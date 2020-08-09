@@ -1,0 +1,60 @@
+<app-card [hidHeader]="true" cardClass="flat-card m-t-20 p-0" blockClass="p-0">
+  <div class="card-body p-0" >
+
+      <div class="fileview-header" *ngIf='repositoryAsset;'>
+
+          <span><b>{{repositoryAsset.name}}</b> | File size: {{repositoryAsset.assetSize | number:'1.0-0'}} B</span>
+          <div style="float:right">
+            <span style="margin-right:3px"></span>
+          </div>
+
+      </div>
+
+        <div *ngIf='repositoryAsset;' class="fileview-block f-12" (click)="setHighlights()">
+            <markdown [data]="repositoryAsset.content | language : 'java'" lineHighlight [line]="lineHighlights" lineNumbers></markdown>
+
+          <!--
+            <div style="position:absolute;display:block;top:10px;right:10px;z-index:1000;width:700px;">
+                <span style="font-size:16px">Embedded Assets</span>
+
+                  <p-table #dt [columns]="assetCols" [value]="assetData"
+                           selectionMode="single" (onRowSelect)="setLicense()" [(selection)]="selectedCar3" dataKey="name"
+                           tableStyleClass="table table-hover dataTable table-sm diff-table" >
+
+                    <ng-template pTemplate="header" let-assetCols>
+                      <tr>
+                        <th *ngFor="let col of assetCols" >
+                          {{col.header}}
+                        </th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-assetData let-columns="assetCols">
+                      <tr [pSelectableRow]="licenseData">
+
+                        <td><i class="far fa-file-alt m-r-10"></i> <a [routerLink]="['fileview']">{{assetData['name']}}</a></td>
+                        <td>{{assetData['size']}}b</td>
+                        <td>
+
+                          <div *ngIf="assetData['licenses']?.length > 1">
+                            <a [placement]="'bottom'" [ngbPopover]="licenseContent">Show Licenses</a><span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span>
+                            <ng-template #licenseContent>
+                              <div *ngFor="let license of assetData['licenses']" class="license-dropdown">
+                                <a  href="#">{{license.name}}</a><span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span><br/>
+                              </div>
+                            </ng-template>
+                          </div>
+
+                          <div *ngIf="assetData['licenses']?.length == 1">
+                            only 1 license<span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+          </div>
+          -->
+
+    </div>
+
+  </div>
+</app-card>

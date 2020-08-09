@@ -1,0 +1,70 @@
+
+<div class="col-xl-12">
+    <div *ngIf='obsScan | async as scan;'>
+
+      <div style="float:left;clear: both;">
+        <ng-template pTemplate="caption">
+          <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+            header
+          </div>
+        </ng-template>
+      </div>
+
+      <perfect-scrollbar [style.max-height]="'650px'">
+        <p-table #dt [columns]="columns" [value]="scan.components" [paginator]="false" [rows]="50"
+                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                 [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
+
+          <ng-template pTemplate="caption">
+            <div style="text-align: right">
+              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-component let-columns="columns">
+            <tr [routerLink]="['/dashboard/project/component',component.componentId]">
+              <td>{{component.name}}</td>
+              <td>{{component.group}}</td>
+              <td>{{component.version}}</td>
+              <td>{{component.isInternal}}</td>
+              <td>File System/POM</td>
+              <td>
+                <ng-container *ngIf="component.licenses.length > 0">
+                  <span *ngIf="component.licenses[0].category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                  <span *ngIf="component.licenses[0].category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                  <span *ngIf="component.licenses[0].category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                  <span *ngIf="component.licenses[0].category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                  <span *ngIf="component.licenses[0].category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                  <span *ngIf="component.licenses[0].category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
+                  <span>{{component.licenses[0].name}}</span>
+                </ng-container>
+                <span *ngIf="!component.licenses">No License</span>
+              </td>
+              <td>
+                <div *ngFor="let vulnerability of component.vulnerabilities">
+                    <span>{{component.vulnerabilities[0]?.vulnId}}:{{component.vulnerabilities[0]?.severity}}</span>
+                    <span *ngIf="vulnerability.severity === 'CRITICAL'"  title="Critical" class="badge m-l-5 badge-light-danger">CRITICAL</span>
+                    <span *ngIf="vulnerability.severity === 'HIGH'"  title="Critical" class="badge m-l-5 badge-light-danger">HIGH</span>
+                    <span *ngIf="vulnerability.severity === 'MEDIUM'"  title="Critical" class="badge m-l-5 badge-light-warning">MEDIUM</span>
+                    <span *ngIf="vulnerability.severity === 'LOW'"  title="Critical" class="badge m-l-5 badge-light-primary">LOW</span>
+                    <span *ngIf="vulnerability.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
+                </div>
+              </td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </perfect-scrollbar>
+
+    </div>
+
+
+</div>

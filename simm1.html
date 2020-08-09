@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<!-- saved from url=(0084)https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19 -->
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <link rel="dns-prefetch" href="https://github.githubassets.com/">
+  <link rel="dns-prefetch" href="https://avatars0.githubusercontent.com/">
+  <link rel="dns-prefetch" href="https://avatars1.githubusercontent.com/">
+  <link rel="dns-prefetch" href="https://avatars2.githubusercontent.com/">
+  <link rel="dns-prefetch" href="https://avatars3.githubusercontent.com/">
+  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com/">
+  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">
+
+
+  <link crossorigin="anonymous" media="all"
+        integrity="sha512-FG+rXqMOivrAjdEQE7tO4BwM1poGmg70hJFTlNSxjX87grtrZ6UnPR8NkzwUHlQEGviu9XuRYeO8zH9YwvZhdg=="
+        rel="stylesheet"
+        href="./Update AddUserTemp.aspx.cs · jm-ds_WebGoat.Net@fac79b1_files/frameworks-146fab5ea30e8afac08dd11013bb4ee0.css">
+
+  <link crossorigin="anonymous" media="all"
+        integrity="sha512-t5ybyYrKqgeKqZz4SgMg1nft30F/PUMJn/S+jbDzPMbJBctQYzmi7lf7Cw2DxvYOwSJBEz/Ym5ERjToboKFPXQ=="
+        rel="stylesheet"
+        href="./Update AddUserTemp.aspx.cs · jm-ds_WebGoat.Net@fac79b1_files/github-b79c9bc98acaaa078aa99cf84a0320d6.css">
+
+
+  <meta name="viewport" content="width=device-width">
+
+  <title>Update AddUserTemp.aspx.cs · jm-ds/WebGoat.Net@fac79b1</title>
+  <meta name="description" content="OWASP&#39;s official repository for WebGoat (ASP.NET version) - jm-ds/WebGoat.Net">
+  <link rel="search" type="application/opensearchdescription+xml" href="https://github.com/opensearch.xml"
+        title="GitHub">
+  <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+  <meta property="fb:app_id" content="1401488693436528">
+
+  <meta name="twitter:image:src" content="https://avatars3.githubusercontent.com/u/33268211?s=400&amp;v=4">
+  <meta name="twitter:site" content="@github">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Update AddUserTemp.aspx.cs · jm-ds/WebGoat.Net@fac79b1">
+  <meta name="twitter:description" content="">
+  <meta property="og:image" content="https://avatars3.githubusercontent.com/u/33268211?s=400&amp;v=4">
+  <meta property="og:site_name" content="GitHub">
+  <meta property="og:type" content="object">
+  <meta property="og:title" content="Update AddUserTemp.aspx.cs · jm-ds/WebGoat.Net@fac79b1">
+  <meta property="og:url"
+        content="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19">
+  <meta property="og:updated_time" content="1586405285">
+
+  <link rel="assets" href="https://github.githubassets.com/">
+  <link rel="web-socket"
+        href="wss://live.github.com/_sockets/VjI6NDc0MTA5MjY5OjM3OTYzODE3M2ExN2VlZjI3MTcxNjI5OWZiYjFmYzQzNjgyMzE0NDdmMDJjYWM3NDU0ZjQwMjg0MDRkOTc4MjA=--ff6d43798e110d026602db914d3aae5a8e4bcf13">
+  <link rel="sudo-modal" href="https://github.com/sessions/sudo_modal">
+
+  <meta name="request-id" content="CDC7:2F04:E6ACB:13BD58:5E8E9FB5" data-pjax-transient="true">
+  <meta name="html-safe-nonce" content="c535d85b4c2b16cabdc7f2d6be65f293ba31c164" data-pjax-transient="true">
+  <meta name="visitor-payload"
+        content="eyJyZWZlcnJlciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9qbS1kcy9XZWJHb2F0Lk5ldC9jb21taXRzL21hc3Rlci9XZWJTaXRlL0FkZFVzZXJUZW1wLmFzcHguY3MiLCJyZXF1ZXN0X2lkIjoiQ0RDNzoyRjA0OkU2QUNCOjEzQkQ1ODo1RThFOUZCNSIsInZpc2l0b3JfaWQiOiI4MDY5ODM5ODc1MzcyNDEyNjA5IiwicmVnaW9uX2VkZ2UiOiJzZWEiLCJyZWdpb25fcmVuZGVyIjoiaWFkIn0="
+        data-pjax-transient="true">
+  <meta name="visitor-hmac" content="065265b013ef33edbd945dc229ec6637cb69968e3c407bffed4f56bc256ca4d3"
+        data-pjax-transient="true">
+
+
+  <meta name="github-keyboard-shortcuts" content="repository,commits" data-pjax-transient="true">
+
+
+  <meta name="selected-link" value="repo_commits" data-pjax-transient="">
+
+  <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU">
+  <meta name="google-site-verification" content="ZzhVyEFwb7w3e0-uOTltm8Jsck2F5StVihD0exw2fsA">
+  <meta name="google-site-verification" content="GXs5KoUUkNCoaAZn7wPN-t01Pywp9M3sEjnt_3_ZWPc">
+
+  <meta name="octolytics-host" content="collector.githubapp.com">
+  <meta name="octolytics-app-id" content="github">
+  <meta name="octolytics-event-url" content="https://collector.githubapp.com/github-external/browser_event">
+  <meta name="octolytics-dimension-ga_id" content="1939679219.1574629059" class="js-octo-ga-id">
+  <meta name="octolytics-actor-id" content="33268211">
+  <meta name="octolytics-actor-login" content="jm-ds">
+  <meta name="octolytics-actor-hash" content="7445f34e9cd20675dc8bd75a6ff4d0f6961ccd43f3df9bba21011d30f1027682">
+  <meta name="analytics-location" content="/&lt;user-name&gt;/&lt;repo-name&gt;/commit/show" data-pjax-transient="true">
+
+
+  <meta name="google-analytics" content="UA-3769691-2">
+
+  <meta class="js-ga-set" name="userId" content="3d936d7bbe3c6cdf492da4c20be93285">
+
+  <meta class="js-ga-set" name="dimension1" content="Logged In">
+
+
+  <meta name="hostname" content="github.com">
+  <meta name="user-login" content="jm-ds">
+
+  <meta name="expected-hostname" content="github.com">
+
+  <meta name="js-proxy-site-detection-payload"
+        content="NDNjMTdlNjM2ZWVkYzg2ZDFhZWZmYjIzNGFiYTBjYmY4ODczNWYxMTkzMzk5Mzg5YmIxM2VkMDFjY2VlNDE0Nnx7InJlbW90ZV9hZGRyZXNzIjoiNzYuMTQuMTI4LjI0MiIsInJlcXVlc3RfaWQiOiJDREM3OjJGMDQ6RTZBQ0I6MTNCRDU4OjVFOEU5RkI1IiwidGltZXN0YW1wIjoxNTg2NDA1MzAyLCJob3N0IjoiZ2l0aHViLmNvbSJ9">
+
+  <meta name="enabled-features"
+        content="MARKETPLACE_FEATURED_BLOG_POSTS,MARKETPLACE_INVOICED_BILLING,MARKETPLACE_SOCIAL_PROOF_CUSTOMERS,MARKETPLACE_TRENDING_SOCIAL_PROOF,MARKETPLACE_RECOMMENDATIONS,MARKETPLACE_PENDING_INSTALLATIONS,RELATED_ISSUES,GHE_CLOUD_TRIAL,PAGE_STALE_CHECK">
+
+  <meta http-equiv="x-pjax-version" content="87f00754200db00055535d6e0ee24fd3">
+
+
+  <link href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19.diff" rel="alternate"
+        type="text/plain+diff" data-pjax-transient="true">
+  <link href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19.patch"
+        rel="alternate" type="text/plain+patch" data-pjax-transient="true">
+
+  <meta name="diff-view" content="split" data-pjax-transient="">
+  <link href="https://github.com/jm-ds/WebGoat.Net/commits/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19.atom"
+        rel="alternate" title="Recent Commits to WebGoat.Net:fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19"
+        type="application/atom+xml">
+
+  <meta name="go-import" content="github.com/jm-ds/WebGoat.Net git https://github.com/jm-ds/WebGoat.Net.git">
+
+  <meta name="octolytics-dimension-user_id" content="33268211">
+  <meta name="octolytics-dimension-user_login" content="jm-ds">
+  <meta name="octolytics-dimension-repository_id" content="203867417">
+  <meta name="octolytics-dimension-repository_nwo" content="jm-ds/WebGoat.Net">
+  <meta name="octolytics-dimension-repository_public" content="true">
+  <meta name="octolytics-dimension-repository_is_fork" content="true">
+  <meta name="octolytics-dimension-repository_parent_id" content="175925095">
+  <meta name="octolytics-dimension-repository_parent_nwo" content="alokshukla1978/WebGoat.Net">
+  <meta name="octolytics-dimension-repository_network_root_id" content="9695907">
+  <meta name="octolytics-dimension-repository_network_root_nwo" content="rapPayne/WebGoat.Net">
+  <meta name="octolytics-dimension-repository_explore_github_marketplace_ci_cta_shown" content="false">
+
+
+  <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+
+  <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+
+  <link rel="mask-icon" href="https://github.githubassets.com/pinned-octocat.svg" color="#000000">
+  <link rel="alternate icon" class="js-site-favicon" type="image/png"
+        href="https://github.githubassets.com/favicons/favicon.png">
+  <link rel="icon" class="js-site-favicon" type="image/svg+xml"
+        href="https://github.githubassets.com/favicons/favicon.svg">
+
+  <meta name="theme-color" content="#1e2327">
+
+
+  <link rel="manifest" href="https://github.com/manifest.json" crossorigin="use-credentials">
+
+</head>
+
+<body class="logged-in env-production page-responsive full-width">
+
+<div id="toc" class="details-collapse table-of-contents js-details-container Details">
+  <div class="BtnGroup float-right ml-2" data-ga-load="Diff, view, Viewed Split Diff">
+    <a class="btn btn-sm BtnGroup-item"
+       href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19?diff=unified">
+      Unified
+    </a>
+    <a class="btn btn-sm BtnGroup-item selected" aria-current="true"
+       href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19?diff=split">
+      Split
+    </a>
+  </div>
+
+
+  <div class="toc-diff-stats">
+    <svg class="octicon octicon-diff" viewBox="0 0 13 16" version="1.1" width="13" height="16"
+         aria-hidden="true">
+      <path fill-rule="evenodd"
+            d="M6 7h2v1H6v2H5V8H3V7h2V5h1v2zm-3 6h5v-1H3v1zM7.5 2L11 5.5V15c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h6.5zM10 6L7 3H1v12h9V6zM8.5 0H3v1h5l4 4v8h1V4.5L8.5 0z"></path>
+    </svg>
+    Showing
+    <button type="button" class="btn-link js-details-target" aria-expanded="false">
+      1 changed file
+    </button>
+    with
+    <strong>5 additions</strong>
+    and <strong>5 deletions</strong>.
+  </div>
+
+  <ol class="content collapse js-transitionable">
+    <li>
+      <span class="diffstat float-right">
+          <span class="text-green">
+            +5
+          </span>
+          <span class="text-red">
+            −5
+          </span>
+          <a
+            href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162"
+            class="tooltipped tooltipped-s" aria-label="10 lines changed">
+            <span class="diffstat-block-added"></span><span class="diffstat-block-added"></span><span
+            class="diffstat-block-deleted"></span><span class="diffstat-block-deleted"></span><span
+            class="diffstat-block-neutral"></span>
+          </a>
+      </span>
+      <svg title="modified" class="octicon octicon-diff-modified" viewBox="0 0 14 16" version="1.1" width="14"
+           height="16" aria-hidden="true">
+        <path fill-rule="evenodd"
+              d="M13 1H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1zm0 13H1V2h12v12zM4 8c0-1.66 1.34-3 3-3s3 1.34 3 3-1.34 3-3 3-3-1.34-3-3z"></path>
+      </svg>
+      <a
+        href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162">WebSite/AddUserTemp.aspx.cs</a>
+    </li>
+  </ol>
+</div>
+
+<div id="files" class="diff-view commentable">
+
+  <div class="js-diff-progressive-container">
+
+    <div id="diff-cbc48e9231ed1b2f253b21556ae7e162" class="file js-file js-details-container js-targetable-element Details
+              Details--on open
+
+
+
+
+
+              show-inline-notes
+           " data-file-type=".cs" data-file-deleted="false">
+      <div
+        class="file-header d-flex flex-md-row flex-column flex-md-items-center file-header--expandable js-file-header "
+        data-path="WebSite/AddUserTemp.aspx.cs" data-short-path="cbc48e9"
+        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-file-type=".cs" data-file-deleted="false">
+        <div class="file-info flex-auto min-width-0 mb-md-0 mb-2">
+          <button type="button" class="btn-octicon js-details-target" aria-label="Toggle diff contents"
+                  aria-expanded="true" style="width: 22px;">
+            <svg class="octicon octicon-chevron-down Details-content--hidden" viewBox="0 0 10 16"
+                 version="1.1" width="10" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"></path>
+            </svg>
+            <svg class="octicon octicon-chevron-right Details-content--shown" viewBox="0 0 8 16" version="1.1"
+                 width="8" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.5 8l-5 5L1 11.5 4.75 8 1 4.5 2.5 3l5 5z"></path>
+            </svg>
+          </button>
+
+
+          <span class="diffstat tooltipped tooltipped-e"
+                aria-label="10 changes: 5 additions &amp; 5 deletions">10 <span
+            class="diffstat-block-added"></span><span class="diffstat-block-added"></span><span
+            class="diffstat-block-deleted"></span><span class="diffstat-block-deleted"></span><span
+            class="diffstat-block-neutral"></span></span>
+
+          <a title="WebSite/AddUserTemp.aspx.cs" class="link-gray-dark"
+             href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162">WebSite/AddUserTemp.aspx.cs</a>
+          <clipboard-copy value="WebSite/AddUserTemp.aspx.cs" data-copy-feedback="Copied!" aria-label="Copy"
+                          class="js-clipboard-copy zeroclipboard-link text-gray link-hover-blue" tabindex="0"
+                          role="button">
+            <svg class="octicon octicon-clippy d-inline-block mx-1 js-clipboard-clippy-icon"
+                 viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true">
+              <path fill-rule="evenodd"
+                    d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z"></path>
+            </svg>
+            <svg class="octicon octicon-check js-clipboard-check-icon mx-1 d-inline-block d-none text-green"
+                 viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5L12 5z"></path>
+            </svg>
+          </clipboard-copy>
+
+
+        </div>
+
+        <div class="file-actions pt-0 mb-md-0 mb-2 ml-md-2 flex-shrink-0 flex-md-justify-end">
+          <div class="d-flex flex-justify-end">
+
+
+            <details class="js-file-header-dropdown dropdown details-overlay details-reset pr-2 pl-2">
+              <summary class="height-full" aria-haspopup="menu" role="button">
+                <div class="height-full d-flex flex-items-center link-gray">
+                  <svg aria-label="Show options" class="octicon octicon-kebab-horizontal" viewBox="0 0 13 16"
+                       version="1.1" width="13" height="16" role="img">
+                    <path fill-rule="evenodd"
+                          d="M1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm5 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM13 7.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                  </svg>
+                </div>
+              </summary>
+              <details-menu
+                class="dropdown-menu dropdown-menu-sw show-more-popover text-gray-dark position-absolute f5"
+                style="width:185px; z-index:99; right: -4px;" role="menu">
+                <label role="menuitemradio" class="dropdown-item btn-link text-normal d-block pl-5"
+                       tabindex="0" aria-checked="true">
+                            <span class="position-absolute ml-n3"><svg class="octicon octicon-check" viewBox="0 0 12 16"
+                                                                       version="1.1" width="12" height="16"
+                                                                       aria-hidden="true"><path fill-rule="evenodd"
+                                                                                                d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5L12 5z"></path></svg></span>
+                  <input type="checkbox" checked="" class="d-none js-toggle-file-notes">
+                  Show comments
+                </label>
+
+                <div role="none" class="dropdown-divider"></div>
+
+                <a
+                  href="https://github.com/jm-ds/WebGoat.Net/blob/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19/WebSite/AddUserTemp.aspx.cs"
+                  class="pl-5 dropdown-item btn-link" rel="nofollow" role="menuitem"
+                  data-ga-click="View file, click, location:files_changed_dropdown">
+                  View file
+                </a>
+
+
+                <button type="button" disabled="" role="menuitem" class="pl-5 dropdown-item btn-link"
+                        aria-label="You must be signed in and have push access to make changes.">
+                  Edit file
+                </button>
+
+
+                <button type="button" disabled="" role="menuitem" class="pl-5 dropdown-item btn-link"
+                        aria-label="You must be signed in and have push access to delete this file.">
+                  Delete file
+                </button>
+
+
+                <div role="none" class="dropdown-divider"></div>
+
+
+              </details-menu>
+            </details>
+          </div>
+        </div>
+      </div>
+      <div class="js-file-content Details-content--hidden"
+           data-hydro-view="{&quot;event_type&quot;:&quot;pull_request.select_diff_range&quot;,&quot;payload&quot;:{&quot;actor_id&quot;:33268211,&quot;pull_request_id&quot;:null,&quot;repository_id&quot;:null,&quot;diff_type&quot;:&quot;SPLIT&quot;,&quot;whitespace_ignored&quot;:false,&quot;originating_url&quot;:&quot;https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19&quot;,&quot;user_id&quot;:33268211}}"
+           data-hydro-view-hmac="c101c7acf62b0dd67b5a9adbb26eba473987a2401403d47b01d2e5211f11c919">
+        <div class="data highlight js-blob-wrapper " style="overflow-x: auto">
+          <table class="diff-table js-diff-table tab-size  file-diff-split js-file-diff-split"
+                 data-tab-size="8" data-diff-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162"
+                 data-paste-markdown-skip="">
+            <colgroup>
+              <col width="40">
+              <col>
+              <col width="40">
+              <col>
+            </colgroup>
+
+
+            <tbody>
+            <tr class="js-expandable-line" data-position="0">
+              <td class="blob-num blob-num-expandable" colspan="1">
+                <a
+                  href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162"
+                  class="js-expand directional-expander single-expander" title="Expand Up"
+                  aria-label="Expand Up"
+                  data-url="/jm-ds/WebGoat.Net/blob_excerpt/744aac03eb17f2d14abcb199e29119d0608bb3f7?diff=split&amp;direction=up&amp;in_wiki_context=&amp;last_left=&amp;last_right=&amp;left=7&amp;left_hunk_size=7&amp;mode=100644&amp;path=WebSite%2FAddUserTemp.aspx.cs&amp;right=7&amp;right_hunk_size=7"
+                  data-left-range="1-6" data-right-range="1-6">
+                  <svg class="octicon octicon-fold-up" viewBox="0 0 14 16" version="1.1" width="14"
+                       height="16" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M10 6L7 3 4 6h2v6h2V6h2zm4 0c0-.55-.45-1-1-1h-2.5l1 1h1l-2 2H9v1h1.5l2 2H9v1h4c.55 0 1-.45 1-1l-2.5-2.5L14 6zM3.5 8H5v1H3.5l-2 2H5v1H1c-.55 0-1-.45-1-1l2.5-2.5L0 6c0-.55.45-1 1-1h2.5l-1 1h-1l2 2z"></path>
+                  </svg>
+                </a>
+              </td>
+              <td class="blob-code blob-code-inner blob-code-hunk" colspan="3">@@ -7,7 +7,7 @@</td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L7" data-line-number="7"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="1"
+                        data-original-line=" using System.Web.UI.WebControls;" data-line="7" data-side="right"
+                        type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><span
+                  class="pl-k">using</span> <span class="pl-en">System</span>.<span
+                  class="pl-en">Web</span>.<span class="pl-en">UI</span>.<span
+                  class="pl-en">WebControls</span>;</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R7" data-line-number="7"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="1"
+                        data-original-line=" using System.Web.UI.WebControls;" data-line="7" data-side="right"
+                        type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><span
+                  class="pl-k">using</span> <span class="pl-en">System</span>.<span
+                  class="pl-en">Web</span>.<span class="pl-en">UI</span>.<span
+                  class="pl-en">WebControls</span>;</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L8" data-line-number="8"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="2"
+                        data-original-line=" " data-line="8" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><br></span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R8" data-line-number="8"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="2"
+                        data-original-line=" " data-line="8" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><br></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L9" data-line-number="9"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="3"
+                        data-original-line=" namespace WebSite" data-line="9" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><span class="pl-k">namespace</span> <span
+                  class="pl-en">WebSite</span></span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R9" data-line-number="9"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="3"
+                        data-original-line=" namespace WebSite" data-line="9" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><span class="pl-k">namespace</span> <span
+                  class="pl-en">WebSite</span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-deletion js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L10" data-line-number="10"></td>
+
+              <td class="code-review blob-code blob-code-deletion">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="4"
+                        data-original-line="-{" data-line="10" data-side="left" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="-">{</span>
+
+              </td>
+
+              <td class="blob-num blob-num-addition js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R10" data-line-number="10"></td>
+
+              <td class="code-review blob-code blob-code-addition">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="5"
+                        data-original-line="+{ " data-line="10" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="+">{<span
+                  class="x x-first x-last"> </span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L11" data-line-number="11"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="6"
+                        data-original-line="     public partial class AddUserTemp : System.Web.UI.Page"
+                        data-line="11" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    <span class="pl-k">public</span> <span
+                  class="pl-k">partial</span> <span class="pl-k">class</span> <span
+                  class="pl-en">AddUserTemp</span> : <span class="pl-k">System</span>.<span
+                  class="pl-k">Web</span>.<span class="pl-k">UI</span>.<span class="pl-en">Page</span></span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R11" data-line-number="11"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="6"
+                        data-original-line="     public partial class AddUserTemp : System.Web.UI.Page"
+                        data-line="11" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    <span class="pl-k">public</span> <span
+                  class="pl-k">partial</span> <span class="pl-k">class</span> <span
+                  class="pl-en">AddUserTemp</span> : <span class="pl-k">System</span>.<span
+                  class="pl-k">Web</span>.<span class="pl-k">UI</span>.<span class="pl-en">Page</span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L12" data-line-number="12"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="7"
+                        data-original-line="     {" data-line="12" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    {</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R12" data-line-number="12"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="7"
+                        data-original-line="     {" data-line="12" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    {</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="05cef450e2ff472ff91356287a6b6087">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L13" data-line-number="13"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="8"
+                        data-original-line="         protected void Page_Load(object sender, EventArgs e)"
+                        data-line="13" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        <span
+                  class="pl-k">protected</span> <span class="pl-k">void</span> <span
+                  class="pl-en">Page_Load</span>(<span class="pl-k">object</span> <span
+                  class="pl-smi">sender</span>, <span class="pl-en">EventArgs</span> <span
+                  class="pl-smi">e</span>)</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R13" data-line-number="13"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="8"
+                        data-original-line="         protected void Page_Load(object sender, EventArgs e)"
+                        data-line="13" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        <span
+                  class="pl-k">protected</span> <span class="pl-k">void</span> <span
+                  class="pl-en">Page_Load</span>(<span class="pl-k">object</span> <span
+                  class="pl-smi">sender</span>, <span class="pl-en">EventArgs</span> <span
+                  class="pl-smi">e</span>)</span>
+
+              </td>
+            </tr>
+
+
+            <tr class="js-expandable-line" data-position="9">
+              <td class="blob-num blob-num-expandable" colspan="1">
+                <a
+                  href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162"
+                  class="js-expand directional-expander single-expander" title="Expand All"
+                  aria-label="Expand All"
+                  data-url="/jm-ds/WebGoat.Net/blob_excerpt/744aac03eb17f2d14abcb199e29119d0608bb3f7?diff=split&amp;in_wiki_context=&amp;last_left=13&amp;last_right=13&amp;left=20&amp;left_hunk_size=7&amp;mode=100644&amp;path=WebSite%2FAddUserTemp.aspx.cs&amp;right=20&amp;right_hunk_size=7"
+                  data-left-range="14-15" data-right-range="14-15">
+                  <svg class="octicon octicon-unfold" viewBox="0 0 14 16" version="1.1" width="14" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M11.5 7.5L14 10c0 .55-.45 1-1 1H9v-1h3.5l-2-2h-7l-2 2H5v1H1c-.55 0-1-.45-1-1l2.5-2.5L0 5c0-.55.45-1 1-1h4v1H1.5l2 2h7l2-2H9V4h4c.55 0 1 .45 1 1l-2.5 2.5zM6 6h2V3h2L7 0 4 3h2v3zm2 3H6v3H4l3 3 3-3H8V9z"></path>
+                  </svg>
+                </a>
+              </td>
+              <td class="blob-code blob-code-inner blob-code-hunk" colspan="3">@@ -20,7 +20,7 @@ protected
+                void Page_Load(object sender, EventArgs e)
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L20" data-line-number="20"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="10"
+                        data-original-line="         }" data-line="20" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R20" data-line-number="20"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="10"
+                        data-original-line="         }" data-line="20" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        }</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number is-hovered"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L21" data-line-number="21"></td>
+
+              <td class="code-review blob-code blob-code-context is-hovered">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="11"
+                        data-original-line=" " data-line="21" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><br></span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R21" data-line-number="21"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="11"
+                        data-original-line=" " data-line="21" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" "><br></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L22" data-line-number="22"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="12"
+                        data-original-line="         protected void btnAddUser_Click(object sender, EventArgs e)"
+                        data-line="22" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        <span
+                  class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">btnAddUser_Click</span>(<span
+                  class="pl-k">object</span> <span class="pl-smi">sender</span>, <span
+                  class="pl-en">EventArgs</span> <span class="pl-smi">e</span>)</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R22" data-line-number="22"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="12"
+                        data-original-line="         protected void btnAddUser_Click(object sender, EventArgs e)"
+                        data-line="22" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">        <span
+                  class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">btnAddUser_Click</span>(<span
+                  class="pl-k">object</span> <span class="pl-smi">sender</span>, <span
+                  class="pl-en">EventArgs</span> <span class="pl-smi">e</span>)</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-deletion js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L23" data-line-number="23"></td>
+
+              <td class="code-review blob-code blob-code-deletion">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="13"
+                        data-original-line="-        {" data-line="23" data-side="left" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="-">        {</span>
+
+              </td>
+
+              <td class="blob-num blob-num-addition js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R23" data-line-number="23"></td>
+
+              <td class="code-review blob-code blob-code-addition">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="14"
+                        data-original-line="+        { " data-line="23" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="+">        {<span
+                  class="x x-first x-last"> </span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L24" data-line-number="24"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="15"
+                        data-original-line="             try" data-line="24" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            <span
+                  class="pl-k">try</span></span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R24" data-line-number="24"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="15"
+                        data-original-line="             try" data-line="24" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            <span
+                  class="pl-k">try</span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L25" data-line-number="25"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="16"
+                        data-original-line="             {" data-line="25" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            {</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R25" data-line-number="25"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="16"
+                        data-original-line="             {" data-line="25" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            {</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="37e1566f443f36099765a3c066fe6c7d">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L26" data-line-number="26"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="17"
+                        data-original-line="                 Membership.CreateUser(txtUsername.Text, txtPassword.Text, txtEmail.Text);"
+                        data-line="26" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">Membership</span>.<span class="pl-en">CreateUser</span>(<span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>, <span class="pl-smi">txtPassword</span>.<span class="pl-smi">Text</span>, <span
+                  class="pl-smi">txtEmail</span>.<span class="pl-smi">Text</span>);</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R26" data-line-number="26"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="17"
+                        data-original-line="                 Membership.CreateUser(txtUsername.Text, txtPassword.Text, txtEmail.Text);"
+                        data-line="26" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">Membership</span>.<span class="pl-en">CreateUser</span>(<span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>, <span class="pl-smi">txtPassword</span>.<span class="pl-smi">Text</span>, <span
+                  class="pl-smi">txtEmail</span>.<span class="pl-smi">Text</span>);</span>
+
+              </td>
+            </tr>
+
+
+            <tr class="js-expandable-line" data-position="18">
+              <td class="blob-num blob-num-expandable" colspan="1">
+                <a
+                  href="https://github.com/jm-ds/WebGoat.Net/commit/fac79b155c4b38fb5ee4fcaf936f6d1c1187dd19#diff-cbc48e9231ed1b2f253b21556ae7e162"
+                  class="js-expand directional-expander single-expander" title="Expand All"
+                  aria-label="Expand All"
+                  data-url="/jm-ds/WebGoat.Net/blob_excerpt/744aac03eb17f2d14abcb199e29119d0608bb3f7?diff=split&amp;in_wiki_context=&amp;last_left=26&amp;last_right=26&amp;left=29&amp;left_hunk_size=11&amp;mode=100644&amp;path=WebSite%2FAddUserTemp.aspx.cs&amp;right=29&amp;right_hunk_size=11"
+                  data-left-range="27-26" data-right-range="27-26">
+                  <svg class="octicon octicon-unfold" viewBox="0 0 14 16" version="1.1" width="14" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M11.5 7.5L14 10c0 .55-.45 1-1 1H9v-1h3.5l-2-2h-7l-2 2H5v1H1c-.55 0-1-.45-1-1l2.5-2.5L0 5c0-.55.45-1 1-1h4v1H1.5l2 2h7l2-2H9V4h4c.55 0 1 .45 1 1l-2.5 2.5zM6 6h2V3h2L7 0 4 3h2v3zm2 3H6v3H4l3 3 3-3H8V9z"></path>
+                  </svg>
+                </a>
+              </td>
+              <td class="blob-code blob-code-inner blob-code-hunk" colspan="3">@@ -29,11 +29,11 @@ protected
+                void btnAddUser_Click(object sender, EventArgs e)
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L29" data-line-number="29"></td>
+
+              <td class="code-review blob-code blob-code-context ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="19"
+                        data-original-line="                     Roles.AddUserToRole(txtUsername.Text, &quot;admin&quot;);"
+                        data-line="29" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                    <span
+                  class="pl-smi">Roles</span>.<span class="pl-en">AddUserToRole</span>(<span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>, <span class="pl-s"><span class="pl-pds">"</span>admin<span
+                  class="pl-pds">"</span></span>);</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R29" data-line-number="29"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="19"
+                        data-original-line="                     Roles.AddUserToRole(txtUsername.Text, &quot;admin&quot;);"
+                        data-line="29" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                    <span
+                  class="pl-smi">Roles</span>.<span class="pl-en">AddUserToRole</span>(<span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>, <span class="pl-s"><span class="pl-pds">"</span>admin<span
+                  class="pl-pds">"</span></span>);</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L30" data-line-number="30"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="20"
+                        data-original-line="                 }" data-line="30" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R30" data-line-number="30"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="20"
+                        data-original-line="                 }" data-line="30" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                }</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L31" data-line-number="31"></td>
+
+              <td class="code-review blob-code blob-code-context ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="21"
+                        data-original-line="                 lblErrorMessage.Text = string.Format(&quot;{0} was created.&quot;, txtUsername.Text);"
+                        data-line="31" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">lblErrorMessage</span>.<span class="pl-smi">Text</span> <span
+                  class="pl-k">=</span> <span class="pl-smi">string</span>.<span
+                  class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>{0} was created.<span
+                  class="pl-pds">"</span></span>, <span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>);</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R31" data-line-number="31"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="21"
+                        data-original-line="                 lblErrorMessage.Text = string.Format(&quot;{0} was created.&quot;, txtUsername.Text);"
+                        data-line="31" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">lblErrorMessage</span>.<span class="pl-smi">Text</span> <span
+                  class="pl-k">=</span> <span class="pl-smi">string</span>.<span
+                  class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>{0} was created.<span
+                  class="pl-pds">"</span></span>, <span class="pl-smi">txtUsername</span>.<span
+                  class="pl-smi">Text</span>);</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-deletion js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L32" data-line-number="32"></td>
+
+              <td class="code-review blob-code blob-code-deletion">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="22"
+                        data-original-line="-            }" data-line="32" data-side="left" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="-">            }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-addition js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R32" data-line-number="32"></td>
+
+              <td class="code-review blob-code blob-code-addition">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="23"
+                        data-original-line="+            } " data-line="32" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="+">            }<span
+                  class="x x-first x-last"> </span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L33" data-line-number="33"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="24"
+                        data-original-line="             catch (Exception ex)" data-line="33"
+                        data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            <span
+                  class="pl-k">catch</span> (<span class="pl-en">Exception</span> <span
+                  class="pl-smi">ex</span>)</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R33" data-line-number="33"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="24"
+                        data-original-line="             catch (Exception ex)" data-line="33"
+                        data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            <span
+                  class="pl-k">catch</span> (<span class="pl-en">Exception</span> <span
+                  class="pl-smi">ex</span>)</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L34" data-line-number="34"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="25"
+                        data-original-line="             {" data-line="34" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            {</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R34" data-line-number="34"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="25"
+                        data-original-line="             {" data-line="34" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            {</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L35" data-line-number="35"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="26"
+                        data-original-line="                 lblErrorMessage.Text = string.Format(&quot;An error has occurred: {0}&quot;, ex);"
+                        data-line="35" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">lblErrorMessage</span>.<span class="pl-smi">Text</span> <span
+                  class="pl-k">=</span> <span class="pl-smi">string</span>.<span
+                  class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>An error has occurred: {0}<span
+                  class="pl-pds">"</span></span>, <span class="pl-smi">ex</span>);</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R35" data-line-number="35"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="26"
+                        data-original-line="                 lblErrorMessage.Text = string.Format(&quot;An error has occurred: {0}&quot;, ex);"
+                        data-line="35" data-side="right" type="button" aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">                <span
+                  class="pl-smi">lblErrorMessage</span>.<span class="pl-smi">Text</span> <span
+                  class="pl-k">=</span> <span class="pl-smi">string</span>.<span
+                  class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>An error has occurred: {0}<span
+                  class="pl-pds">"</span></span>, <span class="pl-smi">ex</span>);</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L36" data-line-number="36"></td>
+
+              <td class="code-review blob-code blob-code-context ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="27"
+                        data-original-line="             }" data-line="36" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R36" data-line-number="36"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="27"
+                        data-original-line="             }" data-line="36" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">            }</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-deletion js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L37" data-line-number="37"></td>
+
+              <td class="code-review blob-code blob-code-deletion ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="28"
+                        data-original-line="-        }" data-line="37" data-side="left" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="-">        }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-addition js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R37" data-line-number="37"></td>
+
+              <td class="code-review blob-code blob-code-addition">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="29"
+                        data-original-line="+        } " data-line="37" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="+">        }<span
+                  class="x x-first x-last"> </span></span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L38" data-line-number="38"></td>
+
+              <td class="code-review blob-code blob-code-context ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="30"
+                        data-original-line="     }" data-line="38" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    }</span>
+
+              </td>
+
+              <td class="blob-num blob-num-context js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R38" data-line-number="38"></td>
+
+              <td class="code-review blob-code blob-code-context">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-single-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="30"
+                        data-original-line="     }" data-line="38" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker=" ">    }</span>
+
+              </td>
+            </tr>
+
+
+            <tr data-hunk="d4fda617a2a23a596512a4d372b29168">
+              <td class="blob-num blob-num-deletion js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162L39" data-line-number="39"></td>
+
+              <td class="code-review blob-code blob-code-deletion ">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="deletion" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="31"
+                        data-original-line="-}" data-line="39" data-side="left" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="-">}</span>
+
+                <span class="no-nl-marker tooltipped tooltipped-n" aria-label="No newline at end of file">
+          <svg class="octicon octicon-no-newline" viewBox="0 0 16 16" version="1.1" width="16" height="16"
+               aria-hidden="true"><path fill-rule="evenodd"
+                                        d="M16 5v3c0 .55-.45 1-1 1h-3v2L9 8l3-3v2h2V5h2zM8 8c0 2.2-1.8 4-4 4s-4-1.8-4-4 1.8-4 4-4 4 1.8 4 4zM1.5 9.66L5.66 5.5C5.18 5.19 4.61 5 4 5 2.34 5 1 6.34 1 8c0 .61.19 1.17.5 1.66zM7 8c0-.61-.19-1.17-.5-1.66L2.34 10.5c.48.31 1.05.5 1.66.5 1.66 0 3-1.34 3-3z"></path></svg>
+        </span>
+              </td>
+
+              <td class="blob-num blob-num-addition js-linkable-line-number"
+                  id="diff-cbc48e9231ed1b2f253b21556ae7e162R39" data-line-number="39"></td>
+
+              <td class="code-review blob-code blob-code-addition">
+                <button class="btn-link add-line-comment js-add-line-comment js-add-split-line-comment"
+                        data-type="addition" data-path="WebSite/AddUserTemp.aspx.cs"
+                        data-anchor="diff-cbc48e9231ed1b2f253b21556ae7e162" data-position="33"
+                        data-original-line="+}" data-line="39" data-side="right" type="button"
+                        aria-label="Add line comment">
+                  <svg class="octicon octicon-plus" viewBox="0 0 12 16" version="1.1" width="12" height="16"
+                       aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                  </svg>
+                </button>
+
+                <span class="blob-code-inner blob-code-marker" data-code-marker="+">}</span>
+
+              </td>
+            </tr>
+
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+  <div *ngIf='sourceAsset; '>
+
+    <div class="row" style="margin-bottom:20px">
+      <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
+        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a [routerLink]="['/dashboard/project',project.projectId]">{{project.name}}</a> / {{sourceAsset.name}}</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3>{{sourceAsset.name}}<span style="font-size:15px"></span></h3>
+        <span title="Info" class="badge m-r-5 badge-light-primary">Path: </span> {{sourceAsset.workspacePath}}
+        <!--Released: <span title="Info" class="badge m-r-5 badge-light-primary">Oct 10, 2017</span>-->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <perfect-scrollbar [style.max-height]="'250px'">
+          <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
+
+            <ng-template pTemplate="caption">
+              <div style="text-align: right">
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>Name</th>
+                <th>Repository</th>
+                <th>Percent match <i class="badge-light-primary fas fa-question-circle"></i></th>
+                <th>Size</th>
+                <th>Versions & Licenses</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-embeddedAsset >
+              <tr>
+                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.name}}</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.matchRepository.repositoryOwner}}/{{embeddedAsset.matchRepository.repositoryName}}</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.percentMatch | number:'1.1-2'}}%</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset)" *ngIf='embeddedAsset.assetSize >= 1024'>{{embeddedAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset)" *ngIf='embeddedAsset.assetSize < 1024'>{{embeddedAsset.assetSize | number:'1.0-0'}} bytes</td>
+                <td style="word-spacing: 6px;">
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset);exampleModalCenter.show()">
+                    {{embeddedAsset.releases[0].releaseName}}
+                    <span *ngIf="embeddedAsset.releases.length > 1" >
+                      to {{embeddedAsset.releases[embeddedAsset.releases.length-1].releaseName}}
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+      </div>
+    </div>
+
+      <app-ui-modal #exampleModalCenter dialogClass="modal-dialog-centered">
+        <div class="app-modal-header">
+          <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
+          <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="exampleModalCenter.hide()"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="app-modal-body">
+
+
+          <perfect-scrollbar [style.max-height]="'550px'">
+            <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.releases" [paginator]="false" [rows]="50"
+                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                     [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
+
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th>Release Name</th>
+                  <th>Release Date</th>
+                  <th>Licenses</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-release >
+                <tr>
+                  <td>
+                    {{release.releaseName}}
+                  </td>
+                  <td>
+                    {{release.releaseDate | date :'MMMM d, y'}}
+                  </td>
+                  <td style="border-left:1px solid gray">
+                    <div *ngFor="let license of release?.licenses">
+                      <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                      <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                      <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                      <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                      <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                      <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                      <span *ngIf="license.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
+                      <a [routerLink]="['/dashboard/project/license',license.licenseId]">{{license.shortName}}</a>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </perfect-scrollbar>
+
+
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="exampleModalCenter.hide()">Close</button>
+        </div>
+      </app-ui-modal>
+
+
+    <div class="row">
+      <div *ngIf='sourceAsset; else loading' class="col-xl-6">
+        <file-view [repositoryAsset]="sourceAsset"></file-view>
+      </div>
+      <div *ngIf='matchAsset' class="col-xl-6">
+        <file-view [repositoryAsset]="matchAsset"></file-view>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+

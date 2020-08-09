@@ -1,0 +1,114 @@
+
+<div class="row">
+
+  <div class="col-xl-12" *ngIf='obsLicense | async as license;' >
+
+    <div class="inner-card">
+      <div class="card-body">
+        <div class="container">
+          <div class="row">
+
+            <!-- LEFT COLUMN -->
+            <div class="col-xl-4" style="padding-right:30px">
+                <div class="col-xl-12">
+                  <div style="width=20%;height:30px;border-bottom:1px solid gray;text-align:center">
+                    THREAT CATEGORY
+                  </div>
+                  <div style="width=100%;font-size:20px;text-align:center;padding-top:15px">
+                    <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger f-18">COPYLEFT STRONG</span>
+                    <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning f-18">COPYLEFT WEAK</span>
+                    <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning f-18">COPYLEFT PARTIAL</span>
+                    <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning f-18">COPYLEFT LIMITED</span>
+                    <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning f-18">COPYLEFT</span>
+                    <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success f-18">PERMISSIVE</span>
+                    <!--<button class="btn btn-outline-danger" style="cursor: default;" ><i class="fas fa-exclamation-triangle"></i>VIRAL</button>-->
+                  </div>
+                </div>
+                <div class="col-xl-12" style="margin-top:40px">
+                  <div class="form-group row  p-l-5">
+                    <label for="spdx" class="col-sm-12 col-form-label">SPDX</label>
+                    <div class="col-xl-12">
+                      <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.spdxId}}">
+                    </div>
+                  </div>
+                  <div class="form-group row  p-l-5">
+                    <label for="style" class="col-sm-12 col-form-label">Style</label>
+                    <div class="col-xl-12">
+                      <input type="text" class="form-control" id="style" readonly placeholder="{{license.style}}">
+                    </div>
+                  </div>
+                  <div class="form-group row  p-l-5">
+                    <label for="publicationYear" class="col-sm-12 col-form-label">Publication Year</label>
+                    <div class="col-xl-12">
+                      <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.publicationYear}}">
+                    </div>
+                  </div>
+                  <div class="form-group row  p-l-5">
+                    <label for="type" class="col-sm-12 col-form-label">Type</label>
+                    <div class="col-xl-12">
+                      <input type="text" class="form-control" id="type" readonly placeholder="{{license.type}}">
+                    </div>
+                  </div>
+                  <div class="form-group row  p-l-5">
+                    <label for="compat" class="col-sm-12 col-form-label">Compatible</label>
+                    <div class="col-xl-12">
+                      <input type="text" class="form-control" id="compat" readonly placeholder="GPL-2.0 GPL-3.0">
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-xl-8">
+
+              <!-- DESCRIPTION -->
+
+                <div class="col-xl-12">
+                    <div class="f-18" style="margin-bottom:20px;text-align:center;width=100%;">{{license.name}}</div>
+                    <div>{{license.description}}</div>
+                </div>
+
+
+              <!-- ATTRIBUTES -->
+              <div class="row" style="padding-left:15px;margin-top:40px">
+                <div class="col-xl-4">
+                  <div class="caption">Permissions</div>
+                  <div *ngFor="let licenseAttribute of permissions">
+                    <i class="fas fa-check color-success p-r-5"></i> {{licenseAttribute.key}}
+                  </div>
+                </div>
+                <div class="col-xl-4">
+                  <div class="caption">Limitations</div>
+                  <div *ngFor="let licenseAttribute of limitations">
+                    <i class="fas fa-times color-danger p-r-5"></i> {{licenseAttribute.key}}
+                  </div>
+                </div>
+                <div class="col-xl-4">
+                  <div class="caption">Conditions</div>
+                  <div *ngFor="let licenseAttribute of conditions">
+                    <i class="fas fa-info-circle color-info p-r-5"></i> {{licenseAttribute.key}}
+                  </div>
+                </div>
+              </div>
+
+              <!-- LICENSE BODY -->
+              <div class="col-xl-12" style="margin-top:40px">
+                <div class="card card-body bg-light" style="padding-left:50px">
+                  <pre class="asset-pane">{{license.body}}</pre>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

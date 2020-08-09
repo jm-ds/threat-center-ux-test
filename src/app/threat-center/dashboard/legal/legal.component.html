@@ -1,0 +1,1035 @@
+<div style="position:absolute;float:right;top:30px;right:15px;">
+  <div class="btn-group mb-2 mr-2" ngbDropdown [placement]="'bottom-right'">
+    <button class="btn btn-outline-secondary" ngbDropdownToggle type="button" style="font-size:16px;"><i class="fas fa-chart-pie"></i><span>Reports</span></button>
+    <div ngbDropdownMenu>
+      <a class="dropdown-item" href="javascript:">Project Analytics Report</a>
+      <a class="dropdown-item" href="javascript:">License Report</a>
+      <a class="dropdown-item" href="javascript:">Comprehensive Asset Report</a>
+    </div>
+  </div>
+</div>
+<div class="row">
+
+  <!-- PROJECT SUMMARY -->
+  <div [hideIfUnauthorized]="'USER_CREATE'" class="col-xl-3 col-lg-6 col-md-12">
+    <div class="marge-card">
+      <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+        <div class="row">
+          <div class="col-auto">
+            <h6>Project Analytics</h6>
+          </div>
+          <div class="col">
+            <div class="dropdown float-right" ngbDropdown>
+              <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Monthly</a>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" href="javascript:">week</a>
+                <a class="dropdown-item" href="javascript:">month</a>
+                <a class="dropdown-item" href="javascript:">Year</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <span class="d-block"><i style="color:#00e396" class="fas fa-square f-10 m-r-10"></i>Total Projects</span>
+            <h6 class="ml-3 mt-1">105</h6>
+          </div>
+          <div class="col">
+            <span class="d-block"><i style="color:#feb019" class="fas fa-square f-10 m-r-10"></i>Project Scans</span>
+            <h6 class="ml-3 mt-1">312</h6>
+          </div>
+        </div>
+      </app-card>
+      <app-card [hidHeader]="true" blockClass="p-0">
+        <app-apex-chart chartID="chart-project-summary" [chartConfig]="this.chartDB.projectSummaryCard"></app-apex-chart>
+      </app-card>
+    </div>
+  </div>
+
+  <!-- License summary -->
+  <div class="col-xl-3 col-lg-6 col-md-12">
+    <div class="marge-card">
+      <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+        <div class="row">
+          <div class="col-auto">
+            <h6>License Analytics</h6>
+          </div>
+          <div class="col">
+            <div class="dropdown float-right" ngbDropdown>
+              <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Monthly</a>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" href="javascript:">week</a>
+                <a class="dropdown-item" href="javascript:">month</a>
+                <a class="dropdown-item" href="javascript:">Year</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <span class="d-block"><i class="fas fa-square text-c-blue f-10 m-r-10"></i>Total</span>
+            <h6 class="ml-3 mt-1">1,205</h6>
+          </div>
+          <div class="col-auto">
+            <span class="d-block"><i class="fas fa-square text-c-red f-10 m-r-10"></i>Threats</span>
+            <h6 class="ml-3 mt-1">305</h6>
+          </div>
+          <div class="col">
+            <span class="d-block"><i class="fas fa-square text-c-white f-10 m-r-10"></i>Copyrights</span>
+            <h6 class="ml-3 mt-1">85</h6>
+          </div>
+        </div>
+      </app-card>
+      <app-card [hidHeader]="true" blockClass="p-0">
+        <app-apex-chart chartID="chart-license-summary" [chartConfig]="this.chartDB.licenseSummaryCard"></app-apex-chart>
+      </app-card>
+    </div>
+  </div>
+
+  <!-- Assets summary -->
+  <div class="col-xl-3 col-lg-6 col-md-12">
+    <div class="marge-card">
+      <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+        <div class="row">
+          <div class="col-auto">
+            <h6>Asset Analytics</h6>
+          </div>
+          <div class="col">
+            <div class="dropdown float-right" ngbDropdown>
+              <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Monthly</a>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" href="javascript:">week</a>
+                <a class="dropdown-item" href="javascript:">month</a>
+                <a class="dropdown-item" href="javascript:">Year</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <span class="d-block"><i style="color:#775dd0" class="fas fa-square f-10 m-r-10"></i>Total Assets</span>
+            <h6 class="ml-3 mt-1">1,205</h6>
+          </div>
+          <div class="col">
+            <span class="d-block"><i style="color:#f5f12c" class="fas fa-square f-10 m-r-10"></i>Embedded Assets</span>
+            <h6 class="ml-3 mt-1">305</h6>
+          </div>
+        </div>
+      </app-card>
+      <app-card [hidHeader]="true" blockClass="p-0">
+        <app-apex-chart chartID="chart-assets-summary" [chartConfig]="this.chartDB.assetsSummaryCard"></app-apex-chart>
+      </app-card>
+    </div>
+  </div>
+
+  <!-- Library summary -->
+  <div class="col-xl-3 col-lg-6 col-md-12">
+    <div class="marge-card">
+      <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+        <div class="row">
+          <div class="col-auto">
+            <h6>Library Analytics</h6>
+          </div>
+          <div class="col">
+            <div class="dropdown float-right" ngbDropdown>
+              <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Monthly</a>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" href="javascript:">week</a>
+                <a class="dropdown-item" href="javascript:">month</a>
+                <a class="dropdown-item" href="javascript:">Year</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <span class="d-block"><i style="color:#feb019" class="fas fa-square f-10 m-r-10"></i>Total Libraries</span>
+            <h6 class="ml-3 mt-1">100,205</h6>
+          </div>
+        </div>
+      </app-card>
+      <app-card [hidHeader]="true" blockClass="p-0">
+        <app-apex-chart chartID="chart-library-summary" [chartConfig]="this.chartDB.librarySummaryCard"></app-apex-chart>
+      </app-card>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+<div class="row">
+  <div class="col-xl-9 col-md-12">
+    <app-card [hidHeader]="true" cardClass="tab-card" >
+      <h5 class="mb-3"><i class="fas fa-bug text-c-red f-20"></i> License Threats</h5>
+      <ngb-tabset type="pills">
+        <ngb-tab title="HISTORY" class="mb-3 ml-0 pl-0">
+          <ng-template ngbTabContent>
+            <div class="row">
+              <div class="col-xl-6" >
+                <app-card cardTitle="License Source" [options]="false" cardClass="nested-card">
+                  <app-apex-chart chartID="licenseHistoryBySource" [chartConfig]="this.chartDB.licenseHistoryBySource"></app-apex-chart>
+                </app-card>
+              </div>
+              <div class="col-xl-6" >
+                <app-card cardTitle="License Category" [options]="false" cardClass="nested-card">
+                  <app-apex-chart chartID="licenseHistoryByCategory" [chartConfig]="this.chartDB.licenseHistoryByCategory"></app-apex-chart>
+                </app-card>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="BUSINESS UNIT" class="mb-3 ml-0 pl-0">
+          <ng-template ngbTabContent>
+            <div class="row">
+              <div class="col-md-6">
+                <app-card cardTitle="Licenses Sources" [options]="false">
+                  <app-apex-chart chartID="bar-chart-1-cac" [chartConfig]="this.chartDB.licensesBySourceByBU"></app-apex-chart>
+                </app-card>
+              </div>
+              <div class="col-md-6">
+                <app-card cardTitle="Licenses Categories" [options]="false">
+                  <app-apex-chart chartID="bar-chart-2-cac" [chartConfig]="this.chartDB.licensesByCatByBU"></app-apex-chart>
+                </app-card>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </app-card>
+  </div>
+
+  <div class="col-xl-3 col-md-12">
+    <app-card [hidHeader]="true" cardClass="tab-card" >
+
+      <h5 class="mb-3"><i class="far fa-calendar-check text-c-red f-20"></i> Policy Violations</h5>
+
+      <!-- business unit chart -->
+      <div class="row align-items-center text-center">
+        <div class="col ">
+          <h6>By Business Unit</h6>
+          <app-apex-chart chartID="pie-chart-3-cac" [chartConfig]="licensePieChart4"></app-apex-chart>
+        </div>
+      </div>
+
+      <div class="row m-b-30 ">
+        <div class="col">
+          Library Policy Violations
+          <ngb-progressbar height="15px" type="info" textType="white" [value]="35" showValue="true"></ngb-progressbar>
+        </div>
+      </div>
+      <div class="row m-b-30 ">
+        <div class="col">
+          License Policy Violations
+          <ngb-progressbar height="15px" type="danger" textType="white" [value]="75" showValue="true"></ngb-progressbar>
+        </div>
+      </div>
+      <div class="row m-b-30 ">
+        <div class="col">
+          License Policy Violations
+          <ngb-progressbar height="15px" type="danger" textType="white" [value]="75" showValue="true"></ngb-progressbar>
+        </div>
+      </div>
+      <div class="row m-b-30 text-center">
+        <div class="col">
+          License Policy Violations
+          <ngb-progressbar height="15px" type="danger" textType="white" [value]="75" showValue="true"></ngb-progressbar>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+
+</div>
+
+
+
+<div class="row">
+  <div class="col-12">
+
+  <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
+    <h5 class="mb-3">License & Copyrights</h5>
+
+<!--
+    <div style="float:right;position:absolute;top:20px;right:460px;border:#182e54 solid 1px;z-index:1099">
+      <app-card [hidHeader]="true" cardClass="m-b-0  metrics-card">
+        <span>Projects</span>
+        <h3 class="mt-2 mb-0">257<sup class="text-c-blue f-14 ml-1">-1.1%</sup></h3>
+      </app-card>
+    </div>
+    <div style="float:right;position:absolute;top:20px;right:460px;border:#182e54 solid 1px;z-index:1099">
+      <app-card [hidHeader]="true" cardClass="m-b-0  metrics-card">
+        <span>Projects</span>
+        <h3 class="mt-2 mb-0">257<sup class="text-c-blue f-14 ml-1">-1.1%</sup></h3>
+      </app-card>
+    </div>
+    <div style="float:right;position:absolute;top:20px;right:240px;border:#182e54 solid 1px;z-index:1099">
+      <app-card [hidHeader]="true" cardClass="m-b-0 metrics-card" >
+        <span>Licenses</span>
+        <h3 class="mt-2 mb-0">3345<sup class="text-c-blue f-14 ml-1">+11.4%</sup></h3>
+      </app-card>
+    </div>
+    <div style="float:right;position:absolute;top:20px;right:20px; border:#182e54 solid 1px;z-index:1099">
+      <app-card [hidHeader]="true" cardClass="m-b-0 metrics-card"  >
+        <span>Copyrights</span>
+        <h3 class="mt-2 mb-0">153<sup class="text-c-blue f-14 ml-1">+12.3%</sup></h3>
+      </app-card>
+    </div>-->
+
+    <ngb-tabset type="pills" >
+      <ngb-tab title="BUSINESS UNIT" class="mb-3 ml-0 pl-0">
+        <ng-template ngbTabContent>
+          <!-- product-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="row m-20" style="text-align:right">
+                  <div class="col-sm-12">
+                    <div class="btn-group mb-2 mr-2" ngbDropdown [placement]="'bottom-right'">
+                      <button class="btn btn-outline-secondary" ngbDropdownToggle type="button" style="font-size:16px;"><i class="fas fa-chart-pie"></i><span>Reports</span></button>
+                      <div ngbDropdownMenu>
+                        <a class="dropdown-item" href="javascript:">Project Analytics Report</a>
+                        <a class="dropdown-item" href="javascript:">License Report</a>
+                        <a class="dropdown-item" href="javascript:">Comprehensive Asset Report</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <perfect-scrollbar [style.max-height]="'550px'">
+                    <table class="table table-hover m-b-0">
+                      <thead >
+                      <tr>
+                        <th width="250px">DIVISION</th>
+                        <th>PROJECTS</th>
+                        <th>LICENSE RISK</th>
+                        <th>THREATS</th>
+                        <th>LICENSES</th><!-- pie chart? -->
+                        <th>COPYRIGHTS</th>
+                        <th>ASSETS</th>
+                        <th>% INCLUSIONS</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Business Units</td>
+                          <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">45</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">84</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">129</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">2685</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">148,658</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">2.9%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">China</a></td>
+                          <td style="border-left:1px solid #4680ff">15</td>
+                          <td><span class="text-c-red">HIGH</span></td>
+                          <td>27</td>
+                          <td>35<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>434</td>
+                          <td>12,385</td>
+                          <td>2%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">UK</a></td>
+                          <td style="border-left:1px solid #4680ff">5</td>
+                          <td><span class="text-c-yellow">MODERATE</span></td>
+                          <td>5</td>
+                          <td>37<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>267</td>
+                          <td>24,054</td>
+                          <td>4%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Bangalore</a></td>
+                          <td  style="border-left:1px solid #4680ff">5</td>
+                          <td><span class="text-c-yellow">MODERATE</span></td>
+                          <td>5</td>
+                          <td>15<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>284</td>
+                          <td>18,083</td>
+                          <td>1%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Japan</a></td>
+                          <td style="border-left:1px solid #4680ff">1</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>20</td>
+                          <td>25<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>675</td>
+                          <td>9,539</td>
+                          <td>3%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Santa Clara</a></td>
+                          <td style="border-left:1px solid #4680ff">18</td>
+                          <td><span class="text-c-yellow">MODERATE</span></td>
+                          <td>17</td>
+                          <td>17<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>1025</td>
+                          <td>83,597</td>
+                          <td>2%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Boston</a></td>
+                          <td style="border-left:1px solid #4680ff">5</td>
+                          <td><span class="text-c-yellow">MODERATE</span></td>
+                          <td>22</td>
+                          <td>4<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>2025</td>
+                          <td>43,137</td>
+                          <td>1%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Germany</a></td>
+                          <td style="border-left:1px solid #4680ff">14</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>19</td>
+                          <td>0<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>842</td>
+                          <td>3,112</td>
+                          <td>7%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Secret Dev Bunker</a></td>
+                          <td style="border-left:1px solid #4680ff">14</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>54</td>
+                          <td>2<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>516</td>
+                          <td>387</td>
+                          <td>1%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Romania</a></td>
+                          <td style="border-left:1px solid #4680ff">14</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>24</td>
+                          <td>2<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>515</td>
+                          <td>28,285</td>
+                          <td>12%</td>
+                        </tr>
+                        <tr>
+                          <td><a [routerLink]="['/dashboard/entity']">Belarus</a></td>
+                          <td style="border-left:1px solid #4680ff">14</td>
+                          <td><span class="text-c-red">LOW</span></td>
+                          <td>4</td>
+                          <td>1<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>916</td>
+                          <td>33,552</td>
+                          <td>3%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- product-section end -->
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="PROJECTS">
+        <ng-template ngbTabContent>
+          <!-- product-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card cardTitle="License Data By Project" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="table-responsive">
+                  <perfect-scrollbar >
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                      <tr>
+                        <th width="250px">PROJECT NAME</th>
+                        <th width="150px">DIVISION</th>
+                        <th>LICENSE RISK</th>
+                        <th>THREATS</th>
+                        <th>LICENSES</th>
+                        <th>COPYRIGHTS</th>
+                        <th>ASSETS</th>
+                        <th>LAST SCAN</th>
+                        <th>SCAN HOST</th>
+                        <th>AVG % INCLUSIONS</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Projects</td>
+                          <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">All Business Units</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">84</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">129</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">2685</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">148,658</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">5/24 12:15pm</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">j.mcconnel@threatrix.io</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">2.9%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">End User Website - Medical Devices</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-red">HIGH</span></td>
+                          <td>1</td>
+                          <td>13<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>15</td>
+                          <td>1,385</td>
+                          <td>5/24 12:15pm</td>
+                          <td>j.mcconnel@threatrix.io</td>
+                          <td>2%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">End User Website - Pharma</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-yellow">MODERATE</span></td>
+                          <td>1</td>
+                          <td>8<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>5</td>
+                          <td>385</td>
+                          <td>5/24 10:30am</td>
+                          <td>Build/Jenkins(build1.threatrix.io)</td>
+                          <td>0%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">Website - Pharma Core</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>2</td>
+                          <td>6<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>9</td>
+                          <td>115</td>
+                          <td>5/22 1:17am</td>
+                          <td>b.simpson@threatrix.io</td>
+                          <td>0%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">Pharma App</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>0</td>
+                          <td>1<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>19</td>
+                          <td>2,885</td>
+                          <td>5/21 4:54pm</td>
+                          <td>Build/Jenkins(build1.threatrix.io)</td>
+                          <td>2%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">DataScience Core</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>1</td>
+                          <td>2<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>23</td>
+                          <td>154</td>
+                          <td>5/20 2:18pm</td>
+                          <td>Build/TeamCity(tc5.threatrix.io)</td>
+                          <td>15%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">DataScience Tools</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>2</td>
+                          <td>4<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>6</td>
+                          <td>273</td>
+                          <td>5/20 6:24am</td>
+                          <td>Build/TeamCity(tc2.threatrix.io)</td>
+                          <td>0%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">DataScience Chart API</a></td>
+                          <td style="border-left:1px solid #4680ff">China</td>
+                          <td><span class="text-c-green">LOW</span></td>
+                          <td>15</td>
+                          <td>16<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>29</td>
+                          <td>7835</td>
+                          <td>5/20 3:16pm</td>
+                          <td>Build/TeamCity(tc2.threatrix.io)</td>
+                          <td>2%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">Financials API</a></td>
+                          <td style="border-left:1px solid #4680ff">Belarus</td>
+                          <td><span class="text-c-green">Moderate</span></td>
+                          <td>0</td>
+                          <td>1<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>5</td>
+                          <td>385</td>
+                          <td>5/20 5:54am</td>
+                          <td>b.simpson@threatrix.io</td>
+                          <td>21%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">Finacials Website</a></td>
+                          <td style="border-left:1px solid #4680ff">Belarus</td>
+                          <td><span class="text-c-red">HIGH</span></td>
+                          <td>1</td>
+                          <td>7<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>19</td>
+                          <td>1,462</td>
+                          <td>5/19 7:54pm</td>
+                          <td>b.simpson@threatrix.io</td>
+                          <td>22%</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:bold"><a [routerLink]="['/dashboard/entity']">Skynet</a></td>
+                          <td style="border-left:1px solid #4680ff">Cyberdyne Systems</td>
+                          <td><span class="text-c-green">HIGH</span></td>
+                          <td>55</td>
+                          <td>22<a href="#"><i class="fas fa-chart-pie pl-2"></i></a> </td>
+                          <td>29</td>
+                          <td>203,973</td>
+                          <td>5/18 12:12am</td>
+                          <td>Build/Jenkins(00100.sky.net)</td>
+                          <td>0%</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- product-section end -->
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="LICENSES">
+        <ng-template ngbTabContent>
+
+          <!-- license-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card cardTitle="License Data By License Type" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="table-responsive">
+                  <perfect-scrollbar >
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                        <tr>
+                          <th width="250px">LICENSE</th>
+                          <th>LICENSE RISK</th>
+                          <th>COUNT</th>
+                          <th>CATEGORY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Licenses</td>
+                          <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">227</td>
+                          <td style="border-bottom:1px solid #4680ff;font-weight:bold">-</td>
+                        </tr>
+                        <tr>
+                          <td>GPL v1</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-red">HIGH</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>GPL v2</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-red">HIGH</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>GPL v3</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-red">HIGH</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>AGPL v1</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-yellow">MODERATE</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>Apache License v1</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-yellow">MODERATE</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>Creative Commons</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-green">LOW</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>MIT License</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-green">LOW</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                        <tr>
+                          <td>BSD License</td>
+                          <td style="border-left:1px solid #4680ff"><span class="text-c-green">LOW</span></td>
+                          <td>45</td>
+                          <td>343</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- license-section end -->
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="COPYRIGHTS">
+        <ng-template ngbTabContent>
+          <!-- embedded assets-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="table-responsive">
+                  <perfect-scrollbar>
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                        <tr>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">TEXT</th>
+                          <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">START YEAR</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">END YEAR</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">COUNT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr>
+                          <td>Copyright 2009, Broadcom Corporation</td>
+                          <td style="border-left:1px solid #4680ff">2009</td>
+                          <td>present</td>
+                          <td>15</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright 2006, 2007, Michael Buesch &lt;mb@bu3sch.de&gt;</td>
+                          <td style="border-left:1px solid #4680ff">2006</td>
+                          <td>present</td>
+                          <td>5</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright 2010, Bernhard Loos &lt;bernhardloos@googlemail.com&gt;</td>
+                          <td style="border-left:1px solid #4680ff">2010</td>
+                          <td>present</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright 2011, Hauke Mehrtens &lt;hauke@hauke-m.de&gt;</td>
+                          <td style="border-left:1px solid #4680ff">2011</td>
+                          <td>present</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright (c) 2015, Intel Corporation.</td>
+                          <td style="border-left:1px solid #4680ff">2015</td>
+                          <td>present</td>
+                          <td>112</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright (c) 2016 Christoph Hellwig.</td>
+                          <td style="border-left:1px solid #4680ff">2015</td>
+                          <td>present</td>
+                          <td>43</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright (C) 2016 Jens Axboe</td>
+                          <td style="border-left:1px solid #4680ff">2016</td>
+                          <td>present</td>
+                          <td>15</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright (c) 2015, Hannes Reinecke</td>
+                          <td style="border-left:1px solid #4680ff">2015</td>
+                          <td>present</td>
+                          <td>37</td>
+                        </tr>
+                        <tr>
+                          <td>Copyright (c) 2016, Damien Le Moal</td>
+                          <td style="border-left:1px solid #4680ff">2016</td>
+                          <td>present</td>
+                          <td>2</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- embedded assets-section end -->
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="ASSETS">
+        <ng-template ngbTabContent>
+
+          <!-- embedded assets-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="table-responsive">
+                  <perfect-scrollbar>
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                      <tr>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold"  width="250px">NAME</th>
+                        <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">PATH</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold">PROJECT</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold">DIVISION</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold">SIZE</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold">% INCLUSIONS</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold">INCLUSION LICENSE(S)</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <!--
+                      <tr>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                        <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red"></span></td>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                        <td style="border-bottom:1px solid #4680ff;font-weight:bold"></td>
+                      </tr>-->
+                      <tr>
+                        <td>AliasRegistry.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>5.5kb</td>
+                        <td>10.2%</td>
+                        <td>Apache-2.0</td>
+                      </tr>
+                      <tr>
+                        <td>AttributeAccessor.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>3.6kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>BridgeMethodResolver.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>12.5kb</td>
+                        <td>22.6%</td>
+                        <td>GPL-3.0</td>
+                      </tr>
+                      <tr>
+                        <td>CollectionFactory.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>15.8kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>ConfigurableObjectInputStream.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>1.4kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>ExceptionDepthComparator.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>28.6kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>GenericTypeResolver.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>2.8kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>InfrastructureProxy.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>9.4kb</td>
+                        <td>4.9%</td>
+                        <td>Creative Commons</td>
+                      </tr>
+                      <tr>
+                        <td>MethodClassKey.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>59.6kb</td>
+                        <td>15.6%</td>
+                        <td>GPL-3.0</td>
+                      </tr>
+                      <tr>
+                        <td>MethodIntrospector.java</td>
+                        <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
+                        <td>Sci Framework</td>
+                        <td>China</td>
+                        <td>37.4kb</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- embedded assets-section end -->
+
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="LIBRARIES">
+        <ng-template ngbTabContent>
+          <!-- embedded assets-section start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                <div class="table-responsive">
+                  <perfect-scrollbar>
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                        <tr>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">NAME</th>
+                          <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">VERSION</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">LAST RELEASE</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">PROJECT(S)</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">LICENSE(S)</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">REPOSITORY</th>
+                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">DEPENDENCY TREE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>spring-boot</td>
+                          <td style="border-left:1px solid #4680ff">v2.3.0.M4</td>
+                          <td>3/3/2020</td>
+                          <td>Sci Framework</td>
+                          <td>Apache-2.0</td>
+                          <td>spring-framework/spring-boot </td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>spring-core</td>
+                          <td style="border-left:1px solid #4680ff">v2.3.0.RELEASE</td>
+                          <td>2/3/2020</td>
+                          <td>Sci Framework</td>
+                          <td>Apache-2.0</td>
+                          <td>spring-framework/spring-core</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>log4j</td>
+                          <td style="border-left:1px solid #4680ff">v1.3.4</td>
+                          <td>4/6/2020</td>
+                          <td>Sci Framework</td>
+                          <td>MIT</td>
+                          <td></td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>spring-cassandra</td>
+                          <td style="border-left:1px solid #4680ff">v2.4.0.RELEASE</td>
+                          <td>12/22/2019</td>
+                          <td>Sci Framework</td>
+                          <td>General Public License v2.0</td>
+                          <td>spring-framework/spring-data-cassandra</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>spring-jdbc</td>
+                          <td style="border-left:1px solid #4680ff">v2.3.0.M3</td>
+                          <td>5/8/2020</td>
+                          <td>Sci Framework</td>
+                          <td>Apache-2.0</td>
+                          <td>spring-framework/spring-jdbc</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>Apache Commons DBCP</td>
+                          <td style="border-left:1px solid #4680ff">v7.8.9</td>
+                          <td>12/12/2019</td>
+                          <td>Sci Framework</td>
+                          <td>Creative Commons</td>
+                          <td>org.apache.commons/commons-dbcp2</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>spring-security-oauth</td>
+                          <td style="border-left:1px solid #4680ff">v10.15.5.M4</td>
+                          <td>4/15/2020</td>
+                          <td>Sci Framework</td>
+                          <td>Apache-2.0</td>
+                          <td>spring-framework/spring-security-oauth</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>atom-spring-boot</td>
+                          <td style="border-left:1px solid #4680ff">v2.3.0.M4</td>
+                          <td>6/29/2019</td>
+                          <td>Sci Framework</td>
+                          <td>BSD 2.0</td>
+                          <td>spring-framework/atom-spring-boot</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>redis</td>
+                          <td style="border-left:1px solid #4680ff">v4.5.0.M4</td>
+                          <td>3/3/2020</td>
+                          <td>Sci Framework</td>
+                          <td>Apache-2.0</td>
+                          <td>redis/redis</td>
+                          <td>dep tree</td>
+                        </tr>
+                        <tr>
+                          <td>DataStax Cassandra Java Driver</td>
+                          <td style="border-left:1px solid #4680ff">v8.6.3.M4</td>
+                          <td>5/8/2020</td>
+                          <td>Sci Framework</td>
+                          <td>AGPLv2.0</td>
+                          <td>datastax/java-cassandra-driver</td>
+                          <td>dep tree</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+              </app-card>
+            </div>
+          </div>
+          <!-- embedded assets-section end -->
+        </ng-template>
+      </ngb-tab>
+
+
+
+
+    </ngb-tabset>
+  </app-card>
+  </div>
+</div>
+
+

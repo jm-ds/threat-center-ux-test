@@ -1,0 +1,6 @@
+<div class="row" style="margin-bottom:20px">
+  <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
+    <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a [routerLink]="['/dashboard/project',project.projectId]">{{project.name}}</a> / License Detail</span>
+  </div>
+</div>
+<license-dimension [licenseId]="licenseId"></license-dimension>

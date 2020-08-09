@@ -1,0 +1,250 @@
+  <div *ngIf='obsComponent | async as component;'>
+
+    <div class="row" style="margin-bottom:20px">
+      <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
+        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a [routerLink]="['/dashboard/project',project.projectId]">{{project.name}}</a> / {{component.name}}</span>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:40px">
+      <div class="col-md-6">
+        <h3><span style="font-size:15px">{{component.group}}</span> | {{component.name}}</h3>
+        Version: <span title="Info" class="badge m-r-5 badge-light-primary">{{component.version}}</span>
+        Released: <span title="Info" class="badge m-r-5 badge-light-primary">Oct 10, 2017</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ngb-tabset type="pills" [activeId]="stateService.component_tabs_selectedTab" (tabChange)="onTabChange($event)">
+
+          <!-- VULNERABILITIES TAB -->
+          <ngb-tab title="Vulnerabilities" id="vulnerabilities">
+            <ng-template ngbTabContent>
+              <perfect-scrollbar [style.max-height]="'650px'">
+                <p-table #dt [columns]="vulnerabilityColumns" [value]="component.vulnerabilities" [paginator]="false" [rows]="50"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
+
+                  <ng-template pTemplate="caption">
+                    <div style="display: flex;text-align: left">
+                      <div style="flex: 50%;font-weight:bold">
+
+                      </div>
+                      <div style="flex: 50%;text-align: right">
+                        <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                        <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns" >
+                        {{col}}
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-vulnerability>
+                    <tr [routerLink]="['/dashboard/project/vulnerability', vulnerability?.vulnerabilityId]">
+                      <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.source}}</span> {{vulnerability?.vulnId}}</td>
+                      <td><span *ngIf="vulnerability?.cwe"> CWE-{{vulnerability?.cwe?.cweId}} : {{vulnerability?.cwe?.name}}</span></td>
+                      <td>{{vulnerability?.severity}}</td>
+                      <td>{{vulnerability?.cvssV2BaseScore}}</td>
+                      <td>{{vulnerability?.cvssV3BaseScore | number : '1.1-1'}}</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </perfect-scrollbar>
+            </ng-template>
+          </ngb-tab>
+
+          <!-- LICENSES TAB -->
+          <ngb-tab title="Licenses" id="licenses">
+            <ng-template ngbTabContent>
+
+              <div style="display: flex;">
+                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of component.licenses">
+                  <div class="card-body" [routerLink]="['/dashboard/project/license', license.licenseId]">
+                    <h6 class="card-title">{{license.name}}</h6>
+                      <div class="card p-2 m-3">
+                        <form>
+                          <div class="form-group row  p-l-5">
+                            <label class="col-sm-12 col-form-label">Category</label>
+                            <div class="col-xl-12">
+                              <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                              <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                              <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                              <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                              <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                              <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="spdx" class="col-sm-12 col-form-label">SPDX</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.spdxId}}">
+                            </div>
+                          </div>publicationYear
+                          <div class="form-group row  p-l-5">
+                            <label for="style" class="col-sm-12 col-form-label">Style</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="style" readonly placeholder="{{license.style}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="publicationYear" class="col-sm-12 col-form-label">Publication Year</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.publicationYear}}">
+                            </div>
+                          </div>
+
+                        </form>
+                      </div>
+
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <!-- REPOSITORIES TAB -->
+          <ngb-tab title="Repositories" id="repositories">
+            <ng-template ngbTabContent>
+              <div class="row" style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
+                <div class="col-md-6">
+                  <app-card [hidHeader]="true" cardClass="mb-5" blockClass="pb-0">
+
+                    <div>
+                      <div style="width:45%;float:left;">
+                        <div>
+                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{component.repositoryMeta.repositoryType}}</span></div>
+                          <div style="width:50%;float:left;text-align:right;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-success">BINARY</span></div>
+                        </div>
+                        <div class="form-group">
+                          <label>Namespace</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.namespace}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Name</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.name}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Latest Version</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.latestVersion}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Published</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.published | date :'MMMM d, y'}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Last Checked</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
+                        </div>
+                      </div>
+                      <div style="width:50%;float:right;">
+                        <perfect-scrollbar [style.max-height]="'400px'">
+                          <p-table #dt [columns]="releaseCols" [value]="releases" [paginator]="false" [rows]="50"
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                                   [filterDelay]="0" [globalFilterFields]="['name']">
+
+                            <ng-template pTemplate="caption">
+                              <div style="text-align: right;float:right;margin-bottom:10px">
+                                <input type="text" pInputText size="50" placeholder="Filter"
+                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       style="width:160px;display:inline" class="form-control">
+                              </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Version</th>
+                                <th>Release Date</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-release>
+                              <tr>
+                                <td>{{release.version}}</td>
+                                <td>{{release.date}}</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </perfect-scrollbar>
+                      </div>
+                    </div>
+                  </app-card>
+                </div>
+                <div class="col-md-6">
+                  <app-card [hidHeader]="true" cardClass="mb-3" blockClass="pb-0">
+                    <div>
+                      <div style="width:45%;float:left;">
+                        <div>
+                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">GitHub</span></div>
+                          <div style="width:50%;float:left;text-align:right;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-success">SOURCE</span></div>
+                        </div>
+                        <div class="form-group">
+                          <label>Namespace</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.namespace}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Name</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.name}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Latest Version</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.latestVersion}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Published</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.published | date :'MMMM d, y'}}">
+                        </div>
+                        <div class="form-group">
+                          <label>Last Checked</label>
+                          <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
+                        </div>
+                      </div>
+                      <div style="width:50%;float:right;">
+
+
+                        <perfect-scrollbar [style.max-height]="'400px'">
+                          <p-table #dt [columns]="releaseCols" [value]="releases" [paginator]="false" [rows]="50"
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                                   [filterDelay]="0" [globalFilterFields]="['name']">
+
+                            <ng-template pTemplate="caption">
+                              <div style="text-align: right;float:right;margin-bottom:10px">
+                                <input type="text" pInputText size="50" placeholder="Filter"
+                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       style="width:160px;display:inline" class="form-control">
+                              </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Version</th>
+                                <th>Release Date</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-release>
+                              <tr>
+                                <td>{{release.version}}</td>
+                                <td>{{release.date}}</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </perfect-scrollbar>
+
+
+
+                      </div>
+                    </div>
+
+                  </app-card>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+
+      </div>
+    </div>
+  </div>
+
+

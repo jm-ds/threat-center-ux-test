@@ -1,0 +1,56 @@
+
+<div class="col-xl-12">
+    <div *ngIf='obsScan | async as scan;'>
+
+      <div style="float:left;clear: both;">
+        <ng-template pTemplate="caption">
+          <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+            header
+          </div>
+        </ng-template>
+      </div>
+
+      <perfect-scrollbar [style.max-height]="'650px'">
+        <p-table #dt [columns]="columns" [value]="sort(scan.scanAssets)" [paginator]="false" [rows]="50"
+                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                 [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
+
+          <ng-template pTemplate="caption">
+            <div style="text-align: right">
+              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">
+                {{col}}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-scanAsset>
+            <tr style="cursor: pointer;" *ngIf="scanAsset.status === 'ACCEPTED'" [routerLink]="['/dashboard/project/scanasset',scan.scanId, scanAsset.scanAssetId]">
+              <td>{{scanAsset.name}}</td>
+              <td *ngIf='scanAsset.assetSize >= 1024'>{{scanAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf='scanAsset.assetSize < 1024'>{{scanAsset.assetSize | number:'1.0-0'}} bytes</td>
+              <td>{{scanAsset.workspacePath}}</td>
+              <td>{{scanAsset.status}}</td>
+              <td>{{scanAsset.embeddedAssets.length}} <span *ngIf='scanAsset.embeddedAssets[0]'> / {{scanAsset.embeddedAssets[0]?.percentMatch | number:'1.1-2'}}%</span></td>
+            </tr>
+            <tr *ngIf="scanAsset.status != 'ACCEPTED'" >
+              <td>{{scanAsset.name}}</td>
+              <td *ngIf='scanAsset.assetSize >= 1024'>{{scanAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf='scanAsset.assetSize < 1024'>{{scanAsset.assetSize | number:'1.0-0'}} bytes</td>
+              <td>{{scanAsset.workspacePath}}</td>
+              <td>{{scanAsset.status}}</td>
+              <td>{{scanAsset.embeddedAssets.length}} <span *ngIf='scanAsset.embeddedAssets[0]'> / {{scanAsset.embeddedAssets[0]?.percentMatch | number:'1.1-2'}}%</span></td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </perfect-scrollbar>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,58 @@
+    <div class="inner-card">
+      <div class="card-body">
+        <p-table #dt [columns]="assetCols" [value]="assetData"
+                 selectionMode="single" dataKey="name"
+                 tableStyleClass="table table-hover dataTable table-sm">
+
+          <ng-template pTemplate="caption">
+            <div style="text-align: left;float:left">
+              License Data
+            </div>
+            <div style="text-align: right;float:right;margin-bottom:10px">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Global Filter"
+                     (input)="dt.filterGlobal($event.target.value, 'contains')"
+                     style="width:200px;display:inline" class="form-control">
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" let-assetCols>
+            <tr>
+              <th *ngFor="let col of assetCols">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-assetData let-columns="assetCols">
+            <tr [pSelectableRow]="licenseData">
+              <!--<--<td>{{assetData['assetId']}}</a></td>-->
+              <td><i class="far fa-file-alt m-r-10"></i> <a [routerLink]="['fileview']">{{assetData['name']}}</a></td>
+              <td>{{assetData['pct_opensource']}}%</td>
+              <td>{{assetData['status']}}</td>
+              <td>{{assetData['size']}}b</td>
+              <td>
+
+                <!--<div class="btn-group mb-2 mr-2" ngbDropdown [placement]="'bottom-left'" *ngIf="assetData['licenses']?.length > 1">
+                  <button class="btn btn-outline-secondary" ngbDropdownToggle type="button">Licenses</button>
+                  <div ngbDropdownMenu>
+                    <a *ngFor="let license of assetData['licenses']" class="dropdown-item" href="javascript:">{{license.name}}</a>
+                  </div>
+                </div>-->
+
+                <div *ngIf="assetData['licenses']?.length > 1">
+                  <a [placement]="'bottom'" [ngbPopover]="licenseContent">Show Licenses</a><span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span>
+                  <ng-template #licenseContent>
+                    <div *ngFor="let license of assetData['licenses']" class="license-dropdown">
+                      <a  href="#">{{license.name}}</a><span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span><br/>
+                    </div>
+                  </ng-template>
+                </div>
+
+                <div *ngIf="assetData['licenses']?.length == 1">
+                  only 1 license<span _ngcontent-ntu-c20="" class="badge m-l-10 badge-light-danger">VIRAL</span>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
