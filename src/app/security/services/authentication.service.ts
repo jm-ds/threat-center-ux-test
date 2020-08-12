@@ -15,10 +15,10 @@ export class AuthenticationService {
 
     // these should be set with the 'production' hook. Figure that out.
     // dev URL
-    //private host_url = "http://localhost:8080";
+    private host_url = "http://localhost:8080";
 
     // production URL
-    private host_url = ""
+    //private host_url = ""
 
     constructor(private http: HttpClient,private router: Router) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
