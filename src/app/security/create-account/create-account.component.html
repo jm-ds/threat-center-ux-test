@@ -1,0 +1,75 @@
+<div class="row" style="height:100vh;margin: 0px;min-width:800px">
+    <div class="col-6 col-lg-6 col-xl-8 auth-left-panel">
+        <div class="auth-bgimg-div"></div>
+        <div style="float:right;margin:250px 100px 0 0;color:#adb7be;">
+            <div style="font-size:25px">
+                <img width="300" src="/assets/images/website_logo_white-letters-transparent_background-large.png">
+            </div>
+            <div style="position:relative;top:-17px;text-align:right;font-size:25px;">ThreatCenter</div>
+            <div style="color:#41a8e3;text-align:right;font-size:25px;padding-left:10px;padding-top:40px">Advanced
+                Threat Intelligence
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-6 col-xl-4 auth-div">
+
+        <div>
+
+            <div>
+                {{errorMessage}}
+            </div>
+
+            <div class="row" style="margin-top:40px;border-bottom:2px solid #41a8e3;font-size:15px;font-weight:bold">
+                Create account
+            </div>
+
+            <form name="form" (ngSubmit)="f.form.valid && createAccount()" #f="ngForm" novalidate>
+
+                <div [ngClass]="{ 'has-error': f.submitted && !companyName.valid }" class="row" style="padding:0px 10px 10px 10px">
+                    <div class="col-xl-12" style="padding:10px 0px 10px 0px">
+                        <input class="form-control" name="companyName" [(ngModel)]="model.companyName" #companyName="ngModel" required placeholder="Company name">
+                        <div class="text-danger" *ngIf="f.submitted && !companyName.valid">Company name is required</div>
+                    </div>
+                </div>
+
+                <div [ngClass]="{ 'has-error': f.submitted && !fullName.valid }" class="row" style="padding:0px 10px 10px 10px">
+                    <div class="col-xl-12" style="padding:10px 0px 10px 0px">
+                        <input class="form-control" name="fullName" [(ngModel)]="model.fullName" #fullName="ngModel" required placeholder="Full name">
+                        <div class="text-danger" *ngIf="f.submitted && !fullName.valid">Full name is required</div>
+                    </div>
+                </div>
+
+                <div [ngClass]="{ 'has-error': f.submitted && !phone.valid }" class="row" style="padding:0px 10px 10px 10px">
+                    <div class="col-xl-12" style="padding:10px 0px 10px 0px">
+                        <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required placeholder="Phone number">
+                        <div class="text-danger" *ngIf="f.submitted && !phone.valid">Phone number is required</div>
+                    </div>
+                </div>
+
+                <div [ngClass]="{ 'has-error': f.submitted && !email.valid }" class="row" style="padding:0px 10px 10px 10px">
+                    <div class="col-xl-12" style="padding:10px 0px 10px 0px">
+                        <input class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required placeholder="Email">
+                        <div class="text-danger" *ngIf="f.submitted && !email.valid">Email is required</div>
+                    </div>
+                </div>
+
+                <div [ngClass]="{ 'has-error': f.submitted && !password.valid }" class="row" style="padding:0px 10px 10px 10px">
+                    <div class="col-xl-12" style="padding:10px 0px 10px 0px">
+                        <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required placeholder="Password">
+                        <div class="text-danger" *ngIf="f.submitted && !password.valid">Password is required</div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-12" style="padding:0px 10px 0px 10px">
+                        <button [disabled]="loading" class="btn btn-primary btn-block ">Sign up</button>
+                    </div>
+                </div>
+
+                By clicking "Sign up" button you agree to our <a href="#">Terms of Service</a>
+            </form>
+
+        </div>
+    </div>
+</div>
