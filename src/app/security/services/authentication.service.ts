@@ -65,6 +65,7 @@ export class AuthenticationService {
     }
 
     createAccount(email: string, fullName: string, phone: string, password: string, companyName: string) {
+        // todo[5]: don't forget to that "this.host_url" to "environment.apiUrl" on merge
         const url = this.host_url + '/account/create';
         const body = {email, fullName, phone, password, companyName};
         return this.http.post<any>(url, body)
