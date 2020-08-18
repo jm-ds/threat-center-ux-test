@@ -36,6 +36,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
       // only send JWT token if we're sending  request to our own server.
+      // todo[4]: we better update this conditions. (https://github.com/threatrix/product/issues/77)
       if( request.url.includes('user') || request.url.includes('localhost') || request.url.includes('threatrix.io') || request.url.includes('graphql')) {
         // add authorization header with basic auth credentials if available
         const jwt = sessionStorage.getItem("jwt");

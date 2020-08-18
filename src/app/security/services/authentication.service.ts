@@ -7,26 +7,20 @@ import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import { User } from '../../models';
+import {environment} from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
     private currentUserSubject: BehaviorSubject<User>;
 
-    // these should be set with the 'production' hook. Figure that out.
-    // dev URL
-    private host_url = "http://localhost:8080";
-
-    // production URL
-    //private host_url = ""
-
-    constructor(private http: HttpClient,private router: Router) {
+    constructor(private http: HttpClient, private router: Router) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     }
 
     public get currentUser(): User {
-      //note: I don't think the loading is working in constructor
-      if((!this.currentUserSubject || !this.currentUserSubject.value) && localStorage.getItem('currentUser')) {
+      // note: I don't think the loading is working in constructor
+      if ((!this.currentUserSubject || !this.currentUserSubject.value) && localStorage.getItem('currentUser')) {
         console.log("Current user subject is null. Loading from localStorage")
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
       }
@@ -34,7 +28,7 @@ export class AuthenticationService {
     }
 
     loadAuthenticatedUser() {
-      let url = this.host_url+'/user';
+      const url = environment.apiUrl + '/user';
       return this.http.get<any>(url)
         .pipe(first())
         .subscribe(user => {
@@ -44,7 +38,7 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        let url = this.host_url+'/authenticate';
+        const url = environment.apiUrl + '/authenticate';
         const body = {
           username: username,
           password: password
@@ -66,7 +60,7 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        //localStorage.removeItem('currentUser');
+        // localStorage.removeItem('currentUser');
         console.log("Logout called");
         sessionStorage.removeItem("jwt");
         this.currentUserSubject.next(null);

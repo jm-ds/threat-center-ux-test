@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
     error = '';
     model: any = {};
     errorMessage: string;
+    apiUrl: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
         if (this.authenticationService.currentUser) {
             this.router.navigate(['/']);
         }
+        this.apiUrl = environment.apiUrl;
     }
 
     ngOnInit() {
