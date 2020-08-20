@@ -1,0 +1,10 @@
+{
+  "/graphql": {
+    "target": "https://app.threatrix.io",
+    "secure": false
+  },
+  "/user": {
+    "target": "https://app.threatrix.io",
+    "secure": false
+  }
+}
