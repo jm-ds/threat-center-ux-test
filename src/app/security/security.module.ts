@@ -5,6 +5,7 @@ import { FormsModule }    from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
+import {CreateAccountComponent} from '@app/security/create-account/create-account.component';
 
 @NgModule({
   imports: [
@@ -14,6 +15,9 @@ import { SharedModule } from '@app/shared/shared.module';
     ReactiveFormsModule,
     SharedModule
   ],
-  declarations: [LoginComponent]
+  declarations: [
+      LoginComponent,
+      CreateAccountComponent
+  ]
 })
 export class SecurityModule { }
