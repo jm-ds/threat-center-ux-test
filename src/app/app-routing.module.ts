@@ -21,6 +21,10 @@ const routes: Routes = [
         loadChildren: () => import('./threat-center/dashboard/dashboard.module').then(module => module.DashboardModule)
       },
       {
+        path: 'admin',
+        loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule)
+      },
+      {
         path: 'layout',
         loadChildren: () => import('./demo/pages/layout/layout.module').then(module => module.LayoutModule)
       },
