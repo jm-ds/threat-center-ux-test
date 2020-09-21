@@ -135,7 +135,7 @@ const NavigationItems = [
             title: 'RBAC',
             icon: 'fas fa-user-lock',
             type: 'item',
-            url: '/admin/rbac',
+            url: '/admin/role',
             target: false,
           },
           {

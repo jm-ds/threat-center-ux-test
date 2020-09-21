@@ -16,7 +16,7 @@ const routes: Routes = [
         loadChildren: () => import('./user/user.module').then(module => module.UserModule)
       },
       {
-        path: 'rbac',
+        path: 'role',
         loadChildren: () => import('./rbac/rbac.module').then(module => module.RbacModule)
       },
       {
