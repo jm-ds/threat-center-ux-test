@@ -28,7 +28,6 @@
 
         <div class="form-group">
             <label>Entities</label>
-            {{entitySelectSelectedItems}}
             <ng-select name="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'"></ng-select>
         </div>
 

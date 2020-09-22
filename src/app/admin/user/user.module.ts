@@ -14,6 +14,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import {TcSharedModule} from "@app/threat-center/shared/tc-shared.module";
 import {FormsModule} from "@angular/forms";
 import {SelectModule} from "ng-select";
+import {SharedModule} from "@app/shared/shared.module";
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {SelectModule} from "ng-select";
         TcSharedModule,
         AlertModule,
         FormsModule,
-        SelectModule
+        SelectModule,
+        SharedModule
     ]
 })
 export class UserModule { }

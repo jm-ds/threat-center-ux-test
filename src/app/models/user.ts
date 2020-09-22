@@ -13,11 +13,16 @@ export class User {
     email: string;
     orgId: string;
     defaultEntityId: string;
-    permissions: string[];
     authdata?: string;
+
+    // lists returned by gql inner queries
     userRoles: Role[];
     userEntities: Entity[];
     userPermissions: Permission[];
+
+    // lists as user class fields
+    roles: Role[];
+    permissions: string[];
 }
 
 
