@@ -47,13 +47,9 @@ export class UserEditComponent implements OnInit {
             this.userService.getUser(username).subscribe(
                 data => {
                     this.user = data.data.user;
-                    console.log("this.user:");
-                    console.log(this.user);
                     this.newUser = false;
                     this.selectedRoles = this.user.userRoles;
                     this.entitySelectSelectedItems = this.user.userEntities.map(entity => entity.entityId);
-                    console.log("this.entitySelectSelectedItems");
-                    console.log(this.entitySelectSelectedItems);
                 },
                 error => {
                     console.error("UserEditComponent", error);
@@ -64,9 +60,6 @@ export class UserEditComponent implements OnInit {
             this.user = new User();
             this.selectedRoles = [];
         }
-
-        console.log("this.selectedRoles:");
-        console.log(this.selectedRoles);
 
         this.roleService.getRoleList().subscribe(
             data => {
@@ -121,15 +114,6 @@ export class UserEditComponent implements OnInit {
 
 
     private saveUser() {
-        console.log("this.entitySelectSelectedItems");
-        console.log(this.entitySelectSelectedItems);
-        console.log("ENTITY LIST:");
-        console.log(this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems));
-        console.log("this.selectedRoles");
-        console.log(this.selectedRoles);
-        console.log("THIS.USER:");
-        console.log(this.user);
-
         this.user.userRoles = this.selectedRoles;
         this.user.userEntities = this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems);
 

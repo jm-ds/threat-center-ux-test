@@ -105,8 +105,6 @@ export class UserService {
         }
 
         const userRequest = UserRequestInput.from(user);
-        console.log("USERREQUEST:");
-        console.log(userRequest);
 
         return this.apollo.mutate({
             mutation: gql`

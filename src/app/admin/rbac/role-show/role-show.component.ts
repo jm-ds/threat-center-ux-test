@@ -35,8 +35,6 @@ export class RoleShowComponent implements OnInit {
 
     removeRole() {
         if (confirm("Are you sure you want to delete the role " + this.role.roleId + "?")) {
-            console.log("Implement delete functionality here");
-
             this.roleService.removeRole(this.role)
                 .subscribe(({data}) => {
                     this.router.navigate(['/admin/role/list'],
