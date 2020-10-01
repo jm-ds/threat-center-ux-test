@@ -67,11 +67,11 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
     private saveRoles() {
         this.userService.saveRoles(this.user.username, this.confirmed)
             .subscribe(({data}) => {
-                this.router.navigate(['/admin/user/' + this.user.username],
+                this.router.navigate(['/admin/user/show/' + this.user.username],
                     {state: {messages: [Message.success("Roles added successfully.")]}});
             }, (error) => {
                 console.error('User Roles Saving', error);
-                this.router.navigate(['/admin/user/' + this.user.username],
+                this.router.navigate(['/admin/user/show/' + this.user.username],
                     {state: {messages: [Message.error("Unexpected error occurred while trying to add roles.")]}});
             });
     }
