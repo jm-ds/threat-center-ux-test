@@ -12,11 +12,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     ) {
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let jwt = route.queryParams['jwt'];
         if (jwt) {
             sessionStorage.setItem("jwt", jwt);
-            this.authenticationService.loadAuthenticatedUser();
+            await this.authenticationService.loadAuthenticatedUser();
             return this.authorizationService.hasPermissions(route.data.auth);
         } else {
             jwt = sessionStorage.getItem("jwt");
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                     this.router.navigate(['/login']);
                 }
                 if (!localStorage.getItem("currentUser")) {
-                    this.authenticationService.loadAuthenticatedUser();
+                    await this.authenticationService.loadAuthenticatedUser();
                 }
                 // logged in so return true
                 return this.authorizationService.hasPermissions(route.data.auth);

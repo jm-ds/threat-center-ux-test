@@ -70,30 +70,7 @@ export class AuthorizationService {
     }
 
     private getConsolidatedPermissionList(): string[] {
-        const user = this.authService.currentUser;
-
-        if (user === null || user === undefined) {
-            console.error("Authorization Service Error: user not found.");
-        }
-
-        let permissions: string[] = [];
-
-        if (user.roles != null && user.roles.length > 0) {
-            for (let role of user.roles) {
-                if (role.permissions != null && role.permissions.length > 0) {
-                    permissions = permissions.concat(role.permissions);
-                }
-            }
-        }
-
-        if (user.permissions != null && user.permissions.length > 0) {
-            permissions = permissions.concat(user.permissions);
-        }
-
-        permissions = permissions.filter((value, index, array) => {
-            return array.indexOf(value) === index;
-        });
-
-        return permissions;
+        let authorities = this.authService.currentUser.authorities.map(a => a.authority);
+        return authorities;
     }
 }

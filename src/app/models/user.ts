@@ -23,6 +23,12 @@ export class User {
     // lists as user class fields
     roles: Role[];
     permissions: string[];
+
+    authorities: Authority[];
+}
+
+export interface Authority {
+    authority: string;
 }
 
 
