@@ -48,7 +48,9 @@ NVM: https://github.com/nvm-sh/nvm
 
     # install project packages
     npm install
-
+    
+    # For Linux, Also run
+    npm link @angular/cli
 
 ### Known issues:  
 
