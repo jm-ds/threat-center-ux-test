@@ -1,0 +1,43 @@
+<ng-template [ngIf]="user != undefined && roles != undefined">
+
+    <div>
+        <nav aria-label="breadcrumb" class="float-right">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
+                <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(user.username)">User</a></li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Roles</li>
+            </ol>
+        </nav>
+        <h1>User roles</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+
+            <!-- User card -->
+            <app-user-card [user]="user" [showMenu]="true"></app-user-card>
+
+        </div>
+        <div class="col-md-8">
+            <app-card cardTitle="Manage user roles" [options]="false">
+                <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
+                           [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled"></dual-list>
+
+                <div class="actions mt-5 text-center">
+                    <button (click)="saveRoles()" class="btn btn-success">
+                        <i class="feather icon-save"></i>
+                        Save roles
+                    </button>
+
+                    <a routerLink="/admin/user/show/{{user.username}}" class="btn btn-outline-secondary">
+                        <i class="feather icon-user"></i>
+                        Back to user
+                    </a>
+                </div>
+            </app-card>
+        </div>
+    </div>
+
+
+
+</ng-template>

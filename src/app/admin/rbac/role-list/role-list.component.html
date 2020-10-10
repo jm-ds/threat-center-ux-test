@@ -1,0 +1,39 @@
+<h1>Role list</h1>
+
+<app-messages [messages]="messages"></app-messages>
+
+<div class="mb-3">
+    <a routerLink="/admin/role/create" class="btn btn-outline-info">Add role</a>
+
+    <form action="javascript:" class="form-inline float-right form-filter">
+        <div class="form-group">
+            <input type="text" name="q" class="form-control" value="" placeholder="Search query...">
+        </div>
+        <button type="submit" class="btn btn-info ml-2">
+            <i class="feather icon-filter"></i>
+            Filter
+        </button>
+        <button type="submit" class="btn btn-warning ml-2">
+            <i class="feather icon-slash"></i>
+            Clear
+        </button>
+    </form>
+</div>
+
+
+<table class="table row-border table-row-link">
+    <thead>
+        <tr>
+            <th>Role ID</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let role of roles" [routerLink]="'/admin/role/show/' + role.roleId">
+            <td>
+                {{role.roleId}}
+            </td>
+            <td>{{role.description}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { first,map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
-import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import { User } from '../../models';
@@ -27,14 +26,11 @@ export class AuthenticationService {
       return this.currentUserSubject.value;
     }
 
-    loadAuthenticatedUser() {
-      const url = environment.apiUrl + '/user';
-      return this.http.get<any>(url)
-        .pipe(first())
-        .subscribe(user => {
-          // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        });
+    async loadAuthenticatedUser() {
+        const url = environment.apiUrl + '/user';
+        let user = await this.http.get<any>(url).toPromise();
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        return user;
     }
 
     login(username: string, password: string) {

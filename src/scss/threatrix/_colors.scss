@@ -1,0 +1,82 @@
+/**
+    This file is about fixing styles of different UI elements.
+    Border colors, text colors and so on. Mostly for dark theme.
+*/
+
+$dark-card-border:      #4a4c4f;
+$dark-dropdown-shadow:  rgba(255, 255, 255, 0.16);
+
+$dark-input-border:      #7a8085;
+$dark-input-background:  #2a3641;
+$dark-input-text:        #adb7be;
+$dark-input-placeholder: #6f7a83;
+
+
+// dark theme styles
+body.next-dark {
+
+    input, select, textarea {
+        &::-moz-placeholder {
+            color: $dark-input-placeholder;
+            opacity: 1;
+        }
+
+        &:-ms-input-placeholder {
+            color: $dark-input-placeholder;
+        }
+
+        &::-webkit-input-placeholder {
+            color: $dark-input-placeholder;
+        }
+
+        &::placeholder {
+            color: $dark-input-placeholder;
+        }
+
+        /*&:focus {
+            outline: 0;
+            box-shadow: 0 0 0 0.3rem rgba(20, 134, 255, 0.35);
+        }*/
+    }
+
+    .form-group {
+        input.form-control {
+            border-color: $dark-input-border;
+            &:focus {
+                outline: 0;
+                //box-shadow: 0 0 0 0.3rem rgba(20, 134, 255, 0.35);
+                box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+            }
+        }
+    }
+
+    .breadcrumb {
+        border: 1px solid $dark-input-border;
+    }
+
+    .card {
+        border: 1px solid $dark-card-border;
+    }
+
+    .dropdown-menu {
+        border: 1px solid $dark-card-border;
+        box-shadow: 0 1px 20px 0 $dark-dropdown-shadow;
+    }
+
+    .ng-select {
+        > div {
+            color: $dark-input-text;
+            background-color: $dark-input-background;
+            border-radius: 2px;
+
+            &.focus {
+                box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+            }
+
+            input {
+                color: $dark-input-text;
+            }
+            border-color: $dark-input-border;
+        }
+    }
+}

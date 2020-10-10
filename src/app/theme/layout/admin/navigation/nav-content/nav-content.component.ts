@@ -18,6 +18,8 @@ export class NavContentComponent implements OnInit, AfterViewInit {
   public scrollWidth: any;
   public windowWidth: number;
 
+  private readonly disabledClass = 'disabled d-none';
+
   @Output() onNavMobCollapse = new EventEmitter();
 
   @ViewChild('navbarContent', {static: false}) navbarContent: ElementRef;
@@ -28,7 +30,7 @@ export class NavContentComponent implements OnInit, AfterViewInit {
     this.windowWidth = window.innerWidth;
 
     this.navigation = this.nav.get();
-    this.prevDisabled = 'disabled';
+    this.prevDisabled = this.disabledClass;
     this.nextDisabled = '';
     this.scrollWidth = 0;
     this.contentWidth = 0;
@@ -55,7 +57,7 @@ export class NavContentComponent implements OnInit, AfterViewInit {
     this.scrollWidth = this.scrollWidth + (this.wrapperWidth - 80);
     if (this.scrollWidth > (this.contentWidth - this.wrapperWidth)) {
       this.scrollWidth = this.contentWidth - this.wrapperWidth + 80;
-      this.nextDisabled = 'disabled';
+      this.nextDisabled = this.disabledClass;
     }
     this.prevDisabled = '';
     if(this.nextConfig.rtlLayout) {
@@ -69,7 +71,7 @@ export class NavContentComponent implements OnInit, AfterViewInit {
     this.scrollWidth = this.scrollWidth - this.wrapperWidth;
     if (this.scrollWidth < 0) {
       this.scrollWidth = 0;
-      this.prevDisabled = 'disabled';
+      this.prevDisabled = this.disabledClass;
     }
     this.nextDisabled = '';
     if(this.nextConfig.rtlLayout) {

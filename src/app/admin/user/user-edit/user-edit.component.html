@@ -1,0 +1,63 @@
+<div>
+    <nav aria-label="breadcrumb" class="float-right">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/admin/user/list">Users</a></li>
+            <li class="breadcrumb-item active text-muted" aria-current="page">User</li>
+        </ol>
+    </nav>
+    <h1>User</h1>
+</div>
+
+<app-messages [messages]="messages"></app-messages>
+
+
+<ng-template [ngIf]="user !== undefined">
+    <form>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control {{newUser ? '' : 'readonly'}}" [disabled]="!newUser" placeholder="Email..." required [(ngModel)]="user.email">
+        </div>
+        <div class="form-group">
+            <label>First name</label>
+            <input type="text" name="fname" class="form-control" placeholder="First name..." required [(ngModel)]="user.fname">
+        </div>
+        <div class="form-group">
+            <label>Last name</label>
+            <input type="text" name="lname" class="form-control" placeholder="Last name..." required [(ngModel)]="user.lname">
+        </div>
+
+        <div class="form-group">
+            <label>Entities</label>
+            <ng-select name="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'"></ng-select>
+        </div>
+
+        <!-- [(destination)]="selectedRoles" -->
+        <label>Roles</label>
+        <dual-list [source]="roles" [sort]="true" [key]="'roleId'" [display]="roleDisplay" [filter]="false"
+                   [(destination)]="selectedRoles" height="265px" [format]="format" [disabled]="false"></dual-list>
+
+
+        <div class="actions mt-5 mb-5">
+            <button type="button" class="btn btn-success" (click)="saveUser()">
+                <i class="feather icon-save"></i>
+                Save
+            </button>
+
+
+            <a *ngIf="!newUser" routerLink="/admin/user/show/{{user.username}}" class="btn btn-outline-secondary">
+                <i class="feather icon-user"></i>
+                Back to user
+            </a>
+
+            <a routerLink="/admin/user/list" class="btn btn-outline-secondary">
+                <i class="feather icon-users"></i>
+                Back to list
+            </a>
+        </div>
+    </form>
+</ng-template>
+
+
+<ng-template [ngIf]="user === undefined">
+    <app-alert type="warwing">User not found.</app-alert>
+</ng-template>
