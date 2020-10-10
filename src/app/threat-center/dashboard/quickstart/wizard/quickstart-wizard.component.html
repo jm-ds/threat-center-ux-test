@@ -52,7 +52,11 @@
                                 </div>
                                 <div style="float:left">{{repo.node['name']}}</div>
                               </td>
-                              <td>{{repo.node.primaryLanguage['name']}}</td>
+                              <td>
+                                <div *ngIf="repo.node.primaryLanguage">
+                                  {{repo.node.primaryLanguage['name']}}
+                                </div>
+                              </td>
                             </tr>
                           </ng-template>
                         </p-table>
@@ -94,7 +98,11 @@
                                 </div>
                                 <div style="float:left">{{orgrepo.node.name}}</div>
                               </td>
-                              <td>{{orgrepo.node.primaryLanguage?.name}}</td>
+                              <td>
+                                <div *ngIf="orgrepo.node.primaryLanguage">
+                                  {{orgrepo.node.primaryLanguage?.name}}
+                                </div>
+                              </td>
                             </tr>
                           </ng-template>
                         </p-table>
@@ -134,7 +142,7 @@
                               <div *ngIf="selectedRepo.node.refs.edges.length == 1">
                                 {{selectedRepo.node.defaultBranchRef?.name}}
                               </div>
-                              <div *ngIf="selectedRepo.node.refs.edges.length > 1"><!--[selected]="branch.node.name == 'master'" -->
+                              <div *ngIf="selectedRepo.node.refs.edges.length > 1">
                                 <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"  class="form-control" style="height:25px;padding:2px">
                                   <option *ngFor="let branch of selectedRepo.node.refs.edges" [selected]="branch.node.name == selectedRepo.node.defaultBranchRef?.name" value='{{branch.node.name}}'>{{branch.node.name}}</option>
                                 </select>
