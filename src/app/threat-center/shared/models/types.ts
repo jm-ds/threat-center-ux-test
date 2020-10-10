@@ -241,6 +241,10 @@ export type EntityQuery = {
   entity: Entity;
 }
 
+export type EntityListQuery = {
+  entities: Entity[];
+}
+
 export type VulnerabilityQuery = {
   vulnerability:Vulnerability;
 }

@@ -84,7 +84,10 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "one-line": [true, "check-catch", "check-finally", "check-open-brace", "check-whitespace"],
+    "no-trailing-whitespace": [true, "ignore-blank-lines"],
+    "prefer-const": false
   },
   "rulesDirectory": [
     "codelyzer"

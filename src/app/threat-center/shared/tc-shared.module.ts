@@ -13,6 +13,7 @@ import { DiffViewComponent } from './diff-view/diff-view.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { SharedModule } from '@app/shared/shared.module';
 import { TaskComponent } from './task/task.component';
+import { MessagesComponent } from './messages/messages.component';
 
 
 @NgModule({
@@ -27,19 +28,21 @@ import { TaskComponent } from './task/task.component';
     NgbPopoverModule,
     MarkdownModule.forRoot()
   ],
-  exports: [
-    SourceDimensionComponent,
-    LicenseDimensionComponent,
-    FileViewComponent,
-    DiffViewComponent,
-    TaskComponent
-  ],
+    exports: [
+        SourceDimensionComponent,
+        LicenseDimensionComponent,
+        FileViewComponent,
+        DiffViewComponent,
+        TaskComponent,
+        MessagesComponent
+    ],
   declarations: [
     SourceDimensionComponent,
     LicenseDimensionComponent,
     FileViewComponent,
     DiffViewComponent,
-    TaskComponent
+    TaskComponent,
+    MessagesComponent
   ],
   providers: [ ]
 })

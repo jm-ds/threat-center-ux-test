@@ -130,15 +130,15 @@ We have two versions of each environment file and proxy config file for dev/loca
 
 ### Build options  
 Serve **dev** environment with API proxy  **_(this is how we run app locally)_**
-  
+
     ng serve --proxy-config proxy.conf.json
 
 Build for **prod** environment with API proxy  (this is how to build prod version that runs independently/standalone)
-  
+
     ng build --prod --proxy-config proxy.conf.prod.json
 
 Build for **prod** environment **without** API proxy  (this is how most probably we build the app to run as embedded in spring app)
-  
+
     ng build --prod
 
 
@@ -150,6 +150,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Project Docs
+
+[Threat Center UX developer docs](docs/README.md)
 
 ## Further help
 

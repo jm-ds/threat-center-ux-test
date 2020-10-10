@@ -1,0 +1,66 @@
+<div>
+    <nav aria-label="breadcrumb" class="float-right">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/admin/role/list">Roles</a></li>
+            <ng-template [ngIf]="role !== undefined">
+                <li class="breadcrumb-item"><a routerLink="/admin/role/show/{{role.roleId}}">Role</a></li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Edit</li>
+            </ng-template>
+            <ng-template [ngIf]="role == undefined">
+                <li class="breadcrumb-item active text-muted" aria-current="page">Adding role</li>
+            </ng-template>
+        </ol>
+    </nav>
+    <h1>Role</h1>
+</div>
+
+<app-messages [messages]="messages"></app-messages>
+
+
+<ng-template [ngIf]="role != undefined">
+    <form>
+        <div class="form-group">
+            <label>Role ID</label>
+            <input type="text" name="roleId" class="form-control w-25" placeholder="Role ID..." required [(ngModel)]="role.roleId">
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <input type="text" name="description" class="form-control" placeholder="Description..." required [(ngModel)]="role.description">
+        </div>
+
+
+        <label>Permissions</label>
+        <dual-list [source]="source" [sort]="true" [key]="'name'" [display]="display" [filter]="false"
+                   [(destination)]="confirmed" height="265px" [format]="format" [disabled]="false"></dual-list>
+
+
+        <div class="actions mt-4">
+            <button type="button" class="btn btn-success" (click)="saveRole()">
+                <i class="feather icon-save"></i>
+                Save
+            </button>
+
+
+            <a *ngIf="!newRole" routerLink="/admin/role/show/{{role.roleId}}" class="btn btn-outline-secondary">
+                <i class="feather icon-list"></i>
+                Back to role
+            </a>
+
+            <a routerLink="/admin/role/list" class="btn btn-outline-secondary">
+                <i class="feather icon-list"></i>
+                Back to list
+            </a>
+        </div>
+    </form>
+</ng-template>
+
+
+<ng-template [ngIf]="role === undefined">
+    <app-alert type="warning">Role not found.</app-alert>
+
+    <a routerLink="/admin/role/list" class="btn btn-outline-secondary">
+        <i class="feather icon-list"></i>
+        Back to list
+    </a>
+</ng-template>

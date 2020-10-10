@@ -1,0 +1,56 @@
+
+table.table-row-link {
+    tbody tr:hover td {
+        cursor: pointer;
+        background-color: #b8e8ee;
+        &.skip-row-link {
+            cursor: inherit;
+        }
+    }
+}
+
+.user-profile-list table {
+    margin: 0;
+    width: 100%;
+
+    tbody tr:hover td {
+        &.skip-row-link {
+            cursor: inherit;
+        }
+    }
+}
+
+
+body.next-dark {
+    .table thead th {
+        background-color: rgb(50, 61, 72);
+    }
+
+    table.table-row-link {
+        tbody tr:hover td {
+            background-color: #4d7f85;
+            color: #dde8f0;
+        }
+    }
+
+    .user-profile-list table {
+        tbody tr {
+            td {
+                &:last-child {
+                    min-width: 90px;
+                }
+            }
+            &:hover {
+                box-shadow: 0 0 6px 0 #4d7f85;
+                td {
+                    background-color: #4d7f85;
+                    color: #dde8f0;
+                    .overlay-edit {
+                        background-color: #4d7f85;
+                        color: #dde8f0;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     canActivate: [AuthGuard],
+    data: {auth: "AUTHENTICATED"},
     children: [
       {
         path: '',
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./threat-center/dashboard/dashboard.module').then(module => module.DashboardModule)
+      },
+      {
+        path: 'admin',
+        loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule)
       },
       {
         path: 'layout',

@@ -3,16 +3,46 @@ import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
-import { GitHubUserQuery,ProjectQuery,EntityQuery,ScanQuery,VulnerabilityQuery,ComponentQuery,LicenseQuery, Branch,UserSelection, Vulnerability,Scan,Project,Entity,License,ScanAssetQuery} from '../models/types';
+import {
+  GitHubUserQuery,
+  ProjectQuery,
+  EntityQuery,
+  ScanQuery,
+  VulnerabilityQuery,
+  ComponentQuery,
+  LicenseQuery,
+  Branch,
+  UserSelection,
+  Vulnerability,
+  Scan,
+  Project,
+  Entity,
+  License,
+  ScanAssetQuery,
+  EntityListQuery
+} from '../models/types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private userSelection:UserSelection;
+  private userSelection: UserSelection;
 
   constructor(private apollo: Apollo) { }
+
+  getEntityList() {
+    return this.apollo.watchQuery<EntityListQuery>({
+      query: gql`query {
+          entities {
+              entityId,
+              parentEntityId,
+              name
+          }
+      }`,
+      fetchPolicy: 'no-cache'
+    }).valueChanges;
+  }
 
   getEntity(entityId:string) {
     return this.apollo.watchQuery<EntityQuery>({
