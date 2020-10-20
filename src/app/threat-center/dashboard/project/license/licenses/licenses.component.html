@@ -16,7 +16,7 @@
       </div>
 
       <perfect-scrollbar [style.max-height]="'650px'">
-        <p-table #dt [columns]="columns" [value]="scan.licenses" [paginator]="false" [rows]="50"
+        <p-table #dt [columns]="columns" [value]="scan.licenses?.edges" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
@@ -35,20 +35,20 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-license>
-            <tr [routerLink]="['/dashboard/project/license',license.licenseId]">
-              <td>{{license.name}}</td>
-              <td>{{license.spdxId}}</td>
+            <tr [routerLink]="['/dashboard/project/license',license.node.licenseId]">
+              <td>{{license.node.name}}</td>
+              <td>{{license.node.spdxId}}</td>
               <td>
-                <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
               </td>
-              <td>{{license.style}}</td>
-              <td>{{license.isOsiApproved}}</td>
-              <td>{{license.isFsfLibre}}</td>
+              <td>{{license.node.style}}</td>
+              <td>{{license.node.isOsiApproved}}</td>
+              <td>{{license.node.isFsfLibre}}</td>
             </tr>
         </ng-template>
         </p-table>

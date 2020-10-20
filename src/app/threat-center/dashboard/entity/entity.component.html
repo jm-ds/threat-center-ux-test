@@ -260,38 +260,38 @@
                             <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.assetMetrics.total}}</td>
                             <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.projects[0]?.created | date :'M/d h:mmaa' | lowercase}}</td>
                           </tr>-->
-                          <tr *ngFor="let project of entity.projects">
-                            <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',project.projectId]">{{project.name}}</a></td>
+                          <tr *ngFor="let projectEdge of entity.projects?.edges">
+                            <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
                             <td style="border-left:1px solid #4680ff">{{entity.name}}</td>
                             <td>
-                              <span title="Critical" class="badge m-r-5 badge-light-danger">{{project.latestScan.scanMetrics.vulnerabilityMetrics.critical}}</span>
-                              <span title="High" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics.vulnerabilityMetrics.high}}</span>
-                              <span title="Medium" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.vulnerabilityMetrics.medium}}</span>
-                              <span title="Low" class="badge m-r-5 badge-light-info">{{project.latestScan.scanMetrics.vulnerabilityMetrics.low}}</span>
-                              <span title="Info" class="badge m-r-5 badge-light-primary">{{project.latestScan.scanMetrics.vulnerabilityMetrics.info}}</span>
+                              <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
+                              <span title="High" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.high}}</span>
+                              <span title="Medium" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.medium}}</span>
+                              <span title="Low" class="badge m-r-5 badge-light-info">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.low}}</span>
+                              <span title="Info" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.info}}</span>
                             </td>
                             <td>
-                              <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{project.latestScan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
-                              <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
-                              <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
-                              <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
-                              <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.copyleft}}</span>
-                              <span title="Dual" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.dual}}</span>
-                              <span title="Custom" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.licenseMetrics?.custom}}</span>
-                              <span title="Permissive" class="badge m-r-5 badge-light-primary">{{project.latestScan.scanMetrics?.licenseMetrics?.permissive}}</span>
+                              <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
+                              <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
+                              <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
+                              <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                              <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                              <span title="Dual" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.dual}}</span>
+                              <span title="Custom" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.custom}}</span>
+                              <span title="Permissive" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.permissive}}</span>
                             </td>
                             <td>
-                              <span title="Latest" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.latest}}</span>
-                              <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics.componentMetrics.notLatest}}</span>
-                              <span title="Dual" class="badge m-r-5 badge-light-danger">{{project.latestScan.scanMetrics.componentMetrics.vulnerabilities}}</span>
+                              <span title="Latest" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.latest}}</span>
+                              <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
+                              <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                               <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
                             </td>
                             <td>
-                              <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{project.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
-                              <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
-                              <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
+                              <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
+                              <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
+                              <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td>
-                            <td>{{project?.created | date :'M/d h:mmaa' | lowercase}}</td>
+                            <td>{{projectEdge.node.created | date :'M/d h:mmaa' | lowercase}}</td>
                           </tr>
 
                           </tbody>
@@ -332,23 +332,23 @@
                             </tr>
                           </thead>
                           <tbody *ngIf="componentsEntity as componentsEntity;">
-                            <ng-container *ngFor="let component of componentsEntity.entityComponents">
-                              <tr *ngFor="let vulnerability of component.entityComponentVulnerabilities">
-                                <td *ngIf="vulnerability?.source === 'OSSINDEX'"><span class="badge m-r-5 badge-light-info">{{vulnerability?.source}}</span> {{vulnerability?.vulnId | slice:0:8 | uppercase}} </td>
-                                <td *ngIf="vulnerability?.source != 'OSSINDEX'"><span class="badge m-r-5 badge-light-info">{{vulnerability?.source}}</span> {{vulnerability?.vulnId}} </td>
+                            <ng-container *ngFor="let componentEdge of componentsEntity.entityComponents?.edges">
+                              <tr *ngFor="let vulnerabilityEdge of componentEdge.node.entityComponentVulnerabilities?.edges">
+                                <td *ngIf="vulnerabilityEdge?.node.source === 'OSSINDEX'"><span class="badge m-r-5 badge-light-info">{{vulnerabilityEdge?.node.source}}</span> {{vulnerabilityEdge?.node.vulnId | slice:0:8 | uppercase}} </td>
+                                <td *ngIf="vulnerabilityEdge?.node.source != 'OSSINDEX'"><span class="badge m-r-5 badge-light-info">{{vulnerabilityEdge?.node.source}}</span> {{vulnerabilityEdge?.node.vulnId}} </td>
                                 <td style="border-left:1px solid #4680ff">
-                                  <span *ngIf="vulnerability?.severity === 'CRITICAL'" class="badge m-r-5 badge-light-danger" style="width:60px">{{vulnerability?.severity}}</span>
-                                  <span *ngIf="vulnerability?.severity === 'HIGH'" class="badge m-r-5 badge-light-danger" style="width:60px">{{vulnerability?.severity}}</span>
-                                  <span *ngIf="vulnerability?.severity === 'MEDIUM'" class="badge m-r-5 badge-light-warning" style="width:60px">{{vulnerability?.severity}}</span>
-                                  <span *ngIf="vulnerability?.severity === 'LOW'" class="badge m-r-5 badge-light-info" style="width:60px">{{vulnerability?.severity}}</span>
-                                  <span *ngIf="vulnerability?.severity === 'INFO'" class="badge m-r-5 badge-light-success" style="width:60px">{{vulnerability?.severity}}</span>
+                                  <span *ngIf="vulnerabilityEdge?.node.severity === 'CRITICAL'" class="badge m-r-5 badge-light-danger" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
+                                  <span *ngIf="vulnerabilityEdge?.node.severity === 'HIGH'" class="badge m-r-5 badge-light-danger" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
+                                  <span *ngIf="vulnerabilityEdge?.node.severity === 'MEDIUM'" class="badge m-r-5 badge-light-warning" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
+                                  <span *ngIf="vulnerabilityEdge?.node.severity === 'LOW'" class="badge m-r-5 badge-light-info" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
+                                  <span *ngIf="vulnerabilityEdge?.node.severity === 'INFO'" class="badge m-r-5 badge-light-success" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
                                 </td>
-                                <td>{{vulnerability.vulnerabilityInfection.projectCount}}</td>
-                                <td>{{vulnerability?.cvssV2BaseScore | number : '1.1-1'}} / {{vulnerability?.cvssV3BaseScore | number : '1.1-1'}}</td>
-                                <td>{{component?.name}}</td>
-                                <td>{{component?.group}}</td>
-                                <td>{{component?.version}}</td>
-                                <td style="width: 100px;overflow: hidden;" ><span *ngIf="vulnerability?.cwe"> CWE-{{vulnerability?.cwe?.cweId}} : {{vulnerability?.cwe?.name | slice:0:50}}</span></td>
+                                <td>{{vulnerabilityEdge?.node.vulnerabilityInfection.projectCount}}</td>
+                                <td>{{vulnerabilityEdge?.node.cvssV2BaseScore | number : '1.1-1'}} / {{vulnerabilityEdge?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
+                                <td>{{componentEdge?.node.name}}</td>
+                                <td>{{componentEdge?.node.group}}</td>
+                                <td>{{componentEdge?.node.version}}</td>
+                                <td style="width: 100px;overflow: hidden;" ><span *ngIf="vulnerabilityEdge?.node.cwe"> CWE-{{vulnerabilityEdge?.node.cwe?.cweId}} : {{vulnerabilityEdge?.node.cwe?.name | slice:0:50}}</span></td>
                                 <td><img title="Verified by ShiftLeft NG SAST" width="25" height="25" src="assets/images/scan-logo-dark.svg"></td>
 
                               </tr>
@@ -392,13 +392,13 @@
                           </thead>
                           <tbody *ngIf="componentsEntity as componentsEntity;">
 
-                            <tr *ngFor="let component of componentsEntity.entityComponents">
-                              <td>{{component?.name}}</td>
-                              <td style="border-left:1px solid #4680ff">{{component?.group}}</td>
-                              <td>{{component?.version}}</td>
+                            <tr *ngFor="let componentEdge of componentsEntity.entityComponents?.edges">
+                              <td>{{componentEdge?.node.name}}</td>
+                              <td style="border-left:1px solid #4680ff">{{componentEdge?.node.group}}</td>
+                              <td>{{componentEdge?.node.version}}</td>
                               <td>False</td>
-                              <td>{{component?.entityComponentLicenses[0]?.name}}</td>
-                              <td>{{component.entityComponentVulnerabilities?.length}}</td>
+                              <td>{{componentEdge?.node.entityComponentLicenses?.edges[0]?.node.name}}</td>
+                              <td>{{componentEdge?.node.entityComponentVulnerabilities?.edges?.length}}</td>
                               <td>2</td>
                             </tr>
 

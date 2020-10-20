@@ -16,23 +16,31 @@ export class UserService {
         return this.apollo.watchQuery<UsersQuery>({
             query: gql`query {
                 users {
-                    orgId,
-                    username,
-                    email,
-                    fname,
-                    lname,
-                    created,
-                    permissions,
-                    userRoles {
-                        roleId,
-                        description,
-                        permissions
-                    },
-                    userEntities {
-                        name
+                    edges{
+                      node {
+                        orgId,
+                        username,
+                        email,
+                        fname,
+                        lname,
+                        created,
+                        permissions,
+                        userRoles {
+                            roleId,
+                            description,
+                            permissions
+                        },
+                        userEntities {
+                          edges {
+                            node{
+                              name
+                            }
+                          }
+                        }
+                      }
                     }
                 }
-            }`
+              }`
         }).valueChanges;
     }
 
@@ -56,8 +64,12 @@ export class UserService {
                         }
                     },
                     userEntities {
-                        entityId,
-                        name
+                      edges{
+                        node{
+                          entityId,
+                          name
+                        }
+                      }
                     },
                     userPermissions {
                         name,

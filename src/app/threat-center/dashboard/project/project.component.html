@@ -70,7 +70,7 @@
               </div>
 
               <perfect-scrollbar [style.max-height]="'500px'">
-                <p-table [columns]="columns" [value]="project.scans" [paginator]="false" [rows]="50"
+                <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
                          tableStyleClass="table table-bordered table-hover dataTable no-footer"
                          selectionMode="single" [(selection)]="stateService.selectedScan" [autoLayout]="true">
 
@@ -95,36 +95,36 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
                     <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex">
-                      <td>{{scan?.version}}</td>
-                      <td>{{scan?.branch}}</td>
-                      <td>{{scan?.tag}}</td>
-                      <td>{{scan?.created | date :'M/d h:mmaa' | lowercase}}</td>
+                      <td>{{scan.node?.version}}</td>
+                      <td>{{scan.node?.branch}}</td>
+                      <td>{{scan.node?.tag}}</td>
+                      <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
                       <td>
-                        <span title="Critical" class="badge m-r-5 badge-light-danger">{{scan.scanMetrics?.vulnerabilityMetrics?.critical}}</span>
-                        <span title="High" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.vulnerabilityMetrics?.high}}</span>
-                        <span title="Medium" class="badge m-r-5 badge-light-success">{{scan.scanMetrics?.vulnerabilityMetrics?.medium}}</span>
-                        <span title="Low" class="badge m-r-5 badge-light-info">{{scan.scanMetrics?.vulnerabilityMetrics?.low}}</span>
-                        <span title="Info" class="badge m-r-5 badge-light-primary">{{scan.scanMetrics?.vulnerabilityMetrics?.info}}</span>
+                        <span title="Critical" class="badge m-r-5 badge-light-danger">{{scan.node.scanMetrics?.vulnerabilityMetrics?.critical}}</span>
+                        <span title="High" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.vulnerabilityMetrics?.high}}</span>
+                        <span title="Medium" class="badge m-r-5 badge-light-success">{{scan.node.scanMetrics?.vulnerabilityMetrics?.medium}}</span>
+                        <span title="Low" class="badge m-r-5 badge-light-info">{{scan.node.scanMetrics?.vulnerabilityMetrics?.low}}</span>
+                        <span title="Info" class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.vulnerabilityMetrics?.info}}</span>
                       </td>
                       <td>
-                        <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{scan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
-                        <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
-                        <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
-                        <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
-                        <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.copyleft}}</span>
-                        <span title="Dual" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.dual}}</span>
-                        <span title="Custom" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.licenseMetrics?.custom}}</span>
-                        <span title="Permissive" class="badge m-r-5 badge-light-primary">{{scan.scanMetrics?.licenseMetrics?.permissive}}</span>
+                        <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{scan.node.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
+                        <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
+                        <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
+                        <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                        <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                        <span title="Dual" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.dual}}</span>
+                        <span title="Custom" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.licenseMetrics?.custom}}</span>
+                        <span title="Permissive" class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.licenseMetrics?.permissive}}</span>
                       </td>
                       <td>
-                        <span title="Vulnerabilities" class="badge m-r-5 badge-light-danger">{{scan.scanMetrics?.componentMetrics?.vulnerabilities}}</span>
-                        <span title="Risky Licenses" class="badge m-r-5 badge-light-danger">{{scan.scanMetrics?.componentMetrics?.riskyLicenses}}</span>
-                        <span title="Not Current Version" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.componentMetrics?.notLatest}}</span>
+                        <span title="Vulnerabilities" class="badge m-r-5 badge-light-danger">{{scan.node.scanMetrics?.componentMetrics?.vulnerabilities}}</span>
+                        <span title="Risky Licenses" class="badge m-r-5 badge-light-danger">{{scan.node.scanMetrics?.componentMetrics?.riskyLicenses}}</span>
+                        <span title="Not Current Version" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.componentMetrics?.notLatest}}</span>
                       </td>
                       <td>
-                        <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{scan.scanMetrics?.assetMetrics?.analyzed}}</span>
-                        <span title="Embedded" class="badge m-r-5 badge-light-warning">{{scan.scanMetrics?.assetMetrics?.embedded}}</span>
-                        <span title="Skipped" class="badge m-r-5 badge-light-primary">{{scan.scanMetrics?.assetMetrics?.skipped}}</span>
+                        <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.assetMetrics?.analyzed}}</span>
+                        <span title="Embedded" class="badge m-r-5 badge-light-warning">{{scan.node.scanMetrics?.assetMetrics?.embedded}}</span>
+                        <span title="Skipped" class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.assetMetrics?.skipped}}</span>
                       </td>
                       <!--<th>Policy Violations</th -->
                     </tr>
