@@ -113,6 +113,9 @@
           "configurations": {
             "production": {
               "browserTarget": "threat-center:build:production"
+            },
+            "stage": {
+              "browserTarget": "threat-center:build:stage"
             }
           }
         },
