@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
-import {AuthenticationService, AuthorizationService} from '../services';
+import { AuthenticationService, AuthorizationService } from '../services';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild {
     constructor(
         private router: Router,
@@ -15,16 +15,16 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let jwt = route.queryParams['jwt'];
         if (jwt) {
-            sessionStorage.setItem("jwt", jwt);
+            this.authenticationService.setInSessionStorageBasedEnv("jwt", jwt);
             await this.authenticationService.loadAuthenticatedUser();
             return this.authorizationService.hasPermissions(route.data.auth);
         } else {
-            jwt = sessionStorage.getItem("jwt");
+            jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
             if (jwt) {
                 if (this.authenticationService.isTokenExpired(jwt)) {
                     this.router.navigate(['/login']);
                 }
-                if (!localStorage.getItem("currentUser")) {
+                if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
                     await this.authenticationService.loadAuthenticatedUser();
                 }
                 // logged in so return true
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         }
 
         // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;
     }
 

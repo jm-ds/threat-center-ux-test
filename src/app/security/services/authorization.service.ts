@@ -1,21 +1,19 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AuthenticationService } from './authentication.service';
 
-import {AuthenticationService} from './authentication.service';
-
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthorizationService {
 
     // set this to true so authz service return true in any case
     private readonly FAIL_VALUE = false;
-
-
-    user = localStorage.getItem("currentUser");
+    user;
 
     constructor(
         private http: HttpClient,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
     ) {
+        this.user = this.authService.getFromStorageBasedEnv("currentUser");
     }
 
     hasPermissions(auth: string[] | string): boolean {

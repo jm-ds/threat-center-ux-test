@@ -28,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthInterceptor, ErrorInterceptor } from './security/helpers';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { BasicAuthInterceptor, ErrorInterceptor } from './security/helpers';
     NgbTabsetModule,
     TcSharedModule,
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    CoreModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
