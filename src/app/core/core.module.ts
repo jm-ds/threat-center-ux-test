@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CoreGraphQLService } from './services/core-graphql.service';
 import { LocalService } from './services/local.service';
 import { StorageService } from './services/storage.service';
 
@@ -7,6 +8,10 @@ import { StorageService } from './services/storage.service';
     imports: [],
     exports: [],
     declarations: [],
-    providers: [StorageService, LocalService],
+    providers: [
+        StorageService,
+        LocalService,
+        CoreGraphQLService
+    ],
 })
 export class CoreModule { }
