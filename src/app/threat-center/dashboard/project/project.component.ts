@@ -45,7 +45,9 @@ export class ProjectComponent implements OnInit {
     }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
     this.obsProject.subscribe(project => {
-      this.stateService.selectedScan = project.scans[0];
+      if (project.scans.edges[0]) {
+          this.stateService.selectedScan = project.scans.edges[0].node;
+      }
       let critical = [];
       let high = [];
       let medium = [];
@@ -72,44 +74,47 @@ export class ProjectComponent implements OnInit {
 
 
       for (let i = 9; i >=0; i--) {
-        let scan = project.scans[i];
-        if(scan && scan.scanMetrics) {
-          let vulnerabilityMetrics = scan.scanMetrics.vulnerabilityMetrics;
-          let licenseMetrics = scan.scanMetrics.licenseMetrics;
-          let componentMetrics = scan.scanMetrics.componentMetrics;
-          let assetMetrics = scan.scanMetrics.assetMetrics;
+        let edge = project.scans.edges[i];
+        if (edge) {
+          let scan = edge.node;
+          if(scan && scan.scanMetrics) {
+            let vulnerabilityMetrics = scan.scanMetrics.vulnerabilityMetrics;
+            let licenseMetrics = scan.scanMetrics.licenseMetrics;
+            let componentMetrics = scan.scanMetrics.componentMetrics;
+            let assetMetrics = scan.scanMetrics.assetMetrics;
 
-          // Vulnerability chart data
-          critical.push(scan.scanMetrics.vulnerabilityMetrics.critical);
-          high.push(scan.scanMetrics.vulnerabilityMetrics.high);
-          medium.push(scan.scanMetrics.vulnerabilityMetrics.medium);
-          low.push(scan.scanMetrics.vulnerabilityMetrics.low);
-          info.push(scan.scanMetrics.vulnerabilityMetrics.info);
+            // Vulnerability chart data
+            critical.push(scan.scanMetrics.vulnerabilityMetrics.critical);
+            high.push(scan.scanMetrics.vulnerabilityMetrics.high);
+            medium.push(scan.scanMetrics.vulnerabilityMetrics.medium);
+            low.push(scan.scanMetrics.vulnerabilityMetrics.low);
+            info.push(scan.scanMetrics.vulnerabilityMetrics.info);
 
-          // License chart data
-          // License chart data
-          copyleftStrong.push(scan.scanMetrics.licenseMetrics.copyleftStrong);
-          copyleftWeak.push(scan.scanMetrics.licenseMetrics.copyleftWeak);
-          copyleftPartial.push(scan.scanMetrics.licenseMetrics.copyleftPartial);
-          copyleftLimited.push(scan.scanMetrics.licenseMetrics.copyleftLimited);
-          copyleft.push(scan.scanMetrics.licenseMetrics.copyleft);
-          custom.push(scan.scanMetrics.licenseMetrics.custom);
-          dual.push(scan.scanMetrics.licenseMetrics.dual);
-          permissive.push(scan.scanMetrics.licenseMetrics.permissive);
+            // License chart data
+            // License chart data
+            copyleftStrong.push(scan.scanMetrics.licenseMetrics.copyleftStrong);
+            copyleftWeak.push(scan.scanMetrics.licenseMetrics.copyleftWeak);
+            copyleftPartial.push(scan.scanMetrics.licenseMetrics.copyleftPartial);
+            copyleftLimited.push(scan.scanMetrics.licenseMetrics.copyleftLimited);
+            copyleft.push(scan.scanMetrics.licenseMetrics.copyleft);
+            custom.push(scan.scanMetrics.licenseMetrics.custom);
+            dual.push(scan.scanMetrics.licenseMetrics.dual);
+            permissive.push(scan.scanMetrics.licenseMetrics.permissive);
 
-          // Component chart data
-          notLatest.push(scan.scanMetrics.componentMetrics.notLatest);
-          vulnerabilities.push(scan.scanMetrics.componentMetrics.vulnerabilities);
-          riskyLicenses.push(scan.scanMetrics.componentMetrics.riskyLicenses);
+            // Component chart data
+            notLatest.push(scan.scanMetrics.componentMetrics.notLatest);
+            vulnerabilities.push(scan.scanMetrics.componentMetrics.vulnerabilities);
+            riskyLicenses.push(scan.scanMetrics.componentMetrics.riskyLicenses);
 
-          // Asset chart data
-          embedded.push(scan.scanMetrics.assetMetrics.embedded);
-          analyzed.push(scan.scanMetrics.assetMetrics.analyzed);
-          skipped.push(scan.scanMetrics.assetMetrics.skipped);
+            // Asset chart data
+            embedded.push(scan.scanMetrics.assetMetrics.embedded);
+            analyzed.push(scan.scanMetrics.assetMetrics.analyzed);
+            skipped.push(scan.scanMetrics.assetMetrics.skipped);
 
-          // categories for bar charts
-          //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
-          categories.push(scan.branch);
+            // categories for bar charts
+            //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
+            categories.push(scan.branch);
+          }
         }
       }
 

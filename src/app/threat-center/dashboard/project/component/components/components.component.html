@@ -39,13 +39,13 @@
               <td>File System/POM</td>
               <td>
                 <ng-container *ngIf="component.node.licenses.edges.length > 0">
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                  <span *ngIf="component.node.licenses.edges[0].category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
-                  <span>{{component.node.licenses.edges[0].name}}</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
+                  <span>{{component.node.licenses.edges[0].node.name}}</span>
                 </ng-container>
                 <span *ngIf="!component.node.licenses">No License</span>
               </td>
