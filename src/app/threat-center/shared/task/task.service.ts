@@ -23,7 +23,7 @@ export class TaskService {
     return this.apollo.watchQuery<TaskQuery>({
       query: gql`
         query {
-            task_submitScanRequest(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",entityId:"${this.scanRequest.entityId}") {
+            task_submitScanRequest(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",repoType:"${this.scanRequest.repoType}",projectId:"${this.scanRequest.projectId}",entityId:"${this.scanRequest.entityId}") {
             taskToken,
             pctComplete,
             status,
@@ -39,7 +39,7 @@ export class TaskService {
           }
         }
       `,
-       fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache',
     }).valueChanges;
   }
 

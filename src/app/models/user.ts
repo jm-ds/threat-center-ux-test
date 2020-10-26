@@ -2,6 +2,7 @@ import {Permission, Role} from "@app/models/role";
 import {Entity} from "@app/threat-center/shared/models/types";
 
 export class User {
+    accessToken: string;
     id: number;
     username: string;
     password: string;

@@ -3,6 +3,8 @@ export class ScanRequest {
   repository:string;
   branch:string;
   entityId:string;
+  repoType: string;
+  projectId: string;
 }
 
 export class Task {
@@ -26,6 +28,29 @@ export class GitHubUser {
   //repositories: Repository[];
   //primaryLanguage: Language;
 }
+
+
+// Model for gitlab user
+export class GitLabUser {
+  id?: string = '';
+  avatarUrl?: string = '';
+  email?: string = '';
+  name?: string = '';
+  username?: string = '';
+  token?: string = '';
+}
+
+
+// Model for bitbucket user
+export class BitbucketUser {
+  id?: string = '';
+  avatarUrl?: string = '';
+  email?: string = '';
+  name?: string = '';
+  username?: string = '';
+  token?: string = '';
+}
+
 
 export class Organization {
   avatarUrl?: string ='';
@@ -231,6 +256,18 @@ export type TaskQuery = {
 
 export type GitHubUserQuery = {
   gitHubUser: GitHubUser;
+}
+
+
+// GitLabUserQuery
+export type GitLabUserQuery = {
+  gitLabUser: GitLabUser;
+}
+
+
+// BitbucketUserQuery
+export type BitbucketUserQuery = {
+  bitbucketUser: BitbucketUser;
 }
 
 export type ProjectQuery = {
