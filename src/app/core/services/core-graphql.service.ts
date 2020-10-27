@@ -5,15 +5,18 @@ import { DocumentNode } from 'graphql';
 import { catchError, map } from 'rxjs/operators';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
+import { CoreHelperService } from './core-helper.service';
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class CoreGraphQLService {
-    constructor(private apollo: Apollo) { }
+    constructor(private apollo: Apollo,
+        private coreHelperService: CoreHelperService) { }
 
+
+    // Core graphQL service    
     coreGQLReq<T>(
         query: DocumentNode,
         fetchPolicy?: WatchQueryFetchPolicy,
@@ -33,24 +36,18 @@ export class CoreGraphQLService {
                 catchError(this.errorHandler));
     }
 
+
+    // Handle errors
     private errorHandler = (error: HttpErrorResponse | any) => {
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
-            this.swalALertBox(er.message);
+            this.coreHelperService.swalALertBox(er.message);
         } else if (typeof error === "string") {
-            this.swalALertBox(error);
+            this.coreHelperService.swalALertBox(error);
         } else {
-            this.swalALertBox("Something went wrong!");
+            this.coreHelperService.swalALertBox("Something went wrong!");
         }
         // Two way to return Observable<unknown>
         return EMPTY;
-    }
-
-    swalALertBox(text: string, title: string = "Error!", type: string = "error") {
-        Swal.fire({
-            type: "error",
-            title: "Error!",
-            text: text
-        });
     }
 }

@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import Swal from 'sweetalert2';
+import { CoreHelperService } from './core-helper.service';
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class CoreHttpService {
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private coreHelperService: CoreHelperService) {
     }
 
+    // Http get request
     httpGetRequest<TResponse>(url: string, reqHeader?: HttpHeaders, showLoader?: boolean): Observable<TResponse> {
         return this.http.get(url, { headers: reqHeader }).pipe(
             map((res) => {
@@ -21,6 +22,8 @@ export class CoreHttpService {
         );
     }
 
+
+    // Http get with httpParams request
     httpGetWithParamsRequest<TResponse>(
         url: string,
         reqHeader?: HttpHeaders,
@@ -35,6 +38,8 @@ export class CoreHttpService {
         );
     }
 
+
+    // Http post request
     httpPostRequest<TRequest, TResponse>(url: string, data: TRequest, reqHeader?: HttpHeaders, showLoader?: boolean):
         Observable<TResponse> {
         return this.http.post(url, data, { headers: reqHeader }).pipe(
@@ -45,6 +50,8 @@ export class CoreHttpService {
         );
     }
 
+
+    // Http delete request
     httpDeleteRequest<TRequest, TResponse>(url: string, id?: TRequest, showLoader?: boolean): Observable<TResponse> {
         return this.http.delete(url, id).pipe(
             map((res) => {
@@ -53,6 +60,9 @@ export class CoreHttpService {
             catchError(this.errorHandler)
         );
     }
+
+
+    // Http put request
     httpPutRequest<TRequest, TResponse>(url: string, data: TRequest, reqHeader?: HttpHeaders, showLoader?: boolean): Observable<TResponse> {
         return this.http.put(url, data, { headers: reqHeader }).pipe(
             map((res) => {
@@ -62,10 +72,12 @@ export class CoreHttpService {
         );
     }
 
+
+    // Core error handle
     errorHandler = (error: HttpErrorResponse) => {
         const data: { status: number; message: string } = { status: error.status, message: '' };
         if (error.status === 401) {
-            this.swalALertBox("Unauthorized User!", data.status.toString());
+            this.coreHelperService.swalALertBox("Unauthorized User!", data.status.toString());
             return EMPTY;
         }
         if (typeof error.error === 'string') {
@@ -76,18 +88,10 @@ export class CoreHttpService {
             data.message = 'Something went wrong!';
         }
         if (!!error && !!error.status) {
-            this.swalALertBox(data.message, data.status.toString());
+            this.coreHelperService.swalALertBox(data.message, data.status.toString());
         } else {
-            this.swalALertBox(data.message);
+            this.coreHelperService.swalALertBox(data.message);
         }
         return EMPTY;
     };
-
-    swalALertBox(text: string, title: string = "Error!", type: string = "error") {
-        Swal.fire({
-            type: "error",
-            title: "Error!",
-            text: text
-        });
-    }
 }
