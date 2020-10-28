@@ -11,7 +11,7 @@
       </div>
 
       <perfect-scrollbar [style.max-height]="'650px'">
-        <p-table #dt [columns]="columns" [value]="scan.components" [paginator]="false" [rows]="50"
+        <p-table #dt [columns]="columns" [value]="scan.components?.edges" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
 
@@ -31,32 +31,32 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-component let-columns="columns">
-            <tr [routerLink]="['/dashboard/project/component',component.componentId]">
-              <td>{{component.name}}</td>
-              <td>{{component.group}}</td>
-              <td>{{component.version}}</td>
-              <td>{{component.isInternal}}</td>
+            <tr [routerLink]="['/dashboard/project/component',component.node.componentId]">
+              <td>{{component.node.name}}</td>
+              <td>{{component.node.group}}</td>
+              <td>{{component.node.version}}</td>
+              <td>{{component.node.isInternal}}</td>
               <td>File System/POM</td>
               <td>
-                <ng-container *ngIf="component.licenses.length > 0">
-                  <span *ngIf="component.licenses[0].category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                  <span *ngIf="component.licenses[0].category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                  <span *ngIf="component.licenses[0].category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                  <span *ngIf="component.licenses[0].category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                  <span *ngIf="component.licenses[0].category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                  <span *ngIf="component.licenses[0].category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
-                  <span>{{component.licenses[0].name}}</span>
+                <ng-container *ngIf="component.node.licenses.edges.length > 0">
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                  <span *ngIf="component.node.licenses.edges[0].node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
+                  <span>{{component.node.licenses.edges[0].node.name}}</span>
                 </ng-container>
-                <span *ngIf="!component.licenses">No License</span>
+                <span *ngIf="!component.node.licenses">No License</span>
               </td>
               <td>
-                <div *ngFor="let vulnerability of component.vulnerabilities">
-                    <span>{{component.vulnerabilities[0]?.vulnId}}:{{component.vulnerabilities[0]?.severity}}</span>
-                    <span *ngIf="vulnerability.severity === 'CRITICAL'"  title="Critical" class="badge m-l-5 badge-light-danger">CRITICAL</span>
-                    <span *ngIf="vulnerability.severity === 'HIGH'"  title="Critical" class="badge m-l-5 badge-light-danger">HIGH</span>
-                    <span *ngIf="vulnerability.severity === 'MEDIUM'"  title="Critical" class="badge m-l-5 badge-light-warning">MEDIUM</span>
-                    <span *ngIf="vulnerability.severity === 'LOW'"  title="Critical" class="badge m-l-5 badge-light-primary">LOW</span>
-                    <span *ngIf="vulnerability.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
+                <div *ngFor="let vulnerabilityEdge of component.node.vulnerabilities.edges">
+                    <span>{{component.node.vulnerabilities.edges[0]?.node.vulnId}}:{{component.node.vulnerabilities.edges[0]?.node.severity}}</span>
+                    <span *ngIf="vulnerabilityEdge.node.severity === 'CRITICAL'"  title="Critical" class="badge m-l-5 badge-light-danger">CRITICAL</span>
+                    <span *ngIf="vulnerabilityEdge.node.severity === 'HIGH'"  title="Critical" class="badge m-l-5 badge-light-danger">HIGH</span>
+                    <span *ngIf="vulnerabilityEdge.node.severity === 'MEDIUM'"  title="Critical" class="badge m-l-5 badge-light-warning">MEDIUM</span>
+                    <span *ngIf="vulnerabilityEdge.node.severity === 'LOW'"  title="Critical" class="badge m-l-5 badge-light-primary">LOW</span>
+                    <span *ngIf="vulnerabilityEdge.node.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
                 </div>
               </td>
             </tr>
