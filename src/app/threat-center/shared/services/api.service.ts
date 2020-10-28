@@ -21,6 +21,7 @@ import {
   ScanAssetQuery,
   EntityListQuery
 } from '../models/types';
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,9 @@ export class ApiService {
 
   private userSelection: UserSelection;
 
-  constructor(private apollo: Apollo) { }
+  constructor(
+    private apollo: Apollo,
+    private coreGraphQLService: CoreGraphQLService) { }
 
   getEntityList() {
     return this.apollo.watchQuery<EntityListQuery>({
@@ -48,9 +51,9 @@ export class ApiService {
     }).valueChanges;
   }
 
-  getEntity(entityId:string) {
-    return this.apollo.watchQuery<EntityQuery>({
-      query: gql`
+  getEntity(entityId: string) {
+    return this.coreGraphQLService.coreGQLReq<EntityQuery>(
+      gql`
         query {
           entity(entityId:"${entityId}" ) {
             entityId,
@@ -258,8 +261,6 @@ export class ApiService {
                 }
               } 
             }
-
-
           }
         }
       `,
@@ -267,9 +268,9 @@ export class ApiService {
     }).valueChanges;
   }
 
-  getEntityComponents(entityId:string) {
-    return this.apollo.watchQuery<EntityQuery>({
-      query: gql`
+  getEntityComponents(entityId: string) {
+    return this.coreGraphQLService.coreGQLReq<EntityQuery>(
+      gql`
         query {
           entity(entityId:"${entityId}" ) {
             entityId,
@@ -323,13 +324,12 @@ export class ApiService {
           }
         }
       `,
-      fetchPolicy: 'no-cache',
-    }).valueChanges;
+      'no-cache');
   }
 
-  getProject(projectId:string) {
-    return this.apollo.watchQuery<ProjectQuery>({
-      query: gql`
+  getProject(projectId: string) {
+    return this.coreGraphQLService.coreGQLReq<ProjectQuery>(
+      gql`
         query {
             project(projectId:"${projectId}") {
               projectId,
@@ -381,13 +381,12 @@ export class ApiService {
               }
         }
       `,
-      fetchPolicy: 'no-cache',
-    }).valueChanges;
+      'no-cache');
   }
 
-  getScanVulnerabilities(scanId:string) {
-    return this.apollo.watchQuery<Scan>({
-      query: gql`
+  getScanVulnerabilities(scanId: string) {
+    return this.coreGraphQLService.coreGQLReq<Scan>(
+      gql`
         query {
           scan(scanId:"${scanId}") {
             scanId,
@@ -423,13 +422,12 @@ export class ApiService {
             }
         	}
         }
-      `,
-    }).valueChanges;
+      `);
   }
 
-  getScanComponents(scanId:string) {
-      return this.apollo.watchQuery<ScanQuery>({
-        query: gql`
+  getScanComponents(scanId: string) {
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(
+      gql`
           query {
             scan(scanId:"${scanId}") {
               scanId,
@@ -488,9 +486,9 @@ export class ApiService {
     }).valueChanges;
   }
 
-  getScanLicenses(scanId:string) {
-      return this.apollo.watchQuery<ScanQuery>({
-        query: gql`
+  getScanLicenses(scanId: string) {
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(
+      gql`
          query {
             scan(scanId:"${scanId}") {
               scanId,
@@ -516,9 +514,9 @@ export class ApiService {
     }).valueChanges;
   }
 
-  getComponent(componentId:string) {
-      return this.apollo.watchQuery<ComponentQuery>({
-        query: gql`
+  getComponent(componentId: string) {
+    return this.coreGraphQLService.coreGQLReq<ComponentQuery>(
+      gql`
          query {
             component(componentId:"${componentId}") {
               componentId,
@@ -586,14 +584,12 @@ export class ApiService {
                 lastOccurrence
             }
           }
-        }
-      `,
-    }).valueChanges;
+        }`);
   }
 
-  getLicense(licenseId:string) {
-      return this.apollo.watchQuery<LicenseQuery>({
-        query: gql`
+  getLicense(licenseId: string) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(
+      gql`
           query {
              license(licenseId:"${licenseId}") {
                  licenseId,
@@ -614,13 +610,12 @@ export class ApiService {
                  }
             }
          }
-      `,
-    }).valueChanges;
+      `);
   }
 
-  getVulnerability(vulnerabilityId:string) {
-    return this.apollo.watchQuery<VulnerabilityQuery>({
-      query: gql`
+  getVulnerability(vulnerabilityId: string) {
+    return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(
+      gql`
         query {
             vulnerability(vulnerabilityId:"${vulnerabilityId}") {
               vulnerabilityId,
@@ -662,14 +657,13 @@ export class ApiService {
               }
           }
         }
-      `,
-    }).valueChanges;
+      `);
   }
 
 
-  getScanRepository(scanId:string) {
-    return this.apollo.watchQuery<ScanQuery>({
-      query: gql`
+  getScanRepository(scanId: string) {
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(
+      gql`
        query {
           scan(scanId:"${scanId}") {
             scanRepository {
@@ -678,13 +672,12 @@ export class ApiService {
             }
           }
         }
-      `,
-    }).valueChanges;
+      `);
   }
 
-  getScanAssets(scanId:string) {
-    return this.apollo.watchQuery<ScanQuery>({
-      query: gql`
+  getScanAssets(scanId: string) {
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(
+      gql`
         query {
         	 scan(scanId:"${scanId}") {
             scanId
@@ -712,13 +705,12 @@ export class ApiService {
             }
           }
         }
-      `,
-    }).valueChanges;
+      `);
   }
 
-  getScanAsset(scanId:string,scanAssetId:string) {
-    return this.apollo.watchQuery<ScanAssetQuery>({
-      query: gql`
+  getScanAsset(scanId: string, scanAssetId: string) {
+    return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(
+      gql`
         query {
         	scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
             name,
@@ -765,14 +757,12 @@ export class ApiService {
             }
           }
         }
-      `,
-    }).valueChanges;
+      `);
   }
 
-
   getGitHubUser() {
-    return this.apollo.watchQuery<GitHubUserQuery>({
-      query: gql`
+    return this.coreGraphQLService.coreGQLReq<GitHubUserQuery>(
+      gql`
         query {
           gitHubUser {
             id,
@@ -872,7 +862,6 @@ export class ApiService {
             }
           }
         }
-      `,
-    }).valueChanges;
+      `);
   }
 }
