@@ -16,7 +16,7 @@
     <div class="row">
       <div class="col-md-12">
         <perfect-scrollbar [style.max-height]="'250px'">
-          <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets" [paginator]="false" [rows]="50"
+          <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
@@ -38,16 +38,16 @@
 
             <ng-template pTemplate="body" let-embeddedAsset >
               <tr>
-                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.name}}</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.matchRepository.repositoryOwner}}/{{embeddedAsset.matchRepository.repositoryName}}</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset)">{{embeddedAsset.percentMatch | number:'1.1-2'}}%</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset)" *ngIf='embeddedAsset.assetSize >= 1024'>{{embeddedAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset)" *ngIf='embeddedAsset.assetSize < 1024'>{{embeddedAsset.assetSize | number:'1.0-0'}} bytes</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.name}}</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize >= 1024'>{{embeddedAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+                <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize < 1024'>{{embeddedAsset.node.assetSize | number:'1.0-0'}} bytes</td>
                 <td style="word-spacing: 6px;">
-                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset);exampleModalCenter.show()">
-                    {{embeddedAsset.releases[0].releaseName}}
-                    <span *ngIf="embeddedAsset.releases.length > 1" >
-                      to {{embeddedAsset.releases[embeddedAsset.releases.length-1].releaseName}}
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
+                    {{embeddedAsset.node.releases.edges[0].node.releaseName}}
+                    <span *ngIf="embeddedAsset.node.releases.edges.length > 1" >
+                      to {{embeddedAsset.node.releases.edges[embeddedAsset.releases.edges.length-1].node.releaseName}}
                     </span>
                   </a>
                 </td>
@@ -67,7 +67,7 @@
 
 
           <perfect-scrollbar [style.max-height]="'550px'">
-            <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.releases" [paginator]="false" [rows]="50"
+            <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.releases.edges" [paginator]="false" [rows]="50"
                      tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                      [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
@@ -83,21 +83,21 @@
               <ng-template pTemplate="body" let-release >
                 <tr>
                   <td>
-                    {{release.releaseName}}
+                    {{release.node.releaseName}}
                   </td>
                   <td>
-                    {{release.releaseDate | date :'MMMM d, y'}}
+                    {{release.node.releaseDate | date :'MMMM d, y'}}
                   </td>
                   <td style="border-left:1px solid gray">
-                    <div *ngFor="let license of release?.licenses">
-                      <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                      <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                      <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                      <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                      <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                      <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-                      <span *ngIf="license.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
-                      <a [routerLink]="['/dashboard/project/license',license.licenseId]">{{license.shortName}}</a>
+                    <div *ngFor="let license of release?.node.licenses.edges">
+                      <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                      <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                      <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                      <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                      <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                      <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                      <span *ngIf="license.node.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
+                      <a [routerLink]="['/dashboard/project/license',license.node.licenseId]">{{license.node.shortName}}</a>
                     </div>
                   </td>
                 </tr>

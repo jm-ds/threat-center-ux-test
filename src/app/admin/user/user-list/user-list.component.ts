@@ -26,7 +26,7 @@ export class UserListComponent extends UserUtils implements OnInit {
         // this.users = this.userService.getUserList().pipe(map(result => result.data.users));
         this.userService.getUserList().subscribe(
             data => {
-                this.users = data.data.users;
+                this.users = data.data.users.edges.map((e)=>e.node);
             },
             error => {
                 console.error("UserListComponent", error);

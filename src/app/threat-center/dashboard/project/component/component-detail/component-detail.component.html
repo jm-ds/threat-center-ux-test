@@ -21,7 +21,7 @@
           <ngb-tab title="Vulnerabilities" id="vulnerabilities">
             <ng-template ngbTabContent>
               <perfect-scrollbar [style.max-height]="'650px'">
-                <p-table #dt [columns]="vulnerabilityColumns" [value]="component.vulnerabilities" [paginator]="false" [rows]="50"
+                <p-table #dt [columns]="vulnerabilityColumns" [value]="component.vulnerabilities.edges" [paginator]="false" [rows]="50"
                          tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                          [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
 
@@ -45,12 +45,12 @@
                   </ng-template>
 
                   <ng-template pTemplate="body" let-vulnerability>
-                    <tr [routerLink]="['/dashboard/project/vulnerability', vulnerability?.vulnerabilityId]">
-                      <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.source}}</span> {{vulnerability?.vulnId}}</td>
-                      <td><span *ngIf="vulnerability?.cwe"> CWE-{{vulnerability?.cwe?.cweId}} : {{vulnerability?.cwe?.name}}</span></td>
-                      <td>{{vulnerability?.severity}}</td>
-                      <td>{{vulnerability?.cvssV2BaseScore}}</td>
-                      <td>{{vulnerability?.cvssV3BaseScore | number : '1.1-1'}}</td>
+                    <tr [routerLink]="['/dashboard/project/vulnerability', vulnerability?.node.vulnerabilityId]">
+                      <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.node.source}}</span> {{vulnerability?.node.vulnId}}</td>
+                      <td><span *ngIf="vulnerability?.node.cwe"> CWE-{{vulnerability?.node.cwe?.cweId}} : {{vulnerability?.node.cwe?.name}}</span></td>
+                      <td>{{vulnerability?.node.severity}}</td>
+                      <td>{{vulnerability?.node.cvssV2BaseScore}}</td>
+                      <td>{{vulnerability?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
                     </tr>
                   </ng-template>
                 </p-table>
@@ -63,38 +63,38 @@
             <ng-template ngbTabContent>
 
               <div style="display: flex;">
-                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of component.licenses">
-                  <div class="card-body" [routerLink]="['/dashboard/project/license', license.licenseId]">
-                    <h6 class="card-title">{{license.name}}</h6>
+                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of component.licenses.edges">
+                  <div class="card-body" [routerLink]="['/dashboard/project/license', license.node.licenseId]">
+                    <h6 class="card-title">{{license.node.name}}</h6>
                       <div class="card p-2 m-3">
                         <form>
                           <div class="form-group row  p-l-5">
                             <label class="col-sm-12 col-form-label">Category</label>
                             <div class="col-xl-12">
-                              <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                              <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                              <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                              <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                              <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                              <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                              <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                              <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                              <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                              <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                              <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                              <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
                             <label for="spdx" class="col-sm-12 col-form-label">SPDX</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.spdxId}}">
+                              <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.node.spdxId}}">
                             </div>
                           </div>publicationYear
                           <div class="form-group row  p-l-5">
                             <label for="style" class="col-sm-12 col-form-label">Style</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="style" readonly placeholder="{{license.style}}">
+                              <input type="text" class="form-control" id="style" readonly placeholder="{{license.node.style}}">
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
                             <label for="publicationYear" class="col-sm-12 col-form-label">Publication Year</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.publicationYear}}">
+                              <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.node.publicationYear}}">
                             </div>
                           </div>
 

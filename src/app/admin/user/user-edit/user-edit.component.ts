@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "@app/admin/services/user.service";
 import {DualListComponent} from "angular-dual-listbox";
 import {RoleService} from "@app/admin/services/role.service";
-import {Entity} from "@app/threat-center/shared/models/types";
+import {Entity, EntityEdge} from "@app/threat-center/shared/models/types";
 import {ApiService} from "@app/threat-center/shared/services";
 import {IOption} from "ng-select";
 
@@ -49,7 +49,7 @@ export class UserEditComponent implements OnInit {
                     this.user = data.data.user;
                     this.newUser = false;
                     this.selectedRoles = this.user.userRoles;
-                    this.entitySelectSelectedItems = this.user.userEntities.map(entity => entity.entityId);
+                    this.entitySelectSelectedItems = this.user.userEntities.edges.map(edge => edge.node.entityId);
                 },
                 error => {
                     console.error("UserEditComponent", error);
@@ -76,7 +76,7 @@ export class UserEditComponent implements OnInit {
         );
 
         this.apiService.getEntityList().subscribe(data => {
-            this.entities = data.data.entities;
+            this.entities = data.data.entities.edges.map((e)=>e.node);
             // let entity = this.entities[0];
             // let opt = {value: entity.entityId, label: entity.name};
             /*this.entitySelectItems = this.entities.map(entity => {
@@ -115,7 +115,7 @@ export class UserEditComponent implements OnInit {
 
     private saveUser() {
         this.user.userRoles = this.selectedRoles;
-        this.user.userEntities = this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems);
+        this.user.userEntities.edges = this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity=> new EntityEdge(entity, ""));
 
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {

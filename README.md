@@ -26,7 +26,7 @@ NVM: https://github.com/nvm-sh/nvm
 
     # install NVM
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-
+    
     # install node 10.19.0
     nvm install 10.19.0
     
@@ -35,17 +35,17 @@ NVM: https://github.com/nvm-sh/nvm
     
     # set using node 8.9.4
     nvm use 8.9.4
-
+    
     # go to threat-center-ux folder
     cd /path/to/threat-center-ux
-
+    
     # set fontawesome pro npm token
     npm config set "@fortawesome:registry" https://npm.fontawesome.com/ && \
     npm config set "//npm.fontawesome.com/:_authToken" 835DE574-0FFE-40E6-8783-4B1CA13F230F
     
     # install fontawesome
     npm install --save @fortawesome/fontawesome-pro
-
+    
     # install project packages
     npm install
     
@@ -92,6 +92,12 @@ To run **prod** environment via on IDEA we have two options.
 To set api proxy config pass `--proxy-config proxy.conf.json` argument same way as `--prod` argument.  
 For **PROD** version of proxy set `--proxy-config proxy.conf.prod.json`.
 
+### IDEA run config with proxy config
+
+<font color='red'>**It's importnant to set proxy config to you local installation run command/config so UX app access API properly.**</font>  
+
+<img alt="Angular CLI Server run configuration" src="https://github.com/threatrix/threat-center-ux/blob/master/angular-proxy-settings.png">
+
 
 
 ## DEV/PROD config/environment
@@ -125,11 +131,15 @@ First file contains variables for **dev** environment, second for **prod**. Seco
 To apply API proxy we pass `--proxy-config proxy.conf.json` argument to build (or serve) command. To build **prod** version we just pass prod version of proxy config `--proxy-config proxy.conf.prod.json`.  
 If you would like to use Angular app as embedded into the Spring app then you **don't** need to pass `--proxy-config proxy.conf.prod.json` argument.
 
+<font color='red'>Don't forget to apply proxy config for local development environment build.</font>
+
 ### Build summary  
 We have two versions of each environment file and proxy config file for dev/local and for prod environments. We set variables in these files once and then just pass required arguments to build/serve command to build dev or prod.
 
 ### Build options  
 Serve **dev** environment with API proxy  **_(this is how we run app locally)_**
+
+<font color='red'>Don't forget to apply proxy config for local development environment build.</font>
 
     ng serve --proxy-config proxy.conf.json
 
