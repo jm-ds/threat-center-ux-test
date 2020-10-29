@@ -1,5 +1,5 @@
 import {Role} from "@app/models";
-import {Entity} from "@app/threat-center/shared/models/types";
+import {EntityConnection} from "@app/threat-center/shared/models/types";
 import {Router} from "@angular/router";
 // import {element} from "protractor";
 
@@ -17,9 +17,9 @@ export class UserUtils {
         }).sort().join(", ");
     }
 
-    renderEntities(entities: Entity[]) {
-        return entities.map(entity => {
-            return entity.name;
+    renderEntities(entities: EntityConnection) {
+        return entities.edges.map(entity => {
+            return entity.node.name;
         }).sort().join(", ");
     }
 

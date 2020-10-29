@@ -84,7 +84,7 @@ export class UserSelection {
 export class Entity {
   entityId:string;
   name:string;
-  projects:Project[];
+  projects:ProjectConnection;
   entityMetrics:EntityMetrics;
   entityComponents:any;
 }
@@ -131,7 +131,8 @@ export class Project {
   projectId:string;
   name:string;
   created:any;
-  scans:Scan[];
+  latestScan: Scan;
+  scans: ScanConnection;
 }
 
 export class Scan {
@@ -246,6 +247,49 @@ export class User {
 }
 
 
+export class PageInfo {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string;
+  endCursor: string;
+}
+
+export class ProjectConnection {
+  edges: ProjectEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class ProjectEdge {
+  node: Project;
+  cursor: string;
+}
+
+export class ScanConnection {
+  edges: ScanEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class ScanEdge {
+  node: Scan;
+  cursor: string;
+}
+
+export class EntityConnection {
+  edges: EntityEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class EntityEdge {
+  node: Entity;
+  cursor: string;
+  constructor (node: Entity, cursor: string) {
+    this.node = node;
+    this.cursor = cursor;
+  }
+}
 
 
 // GRAPHQL QUERIES
@@ -279,7 +323,7 @@ export type EntityQuery = {
 }
 
 export type EntityListQuery = {
-  entities: Entity[];
+  entities: EntityConnection;
 }
 
 export type VulnerabilityQuery = {

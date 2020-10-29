@@ -26,6 +26,6 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   sort(scanAssets:any) {
-    return scanAssets.sort((a,b) => a.status.localeCompare(b.status)).sort((a,b) => b.embeddedAssets.length-a.embeddedAssets.length);
+    return scanAssets.sort((a,b) => a.node.status.localeCompare(b.node.status)).sort((a,b) => b.node.embeddedAssets.length-a.node.embeddedAssets.length);
   }
 }

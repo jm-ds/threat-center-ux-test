@@ -1,5 +1,5 @@
 import {Permission, Role} from "@app/models/role";
-import {Entity} from "@app/threat-center/shared/models/types";
+import {EntityConnection, PageInfo} from "@app/threat-center/shared/models/types";
 
 export class User {
     accessToken: string;
@@ -18,7 +18,7 @@ export class User {
 
     // lists returned by gql inner queries
     userRoles: Role[];
-    userEntities: Entity[];
+    userEntities: EntityConnection;
     userPermissions: Permission[];
 
     // lists as user class fields
@@ -34,7 +34,7 @@ export interface Authority {
 
 
 export interface UsersQuery {
-    users: User[];
+    users: UserConnection;
 }
 
 export interface UserQuery {
@@ -70,8 +70,8 @@ export class UserRequestInput {
         }
 
         let entities;
-        if (user.userEntities != null && user.userEntities.length > 0) {
-            entities = user.userEntities.map(entity => entity.entityId);
+        if (user.userEntities != null && user.userEntities.edges && user.userEntities.edges.length > 0) {
+            entities = user.userEntities.edges.map(edge => edge.node.entityId);
         }
         else {
             entities = [];
@@ -88,3 +88,14 @@ export class UserRequestInput {
         return new UserRequestInput(user.email, user.fname, user.lname, entities, roles, permissions);
     }
 }
+
+export class UserConnection {
+    edges: UserEdge[];
+    pageInfo: PageInfo;
+    totalCount: number;
+  }
+
+  export class UserEdge {
+    node: User;
+    cursor: string;
+  }

@@ -81,13 +81,13 @@ export class EntityComponent implements OnInit {
       this.componentsEntity = entity;
       let uniqueLicenseNames = [];
       if(this.componentsEntity.entityComponents) {
-        this.componentsEntity.entityComponents.forEach(component => {
-          let licenses = component.entityComponentLicenses;
+        this.componentsEntity.entityComponents.edges.forEach(component => {
+          let licenses = component.node.entityComponentLicenses;
           if(licenses){
-            licenses.forEach(license => {
-              if(uniqueLicenseNames.indexOf(license.name) === -1) {
-                uniqueLicenseNames.push(license.name);
-                this.uniqueLicenses.push(license);
+            licenses.edges.forEach(license => {
+              if(uniqueLicenseNames.indexOf(license.node.name) === -1) {
+                uniqueLicenseNames.push(license.node.name);
+                this.uniqueLicenses.push(license.node);
               }
             });
           }

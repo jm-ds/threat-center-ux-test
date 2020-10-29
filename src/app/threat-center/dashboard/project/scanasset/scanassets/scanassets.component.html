@@ -11,7 +11,7 @@
       </div>
 
       <perfect-scrollbar [style.max-height]="'650px'">
-        <p-table #dt [columns]="columns" [value]="sort(scan.scanAssets)" [paginator]="false" [rows]="50"
+        <p-table #dt [columns]="columns" [value]="sort(scan.scanAssets.edges)" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
 
@@ -30,21 +30,21 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset>
-            <tr style="cursor: pointer;" *ngIf="scanAsset.status === 'ACCEPTED'" [routerLink]="['/dashboard/project/scanasset',scan.scanId, scanAsset.scanAssetId]">
-              <td>{{scanAsset.name}}</td>
-              <td *ngIf='scanAsset.assetSize >= 1024'>{{scanAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
-              <td *ngIf='scanAsset.assetSize < 1024'>{{scanAsset.assetSize | number:'1.0-0'}} bytes</td>
-              <td>{{scanAsset.workspacePath}}</td>
-              <td>{{scanAsset.status}}</td>
-              <td>{{scanAsset.embeddedAssets.length}} <span *ngIf='scanAsset.embeddedAssets[0]'> / {{scanAsset.embeddedAssets[0]?.percentMatch | number:'1.1-2'}}%</span></td>
+            <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED'" [routerLink]="['/dashboard/project/scanasset',scan.scanId, scanAsset.node.scanAssetId]">
+              <td>{{scanAsset.node.name}}</td>
+              <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td>{{scanAsset.node.workspacePath}}</td>
+              <td>{{scanAsset.node.status}}</td>
+              <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
             </tr>
-            <tr *ngIf="scanAsset.status != 'ACCEPTED'" >
-              <td>{{scanAsset.name}}</td>
-              <td *ngIf='scanAsset.assetSize >= 1024'>{{scanAsset.assetSize/1024 | number:'1.0-1'}} kB</td>
-              <td *ngIf='scanAsset.assetSize < 1024'>{{scanAsset.assetSize | number:'1.0-0'}} bytes</td>
-              <td>{{scanAsset.workspacePath}}</td>
-              <td>{{scanAsset.status}}</td>
-              <td>{{scanAsset.embeddedAssets.length}} <span *ngIf='scanAsset.embeddedAssets[0]'> / {{scanAsset.embeddedAssets[0]?.percentMatch | number:'1.1-2'}}%</span></td>
+            <tr *ngIf="scanAsset.node.status != 'ACCEPTED'" >
+              <td>{{scanAsset.node.name}}</td>
+              <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td>{{scanAsset.node.workspacePath}}</td>
+              <td>{{scanAsset.node.status}}</td>
+              <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
             </tr>
         </ng-template>
         </p-table>
