@@ -1,25 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import {
-  GitHubUserQuery,
-  ProjectQuery,
-  EntityQuery,
-  ScanQuery,
-  VulnerabilityQuery,
-  ComponentQuery,
-  LicenseQuery,
-  Branch,
-  UserSelection,
-  Vulnerability,
-  Scan,
-  Project,
-  Entity,
-  License,
-  ScanAssetQuery,
-  EntityListQuery
+    BitbucketUserQuery,
+    ComponentQuery,
+    EntityListQuery,
+    EntityQuery,
+    GitHubUserQuery,
+    GitLabUserQuery,
+    LicenseQuery,
+    ProjectQuery,
+    Scan,
+    ScanAssetQuery,
+    ScanQuery,
+    UserSelection,
+    VulnerabilityQuery
 } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
@@ -845,4 +840,70 @@ export class ApiService {
         }
       `);
   }
+
+    // Request gitlab repos data from backend
+    getGitLabUser() {
+        return this.apollo.watchQuery<GitLabUserQuery>({
+            query: gql`
+                query {
+                  gitLabUser {
+                    id,
+                    avatarUrl,
+                    email,
+                    name,
+                    username,
+                    gitLabProjects {
+                      id,
+                      name,
+                      fullPath,
+                      description,
+                      httpUrlToRepo,
+                      sshUrlToRepo,
+                      path,
+                      webUrl,
+                      archived,
+                      createdAt,
+                      repository {
+                          rootRef,
+                          exists
+                      }
+                    }
+                  }
+                }
+              `,
+        }).valueChanges;
+    }
+
+
+    // Request bitbucket repos data from backend
+    getBitbucketUser() {
+        return this.apollo.watchQuery<BitbucketUserQuery>({
+            query: gql`
+                query {
+                  bitbucketUser {
+                    id,
+                    name,
+                    username,
+                    state,
+                    email,
+                    avatarUrl,
+                    webUrl,
+                    organization,
+                    bitBucketRepositories {
+                        name,
+                        fullName,
+                        url,
+                        sshUrl,
+                        owner,
+                        createdOn,
+                        description,
+                        language,
+                        mainBranch,
+                        branches
+                    }
+                  }
+                }
+              `,
+        }).valueChanges;
+    }
 }
