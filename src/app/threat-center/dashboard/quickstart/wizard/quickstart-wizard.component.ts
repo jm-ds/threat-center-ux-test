@@ -76,7 +76,7 @@ export class QuickstartWizardComponent implements OnInit {
             let resourcePath = this.selectedRepos[0].node.resourcePath.split("/", 3);
             let owner = resourcePath[1];
             let repo = resourcePath[2];
-            let branch = this.selectedRepos[0].scanBranch;
+            let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
                 branch = 'master';
             }
@@ -85,19 +85,19 @@ export class QuickstartWizardComponent implements OnInit {
             scanRequest.repository = repo;
         } else if (repoType === "gitlab") {
             console.log("is gitlab");
-            let resourcePath = this.selectedRepos[0].fullPath.split("/", 3);
+            let resourcePath = this.selectedRepos[0].node.fullPath.split("/", 3);
             scanRequest.login = resourcePath[0];
             scanRequest.repository = resourcePath[1];
-            scanRequest.branch = this.selectedRepos[0].repository.rootRef;
-            scanRequest.projectId = this.selectedRepos[0].id;
+            scanRequest.branch = this.selectedRepos[0].node.repository.rootRef;
+            scanRequest.projectId = this.selectedRepos[0].node.id;
         } else {
             console.log("is bitbucket");
-            let resourcePath = this.selectedRepos[0].fullName.split("/", 3);
+            let resourcePath = this.selectedRepos[0].node.fullName.split("/", 3);
             scanRequest.login = resourcePath[0];
             scanRequest.repository = resourcePath[1];
-            let branch = this.selectedRepos[0].scanBranch;
+            let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
-                branch = this.selectedRepos[0].mainBranch;
+                branch = this.selectedRepos[0].node.mainBranch;
             }
             scanRequest.branch = branch;
         }
@@ -162,7 +162,7 @@ export class QuickstartWizardComponent implements OnInit {
 
     changeBranch(newValue) {
         console.log(newValue);
-        this.selectedRepos[0].scanBranch = newValue;
+        this.selectedRepos[0].node.scanBranch = newValue;
     }
 
     licenseAttributeFilter(license: any, attributeType: string) {
