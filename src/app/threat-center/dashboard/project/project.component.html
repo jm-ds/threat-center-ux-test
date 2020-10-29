@@ -72,7 +72,7 @@
               <perfect-scrollbar [style.max-height]="'500px'">
                 <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
                          tableStyleClass="table table-bordered table-hover dataTable no-footer"
-                         selectionMode="single" [(selection)]="stateService.selectedScan" [autoLayout]="true">
+                         selectionMode="single" [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true">
 
                   <ng-template pTemplate="caption">
                     <div style="text-align: right">
@@ -137,7 +137,7 @@
           <!-- VULNERABILITIES TAB -->
           <ngb-tab title="Vulnerabilities" id="vulnerabilities">
             <ng-template ngbTabContent>
-              <vulnerabilities [scanId]="stateService.selectedScan?.scanId"></vulnerabilities>
+              <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId"></vulnerabilities>
             </ng-template>
           </ngb-tab>
 
@@ -145,7 +145,7 @@
           <ngb-tab title="Components" id="components">
             <ng-template ngbTabContent>
 
-              <components [scanId]="stateService.selectedScan?.scanId"></components>
+              <components [scanId]="stateService.selectedScan?.node.scanId"></components>
               <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -179,7 +179,7 @@
           <!-- LICENSES TAB -->
           <ngb-tab title="Licenses" id="licenses">
             <ng-template ngbTabContent>
-              <licenses [scanId]="stateService.selectedScan?.scanId"></licenses>
+              <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
             </ng-template>
           </ngb-tab>
 
@@ -269,7 +269,7 @@
           <!-- ASSETS TAB -->
           <ngb-tab title="Assets" id="assets">
             <ng-template ngbTabContent>
-              <scanassets [scanId]="stateService.selectedScan?.scanId"></scanassets>
+              <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
               <p></p>
             </ng-template>
           </ngb-tab>
