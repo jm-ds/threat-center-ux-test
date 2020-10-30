@@ -45,9 +45,7 @@ export class ProjectComponent implements OnInit {
     }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
     this.obsProject.subscribe(project => {
-      if (project.scans.edges[0]) {
-          this.stateService.selectedScan = project.scans.edges[0].node;
-      }
+      this.stateService.selectedScan = project.scans.edges[0];
       let critical = [];
       let high = [];
       let medium = [];
@@ -153,6 +151,11 @@ export class ProjectComponent implements OnInit {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab=$event.nextId;
+  }
+
+  rowUnselect ($event: any) {
+    // prevent unselect row
+    this.stateService.selectedScan = $event.data;
   }
 
   public licensePieChart2 = {

@@ -76,7 +76,7 @@ export class QuickstartWizardComponent implements OnInit {
             let resourcePath = this.selectedRepos[0].node.resourcePath.split("/", 3);
             let owner = resourcePath[1];
             let repo = resourcePath[2];
-            let branch = this.selectedRepos[0].scanBranch;
+            let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
                 branch = 'master';
             }
@@ -162,7 +162,7 @@ export class QuickstartWizardComponent implements OnInit {
 
     changeBranch(newValue) {
         console.log(newValue);
-        this.selectedRepos[0].scanBranch = newValue;
+        this.selectedRepos[0].node.scanBranch = newValue;
     }
 
     licenseAttributeFilter(license: any, attributeType: string) {
