@@ -66,8 +66,10 @@ export class ScanAssetDetailComponent implements OnInit {
 
             let user = this.authService.getFromStorageBasedEnv("currentUser");
             const accessToken = user.repositoryAccounts.githubAccount.accessToken;
+            console.log("ACCESS TOKEN:",accessToken);
 
             if (accessToken) {
+              console.log("Getting file");
               this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
                 .subscribe(result => {
                   this.sourceAsset.content = atob(result.content);
