@@ -1,0 +1,82 @@
+$links-width: 30;
+$padding: 20;
+
+.simm-box {
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: #242E38;
+    z-index: 2000;
+
+    display: flex;
+    padding: $padding+px;
+
+    .simm-toolbar {
+        position: absolute;
+        top: $padding+px;
+        left: $padding+px;
+        right: $padding+px;
+        display: flex;
+        > div {
+            display: inline-flex;
+        }
+
+        span.hint {
+            line-height: 31px;
+            padding: 0 10px;
+            color: #686d70;
+        }
+    }
+
+    .simm-header {
+        position: absolute;
+        top: ($padding * 3)+px;
+        left: $padding+px;
+        right: $padding+px;
+        display: flex;
+        justify-content: space-between;
+        > div {
+            width: 49%;
+            background: #202932;
+            padding: 5px 10px;
+            border: 1px solid #4a4c4f;
+        }
+    }
+
+    .simm-files {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: stretch;
+        width: 100%;
+
+        margin-top: ($padding*3.5)+px;
+
+        .simm-file {
+            //width: calc(50% - 15);
+            width: 49%;
+            overflow: scroll;
+            pre.line-highlight[class*="language-"] {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+
+
+        }
+        .matches-links {
+            width: ($links-width)px;
+        }
+    }
+}
+
+::ng-deep .line-highlight {
+    //display: none !important;
+    //background: #637e99;
+    //background: linear-gradient(to right, hsla(151, 20%, 49%, 0.25) 80%, hsla(151, 20%, 49%, 0.05));
+    background: linear-gradient(to right, hsla(0, 48%, 38%, 0.25) 80%, hsla(0, 48%, 38%, 0.05));
+}
+
+
+::ng-deep pre[class*="language-"] {
+    margin-top: 0;
+    margin-bottom: 0;
+}

@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { SharedModule } from '@app/shared/shared.module';
 import { TaskComponent } from './task/task.component';
 import { MessagesComponent } from './messages/messages.component';
+import { SimmComponent } from './simm/simm.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { MessagesComponent } from './messages/messages.component';
         FileViewComponent,
         DiffViewComponent,
         TaskComponent,
-        MessagesComponent
+        MessagesComponent,
+        SimmComponent
     ],
   declarations: [
     SourceDimensionComponent,
@@ -42,7 +44,8 @@ import { MessagesComponent } from './messages/messages.component';
     FileViewComponent,
     DiffViewComponent,
     TaskComponent,
-    MessagesComponent
+    MessagesComponent,
+    SimmComponent
   ],
   providers: [ ]
 })
