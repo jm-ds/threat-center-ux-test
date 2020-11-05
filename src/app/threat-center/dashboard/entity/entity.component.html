@@ -16,7 +16,7 @@
 
 
 
-  <div class="row entity-chart-blk" style="padding:20px 0px 20px 0px" *ngIf="entity.entityMetrics">
+  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="entity.entityMetrics">
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <!--<div>
@@ -53,12 +53,12 @@
         <app-apex-chart chartID="assetChart" [chartConfig]="this.assetChart"></app-apex-chart>
       </app-card>
     </div>
-     <div class="col-md-3">
+     <!-- <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 p-r-5"></i>Source Code Leaks</div>
         <app-apex-chart chartID="sourceCodeLeakChart" [chartConfig]="sourceCodeLeakChart"></app-apex-chart>
       </app-card>
-    </div>
+    </div> -->
   </div>
 
 
@@ -253,7 +253,7 @@
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Licenses</th>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Components</th>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Assets</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">Leaked Assets</th>
+                            <!-- <th style="border-bottom:1px solid #4680ff;font-weight:bold">Leaked Assets</th> -->
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Last Scan</th>
                           </tr>
                           </thead>
@@ -298,11 +298,11 @@
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td>
-                            <td>
+                            <!-- <td>
                               <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
-                            </td>
+                            </td> -->
                             <td>{{projectEdge.node.created | date :'M/d h:mmaa' | lowercase}}</td>
                           </tr>
 
@@ -687,9 +687,9 @@
             </ng-template>
           </ngb-tab>
 
-          <ngb-tab title="LEAKED ASSETS">
+          <!-- <ngb-tab title="LEAKED ASSETS">
             
-          </ngb-tab>
+          </ngb-tab> -->
 
 
         </ngb-tabset>

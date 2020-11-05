@@ -247,39 +247,19 @@ export class EntityComponent implements OnInit {
   };
   legend = {
     position: 'top',
-    horizontalAlign: 'left',
-    fontSize: '10px',
-    fontFamily: 'Helvetica, Arial',
-    fontWeight: 320,
+    horizontalAlign: 'center',
+    offsetX: 0,
+    offsetY: 5,
+    fontSize: '11px',
+    //width: 500,
     itemMargin: {
-      horizontal: 4,
-      vertical: 0
+     horizontal: 5,
+     vertical: 0
     },
-    markers: {
-      width: 10,
-      height: 10,
-      strokeWidth: 0,
-      strokeColor: '#fff',
-      fillColors: undefined,
-      radius: 10,
-      customHTML: undefined,
-      onClick: undefined,
-      offsetX: 0,
-      offsetY: 0
-  },
-    // horizontalAlign: 'center',
-    // offsetX: 0,
-    // offsetY: 5,
-    // fontSize: '11px',
-    // //width: 500,
-    // itemMargin: {
-    //   horizontal: 5,
-    //   vertical: 0
-    // },
-
   };
+  
   dataLabels = {
-    enabled: true
+    enabled: false
   };
   stroke = {
     show: true,
