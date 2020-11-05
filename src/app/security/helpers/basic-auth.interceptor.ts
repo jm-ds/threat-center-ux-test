@@ -8,13 +8,10 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) { }
 
   //Http Inetrsaptor
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.headers.get('No-Auth') === 'true') {
-      return next.handle(request.clone());
-    }
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> { 
     const jwtToken = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
     let existingHeaders = request.headers;
-    if (jwtToken) {
+    if (jwtToken && (request.url.includes('user') || request.url.includes('localhost') || request.url.includes('threatrix.io') || request.url.includes('graphql'))) {
       existingHeaders = existingHeaders.set('Authorization', `Bearer ${jwtToken}`);
     } else {
       return next.handle(request.clone());

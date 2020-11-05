@@ -44,12 +44,13 @@
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize >= 1024'>{{embeddedAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize < 1024'>{{embeddedAsset.node.assetSize | number:'1.0-0'}} bytes</td>
                 <td style="word-spacing: 6px;">
+                  <!--
                   <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
                     {{embeddedAsset.node.releases.edges[0].node.releaseName}}
                     <span *ngIf="embeddedAsset.node.releases.edges.length > 1" >
                       to {{embeddedAsset.node.releases.edges[embeddedAsset.releases.edges.length-1].node.releaseName}}
                     </span>
-                  </a>
+                  </a>-->
                 </td>
               </tr>
             </ng-template>
