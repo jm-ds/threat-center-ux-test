@@ -177,6 +177,7 @@
                     <th>Licenses</th>
                     <th>Components</th>
                     <th>Embedded Assets</th>
+                    <th>Leaked Assets</th>
                     <!--<th>Policy Violations</th>-->
                   </tr>
                 </ng-template>
@@ -232,6 +233,15 @@
                       <span title="Skipped"
                         class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.assetMetrics?.skipped}}</span>
                     </td>
+                    <td>
+                      <span title="Partial Asset Leaks"
+                        class="badge m-r-5 badge-light-primary">5</span>
+                      <span title="Asset Leaks"
+                        class="badge m-r-5 badge-light-warning">5</span>
+                      <span title="Project Leaks"
+                        class="badge m-r-5 badge-light-primary">5</span>
+                    </td>
+
                     <!--<th>Policy Violations</th -->
                   </tr>
                 </ng-template>
@@ -379,6 +389,11 @@
             <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
             <p></p>
           </ng-template>
+        </ngb-tab>
+
+        <!-- SOURCE CODE ASSETS -->
+        <ngb-tab title="Leaked Assets" id="leakedassets">
+          <ng-template ngbTabContent></ng-template>
         </ngb-tab>
 
       </ngb-tabset>
