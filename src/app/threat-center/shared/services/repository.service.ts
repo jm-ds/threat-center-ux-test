@@ -23,7 +23,7 @@ export class RepositoryService {
   // https://github.com/threatrix/threat-center-ux/issues/6
   // we need to use the repositoryUrl(from the server)
   fetchAuthenticatedAsset(repositoryOwner:string,repositoryName:string,assetId:string,accountToken:string) {
-    const headers = { 'Authorization': `Bearer ${accountToken}` };
+    const headers = { 'Authorization': `Bearer ${accountToken}`};
     return this.http.get<any>(`https://api.github.com/repos/${repositoryOwner}/${repositoryName}/git/blobs/${assetId}`,{ headers });
   }
 }
