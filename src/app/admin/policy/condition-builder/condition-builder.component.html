@@ -95,7 +95,11 @@
           </div>
           <div class="form-group" *ngIf="!readonly || condition.legalFoundIn">
             <label class="font-weight-bolder">Found in</label>
-            <input [disabled]="readonly" class="form-control" [(ngModel)]="condition.legalFoundIn"/>
+            <select [(ngModel)]="condition.legalFoundIn" 
+            [disabled]="readonly" class="form-control ng-select">
+              <option [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of legalFoundInValues" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
           </div>
         </ng-template>
         <ng-template ngSwitchCase="COMPONENT">

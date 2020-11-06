@@ -15,14 +15,16 @@ export class ConditionBuilderComponent implements OnInit {
     @Input() public readonly: Boolean;
 
     securityOperators: CodeNamePair[];
-    legalOperators: CodeNamePair[];
-    componentOperators: CodeNamePair[];
-    codeQualityOperators: CodeNamePair[];
-
-    workflowReleasePhases: CodeNamePair[];
-    conditionTypeItems: CodeNamePair[];
     securitySeverityValues: CodeNamePair[];
     securityCVSS3ScoreValues: CodeNamePair[]
+    legalOperators: CodeNamePair[];
+    legalFoundInValues: CodeNamePair[];
+    componentOperators: CodeNamePair[];
+    codeQualityOperators: CodeNamePair[];
+    workflowReleasePhases: CodeNamePair[];
+
+
+    conditionTypeItems: CodeNamePair[];
 
     conditionTypes: object;
 
@@ -34,53 +36,57 @@ export class ConditionBuilderComponent implements OnInit {
 
     ngOnInit() {
         this.securityOperators = [
-        { code: "EQ", name: "=" },
-        { code: "GT", name: ">" },
-        { code: "LT", name: "<" }
+            { code: "EQ", name: "=" },
+            { code: "GT", name: ">" },
+            { code: "LT", name: "<" }
         ];
         this.legalOperators = [
-        { code: "EQ", name: "=" },
-        { code: "LIKE", name: "LIKE" }
+            { code: "EQ", name: "=" },
+            { code: "LIKE", name: "LIKE" }
         ];
         this.componentOperators = [
-        { code: "EQ", name: "=" },
-        { code: "GT", name: ">" },
-        { code: "LT", name: "<" }
+            { code: "EQ", name: "=" },
+            { code: "GT", name: ">" },
+            { code: "LT", name: "<" }
         ];
         this.codeQualityOperators = [
-        { code: "GT", name: ">" },
-        { code: "LT", name: "<" }
+            { code: "GT", name: ">" },
+            { code: "LT", name: "<" }
         ];
         this.workflowReleasePhases = [
-        { code: "DEVELOPMENT", name: "Development" },
-        { code: "STAGE", name: "Stage" },
-        { code: "Q/A", name: "Q/A" },
-        { code: "PRODUCTION", name: "Production" }
+            { code: "DEVELOPMENT", name: "Development" },
+            { code: "STAGE", name: "Stage" },
+            { code: "Q/A", name: "Q/A" },
+            { code: "PRODUCTION", name: "Production" }
         ];
         this.securitySeverityValues = [
-        { code: "INFO", name: "Info" },
-        { code: "MEDIUM", name: "Medium" },
-        { code: "HIGH", name: "High" },
-        { code: "CRITICAL", name: "Critical" }
+            { code: "INFO", name: "Info" },
+            { code: "MEDIUM", name: "Medium" },
+            { code: "HIGH", name: "High" },
+            { code: "CRITICAL", name: "Critical" }
         ];
         this.securityCVSS3ScoreValues = [
-        { code: "1", name: "1" },
-        { code: "2", name: "2" },
-        { code: "3", name: "3" },
-        { code: "4", name: "4" },
-        { code: "5", name: "5" },
-        { code: "6", name: "6" },
-        { code: "7", name: "7" },
-        { code: "8", name: "8" },
-        { code: "9", name: "9" },
-        { code: "10", name: "10" }
+            { code: "1", name: "1" },
+            { code: "2", name: "2" },
+            { code: "3", name: "3" },
+            { code: "4", name: "4" },
+            { code: "5", name: "5" },
+            { code: "6", name: "6" },
+            { code: "7", name: "7" },
+            { code: "8", name: "8" },
+            { code: "9", name: "9" },
+            { code: "10", name: "10" }
+        ];
+        this.legalFoundInValues = [
+            { code: "COMPONENT", name: "Component" },
+            { code: "IP", name: "IP" }
         ];
         this.conditionTypes = {
-        "SECURITY": "Security",
-        "LEGAL": "Legal",
-        "COMPONENT": "Component" ,
-        "CODE_QUALITY": "Code quality",
-        "WORKFLOW": "Workflow"
+            "SECURITY": "Security",
+            "LEGAL": "Legal",
+            "COMPONENT": "Component" ,
+            "CODE_QUALITY": "Code quality",
+            "WORKFLOW": "Workflow"
         };
         this.conditionTypeItems = [];
         for (const key in this.conditionTypes) {
