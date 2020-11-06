@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { RbacModule } from './rbac/rbac.module';
 import { EntityModule } from './entity/entity.module';
 import { IntegrationModule } from './integration/integration.module';
+import { PolicyModule } from './policy/policy.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { IntegrationModule } from './integration/integration.module';
     UserModule,
     RbacModule,
     EntityModule,
-    IntegrationModule
+    IntegrationModule,
+    PolicyModule
   ]
 })
 export class AdminModule { }

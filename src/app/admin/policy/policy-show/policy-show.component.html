@@ -1,0 +1,122 @@
+<div>
+  <nav aria-label="breadcrumb" class="float-right">
+      <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/admin/policy/list">Policies</a></li>
+          <li class="breadcrumb-item active text-muted" aria-current="page">Policy</li>
+      </ol>
+  </nav>
+  <h1>Policy</h1>
+</div>
+
+
+<app-messages [messages]="messages"></app-messages>
+
+
+<ng-template [ngIf]="policy != undefined">
+  <div class="row" style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
+    <div class="col-lg-3 col-md-12 mb-4">
+      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Policy">
+        <div class="pt-4" style="width: 100%;">
+          <ng-template [ngIf]="policy.active == true">
+            <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
+          </ng-template>
+          
+          <div class="form-group " style="padding-left: 0px">
+            <label >Name</label>
+            <input disabled class="form-control" style="width: 100%;" value="{{policy.name}}"/>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
+            <label>Title</label>
+            <input disabled class="form-control" value="{{policy.title}}"/>
+          </div>
+          <div class="form-group">
+            <label class="font-weight-bolder">Description</label>
+            <input disabled class="form-control" value="{{policy.description}}"/>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
+              <label class="font-weight-bolder">Created by</label>
+              <input disabled class="form-control" value="{{policy.createdBy}}"/>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
+            <label class="font-weight-bolder">Created date</label>
+            <input disabled class="form-control" value="{{policy.createDate}}"/>
+          </div>
+          <div *ngIf="!policy.active" class="form-group">
+            <label class="font-weight-bolder">Removed date</label>
+            <input disabled class="form-control" value="{{policy.dateRemoved}}"/>
+          </div>
+
+        </div>
+      </app-card>
+    </div>    
+    <!-- Conditions -->
+    <div class="col-lg-6 col-md-12 mb-4">
+      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
+        <condition-builder style="width: 100%" [group]="policy.rootGroup" [readonly]="true">
+        </condition-builder>  
+      </app-card>  
+    </div>   
+    <!-- Actions  -->
+    <div class="col-lg-3 col-md-12">
+      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
+        <perfect-scrollbar [style.max-height]="'500px'">
+          <p-table #dt [columns]="actionCols" [value]="policy.actions" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                   [filterDelay]="0" [globalFilterFields]="['actionName']">
+
+            <ng-template pTemplate="caption">
+              <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
+                <input type="text" pInputText size="30" placeholder="Filter"
+                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                       style="width:100px;display:inline" class="form-control">
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-action>
+              <tr>
+                <td>{{action.actionType}}</td>
+                <td>{{action.actionName}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+
+      </app-card>
+    </div>
+  </div>    
+  <div class="actions mt-4">
+      <ng-template [ngIf]="policy.active == true">
+        <a routerLink="/admin/policy/edit/{{policy.policyId}}" class="btn btn-outline-info">
+            <i class="feather icon-edit"></i>
+            Edit
+        </a>
+      </ng-template>  
+
+      <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+          <i class="feather icon-list"></i>
+          Back to list
+      </a>
+
+      <ng-template [ngIf]="policy.active == true">
+        <a  (click)="removePolicy()" class="btn btn-outline-danger float-right">
+            <i class="feather icon-trash"></i>
+            Delete
+        </a>
+      </ng-template>  
+  </div>
+</ng-template>
+
+
+<ng-template [ngIf]="policy === undefined">
+  <app-alert type="warning">Policy not found.</app-alert>
+
+  <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+      <i class="feather icon-list"></i>
+      Back to list
+  </a>
+</ng-template>

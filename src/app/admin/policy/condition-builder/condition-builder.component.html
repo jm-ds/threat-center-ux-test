@@ -1,0 +1,162 @@
+<div style="width: 100%;">
+  <div class = "card">
+    <div>
+    <button *ngIf="!readonly && parentGroup.groupId" type="button" class="btn btn-icon" title="Remove group" (click)="this.removeGroup(group)" 
+    style="color: #c9d0d5; float: right;">
+      <i class="feather icon-x" style="font-size: 14px; font-weight: 800;"></i>
+    </button>
+    <button *ngIf="!readonly" type="button" class="btn btn-icon" title="Add group" (click)="this.addChildGroup()" 
+    style="color: #c9d0d5; float: right;">
+      <i class="feather icon-folder" style="font-size: 14px; font-weight: 800;"></i>
+    </button>
+    <button *ngIf="!readonly" type="button" class="btn btn-icon" title="Add condition" (click)="this.addCondition()" 
+    style="color: #c9d0d5; float: right;">
+      <i class="feather icon-plus" style="font-size: 14px; font-weight: 800;"></i>
+    </button>
+
+    <select 
+    [(ngModel)]="group.groupOperator" required [disabled]="readonly" class="form-control input-sm ng-select" style="width: min-content; float: left;">
+      <option>OR</option>
+      <option>AND</option>
+    </select>
+    </div>
+    <div *ngFor="let condition of group.conditions" class="ml-4 mt-1">
+      <div [ngSwitch]="condition.conditionType" class="card p-2">
+        <div style="border-bottom: 1px solid; padding-bottom: 4px; margin-bottom: 4px;">
+          <button *ngIf="!readonly" type="button" class="btn btn-icon float-right" title="Remove condition" (click)="this.removeCondition(condition)" 
+          style="color: #c9d0d5;">
+            <i class="feather icon-x" style="font-size: 12px; font-weight: 800;"></i>
+          </button>
+          <div *ngIf="readonly;  else editableConditionType" class="font-weight-bolder float-left" style="margin-top: 7px;">
+            {{conditionTypes[condition.conditionType]}}</div>
+          <ng-template #editableConditionType>
+            <select [(ngModel)]="condition.conditionType" 
+                class="form-control float-left input-sm ng-select" style="width: min-content;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
+            </select>
+          </ng-template>
+        </div>  
+        <ng-template ngSwitchCase="SECURITY">
+            <div class="form-group" *ngIf="!readonly || condition.securitySeverityValue">
+              <select [(ngModel)]="condition.securitySeverityOperator" 
+              [disabled]="readonly"  class="form-control float-right input-sm ng-select" style="width: unset;">
+                <option disabled [ngValue]="undefined"> </option>  
+                <option *ngFor="let operator of securityOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+              </select>
+              <label class="font-weight-bolder pt-2">Severity</label>
+              <select name="securitySeverityValue" [(ngModel)]="condition.securitySeverityValue" 
+              [disabled]="readonly" class="form-control mt-2 ng-select" style="overflow-y: auto;" >
+                <option disabled [ngValue]="undefined"> </option>  
+                <option *ngFor="let item of securitySeverityValues" [ngValue]="item.code">{{ item.name }}</option> 
+              </select>
+            </div>
+            <div class="form-group" *ngIf="!readonly || condition.securityCVSS3ScoreValue">
+              <select [(ngModel)]="condition.securityCVSS3ScoreOperator" 
+              [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+                <option disabled [ngValue]="undefined"> </option>  
+                <option *ngFor="let operator of securityOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+              </select>
+              <label class="font-weight-bolder pt-2">CVSS3 Score</label>
+              <select name="securityCVSS3ScoreValue" [(ngModel)]="condition.securityCVSS3ScoreValue" 
+              [disabled]="readonly"  class="form-control mt-2 ng-select" style="overflow-y: auto;" >
+                <option disabled [ngValue]="undefined"> </option>  
+                <option *ngFor="let item of securityCVSS3ScoreValues" [ngValue]="item.code">{{ item.name }}</option> 
+              </select>
+            </div>
+        </ng-template>
+        <ng-template ngSwitchCase="LEGAL">
+          <div class="form-group" *ngIf="!readonly || condition.legalLicenseFamilyValue">
+            <select [(ngModel)]="condition.legalLicenseFamilyOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of legalOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">License Family</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.legalLicenseFamilyValue"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.legalLicenseTypeValue">
+            <select [(ngModel)]="condition.legalLicenseTypeOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of legalOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">License Type</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.legalLicenseTypeValue"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.legalLicenseNameValue">
+            <select [(ngModel)]="condition.legalLicenseNameOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of legalOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">License Name</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.legalLicenseNameValue"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.legalFoundIn">
+            <label class="font-weight-bolder">Found in</label>
+            <input [disabled]="readonly" class="form-control" [(ngModel)]="condition.legalFoundIn"/>
+          </div>
+        </ng-template>
+        <ng-template ngSwitchCase="COMPONENT">
+          <div class="form-group" *ngIf="!readonly || condition.componentGroupId">
+            <label class="font-weight-bolder">Group ID</label>
+            <input [disabled]="readonly" class="form-control" [(ngModel)]="condition.componentGroupId"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.componentArtifactId">
+            <label class="font-weight-bolder">Artifact ID</label>
+            <input [disabled]="readonly" class="form-control" [(ngModel)]="condition.componentArtifactId"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.componentVersion">
+            <label class="font-weight-bolder">Version</label>
+            <input [disabled]="readonly" class="form-control" [(ngModel)]="condition.componentVersion"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.componentLibraryAgeValue">
+            <select [(ngModel)]="condition.componentLibraryAgeOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of componentOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">Library Age</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.componentLibraryAgeValue"/>
+          </div>
+          <div class="form-group" *ngIf="!readonly || condition.componentVersBehindValue">
+            <select [(ngModel)]="condition.componentVersBehindOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of componentOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">Versions Behind</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.componentVersBehindValue"/>
+          </div>
+        </ng-template>
+        <ng-template ngSwitchCase="CODE_QUALITY">
+          <div class="form-group" *ngIf="!readonly || condition.codeQualityEmbAssetsValue">
+            <select [(ngModel)]="condition.codeQualityEmbAssetsOperator" 
+            [disabled]="readonly" class="form-control float-right ng-select" style="width: unset;">
+              <option disabled [ngValue]="undefined"> </option>  
+              <option *ngFor="let operator of codeQualityOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
+            </select>
+            <label class="font-weight-bolder pt-2">Embedded Assets percent</label>
+            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.codeQualityEmbAssetsValue"/>
+          </div>
+        </ng-template>
+        <ng-template ngSwitchCase="WORKFLOW">
+          <div class="form-group" *ngIf="!readonly || condition.workflowReleasePhase">
+            <label class="font-weight-bolder pt-2">Release Phase</label>
+            <select name="workflowReleasePhase" [(ngModel)]="condition.workflowReleasePhase" 
+            [disabled]="readonly"  multiple class="form-control mt-2 ng-select" style="overflow-y: auto;" >
+              <option *ngFor="let item of workflowReleasePhases" [ngValue]="item.code">{{ item.name }}</option> 
+            </select>
+          </div>
+        </ng-template>
+      </div>
+    </div>  
+    <div *ngFor="let childGroup of group.groups" class="ml-4 mt-1">
+      <condition-builder style="width: 100%" [group]="childGroup" [parentGroup]="group" [readonly]="readonly">
+      </condition-builder>  
+
+    </div>  
+  </div>  
+
+</div>
