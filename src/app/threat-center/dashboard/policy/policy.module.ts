@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ThemeSharedModule} from '../../theme/shared/theme-shared.module';
+import {ThemeSharedModule} from '../../../theme/shared/theme-shared.module';
 
 import { ConditionBuilderComponent } from './condition-builder/condition-builder.component';
 import { PolicyRoutingModule } from './policy-routing.module';

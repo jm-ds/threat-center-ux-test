@@ -18,7 +18,7 @@
                 <label class="custom-control-label" for="onlyActive">Only active</label>
               </div>
             <div style="width: fit-content;">
-                <a routerLink="/admin/policy/create" class="btn btn-outline-info">Add Policy</a>
+                <a routerLink="/dashboard/policy/create" class="btn btn-outline-info">Add Policy</a>
             </div>    
         </div>
       </ng-template>
@@ -31,7 +31,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-policy let-columns="columns">
-        <tr [routerLink]="['/admin/policy/show',policy.node.policyId]">
+        <tr [routerLink]="['/dashboard/policy/show',policy.node.policyId]">
             <td>{{policy.node.name}}</td>
             <td>{{policy.node.title}}</td>
             <td>

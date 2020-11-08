@@ -142,7 +142,7 @@
               <option *ngFor="let operator of codeQualityOperators" [ngValue]="operator.code">{{ operator.name }}</option> 
             </select>
             <label class="font-weight-bolder pt-2">Embedded Assets percent</label>
-            <input [disabled]="readonly" class="form-control mt-2" [(ngModel)]="condition.codeQualityEmbAssetsValue"/>
+            <input [disabled]="readonly" type="number" class="form-control mt-2" [(ngModel)]="condition.codeQualityEmbAssetsValue"/>
           </div>
         </ng-template>
         <ng-template ngSwitchCase="WORKFLOW">

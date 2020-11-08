@@ -1,7 +1,7 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
       <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a routerLink="/admin/policy/list">Policies</a></li>
+          <li class="breadcrumb-item"><a routerLink="/dashboard/policy/list">Policies</a></li>
           <li class="breadcrumb-item active text-muted" aria-current="page">Policy</li>
       </ol>
   </nav>
@@ -91,13 +91,13 @@
   </div>    
   <div class="actions mt-4">
       <ng-template [ngIf]="policy.active == true">
-        <a routerLink="/admin/policy/edit/{{policy.policyId}}" class="btn btn-outline-info">
+        <a routerLink="/dashboard/policy/edit/{{policy.policyId}}" class="btn btn-outline-info">
             <i class="feather icon-edit"></i>
             Edit
         </a>
       </ng-template>  
 
-      <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+      <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
           <i class="feather icon-list"></i>
           Back to list
       </a>
@@ -115,7 +115,7 @@
 <ng-template [ngIf]="policy === undefined">
   <app-alert type="warning">Policy not found.</app-alert>
 
-  <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+  <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
       <i class="feather icon-list"></i>
       Back to list
   </a>

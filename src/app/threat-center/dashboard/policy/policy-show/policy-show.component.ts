@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Message, Messages, Policy, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PolicyService} from "@app/admin/services/policy.service";
+import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
 
 @Component({
     selector: 'app-policy-view',
@@ -63,11 +63,11 @@ export class PolicyShowComponent implements OnInit {
         if (confirm("Are you sure you want to delete the policy ?")) {
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
-                    this.router.navigate(['/admin/policy/list'],
+                    this.router.navigate(['/dashboard/policy/list'],
                         {state: {messages: [Message.success("Policy removed successfully.")]}});
                 }, (error) => {
                     console.error('Policy Removing', error);
-                    this.router.navigate(['/admin/policy/show/' + this.policy.policyId],
+                    this.router.navigate(['/dashboard/policy/show/' + this.policy.policyId],
                         {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy.")]}});
                 });
         }

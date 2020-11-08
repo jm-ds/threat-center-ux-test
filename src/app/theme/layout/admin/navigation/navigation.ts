@@ -154,14 +154,6 @@ const NavigationItems = [
             url: '/admin/integration',
             target: false,
           },
-          {
-            id: 'policy',
-            title: 'Policy',
-            icon: 'fas fa-cogs',
-            type: 'item',
-            url: '/admin/policy',
-            target: false,
-          },
         ]
       },
       /*

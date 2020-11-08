@@ -1,7 +1,7 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
       <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a routerLink="/admin/policy/list">Policies</a></li>
+          <li class="breadcrumb-item"><a routerLink="/dashboard/policy/list">Policies</a></li>
           <li class="breadcrumb-item active text-muted" aria-current="page">Policy</li>
       </ol>
   </nav>
@@ -24,11 +24,11 @@
             
             <div class="form-group " style="padding-left: 0px">
               <label >Name</label>
-              <input name="name" placeholder="name..." class="form-control" style="width: 100%;" [(ngModel)]="policy.name"/>
+              <input name="name" required placeholder="Name..." class="form-control" style="width: 100%;" [(ngModel)]="policy.name"/>
             </div>
             <div class="form-group" style="padding-left: 0px">
               <label>Title</label>
-              <input name="title" placeholder="Title..." class="form-control" [(ngModel)]="policy.title"/>
+              <input name="title" required placeholder="Title..." class="form-control" [(ngModel)]="policy.title"/>
             </div>
             <div class="form-group">
               <label class="font-weight-bolder">Description</label>
@@ -123,19 +123,18 @@
       </div>
     </div>   
     <div class="actions mt-4">
-      <button type="button" class="btn btn-success" (click)="savePolicy()" 
-      [disabled] = "((!policy.rootGroup.conditions || policy.rootGroup.conditions.length==0)&&(!policy.rootGroup.groups || policy.rootGroup.groups.length==0)) ||(!policy.actions || policy.actions.length==0)">
+      <button type="button" class="btn btn-success" (click)="savePolicy()" >
           <i class="feather icon-save"></i>
           Save
       </button>
 
 
-      <a *ngIf="!newPolicy" routerLink="/admin/policy/show/{{policy.policyId}}" class="btn btn-outline-secondary">
+      <a *ngIf="!newPolicy" routerLink="/dashboard/policy/show/{{policy.policyId}}" class="btn btn-outline-secondary">
           <i class="feather icon-list"></i>
           Back to policy
       </a>
 
-      <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+      <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
           <i class="feather icon-list"></i>
           Back to list
       </a>
@@ -148,7 +147,7 @@
 <ng-template [ngIf]="policy === undefined">
   <app-alert type="warning">Policy not found.</app-alert>
 
-  <a routerLink="/admin/policy/list" class="btn btn-outline-secondary">
+  <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
       <i class="feather icon-list"></i>
       Back to list
   </a>

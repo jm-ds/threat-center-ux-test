@@ -24,7 +24,11 @@ const routes: Routes = [
       {
         path: 'quickstart',
         loadChildren: () => import('./quickstart/quickstart.module').then(module => module.QuickstartModule)
-      }
+      },
+      {
+        path: 'policy',
+        loadChildren: () => import('./policy/policy.module').then(module => module.PolicyModule)
+      },      
     ]
   }
 ];

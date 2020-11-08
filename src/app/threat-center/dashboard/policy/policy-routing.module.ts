@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {PolicyListComponent} from "@app/admin/policy/policy-list/policy-list.component";
-import {PolicyShowComponent} from "@app/admin/policy/policy-show/policy-show.component";
+import {PolicyListComponent} from "./policy-list/policy-list.component";
+import {PolicyShowComponent} from "./policy-show/policy-show.component";
 import { PolicyEditComponent } from './policy-edit/policy-edit.component';
 
 const routes: Routes = [

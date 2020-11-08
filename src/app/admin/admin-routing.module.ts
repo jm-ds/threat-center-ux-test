@@ -26,11 +26,7 @@ const routes: Routes = [
       {
         path: 'integration',
         loadChildren: () => import('./integration/integration.module').then(module => module.IntegrationModule)
-      },
-      {
-        path: 'policy',
-        loadChildren: () => import('./policy/policy.module').then(module => module.PolicyModule)
-      },
+      }
     ]
   }
 ];
