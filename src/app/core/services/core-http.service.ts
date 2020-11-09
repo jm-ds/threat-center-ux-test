@@ -3,13 +3,17 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { EMPTY, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CoreHelperService } from './core-helper.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class CoreHttpService {
-    constructor(private http: HttpClient, private coreHelperService: CoreHelperService) {
+    constructor(private http: HttpClient,
+        private coreHelperService: CoreHelperService,
+        private spinner: NgxSpinnerService) {
     }
 
     // Http get request
@@ -75,6 +79,7 @@ export class CoreHttpService {
 
     // Core error handle
     errorHandler = (error: HttpErrorResponse) => {
+        this.spinner.hide();
         const data: { status: number; message: string } = { status: error.status, message: '' };
         if (error.status === 401) {
             this.coreHelperService.swalALertBox("Unauthorized User!", data.status.toString());
