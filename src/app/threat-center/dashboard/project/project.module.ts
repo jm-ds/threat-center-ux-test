@@ -14,6 +14,7 @@ import {LicensesComponent,LicenseDetailComponent} from './license';
 import {ScanAssetsComponent,ScanAssetDetailComponent} from './scanasset';
 import {TcSharedModule} from '@app/threat-center/shared/tc-shared.module';
 import { MarkdownModule } from 'ngx-markdown';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { MarkdownModule } from 'ngx-markdown';
     SharedModule,
     TableModule,
     TcSharedModule,
-    MarkdownModule
+    MarkdownModule,
+    NgxSpinnerModule
   ],
   declarations: [
     ProjectComponent,

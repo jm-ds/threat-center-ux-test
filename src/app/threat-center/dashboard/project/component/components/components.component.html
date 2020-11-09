@@ -58,6 +58,30 @@
                     <span *ngIf="vulnerabilityEdge.node.severity === 'LOW'"  title="Critical" class="badge m-l-5 badge-light-primary">LOW</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
                 </div>
+                <div *ngIf="component.node.vulnerabilities.edges.length>0">
+                  <button class="btn btn-outline-primary" data-toggle="modal" type="button" (click)="$event.stopPropagation();selectVersionDialog.show()">Fix</button>
+                  <app-ui-modal #selectVersionDialog dialogClass="modal-dialog-centered" (click)="$event.stopPropagation();">
+                    <div class="app-modal-header">
+                      <h5 class="modal-title">Fix component version</h5>
+                      <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="$event.stopPropagation();selectVersionDialog.hide()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="app-modal-body">
+                      <p>Choose version:</p>
+                      <div *ngFor="let vulnerabilityEdge of component.node.vulnerabilities.edges">
+                        <div class="form-group">
+                          <div class="radio radio-primary d-inline">
+                            <input [(ngModel)]="newVersion" type="radio" value="{{vulnerabilityEdge.node.vulnId}}||{{vulnerabilityEdge.node.patchedVersions}}" name="radio-p-1" id="{{vulnerabilityEdge.node.vulnId}}">
+                            <label for="{{vulnerabilityEdge.node.vulnId}}" class="cr">"{{vulnerabilityEdge.node.vulnId}} : {{component.node.version}}->{{vulnerabilityEdge.node.patchedVersions}}"</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="app-modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="$event.stopPropagation();selectVersionDialog.hide()">Close</button>
+                      <button type="button" class="btn btn-primary" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.group,component.node.name)">Fix</button>
+                    </div>
+                  </app-ui-modal>
+                </div>
               </td>
             </tr>
         </ng-template>
@@ -65,6 +89,6 @@
       </perfect-scrollbar>
 
     </div>
-
+  <ngx-spinner [fullScreen]="true" color="#4680ff" type="pacman" size="large"></ngx-spinner>
 
 </div>

@@ -147,6 +147,10 @@ export class TxComponent {
   componentId;
 }
 
+export class FixResult {
+  result;
+}
+
 export class Vulnerability {
   vulnerabilityId:string;
   description:string;
