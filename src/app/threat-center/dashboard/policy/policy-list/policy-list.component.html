@@ -1,0 +1,45 @@
+<h1>Policy list</h1>
+
+<app-messages [messages]="messages"></app-messages>
+
+<perfect-scrollbar [style.max-height]="'500px'">
+    <p-table #dt [value]="policies?.edges" [paginator]="false" [rows]="50"
+             tableStyleClass="table table-bordered table-hover dataTable no-footer row-border table-row-link"
+             selectionMode="single" [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['node.name', 'node.title']">
+
+      <ng-template pTemplate="caption">
+        <div class="mb-1">
+            <div style="width: fit-content;" class="float-right form-filter mr-1">
+                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" class="form-control" pInputText size="50" placeholder="Policy filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+            </div>
+            <div class="custom-control custom-checkbox form-check d-inline-block mr-4 float-right pt-2">
+                <input type="checkbox" class="custom-control-input" ([ngModel])="onlyActive" (change)="onlyActiveChange()" id="onlyActive" checked>
+                <label class="custom-control-label" for="onlyActive">Only active</label>
+              </div>
+            <div style="width: fit-content;">
+                <a routerLink="/dashboard/policy/create" class="btn btn-outline-info">Add Policy</a>
+            </div>    
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Active</th>
+            <th>Description</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-policy let-columns="columns">
+        <tr [routerLink]="['/dashboard/policy/show',policy.node.policyId]">
+            <td>{{policy.node.name}}</td>
+            <td>{{policy.node.title}}</td>
+            <td>
+                <ng-template [ngIf]="policy.node.active == true">
+                  <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
+                </ng-template>
+            <td>{{policy.node.description}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+</perfect-scrollbar>
