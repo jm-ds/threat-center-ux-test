@@ -1,0 +1,11 @@
+// @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
+
+.mt-20{
+    margin-top: 20px;
+}
+
+tbody tr:hover td {
+    &.skip-row-link {
+        cursor: inherit;
+    }
+}

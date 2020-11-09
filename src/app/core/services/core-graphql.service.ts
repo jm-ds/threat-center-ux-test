@@ -18,6 +18,7 @@ export class CoreGraphQLService {
 
     // Core graphQL service    
     coreGQLReq<T>(
+
         query: DocumentNode,
         fetchPolicy?: WatchQueryFetchPolicy,
         variable: OperationVariables = {}
@@ -36,6 +37,23 @@ export class CoreGraphQLService {
                 catchError(this.errorHandler));
     }
 
+    coreGQLReqWithQuery<T>(
+        query: DocumentNode,
+        fetchPolicy?: WatchQueryFetchPolicy,
+        variable: OperationVariables = {}
+    ):
+        Observable<ApolloQueryResult<T>> {
+        return this.apollo.query<T>({
+            query: query,
+            // fetchPolicy: fetchPolicy,
+            variables: variable
+        })
+            .pipe(
+                map((result) => {
+                    return <ApolloQueryResult<T>>result;
+                }),
+                catchError(this.errorHandler));
+    }
 
     // Handle errors
     private errorHandler = (error: HttpErrorResponse | any) => {
