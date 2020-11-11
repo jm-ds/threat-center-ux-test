@@ -1,0 +1,204 @@
+<!--
+Inventory of every file discovered during a scan.
+
+FILTERS:
+    -   Period
+    -   Entities
+    -------------
+    -   Name
+    -   Size
+    -   % embedded
+    -   Status
+
+DIMENSIONS
+    -   NONE
+
+METRICS
+    -   Name
+    -   Size
+    -   Status
+    -   Embedded
+
+-->
+
+
+<h1 *ngIf="!displayDataOnly">Embedded Assets Report</h1>
+
+<!-- FILTER -->
+<div class="report-filter" *ngIf="!displayDataOnly">
+
+    <form class="form-inline1" action="javascript:">
+
+        <div class="report-filter-row">
+            <app-date-interval-filter></app-date-interval-filter>
+            <app-entity-tree-filter></app-entity-tree-filter>
+        </div>
+
+
+        <div class="report-filter-row">
+            <div>
+                <label>File Name</label>
+                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="nameFilter" placeholder="Type file name"/>
+            </div>
+
+            <div class="slider-box">
+                <label>Size</label>
+                <div class="ag-slider">
+                    <nouislider [config]="sizeFilterConfig" [(ngModel)]="sizeFilter" name="sizeFilter" #sizeFilterRef></nouislider>
+                </div>
+                <span class="sub-title">Range: <code> {{ sizeFilter | json }} </code></span>
+            </div>
+
+            <div class="slider-box">
+                <label>Percent embedded</label>
+                <div class="ag-slider">
+                    <nouislider [config]="embeddedFilterConfig" [(ngModel)]="embeddedFilter" name="embeddedFilter"></nouislider>
+                </div>
+                <span class="sub-title">Range: <code> {{ embeddedFilter | json }} </code></span>
+            </div>
+
+            <div>
+                <label>Status</label>
+                <select name="statusFilter" class="form-control" [(ngModel)]="statusFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="IGNORED_SIZE_SMALL">Ignored (size small)</option>
+                    <option value="IGNORED_SIZE_LARGE">Ignored (size large)</option>
+                    <option value="IGNORED_SIZE_EMPTY">Ignored (size empty)</option>
+                    <option value="IGNORED_TYPE_UNSUPPORTED">Ignored (type unsupported)</option>
+                    <option value="ACCEPTED">Accepted</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-info">
+                <i class="feather icon-filter"></i>
+                Filter
+            </button>
+            <button type="submit" class="btn btn-warning">
+                <i class="feather icon-slash"></i>
+                Clear
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+
+<!-- ACTIONS -->
+<div class="report-primary-actions" *ngIf="!displayDataOnly">
+    <h2>Report actions</h2>
+    <button class="btn btn-lg btn-outline-secondary" (click)="openPreview()"><i class="fas fa-search"></i> Preview report</button>
+    <button class="btn btn-lg btn-outline-danger"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    <button class="btn btn-lg btn-outline-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
+    <button class="btn btn-lg btn-outline-secondary"><i class="fas fa-file-csv"></i> Export to CSV</button>
+</div>
+
+
+
+<!-- PREVIEW -->
+<h2 class="report-data-preview-caption">Embedded Assets Report data preview</h2>
+<div #reportPreview class="report-preview {{previewStateOpen ? 'open' : ''}}">
+
+    <div class="report-preview-close">
+        <i class="feather icon-x-square" (click)="closePreview()"></i>
+    </div>
+
+    <div class="container">
+
+        <!-- logos -->
+        <div class="report-logos" *ngIf="!displayDataOnly">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img src="/assets/reports/shiftleft-logo.png" alt="" class="img-fluid">
+                </div>
+                <div class="col-sm-6">
+                    <img src="/assets/images/website_logo_white-letters-transparent_background.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="report-title">
+            Embedded Assets<span *ngIf="!displayDataOnly"> Report</span>
+            <div class="report-date" *ngIf="!displayDataOnly">{{reportDate | date:'longDate'}}</div>
+        </div>
+
+
+        <!-- TOTALS -->
+        <div class="report-totals" *ngIf="totals">
+
+            <!-- CARDS -->
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.entities}}</h3>
+                        <span class="m-t-10">Entities</span>
+                        <i class="far fa-building"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.projects}}</h3>
+                        <span class="m-t-10">Projects</span>
+                        <i class="fas fa-project-diagram"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.embedded}}</h3>
+                        <span class="m-t-10">Embedded Assets</span>
+                        <i class="far fas fa-code"></i>
+                    </app-card>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="report-data">
+
+
+            <ng-template ngFor let-entity [ngForOf]="entities" let-i="index">
+                <div class="entity-caption">{{entity.name}}</div>
+
+                <p-table [columns]="columns" [value]="entity.projects?.edges" [paginator]="false" [rows]="50"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         [autoLayout]="true" >
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns">
+                                {{col}}
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-project>
+                        <tr *ngFor="let scanAsset of project.node.latestScan.scanAssets.edges">
+                            <td>{{project?.node?.name}}</td>
+                            <td>{{scanAsset.node.name}}</td>
+                            <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+                            <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+                            <td>{{scanAsset.node.workspacePath}}</td>
+                            <td>{{scanAsset.node.status}}</td>
+                            <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="columns.length" class="no-padding">
+                                <app-alert type="success"><i class="far fa-smile-beam"></i>&nbsp;&nbsp;No embedded assets found</app-alert>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-template>
+
+        </div>
+
+
+    </div>
+</div>

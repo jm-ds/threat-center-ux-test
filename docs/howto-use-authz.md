@@ -6,7 +6,7 @@
 
 In the **`app-routing.module.ts`** or **any other** routing module we could set AuthGuard (**`auth.guard.ts`**) to **canActivate** and/or **canActivateChild**.
 
-And to set which permissiaons required to access the route we shoud add **"data"** object with **"auth"** property to the route definition in the couting module. The auth property can be of type string or array of strings. Single permissions or list of permissions respectively.
+And to set which permissiaons required to access the route we shoud add **"data"** object with **"auth"** property to the route definition in the routing module. The auth property can be of type string or array of strings. Single permissions or list of permissions respectively.
 
 ```
 const routes: Routes = [
