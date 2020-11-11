@@ -1,5 +1,6 @@
-import {Permission, Role} from "@app/models/role";
-import {EntityConnection, PageInfo} from "@app/threat-center/shared/models/types";
+import { EntityModel } from '@app/admin/entity/entity.class';
+import { Permission, Role } from "@app/models/role";
+import { EntityConnection, PageInfo } from "@app/threat-center/shared/models/types";
 
 export class User {
     accessToken: string;
@@ -89,13 +90,14 @@ export class UserRequestInput {
     }
 }
 
+
 export class UserConnection {
     edges: UserEdge[];
     pageInfo: PageInfo;
     totalCount: number;
-  }
+}
 
-  export class UserEdge {
+export class UserEdge {
     node: User;
     cursor: string;
-  }
+}

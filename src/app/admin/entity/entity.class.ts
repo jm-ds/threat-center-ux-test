@@ -20,8 +20,8 @@ export class EntityModel {
     entityMetrics: any;
     projects: ChildModel;
     entityType?: string;
-    isChildEntity?:boolean;
-    isProjects?:boolean;
+    isChildEntity?: boolean;
+    isProjects?: boolean;
     constructor(init?: Partial<EntityModel>) {
         Object.assign(this, init);
     }
@@ -29,4 +29,38 @@ export class EntityModel {
 
 export class ChildModel {
     edges: Array<any>;
+}
+
+
+export class EntityRequestInput {
+    readonly entityName: string;
+    readonly entityType: string;
+    readonly parentEntityId: string;
+
+    constructor(entityName: string, entityType: string, parentEntityId: string) {
+        this.entityName = entityName;
+        this.entityType = entityType;
+        this.parentEntityId = parentEntityId;
+    }
+
+    static from(entity) {
+        return new EntityRequestInput(entity.entityName, entity.entityType, entity.parentEntityId);
+    }
+}
+
+
+export class EntityUpdateRequestInput {
+    readonly entityId: string;
+    readonly entityName: string;
+    readonly entityType: string;
+
+
+    constructor(entityId: string, entityName: string, entityType: string) {
+        this.entityId = entityId;
+        this.entityName = entityName;
+        this.entityType = entityType;
+    }
+    static from(entity) {
+        return new EntityUpdateRequestInput(entity.entityId, entity.entityName, entity.entityType);
+    }
 }

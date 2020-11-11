@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CoreHelperService } from './core-helper.service';
+import { FetchResult } from 'apollo-link';
 
 @Injectable({
     providedIn: 'root'
@@ -51,6 +52,22 @@ export class CoreGraphQLService {
             .pipe(
                 map((result) => {
                     return <ApolloQueryResult<T>>result;
+                }),
+                catchError(this.errorHandler));
+    }
+
+
+    coreGQLReqForMutation<T>(
+        mutationQ: DocumentNode,
+        variable: OperationVariables = {}
+    ): Observable<FetchResult<T>> {
+        return this.apollo.mutate<T>({
+            mutation: mutationQ,
+            variables: variable
+        })
+            .pipe(
+                map((result) => {
+                    return <FetchResult<T>>result;
                 }),
                 catchError(this.errorHandler));
     }

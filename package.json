@@ -86,6 +86,7 @@
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngx-spinner": "^9.0.2",
     "ngx-text-diff": "^0.5.4",
+    "ngx-toastr": "^10.0.4",
     "node-gyp": "^7.1.0",
     "nouislider": "^14.0.1",
     "peity": "^3.3.0",

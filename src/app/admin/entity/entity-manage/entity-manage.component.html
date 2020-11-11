@@ -1,7 +1,7 @@
 <h1>Entity Manage</h1>
 <div class="row">
 
-    <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="!!entityTreeNodeList && entityTreeNodeList.length >= 1">
         <app-card [hidHeader]="true">
             <tree-root #tree [nodes]="entityTreeNodeList" [focused]="true" (initialized)="onTreeLoad($event)"
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">
@@ -11,7 +11,7 @@
     <div class="col-lg-8 col-md-8 col-sm-12">
 
         <app-card [hidHeader]="false" cardTitle="Selected Entity">
-            <div class="row">
+            <div class="row mt-20">
                 <div class="col-12">
                     <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && editEntity()">
                         <div class="form-group row">
@@ -22,8 +22,8 @@
                                     placeholder="Enter Entity Name" required />
                                 <div class="invalid-form"
                                     *ngIf="entityForm.submitted || (entityName.errors && (entityName.dirty || entityName.touched))">
-                                    <small *ngIf="entityName.errors && entityName.errors?.required">Entity name is
-                                        required.</small>
+                                    <p *ngIf="entityName.errors && entityName.errors?.required">Entity name is
+                                        required.</p>
                                 </div>
                             </div>
                         </div>
@@ -40,8 +40,8 @@
                                 </select>
                                 <div class="invalid-form"
                                     *ngIf="entityForm.submitted || (entityType.errors && (entityType.dirty || entityType.touched))">
-                                    <small *ngIf="entityType.errors && entityType.errors?.required">Entity type is
-                                        required.</small>
+                                    <p *ngIf="entityType.errors && entityType.errors?.required">Entity type is
+                                        required.</p>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                     <i class="feather icon-edit"></i>
                                     EDIT
                                 </button>&nbsp;&nbsp;
-                                <button
+                                <button (click)="deleteEntity(selectedTreeNode)"
                                     *ngIf="!!selectedTreeNode.entityId && !selectedTreeNode.isProjects && !selectedTreeNode.isChildEntity"
                                     type="button" class="btn btn-outline-danger btn-sm">
                                     <i class="feather icon-trash"></i>
@@ -69,7 +69,7 @@
         <app-card [hidHeader]="true" cardTitle="Child Entity" *ngIf="!!selectedTreeNode.entityId">
             <div class="row">
                 <div class="col-12 text-right">
-                    <button type="button" class="btn btn-success btn-sm" (click)="saveUser()">
+                    <button type="button" class="btn btn-success btn-sm" (click)="addChildEntity()">
                         <i class="feather icon-plus"></i>
                         Add Child Entity
                     </button>
@@ -83,17 +83,21 @@
                             <thead>
                                 <tr>
                                     <th>Child Entity Name</th>
+                                    <th>Entity Type</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of selectedTreeNode.childEntities.edges">
                                     <td>{{data.node?.name}}</td>
+                                    <td>{{data.node?.entityType}}</td>
                                     <td>
                                         <div class="overlay-edit">
-                                            <a class="text-success"><i
+                                            <a class="text-success" (click)="editChildEntity(data.node)"><i
                                                     class="feather icon-edit fa-md"></i></a>&nbsp;&nbsp;
-                                            <a class="text-danger"><i class="feather icon-trash-2 fa-md"></i></a>
+                                            <a class="text-danger" (click)="deleteEntity(data.node)"
+                                                *ngIf="!data.node?.isChildEntity && !data.node?.isProjects">
+                                                <i class="feather icon-trash-2 fa-md"></i></a>
                                         </div>
                                     </td>
                                 </tr>
