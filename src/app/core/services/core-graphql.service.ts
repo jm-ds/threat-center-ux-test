@@ -7,6 +7,7 @@ import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CoreHelperService } from './core-helper.service';
 import { FetchResult } from 'apollo-link';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,9 @@ import { FetchResult } from 'apollo-link';
 
 export class CoreGraphQLService {
     constructor(private apollo: Apollo,
-        private coreHelperService: CoreHelperService) { }
+        private coreHelperService: CoreHelperService,
+        private spinner: NgxSpinnerService,
+    ) { }
 
 
     // Core graphQL service    
@@ -74,6 +77,7 @@ export class CoreGraphQLService {
 
     // Handle errors
     private errorHandler = (error: HttpErrorResponse | any) => {
+        this.spinner.hide();
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
             this.coreHelperService.swalALertBox(er.message);

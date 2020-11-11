@@ -1,20 +1,21 @@
-import {Injectable} from '@angular/core';
-import {Apollo} from "apollo-angular";
-import {Role, RoleRequestInput, User, UserQuery, UserRequestInput, UsersQuery} from "@app/models";
+import { Injectable } from '@angular/core';
+import { Apollo } from "apollo-angular";
+import { Role, RoleRequestInput, User, UserQuery, UserRequestInput, UsersQuery } from "@app/models";
 import gql from "graphql-tag";
-import {Entity} from "@app/threat-center/shared/models/types";
+import { Entity } from "@app/threat-center/shared/models/types";
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
 
-    constructor(private apollo: Apollo) {
+    constructor(private apollo: Apollo, private coreGraphQLService: CoreGraphQLService) {
     }
 
     getUserList() {
-        return this.apollo.watchQuery<UsersQuery>({
-            query: gql`query {
+        return this.coreGraphQLService.coreGQLReq<UsersQuery>(
+            gql`query {
                 users {
                     edges{
                       node {
@@ -40,13 +41,12 @@ export class UserService {
                       }
                     }
                 }
-              }`
-        }).valueChanges;
+            }`);
     }
 
     getUser(username: string) {
-        return this.apollo.watchQuery<UserQuery>({
-            query: gql`query {
+        return this.coreGraphQLService.coreGQLReq<UserQuery>(
+            gql`query {
                 user(username: "${username}") {
                     orgId,
                     username,
@@ -77,8 +77,7 @@ export class UserService {
                         description
                     }
                 }
-            }`
-        }).valueChanges;
+            }`);
     }
 
     saveRoles(username: string, roles: Role[]) {

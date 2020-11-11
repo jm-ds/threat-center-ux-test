@@ -1,53 +1,51 @@
-import {Injectable} from '@angular/core';
-import {Apollo} from "apollo-angular";
-import {Permission, PermissionsQuery, Role, RoleQuery, RoleRequestInput, RolesQuery} from "@app/models";
+import { Injectable } from '@angular/core';
+import { Apollo } from "apollo-angular";
+import { Permission, PermissionsQuery, Role, RoleQuery, RoleRequestInput, RolesQuery } from "@app/models";
 import gql from "graphql-tag";
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoleService {
 
-    constructor(private apollo: Apollo) {
+    constructor(private apollo: Apollo, private coreGraphQLService: CoreGraphQLService) {
     }
 
     getRoleList() {
-        return this.apollo.watchQuery<RolesQuery>({
-            query: gql`query {
+        return this.coreGraphQLService.coreGQLReq<RolesQuery>(
+            gql`query {
                 roles {
                     roleId,
                     description
                 }
-            }`
-        }).valueChanges;
+            }`);
     }
 
     getRole(roleId: string) {
-        return this.apollo.watchQuery<RoleQuery>({
-            query: gql`query {
-                        role(roleId: "${roleId}") {
-                            roleId,
-                            description,
-                            rolePermissions {
-                                name,
-                                title,
-                                description
-                            }
-                        }
-                    }`
-        }).valueChanges;
+        return this.coreGraphQLService.coreGQLReq<RoleQuery>(
+            gql`query {
+                role(roleId: "${roleId}") {
+                    roleId,
+                    description,
+                    rolePermissions {
+                        name,
+                        title,
+                        description
+                    }
+                }
+            }`);
     }
 
     getPermissionList() {
-        return this.apollo.watchQuery<PermissionsQuery>({
-            query: gql`query {
-                            permissions {
-                                name,
-                                title
-                                description
-                            }
-                        }`
-        }).valueChanges;
+        return this.coreGraphQLService.coreGQLReq<PermissionsQuery>(
+            gql`query {
+                permissions {
+                    name,
+                    title
+                    description
+                }
+            }`);
     }
 
 
