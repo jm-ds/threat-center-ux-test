@@ -50,6 +50,8 @@ export class ApiService {
             entityId
             parentEntityId
             name
+            entityType
+            removed
             projects {
               edges {
                 node {
@@ -153,6 +155,8 @@ export class ApiService {
                   entityId
                   parentEntityId
                   name
+                  entityType
+                  removed
                   projects {
                     edges {
                       node {
