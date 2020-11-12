@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Manage Child Entity</h4>
+    <h4 class="modal-title" id="modal-basic-title">Manage child entity</h4>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">×</span>
     </button>
@@ -14,7 +14,7 @@
                     <div class="col-sm-9">
                         <input type="text" class="form-control form-control-sm" id="entity"
                             [(ngModel)]="entityData.name" #entityName="ngModel" name="entity"
-                            placeholder="Enter Entity Name" required />
+                            placeholder="Enter entity name" required />
                         <div class="invalid-form"
                             *ngIf="entityForm.submitted || (entityName.errors && (entityName.dirty || entityName.touched))">
                             <p *ngIf="entityName.errors && entityName.errors?.required">Entity name is

@@ -22,7 +22,7 @@
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm" id="entity"
                                     [(ngModel)]="selectedTreeNode.name" #entityName="ngModel" name="entity"
-                                    placeholder="Enter Entity Name" required />
+                                    placeholder="Enter entity name" required />
                                 <div class="invalid-form"
                                     *ngIf="entityForm.submitted || (entityName.errors && (entityName.dirty || entityName.touched))">
                                     <p *ngIf="entityName.errors && entityName.errors?.required">Entity name is
@@ -82,14 +82,14 @@
                 <div class="col-12">
                     <div class="dt-responsive table-responsive">
                         <table datatable class="table row-border">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
                                     <th>Child Entity Name</th>
                                     <th>Entity Type</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-center">
                                 <tr *ngFor="let data of childDataList">
                                     <td>{{data.name}}</td>
                                     <td>{{data.entityType}}</td>
