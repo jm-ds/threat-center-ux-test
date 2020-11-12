@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { EntityService } from '@app/admin/services/entity.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { AuthenticationService } from '@app/security/services';
-import { ITreeOptions, TreeComponent } from '@circlon/angular-tree-component';
+import { ITreeOptions, TreeComponent, TreeNode } from '@circlon/angular-tree-component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-entity-manage',
@@ -22,6 +23,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     userDefaultEntityDetails: EntityModel;
     selectedTreeNode: EntityModel = new EntityModel();
     recursionHelperArray = [];
+    childDataList: Array<EntityModel> = new Array<EntityModel>();
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -30,9 +32,10 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         private entityService: EntityService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
-        private toastr: ToastrService,
+        private toastr: ToastrService
     ) {
     }
+
     ngOnInit(): void {
         this.getTreeEntityData();
         this.selectedTreeNode.entityType = '';
@@ -45,66 +48,88 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             animateAcceleration: 2.5,
         }
     }
+
     ngAfterViewInit(): void { }
-    ngOnDestroy(): void {
-        // throw new Error('Method not implemented.');
-    }
+    ngOnDestroy(): void { }
+
+    //helper function for assign tree data
     async getTreeEntityData() {
         if (!!this.route.snapshot.data['defaultEntityDetails'] && this.route.snapshot.data['defaultEntityDetails'].data.entity) {
             this.userDefaultEntityDetails = this.route.snapshot.data['defaultEntityDetails'].data.entity;
             await this.actualTreeLogic();
+            setTimeout(() => {
+                this.selectFirstRootNode();
+            }, 1000);
         }
     }
 
+    //while initialize tree data
     onTreeLoad(evn) {
-        if (!!evn && !!evn.treeModel) {
+        if (!!evn && !!evn.treeModel && !!evn.treeModel.getFirstRoot()) {
             evn.treeModel.getFirstRoot().toggleActivated();
         }
     }
 
+    //event of tree.
     onEvent(ev) {
         if (ev.eventName === 'activate') {
             this.initSelectedEntity(ev.node.data);
         }
     }
+
+    //edit entity with server call.
     editEntity() {
         this.entityService.updateEntity({ entityId: this.selectedTreeNode.entityId, entityName: this.selectedTreeNode.name, entityType: this.selectedTreeNode.entityType })
             .subscribe((data: any) => {
                 if (!!data && !!data.data) {
                     this.toastr.success("Entity updated successfully.");
+                    this.refreshTreeView(this.selectedTreeNode.entityId, "EDIT", this.selectedTreeNode);
                 }
             });
     }
+
+    //add child entity button call
     addChildEntity() {
         this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
     }
+
+    //edit child entity data with server call
     editChildEntity(data) {
         this.manageChildEntity("EDIT", data);
     }
+
+    //delete entity data with server call
     deleteEntity(data) {
         this.coreHelperService.swalAlertConfrm("Are you sure?", "Once deleted, you will not be able to recover this entity!")
             .then((willDelete) => {
                 if (willDelete.value) {
                     //delete...
                     this.entityService.deleteEntity(data.entityId)
-                        .subscribe(data => {
-                            if (!!data && !!data.data) {
+                        .subscribe(res => {
+                            if (!!res && !!res.data) {
                                 this.toastr.success("Entity removed successfully.");
+                                this.refreshTreeView(data.entityId, "DELETE", null);
                             }
                         });
                 }
             });
     }
 
+    //while select any tree node.
     private initSelectedEntity(data) {
         if (!!data.tagData) {
-            this.selectedTreeNode = Object.assign(data.tagData);
+            this.selectedTreeNode = Object.assign({}, data.tagData);
             this.selectedTreeNode.isChildEntity = data.isChildEntity;
             this.selectedTreeNode.isProjects = data.isProjects;
-            if (!!this.selectedTreeNode.childEntities && this.selectedTreeNode.childEntities.edges.length >= 1) {
-                this.selectedTreeNode.childEntities.edges.forEach(data => {
-                    data.node['isChildEntity'] = (!!data.node && !!data.node.childEntities && data.node.childEntities.edges.length >= 1) ? true : false;
-                    data.node['isProjects'] = (!!data.node && !!data.node.projects && data.node.projects.edges.length >= 1) ? true : false;
+            this.selectedTreeNode.isChildEntity = data.children.length >= 1 ? true : false;
+            this.childDataList = new Array<EntityModel>();
+            //Init child table list.
+            if (!!data.children && data.children.length >= 1) {
+                data.children.forEach(d => {
+                    const entity = Object.assign({}, d['tagData']);
+                    entity['isChildEntity'] = d['isChildEntity'];
+                    entity['isProjects'] = d['isProjects'];
+                    this.childDataList.push(entity);
                 });
             }
         } else {
@@ -112,15 +137,15 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    //helper method which will initialize tree data
     private async actualTreeLogic() {
         this.recursionHelperArray = new Array();
         if (!!this.userDefaultEntityDetails.parentEntityId && this.userDefaultEntityDetails.parentEntityId !== '') {
-            // Here User default entity have parent so Tree root node will be default entity...;
-
+            // Here User default entity have parent so root entity will be default entity;
             this.coreHelperService.spinnerEdit("VISIBLE");
+
             //For now implemented below function logic will change it when server will return proper data with child entity
             await this.populateChildernRecusivaly(this.userDefaultEntityDetails.childEntities.edges, null);
-
             this.coreHelperService.spinnerEdit("INVISIBLE");
             this.entityTreeNodeList = [
                 {
@@ -133,13 +158,10 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     children: this.list_to_tree(this.recursionHelperArray)
                 }
             ];
-
         } else {
-            //Here User default entity dose not have any parent so organization will be on root.
+            // set organization on root of tree because default entity dose not have parent.
             this.coreHelperService.spinnerEdit("VISIBLE");
-            //For now implemented below function logic will change it when server will return proper data with child entity
             await this.populateChildernRecusivaly(this.userDefaultEntityDetails.childEntities.edges, null);
-
             this.coreHelperService.spinnerEdit("INVISIBLE");
             this.entityTreeNodeList = [
                 {
@@ -165,8 +187,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
-
+    //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
     private async populateChildernRecusivaly(childData, prId) {
         if (childData.length >= 1) {
             for (let i = 0; i < childData.length; i++) {
@@ -195,6 +216,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    //Helper function which will return treeview from flat array according to parentId..
     private list_to_tree(list) {
         var map = {}, node, roots = [], i;
         for (i = 0; i < list.length; i += 1) {
@@ -213,6 +235,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         return roots;
     }
 
+    //Helper function for child entity manage(open popup and server calls)
     private manageChildEntity(from: string, data) {
         const modelRef = this.modalService.open(ChildEntityManageComponent, { ariaLabelledBy: 'modal-basic-title' });
         modelRef.componentInstance.entityData = Object.assign({}, data);
@@ -222,13 +245,16 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.entityService.updateEntity({ entityId: result.entityId, entityName: result.name, entityType: result.entityType })
                     .subscribe((data: any) => {
                         if (!!data && !!data.data) {
-                            this.selectedTreeNode.childEntities.edges.forEach(d => {
-                                if (!!d.node && d.node.entityId === result.entityId) {
-                                    d.node.entityName = result.name;
-                                    d.node.entityType = result.entityType;
+                            this.toastr.success("Entity updated successfully.");
+                            //updating into table
+                            this.childDataList.forEach(d => {
+                                if (d.entityId === result.entityId) {
+                                    d.name = result.name;
+                                    d.entityType = result.entityType
                                 }
                             });
-                            this.toastr.success("Entity updated successfully.");
+                            //Updating tree..
+                            this.refreshTreeView(result.entityId, "EDIT", result);
                         }
                     });
             } else {
@@ -236,19 +262,74 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.entityService.createEntity({ entityName: result.name, entityType: result.entityType, parentEntityId: result.parentEntityId })
                     .subscribe((data: any) => {
                         if (!!data && !!data.data) {
-                            this.selectedTreeNode.childEntities.edges.push({ node: data.data.createEntity });
+                            //updatig into table...
+                            let newData = Object.assign({}, data.data.createEntity);
+                            newData['isChildEntity'] = (!!newData.childEntities && newData.childEntities.edges.length >= 1) ? true : false;
+                            newData['isProjects'] = (!!newData.projects && newData.projects.edges.length >= 1) ? true : false;
+                            this.childDataList.push(newData);
                             this.toastr.success("Entity created successfully.");
-                            // and refresh tree view...
+                            //Updating tree view...
+                            this.refreshTreeView(result.parentEntityId, 'ADD_CHILD', data.data.createEntity);
                         }
                     });
             }
-            //   this.closeResult = `Closed with: ${result}`;
         }, (reason) => {
-            //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
     }
 
-    private refreshTreeView() {
+    //Refreshing tree view locally after any actions taken by user
+    private refreshTreeView(entityId, action, eData) {
+        switch (action) {
+            case 'EDIT': {
+                const node = this.tree.treeModel.getNodeById(entityId);
+                node.data['tagData'] = eData;
+                node.data['name'] = eData.name;
+                break;
+            }
+            case 'DELETE': {
+                const nodeToDelete = this.tree.treeModel.getNodeById(entityId);
+                this.removeNode(nodeToDelete);
+                this.selectFirstRootNode();
+                break;
+            }
+            case 'ADD_CHILD': {
+                const pNode = this.tree.treeModel.getNodeById(entityId);
+                pNode.data['children'].push({
+                    id: eData.entityId,
+                    name: eData.name,
+                    tagData: eData,
+                    isExpanded: false,
+                    children: new Array(),
+                    isChildEntity: (!!eData.childEntities && eData.childEntities.edges.length >= 1) ? true : false,
+                    isProjects: (!!eData.projects && eData.projects.edges.length >= 1) ? true : false
+                });
+                pNode.data['isChildEntity'] = true;
+                this.selectedTreeNode['isChildEntity'] = true;
+                break;
+            }
+            default: {
+                //statements; 
+                break;
+            }
+        }
+        this.tree.treeModel.update();
+    }
 
+    //Helper function to serlect first root node od the tree.
+    private selectFirstRootNode() {
+        const firstRoot = this.tree.treeModel.roots[0];
+        firstRoot.setActiveAndVisible(true);
+        firstRoot.expand();
+    }
+
+    //Helper functions to remove children from tree...
+    removeNode(node: TreeNode) {
+        let parentNode = node.realParent
+            ? node.realParent
+            : node.treeModel.virtualRoot;
+
+        _.remove(parentNode.data.children, function (child) {
+            return child === node.data;
+        });
     }
 }

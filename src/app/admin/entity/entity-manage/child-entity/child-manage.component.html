@@ -7,8 +7,9 @@
 <div class="modal-body">
     <div class="row mt-20">
         <div class="col-12">
-            <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && saveRecord()">
+            <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && entityForm.form.dirty &&saveRecord()">
                 <div class="form-group row">
+
                     <label for="entity" class="col-sm-3 col-form-label">Entity</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control form-control-sm" id="entity"
@@ -22,11 +23,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="entityType" class="col-sm-3 col-form-label">Entity Type</label>
+                    <label for="entityType" class="col-sm-3 col-form-label">Entity type</label>
                     <div class="col-sm-9">
-                        <select class="form-control form-control-sm" id="entityType"
-                            [(ngModel)]="entityData.entityType" #entityType="ngModel" name="entityType" required>
-                            <option value="" selected disabled>Select Entity Type</option>
+                        <select class="form-control form-control-sm" id="entityType" [(ngModel)]="entityData.entityType"
+                            #entityType="ngModel" name="entityType" required>
+                            <option value="" selected disabled>Select entity type</option>
                             <option value="DIVISION">Divison</option>
                             <option value="BUSINESS_UNIT">Business Unit</option>
                             <option value="TEAM">Team</option>
@@ -45,7 +46,8 @@
                         <button type="submit" class="btn btn-info btn-sm">
                             SAVE
                         </button>&nbsp;&nbsp;
-                        <button type="button" class="btn btn-warning btn-sm" (click)="activeModal.dismiss('Cross click')">
+                        <button type="button" class="btn btn-warning btn-sm"
+                            (click)="activeModal.dismiss('Cross click')">
                             CLOSE
                         </button>
                     </div>

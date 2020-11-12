@@ -16,8 +16,7 @@ export class EntityService {
   constructor(private coreGraphQLService: CoreGraphQLService) {
   }
 
-
-
+  //get tree entity data
   getTreeEntity(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
     return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
       gql`
@@ -237,6 +236,7 @@ export class EntityService {
           `, 'no-cache');
   }
 
+  //create entitu server call
   createEntity(entityReqPayload: { entityName: string, entityType: string, parentEntityId: string }) {
     const entityRequest = EntityRequestInput.from(entityReqPayload);
     return this.coreGraphQLService.coreGQLReqForMutation(
@@ -456,6 +456,7 @@ export class EntityService {
     }`, { entity: entityRequest });
   }
 
+  //update entity server call
   updateEntity(entityReqPayload: { entityId: string, entityName: string, entityType: string }) {
     const entityRequest = EntityUpdateRequestInput.from(entityReqPayload);
     return this.coreGraphQLService.coreGQLReqForMutation(
@@ -470,6 +471,7 @@ export class EntityService {
       }`, { entity: entityRequest });
   }
 
+  //delete entity server call
   deleteEntity(entityId: string) {
     return this.coreGraphQLService.coreGQLReqForMutation(
       gql`mutation {

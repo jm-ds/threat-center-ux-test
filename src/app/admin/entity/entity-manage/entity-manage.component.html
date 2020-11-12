@@ -1,7 +1,7 @@
-<h1>Entity Manage</h1>
+<h1>Entity manage</h1>
 <div class="row">
 
-    <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="!!entityTreeNodeList && entityTreeNodeList.length >= 1">
+    <div class="col-lg-4 col-md-4 col-sm-12">
         <app-card [hidHeader]="true">
             <tree-root #tree [nodes]="entityTreeNodeList" [focused]="true" (initialized)="onTreeLoad($event)"
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">
@@ -10,10 +10,13 @@
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12">
 
-        <app-card [hidHeader]="false" cardTitle="Selected Entity">
+        <app-card [hidHeader]="true">
+            <div class="row col-12">
+                <h4>Selected entity</h4>
+            </div>
             <div class="row mt-20">
                 <div class="col-12">
-                    <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && editEntity()">
+                    <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && entityForm.form.dirty && editEntity()">
                         <div class="form-group row">
                             <label for="entity" class="col-sm-3 col-form-label">Entity</label>
                             <div class="col-sm-9">
@@ -28,12 +31,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="entityType" class="col-sm-3 col-form-label">Entity Type</label>
+                            <label for="entityType" class="col-sm-3 col-form-label">Entity type</label>
                             <div class="col-sm-9">
                                 <select class="form-control form-control-sm" id="entityType"
                                     [(ngModel)]="selectedTreeNode.entityType" #entityType="ngModel" name="entityType"
                                     required>
-                                    <option value="" selected disabled>Select Entity Type</option>
+                                    <option value="" selected disabled>Select entity type</option>
                                     <option value="DIVISION">Divison</option>
                                     <option value="BUSINESS_UNIT">Business Unit</option>
                                     <option value="TEAM">Team</option>
@@ -69,14 +72,13 @@
         <app-card [hidHeader]="true" cardTitle="Child Entity" *ngIf="!!selectedTreeNode.entityId">
             <div class="row">
                 <div class="col-12 text-right">
-                    <button type="button" class="btn btn-success btn-sm" (click)="addChildEntity()">
+                    <button type="button" class="btn btn-outline-info btn-sm" (click)="addChildEntity()">
                         <i class="feather icon-plus"></i>
-                        Add Child Entity
+                        Add child entity
                     </button>
                 </div>
             </div>
-            <div class="row mt-20"
-                *ngIf="!!selectedTreeNode.childEntities && selectedTreeNode.childEntities.edges.length >= 1">
+            <div class="row mt-20">
                 <div class="col-12">
                     <div class="dt-responsive table-responsive">
                         <table datatable class="table row-border">
@@ -88,16 +90,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of selectedTreeNode.childEntities.edges">
-                                    <td>{{data.node?.name}}</td>
-                                    <td>{{data.node?.entityType}}</td>
+                                <tr *ngFor="let data of childDataList">
+                                    <td>{{data.name}}</td>
+                                    <td>{{data.entityType}}</td>
                                     <td>
                                         <div class="overlay-edit">
-                                            <a class="text-success" (click)="editChildEntity(data.node)"><i
+                                            <a class="text-success" (click)="editChildEntity(data)"><i
                                                     class="feather icon-edit fa-md"></i></a>&nbsp;&nbsp;
-                                            <a class="text-danger" (click)="deleteEntity(data.node)"
-                                                *ngIf="!data.node?.isChildEntity && !data.node?.isProjects">
-                                                <i class="feather icon-trash-2 fa-md"></i></a>
+                                            <!-- <a class="text-danger" (click)="deleteEntity(data)"
+                                                *ngIf="!data.isChildEntity && !data.isProjects">
+                                                <i class="feather icon-trash-2 fa-md"></i></a> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -107,8 +109,7 @@
                 </div>
             </div>
 
-            <div class="row mt-20 text-center" *ngIf="!selectedTreeNode.childEntities || !selectedTreeNode.childEntities.edges ||
-            selectedTreeNode.childEntities.edges.length == 0">
+            <div class="row mt-20 text-center" *ngIf="!childDataList || childDataList.length == 0">
                 <h5 class="col-12">There are no child entity available for {{selectedTreeNode.name}}.</h5>
             </div>
 
