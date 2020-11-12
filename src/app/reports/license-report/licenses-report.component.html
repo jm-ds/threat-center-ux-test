@@ -1,0 +1,223 @@
+<!--
+Inventory of licenses and their associated risk factors.
+License reports convey risks associated with a companies use of a specific version of a specific component.
+
+FILTERS:
+    -   Period
+    -   Entities
+    -------------
+    -   Name
+    -   Type
+    -   Style
+    -   Risk Score
+
+DIMENSIONS
+    -   NONE
+
+METRICS
+    -   Name
+    -   Type
+    -   family
+    -   Style
+    -   Risk score
+-->
+
+
+<h1 *ngIf="!displayDataOnly">Licenses Report</h1>
+
+<!-- FILTER -->
+<div class="report-filter" *ngIf="!displayDataOnly">
+
+    <form class="form-inline1" action="javascript:">
+
+        <div class="report-filter-row">
+            <app-date-interval-filter></app-date-interval-filter>
+            <app-entity-tree-filter></app-entity-tree-filter>
+        </div>
+
+
+        <div class="report-filter-row">
+            <div>
+                <label>License Name</label>
+                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="nameFilter" placeholder="Type license name"/>
+            </div>
+
+            <div>
+                <label>License Type</label>
+                <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="Open Source">Open Source</option>
+                    <option value="Proprietary">Proprietary</option>
+                </select>
+            </div>
+
+
+            <div>
+                <label>License Category</label>
+                <select name="categoryFilter" class="form-control" [(ngModel)]="categoryFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="UNDEFINED">UNDEFINED</option>
+                    <option value="PUBLIC_DOMAIN">PUBLIC_DOMAIN</option>
+                    <option value="PROPRIETARY">PROPRIETARY</option>
+                    <option value="PERMISSIVE">PERMISSIVE</option>
+                    <option value="COPYLEFT_WEAK">COPYLEFT_WEAK</option>
+                    <option value="COPYLEFT_STRONG">COPYLEFT_STRONG</option>
+                    <option value="COPYLEFT_PARTIAL">COPYLEFT_PARTIAL</option>
+                    <option value="COPYLEFT_LIMITED">COPYLEFT_LIMITED</option>
+                    <option value="COPYLEFT">COPYLEFT</option>
+                </select>
+            </div>
+
+            <div>
+                <label>License Style</label>
+                <select name="styleFilter" class="form-control" [(ngModel)]="styleFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="Apache 1.1-Style">Apache 1.1-Style</option>
+                    <option value="Attribution">Attribution</option>
+                    <option value="Attribution+Patent">Attribution+Patent</option>
+                    <option value="BSD-Style">BSD-Style</option>
+                    <option value="Commercial+Patent">Commercial+Patent</option>
+                    <option value="Copyleft">Copyleft</option>
+                    <option value="Copyleft Limited">Copyleft Limited</option>
+                    <option value="Copyleft v3">Copyleft v3</option>
+                    <option value="MIT-Style">MIT-Style</option>
+                    <option value="Open Patent">Open Patent</option>
+                    <option value="Proprietary">Proprietary</option>
+                    <option value="Proprietary+Patent">Proprietary+Patent</option>
+                    <option value="Public Domain">Public Domain</option>
+                    <option value="X11-Style">X11-Style</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-info">
+                <i class="feather icon-filter"></i>
+                Filter
+            </button>
+            <button type="submit" class="btn btn-warning">
+                <i class="feather icon-slash"></i>
+                Clear
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+
+<!-- ACTIONS -->
+<div class="report-primary-actions" *ngIf="!displayDataOnly">
+    <h2>Report actions</h2>
+    <button class="btn btn-lg btn-outline-secondary" (click)="openPreview()"><i class="fas fa-search"></i> Preview report</button>
+    <button class="btn btn-lg btn-outline-danger"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    <button class="btn btn-lg btn-outline-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
+    <button class="btn btn-lg btn-outline-secondary"><i class="fas fa-file-csv"></i> Export to CSV</button>
+</div>
+
+
+
+<!-- PREVIEW -->
+<h2 class="report-data-preview-caption">Licenses Report data preview</h2>
+<div #reportPreview class="report-preview {{previewStateOpen ? 'open' : ''}}">
+
+    <div class="report-preview-close">
+        <i class="feather icon-x-square" (click)="closePreview()"></i>
+    </div>
+
+    <div class="container">
+
+        <!-- logos -->
+        <div class="report-logos" *ngIf="!displayDataOnly">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img src="/assets/reports/shiftleft-logo.png" alt="" class="img-fluid">
+                </div>
+                <div class="col-sm-6">
+                    <img src="/assets/images/website_logo_white-letters-transparent_background.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="report-title">
+            Licenses<span *ngIf="!displayDataOnly"> Report</span>
+            <div class="report-date" *ngIf="!displayDataOnly">{{reportDate | date:'longDate'}}</div>
+        </div>
+
+
+        <!-- TOTALS -->
+        <div class="report-totals" *ngIf="totals">
+
+            <!-- CARDS -->
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.entities}}</h3>
+                        <span class="m-t-10">Entities</span>
+                        <i class="far fa-building"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.licenses}}</h3>
+                        <span class="m-t-10">Licenses</span>
+                        <i class="far fa-copyright"></i>
+                    </app-card>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="report-data">
+
+
+            <ng-template ngFor let-entity [ngForOf]="entities" let-i="index">
+                <div class="entity-caption">{{entity.name}}</div>
+
+                <p-table [columns]="columns" [value]="entity.licenses" [paginator]="false" [rows]="50"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         [autoLayout]="true" >
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns">
+                                {{col}}
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-license>
+                        <tr [routerLink]="['/dashboard/project/license',license.licenseId]">
+                            <td>{{license.name}}</td>
+<!--                            <td>{{license.spdxId}}</td>-->
+                            <td>{{license.type}}</td>
+                            <td>{{license.familyName}}</td>
+                            <td>
+                                <span *ngIf="license.category === 'COPYLEFT STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                                <span *ngIf="license.category === 'COPYLEFT WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                                <span *ngIf="license.category === 'COPYLEFT PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                                <span *ngIf="license.category === 'COPYLEFT LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                                <span *ngIf="license.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                <span *ngIf="license.category === 'PROPRIETARY'" title="Permissive" class="badge m-r-5 badge-light-danger">PROPRIETARY</span>
+                                <span *ngIf="license.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                <span *ngIf="license.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
+                                <span *ngIf="license.category === 'UNDEFINED'" title="Permissive" class="badge m-r-5">UNDEFINED</span>
+                            </td>
+                            <td>{{license.style}}</td>
+<!--                            <td>{{license.isOsiApproved}}</td>-->
+<!--                            <td>{{license.isFsfLibre}}</td>-->
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="columns.length" class="no-padding">
+                                <app-alert type="success"><i class="far fa-smile-beam"></i>&nbsp;&nbsp;No licenses</app-alert>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-template>
+        </div>
+    </div>
+</div>

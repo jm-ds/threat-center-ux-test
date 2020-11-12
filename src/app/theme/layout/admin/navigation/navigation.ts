@@ -73,47 +73,50 @@ const NavigationItems = [
         type: 'collapse',
         icon: 'fas fa-chart-pie',
         children: [
+            // <i class="fas fa-flag-checkered"></i>
           {
-            id: 'vulnerabilities',
-            title: 'vulnerabilities',
-            icon: 'fas fa-fire-alt',
+            id: 'executive-report',
+            title: 'Executive',
+            icon: 'fas fa-flag-checkered',
             type: 'item',
-            url: '/layout/static',
-            target: true,
-            /*children: [
-              {
-                id: 'v-static',
-                title: 'Static',
-                type: 'item',
-                url: '/layout/static',
-                target: true,
-              },
-            ]*/
+            url: '/reports/executive',
           },
           {
-            id: 'Licenses',
+            id: 'vulnerability-report',
+            title: 'Vulnerabilities',
+            // icon: 'fas fa-fire-alt',
+            icon: 'fas fa-exclamation-triangle',
+            type: 'item',
+            url: '/reports/vulnerability',
+          },
+          {
+            id: 'license-report',
             title: 'Licenses',
             icon: 'fas fa-balance-scale',
             type: 'item',
-            url: '/layout/static',
-            target: true,
+            url: '/reports/license',
           },
           {
-            id: 'Components',
+            id: 'component-report',
             title: 'Components',
-            icon: 'fas fa-project-diagram',
+            icon: 'fas fa-cubes',
             type: 'item',
-            url: '/layout/static',
-            target: true,
+            url: '/reports/component',
           },
-         {
-           id: 'Assets',
-           title: 'Assets',
-           icon: 'far fa-file-code',
-           type: 'item',
-           url: '/layout/static',
-           target: true,
-         }
+          {
+            id: 'embedded-report',
+            title: 'Embedded Assets',
+            icon: 'fas fa-code',
+            type: 'item',
+            url: '/reports/embedded',
+          },
+          {
+            id: 'software-leaks-report',
+            title: 'Software leaks',
+            icon: 'fas fa-file-export',
+            type: 'item',
+            url: '/reports/leaks',
+          },
         ]
       },
       {
