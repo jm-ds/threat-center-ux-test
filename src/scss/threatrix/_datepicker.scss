@@ -1,0 +1,15 @@
+// dark theme colors fixes
+body.next-dark {
+    .ngb-dp-day {
+        .btn-light {
+            color: #a6b5bf !important;
+            &:hover {
+                color: #212529 !important;
+            }
+
+        }
+        &.ngb-dp-today .btn-light {
+            color: #212529 !important;
+        }
+    }
+}

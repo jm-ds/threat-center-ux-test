@@ -1,0 +1,33 @@
+<div class="date-interval">
+    <label>Period</label>
+    <div class="date-fields">
+
+
+        <div class="form-group">
+            <div class="input-group cursor-pointer">
+                <input class="form-control input-date" autocomplete="off" placeholder="yyyy-mm-dd" name="dateStart"
+                       [(ngModel)]="dateStart" ngbDatepicker #dateStartPicker="ngbDatepicker" (click)="dateStartPicker.toggle()">
+                <div class="input-group-append">
+                                <span class="input-group-text" (click)="dateStartPicker.toggle()">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                </div>
+            </div>
+        </div>
+
+        <div><i class="fas fa-minus"></i></div>
+
+        <div class="form-group">
+            <div class="input-group cursor-pointer">
+                <input class="form-control input-date" autocomplete="off" placeholder="yyyy-mm-dd" name="dateEnd"
+                       [(ngModel)]="dateEnd" ngbDatepicker #dateEndPicker="ngbDatepicker" (click)="dateEndPicker.toggle()">
+                <div class="input-group-append">
+                                <span class="input-group-text" (click)="dateEndPicker.toggle()">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

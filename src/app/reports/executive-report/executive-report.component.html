@@ -1,0 +1,123 @@
+<!--
+A complete report including vulnerabilities, licenses, components, assets, embedded assets, and leaked assets in tandem with all risk factors.
+
+FILTERS:
+    -   Period
+    -   Entities
+
+-->
+
+<h1>Executive Report</h1>
+
+<!-- FILTER -->
+<div class="report-filter">
+
+    <form class="form-inline1" action="javascript:">
+
+        <div class="report-filter-row">
+            <app-date-interval-filter></app-date-interval-filter>
+            <app-entity-tree-filter></app-entity-tree-filter>
+        </div>
+
+
+        <div class="report-filter-row">
+            <div>
+                <label>Include following reports data:</label>
+                <div class="report-include-checkboxes">
+                    <div>
+                        <div class="checkbox checkbox-info d-inline">
+                            <input type="checkbox" name="checkbox-01" id="checkbox-01" checked>
+                            <label for="checkbox-01" class="cr">Vulnerabilities</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="checkbox checkbox-info d-inline">
+                            <input type="checkbox" name="checkbox-02" id="checkbox-02" checked>
+                            <label for="checkbox-02" class="cr">Licenses</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="checkbox checkbox-info d-inline">
+                            <input type="checkbox" name="checkbox-03" id="checkbox-03" checked>
+                            <label for="checkbox-03" class="cr">Components</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="checkbox checkbox-info d-inline">
+                            <input type="checkbox" name="checkbox-04" id="checkbox-04" checked>
+                            <label for="checkbox-04" class="cr">Embedded assets</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="checkbox checkbox-info d-inline">
+                            <input type="checkbox" name="checkbox-05" id="checkbox-05" checked>
+                            <label for="checkbox-05" class="cr">Sowftware leaks</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <button type="submit" class="btn btn-info">
+                <i class="feather icon-filter"></i>
+                Filter
+            </button>
+            <button type="submit" class="btn btn-warning">
+                <i class="feather icon-slash"></i>
+                Clear
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+
+<!-- ACTIONS -->
+<div class="report-primary-actions">
+    <h2>Report actions</h2>
+    <button class="btn btn-lg btn-outline-secondary" (click)="openPreview()"><i class="fas fa-search"></i> Preview report</button>
+    <button class="btn btn-lg btn-outline-danger"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    <button class="btn btn-lg btn-outline-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
+    <button class="btn btn-lg btn-outline-secondary"><i class="fas fa-file-csv"></i> Export to CSV</button>
+</div>
+
+
+
+<!-- PREVIEW -->
+<div #reportPreview class="report-preview {{previewStateOpen ? 'open' : ''}}">
+
+    <div class="report-preview-close">
+        <i class="feather icon-x-square" (click)="closePreview()"></i>
+    </div>
+
+    <div class="container">
+
+        <!-- logos -->
+        <div class="report-logos">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img src="/assets/reports/shiftleft-logo.png" alt="" class="img-fluid">
+                </div>
+                <div class="col-sm-6">
+                    <img src="/assets/images/website_logo_white-letters-transparent_background.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="report-title">
+            Executive Report
+            <div class="report-date">{{reportDate | date:'longDate'}}</div>
+        </div>
+
+        <app-vulnerability-report [displayDataOnly]="true"></app-vulnerability-report>
+        <app-license-report [displayDataOnly]="true"></app-license-report>
+        <app-component-report [displayDataOnly]="true"></app-component-report>
+        <app-embedded-asset-report [displayDataOnly]="true"></app-embedded-asset-report>
+        <app-software-leaks-report [displayDataOnly]="true"></app-software-leaks-report>
+
+
+    </div>
+</div>

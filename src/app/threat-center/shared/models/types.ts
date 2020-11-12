@@ -83,10 +83,13 @@ export class UserSelection {
 
 export class Entity {
   entityId:string;
+  parentEntityId: string;
   name:string;
   projects:ProjectConnection;
   entityMetrics:EntityMetrics;
   entityComponents:any;
+  vulnerabilities: Vulnerability[];
+  licenses: License[];
 }
 
 export class EntityMetrics {
@@ -141,6 +144,7 @@ export class Scan {
   vulnerabilities:Vulnerability[];
   scanRepository:Repository;
   scanMetrics:any;
+  scanAssets: any;
 }
 
 export class TxComponent {

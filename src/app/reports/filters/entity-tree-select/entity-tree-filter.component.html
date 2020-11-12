@@ -1,0 +1,6 @@
+<div class="tree-box">
+    <label>Entities</label>
+    <ngx-dropdown-treeview [config]="entityTreeConfig" [items]="entityTree" [buttonClass]="'btn-outline-secondary'"
+                           (selectedChange)="entitiesSelected = $event"  (filterChange)="onEntityFilterChange($event)" >
+    </ngx-dropdown-treeview>
+</div>

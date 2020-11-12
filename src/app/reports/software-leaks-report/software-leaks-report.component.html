@@ -1,0 +1,213 @@
+<!--
+Software Leaks report
+
+FILTERS:
+    -   Period
+    -   Entities
+    -------------
+    -   Source
+    -   Type
+    -   Status
+
+DIMENSIONS
+    -   Source (where we found the leak)
+
+METRICS
+    -   Asset Name
+    -   Source
+    -   Type(Partial, Asset, Project)
+    -   Status
+
+        Metrics notes:
+            Asset Name: This is the customers source file that was leaked
+            Source: This is where we found it(pastebin, github, gitlab...maybe the repo data.. github/repoowner/reponame
+            Type: Partial=some of the file was leaked, Asset=Entire file was leaked, Project=multi files were leaked
+            Status: MMmm, I dunno...maybe "Active" & "Removed", "Under Review"
+
+-->
+
+
+<h1 *ngIf="!displayDataOnly">Software Leaks Report</h1>
+
+<!-- FILTER -->
+<div class="report-filter" *ngIf="!displayDataOnly">
+
+    <form class="form-inline1" action="javascript:">
+
+        <div class="report-filter-row">
+            <app-date-interval-filter></app-date-interval-filter>
+            <app-entity-tree-filter></app-entity-tree-filter>
+        </div>
+
+
+        <div class="report-filter-row">
+            <div>
+                <label>Asset Name</label>
+                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="nameFilter" placeholder="Type component name"/>
+            </div>
+
+            <div>
+                <label>Source</label>
+                <select name="sourceFilter" class="form-control" [(ngModel)]="sourceFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="Pastebin">Pastebin</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="GitLab">GitLab</option>
+                    <option value="StackOverflow">StackOverflow</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Type</label>
+                <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="PARTIAL">Partial</option>
+                    <option value="ASSET">Asset</option>
+                    <option value="PROJECT">Project</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Status</label>
+                <select name="statusFilter" class="form-control" [(ngModel)]="statusFilter">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="REMOVED">Removed</option>
+                    <option value="UNDER_REVIEW">Under review</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-info">
+                <i class="feather icon-filter"></i>
+                Filter
+            </button>
+            <button type="submit" class="btn btn-warning">
+                <i class="feather icon-slash"></i>
+                Clear
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+
+<!-- ACTIONS -->
+<div class="report-primary-actions" *ngIf="!displayDataOnly">
+    <h2>Report actions</h2>
+    <button class="btn btn-lg btn-outline-secondary" (click)="openPreview()"><i class="fas fa-search"></i> Preview report</button>
+    <button class="btn btn-lg btn-outline-danger"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    <button class="btn btn-lg btn-outline-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
+    <button class="btn btn-lg btn-outline-secondary"><i class="fas fa-file-csv"></i> Export to CSV</button>
+</div>
+
+
+
+<!-- PREVIEW -->
+<h2 class="report-data-preview-caption">Software Leaks Report data preview</h2>
+<div #reportPreview class="report-preview {{previewStateOpen ? 'open' : ''}}">
+
+    <div class="report-preview-close">
+        <i class="feather icon-x-square" (click)="closePreview()"></i>
+    </div>
+
+    <div class="container">
+
+        <!-- logos -->
+        <div class="report-logos" *ngIf="!displayDataOnly">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img src="/assets/reports/shiftleft-logo.png" alt="" class="img-fluid">
+                </div>
+                <div class="col-sm-6">
+                    <img src="/assets/images/website_logo_white-letters-transparent_background.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="report-title">
+            Software Leaks<span *ngIf="!displayDataOnly"> Report</span>
+            <div class="report-date" *ngIf="!displayDataOnly">{{reportDate | date:'longDate'}}</div>
+        </div>
+
+
+        <!-- TOTALS -->
+        <div class="report-totals" *ngIf="totals">
+
+            <!-- CARDS -->
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.entities}}</h3>
+                        <span class="m-t-10">Entities</span>
+                        <i class="far fa-building"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.projects}}</h3>
+                        <span class="m-t-10">Projects</span>
+                        <i class="fas fa-project-diagram"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.leaks}}</h3>
+                        <span class="m-t-10">Software leaks</span>
+                        <i class="fas fa-file-export"></i>
+                    </app-card>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="report-data">
+
+
+            <ng-template ngFor let-entity [ngForOf]="entities" let-i="index">
+                <div class="entity-caption">{{entity.name}}</div>
+
+                <p-table [columns]="columns" [value]="entity.projects?.edges" [paginator]="false" [rows]="50"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         [autoLayout]="true" >
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns">
+                                {{col}}
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-project>
+                        <tr *ngFor="let leak of project.node.leaks">
+                            <td>{{project?.node?.name}}</td>
+                            <td>{{leak.name}}</td>
+                            <td>{{leak.type}}</td>
+                            <td>{{leak.status}}</td>
+                            <td>{{leak.source}}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="columns.length" class="no-padding">
+                                <app-alert type="success"><i class="far fa-smile-beam"></i>&nbsp;&nbsp;No software leaks found</app-alert>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-template>
+
+        </div>
+
+
+
+    </div>
+</div>
