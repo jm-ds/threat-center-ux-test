@@ -1,2 +1,4 @@
 #!/bin/bash
 ng serve --proxy-config proxy.conf.json
+#ng serve --configuration=stage
+
