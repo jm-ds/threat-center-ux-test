@@ -168,7 +168,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.entityTreeNodeList = [
                 {
                     id: this.authService.currentUser.orgId,
-                    name: "ORG_TEST_NAME",
+                    name: !!this.authService.currentUser.organization ? this.authService.currentUser.organization.name : "Organization",
                     isExpanded: true,
                     tagData: null,
                     isChildEntity: true,

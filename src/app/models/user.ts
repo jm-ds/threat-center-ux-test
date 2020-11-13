@@ -27,6 +27,16 @@ export class User {
     permissions: string[];
 
     authorities: Authority[];
+
+    //organization
+    organization: OrganizationModel
+}
+
+export class OrganizationModel {
+    name: string;
+    created: string | any;
+    orgId: string;
+    tenantId: string;
 }
 
 export interface Authority {
