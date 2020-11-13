@@ -179,3 +179,12 @@
     font-size: 14px;
     border-left: none;
 }
+
+
+.entiy-tree .node-content-wrapper-active, .entiy-tree .node-content-wrapper.node-content-wrapper-active:hover, .entiy-tree .node-content-wrapper-active.node-content-wrapper-focused {
+    background: #6078ea !important;
+
+    span {
+        color: var(--white) !important;
+    }
+}

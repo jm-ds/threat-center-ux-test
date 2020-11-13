@@ -1,7 +1,7 @@
 <h1>Entity manage</h1>
 <div class="row">
 
-    <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12 entiy-tree">
         <app-card [hidHeader]="true">
             <tree-root #tree [nodes]="entityTreeNodeList" [focused]="true" (initialized)="onTreeLoad($event)"
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">

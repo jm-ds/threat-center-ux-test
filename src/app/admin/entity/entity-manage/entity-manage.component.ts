@@ -41,7 +41,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getTreeEntityData();
         this.selectedTreeNode.entityType = '';
         this.treeNodeOptions = {
-            levelPadding: 10,
+            levelPadding: 4,
             useVirtualScroll: false,
             animateExpand: true,
             scrollOnActivate: false,
