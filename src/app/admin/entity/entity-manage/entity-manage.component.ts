@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EntityService } from '@app/admin/services/entity.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -13,7 +13,8 @@ import * as _ from 'lodash';
 @Component({
     selector: 'app-entity-manage',
     templateUrl: './entity-manage.component.html',
-    styleUrls: ['./entity-manage.component.scss']
+    styleUrls: ['./entity-manage.component.scss'],
+    encapsulation: ViewEncapsulation.Emulated
 })
 
 export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -40,12 +41,12 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getTreeEntityData();
         this.selectedTreeNode.entityType = '';
         this.treeNodeOptions = {
-            levelPadding: 5,
+            levelPadding: 10,
             useVirtualScroll: false,
             animateExpand: true,
             scrollOnActivate: false,
             animateSpeed: 5,
-            animateAcceleration: 2.5,
+            animateAcceleration: 2.5
         }
     }
 
@@ -155,6 +156,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     tagData: this.userDefaultEntityDetails,
                     isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                     isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
+                    classes: ['text-bold'],
                     children: this.list_to_tree(this.recursionHelperArray)
                 }
             ];
@@ -171,6 +173,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     tagData: null,
                     isChildEntity: true,
                     isProjects: true,
+                    classes: ['text-bold'],
                     children: [
                         {
                             id: this.userDefaultEntityDetails.entityId,
@@ -179,6 +182,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             tagData: this.userDefaultEntityDetails,
                             isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                             isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
+                            classes: ['text-bold'],
                             children: this.list_to_tree(this.recursionHelperArray)
                         }
                     ]
@@ -204,6 +208,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                         ? true : false;
                     d['isProjects'] = (!!cData.data.entity.projects && cData.data.entity.projects.edges.length >= 1)
                         ? true : false;
+                    d['classes'] = ['text-bold'];
+
                     this.recursionHelperArray.push(d);
                     if (!!cData.data && !!cData.data.entity && !!cData.data.entity.childEntities
                         && cData.data.entity.childEntities.edges.length >= 1) {

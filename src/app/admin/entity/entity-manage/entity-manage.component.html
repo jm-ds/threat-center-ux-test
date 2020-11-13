@@ -5,6 +5,9 @@
         <app-card [hidHeader]="true">
             <tree-root #tree [nodes]="entityTreeNodeList" [focused]="true" (initialized)="onTreeLoad($event)"
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">
+                <ng-template #treeNodeTemplate let-node let-index="index">
+                    <span [ngClass]="node.data.classes">{{ node.data.name }}</span>
+                  </ng-template>
             </tree-root>
         </app-card>
     </div>
@@ -51,17 +54,17 @@
                         <div class="row">
                             <div class="col-sm-3">
                             </div>
-                            <div class="col-sm-9 text-right">
+                            <div class="col-sm-9 text-right actions">
                                 <button *ngIf="!!selectedTreeNode.entityId" type="submit"
-                                    class="btn btn-outline-info btn-sm">
-                                    <i class="feather icon-edit"></i>
-                                    EDIT
+                                    class="btn btn-outline-info">
+                                    <i class="feather icon-save"></i>&nbsp;
+                                    Save
                                 </button>&nbsp;&nbsp;
                                 <button (click)="deleteEntity(selectedTreeNode)"
                                     *ngIf="!!selectedTreeNode.entityId && !selectedTreeNode.isProjects && !selectedTreeNode.isChildEntity"
-                                    type="button" class="btn btn-outline-danger btn-sm">
-                                    <i class="feather icon-trash"></i>
-                                    DELETE
+                                    type="button" class="btn btn-outline-danger">
+                                    <i class="feather icon-trash"></i>&nbsp;
+                                    Delete
                                 </button>
                             </div>
                         </div>
@@ -71,8 +74,8 @@
         </app-card>
         <app-card [hidHeader]="true" cardTitle="Child Entity" *ngIf="!!selectedTreeNode.entityId">
             <div class="row">
-                <div class="col-12 text-right">
-                    <button type="button" class="btn btn-outline-info btn-sm" (click)="addChildEntity()">
+                <div class="col-12 text-right actions">
+                    <button type="button" class="btn btn-outline-info" (click)="addChildEntity()">
                         <i class="feather icon-plus"></i>
                         Add child entity
                     </button>
@@ -81,22 +84,22 @@
             <div class="row mt-20">
                 <div class="col-12">
                     <div class="dt-responsive table-responsive">
-                        <table datatable class="table row-border">
-                            <thead class="text-center">
+                        <table datatable class="table table-hover table-bordered">
+                            <thead>
                                 <tr>
                                     <th>Child Entity Name</th>
                                     <th>Entity Type</th>
-                                    <th>Actions</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody>
                                 <tr *ngFor="let data of childDataList">
                                     <td>{{data.name}}</td>
                                     <td>{{data.entityType}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <div class="overlay-edit">
                                             <a class="text-success" (click)="editChildEntity(data)"><i
-                                                    class="feather icon-edit fa-md"></i></a>&nbsp;&nbsp;
+                                                    class="feather icon-edit fa-lg"></i></a>&nbsp;&nbsp;
                                             <!-- <a class="text-danger" (click)="deleteEntity(data)"
                                                 *ngIf="!data.isChildEntity && !data.isProjects">
                                                 <i class="feather icon-trash-2 fa-md"></i></a> -->
@@ -110,7 +113,7 @@
             </div>
 
             <div class="row mt-20 text-center" *ngIf="!childDataList || childDataList.length == 0">
-                <h5 class="col-12">There are no child entity available for {{selectedTreeNode.name}}.</h5>
+                <h5 class="col-12">{{selectedTreeNode.name}} have no child entities yet.</h5>
             </div>
 
         </app-card>

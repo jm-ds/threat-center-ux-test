@@ -233,7 +233,7 @@ export class EntityService {
                 }
               }
             }
-          `, 'no-cache');
+          `, "no-cache");
   }
 
   //create entitu server call

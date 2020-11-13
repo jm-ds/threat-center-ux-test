@@ -6,6 +6,7 @@ export class TreeViewNodeModel {
     tagData?: EntityModel;
     isChildEntity: boolean;
     isProjects: boolean;
+    classes: Array<string>;
     constructor(init?: Partial<TreeViewNodeModel>) {
         Object.assign(this, init);
     }

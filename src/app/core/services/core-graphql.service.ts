@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { ApolloQueryResult, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
+import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
 import { DocumentNode } from 'graphql';
 import { catchError, map } from 'rxjs/operators';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
@@ -43,13 +43,13 @@ export class CoreGraphQLService {
 
     coreGQLReqWithQuery<T>(
         query: DocumentNode,
-        fetchPolicy?: WatchQueryFetchPolicy,
+        fetchPolicyss?: FetchPolicy,
         variable: OperationVariables = {}
     ):
         Observable<ApolloQueryResult<T>> {
         return this.apollo.query<T>({
             query: query,
-            // fetchPolicy: fetchPolicy,
+            fetchPolicy: fetchPolicyss,
             variables: variable
         })
             .pipe(
