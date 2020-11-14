@@ -170,54 +170,8 @@ export class ProjectComponent implements OnInit {
     this.stateService.selectedScan = $event.data;
   }
 
-  public licensePieChart2 = {
-    chart: {
-      height: 218,
-      type: 'donut',
-      animations: {
-        enabled: true,
-        easing: 'easeinout',
-        speed: 500
-      }
-    },
-    stroke: {
-      width: 2,
-    },
-    series: [55, 35, 5, 10, 47],
-    labels: ["Apache License 2.0", "Eclipse Public License 1.0", "JSON License", "Mozilla License", "Mozilla Public License 1.1"],
-    tooltip: {
-      enabled: false
-    },
-    legend: {
-      show: false,
-    },
-    plotOptions: {
-      pie: {
-        donut: {
-          size: '75%',
-          labels: {
-            show: true,
-            name: {
-              show: true,
-              fontSize: '13px',
-            },
-            value: {
-              show: true
-            }
-          }
-        }
-      }
-    },
-    dataLabels: {
-      enabled: false,
-      dropShadow: {
-        enabled: true,
-      }
-    }
-  };
-
   chart = {
-    height: 200,
+    height: 160,
     parentHeightOffset: 0,
     stacked: true,
     type: 'bar',
@@ -238,14 +192,15 @@ export class ProjectComponent implements OnInit {
   };
 
   legend = {
+    show: false,
     position: 'top',
     horizontalAlign: 'center',
     offsetX: 0,
-    offsetY: 5,
-    fontSize: '11px',
+    offsetY: 0,
+    fontSize: '0px',
     //width: 500,
     itemMargin: {
-      horizontal: 5,
+      horizontal: 0,
       vertical: 0
     },
   };

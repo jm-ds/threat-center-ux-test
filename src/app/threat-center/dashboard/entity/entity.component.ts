@@ -101,6 +101,7 @@ export class EntityComponent implements OnInit {
     this.obsEntity = this.apiService.getEntity(entityId)
       .pipe(map(result => result.data.entity));
 
+
     this.obsEntity.subscribe(entity => {
       //this.stateService.selectedScan = project.scans[0];
       let critical = [];
