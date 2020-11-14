@@ -446,7 +446,8 @@ export class ApiService {
                         node {
                           vulnerabilityId,
                           vulnId,
-                          severity
+                          severity,
+                          patchedVersions
                         }
                       }
                     }
