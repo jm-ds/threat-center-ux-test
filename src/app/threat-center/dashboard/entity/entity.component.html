@@ -31,7 +31,7 @@
         </div>
         <div  style="clear:both"></div>
         -->
-        <div style="margin-bottom:20px;"><i class="fas fa-bug text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
         <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="this.vulnerabilityChart"></app-apex-chart>
       </app-card>
     </div>
@@ -43,13 +43,13 @@
     </div>
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 p-r-5"></i>Components</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 p-r-5"></i>Components</div>
         <app-apex-chart chartID="componentChart" [chartConfig]="this.componentChart"></app-apex-chart>
       </app-card>
     </div>
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 p-r-5"></i>Assets</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 p-r-5"></i>Assets</div>
         <app-apex-chart chartID="assetChart" [chartConfig]="this.assetChart"></app-apex-chart>
       </app-card>
     </div>

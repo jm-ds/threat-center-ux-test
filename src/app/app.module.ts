@@ -29,6 +29,7 @@ import { GraphQLModule } from './graphql.module';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthInterceptor, ErrorInterceptor } from './security/helpers';
 import { CoreModule } from './core/core.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { CoreModule } from './core/core.module';
     TcSharedModule,
     GraphQLModule,
     HttpClientModule,
-    CoreModule
+    CoreModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

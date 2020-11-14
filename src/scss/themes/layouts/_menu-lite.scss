@@ -721,8 +721,9 @@
             &.pcoded-hasmenu {
                 > a {
                     &:after {
-                        content: "\e844";
-                        font-family: 'feather';
+                        content: "\f105";
+                        font-family: "Font Awesome 5 Free";
+                        font-weight: 900;
                         font-size: 13px;
                         border: none;
                         position: absolute;

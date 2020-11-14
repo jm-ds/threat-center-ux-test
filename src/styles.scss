@@ -2,6 +2,7 @@
 
 /* SCSS */
 @import "scss/style";
+@import '~@circlon/angular-tree-component/css/angular-tree-component.css';
 
 #projectVulnerabilityChart {
     filter: saturate(70%) !important;
@@ -166,5 +167,24 @@
             }
 
         }
+    }
+}
+
+.invalid-form{
+    width: 100%;
+    color: #ff5252;
+    margin-top: 0.25rem;
+}
+.tree-node {
+    font-size: 14px;
+    border-left: none;
+}
+
+
+.entiy-tree .node-content-wrapper-active, .entiy-tree .node-content-wrapper.node-content-wrapper-active:hover, .entiy-tree .node-content-wrapper-active.node-content-wrapper-focused {
+    background: #6078ea !important;
+
+    span {
+        color: var(--white) !important;
     }
 }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { ApolloQueryResult, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
+import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
 import { DocumentNode } from 'graphql';
 import { catchError, map } from 'rxjs/operators';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CoreHelperService } from './core-helper.service';
+import { FetchResult } from 'apollo-link';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
@@ -21,6 +22,7 @@ export class CoreGraphQLService {
 
     // Core graphQL service    
     coreGQLReq<T>(
+
         query: DocumentNode,
         fetchPolicy?: WatchQueryFetchPolicy,
         variable: OperationVariables = {}
@@ -39,6 +41,39 @@ export class CoreGraphQLService {
                 catchError(this.errorHandler));
     }
 
+    coreGQLReqWithQuery<T>(
+        query: DocumentNode,
+        fetchPolicyss?: FetchPolicy,
+        variable: OperationVariables = {}
+    ):
+        Observable<ApolloQueryResult<T>> {
+        return this.apollo.query<T>({
+            query: query,
+            fetchPolicy: fetchPolicyss,
+            variables: variable
+        })
+            .pipe(
+                map((result) => {
+                    return <ApolloQueryResult<T>>result;
+                }),
+                catchError(this.errorHandler));
+    }
+
+
+    coreGQLReqForMutation<T>(
+        mutationQ: DocumentNode,
+        variable: OperationVariables = {}
+    ): Observable<FetchResult<T>> {
+        return this.apollo.mutate<T>({
+            mutation: mutationQ,
+            variables: variable
+        })
+            .pipe(
+                map((result) => {
+                    return <FetchResult<T>>result;
+                }),
+                catchError(this.errorHandler));
+    }
 
     // Handle errors
     private errorHandler = (error: HttpErrorResponse | any) => {
