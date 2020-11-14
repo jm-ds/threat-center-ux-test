@@ -9,6 +9,19 @@ table.table-row-link {
     }
 }
 
+table {
+    tr.pointer {
+        td {
+            cursor: pointer;
+        }
+    }
+    tr {
+        td.pointer {
+            cursor: pointer;
+        }
+    }
+}
+
 .user-profile-list table {
     margin: 0;
     width: 100%;

@@ -15,7 +15,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <perfect-scrollbar [style.max-height]="'250px'">
+<!--        <perfect-scrollbar [style.max-height]="'250px'">-->
           <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
@@ -37,12 +37,12 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-embeddedAsset >
-              <tr>
-                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.name}}</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset.node)">{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize >= 1024'>{{embeddedAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
-                <td (click)="fetchRepositoryAsset(embeddedAsset.node)" *ngIf='embeddedAsset.node.assetSize < 1024'>{{embeddedAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <tr (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">
+                <td>{{embeddedAsset.node.name}}</td>
+                <td>{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}</td>
+                <td>{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>
+                <td *ngIf='embeddedAsset.node.assetSize >= 1024'>{{embeddedAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+                <td *ngIf='embeddedAsset.node.assetSize < 1024'>{{embeddedAsset.node.assetSize | number:'1.0-0'}} bytes</td>
                 <td style="word-spacing: 6px;">
                   <!--
                   <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
@@ -55,7 +55,7 @@
               </tr>
             </ng-template>
           </p-table>
-        </perfect-scrollbar>
+<!--        </perfect-scrollbar>-->
       </div>
     </div>
 
@@ -114,7 +114,7 @@
       </app-ui-modal>
 
 
-    <div class="row">
+    <!--<div class="row">
       <div *ngIf='sourceAsset; else loading' class="col-xl-6">
         <file-view [repositoryAsset]="sourceAsset"></file-view>
       </div>
@@ -122,7 +122,9 @@
         <file-view [repositoryAsset]="matchAsset"></file-view>
       </div>
 
-    </div>
+    </div>-->
+
+    <app-simm #simmtool [sourceAsset]="sourceAsset" [matchAsset]="matchAsset"></app-simm>
 
 
   </div>
