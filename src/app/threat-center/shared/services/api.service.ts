@@ -324,6 +324,7 @@ export class ApiService {
         query {
             project(projectId:"${projectId}") {
               projectId,
+              entityId,
               name,
               scans {
                 edges {

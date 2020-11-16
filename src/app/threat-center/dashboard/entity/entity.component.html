@@ -1,19 +1,52 @@
 <div *ngIf='obsEntity | async as entity;'>
   <div class="row">
-    <div class="col-6">
+    <div class="col-9">
       <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
+    </div>
+    <div class="col-3" style="text-align:right" *ngIf="entity.entityMetrics">
+      <a [routerLink]="['/admin/entity']">
+        <button type="submit" class="btn btn-outline-warning ml-2">
+          <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child
+        </button>
+      </a>
+      <a [routerLink]="['/dashboard/scan/',entity.entityId]">
+        <button type="submit" class="btn btn-outline-info ml-2">
+          <i class="fas fa-fingerprint" style="margin-right:5px"></i>Execute ThreatScan
+        </button>
+      </a>
     </div>
   </div>
 
-    <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetrics">
-      <div class="col-md-3">
-        <app-card [hidHeader]="true" cardClass="proj-t-card">
-          <a [routerLink]="['/dashboard/quickstart', entity.entityId]">Scan a project with Quickstart</a>
-        </app-card>
-      </div>
+  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetrics">
+    <div class="col-md-5">
+      <app-card [hidHeader]="true" cardClass="proj-t-card">
+        <span style="font-size:20px;color:#4680ff">
+          A fresh dashboard ready to get to work.
+        </span>
+        <div style="margin-top:20px;text-align: justify;">
+          <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a hierarchy of company Divisions, Business Units, Teams or even individual developers
+          who can scan their own projects while automatically sharing the data with your team.</p>
+          <p>Risk Metrics, from child entities, will also be rolled up to your dashboard so as to easily assess the risk across your organization.</p>
+          <a [routerLink]="['/admin/entity']">
+            <button type="submit" class="btn btn-outline-warning ml-2">
+              <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child Dashboard
+            </button>
+          </a>
+        </div>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>Get started quickly by connecting Threatrix with your Github, GitLab or Bitbucket accounts to see results in seconds.</p>
+          <a [routerLink]="['/dashboard/scan/',entity.entityId]">
+            <button type="submit" class="btn btn-outline-info ml-2">
+              <i class="fas fa-fingerprint" style="margin-right:5px"></i>Execute ThreatScan
+            </button>
+          </a>
+        </div>
+      </app-card>
     </div>
+  </div>
 
   <div class="row" style="padding:20px 0px 20px 0px" *ngIf="entity.entityMetrics">
+
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
@@ -41,11 +74,12 @@
   </div>
 
 
-  <div class="row" *ngIf="entity.entityMetrics">
+  <div class="row" *ngIf="entity.childEntities.edges.length > 0 || entity.entityMetrics?.projectCount > 0">
     <div class="col-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" >
-          <ngb-tab title="BUSINESS UNIT" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0">
+
+          <ngb-tab title="BUSINESS UNITS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0">
             <ng-template ngbTabContent>
               <!-- product-section start -->
               <div class="row">
@@ -56,7 +90,8 @@
                         <table class="table table-hover m-b-0">
                           <thead >
                           <tr>
-                            <th width="250px">DIVISION</th>
+                            <th width="250px">NAME</th>
+                            <th>TYPE</th>
                             <th>PROJECTS</th>
                             <th>LICENSE RISK</th>
                             <th>THREATS</th>
@@ -67,16 +102,19 @@
                           </thead>
                           <tbody>
                             <!-- summary data -->
-                            <tr>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Business Units</td>
-                              <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.projectCount}}</td>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.vulnerabilityMetrics.total}}</td>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.componentMetrics.total}}</td>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.licenseMetrics.total}}</td>
-                              <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.assetMetrics.total}}</td>
-
-                            </tr>
+                            <ng-container *ngIf="entity.entityMetrics">
+                              <tr >
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Business Units</td>
+                                <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">&nbsp;</td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.projectCount}}</td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.vulnerabilityMetrics.total}}</td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.componentMetrics.total}}</td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.licenseMetrics.total}}</td>
+                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics.assetMetrics.total}}</td>
+                              </tr>
+                            </ng-container>
+                            <!-- Data for THIS business unit. Commented for now, as it's weird and causes confusion
                             <tr>
                               <td>{{entity.name}}</td>
                               <td style="border-left:1px solid #4680ff">{{entity.entityMetrics?.projectCount}}</td>
@@ -86,6 +124,7 @@
                               <td>{{entity.entityMetrics.licenseMetrics.total}}</td>
                               <td>{{entity.entityMetrics.assetMetrics.total}}</td>
                             </tr>
+                            -->
                             <tr *ngFor="let childEntity of entity.childEntities?.edges">
                               <td><a (click)="changeEntity(childEntity.node.entityId)" style="cursor: pointer;">{{childEntity.node.name}}</a></td>
 
@@ -93,8 +132,8 @@
                               <td *ngIf="!childEntity.node.entityMetrics" style="border-left:1px solid #4680ff" colspan="7">
                                 No projects found for this Business Unit
                               </td>
-
-                              <td *ngIf="childEntity.node.entityMetrics" style="border-left:1px solid #4680ff">{{childEntity.node.entityMetrics?.projectCount}}</td>
+                              <td *ngIf="childEntity.node.entityMetrics" style="border-left:1px solid #4680ff">{{childEntity.node.entityType}}</td>
+                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.projectCount}}</td>
                               <td *ngIf="childEntity.node.entityMetrics"><span class="text-c-red">HIGH</span></td>
                               <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.vulnerabilityMetrics.total}}</td>
                               <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.licenseMetrics.total}}</td>
@@ -114,7 +153,7 @@
           </ngb-tab>
 
           <!-- PROJECTS -->
-          <ngb-tab title="PROJECTS" *ngIf="entity.projects?.edges.length > 0">
+          <ngb-tab title="PROJECTS" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
               <!-- product-section start -->
               <div class="row">
@@ -163,7 +202,7 @@
                               <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
                             </td>
                             <td>
-                              <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
+                              <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td>
@@ -172,8 +211,48 @@
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td> -->
-                            <td>{{projectEdge.node.created | date :'M/d h:mmaa' | lowercase}}</td>
+                            <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                           </tr>
+                          <ng-container *ngFor="let childEntityEdge of entity.childEntities?.edges">
+                            <tr *ngFor="let projectEdge of childEntityEdge.node.projects?.edges">
+                              <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
+                              <td style="border-left:1px solid #4680ff">{{childEntityEdge.node.name}}</td>
+                              <td>
+                                <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
+                                <span title="High" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.high}}</span>
+                                <span title="Medium" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.medium}}</span>
+                                <span title="Low" class="badge m-r-5 badge-light-info">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.low}}</span>
+                                <span title="Info" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.info}}</span>
+                              </td>
+                              <td>
+                                <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
+                                <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
+                                <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
+                                <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                                <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                                <span title="Dual" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.dual}}</span>
+                                <span title="Custom" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.custom}}</span>
+                                <span title="Permissive" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.licenseMetrics?.permissive}}</span>
+                              </td>
+                              <td>
+                                <span title="Latest" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.latest}}</span>
+                                <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
+                                <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
+                                <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
+                              </td>
+                              <td>
+                                <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
+                                <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
+                                <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
+                              </td>
+                              <!-- <td>
+                                <span title="Analyzed" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
+                                <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
+                                <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
+                              </td> -->
+                              <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                            </tr>
+                          </ng-container>
 
 
                           </tbody>
@@ -188,7 +267,7 @@
           </ngb-tab>
 
           <!-- VULNERABILITIES -->
-          <ngb-tab title="VULNERABILITIES" class="mb-3 ml-0 pl-0">
+          <ngb-tab title="VULNERABILITIES" class="mb-3 ml-0 pl-0" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
 
               <div class="row">
@@ -203,16 +282,13 @@
                               <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">SEVERITY</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold">IN PROJECTS</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold">CVSS 2/3</th>
-
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold">COMPONENT</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold">GROUP</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold">VERSION</th>
-
                               <th style="width: 100px;border-bottom:1px solid #4680ff;font-weight:bold">CWE</th>
-                              <th style="width: 100px;border-bottom:1px solid #4680ff;font-weight:bold">VERIFIED</th>
-
                             </tr>
                           </thead>
+
                           <tbody *ngIf="componentsEntity as componentsEntity;">
                             <ng-container *ngFor="let componentEdge of componentsEntity.entityComponents?.edges">
                               <tr *ngFor="let vulnerabilityEdge of componentEdge.node.entityComponentVulnerabilities?.edges">
@@ -225,14 +301,12 @@
                                   <span *ngIf="vulnerabilityEdge?.node.severity === 'LOW'" class="badge m-r-5 badge-light-info" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
                                   <span *ngIf="vulnerabilityEdge?.node.severity === 'INFO'" class="badge m-r-5 badge-light-success" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
                                 </td>
-                                <td>{{vulnerabilityEdge?.node.vulnerabilityInfection.projectCount}}</td>
+                                <td><!--{{vulnerabilityEdge?.node.vulnerabilityInfection.projectCount}}-->Unknown</td>
                                 <td>{{vulnerabilityEdge?.node.cvssV2BaseScore | number : '1.1-1'}} / {{vulnerabilityEdge?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
                                 <td>{{componentEdge?.node.name}}</td>
                                 <td>{{componentEdge?.node.group}}</td>
                                 <td>{{componentEdge?.node.version}}</td>
                                 <td style="width: 100px;overflow: hidden;" ><span *ngIf="vulnerabilityEdge?.node.cwe"> CWE-{{vulnerabilityEdge?.node.cwe?.cweId}} : {{vulnerabilityEdge?.node.cwe?.name | slice:0:50}}</span></td>
-                                <td><img title="Verified by ShiftLeft NG SAST" width="25" height="25" src="assets/images/scan-logo-dark.svg"></td>
-
                               </tr>
                             </ng-container>
                           </tbody>
@@ -252,7 +326,7 @@
 
 
           <!-- COMPONENTS -->
-          <ngb-tab title="COMPONENTS">
+          <ngb-tab title="COMPONENTS" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
               <!-- embedded assets-section start -->
               <div class="row">
@@ -297,7 +371,7 @@
 
 
           <!-- LICENSES -->
-          <ngb-tab title="LICENSES">
+          <ngb-tab title="LICENSES" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
 
               <!-- license-section start -->
@@ -321,12 +395,14 @@
                               <td>{{license.shortName}}</td>
                               <td style="border-left:1px solid #4680ff">{{license.spdxId}}</td>
                               <td>
-                                <span *ngIf="license.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                                <span *ngIf="license.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                                <span *ngIf="license.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                                <span *ngIf="license.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                                <span *ngIf="license.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                                <span *ngIf="license.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                <span *ngIf="license.category === 'COPYLEFT_STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                                <span *ngIf="license.category === 'COPYLEFT_WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                                <span *ngIf="license.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                                <span *ngIf="license.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                                <span *ngIf="license.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                <span *ngIf="license.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                <span *ngIf="license.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
+                                <span *ngIf="license.category === 'UNDEFINED'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">UNDEFINED</span>
                               </td>
                               <td>{{license.style}}</td>
                               <td>{{license.publicationYear}}</td>
@@ -344,128 +420,46 @@
 
 
 
-          <ngb-tab title="ASSETS">
+          <ngb-tab title="ASSETS" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
 
-              <!-- embedded assets-section start -->
-              <div class="row">
-                <div class="col-sm-12">
-                  <app-card cardTitle="Embedded Assets: 55" cardClass="table-card" blockClass="px-0 py-0" >
 
-                    <div class="table-responsive">
-                      <perfect-scrollbar>
-                        <table class="table table-hover m-b-0">
-                          <thead>
-                          <tr>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold"  width="250px">NAME</th>
-                            <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">PATH</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">PROJECT</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">DIVISION</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">SIZE</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">% INCLUSIONS</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">INCLUSION LICENSE(S)</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                          <tr>
-                            <td>AliasRegistry.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>5.5kb</td>
-                            <td>10.2%</td>
-                            <td>Apache-2.0</td>
-                          </tr>
-                          <tr>
-                            <td>AttributeAccessor.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>3.6kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-                          <tr>
-                            <td>BridgeMethodResolver.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>12.5kb</td>
-                            <td>22.6%</td>
-                            <td>GPL-3.0</td>
-                          </tr>
-                          <tr>
-                            <td>CollectionFactory.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>15.8kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-                          <tr>
-                            <td>ConfigurableObjectInputStream.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>1.4kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-                          <tr>
-                            <td>ExceptionDepthComparator.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>28.6kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-                          <tr>
-                            <td>GenericTypeResolver.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>2.8kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-                          <tr>
-                            <td>InfrastructureProxy.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>9.4kb</td>
-                            <td>4.9%</td>
-                            <td>Creative Commons</td>
-                          </tr>
-                          <tr>
-                            <td>MethodClassKey.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>59.6kb</td>
-                            <td>15.6%</td>
-                            <td>GPL-3.0</td>
-                          </tr>
-                          <tr>
-                            <td>MethodIntrospector.java</td>
-                            <td style="border-left:1px solid #4680ff">sci-core/src/main/java/org/sciframework/core/</td>
-                            <td>Sci Framework</td>
-                            <td>China</td>
-                            <td>37.4kb</td>
-                            <td>-</td>
-                            <td>-</td>
-                          </tr>
-
-                          </tbody>
-                        </table>
-                      </perfect-scrollbar>
+                <div style="padding-top:20px;padding-bottom:25px;;margin-bottom:20px;text-align:right;">
+                  <form action="javascript:" class="form-inline float-right form-filter">
+                    <div class="form-group">
+                      <input type="text" name="q" class="form-control" value="" placeholder="Search query...">
                     </div>
-                  </app-card>
+                    <button type="submit" class="btn btn-info ml-2">
+                      <i class="feather icon-filter"></i>
+                      Filter
+                    </button>
+                    <button type="submit" class="btn btn-warning ml-2">
+                      <i class="feather icon-slash"></i>
+                      Clear
+                    </button>
+                  </form>
+
                 </div>
-              </div>
-              <!-- embedded assets-section end -->
+                <div class="table-responsive">
+                  <perfect-scrollbar >
+                    <table class="table table-hover m-b-0">
+                      <thead>
+                      <tr>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">LICENSE Name</th>
+                        <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">SPDX</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold" >THREAT CATEGORY</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold" >STYLE</th>
+                        <th style="border-bottom:1px solid #4680ff;font-weight:bold" >Publication Year</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </perfect-scrollbar>
+                </div>
+
+
 
             </ng-template>
           </ngb-tab>
@@ -473,7 +467,7 @@
 
 
           <!-- COPYRIGHTS -->
-          <ngb-tab title="COPYRIGHTS">
+          <ngb-tab title="COPYRIGHTS" *ngIf="entity.entityMetrics?.projectCount > 0">
             <ng-template ngbTabContent>
               <!-- embedded assets-section start -->
               <div class="row">

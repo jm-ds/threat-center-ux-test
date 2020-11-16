@@ -1,4 +1,4 @@
-<h1>Entity manage</h1>
+<h1>Entity Manager</h1>
 <div class="row">
 
     <div class="col-lg-4 col-md-4 col-sm-12 entiy-tree">
@@ -40,6 +40,7 @@
                                     [(ngModel)]="selectedTreeNode.entityType" #entityType="ngModel" name="entityType"
                                     required>
                                     <option value="" selected disabled>Select entity type</option>
+                                    <option value="DASHBOARD">Dashboard</option>
                                     <option value="DIVISION">Divison</option>
                                     <option value="BUSINESS_UNIT">Business Unit</option>
                                     <option value="TEAM">Team</option>

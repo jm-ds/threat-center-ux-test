@@ -239,12 +239,12 @@ export class ProjectComponent implements OnInit {
         for (let i = 0; i < w.config.series.length; i++) {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data.reduce((prev, next) => prev + (+next), 0);
+            data = w.config.series[i].data[dataPointIndex];
           str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data.reduce((prev, next) => prev + (+next), 0);
+          orgData = w.config.series[seriesIndex].data[dataPointIndex];
         }
         return (
           '<div class=" arrow_box chart-overlay">' +
@@ -275,12 +275,12 @@ export class ProjectComponent implements OnInit {
         for (let i = 0; i < w.config.series.length; i++) {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data.reduce((prev, next) => prev + (+next), 0);
+            data = w.config.series[i].data[dataPointIndex];
           str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data.reduce((prev, next) => prev + (+next), 0);
+          orgData = w.config.series[seriesIndex].data[dataPointIndex];
         }
         return (
           '<div class=" arrow_box chart-overlay">' +
@@ -311,12 +311,12 @@ export class ProjectComponent implements OnInit {
         for (let i = 0; i < w.config.series.length; i++) {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data.reduce((prev, next) => prev + (+next), 0);
+            data = w.config.series[i].data[dataPointIndex];
           str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data.reduce((prev, next) => prev + (+next), 0);
+          orgData = w.config.series[seriesIndex].data[dataPointIndex];
         }
         return (
           '<div class=" arrow_box chart-overlay">' +
@@ -347,12 +347,12 @@ export class ProjectComponent implements OnInit {
         for (let i = 0; i < w.config.series.length; i++) {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data.reduce((prev, next) => prev + (+next), 0);
+            data = w.config.series[i].data[dataPointIndex];
           str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data.reduce((prev, next) => prev + (+next), 0);
+          orgData = w.config.series[seriesIndex].data[dataPointIndex];
         }
         return (
           '<div class=" arrow_box chart-overlay">' +
@@ -383,12 +383,12 @@ export class ProjectComponent implements OnInit {
         for (let i = 0; i < w.config.series.length; i++) {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data.reduce((prev, next) => prev + (+next), 0);
+            data = w.config.series[i].data[dataPointIndex];
           str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data.reduce((prev, next) => prev + (+next), 0);
+          orgData = w.config.series[seriesIndex].data[dataPointIndex];
         }
         return (
           '<div class=" arrow_box chart-overlay">' +
@@ -406,10 +406,10 @@ export class ProjectComponent implements OnInit {
   
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-      return data.reduce((prev, next) => prev + (+next), 0);
+        return data[0];
+      //return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
   }
-
 }

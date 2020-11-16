@@ -22,7 +22,7 @@ const routes: Routes = [
         loadChildren: () => import('./container/container.module').then(module => module.ContainerModule)
       },
       {
-        path: 'quickstart',
+        path: 'scan',
         loadChildren: () => import('./quickstart/quickstart.module').then(module => module.QuickstartModule)
       },
       {

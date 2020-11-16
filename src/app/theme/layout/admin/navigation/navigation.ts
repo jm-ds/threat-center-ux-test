@@ -33,11 +33,11 @@ const NavigationItems = [
     icon: 'feather icon-monitor',
     children: [
       {
-        id: 'quickstart',
-        title: 'Quickstart',
+        id: 'scan',
+        title: 'ThreatScan',
         type: 'item',
-        url: '/dashboard/quickstart',
-        icon: 'fas fa-tachometer-alt',
+        url: '/dashboard/scan',
+        icon: 'fas fa-fingerprint',
       },
       {
         id: 'entity',

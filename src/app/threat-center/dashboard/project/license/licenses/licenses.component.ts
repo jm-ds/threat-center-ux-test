@@ -19,8 +19,7 @@ export class LicensesComponent implements OnInit {
   constructor(private apiService:ApiService) { }
 
   ngOnInit() {
-    console.log("scanId:",this.scanId);
-    console.log("Loading ComponentsComponent");
+    console.log("Loading LicensesComponent for scanId: ",this.scanId);
     this.obsScan = this.apiService.getScanLicenses(this.scanId)
     .pipe(map(result => result.data.scan));
   }
