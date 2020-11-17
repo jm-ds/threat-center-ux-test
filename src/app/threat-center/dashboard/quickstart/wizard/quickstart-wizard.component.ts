@@ -186,7 +186,6 @@ export class QuickstartWizardComponent implements OnInit {
         // but I need to figure out how to pull the relative URL and use
         // it for the replaceState URL, I think.
         console.log("IN QuickstartWizardComponent");
-        this.location.replaceState('/dashboard/quickstart');
         let accessToken = this.authService.currentUser.accessToken;
         console.log("accessToken: " + accessToken);
         if (this.isEmail(accessToken)) {
