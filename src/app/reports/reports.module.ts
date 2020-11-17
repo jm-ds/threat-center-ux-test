@@ -41,8 +41,12 @@ import {NouisliderModule} from "ng2-nouislider";
         AlertModule,
         NouisliderModule
     ],
+    exports: [
+        DateIntervalFilterComponent,
+        EntityTreeFilterComponent
+    ],
     providers: [
-        { provide: TreeviewI18n, useClass: EntityTreeviewI18n },
+        {provide: TreeviewI18n, useClass: EntityTreeviewI18n},
     ]
 })
 export class ReportsModule {

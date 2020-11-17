@@ -1,0 +1,389 @@
+<!--
+filter by
+- date interval
+- title
+- type
+- severity
+- all/unread/read
+
+
+group actions:
+- mark as read
+- mark as unread
+- apply default workflow
+- delete
+
+buttons:
+- export as pdf
+- export as xls
+
+
+table columns
+- checkbox
+- date
+- title
+- workflow action
+// type & severity are obvious as we have title containing type and color row telling severity
+-->
+
+
+<h1>Alerts</h1>
+
+
+<!-- FILTER -->
+<div class="report-filter">
+
+    <form class="form-inline1" action="javascript:">
+
+        <div class="report-filter-row">
+            <app-date-interval-filter></app-date-interval-filter>
+        </div>
+
+
+        <div class="report-filter-row">
+            <div>
+                <label>Alert title</label>
+                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="filterTitle" placeholder="Type alert title"/>
+            </div>
+
+            <div>
+                <label>Alert type</label>
+                <select name="typeFilter" class="form-control custom-select" [(ngModel)]="filterType">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="Policy Violations">Policy Violations</option>
+                    <option value="Vulnerabilities">Vulnerabilities</option>
+                    <option value="High-risk license">High-risk license</option>
+                    <option value="Embedded assets">Embedded assets</option>
+                    <option value="Leaked Source Code">Leaked Source Code</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Severity</label>
+                <select name="severityFilter" class="form-control custom-select" [(ngModel)]="filterSeverity">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="CRITICAL">CRITICAL</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="LOW">LOW</option>
+                    <option value="INFO">INFO</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Read</label>
+                <select name="fixFilter" class="form-control custom-select" [(ngModel)]="filterRead">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="HASFIX">unread</option>
+                    <option value="NOFIX">read</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-info">
+                <i class="feather icon-filter"></i>
+                Filter
+            </button>
+            <button type="submit" class="btn btn-warning">
+                <i class="feather icon-slash"></i>
+                Clear
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+<!-- GROUP ACTIONS -->
+<div class="alert-table-actions">
+    <div>
+        <label>Group actions:</label>
+        <button class="btn btn-outline-info btn-sm"><i class="fas fa-play"></i> Default workflow action</button>
+        <button class="btn btn-outline-secondary btn-sm"><i class="far fa-envelope-open"></i></button>
+        <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-envelope"></i></button>
+        <button class="btn btn-outline-danger btn-sm"><i class="far fa-trash-alt"></i></button>
+    </div>
+    <div class="text-left">
+        <button class="btn btn-outline-pdf btn-sm"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+        <button class="btn btn-outline-excel btn-sm"><i class="fas fa-file-excel"></i> Export to Excel</button>
+    </div>
+</div>
+
+
+<!-- TABLE -->
+<div class="table-responsive-disabled">
+    <table class="table alerts-table">
+        <thead>
+            <tr>
+                <th>
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-all" id="checkbox-all">
+                        <label for="checkbox-all" class="cr"></label>
+                    </div>
+                </th>
+                <th>Date/time</th>
+                <th>Alert title</th>
+                <th class="min">Workflow action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- danger, unread -->
+            <tr class="unread table-danger">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-01" id="checkbox-01">
+                        <label for="checkbox-01" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 10:15</td>
+                <td>
+                    <a href="javascript:">Vulnerability</a> of critical severity found
+                    in component <a href="javascript:">jasper-reports</a>
+                    of project <a href="javascript:">threatrix-matrix</a>,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to most recent version without vulnerabilities</a>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to next version without vulnerabilities</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- common, unread -->
+            <tr class="unread">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-02" id="checkbox-02">
+                        <label for="checkbox-02" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 10:10</td>
+                <td>
+                    <a href="javascript:">Scan</a> of project <a href="javascript:">threatrix-matrix</a> is completed,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <!--<div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to most recent version without vulnerabilities</a>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to next version without vulnerabilities</a>
+                        </div>
+                    </div>-->
+                </td>
+            </tr>
+
+
+            <!-- common, read -->
+            <tr class="read">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-03" id="checkbox-03">
+                        <label for="checkbox-03" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 09:05</td>
+                <td>
+                    <a href="javascript:">Scan</a> of project <a href="javascript:">threatrix-matrix</a> is completed,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <!--<div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to most recent version without vulnerabilities</a>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to next version without vulnerabilities</a>
+                        </div>
+                    </div>-->
+                </td>
+            </tr>
+
+
+            <!-- warning, unread -->
+            <tr class="unread table-warning">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-04" id="checkbox-04">
+                        <label for="checkbox-04" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 10:15</td>
+                <td>
+                    <a href="javascript:">Policy Violations</a> of major severity found
+                    for <a href="javascript:">Reports Team</a> entity,
+                    <a href="javascript:">threatrix-matrix</a> project.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Create and subscribe Jira ticket.</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- common, read -->
+            <tr class="read">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-05" id="checkbox-05">
+                        <label for="checkbox-05" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 09:05</td>
+                <td>
+                    <a href="javascript:">Scan</a> of project <a href="javascript:">threatrix-matrix</a> is completed,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <!--<div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to most recent version without vulnerabilities</a>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to next version without vulnerabilities</a>
+                        </div>
+                    </div>-->
+                </td>
+            </tr>
+
+
+            <!-- danger, read -->
+            <tr class="read table-danger">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-06" id="checkbox-06">
+                        <label for="checkbox-06" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 08:15</td>
+                <td>
+                    <a href="javascript:">High-risk license</a> found
+                    in component <a href="javascript:">jasper-reports</a>
+                    of project <a href="javascript:">threatrix-matrix</a>,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Block releases</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- common, read -->
+            <tr class="read">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-07" id="checkbox-07">
+                        <label for="checkbox-07" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 08:05</td>
+                <td>
+                    <a href="javascript:">Scan</a> of project <a href="javascript:">threatrix-matrix</a> is completed,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <!--<div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to most recent version without vulnerabilities</a>
+                            <a class="dropdown-item" href="javascript:">Auto-update component version to next version without vulnerabilities</a>
+                        </div>
+                    </div>-->
+                </td>
+            </tr>
+
+
+            <!-- success, read -->
+            <tr class="read table-success">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-08" id="checkbox-08">
+                        <label for="checkbox-08" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-16 16:25</td>
+                <td>
+                    <a href="javascript:">Embedded asset</a> (25% match) found
+                    in project <a href="javascript:">threatrix-matrix</a>,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Create Jira ticket</a>
+                            <a class="dropdown-item" href="javascript:">Notify project lead.</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- info, read -->
+            <tr class="read table-info">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-09" id="checkbox-09">
+                        <label for="checkbox-09" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 10:15</td>
+                <td>
+                    <a href="javascript:">Embedded asset</a> (12% match) found
+                    in project <a href="javascript:">threatrix-matrix</a>,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Create Jira ticket</a>
+                            <a class="dropdown-item" href="javascript:">Notify project lead.</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- danger, read -->
+            <tr class="read table-danger">
+                <td class="min">
+                    <div class="checkbox checkbox-info d-inline">
+                        <input type="checkbox" name="checkbox-10" id="checkbox-10">
+                        <label for="checkbox-10" class="cr"></label>
+                    </div>
+                </td>
+                <td class="min">2020-11-17 08:15</td>
+                <td>
+                    <a href="javascript:">Leaked Source Code</a> found
+                    of project <a href="javascript:">threatrix-matrix</a>,
+                    <a href="javascript:">Reports Team</a> entity.
+                </td>
+                <td class="min">
+                    <div class="btn-group" ngbDropdown [placement]="'bottom-right'">
+                        <button class="btn btn-info btn-xs" ngbDropdownToggle type="button">Action</button>
+                        <div ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:">Create Jira ticket</a>
+                            <a class="dropdown-item" href="javascript:">Warn team lead</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</div>

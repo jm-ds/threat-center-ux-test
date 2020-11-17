@@ -120,6 +120,28 @@ const NavigationItems = [
         ]
       },
       {
+        id: "alerts",
+        title: "Alerts",
+        type: "collapse",
+        icon: "fas fa-bell",
+        children: [
+          {
+            id: 'alerts-alerts',
+            title: 'Alerts',
+            icon: 'fas fa-bell',
+            type: 'item',
+            url: '/alerts/list'
+          },
+          {
+            id: 'alerts-settings',
+            title: 'Alerts settings',
+            icon: 'fas fa-cog',
+            type: 'item',
+            url: '/alerts/settings'
+          }
+        ]
+      },
+      {
         id: 'admin',
         title: 'Admin',
         type: 'collapse',

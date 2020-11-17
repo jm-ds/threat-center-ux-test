@@ -105,6 +105,7 @@ File: style.css
 
 
 // threatrix styles
+@import "threatrix/common";
 @import "threatrix/colors";
 @import "threatrix/breadcrumbs";
 @import "threatrix/buttons";
@@ -117,3 +118,4 @@ File: style.css
 
 // threatrix styles module specific
 @import "threatrix/reports";
+@import "threatrix/module-alerts";
