@@ -30,6 +30,10 @@ const routes: Routes = [
         loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule)
       },
       {
+        path: 'alerts',
+        loadChildren: () => import('./alerts/alerts.module').then(module => module.AlertsModule)
+      },
+      {
         path: 'layout',
         loadChildren: () => import('./demo/pages/layout/layout.module').then(module => module.LayoutModule)
       },

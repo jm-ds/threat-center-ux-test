@@ -1,0 +1,67 @@
+<div class="alerts-settings-container">
+    <h1>Alerts settings</h1>
+
+    <app-card [hidHeader]="true" [options]="false">
+        <h4>Alert severities settings</h4>
+
+        <div class="form-group">
+            <div class="switch switch-danger d-inline m-r-10">
+                <input type="checkbox" id="switch-d-1" disabled checked>
+                <label for="switch-d-1" class="cr"></label>
+            </div>
+            <label>Subscribe critical severity alerts</label>
+        </div>
+
+        <div class="form-group">
+            <div class="switch switch-warning d-inline m-r-10">
+                <input type="checkbox" id="switch-w-2" checked>
+                <label for="switch-w-2" class="cr"></label>
+            </div>
+            <label>Subscribe high severity alerts</label>
+        </div>
+
+        <div class="form-group">
+            <div class="switch switch-primary d-inline m-r-10">
+                <input type="checkbox" id="switch-w-3" checked>
+                <label for="switch-w-3" class="cr"></label>
+            </div>
+            <label>Subscribe medium severity alerts</label>
+        </div>
+
+        <div class="form-group">
+            <div class="switch switch-info d-inline m-r-10">
+                <input type="checkbox" id="switch-w-4">
+                <label for="switch-w-4" class="cr"></label>
+            </div>
+            <label>Subscribe low severity alerts</label>
+        </div>
+
+        <div class="form-group">
+            <div class="switch switch-success d-inline m-r-10">
+                <input type="checkbox" id="switch-w-5">
+                <label for="switch-w-5" class="cr"></label>
+            </div>
+            <label>Subscribe info severity alerts</label>
+        </div>
+    </app-card>
+
+
+
+
+    <h2>Alert types settings</h2>
+
+    <app-alert-type-settings [typeName]="'Policy Violations'"></app-alert-type-settings>
+    <app-alert-type-settings [typeName]="'Vulnerabilities'"></app-alert-type-settings>
+    <app-alert-type-settings [typeName]="'High-risk license'"></app-alert-type-settings>
+    <app-alert-type-settings [typeName]="'Embedded assets'"></app-alert-type-settings>
+    <app-alert-type-settings [typeName]="'Leaked Source Code'"></app-alert-type-settings>
+
+
+    <!-- SAVE SETTINGS -->
+    <div class="text-center">
+        <button class="btn btn-success btn-save"><i class="fas fa-save"></i> Save settings</button>
+    </div>
+</div>
+
+
+
