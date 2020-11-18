@@ -62,7 +62,7 @@
         <perfect-scrollbar [style.max-height]="'500px'">
           <p-table #dt [columns]="actionCols" [value]="policy.actions" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                   [filterDelay]="0" [globalFilterFields]="['actionName']">
+                   [filterDelay]="0" [globalFilterFields]="['actionType', 'actionName']">
 
             <ng-template pTemplate="caption">
               <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
