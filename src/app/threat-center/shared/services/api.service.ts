@@ -383,6 +383,7 @@ export class ApiService {
                     tag,
                     version
                     created,
+                    errorMsg,
                     scanMetrics {
                       vulnerabilityMetrics {
                         critical,

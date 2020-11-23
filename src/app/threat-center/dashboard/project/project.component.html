@@ -175,6 +175,7 @@
                     <th>Components</th>
                     <th>Embedded Assets</th>
                     <th>Leaked Assets</th>
+                    <th>Success</th>
                     <!--<th>Policy Violations</th>-->
                   </tr>
                 </ng-template>
@@ -237,6 +238,10 @@
                         class="badge m-r-5 badge-light-warning">5</span>
                       <span title="Project Leaks"
                         class="badge m-r-5 badge-light-primary">5</span>
+                    </td>
+                    <td>
+                      <span *ngIf="scan.node?.errorMsg;else successMsg"><i class="feather icon-x" style="font-size: 14px; font-weight: 800;"></i></span>
+                      <ng-template #successMsg><span><i class="feather icon-check" style="font-size: 14px; font-weight: 800;"></i></span></ng-template>
                     </td>
 
                     <!--<th>Policy Violations</th -->
