@@ -3,7 +3,7 @@
     <div class="col-md-3">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-        <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}</h3>
+            <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}</h3>
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
@@ -91,8 +91,10 @@
           </div>
           <div  style="clear:both"></div>
           -->
-            <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
-            <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart"></app-apex-chart>
+            <div style="margin-bottom:20px;"><i
+                class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
+            <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart">
+            </app-apex-chart>
           </app-card>
         </div>
 
@@ -153,7 +155,7 @@
             </div>
 
             <perfect-scrollbar [style.max-height]="'500px'">
-              <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
+              <p-table [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
                 [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true">
 
@@ -231,19 +233,22 @@
                         class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.assetMetrics?.skipped}}</span>
                     </td>
                     <td>
-                      <span title="Partial Asset Leaks"
-                        class="badge m-r-5 badge-light-primary">5</span>
-                      <span title="Asset Leaks"
-                        class="badge m-r-5 badge-light-warning">5</span>
-                      <span title="Project Leaks"
-                        class="badge m-r-5 badge-light-primary">5</span>
+                      <span title="Partial Asset Leaks" class="badge m-r-5 badge-light-primary">5</span>
+                      <span title="Asset Leaks" class="badge m-r-5 badge-light-warning">5</span>
+                      <span title="Project Leaks" class="badge m-r-5 badge-light-primary">5</span>
                     </td>
 
                     <!--<th>Policy Violations</th -->
                   </tr>
                 </ng-template>
               </p-table>
+
             </perfect-scrollbar>
+            <div class="col-sm-12">
+              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount" [pageSize]="defaultPageSize"
+                [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+              </mat-paginator>
+            </div>
           </ng-template>
         </ngb-tab>
 

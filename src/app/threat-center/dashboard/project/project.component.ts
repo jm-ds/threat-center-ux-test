@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { TaskComponent } from '@app/threat-center/shared/task/task.component';
@@ -10,6 +10,7 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
+import { MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'project-dashboard',
@@ -33,18 +34,31 @@ export class ProjectComponent implements OnInit {
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
 
+  defaultPageSize = 25;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  projectDetails = null;
+  scanList = [];
+
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId)
+      this.obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
     }
+    this.subscribeProjectData();
+  }
+
+  subscribeProjectData() {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
     this.obsProject.subscribe(project => {
+      //Taking sacn list to show in scan tab
+      this.scanList = project.scans.edges;
+      this.projectDetails = project;
+
       this.stateService.selectedScan = project.scans.edges[0];
       let critical = [];
       let high = [];
@@ -403,13 +417,48 @@ export class ProjectComponent implements OnInit {
       }
     }
   };
-  
+
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-        return data[0];
+      return data[0];
       //return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
+  }
+
+  //While any changes occurred in page
+  changePage(pageInfo) {
+    if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
+      //page size changed...
+      this.defaultPageSize = pageInfo.pageSize;
+      //API Call
+      this.loadProjectData(Number(this.defaultPageSize), undefined, undefined, undefined);
+      this.paginator.firstPage();
+    }
+    else {
+      //Next and Previous changed
+      if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
+        //call with after...
+        if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasNextPage']) {
+          this.loadProjectData(Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
+        }
+      } else {
+        //call with before..
+        if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasPreviousPage']) {
+          this.loadProjectData(undefined, Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['startCursor']);
+        }
+      }
+    }
+  }
+
+  //Loading project data after paggination for scan tab.
+  loadProjectData(first, last, endCursor = undefined, startCursor = undefined) {
+    let projects = this.apiService.getProject(this.projectId, first, last, endCursor, startCursor)
+      .pipe(map(result => result.data.project));
+    projects.subscribe(project => {
+      this.scanList = project.scans.edges;
+      this.projectDetails = project;
+    });
   }
 }
