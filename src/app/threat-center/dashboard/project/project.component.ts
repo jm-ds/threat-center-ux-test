@@ -187,7 +187,8 @@ export class ProjectComponent implements OnInit {
   plotOptions = {
     bar: {
       horizontal: false,
-      columnWidth: '60%',
+      columnWidth: '65%',
+      distributed: false
     },
   };
 
