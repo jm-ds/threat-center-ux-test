@@ -32,7 +32,7 @@ export class ProjectComponent implements OnInit {
   projectId: string;
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
-
+  tabDataCount = undefined;
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     console.log(this.projectId);
@@ -42,6 +42,7 @@ export class ProjectComponent implements OnInit {
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
+      this.stateService.project_tabs_selectedTab = "scan";
     }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
     this.obsProject.subscribe(project => {
@@ -412,5 +413,10 @@ export class ProjectComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+   //fired when getting data from child component
+   acceptData(dataCount) {
+    this.tabDataCount = dataCount;
   }
 }

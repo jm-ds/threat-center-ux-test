@@ -40,11 +40,11 @@
             </div>
             <div class="form-group" style="padding-left: 0px">
               <label class="font-weight-bolder">Created date</label>
-              <input disabled class="form-control" value="{{policy.createDate}}"/>
+              <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
             </div>
             <div *ngIf="!policy.active" class="form-group">
               <label class="font-weight-bolder">Removed date</label>
-              <input disabled class="form-control" value="{{policy.dateRemoved}}"/>
+              <input disabled class="form-control" value="{{policy.dateRemoved | date :'M/d/y h:mmaa' | lowercase}}"/>
             </div>
 
           </div>

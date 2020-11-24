@@ -1,9 +1,9 @@
 <div *ngIf='obsEntity | async as entity;'>
   <div class="row">
-    <div class="col-9">
+    <div class="col-6">
       <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
     </div>
-    <div class="col-3" style="text-align:right" *ngIf="entity.entityMetrics">
+    <div class="col-6" style="text-align:right" *ngIf="entity.entityMetrics">
       <a [routerLink]="['/admin/entity']">
         <button type="submit" class="btn btn-outline-warning ml-2">
           <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child
