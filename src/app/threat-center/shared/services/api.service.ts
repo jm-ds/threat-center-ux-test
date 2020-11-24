@@ -703,12 +703,23 @@ export class ApiService {
       `);
   }
 
-  getScanAssets(scanId: string) {
+  getScanAssets(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
         query {
         	 scan(scanId:"${scanId}") {
             scanId
-            scanAssets {
+            scanAssets(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+              totalCount
               edges {
                 node {
                   name,
@@ -732,7 +743,7 @@ export class ApiService {
             }
           }
         }
-      `);
+      `,'no-cache');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {

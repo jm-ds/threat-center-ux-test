@@ -61,7 +61,7 @@
     </perfect-scrollbar>
     <div class="col-sm-12">
       <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="licensesDetails.licenses?.totalCount"
-        [pageSize]="defaultPageSize" [pageSizeOptions]="[1,25, 50, 100]" (page)="changePage($event)">
+        [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
       </mat-paginator>
     </div>
   </div>
