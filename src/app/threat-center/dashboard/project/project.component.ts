@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { TaskComponent } from '@app/threat-center/shared/task/task.component';
-import { Scan, Project } from '@app/threat-center/shared/models/types';
+import { Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, filter, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'project-dashboard',
@@ -22,7 +21,8 @@ export class ProjectComponent implements OnInit {
     private apiService: ApiService,
     private stateService: StateService,
     private route: ActivatedRoute,
-    public apexEvent: ApexChartService) {
+    public apexEvent: ApexChartService,
+    private modalService: NgbModal) {
     this.chartDB = ChartDB;
   }
 
@@ -30,6 +30,7 @@ export class ProjectComponent implements OnInit {
   obsProject: Observable<Project>;
   //selectedScan:Scan;
   projectId: string;
+  errorMsg: string;
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
 
@@ -411,5 +412,11 @@ export class ProjectComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  openErrorMsg(content, errorMsg:string) {
+    // open error messages
+    this.errorMsg = errorMsg;
+    this.modalService.open(content);
   }
 }

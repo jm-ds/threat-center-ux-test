@@ -239,9 +239,15 @@
                       <span title="Project Leaks"
                         class="badge m-r-5 badge-light-primary">5</span>
                     </td>
-                    <td>
-                      <span *ngIf="scan.node?.errorMsg;else successMsg"><i class="feather icon-x" style="font-size: 14px; font-weight: 800;"></i></span>
-                      <ng-template #successMsg><span><i class="feather icon-check" style="font-size: 14px; font-weight: 800;"></i></span></ng-template>
+                    <td style="text-align: center">
+                      <span *ngIf="scan.node?.errorMsg;else successMsg">
+                        <button class="btn badge-light-danger error-btn" title="Show error messages" (click)="openErrorMsg(scanError, scan.node.errorMsg)">
+                          <i class="feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
+                        </button>
+                      </span>
+                      <ng-template #successMsg><span>
+                        <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
+                      </span></ng-template>
                     </td>
 
                     <!--<th>Policy Violations</th -->
@@ -402,4 +408,15 @@
       <!--</app-card>-->
     </div>
   </div>
+  <ng-template #scanError let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Scan errors</h4>
+    </div>
+    <div class="modal-body">
+      <pre>{{errorMsg}}</pre>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+    </div>
+  </ng-template>  
 </div>
