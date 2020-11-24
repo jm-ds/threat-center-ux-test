@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Scan } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 export class ScanAssetsComponent implements OnInit {
 
   @Input() scanId;
+  @Output() dataCount = new EventEmitter<string>();
   obsScan:Observable<Scan>;
 
   columns = ['Name', 'File Size','Workspace Path','Status','Embedded Assets' ];
@@ -23,6 +24,10 @@ export class ScanAssetsComponent implements OnInit {
     console.log("Loading ScanAssetsComponent");
     this.obsScan = this.apiService.getScanAssets(this.scanId)
     .pipe(map(result => result.data.scan));
+
+    this.obsScan.subscribe(asset => {
+      this.dataCount.emit(asset.scanAssets.totalCount);
+    });
   }
 
   sort(scanAssets:any) {

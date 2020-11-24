@@ -327,6 +327,7 @@ export class ApiService {
               entityId,
               name,
               scans {
+                totalCount
                 edges {
                   node {
                     scanId,
@@ -381,6 +382,7 @@ export class ApiService {
           scan(scanId:"${scanId}") {
             scanId,
             components {
+              totalCount
               edges {
                 node {
                   componentId,
@@ -421,6 +423,7 @@ export class ApiService {
             scan(scanId:"${scanId}") {
               scanId,
               components {
+                totalCount
                 edges {
                   node {
                     componentId,
@@ -481,6 +484,7 @@ export class ApiService {
             scan(scanId:"${scanId}") {
               scanId,
               licenses {
+                totalCount
                 edges {
                   node {
                     licenseId,
@@ -665,6 +669,7 @@ export class ApiService {
         	 scan(scanId:"${scanId}") {
             scanId
             scanAssets {
+              totalCount
               edges {
                 node {
                   name,
