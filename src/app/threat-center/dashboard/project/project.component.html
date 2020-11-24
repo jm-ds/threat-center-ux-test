@@ -3,7 +3,7 @@
     <div class="col-md-3">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-        <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}</h3>
+            <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}</h3>
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
@@ -91,8 +91,10 @@
           </div>
           <div  style="clear:both"></div>
           -->
-            <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
-            <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart"></app-apex-chart>
+            <div style="margin-bottom:20px;"><i
+                class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
+            <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart">
+            </app-apex-chart>
           </app-card>
         </div>
 
@@ -138,13 +140,11 @@
         <!-- SCANS TAB -->
         <ngb-tab id="scan">
           <ng-template ngbTabTitle>Scans&nbsp;
-            <span class="badge badge-light"
-              *ngIf="stateService.project_tabs_selectedTab === 'scan' && !!project.scans?.totalCount">
+            <span class="badge badge-light">
               {{project.scans?.totalCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-
             <div style="float:left;clear: both;">
               <ng-template pTemplate="caption">
                 <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
@@ -237,12 +237,9 @@
                         class="badge m-r-5 badge-light-primary">{{scan.node.scanMetrics?.assetMetrics?.skipped}}</span>
                     </td>
                     <td>
-                      <span title="Partial Asset Leaks"
-                        class="badge m-r-5 badge-light-primary">5</span>
-                      <span title="Asset Leaks"
-                        class="badge m-r-5 badge-light-warning">5</span>
-                      <span title="Project Leaks"
-                        class="badge m-r-5 badge-light-primary">5</span>
+                      <span title="Partial Asset Leaks" class="badge m-r-5 badge-light-primary">5</span>
+                      <span title="Asset Leaks" class="badge m-r-5 badge-light-warning">5</span>
+                      <span title="Project Leaks" class="badge m-r-5 badge-light-primary">5</span>
                     </td>
 
                     <!--<th>Policy Violations</th -->
@@ -256,27 +253,26 @@
         <!-- VULNERABILITIES TAB -->
         <ngb-tab id="vulnerabilities">
           <ng-template ngbTabTitle>Vulnerabilities&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'vulnerabilities' 
-                  && !!tabDataCount">
-              {{tabDataCount}}
+            <span class="badge badge-light">
+              {{vulnerabilityCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></vulnerabilities>
+            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId">
+            </vulnerabilities>
           </ng-template>
         </ngb-tab>
 
         <!-- COMPONENTS TAB -->
         <ngb-tab id="components">
           <ng-template ngbTabTitle>Components&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'components' 
-                  && !!tabDataCount">
-              {{tabDataCount}}
+            <span class="badge badge-light">
+              {{componentCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></components>
+            <components [scanId]="stateService.selectedScan?.node.scanId"></components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -310,20 +306,19 @@
         <!-- LICENSES TAB -->
         <ngb-tab id="licenses">
           <ng-template ngbTabTitle>Licenses&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'licenses'
-                  && !!tabDataCount">
-              {{tabDataCount}}
+            <span class="badge badge-light">
+              {{licensesCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></licenses>
+            <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
           </ng-template>
         </ngb-tab>
 
         <!-- COPYRIGHTS TAB -->
         <ngb-tab id="copyrights">
           <ng-template ngbTabTitle>Copyrights&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'copyrights'">
+            <span class="badge badge-light">
               9
             </span>
           </ng-template>
@@ -412,13 +407,12 @@
         <!-- ASSETS TAB -->
         <ngb-tab id="assets">
           <ng-template ngbTabTitle>Assets&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'assets'
-                  && !!tabDataCount">
-              {{tabDataCount}}
+            <span class="badge badge-light">
+              {{assetCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></scanassets>
+            <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>
@@ -426,7 +420,7 @@
         <!-- SOURCE CODE ASSETS -->
         <ngb-tab id="leakedassets">
           <ng-template ngbTabTitle>Leaked Assets&nbsp;
-            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'leakedassets'">
+            <span class="badge badge-light">
               0
             </span>
           </ng-template>

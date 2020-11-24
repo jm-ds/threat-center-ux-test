@@ -33,18 +33,52 @@ export class ProjectComponent implements OnInit {
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
-  ngOnInit() {
-    this.projectId = this.route.snapshot.paramMap.get('projectId');
-    console.log(this.projectId);
-    if (!this.obsProject) {
-      console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId)
-        .pipe(map(result => result.data.project));
 
-      this.stateService.obsProject = this.obsProject;
-      this.stateService.project_tabs_selectedTab = "scan";
-    }
+  vulnerabilityCount = 0;
+  componentCount = 0;
+  licensesCount = 0;
+  copyrightCount = 9;
+  assetCount = 0;
+  sourceCodeAssetcount = 0;
+
+  ngOnInit() {
+    this.loadProjectData();
+    this.stateService.project_tabs_selectedTab = "scan";
+    this.route.data.subscribe(projData => {
+      if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
+        if (!!projData.otherComponentData[0]) {
+          this.vulnerabilityCount = !!projData.otherComponentData[0].data ?
+            projData.otherComponentData[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
+        }
+        if (!!projData.otherComponentData[1]) {
+          this.componentCount = !!projData.otherComponentData[1].data ?
+            projData.otherComponentData[1].data.scan.components['totalCount'] : this.componentCount;
+        }
+        if (!!projData.otherComponentData[2]) {
+          this.licensesCount = !!projData.otherComponentData[2].data ?
+            projData.otherComponentData[2].data.scan.licenses['totalCount'] : this.licensesCount;
+        }
+        if (!!projData.otherComponentData[3]) {
+          this.assetCount = !!projData.otherComponentData[3].data ?
+            projData.otherComponentData[3].data.scan.scanAssets['totalCount'] : this.assetCount;
+        }
+      }
+    });
+    // if (!this.obsProject) {
+    //   console.log("Loading ScansComponent");
+    //   this.obsProject = this.apiService.getProject(this.projectId)
+    //     .pipe(map(result => result.data.project));
+
+    //   this.stateService.obsProject = this.obsProject;
+    //   this.stateService.project_tabs_selectedTab = "scan";
+    // }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
+  }
+
+  loadProjectData() {
+    this.obsProject = this.route.data
+      .pipe(map(res => res.project.data.project));
+    this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe(project => {
       this.stateService.selectedScan = project.scans.edges[0];
       let critical = [];
@@ -404,18 +438,13 @@ export class ProjectComponent implements OnInit {
       }
     }
   };
-  
+
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-        return data[0];
+      return data[0];
       //return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
-  }
-
-   //fired when getting data from child component
-   acceptData(dataCount) {
-    this.tabDataCount = dataCount;
   }
 }

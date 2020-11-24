@@ -15,7 +15,6 @@ import Swal from "sweetalert2";
 export class ComponentsComponent implements OnInit {
 
     @Input() scanId;
-    @Output() dataCount = new EventEmitter<string>();
     obsScan: Observable<Scan>;
     fixResultObservable: Observable<FixResult>;
     newVersion: string;
@@ -38,9 +37,6 @@ export class ComponentsComponent implements OnInit {
         console.log("Loading ComponentsComponent");
         this.obsScan = this.apiService.getScanComponents(this.scanId)
             .pipe(map(result => result.data.scan));
-        this.obsScan.subscribe((component: any) => {
-            this.dataCount.emit(component.components.totalCount);
-        });
     }
 
     fixVersion(groupId: string, artifactId: string) {
