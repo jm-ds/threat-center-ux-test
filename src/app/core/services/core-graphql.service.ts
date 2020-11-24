@@ -80,8 +80,10 @@ export class CoreGraphQLService {
         this.spinner.hide();
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
+            console.log(er.message);
             this.coreHelperService.swalALertBox(er.message);
         } else if (typeof error === "string") {
+            console.log(error);
             this.coreHelperService.swalALertBox(error);
         } else {
             this.coreHelperService.swalALertBox("Something went wrong!");
