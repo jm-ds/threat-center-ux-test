@@ -37,16 +37,23 @@ export class PolicyEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.policy = null;
         const policyId = this.route.snapshot.paramMap.get('policyId');
         if (policyId !== null && policyId !== undefined) {
             this.newPolicy = false;
             this.policyService.getPolicy(policyId).subscribe(
                 data => {
-                    this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
                     this.policy = data.data.policy;
+                    if (this.policy) {
+                        this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
+                    } else {
+                        this.policy = undefined;
+                        console.error("PolicyEditComponent", "Policy not found");
+                    }
                 },
                 error => {
-                    console.error("PolicyShowComponent", error);
+                    this.policy = undefined;
+                    console.error("PolicyEditComponent", error);
                 }
             );
         } else {
