@@ -161,7 +161,8 @@
             <perfect-scrollbar [style.max-height]="'500px'">
               <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
-                [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true">
+                [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
+                (onRowSelect)="onRowSelect($event)">
 
                 <ng-template pTemplate="caption">
                   <div style="text-align: right">

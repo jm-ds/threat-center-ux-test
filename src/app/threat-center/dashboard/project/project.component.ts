@@ -5,11 +5,12 @@ import { TaskComponent } from '@app/threat-center/shared/task/task.component';
 import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
+import { ProjectDashboardService } from '../services/project.service';
 
 @Component({
   selector: 'project-dashboard',
@@ -22,7 +23,8 @@ export class ProjectComponent implements OnInit {
     private apiService: ApiService,
     private stateService: StateService,
     private route: ActivatedRoute,
-    public apexEvent: ApexChartService) {
+    public apexEvent: ApexChartService,
+    private projectDashboardService: ProjectDashboardService) {
     this.chartDB = ChartDB;
   }
 
@@ -46,22 +48,7 @@ export class ProjectComponent implements OnInit {
     this.stateService.project_tabs_selectedTab = "scan";
     this.route.data.subscribe(projData => {
       if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
-        if (!!projData.otherComponentData[0]) {
-          this.vulnerabilityCount = !!projData.otherComponentData[0].data ?
-            projData.otherComponentData[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
-        }
-        if (!!projData.otherComponentData[1]) {
-          this.componentCount = !!projData.otherComponentData[1].data ?
-            projData.otherComponentData[1].data.scan.components['totalCount'] : this.componentCount;
-        }
-        if (!!projData.otherComponentData[2]) {
-          this.licensesCount = !!projData.otherComponentData[2].data ?
-            projData.otherComponentData[2].data.scan.licenses['totalCount'] : this.licensesCount;
-        }
-        if (!!projData.otherComponentData[3]) {
-          this.assetCount = !!projData.otherComponentData[3].data ?
-            projData.otherComponentData[3].data.scan.scanAssets['totalCount'] : this.assetCount;
-        }
+        this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
       }
     });
     // if (!this.obsProject) {
@@ -203,6 +190,10 @@ export class ProjectComponent implements OnInit {
   rowUnselect($event: any) {
     // prevent unselect row
     this.stateService.selectedScan = $event.data;
+    console.log(this.stateService.selectedScan);
+  }
+  onRowSelect($event) {
+    this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
   }
 
   chart = {
@@ -445,6 +436,46 @@ export class ProjectComponent implements OnInit {
       //return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
+    }
+  }
+
+
+  //load all metrics data after selecting scan in table.
+  private apicallTogetCounts(scanId: string) {
+    this.gettingDataforAllMetrics(scanId)
+      .subscribe(data => {
+        if (!!data && data.length >= 1) {
+          this.populateDataForTotalCountsOfMetrics(data);
+        }
+      });
+  }
+
+  //chain of obsevables (helper function for api calls)
+  private gettingDataforAllMetrics(scanId: string) {
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId);
+    const res2 = this.projectDashboardService.getScanComponents(scanId);
+    const res3 = this.projectDashboardService.getScanLicenses(scanId);
+    const res4 = this.projectDashboardService.getScanAssets(scanId);
+    return forkJoin([res1, res2, res3, res4]);
+  }
+
+  //Helper function which will help to populate metrics count data
+  private populateDataForTotalCountsOfMetrics(data) {
+    if (!!data[0]) {
+      this.vulnerabilityCount = !!data[0].data ?
+        data[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
+    }
+    if (!!data[1]) {
+      this.componentCount = !!data[1].data ?
+        data[1].data.scan.components['totalCount'] : this.componentCount;
+    }
+    if (!!data[2]) {
+      this.licensesCount = !!data[2].data ?
+        data[2].data.scan.licenses['totalCount'] : this.licensesCount;
+    }
+    if (!!data[3]) {
+      this.assetCount = !!data[3].data ?
+        data[3].data.scan.scanAssets['totalCount'] : this.assetCount;
     }
   }
 }
