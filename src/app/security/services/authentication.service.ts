@@ -14,15 +14,16 @@ export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
 
   constructor(private http: HttpClient, private localService: LocalService) {
-    let user = this.getFromStorageBasedEnv('currentUser');
+    // let user = this.getFromStorageBasedEnv('currentUser');
+    let user = this.getFromSessionStorageBasedEnv('currentUser');
     this.currentUserSubject = new BehaviorSubject<User>(user);
   }
 
   public get currentUser(): User {
     // note: I don't think the loading is working in constructor
-    if ((!this.currentUserSubject || !this.currentUserSubject.value) && this.getFromStorageBasedEnv('currentUser')) {
+    if ((!this.currentUserSubject || !this.currentUserSubject.value) && this.getFromSessionStorageBasedEnv('currentUser')) {
       console.log("Current user subject is null. Loading from localStorage")
-      this.currentUserSubject = new BehaviorSubject<User>(this.getFromStorageBasedEnv('currentUser'));
+      this.currentUserSubject = new BehaviorSubject<User>(this.getFromSessionStorageBasedEnv('currentUser'));
     }
     return this.currentUserSubject.value;
   }
@@ -30,7 +31,11 @@ export class AuthenticationService {
   async loadAuthenticatedUser() {
     const url = environment.apiUrl + '/user';
     let user = await this.http.get<any>(url).toPromise();
-    this.setInStorageBasedEnv('currentUser', user);
+
+    // this.setInStorageBasedEnv('currentUser', user);
+
+    //storing user data to session storage.
+    this.setInSessionStorageBasedEnv('currentUser',user);
     return user;
   }
 
@@ -46,7 +51,13 @@ export class AuthenticationService {
         console.log("JWT", response.jwt);
         this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
-        this.setInStorageBasedEnv('currentUser', user);
+
+        //now we do not need to store data to local storage
+        // this.setInStorageBasedEnv('currentUser', user);
+        
+        //storing current user details to session storage.
+        this.setInSessionStorageBasedEnv("currentUser",user);
+
         this.currentUserSubject.next(user);
         return user;
       },
@@ -75,6 +86,7 @@ export class AuthenticationService {
     console.log("Logout called");
     this.localService.clearToken();
     sessionStorage.removeItem("jwt");
+    sessionStorage.removeItem("currentUser");
     this.currentUserSubject.next(null);
   }
 
