@@ -136,7 +136,13 @@
       <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
         <!-- SCANS TAB -->
-        <ngb-tab title="Scans">
+        <ngb-tab id="scan">
+          <ng-template ngbTabTitle>Scans&nbsp;
+            <span class="badge badge-light"
+              *ngIf="stateService.project_tabs_selectedTab === 'scan' && !!project.scans?.totalCount">
+              {{project.scans?.totalCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
 
             <div style="float:left;clear: both;">
@@ -259,17 +265,29 @@
         </ngb-tab>
 
         <!-- VULNERABILITIES TAB -->
-        <ngb-tab title="Vulnerabilities" id="vulnerabilities">
+        <ngb-tab id="vulnerabilities">
+          <ng-template ngbTabTitle>Vulnerabilities&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'vulnerabilities' 
+                  && !!tabDataCount">
+              {{tabDataCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId"></vulnerabilities>
+            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></vulnerabilities>
           </ng-template>
         </ngb-tab>
 
         <!-- COMPONENTS TAB -->
-        <ngb-tab title="Components" id="components">
+        <ngb-tab id="components">
+          <ng-template ngbTabTitle>Components&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'components' 
+                  && !!tabDataCount">
+              {{tabDataCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId"></components>
+            <components [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -301,14 +319,25 @@
           -->
 
         <!-- LICENSES TAB -->
-        <ngb-tab title="Licenses" id="licenses">
+        <ngb-tab id="licenses">
+          <ng-template ngbTabTitle>Licenses&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'licenses'
+                  && !!tabDataCount">
+              {{tabDataCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
+            <licenses [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></licenses>
           </ng-template>
         </ngb-tab>
 
         <!-- COPYRIGHTS TAB -->
-        <ngb-tab title="Copyrights" id="copyrights">
+        <ngb-tab id="copyrights">
+          <ng-template ngbTabTitle>Copyrights&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'copyrights'">
+              9
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
             <div class="row m-t-20">
               <div class="col-sm-12">
@@ -392,15 +421,26 @@
         </ngb-tab>
 
         <!-- ASSETS TAB -->
-        <ngb-tab title="Assets" id="assets">
+        <ngb-tab id="assets">
+          <ng-template ngbTabTitle>Assets&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'assets'
+                  && !!tabDataCount">
+              {{tabDataCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
+            <scanassets [scanId]="stateService.selectedScan?.node.scanId" (dataCount)="acceptData($event)"></scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>
 
         <!-- SOURCE CODE ASSETS -->
-        <ngb-tab title="Leaked Assets" id="leakedassets">
+        <ngb-tab id="leakedassets">
+          <ng-template ngbTabTitle>Leaked Assets&nbsp;
+            <span class="badge badge-light" *ngIf="stateService.project_tabs_selectedTab === 'leakedassets'">
+              0
+            </span>
+          </ng-template>
           <ng-template ngbTabContent></ng-template>
         </ngb-tab>
 

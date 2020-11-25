@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from '@app/threat-center/shared/models/types';
+import { TaskComponent } from '@app/threat-center/shared/task/task.component';
+import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
@@ -33,7 +35,7 @@ export class ProjectComponent implements OnInit {
   errorMsg: string;
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
-
+  tabDataCount = undefined;
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     console.log(this.projectId);
@@ -43,6 +45,7 @@ export class ProjectComponent implements OnInit {
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
+      this.stateService.project_tabs_selectedTab = "scan";
     }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
     this.obsProject.subscribe(project => {
@@ -188,7 +191,8 @@ export class ProjectComponent implements OnInit {
   plotOptions = {
     bar: {
       horizontal: false,
-      columnWidth: '60%',
+      columnWidth: '65%',
+      distributed: false
     },
   };
 
@@ -412,6 +416,11 @@ export class ProjectComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+   //fired when getting data from child component
+   acceptData(dataCount) {
+    this.tabDataCount = dataCount;
   }
 
   openErrorMsg(content, errorMsg:string) {

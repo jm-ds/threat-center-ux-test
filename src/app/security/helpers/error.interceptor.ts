@@ -17,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(catchError(this.errorHandler))
     }
 
-    
+
     //error handler
     private errorHandler = (errObj: HttpErrorResponse): Observable<any> => {
         let dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: '' };
@@ -41,6 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
         }
+        console.log("error: " + errObj.message);
         return throwError(errObj);
     }
 
