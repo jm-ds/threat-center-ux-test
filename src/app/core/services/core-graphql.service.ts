@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CoreHelperService } from './core-helper.service';
 import { FetchResult } from 'apollo-link';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AuthenticationService } from '@app/security/services';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +19,8 @@ export class CoreGraphQLService {
     constructor(private apollo: Apollo,
         private coreHelperService: CoreHelperService,
         private spinner: NgxSpinnerService,
+        private authenticationService: AuthenticationService,
+        private router: Router
     ) { }
 
 
@@ -82,6 +86,21 @@ export class CoreGraphQLService {
             let er = JSON.parse(JSON.stringify(error));
             console.log(er.message);
             this.coreHelperService.swalALertBox(er.message);
+            if (!!er.networkError) {
+                if (er.networkError.status === 401) {
+                    this.authenticationService.logout();
+                    this.router.navigate(['/login']);
+                }
+                if (er.networkError.status === 403) {
+                    const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
+                    if (!!jwt) {
+                        if (this.authenticationService.isTokenExpired(jwt)) {
+                            this.authenticationService.logout();
+                            this.router.navigate(['/login']);
+                        }
+                    }
+                }
+            }
         } else if (typeof error === "string") {
             console.log(error);
             this.coreHelperService.swalALertBox(error);
