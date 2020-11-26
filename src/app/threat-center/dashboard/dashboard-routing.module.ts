@@ -14,7 +14,7 @@ const routes: Routes = [
         loadChildren: () => import('./entity/entity.module').then(module => module.EntityModule)
       },
       {
-        path: 'project',
+        path: 'entity/:entityId/project/:projectId',
         loadChildren: () => import('./project/project.module').then(module => module.ProjectModule)
       },
       {

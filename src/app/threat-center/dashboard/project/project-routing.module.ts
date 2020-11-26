@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {ProjectComponent} from './project.component';
-import {ComponentDetailComponent} from './component';
-import {VulnerabilityDetailComponent} from './vulnerability';
-import {LicenseDetailComponent} from './license';
-import {ScanAssetDetailComponent} from './scanasset';
+import { ProjectComponent } from './project.component';
+import { ComponentDetailComponent } from './component';
+import { VulnerabilityDetailComponent } from './vulnerability';
+import { LicenseDetailComponent } from './license';
+import { ScanAssetDetailComponent } from './scanasset';
 
 
 const routes: Routes = [
@@ -12,24 +12,24 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':projectId',
+        path: '',
         component: ProjectComponent
       },
       {
-       path: 'component/:componentId',
-       component: ComponentDetailComponent
+        path: 'component/:componentId',
+        component: ComponentDetailComponent
       },
       {
-       path: 'vulnerability/:vulnerabilityId',
-       component: VulnerabilityDetailComponent
+        path: 'vulnerability/:vulnerabilityId',
+        component: VulnerabilityDetailComponent
       },
       {
-       path: 'license/:licenseId',
-       component: LicenseDetailComponent
+        path: 'license/:licenseId',
+        component: LicenseDetailComponent
       },
       {
-       path: 'scanasset/:scanId/:scanAssetId',
-       component: ScanAssetDetailComponent
+        path: 'scanasset/:scanId/:scanAssetId',
+        component: ScanAssetDetailComponent
       }
     ]
   }

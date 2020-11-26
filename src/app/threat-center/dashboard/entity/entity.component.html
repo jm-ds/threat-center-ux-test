@@ -176,7 +176,7 @@
                           </thead>
                           <tbody>
                           <tr *ngFor="let projectEdge of entity.projects?.edges">
-                            <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
+                            <td style="font-weight:bold"><a (click)="navigateToProject(projectEdge.node.projectId)">{{projectEdge.node.name}}</a></td>
                             <td style="border-left:1px solid #4680ff">{{entity.name}}</td>
                             <td>
                               <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
