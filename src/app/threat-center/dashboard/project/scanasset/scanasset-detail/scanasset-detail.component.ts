@@ -64,7 +64,8 @@ export class ScanAssetDetailComponent implements OnInit {
             this.sourceAsset = result;
             let assetId = this.sourceAsset.originAssetId;
 
-            let user = this.authService.getFromStorageBasedEnv("currentUser");
+            // let user = this.authService.getFromStorageBasedEnv("currentUser");
+            let user = this.authService.getFromSessionStorageBasedEnv("currentUser");
             const accessToken = user.repositoryAccounts.githubAccount.accessToken;
             console.log("ACCESS TOKEN:",accessToken);
 
