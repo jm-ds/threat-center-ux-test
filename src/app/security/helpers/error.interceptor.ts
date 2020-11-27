@@ -23,16 +23,18 @@ export class ErrorInterceptor implements HttpInterceptor {
         let dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: '' };
         if (errObj.status === 401 || errObj.status === 403) {
             dataObjToShow.message = !!errObj.error && !!errObj.error.message ? errObj.error.message : "Unauthorized user!";
-            this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
             if (errObj.status === 403) {
                 const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
                 if (!!jwt) {
                     if (this.authenticationService.isTokenExpired(jwt)) {
                         this.authenticationService.logout();
                         this.router.navigate(['/login']);
+                    } else {
+                        this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                     }
                 }
             } else {
+                this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                 this.authenticationService.logout();
                 this.router.navigate(['/login']);
             }
