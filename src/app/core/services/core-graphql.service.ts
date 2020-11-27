@@ -85,21 +85,26 @@ export class CoreGraphQLService {
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
             console.log(er.message);
-            this.coreHelperService.swalALertBox(er.message);
             if (!!er.networkError) {
-                if (er.networkError.status === 401) {
-                    this.authenticationService.logout();
-                    this.router.navigate(['/login']);
-                }
                 if (er.networkError.status === 403) {
                     const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
                     if (!!jwt) {
                         if (this.authenticationService.isTokenExpired(jwt)) {
                             this.authenticationService.logout();
                             this.router.navigate(['/login']);
+                        } else {
+                            this.coreHelperService.swalALertBox(er.message);
                         }
                     }
+                } else {
+                    this.coreHelperService.swalALertBox(er.message);
+                    if (er.networkError.status === 401) {
+                        this.authenticationService.logout();
+                        this.router.navigate(['/login']);
+                    }
                 }
+            } else {
+                this.coreHelperService.swalALertBox(er.message);
             }
         } else if (typeof error === "string") {
             console.log(error);
