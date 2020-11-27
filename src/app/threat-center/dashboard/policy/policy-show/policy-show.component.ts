@@ -26,13 +26,20 @@ export class PolicyShowComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.policy = null;
         const policyId = this.route.snapshot.paramMap.get('policyId');
         this.policyService.getPolicy(policyId).subscribe(
             data => {
-                this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
                 this.policy = data.data.policy;
+                if (this.policy) {
+                    this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
+                } else {
+                    this.policy = undefined;
+                    console.error("PolicyShowComponent", "Policy not found");
+                }
             },
             error => {
+                this.policy = undefined;
                 console.error("PolicyShowComponent", error);
             }
         );
