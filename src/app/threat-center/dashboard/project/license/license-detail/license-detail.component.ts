@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
@@ -18,17 +18,19 @@ export class LicenseDetailComponent implements OnInit {
   //obsComponent:Observable<Component>;
   //vulnerabilityColumns = ['Vulnerability','Cwe','Severity','CVSS2','CVSS3'];
 
+  projectId:string = ""
   constructor(
     private apiService:ApiService,
     public stateService:StateService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router:Router) { }
 
   licenseId:string;
 
   ngOnInit() {
     console.log("Loading LicenseDetailComponent");
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
-
+    this.projectId = this.route.snapshot.paramMap.get('projectId');
     /*let componentId = this.route.snapshot.paramMap.get('componentId');
     console.log("componentId:",componentId);
     this.obsComponent = this.apiService.getComponent(componentId)
@@ -52,5 +54,11 @@ export class LicenseDetailComponent implements OnInit {
     {version:'v1.4.3-RC1',date:'12/25/2019'},
     {version:'v1.3.9-RELEASE',date:'11/15/2019'},
   ];*/
+
+  gotoProject() {
+    const entityId = this.route.snapshot.paramMap.get('entityId');
+    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
+    this.router.navigate([url]);
+  }
 
 }

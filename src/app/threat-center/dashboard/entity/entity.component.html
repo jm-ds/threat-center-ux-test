@@ -215,7 +215,7 @@
                           </tr>
                           <ng-container *ngFor="let childEntityEdge of entity.childEntities?.edges">
                             <tr *ngFor="let projectEdge of childEntityEdge.node.projects?.edges">
-                              <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
+                              <td style="font-weight:bold"><a (click)="navigateToProject(projectEdge.node.projectId)">{{projectEdge.node.name}}</a></td>
                               <td style="border-left:1px solid #4680ff">{{childEntityEdge.node.name}}</td>
                               <td>
                                 <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
