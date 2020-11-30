@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -28,12 +28,14 @@ export class ScanAssetDetailComponent implements OnInit {
   selectedRelease: any;
   selectedEmbeddedAsset: any;
 
+  projectId: string = "";
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
     private repositoryService: RepositoryService,
     private authService: AuthenticationService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router:Router) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -41,7 +43,7 @@ export class ScanAssetDetailComponent implements OnInit {
     // it's no ideal but will work for the demo.
     let scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
     let scanId = this.route.snapshot.paramMap.get('scanId');
-
+    this.projectId = this.route.snapshot.paramMap.get('projectId');
     // get the scan asset for this page
     let obsScanAsset = this.apiService.getScanAsset(scanId, scanAssetId)
       .pipe(map(result => result.data.scanAsset));
@@ -117,4 +119,15 @@ export class ScanAssetDetailComponent implements OnInit {
     { version: 'v1.3.9-RELEASE', date: '11/15/2019' },
   ];
 
+  gotoProject() {
+    const entityId = this.route.snapshot.paramMap.get('entityId');
+    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
+    this.router.navigate([url]);
+  }
+  gotoLicense(liId){
+    const entityId = this.route.snapshot.paramMap.get('entityId');
+    const scanId = this.route.snapshot.paramMap.get('scanId');
+    const url = "dashboard/entity/" + entityId + '/project/' + this.projectId + '/scan/' + scanId + "/license/" + liId;
+    this.router.navigate([url]);
+  }
 }

@@ -42,7 +42,11 @@ const routes: Routes = [
       {
         path: 'scanasset/:scanId/:scanAssetId',
         component: ScanAssetDetailComponent
-      }
+      },
+      {
+        path: 'scan/:scanId/scanasset/:scanAssetId',
+        component: ScanAssetDetailComponent
+      },
     ]
   }
 ];
