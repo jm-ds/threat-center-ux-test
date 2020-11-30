@@ -392,26 +392,19 @@ export class ApiService {
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<Scan>(gql`
-        query {
-          scan(scanId:"${scanId}") {
+      query {
+        scan(scanId:"${scanId}") {
             scanId,
-            components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+            vulnerabilities(${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
-                hasNextPage
-                hasPreviousPage
-                startCursor
-                endCursor
-              }
-              totalCount
-              edges {
-                node {
-                  componentId,
-                  name,
-                  group,
-                  version,
-                  vulnerabilities {
-                    edges {
-                      node {
+                 hasNextPage
+                 hasPreviousPage
+                 startCursor
+                 endCursor
+               }
+               totalCount
+                edges {
+                    node {
                         vulnerabilityId,
                         vulnId,
                         source,
@@ -420,21 +413,62 @@ export class ApiService {
                         patchedVersions
                         published,
                         cwe{
-                           cweId,
-                           name
+                            cweId,
+                            name
                         },
                         cvssV2BaseScore,
                         cvssV3BaseScore,
                         severity
-                      }
                     }
-                  }
                 }
-              }
             }
-        	}
         }
-      `);
+      }
+  `);
+    // return this.coreGraphQLService.coreGQLReq<Scan>(gql`
+    //     query {
+    //       scan(scanId:"${scanId}") {
+    //         scanId,
+    //         components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+    //           pageInfo {
+    //             hasNextPage
+    //             hasPreviousPage
+    //             startCursor
+    //             endCursor
+    //           }
+    //           totalCount
+    //           edges {
+    //             node {
+    //               componentId,
+    //               name,
+    //               group,
+    //               version,
+    //               vulnerabilities {
+    //                 edges {
+    //                   node {
+    //                     vulnerabilityId,
+    //                     vulnId,
+    //                     source,
+    //                     recommendation,
+    //                     vulnerableVersions,
+    //                     patchedVersions
+    //                     published,
+    //                     cwe{
+    //                        cweId,
+    //                        name
+    //                     },
+    //                     cvssV2BaseScore,
+    //                     cvssV3BaseScore,
+    //                     severity
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //     	}
+    //     }
+    //   `);
   }
 
   getScanComponents(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
