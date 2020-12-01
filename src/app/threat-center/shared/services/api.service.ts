@@ -405,6 +405,15 @@ export class ApiService {
                totalCount
                 edges {
                     node {
+                        components {
+                          edges {
+                            node {
+                              group,
+                              name,
+                              version
+                            }
+                          }
+                        }
                         vulnerabilityId,
                         vulnId,
                         source,
