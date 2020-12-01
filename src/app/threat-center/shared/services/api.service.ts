@@ -666,8 +666,8 @@ export class ApiService {
   getScanAssets(scanId:string) {
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
         query {
-        	 scan(scanId:"${scanId}") {
-            scanId
+        	scan(scanId:"${scanId}") {
+            scanId,
             scanAssets {
               totalCount
               edges {
@@ -714,10 +714,26 @@ export class ApiService {
                   name,
                   assetSize,
                   originAssetId,
+                  earliestReleaseDate,
+                  earliestReleaseVersion,
+                  latestReleaseDate,
+                  latestReleaseVersion,
                   matchRepository{
                     repositoryOwner,
                     repositoryName,
                     repositoryId
+                  },
+                  matchGroups {
+                    edges {
+                        node {
+                          name,
+                          assetMatchId,
+                          earliestReleaseDate,
+                          earliestReleaseVersion,
+                          latestReleaseDate,
+                          latestReleaseVersion,
+                        }
+                    }
                   },
                   releases{
                     edges {
@@ -746,7 +762,6 @@ export class ApiService {
         }
       `);
   }
-
 
   getGitHubUser() {
     return this.coreGraphQLService.coreGQLReq<GitHubUserQuery>(gql`
