@@ -18,6 +18,7 @@ import { AuthenticationService } from '@app/security/services';
 export class ScanAssetDetailComponent implements OnInit {
 
   obsScanAsset: Observable<ScanAsset>;
+  obsScanAssetMatchGroup: Observable<ScanAsset>;
 
   // the asset content from the origin repositories
   //bsSourceAsset:Observable<ScanAsset>;
