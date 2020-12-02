@@ -13,7 +13,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':projectId',
+        path: '',
         component: ProjectComponent,
         resolve: {
           project: GetProjectData,
