@@ -138,9 +138,13 @@
       <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
         <!-- SCANS TAB -->
-        <ngb-tab title="Scans">
+        <ngb-tab id="scan">
+          <ng-template ngbTabTitle>Scans&nbsp;
+            <span class="badge badge-light">
+              {{project.scans?.totalCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
-
             <div style="float:left;clear: both;">
               <ng-template pTemplate="caption">
                 <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
@@ -157,7 +161,8 @@
             <perfect-scrollbar [style.max-height]="'500px'">
               <p-table [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
-                [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true">
+                [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
+                (onRowSelect)="onRowSelect($event)">
 
                 <ng-template pTemplate="caption">
                   <div style="text-align: right">
@@ -253,14 +258,25 @@
         </ngb-tab>
 
         <!-- VULNERABILITIES TAB -->
-        <ngb-tab title="Vulnerabilities" id="vulnerabilities">
+        <ngb-tab id="vulnerabilities">
+          <ng-template ngbTabTitle>Vulnerabilities&nbsp;
+            <span class="badge badge-light">
+              {{vulnerabilityCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId"></vulnerabilities>
+            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId">
+            </vulnerabilities>
           </ng-template>
         </ngb-tab>
 
         <!-- COMPONENTS TAB -->
-        <ngb-tab title="Components" id="components">
+        <ngb-tab id="components">
+          <ng-template ngbTabTitle>Components&nbsp;
+            <span class="badge badge-light">
+              {{componentCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
 
             <components [scanId]="stateService.selectedScan?.node.scanId"></components>
@@ -295,14 +311,24 @@
           -->
 
         <!-- LICENSES TAB -->
-        <ngb-tab title="Licenses" id="licenses">
+        <ngb-tab id="licenses">
+          <ng-template ngbTabTitle>Licenses&nbsp;
+            <span class="badge badge-light">
+              {{licensesCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
             <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
           </ng-template>
         </ngb-tab>
 
         <!-- COPYRIGHTS TAB -->
-        <ngb-tab title="Copyrights" id="copyrights">
+        <ngb-tab id="copyrights">
+          <ng-template ngbTabTitle>Copyrights&nbsp;
+            <span class="badge badge-light">
+              9
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
             <div class="row m-t-20">
               <div class="col-sm-12">
@@ -386,7 +412,12 @@
         </ngb-tab>
 
         <!-- ASSETS TAB -->
-        <ngb-tab title="Assets" id="assets">
+        <ngb-tab id="assets">
+          <ng-template ngbTabTitle>Assets&nbsp;
+            <span class="badge badge-light">
+              {{assetCount}}
+            </span>
+          </ng-template>
           <ng-template ngbTabContent>
             <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
             <p></p>
@@ -394,7 +425,12 @@
         </ngb-tab>
 
         <!-- SOURCE CODE ASSETS -->
-        <ngb-tab title="Leaked Assets" id="leakedassets">
+        <ngb-tab id="leakedassets">
+          <ng-template ngbTabTitle>Leaked Assets&nbsp;
+            <span class="badge badge-light">
+              0
+            </span>
+          </ng-template>
           <ng-template ngbTabContent></ng-template>
         </ngb-tab>
 

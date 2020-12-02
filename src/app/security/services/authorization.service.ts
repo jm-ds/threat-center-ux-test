@@ -13,7 +13,8 @@ export class AuthorizationService {
         private http: HttpClient,
         private authService: AuthenticationService,
     ) {
-        this.user = this.authService.getFromStorageBasedEnv("currentUser");
+        // this.user = this.authService.getFromStorageBasedEnv("currentUser");
+        this.user = this.authService.getFromSessionStorageBasedEnv("currentUser");
     }
 
     hasPermissions(auth: string[] | string): boolean {

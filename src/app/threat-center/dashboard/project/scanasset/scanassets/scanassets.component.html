@@ -21,11 +21,13 @@
               <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
             </div>
           </ng-template>
-          <ng-template pTemplate="header" let-columns>
+          <ng-template pTemplate="header">
             <tr>
-              <th *ngFor="let col of columns">
-                {{col}}
-              </th>
+              <th>Name</th>
+              <th>File Size</th>
+              <th>Workspace Path</th>
+              <th>Status</th>
+              <th>Embedded Assets</th>
             </tr>
           </ng-template>
 
