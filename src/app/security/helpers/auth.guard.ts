@@ -25,7 +25,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                     this.authenticationService.logout();
                     this.router.navigate(['/login']);
                 }
-                if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
+                // if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
+                //     await this.authenticationService.loadAuthenticatedUser();
+                // }
+                if (!this.authenticationService.getFromSessionStorageBasedEnv("currentUser")) {
                     await this.authenticationService.loadAuthenticatedUser();
                 }
                 // logged in so return true

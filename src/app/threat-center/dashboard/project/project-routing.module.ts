@@ -5,6 +5,7 @@ import { ComponentDetailComponent } from './component';
 import { VulnerabilityDetailComponent } from './vulnerability';
 import { LicenseDetailComponent } from './license';
 import { ScanAssetDetailComponent } from './scanasset';
+import { GetProjectData, ProjectDashboardResolver } from '../services/project.service';
 
 
 const routes: Routes = [
@@ -12,8 +13,12 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: '',
-        component: ProjectComponent
+        path: ':projectId',
+        component: ProjectComponent,
+        resolve: {
+          project: GetProjectData,
+          otherComponentData: ProjectDashboardResolver
+        }
       },
       {
         path: 'component/:componentId',
