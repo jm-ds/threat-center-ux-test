@@ -5,11 +5,12 @@ import { TaskComponent } from '@app/threat-center/shared/task/task.component';
 import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
+import { ProjectDashboardService } from '../services/project.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -24,6 +25,7 @@ export class ProjectComponent implements OnInit {
     private stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
+    private projectDashboardService: ProjectDashboardService,
     private modalService: NgbModal) {
     this.chartDB = ChartDB;
   }
@@ -36,18 +38,37 @@ export class ProjectComponent implements OnInit {
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
-  ngOnInit() {
-    this.projectId = this.route.snapshot.paramMap.get('projectId');
-    console.log(this.projectId);
-    if (!this.obsProject) {
-      console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId)
-        .pipe(map(result => result.data.project));
 
-      this.stateService.obsProject = this.obsProject;
-      this.stateService.project_tabs_selectedTab = "scan";
-    }
+  vulnerabilityCount = 0;
+  componentCount = 0;
+  licensesCount = 0;
+  copyrightCount = 9;
+  assetCount = 0;
+  sourceCodeAssetcount = 0;
+
+  ngOnInit() {
+    this.loadProjectData();
+    this.stateService.project_tabs_selectedTab = "scan";
+    this.route.data.subscribe(projData => {
+      if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
+        this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
+      }
+    });
+    // if (!this.obsProject) {
+    //   console.log("Loading ScansComponent");
+    //   this.obsProject = this.apiService.getProject(this.projectId)
+    //     .pipe(map(result => result.data.project));
+
+    //   this.stateService.obsProject = this.obsProject;
+    //   this.stateService.project_tabs_selectedTab = "scan";
+    // }
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
+  }
+
+  loadProjectData() {
+    this.obsProject = this.route.data
+      .pipe(map(res => res.project.data.project));
+    this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe(project => {
       this.stateService.selectedScan = project.scans.edges[0];
       let critical = [];
@@ -172,6 +193,10 @@ export class ProjectComponent implements OnInit {
   rowUnselect($event: any) {
     // prevent unselect row
     this.stateService.selectedScan = $event.data;
+    console.log(this.stateService.selectedScan);
+  }
+  onRowSelect($event) {
+    this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
   }
 
   chart = {
@@ -408,19 +433,54 @@ export class ProjectComponent implements OnInit {
       }
     }
   };
-  
+
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-        return data[0];
+      return data[0];
       //return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
   }
 
-   //fired when getting data from child component
-   acceptData(dataCount) {
-    this.tabDataCount = dataCount;
+
+  //load all metrics data after selecting scan in table.
+  private apicallTogetCounts(scanId: string) {
+    this.gettingDataforAllMetrics(scanId)
+      .subscribe(data => {
+        if (!!data && data.length >= 1) {
+          this.populateDataForTotalCountsOfMetrics(data);
+        }
+      });
+  }
+
+  //chain of obsevables (helper function for api calls)
+  private gettingDataforAllMetrics(scanId: string) {
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId);
+    const res2 = this.projectDashboardService.getScanComponents(scanId);
+    const res3 = this.projectDashboardService.getScanLicenses(scanId);
+    const res4 = this.projectDashboardService.getScanAssets(scanId);
+    return forkJoin([res1, res2, res3, res4]);
+  }
+
+  //Helper function which will help to populate metrics count data
+  private populateDataForTotalCountsOfMetrics(data) {
+    if (!!data[0]) {
+      this.vulnerabilityCount = !!data[0].data ?
+        data[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
+    }
+    if (!!data[1]) {
+      this.componentCount = !!data[1].data ?
+        data[1].data.scan.components['totalCount'] : this.componentCount;
+    }
+    if (!!data[2]) {
+      this.licensesCount = !!data[2].data ?
+        data[2].data.scan.licenses['totalCount'] : this.licensesCount;
+    }
+    if (!!data[3]) {
+      this.assetCount = !!data[3].data ?
+        data[3].data.scan.scanAssets['totalCount'] : this.assetCount;
+    }
   }
 
   openErrorMsg(content, errorMsg:string) {
