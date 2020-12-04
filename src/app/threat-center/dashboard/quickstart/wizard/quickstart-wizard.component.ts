@@ -1,17 +1,17 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Location} from '@angular/common';
-import {FormControl, FormGroup} from '@angular/forms';
-import {FilterUtils} from 'primeng/utils';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Location } from '@angular/common';
+import { FormControl, FormGroup } from '@angular/forms';
+import { FilterUtils } from 'primeng/utils';
 
-import {interval, Observable} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest} from '@app/threat-center/shared/models/types';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TaskService} from '@app/threat-center/shared/task/task.service';
-import {FileUploadValidators} from '@iplab/ngx-file-upload';
-import {NgxSpinnerService} from "ngx-spinner";
-import {AuthenticationService} from '@app/security/services';
+import { interval, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/threat-center/shared/models/types';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskService } from '@app/threat-center/shared/task/task.service';
+import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import { NgxSpinnerService } from "ngx-spinner";
+import { AuthenticationService } from '@app/security/services';
 
 @Component({
     selector: 'app-quickstart',
@@ -48,7 +48,7 @@ export class QuickstartWizardComponent implements OnInit {
     }
 
     public ghUserCols = [
-        {field: 'name', header: 'Name'}
+        { field: 'name', header: 'Name' }
     ];
 
     public demoForm = new FormGroup({
@@ -69,7 +69,7 @@ export class QuickstartWizardComponent implements OnInit {
             }
         }
         console.log("SUBMITTING SCAN..");
-        
+
         if (repoType === "github") {
             console.log("is github");
             // hack: find better way to handle the resource path.
@@ -137,27 +137,30 @@ export class QuickstartWizardComponent implements OnInit {
 
     loadGitHubUser() {
         console.log("Loading github user");
-
+        this.loadingScan = true;
         this.obsGithubUser = this.apiService.getGitHubUser()
-            .pipe(map(result => result.data.gitHubUser));
+            .pipe(map(result => null));
+        this.obsGithubUser.subscribe(d => this.loadingScan = false);
     }
 
 
     // Load gitlab user data
     loadGitLabUser() {
         console.log("Loading gitlab user");
-
+        this.loadingScan = true;
         this.obsGitlabUser = this.apiService.getGitLabUser()
             .pipe(map(result => result.data.gitLabUser));
+        this.obsGitlabUser.subscribe(d => this.loadingScan = false);
     }
 
 
     // Load bitbucket user data
     loadBitbucketUser() {
         console.log("Loading bitbucket user");
-
+        this.loadingScan = true;
         this.obsBitbucketUser = this.apiService.getBitbucketUser()
             .pipe(map(result => result.data.bitbucketUser));
+        this.obsBitbucketUser.subscribe(d => this.loadingScan = false);
     }
 
     changeBranch(newValue) {
