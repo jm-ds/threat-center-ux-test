@@ -122,8 +122,8 @@ export class QuickstartWizardComponent implements OnInit {
                                 this.spinner.hide();
                                 const projectId = taskUpdate.resourceId;
                                 console.log("Task Complete: ", task);
-                                // this.router.navigate(['/dashboard/entity',this.entityId]);
-                                this.router.navigate(['/dashboard/project', projectId]);
+                                const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
+                                this.router.navigate([url]);
                             }
                         });
                 });

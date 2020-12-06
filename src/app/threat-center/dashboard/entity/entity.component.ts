@@ -60,7 +60,11 @@ export class EntityComponent implements OnInit {
       }
     ];
   }
-
+  navigateToProject(projectId) {
+    const entityId = this.route.snapshot.paramMap.get('entityId')
+    const url = "dashboard/entity/" + entityId + '/project/' + projectId;
+    this.router.navigate([url]);
+  }
   ngOnInit() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
     // if an entityId isn't provided in params, use User defaultEntityId
@@ -133,88 +137,88 @@ export class EntityComponent implements OnInit {
       let projectAsset = [];
 
       if(entity.entityMetrics) {
-          let vulnerabilityMetrics = entity.entityMetrics.vulnerabilityMetrics;
-          let licenseMetrics = entity.entityMetrics.licenseMetrics;
-          let componentMetrics = entity.entityMetrics.componentMetrics;
-          let assetMetrics = entity.entityMetrics.assetMetrics;
+        let vulnerabilityMetrics = entity.entityMetrics.vulnerabilityMetrics;
+        let licenseMetrics = entity.entityMetrics.licenseMetrics;
+        let componentMetrics = entity.entityMetrics.componentMetrics;
+        let assetMetrics = entity.entityMetrics.assetMetrics;
 
-          // Vulnerability chart data
-          critical.push(vulnerabilityMetrics.critical);
-          high.push(vulnerabilityMetrics.high);
-          medium.push(vulnerabilityMetrics.medium);
-          low.push(vulnerabilityMetrics.low);
-          info.push(vulnerabilityMetrics.info);
+        // Vulnerability chart data
+        critical.push(vulnerabilityMetrics.critical);
+        high.push(vulnerabilityMetrics.high);
+        medium.push(vulnerabilityMetrics.medium);
+        low.push(vulnerabilityMetrics.low);
+        info.push(vulnerabilityMetrics.info);
 
-          // License chart data
-          copyleftStrong.push(licenseMetrics.copyleftStrong);
-          copyleftWeak.push(licenseMetrics.copyleftWeak);
-          copyleftPartial.push(licenseMetrics.copyleftPartial);
-          copyleftLimited.push(licenseMetrics.copyleftLimited);
-          copyleft.push(licenseMetrics.copyleft);
-          custom.push(licenseMetrics.custom);
-          dual.push(licenseMetrics.dual);
-          permissive.push(licenseMetrics.permissive);
+        // License chart data
+        copyleftStrong.push(licenseMetrics.copyleftStrong);
+        copyleftWeak.push(licenseMetrics.copyleftWeak);
+        copyleftPartial.push(licenseMetrics.copyleftPartial);
+        copyleftLimited.push(licenseMetrics.copyleftLimited);
+        copyleft.push(licenseMetrics.copyleft);
+        custom.push(licenseMetrics.custom);
+        dual.push(licenseMetrics.dual);
+        permissive.push(licenseMetrics.permissive);
 
-          // Component chart data
-          notLatest.push(componentMetrics.notLatest);
-          vulnerabilities.push(componentMetrics.vulnerabilities);
-          riskyLicenses.push(componentMetrics.riskyLicenses);
+        // Component chart data
+        notLatest.push(componentMetrics.notLatest);
+        vulnerabilities.push(componentMetrics.vulnerabilities);
+        riskyLicenses.push(componentMetrics.riskyLicenses);
 
-          // Asset chart data
-          embedded.push(assetMetrics.embedded);
-          analyzed.push(assetMetrics.analyzed);
-          skipped.push(assetMetrics.skipped);
+        // Asset chart data
+        embedded.push(assetMetrics.embedded);
+        analyzed.push(assetMetrics.analyzed);
+        skipped.push(assetMetrics.skipped);
 
-          // Source code leak data
-          partialAsset.push(6);
-          asset.push(10);
-          projectAsset.push(20);
+        // Source code leak data
+        partialAsset.push(6);
+        asset.push(10);
+        projectAsset.push(20);
 
-          // categories for bar charts
-          //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
-          categories.push('Current');
+        // categories for bar charts
+        //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
+        categories.push('Current');
 
 
-          this.vulnerabilityChart.series = [];
-          this.licenseChart.series = [];
-          this.componentChart.series = [];
-          this.assetChart.series = [];
-          this.sourceCodeLeakChart.series = [];
+        this.vulnerabilityChart.series = [];
+        this.licenseChart.series = [];
+        this.componentChart.series = [];
+        this.assetChart.series = [];
+        this.sourceCodeLeakChart.series = [];
 
-          // set vulnerabilityChart data
-          this.vulnerabilityChart.series.push({ name: 'Critical', data: critical });
-          this.vulnerabilityChart.series.push({ name: 'High', data: high });
-          this.vulnerabilityChart.series.push({ name: 'Medium', data: medium });
-          this.vulnerabilityChart.series.push({ name: 'Low', data: low });
-          this.vulnerabilityChart.series.push({ name: 'Info', data: info });
+        // set vulnerabilityChart data
+        this.vulnerabilityChart.series.push({ name: 'Critical', data: critical });
+        this.vulnerabilityChart.series.push({ name: 'High', data: high });
+        this.vulnerabilityChart.series.push({ name: 'Medium', data: medium });
+        this.vulnerabilityChart.series.push({ name: 'Low', data: low });
+        this.vulnerabilityChart.series.push({ name: 'Info', data: info });
 
-          // set licenseChart data
-          this.licenseChart.series.push({ name: 'CL Strong', data: copyleftStrong });
-          this.licenseChart.series.push({ name: 'CL Weak', data: copyleftWeak });
-          this.licenseChart.series.push({ name: 'CL Partial', data: copyleftPartial });
-          this.licenseChart.series.push({ name: 'CL Limited', data: copyleftLimited });
-          this.licenseChart.series.push({ name: 'Copyleft', data: copyleft });
-          this.licenseChart.series.push({ name: 'Custom', data: custom });
-          this.licenseChart.series.push({ name: 'Dual', data: dual });
-          this.licenseChart.series.push({ name: 'Permissive', data: permissive });
+        // set licenseChart data
+        this.licenseChart.series.push({ name: 'CL Strong', data: copyleftStrong });
+        this.licenseChart.series.push({ name: 'CL Weak', data: copyleftWeak });
+        this.licenseChart.series.push({ name: 'CL Partial', data: copyleftPartial });
+        this.licenseChart.series.push({ name: 'CL Limited', data: copyleftLimited });
+        this.licenseChart.series.push({ name: 'Copyleft', data: copyleft });
+        this.licenseChart.series.push({ name: 'Custom', data: custom });
+        this.licenseChart.series.push({ name: 'Dual', data: dual });
+        this.licenseChart.series.push({ name: 'Permissive', data: permissive });
 
-          // set componentChart data
-          this.componentChart.series.push({ name: 'Not Latest', data: notLatest });
-          this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities });
-          this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses });
+        // set componentChart data
+        this.componentChart.series.push({ name: 'Not Latest', data: notLatest });
+        this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities });
+        this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses });
 
-          // set assetChart data
-          this.assetChart.series.push({ name: 'Analyzed', data: analyzed });
-          this.assetChart.series.push({ name: 'Skipped', data: skipped });
-          this.assetChart.series.push({ name: 'Embedded', data: embedded });
+        // set assetChart data
+        this.assetChart.series.push({ name: 'Analyzed', data: analyzed });
+        this.assetChart.series.push({ name: 'Skipped', data: skipped });
+        this.assetChart.series.push({ name: 'Embedded', data: embedded });
 
-          // set source code Leak data
-          this.sourceCodeLeakChart.series.push({ name: 'Partial Asset Leaks', data: partialAsset });
-          this.sourceCodeLeakChart.series.push({ name: 'Asset Leaks', data: asset })
-          this.sourceCodeLeakChart.series.push({ name: 'Project Leaks', data: projectAsset });
+        // set source code Leak data
+        this.sourceCodeLeakChart.series.push({ name: 'Partial Asset Leaks', data: partialAsset });
+        this.sourceCodeLeakChart.series.push({ name: 'Asset Leaks', data: asset })
+        this.sourceCodeLeakChart.series.push({ name: 'Project Leaks', data: projectAsset });
 
-          // set categories on bar charts
-          this.xaxis.categories = categories;
+        // set categories on bar charts
+        this.xaxis.categories = categories;
       }
 
     });
@@ -257,11 +261,11 @@ export class EntityComponent implements OnInit {
     fontSize: '11px',
     //width: 500,
     itemMargin: {
-     horizontal: 5,
-     vertical: 0
+      horizontal: 5,
+      vertical: 0
     },
   };
-  
+
   dataLabels = {
     enabled: false
   };
