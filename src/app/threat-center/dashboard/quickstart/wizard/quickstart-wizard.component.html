@@ -27,7 +27,7 @@
                                    [filterDelay]="0" [globalFilterFields]="['node.name']">
 
                             <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
                                 <img width="30" src="{{user.avatarUrl}}">
                               </div>
                               <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
@@ -75,7 +75,7 @@
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                                    [filterDelay]="0" [globalFilterFields]="['node.name']">
                             <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
                                 <img width="30" src="{{orgEdge.node.avatarUrl}}">
                               </div>
                               <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
@@ -202,7 +202,7 @@
                                    [filterDelay]="0" [globalFilterFields]="['name']">
 
                             <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
                                 <img width="30" src="{{user.avatarUrl}}">
                               </div>
                               <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
@@ -304,7 +304,7 @@
                                    [filterDelay]="0" [globalFilterFields]="['name']">
 
                             <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
                                 <img width="30" src="{{user.avatarUrl}}">
                               </div>
                               <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
@@ -410,7 +410,9 @@
     </ngb-tab>
   </ngb-tabset>
   <ng-template #loading>
-    Loading...
+    <span *ngIf="!loadingScan">
+    You don’t have any repositories available for scanning.</span>
+    <span *ngIf="loadingScan">Loading...</span>
   </ng-template>
 
   <ng-template ngbTabContent #getGithub>
