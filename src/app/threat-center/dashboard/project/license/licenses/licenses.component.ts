@@ -14,7 +14,6 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 export class LicensesComponent implements OnInit {
 
   @Input() scanId;
-  @Output() dataCount = new EventEmitter<string>();
   obsScan: Observable<Scan>;
 
   columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
@@ -73,9 +72,6 @@ export class LicensesComponent implements OnInit {
       this.licensesDetails = license;
     });
 
-    this.obsScan.subscribe((licenses: any) => {
-      this.dataCount.emit(licenses.licenses.totalCount);
-    });
   }
 
   gotoDetails(lId) {
