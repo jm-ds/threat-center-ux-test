@@ -31,7 +31,7 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-component let-columns="columns">
-            <tr [routerLink]="['/dashboard/project/component',component.node.componentId]">
+            <tr class="cursor-pointer" (click)="gotoDetails(component.node.componentId)">
               <td>{{component.node.name}}</td>
               <td>{{component.node.group}}</td>
               <td>{{component.node.version}}</td>

@@ -168,9 +168,11 @@
             &.blue::after {
                 background: rgb(70, 128, 255);
             }
+
             &.pink::after {
                 background: rgb(199, 21, 133);
             }
+
             &.white::after {
                 background: rgb(248, 248, 255);
             }
@@ -199,4 +201,8 @@
     span {
         color: var(--white) !important;
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Scan } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
@@ -21,7 +22,9 @@ export class ScanAssetsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   scanAssetDetails: any;
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService:ApiService,
+    private route:ActivatedRoute,
+    private router:Router) { }
 
   ngOnInit() {
     console.log("scanId:", this.scanId);
@@ -72,5 +75,11 @@ export class ScanAssetsComponent implements OnInit {
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
     });
+  }
+  
+  gotoDetails(sAssetId) {
+    const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
+    const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+    this.router.navigate([decodeURIComponent(url)]);
   }
 }

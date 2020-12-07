@@ -35,7 +35,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-license>
-          <tr [routerLink]="['/dashboard/project/license',license.node.licenseId]">
+          <tr (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
             <td>{{license.node.name}}</td>
             <td>{{license.node.spdxId}}</td>
             <td>

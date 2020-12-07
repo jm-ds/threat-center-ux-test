@@ -7,6 +7,7 @@ import { FixService } from "@app/threat-center/dashboard/project/services/fix.se
 import { NgxSpinnerService } from "ngx-spinner";
 import Swal from "sweetalert2";
 import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'components',
@@ -34,7 +35,9 @@ export class ComponentsComponent implements OnInit {
         { field: 'vulnerabilities', header: 'Vulnerabilities' },
     ];
 
-    constructor(private apiService: ApiService, private fixService: FixService, private spinner: NgxSpinnerService) {
+    constructor(private apiService: ApiService, private fixService: FixService, private spinner: NgxSpinnerService,
+        private router: Router,
+        private route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -95,4 +98,9 @@ export class ComponentsComponent implements OnInit {
             this.componentDetails = component;
         });
     }
+    gotoDetails(cId) {
+        const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
+        const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/component/" + cId;
+        this.router.navigate([decodeURIComponent(url)]);
+      }
 }
