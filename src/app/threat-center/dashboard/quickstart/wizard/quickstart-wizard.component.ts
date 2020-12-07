@@ -139,7 +139,7 @@ export class QuickstartWizardComponent implements OnInit {
         console.log("Loading github user");
         this.loadingScan = true;
         this.obsGithubUser = this.apiService.getGitHubUser()
-            .pipe(map(result => null));
+            .pipe(map(result => result.data.gitHubUser));
         this.obsGithubUser.subscribe(d => this.loadingScan = false);
     }
 
