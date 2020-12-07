@@ -4,7 +4,7 @@
 
       <div style="float:left;clear: both;">
         <ng-template pTemplate="caption">
-          <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+          <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
             header
           </div>
           <div style="text-align: right;float:right;margin-bottom:10px;clear: both;">
@@ -35,11 +35,12 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-license>
-            <tr [routerLink]="['/dashboard/project/license',license.node.licenseId]">
+            <tr (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
               <td>{{license.node.name}}</td>
               <td>{{license.node.spdxId}}</td>
               <td>
-                <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                <span *ngIf="license.
+                node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
                 <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
                 <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
                 <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>

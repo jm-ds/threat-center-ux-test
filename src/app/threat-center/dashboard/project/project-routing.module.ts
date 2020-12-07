@@ -13,7 +13,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':projectId',
+        path: '',
         component: ProjectComponent,
         resolve: {
           project: GetProjectData,
@@ -25,7 +25,15 @@ const routes: Routes = [
         component: ComponentDetailComponent
       },
       {
+        path: 'scan/:scanId/component/:componentId',
+        component: ComponentDetailComponent
+      },
+      {
         path: 'vulnerability/:vulnerabilityId',
+        component: VulnerabilityDetailComponent
+      },
+      {
+        path: 'scan/:scanId/vulnerability/:vulnerabilityId',
         component: VulnerabilityDetailComponent
       },
       {
@@ -33,9 +41,17 @@ const routes: Routes = [
         component: LicenseDetailComponent
       },
       {
+        path: 'scan/:scanId/license/:licenseId',
+        component: LicenseDetailComponent
+      },
+      {
         path: 'scanasset/:scanId/:scanAssetId',
         component: ScanAssetDetailComponent
-      }
+      },
+      {
+        path: 'scan/:scanId/scanasset/:scanAssetId',
+        component: ScanAssetDetailComponent
+      },
     ]
   }
 ];

@@ -175,8 +175,8 @@
                           </tr>
                           </thead>
                           <tbody>
-                          <tr class="cursor-pointer" *ngFor="let projectEdge of entity.projects?.edges" [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">
-                            <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
+                          <tr *ngFor="let projectEdge of entity.projects?.edges">
+                            <td style="font-weight:bold"><a (click)="navigateToProject(projectEdge.node.projectId)">{{projectEdge.node.name}}</a></td>
                             <td style="border-left:1px solid #4680ff">{{entity.name}}</td>
                             <td>
                               <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
@@ -214,8 +214,8 @@
                             <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                           </tr>
                           <ng-container *ngFor="let childEntityEdge of entity.childEntities?.edges">
-                            <tr class="cursor-pointer" *ngFor="let projectEdge of childEntityEdge.node.projects?.edges" [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">
-                              <td style="font-weight:bold"><a [routerLink]="['/dashboard/project/',projectEdge.node.projectId]">{{projectEdge.node.name}}</a></td>
+                            <tr *ngFor="let projectEdge of childEntityEdge.node.projects?.edges">
+                              <td style="font-weight:bold"><a (click)="navigateToProject(projectEdge.node.projectId)">{{projectEdge.node.name}}</a></td>
                               <td style="border-left:1px solid #4680ff">{{childEntityEdge.node.name}}</td>
                               <td>
                                 <span title="Critical" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
