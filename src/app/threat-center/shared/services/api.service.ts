@@ -1,20 +1,20 @@
-import {Injectable} from '@angular/core';
-import {Apollo} from 'apollo-angular';
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import {
-    BitbucketUserQuery,
-    ComponentQuery,
-    EntityListQuery,
-    EntityQuery,
-    GitHubUserQuery,
-    GitLabUserQuery,
-    LicenseQuery,
-    ProjectQuery,
-    Scan,
-    ScanAssetQuery,
-    ScanQuery,
-    UserSelection,
-    VulnerabilityQuery
+  BitbucketUserQuery,
+  ComponentQuery,
+  EntityListQuery,
+  EntityQuery,
+  GitHubUserQuery,
+  GitLabUserQuery,
+  LicenseQuery,
+  ProjectQuery,
+  Scan,
+  ScanAssetQuery,
+  ScanQuery,
+  UserSelection,
+  VulnerabilityQuery
 } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
@@ -26,8 +26,8 @@ export class ApiService {
   private userSelection: UserSelection;
 
   constructor(
-      private apollo: Apollo,
-      private coreGraphQLService: CoreGraphQLService) { }
+    private apollo: Apollo,
+    private coreGraphQLService: CoreGraphQLService) { }
 
   getEntityList() {
     return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {
@@ -40,10 +40,10 @@ export class ApiService {
           }
         }
       }
-    }`,'no-cache');
+    }`, 'no-cache');
   }
 
-  getEntity(entityId:string) {
+  getEntity(entityId: string) {
     return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql`
         query {
           entity(entityId: "${entityId}") {
@@ -258,11 +258,11 @@ export class ApiService {
             }
           }
         }
-      `,'no-cache');
+      `, 'no-cache');
   }
 
 
-  getEntityComponents(entityId:string) {
+  getEntityComponents(entityId: string) {
     return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql`
         query {
           entity(entityId:"${entityId}" ) {
@@ -319,14 +319,24 @@ export class ApiService {
       `, 'no-cache');
   }
 
-  getProject(projectId:string) {
-   return this.coreGraphQLService.coreGQLReq<ProjectQuery>(gql`
+  getProject(projectId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+    return this.coreGraphQLService.coreGQLReq<ProjectQuery>(gql`
         query {
             project(projectId:"${projectId}") {
               projectId,
               entityId,
               name,
-              scans {
+              scans(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
                 totalCount
                 edges {
                   node {
@@ -373,25 +383,37 @@ export class ApiService {
               }
               }
         }
-      `,'no-cache');
+      `, 'no-cache');
   }
 
-  getScanVulnerabilities(scanId:string) {
+  getScanVulnerabilities(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<Scan>(gql`
-        query {
-          scan(scanId:"${scanId}") {
+      query {
+        scan(scanId:"${scanId}") {
             scanId,
-            components {
-              totalCount
-              edges {
-                node {
-                  componentId,
-                  name,
-                  group,
-                  version,
-                  vulnerabilities {
-                    edges {
-                      node {
+            vulnerabilities(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              pageInfo {
+                 hasNextPage
+                 hasPreviousPage
+                 startCursor
+                 endCursor
+               }
+               totalCount
+                edges {
+                    node {
+                        components {
+                          edges {
+                            node {
+                              group,
+                              name,
+                              version
+                            }
+                          }
+                        }
                         vulnerabilityId,
                         vulnId,
                         source,
@@ -400,29 +422,80 @@ export class ApiService {
                         patchedVersions
                         published,
                         cwe{
-                           cweId,
-                           name
+                            cweId,
+                            name
                         },
                         cvssV2BaseScore,
                         cvssV3BaseScore,
                         severity
-                      }
                     }
-                  }
                 }
-              }
             }
-        	}
         }
-      `);
+      }
+  `);
+    // return this.coreGraphQLService.coreGQLReq<Scan>(gql`
+    //     query {
+    //       scan(scanId:"${scanId}") {
+    //         scanId,
+    //         components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+    //           pageInfo {
+    //             hasNextPage
+    //             hasPreviousPage
+    //             startCursor
+    //             endCursor
+    //           }
+    //           totalCount
+    //           edges {
+    //             node {
+    //               componentId,
+    //               name,
+    //               group,
+    //               version,
+    //               vulnerabilities {
+    //                 edges {
+    //                   node {
+    //                     vulnerabilityId,
+    //                     vulnId,
+    //                     source,
+    //                     recommendation,
+    //                     vulnerableVersions,
+    //                     patchedVersions
+    //                     published,
+    //                     cwe{
+    //                        cweId,
+    //                        name
+    //                     },
+    //                     cvssV2BaseScore,
+    //                     cvssV3BaseScore,
+    //                     severity
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //     	}
+    //     }
+    //   `);
   }
 
-  getScanComponents(scanId:string) {
-      return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
+  getScanComponents(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
           query {
             scan(scanId:"${scanId}") {
               scanId,
-              components {
+              components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
                 totalCount
                 edges {
                   node {
@@ -478,12 +551,22 @@ export class ApiService {
       `);
   }
 
-  getScanLicenses(scanId:string) {
-     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
+  getScanLicenses(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+    return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
          query {
             scan(scanId:"${scanId}") {
               scanId,
-              licenses {
+              licenses(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
                 totalCount
                 edges {
                   node {
@@ -505,8 +588,8 @@ export class ApiService {
       `);
   }
 
-  getComponent(componentId:string) {
-      return this.coreGraphQLService.coreGQLReq<ComponentQuery>(gql`
+  getComponent(componentId: string) {
+    return this.coreGraphQLService.coreGQLReq<ComponentQuery>(gql`
          query {
             component(componentId:"${componentId}") {
               componentId,
@@ -578,8 +661,8 @@ export class ApiService {
       `);
   }
 
-  getLicense(licenseId:string) {
-      return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+  getLicense(licenseId: string) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
           query {
              license(licenseId:"${licenseId}") {
                  licenseId,
@@ -603,7 +686,7 @@ export class ApiService {
       `);
   }
 
-  getVulnerability(vulnerabilityId:string) {
+  getVulnerability(vulnerabilityId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
         query {
             vulnerability(vulnerabilityId:"${vulnerabilityId}") {
@@ -650,7 +733,7 @@ export class ApiService {
   }
 
 
-  getScanRepository(scanId:string) {
+  getScanRepository(scanId: string) {
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
        query {
           scan(scanId:"${scanId}") {
@@ -663,12 +746,22 @@ export class ApiService {
       `);
   }
 
-  getScanAssets(scanId:string) {
+  getScanAssets(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
         query {
-        	scan(scanId:"${scanId}") {
-            scanId,
-            scanAssets {
+        	 scan(scanId:"${scanId}") {
+            scanId
+            scanAssets(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
               totalCount
               edges {
                 node {
@@ -693,10 +786,10 @@ export class ApiService {
             }
           }
         }
-      `);
+      `,'no-cache');
   }
 
-  getScanAsset(scanId:string,scanAssetId:string) {
+  getScanAsset(scanId: string, scanAssetId: string) {
     return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(gql`
         query {
         	scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
@@ -867,10 +960,10 @@ export class ApiService {
       `);
   }
 
-    // Request gitlab repos data from backend
-    getGitLabUser() {
-        return this.apollo.watchQuery<GitLabUserQuery>({
-            query: gql`
+  // Request gitlab repos data from backend
+  getGitLabUser() {
+    return this.apollo.watchQuery<GitLabUserQuery>({
+      query: gql`
                 query {
                   gitLabUser {
                     id,
@@ -897,14 +990,14 @@ export class ApiService {
                   }
                 }
               `,
-        }).valueChanges;
-    }
+    }).valueChanges;
+  }
 
 
-    // Request bitbucket repos data from backend
-    getBitbucketUser() {
-        return this.apollo.watchQuery<BitbucketUserQuery>({
-            query: gql`
+  // Request bitbucket repos data from backend
+  getBitbucketUser() {
+    return this.apollo.watchQuery<BitbucketUserQuery>({
+      query: gql`
                 query {
                   bitbucketUser {
                     id,
@@ -930,6 +1023,6 @@ export class ApiService {
                   }
                 }
               `,
-        }).valueChanges;
-    }
+    }).valueChanges;
+  }
 }

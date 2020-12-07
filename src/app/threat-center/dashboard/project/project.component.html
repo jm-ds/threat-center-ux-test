@@ -159,7 +159,7 @@
             </div>
 
             <perfect-scrollbar [style.max-height]="'500px'">
-              <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
+              <p-table [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
                 [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
                 (onRowSelect)="onRowSelect($event)">
@@ -247,7 +247,13 @@
                   </tr>
                 </ng-template>
               </p-table>
+
             </perfect-scrollbar>
+            <div class="col-sm-12">
+              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount" [pageSize]="defaultPageSize"
+                [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+              </mat-paginator>
+            </div>
           </ng-template>
         </ngb-tab>
 
