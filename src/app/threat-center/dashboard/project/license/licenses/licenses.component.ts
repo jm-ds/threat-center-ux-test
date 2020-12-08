@@ -14,7 +14,7 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 export class LicensesComponent implements OnInit {
 
   @Input() scanId;
-  obsScan: Observable<Scan>;
+  @Input() obsScan: Observable<Scan>;
 
   columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
@@ -28,12 +28,15 @@ export class LicensesComponent implements OnInit {
 
   ngOnInit() {
     console.log("Loading LicensesComponent for scanId: ", this.scanId);
-    this.obsScan = this.apiService.getScanLicenses(this.scanId, Number(this.defaultPageSize))
-      .pipe(map(result => result.data.scan));
+    if (!this.obsScan) {
+      this.obsScan = this.apiService.getScanLicenses(this.scanId, Number(this.defaultPageSize))
+        .pipe(map(result => result.data.scan));
 
-    this.obsScan.subscribe(licenses => {
-      this.licensesDetails = licenses;
-    });
+      this.initData();
+    } else {
+      this.initData();
+    }
+
   }
 
   //While any changes occurred in page
@@ -67,17 +70,25 @@ export class LicensesComponent implements OnInit {
   loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
     let licenses = this.apiService.getScanLicenses(this.scanId, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scan));
-  
-   licenses.subscribe(license => {
+
+      licenses.subscribe(license => {
       this.licensesDetails = license;
     });
 
   }
 
+  //goto detail Page
   gotoDetails(lId) {
     const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
     const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
     this.router.navigate([decodeURIComponent(url)]);
+  }
+
+  //initializing data
+  private initData() {
+    this.obsScan.subscribe(licenses => {
+      this.licensesDetails = licenses;
+    });
   }
 
 }

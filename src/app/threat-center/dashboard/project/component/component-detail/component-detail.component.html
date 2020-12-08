@@ -21,7 +21,7 @@
           <ngb-tab title="Vulnerabilities" id="vulnerabilities">
             <ng-template ngbTabContent>
               <perfect-scrollbar [style.max-height]="'650px'">
-                <p-table #dt [columns]="vulnerabilityColumns" [value]="component.vulnerabilities.edges" [paginator]="false" [rows]="50"
+                <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
                          tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                          [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
 
@@ -55,6 +55,13 @@
                   </ng-template>
                 </p-table>
               </perfect-scrollbar>
+
+              <div class="col-sm-12">
+                <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount" [pageSize]="defaultPageSize"
+                  [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+                </mat-paginator>
+              </div>
+
             </ng-template>
           </ngb-tab>
 

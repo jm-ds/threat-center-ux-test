@@ -14,7 +14,7 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 export class ScanAssetsComponent implements OnInit {
 
   @Input() scanId;
-  obsScan: Observable<Scan>;
+  @Input() obsScan: Observable<Scan>;
 
   columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets'];
 
@@ -22,19 +22,20 @@ export class ScanAssetsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   scanAssetDetails: any;
 
-  constructor(private apiService:ApiService,
-    private route:ActivatedRoute,
-    private router:Router) { }
+  constructor(private apiService: ApiService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    this.obsScan = this.apiService.getScanAssets(this.scanId, Number(this.defaultPageSize))
-      .pipe(map(result => result.data.scan));
-
-    this.obsScan.subscribe(asset => {
-      this.scanAssetDetails = asset;
-    });
+    if (!this.obsScan) {
+      this.obsScan = this.apiService.getScanAssets(this.scanId, Number(this.defaultPageSize))
+        .pipe(map(result => result.data.scan));
+      this.initData();
+    } else {
+      this.initData();
+    }
   }
 
   sort(scanAssets: any) {
@@ -76,10 +77,18 @@ export class ScanAssetsComponent implements OnInit {
       this.scanAssetDetails = asset;
     });
   }
-  
+
+  //goto Detail
   gotoDetails(sAssetId) {
     const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
     const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
     this.router.navigate([decodeURIComponent(url)]);
+  }
+
+  //initializing data
+  private initData() {
+    this.obsScan.subscribe(asset => {
+      this.scanAssetDetails = asset;
+    });
   }
 }

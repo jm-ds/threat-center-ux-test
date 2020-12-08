@@ -588,7 +588,11 @@ export class ApiService {
       `);
   }
 
-  getComponent(componentId: string) {
+  getComponent(componentId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `first: ${first}` : '';
+    const lastArg = (!!last) ? `last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ComponentQuery>(gql`
          query {
             component(componentId:"${componentId}") {
@@ -621,7 +625,14 @@ export class ApiService {
                 published,
                 lastCheck
               }
-              vulnerabilities {
+              vulnerabilities(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
+                totalCount
                 edges {
                   node {
                     vulnerabilityId,

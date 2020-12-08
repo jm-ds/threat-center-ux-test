@@ -73,60 +73,195 @@ export class ProjectDashboardService {
           `, 'no-cache');
     }
 
-    //Get Vulnerabilities by scan
-    getScanVulnerabilities(scanId: string) {
+    //Get Scan Vulnerabilities
+    getScanVulnerabilities(scanId: string,defaultPage) {
         return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
-            query {
-              scan(scanId:"${scanId}") {
+          query {
+            scan(scanId:"${scanId}") {
                 scanId,
-                components {
-                  totalCount
+                vulnerabilities(first:${defaultPage}) {
+                  pageInfo {
+                     hasNextPage
+                     hasPreviousPage
+                     startCursor
+                     endCursor
+                   }
+                   totalCount
+                    edges {
+                        node {
+                            components {
+                              edges {
+                                node {
+                                  group,
+                                  name,
+                                  version
+                                }
+                              }
+                            }
+                            vulnerabilityId,
+                            vulnId,
+                            source,
+                            recommendation,
+                            vulnerableVersions,
+                            patchedVersions
+                            published,
+                            cwe{
+                                cweId,
+                                name
+                            },
+                            cvssV2BaseScore,
+                            cvssV3BaseScore,
+                            severity
+                        }
+                    }
+                }
+            }
+          }
+      `);
+
+    }
+
+    //Get Scan Components
+    getScanComponents(scanId: string,defaultPage) {
+     return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+        query {
+          scan(scanId:"${scanId}") {
+            scanId,
+            components(first:${defaultPage}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+              totalCount
+              edges {
+                node {
+                  componentId,
+                  name,
+                  group,
+                  version,
+                  isInternal,
+                  lastInheritedRiskScore,
+                  licenses {
+                    edges {
+                      node {
+                        licenseId,
+                        name,
+                        category
+                      }
+                    }
+                  }
+                  resolvedLicense {
+                    licenseId,
+                    name
+                  }
+                  vulnerabilities {
+                    edges {
+                      node {
+                        vulnerabilityId,
+                        vulnId,
+                        severity,
+                        patchedVersions
+                      }
+                    }
+                  }
+                  metrics {
+                    critical,
+                    high,
+                    medium,
+                    low,
+                    unassigned,
+                    vulnerabilities,
+                    suppressed,
+                    findingsTotal,
+                    findingsAudited,
+                    findingsUnaudited,
+                    inheritedRiskScore,
+                    firstOccurrence,
+                    lastOccurrence
+                  }
                 }
               }
             }
-          `);
+          }
+        }
+    `);
+
     }
 
-    //Get components
-    getScanComponents(scanId: string) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
-              query {
-                scan(scanId:"${scanId}") {
-                  scanId,
-                  components {
-                    totalCount
-                  }
-                }
-              }
-          `);
-    }
-
-    //get License
-    getScanLicenses(scanId: string) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
-             query {
-                scan(scanId:"${scanId}") {
-                  scanId,
-                  licenses {
-                    totalCount
-                  }
-                }
-              }
-          `);
+    //get Scan License
+    getScanLicenses(scanId: string,defaultPage) {
+      return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+      query {
+         scan(scanId:"${scanId}") {
+           scanId,
+           licenses(first:${defaultPage}) {
+             pageInfo {
+               hasNextPage
+               hasPreviousPage
+               startCursor
+               endCursor
+             }
+             totalCount
+             edges {
+               node {
+                 licenseId,
+                 spdxId
+                 name,
+                 category,
+                 style,
+                 type,
+                 spdxId,
+                 publicationYear,
+                 isOsiApproved,
+                 isFsfLibre
+               }
+             }
+           }
+         }
+       }
+   `);
     }
 
     //get assets
-    getScanAssets(scanId: string) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
-            query {
-                 scan(scanId:"${scanId}") {
-                scanId
-                scanAssets {
-                  totalCount
+    getScanAssets(scanId: string,defaultPage) {
+      return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+      query {
+         scan(scanId:"${scanId}") {
+          scanId
+          scanAssets(first:${defaultPage}) {
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+            totalCount
+            edges {
+              node {
+                name,
+                size,
+                assetSize,
+                scanAssetId,
+                originAssetId
+                workspacePath
+                status,
+                embeddedAssets {
+                  edges {
+                    node {
+                      name,
+                      percentMatch,
+                      assetSize
+                    }
+                  }
                 }
               }
             }
-          `);
+          }
+        }
+      }
+    `,'no-cache');
     }
 }
 
@@ -163,10 +298,10 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             .pipe(
                 mergeMap((data: any) => {
                     if (!!data.data.project.scans.edges[0]) {
-                        const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId);
-                        const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId);
-                        const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId);
-                        const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId);
+                        const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId,25);
+                        const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId,25);
+                        const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId,25);
+                        const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId,25);
                         return forkJoin([res1, res2, res3, res4]);
                     } else {
                         return EMPTY;
