@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
-
-    <div class="col-lg-2 col-xs-12">
+    
+    <div class="col-lg-2 col-xs-12 chart-lbl-blk">
       <div class="chart-lbl-indi">
         <label>Vulnerabilities</label>
 
@@ -75,7 +75,7 @@
 
 
     </div>
-    <div class="col-lg-10 col-xs-12">
+    <div class="col-lg-10 col-xs-12  chart-blk">
       <div class="row project-chart-blk">
         <div class="col-md-6">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
@@ -265,7 +265,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId">
+            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
             </vulnerabilities>
           </ng-template>
         </ngb-tab>
@@ -279,7 +279,7 @@
           </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId"></components>
+            <components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -318,7 +318,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
+            <licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></licenses>
           </ng-template>
         </ngb-tab>
 
@@ -419,7 +419,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
+            <scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>

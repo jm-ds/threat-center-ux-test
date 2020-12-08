@@ -49,11 +49,17 @@ export class ProjectComponent implements OnInit {
   projectDetails = null;
   scanList = [];
 
+  vulScanData:any = {};
+  componentScanData:any = {};
+  licensesScanData:any = {};
+  assetScanData:any = {};
+
   ngOnInit() {
     this.initProjectData();
     this.stateService.project_tabs_selectedTab = "scan";
     this.route.data.subscribe(projData => {
       if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
+        this.populateScanComponents(projData.otherComponentData);
         this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
       }
     });
@@ -503,10 +509,10 @@ export class ProjectComponent implements OnInit {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId);
-    const res2 = this.projectDashboardService.getScanComponents(scanId);
-    const res3 = this.projectDashboardService.getScanLicenses(scanId);
-    const res4 = this.projectDashboardService.getScanAssets(scanId);
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId,Number(this.defaultPageSize));
+    const res2 = this.projectDashboardService.getScanComponents(scanId,Number(this.defaultPageSize));
+    const res3 = this.projectDashboardService.getScanLicenses(scanId,Number(this.defaultPageSize));
+    const res4 = this.projectDashboardService.getScanAssets(scanId,Number(this.defaultPageSize));
     return forkJoin([res1, res2, res3, res4]);
   }
 
@@ -514,7 +520,7 @@ export class ProjectComponent implements OnInit {
   private populateDataForTotalCountsOfMetrics(data) {
     if (!!data[0]) {
       this.vulnerabilityCount = !!data[0].data ?
-        data[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
+        data[0].data.scan.vulnerabilities['totalCount'] : this.vulnerabilityCount;
     }
     if (!!data[1]) {
       this.componentCount = !!data[1].data ?
@@ -528,5 +534,12 @@ export class ProjectComponent implements OnInit {
       this.assetCount = !!data[3].data ?
         data[3].data.scan.scanAssets['totalCount'] : this.assetCount;
     }
+  }
+
+  private populateScanComponents(data){
+    this.vulScanData = Observable.of(data[0].data);
+    this.componentScanData = Observable.of(data[1].data.scan);
+    this.licensesScanData = Observable.of(data[2].data.scan);
+    this.assetScanData = Observable.of(data[3].data.scan);
   }
 }

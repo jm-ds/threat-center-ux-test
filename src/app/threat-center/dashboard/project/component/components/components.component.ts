@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ComponentsComponent implements OnInit {
 
     @Input() scanId;
-    obsScan: Observable<Scan>;
+    @Input() obsScan: Observable<Scan>;
     fixResultObservable: Observable<FixResult>;
     newVersion: string;
 
@@ -43,11 +43,14 @@ export class ComponentsComponent implements OnInit {
     ngOnInit() {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
-        this.obsScan = this.apiService.getScanComponents(this.scanId, Number(this.defaultPageSize))
-            .pipe(map(result => result.data.scan));
-        this.obsScan.subscribe(component => {
-            this.componentDetails = component;
-        });
+        if (!this.obsScan) {
+            this.obsScan = this.apiService.getScanComponents(this.scanId, Number(this.defaultPageSize))
+                .pipe(map(result => result.data.scan));
+            this.initData();
+        } else {
+            this.initData();
+        }
+
     }
 
     fixVersion(groupId: string, artifactId: string) {
@@ -98,9 +101,18 @@ export class ComponentsComponent implements OnInit {
             this.componentDetails = component;
         });
     }
+
+    //goto detail Page
     gotoDetails(cId) {
         const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
         const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/component/" + cId;
         this.router.navigate([decodeURIComponent(url)]);
-      }
+    }
+
+    //initializing data
+    private initData(){
+        this.obsScan.subscribe(component => {
+            this.componentDetails = component;
+        });
+    }
 }
