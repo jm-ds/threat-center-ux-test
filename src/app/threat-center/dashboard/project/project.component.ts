@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { TaskComponent } from '@app/threat-center/shared/task/task.component';
@@ -10,6 +10,7 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
+import { MatPaginator } from '@angular/material';
 import { ProjectDashboardService } from '../services/project.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -46,30 +47,51 @@ export class ProjectComponent implements OnInit {
   assetCount = 0;
   sourceCodeAssetcount = 0;
 
+  defaultPageSize = 25;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  projectDetails = null;
+  scanList = [];
+
+  vulScanData:any = {};
+  componentScanData:any = {};
+  licensesScanData:any = {};
+  assetScanData:any = {};
+
   ngOnInit() {
-    this.loadProjectData();
+    this.initProjectData();
     this.stateService.project_tabs_selectedTab = "scan";
     this.route.data.subscribe(projData => {
       if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
+        this.populateScanComponents(projData.otherComponentData);
         this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
       }
     });
-    // if (!this.obsProject) {
-    //   console.log("Loading ScansComponent");
-    //   this.obsProject = this.apiService.getProject(this.projectId)
-    //     .pipe(map(result => result.data.project));
 
-    //   this.stateService.obsProject = this.obsProject;
-    //   this.stateService.project_tabs_selectedTab = "scan";
-    // }
+    this.projectId = this.route.snapshot.paramMap.get('projectId');
+    console.log(this.projectId);
+    if (!this.obsProject) {
+      console.log("Loading ScansComponent");
+      this.obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
+        .pipe(map(result => result.data.project));
+
+      this.stateService.obsProject = this.obsProject;
+    }
+    this.subscribeProjectData();
+  }
+
+  subscribeProjectData() {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
-  loadProjectData() {
+  initProjectData() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
     this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe(project => {
+      //Taking sacn list to show in scan tab
+      this.scanList = project.scans.edges;
+      this.projectDetails = project;
+
       this.stateService.selectedScan = project.scans.edges[0];
       let critical = [];
       let high = [];
@@ -443,6 +465,40 @@ export class ProjectComponent implements OnInit {
     }
   }
 
+  //While any changes occurred in page
+  changePage(pageInfo) {
+    if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
+      //page size changed...
+      this.defaultPageSize = pageInfo.pageSize;
+      //API Call
+      this.loadProjectData(Number(this.defaultPageSize), undefined, undefined, undefined);
+      this.paginator.firstPage();
+    }
+    else {
+      //Next and Previous changed
+      if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
+        //call with after...
+        if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasNextPage']) {
+          this.loadProjectData(Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
+        }
+      } else {
+        //call with before..
+        if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasPreviousPage']) {
+          this.loadProjectData(undefined, Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['startCursor']);
+        }
+      }
+    }
+  }
+
+  //Loading project data after paggination for scan tab.
+  loadProjectData(first, last, endCursor = undefined, startCursor = undefined) {
+    let projects = this.apiService.getProject(this.projectId, first, last, endCursor, startCursor)
+      .pipe(map(result => result.data.project));
+    projects.subscribe(project => {
+      this.scanList = project.scans.edges;
+      this.projectDetails = project;
+    });
+  }
 
   //load all metrics data after selecting scan in table.
   private apicallTogetCounts(scanId: string) {
@@ -456,10 +512,10 @@ export class ProjectComponent implements OnInit {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId);
-    const res2 = this.projectDashboardService.getScanComponents(scanId);
-    const res3 = this.projectDashboardService.getScanLicenses(scanId);
-    const res4 = this.projectDashboardService.getScanAssets(scanId);
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId,Number(this.defaultPageSize));
+    const res2 = this.projectDashboardService.getScanComponents(scanId,Number(this.defaultPageSize));
+    const res3 = this.projectDashboardService.getScanLicenses(scanId,Number(this.defaultPageSize));
+    const res4 = this.projectDashboardService.getScanAssets(scanId,Number(this.defaultPageSize));
     return forkJoin([res1, res2, res3, res4]);
   }
 
@@ -467,7 +523,7 @@ export class ProjectComponent implements OnInit {
   private populateDataForTotalCountsOfMetrics(data) {
     if (!!data[0]) {
       this.vulnerabilityCount = !!data[0].data ?
-        data[0].data.scan.components['totalCount'] : this.vulnerabilityCount;
+        data[0].data.scan.vulnerabilities['totalCount'] : this.vulnerabilityCount;
     }
     if (!!data[1]) {
       this.componentCount = !!data[1].data ?
@@ -481,6 +537,13 @@ export class ProjectComponent implements OnInit {
       this.assetCount = !!data[3].data ?
         data[3].data.scan.scanAssets['totalCount'] : this.assetCount;
     }
+  }
+
+  private populateScanComponents(data){
+    this.vulScanData = Observable.of(data[0].data);
+    this.componentScanData = Observable.of(data[1].data.scan);
+    this.licensesScanData = Observable.of(data[2].data.scan);
+    this.assetScanData = Observable.of(data[3].data.scan);
   }
 
   openErrorMsg(content, errorMsg:string) {

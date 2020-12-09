@@ -4,14 +4,14 @@
 
       <div style="float:left;clear: both;">
         <ng-template pTemplate="caption">
-          <div style="text-align: left;float:left;width=50px;height:50px;margin-right:10px">
+          <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
             header
           </div>
         </ng-template>
       </div>
 
       <perfect-scrollbar [style.max-height]="'650px'">
-        <p-table #dt [columns]="columns" [value]="scan.components?.edges" [paginator]="false" [rows]="50"
+        <p-table #dt [columns]="columns" [value]="componentDetails.components?.edges" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
 
@@ -31,7 +31,7 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-component let-columns="columns">
-            <tr [routerLink]="['/dashboard/project/component',component.node.componentId]">
+            <tr class="cursor-pointer" (click)="gotoDetails(component.node.componentId)">
               <td>{{component.node.name}}</td>
               <td>{{component.node.group}}</td>
               <td>{{component.node.version}}</td>
@@ -87,6 +87,13 @@
         </ng-template>
         </p-table>
       </perfect-scrollbar>
+
+      <div class="col-sm-12">
+        <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="componentDetails.components?.totalCount" [pageSize]="defaultPageSize"
+          [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+        </mat-paginator>
+      </div>
+
 
     </div>
   <ngx-spinner [fullScreen]="true" color="#4680ff" type="pacman" size="large"></ngx-spinner>

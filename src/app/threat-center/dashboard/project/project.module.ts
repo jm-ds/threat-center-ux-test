@@ -15,6 +15,7 @@ import {ScanAssetsComponent,ScanAssetDetailComponent} from './scanasset';
 import {TcSharedModule} from '@app/threat-center/shared/tc-shared.module';
 import { MarkdownModule } from 'ngx-markdown';
 import {NgxSpinnerModule} from "ngx-spinner";
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
     TcSharedModule,
     MarkdownModule,
     NgxSpinnerModule,
+    MatPaginatorModule,
     NgbModule
   ],
   declarations: [

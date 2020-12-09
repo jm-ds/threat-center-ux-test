@@ -3,6 +3,15 @@
 /* SCSS */
 @import "scss/style";
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+.mat-paginator {
+    background: none;
+}
+
+.mat-selected {
+    color: #fff !important;
+}
 
 #projectVulnerabilityChart {
     filter: saturate(70%) !important;
@@ -159,32 +168,41 @@
             &.blue::after {
                 background: rgb(70, 128, 255);
             }
+
             &.pink::after {
                 background: rgb(199, 21, 133);
             }
+
             &.white::after {
-                background: rgb(248,248,255);
+                background: rgb(248, 248, 255);
             }
 
         }
     }
 }
 
-.invalid-form{
+.invalid-form {
     width: 100%;
     color: #ff5252;
     margin-top: 0.25rem;
 }
+
 .tree-node {
     font-size: 14px;
     border-left: none;
 }
 
 
-.entiy-tree .node-content-wrapper-active, .entiy-tree .node-content-wrapper.node-content-wrapper-active:hover, .entiy-tree .node-content-wrapper-active.node-content-wrapper-focused {
+.entiy-tree .node-content-wrapper-active,
+.entiy-tree .node-content-wrapper.node-content-wrapper-active:hover,
+.entiy-tree .node-content-wrapper-active.node-content-wrapper-focused {
     background: #6078ea !important;
 
     span {
         color: var(--white) !important;
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

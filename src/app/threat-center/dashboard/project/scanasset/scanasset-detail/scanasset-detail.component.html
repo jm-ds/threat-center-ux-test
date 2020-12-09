@@ -2,7 +2,7 @@
 
     <div class="row" style="margin-bottom:20px">
       <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
-        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a [routerLink]="['/dashboard/project',project.projectId]">{{project.name}}</a> / {{sourceAsset.name}}</span>
+        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a (click)="gotoProject()">{{project.name}}</a> / {{sourceAsset.name}}</span>
       </div>
     </div>
 
@@ -102,7 +102,7 @@
                       <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
                       <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
                       <span *ngIf="license.node.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
-                      <a [routerLink]="['/dashboard/project/license',license.node.licenseId]">{{license.node.shortName}}</a>
+                      <a (click)="gotoLicense(license.node.licenseId)">{{license.node.shortName}}</a>
                     </div>
                   </td>
                   -->

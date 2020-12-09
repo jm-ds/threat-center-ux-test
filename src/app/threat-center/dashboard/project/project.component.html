@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
-
-    <div class="col-lg-2 col-xs-12">
+    
+    <div class="col-lg-2 col-xs-12 chart-lbl-blk">
       <div class="chart-lbl-indi">
         <label>Vulnerabilities</label>
 
@@ -75,7 +75,7 @@
 
 
     </div>
-    <div class="col-lg-10 col-xs-12">
+    <div class="col-lg-10 col-xs-12  chart-blk">
       <div class="row project-chart-blk">
         <div class="col-md-6">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
@@ -159,7 +159,7 @@
             </div>
 
             <perfect-scrollbar [style.max-height]="'500px'">
-              <p-table [columns]="columns" [value]="project.scans?.edges" [paginator]="false" [rows]="50"
+              <p-table [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
                 [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
                 (onRowSelect)="onRowSelect($event)">
@@ -258,7 +258,13 @@
                   </tr>
                 </ng-template>
               </p-table>
+
             </perfect-scrollbar>
+            <div class="col-sm-12">
+              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount" [pageSize]="defaultPageSize"
+                [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+              </mat-paginator>
+            </div>
           </ng-template>
         </ngb-tab>
 
@@ -270,7 +276,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId">
+            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
             </vulnerabilities>
           </ng-template>
         </ngb-tab>
@@ -284,7 +290,7 @@
           </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId"></components>
+            <components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -323,7 +329,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId"></licenses>
+            <licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></licenses>
           </ng-template>
         </ngb-tab>
 
@@ -424,7 +430,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId"></scanassets>
+            <scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>

@@ -2,7 +2,7 @@
 
     <div class="row" style="margin-bottom:20px">
       <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
-        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a [routerLink]="['/dashboard/project',project.projectId]">{{project.name}}</a> / {{component.name}}</span>
+        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a (click)="gotoProject()">{{project.name}}</a> / {{component.name}}</span>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
           <ngb-tab title="Vulnerabilities" id="vulnerabilities">
             <ng-template ngbTabContent>
               <perfect-scrollbar [style.max-height]="'650px'">
-                <p-table #dt [columns]="vulnerabilityColumns" [value]="component.vulnerabilities.edges" [paginator]="false" [rows]="50"
+                <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
                          tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                          [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
 
@@ -45,7 +45,7 @@
                   </ng-template>
 
                   <ng-template pTemplate="body" let-vulnerability>
-                    <tr [routerLink]="['/dashboard/project/vulnerability', vulnerability?.node.vulnerabilityId]">
+                    <tr (click)="gotoOtherDetailsPage(vulnerability?.node.vulnerabilityId,'vulnerability')" class="cursor-pointer">
                       <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.node.source}}</span> {{vulnerability?.node.vulnId}}</td>
                       <td><span *ngIf="vulnerability?.node.cwe"> CWE-{{vulnerability?.node.cwe?.cweId}} : {{vulnerability?.node.cwe?.name}}</span></td>
                       <td>{{vulnerability?.node.severity}}</td>
@@ -55,6 +55,13 @@
                   </ng-template>
                 </p-table>
               </perfect-scrollbar>
+
+              <div class="col-sm-12">
+                <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount" [pageSize]="defaultPageSize"
+                  [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+                </mat-paginator>
+              </div>
+
             </ng-template>
           </ngb-tab>
 
@@ -64,7 +71,7 @@
 
               <div style="display: flex;">
                 <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of component.licenses.edges">
-                  <div class="card-body" [routerLink]="['/dashboard/project/license', license.node.licenseId]">
+                  <div class="card-body" (click)="gotoOtherDetailsPage(license.node.licenseId,'license')">
                     <h6 class="card-title">{{license.node.name}}</h6>
                       <div class="card p-2 m-3">
                         <form>
