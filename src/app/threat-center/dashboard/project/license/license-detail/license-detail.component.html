@@ -1,6 +1,12 @@
 <div class="row" style="margin-bottom:20px">
-  <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
-    <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a (click)="gotoProject()">{{project.name}}</a> / License Detail</span>
+  <div class="col-md-12" *ngIf="!!breadcumDetail">
+    <span style="font-size:15px">
+        <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
+        <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
+        <a class="cursor-pointer" *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail.SelectedComponent.name}}</a> <span *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
+        <span style="color: #ffffff;">{{licenseName}}</span>
+      </span>
   </div>
+
 </div>
-<license-dimension [licenseId]="licenseId"></license-dimension>
+<license-dimension [licenseId]="licenseId" (getLicenseName)="getLicenseName($event)"></license-dimension>

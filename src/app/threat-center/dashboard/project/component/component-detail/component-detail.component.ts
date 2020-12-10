@@ -7,6 +7,7 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Scan, License, TxComponent } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
 @Component({
@@ -26,11 +27,13 @@ export class ComponentDetailComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   vulnerabilityDetails: any = {};
 
+  breadcumDetail: any = {};
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private coreHelperService:CoreHelperService) { }
 
   ngOnInit() {
     console.log("Loading ComponentDetailComponent");
@@ -41,8 +44,11 @@ export class ComponentDetailComponent implements OnInit {
       .pipe(map(result => result.data.component));
 
     this.obsComponent.subscribe((res: any) => {
+      this.coreHelperService.settingProjectBreadcum("Component",res.name,res.componentId,false);
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
+
+    this.initBreadcum();
   }
 
   onTabChange($event: NgbTabChangeEvent) {
@@ -77,6 +83,7 @@ export class ComponentDetailComponent implements OnInit {
 
   //goto details pages
   gotoOtherDetailsPage(id, pageName: string) {
+    this.coreHelperService.settingProjectBreadcum("","","",true);
     const entityId = this.route.snapshot.paramMap.get('entityId'),
       projectId = this.route.snapshot.paramMap.get('projectId'),
       scanId = this.route.snapshot.paramMap.get('scanId');
@@ -131,4 +138,8 @@ export class ComponentDetailComponent implements OnInit {
     });
   }
 
+  //Initialize breadcum details
+  private initBreadcum() {
+    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+  }
 }
