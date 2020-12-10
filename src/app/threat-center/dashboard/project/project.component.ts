@@ -12,6 +12,7 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDB } from '../../../fack-db/chart-data';
 import { MatPaginator } from '@angular/material';
 import { ProjectDashboardService } from '../services/project.service';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -27,6 +28,7 @@ export class ProjectComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
+    private coreHelperService:CoreHelperService,
     private modalService: NgbModal) {
     this.chartDB = ChartDB;
   }
@@ -88,6 +90,7 @@ export class ProjectComponent implements OnInit {
       .pipe(map(res => res.project.data.project));
     this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe(project => {
+      this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
       //Taking sacn list to show in scan tab
       this.scanList = project.scans.edges;
       this.projectDetails = project;

@@ -8,6 +8,7 @@ import { Scan, License, ScanAsset, User, Repository } from '@app/threat-center/s
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService } from '@app/security/services';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
 @Component({
@@ -30,13 +31,15 @@ export class ScanAssetDetailComponent implements OnInit {
   selectedEmbeddedAsset: any;
 
   projectId: string = "";
+  breadcumDetail: any = {};
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
     private repositoryService: RepositoryService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
-    private router:Router) { }
+    private router:Router,
+    private coreHelperService:CoreHelperService) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -82,6 +85,8 @@ export class ScanAssetDetailComponent implements OnInit {
           });
         }
       });
+
+      this.initBreadcum();
   }
 
   releaseSelected() {
@@ -121,15 +126,23 @@ export class ScanAssetDetailComponent implements OnInit {
     { version: 'v1.3.9-RELEASE', date: '11/15/2019' },
   ];
 
+  //go to project dashboard
   gotoProject() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
     this.router.navigate([url]);
   }
+
+  //go to License details page
   gotoLicense(liId){
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const scanId = this.route.snapshot.paramMap.get('scanId');
     const url = "dashboard/entity/" + entityId + '/project/' + this.projectId + '/scan/' + scanId + "/license/" + liId;
     this.router.navigate([url]);
+  }
+
+  //Initialize breadcum details
+  private initBreadcum() {
+    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
 }

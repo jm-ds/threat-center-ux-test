@@ -1,9 +1,14 @@
   <div *ngIf='obsComponent | async as component;'>
 
     <div class="row" style="margin-bottom:20px">
-      <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
-        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a (click)="gotoProject()">{{project.name}}</a> / {{component.name}}</span>
+      <div class="col-md-12" *ngIf="!!breadcumDetail">
+        <span style="font-size:15px">
+            <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
+            <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
+            <span style="color: #ffffff;">{{component.name}}</span>
+          </span>
       </div>
+
     </div>
 
     <div class="row" style="margin-bottom:40px">
@@ -56,7 +61,11 @@
                 </p-table>
               </perfect-scrollbar>
 
-              <div class="col-sm-12">
+              <div class="row text-center" *ngIf="vulnerabilityDetails.edges.length == 0" style="margin-top: 20px;">
+                <h5 class="col-12">{{component.name}} have no vulnerabilities yet.</h5>
+              </div>
+
+              <div class="col-sm-12" *ngIf="vulnerabilityDetails.edges.length >= 1">
                 <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount" [pageSize]="defaultPageSize"
                   [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
                 </mat-paginator>

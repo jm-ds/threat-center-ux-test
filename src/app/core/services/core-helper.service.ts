@@ -34,8 +34,33 @@ export class CoreHelperService {
     spinnerEdit(isSpeenerVisible) {
         this.subject.next(isSpeenerVisible);
     }
-    
+
     getSpinner() {
         return this.subject.asObservable();
     }
+
+    settingProjectBreadcum(tag, name, id, isFromComponent: boolean = false) {
+        let projectBreadcum: any = {};
+        if (!!sessionStorage.getItem("ProjectBreadcum")) {
+            // update
+            projectBreadcum = JSON.parse(sessionStorage.getItem("ProjectBreadcum"));
+        }
+        if (tag === 'Project') {
+            projectBreadcum['SelectedProject'] = { id: id, name: name };
+        } else if (tag === 'Entity') {
+            projectBreadcum['SelectedEntity'] = { id: id, name: name };
+        } else if (tag === 'Component') {
+            projectBreadcum['SelectedComponent'] = { id: id, name: name };
+        }
+        projectBreadcum['IsFromComponent'] = isFromComponent;
+        sessionStorage.setItem("ProjectBreadcum", JSON.stringify(projectBreadcum));
+    }
+
+    getProjectBreadcum() {
+        if (!!sessionStorage.getItem("ProjectBreadcum")) {
+            return JSON.parse(sessionStorage.getItem("ProjectBreadcum"));
+        }
+        return null;
+    }
+
 }
