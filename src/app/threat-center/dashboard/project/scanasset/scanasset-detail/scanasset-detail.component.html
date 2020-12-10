@@ -1,8 +1,12 @@
   <div *ngIf='sourceAsset; '>
 
     <div class="row" style="margin-bottom:20px">
-      <div class="col-md-3" *ngIf='this.stateService.obsProject | async as project;'>
-        <span style="font-size:15px"><a [routerLink]="['/dashboard/entity']">Team 1</a> / <a (click)="gotoProject()">{{project.name}}</a> / {{sourceAsset.name}}</span>
+      <div class="col-md-12" *ngIf="!!breadcumDetail">
+        <span style="font-size:15px">
+            <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
+            <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
+            <span style="color: #ffffff;">{{sourceAsset.name}}</span>
+          </span>
       </div>
     </div>
 

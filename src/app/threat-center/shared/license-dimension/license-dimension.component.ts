@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 
@@ -20,6 +20,7 @@ export class LicenseDimensionComponent implements OnInit {
 
   @Input() licenseId:string;
   @Input() licenses:License[];
+  @Output() getLicenseName: EventEmitter<any> = new EventEmitter();
   obsLicense:Observable<License>;
 
   permissions:any[];
@@ -33,6 +34,7 @@ export class LicenseDimensionComponent implements OnInit {
     if(this.licenseId) {
       this.loadLicense();
       this.obsLicense.subscribe(license => {
+        this.getLicenseName.emit(license.name);
         this.permissions = this.licenseAttributeFilter(license, 'PERMISSION');
         this.limitations = this.licenseAttributeFilter(license, 'LIMITATION');
         this.conditions = this.licenseAttributeFilter(license, 'CONDITION');

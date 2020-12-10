@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
 
 import { Scan,License } from '@app/threat-center/shared/models/types';
 import { ApiService,StateService } from '@app/threat-center/shared/services';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { ApiService,StateService } from '@app/threat-center/shared/services';
   templateUrl: './license-detail.component.html',
   styles: []
 })
-export class LicenseDetailComponent implements OnInit {
+export class LicenseDetailComponent implements OnInit,OnDestroy {
 
   //obsComponent:Observable<Component>;
   //vulnerabilityColumns = ['Vulnerability','Cwe','Severity','CVSS2','CVSS3'];
@@ -23,10 +24,13 @@ export class LicenseDetailComponent implements OnInit {
     private apiService:ApiService,
     public stateService:StateService,
     private route: ActivatedRoute,
-    private router:Router) { }
+    private router:Router,
+    private coreHelperService:CoreHelperService) { }
 
   licenseId:string;
 
+  breadcumDetail: any = {};
+  licenseName:string = "";
   ngOnInit() {
     console.log("Loading LicenseDetailComponent");
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
@@ -35,6 +39,11 @@ export class LicenseDetailComponent implements OnInit {
     console.log("componentId:",componentId);
     this.obsComponent = this.apiService.getComponent(componentId)
     .pipe(map(result => result.data.component));*/
+    this.initBreadcum();
+  }
+
+  ngOnDestroy(): void {
+    this.coreHelperService.settingProjectBreadcum("","","",false);
   }
 
   //onTabChange($event: NgbTabChangeEvent) {
@@ -60,5 +69,22 @@ export class LicenseDetailComponent implements OnInit {
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
     this.router.navigate([url]);
   }
+
+  gotoComponent() {
+    const entityId = this.route.snapshot.paramMap.get('entityId');
+    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId + "/component/" + this.breadcumDetail.SelectedComponent['id'];
+    this.router.navigate([url]);
+  }
+
+  //Getting license name after emiting
+  getLicenseName(name){
+    this.licenseName = name;
+  }
+
+  //Initialize breadcum details
+  private initBreadcum() {
+    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+  }
+
 
 }

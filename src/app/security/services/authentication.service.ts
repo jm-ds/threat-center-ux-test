@@ -87,6 +87,7 @@ export class AuthenticationService {
     this.localService.clearToken();
     sessionStorage.removeItem("jwt");
     sessionStorage.removeItem("currentUser");
+    sessionStorage.removeItem("ProjectBreadcum");
     this.currentUserSubject.next(null);
   }
 

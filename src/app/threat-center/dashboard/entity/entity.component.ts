@@ -10,6 +10,7 @@ import { ChartDB } from '../../../fack-db/chart-data';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { TableModule } from 'primeng/table';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
 
@@ -41,7 +42,8 @@ export class EntityComponent implements OnInit {
     private stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    private coreHelperService: CoreHelperService
   ) {
     this.chartDB = ChartDB;
     //this.licensePieChart.legend.show=true;
@@ -107,6 +109,7 @@ export class EntityComponent implements OnInit {
 
 
     this.obsEntity.subscribe(entity => {
+      this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
       //this.stateService.selectedScan = project.scans[0];
       let critical = [];
       let high = [];
@@ -136,7 +139,7 @@ export class EntityComponent implements OnInit {
       let asset = [];
       let projectAsset = [];
 
-      if(entity.entityMetrics) {
+      if (entity.entityMetrics) {
         let vulnerabilityMetrics = entity.entityMetrics.vulnerabilityMetrics;
         let licenseMetrics = entity.entityMetrics.licenseMetrics;
         let componentMetrics = entity.entityMetrics.componentMetrics;
