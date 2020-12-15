@@ -28,7 +28,19 @@ const routes: Routes = [
       {
         path: 'policy',
         loadChildren: () => import('./policy/policy.module').then(module => module.PolicyModule)
-      },      
+      },
+      {
+        path: 'org-setting',
+        loadChildren: () => import('./org-settings/org-settings.module').then(module => module.OrganizationSettingModule)
+      },
+      {
+        path: 'entity-setting',
+        loadChildren: () => import('./entity-settings/entity-settings.module').then(module => module.EntitySettingModule)
+      },
+      {
+        path: 'project-setting',
+        loadChildren: () => import('./project-settings/project-settings.module').then(module => module.ProjectSettingModule)
+      }
     ]
   }
 ];
