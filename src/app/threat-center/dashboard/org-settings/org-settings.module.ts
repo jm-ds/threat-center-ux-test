@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { OrganizationSettingRoutingModule } from './org-settings-routing.module';
 import { OrganizationSettingComponent } from './setting/org-setting.component';
 import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { DashboardModule } from '../dashboard.module';
 
 @NgModule({
     declarations: [OrganizationSettingComponent],
@@ -23,7 +24,8 @@ import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
         ThemeSharedModule,
         TableModule,
         NgbTabsetModule,
-        OrganizationSettingRoutingModule
+        OrganizationSettingRoutingModule,
+        DashboardModule
     ]
 })
 

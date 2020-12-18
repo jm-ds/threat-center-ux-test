@@ -1,33 +1,31 @@
 <div class="row">
-    <div class="col-6"><h3>Organization Settings</h3></div>
+    <div class="col-6">
+        <h3>Organization Settings</h3>
+    </div>
     <div class="col-6"></div>
 </div>
 
-
-<div class="row">
-    <div class="col-12">
-        <app-card [hidHeader]="true" cardClass="tab-card">
-            <ngb-tabset type="pills">
-                <ngb-tab title="Threat Agent Configuration" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                        Configuration
-                    </ng-template>
-                </ngb-tab>
-
-                <ngb-tab title="SAML Integration" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                        SAML Integration
-                    </ng-template>
-                </ngb-tab>
-
-                <ngb-tab title="Integrations" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                       <p> Jira Integration</p>
+<app-card [hidHeader]="true" cardClass="tab-card">
+    <div class="row">
+        <div class="col-3">
+            <app-vertical-tab [tabList]="tabDetails" (tabActiveId)="getActiveTabId($event)"></app-vertical-tab>
+        </div>
+        <div class="col-9">
+            <div class="tab-dtls">
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'threatagentconfiguration'}">
+                    <h4 class="tab-heading">Configuration</h4>
+                    Threat Agent Configuration
+                </div>
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'samlIntegrations'}">
+                    <h4 class="tab-heading">SAML Integration</h4>
+                    
+                </div>
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'integrations'}">
+                    <h4 class="tab-heading">Integrations</h4>
+                    <p> Jira Integration</p>
                        <p> Slack Integration</p>
-                    </ng-template>
-                </ngb-tab>
-
-            </ngb-tabset>
-        </app-card>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</app-card>

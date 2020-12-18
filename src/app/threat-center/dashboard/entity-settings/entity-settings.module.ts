@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { EntitySettingRoutingModule } from './entity-settings-routing.module';
 import { EntitySettingsComponent } from './setting/entity-settings.component';
+import { DashboardModule } from '../dashboard.module';
 
 @NgModule({
     declarations: [EntitySettingsComponent],
@@ -23,7 +24,8 @@ import { EntitySettingsComponent } from './setting/entity-settings.component';
         ThemeSharedModule,
         TableModule,
         NgbTabsetModule,
-        EntitySettingRoutingModule
+        EntitySettingRoutingModule,
+        DashboardModule
     ]
 })
 

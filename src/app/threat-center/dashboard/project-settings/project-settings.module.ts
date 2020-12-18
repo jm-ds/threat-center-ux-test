@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectSettingRoutingModule } from './project-settings-routing.module';
 import { ProjectSettingsComponent } from './setting/project-settings.component';
+import { DashboardModule } from '../dashboard.module';
 
 @NgModule({
     declarations: [ProjectSettingsComponent],
@@ -23,7 +24,8 @@ import { ProjectSettingsComponent } from './setting/project-settings.component';
         ThemeSharedModule,
         TableModule,
         NgbTabsetModule,
-        ProjectSettingRoutingModule
+        ProjectSettingRoutingModule,
+        DashboardModule
     ]
 })
 

@@ -9,30 +9,27 @@
     </div>
 </div>
 
-<div class="row tab-config">
-    <div class="col-12">
-        <app-card [hidHeader]="true" cardClass="tab-card">
-            <ngb-tabset type="pills">
+<div class="tab-config">
+    <app-card [hidHeader]="true" cardClass="tab-card ">
+        <div class="row">
+            <div class="col-3">
+                <app-vertical-tab [tabList]="tabDetails" (tabActiveId)="getActiveTabId($event)"></app-vertical-tab>
+            </div>
+            <div class="col-9">
+                <div class="tab-dtls">
+                    <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'alerts'}">
+                        <h4 class="tab-heading">Alerts</h4>
 
-                <ngb-tab title="Alerts" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                        Alerts
-                    </ng-template>
-                </ngb-tab>
+                    </div>
+                    <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'threatagentconfiguration'}">
+                        <h4 class="tab-heading">Threat Agent Configuration</h4>
 
-                <ngb-tab title="Threat Agent Configuration" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                        Threat Agent Configuration
-                    </ng-template>
-                </ngb-tab>
-
-                <ngb-tab title="User Management" class="mb-3 ml-0 pl-0">
-                    <ng-template ngbTabContent>
-                        User Management
-                    </ng-template>
-                </ngb-tab>
-
-            </ngb-tabset>
-        </app-card>
-    </div>
+                    </div>
+                    <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'usermanage'}">
+                        <h4 class="tab-heading">User Management</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-card>
 </div>
