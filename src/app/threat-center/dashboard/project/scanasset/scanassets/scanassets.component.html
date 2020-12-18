@@ -41,7 +41,7 @@
               <td>{{scanAsset.node.status}}</td>
               <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
             </tr>
-            <tr *ngIf="scanAsset.node.status != 'ACCEPTED'" >
+            <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED'" >
               <td>{{scanAsset.node.name}}</td>
               <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
               <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
