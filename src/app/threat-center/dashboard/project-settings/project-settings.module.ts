@@ -11,6 +11,7 @@ import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectSettingRoutingModule } from './project-settings-routing.module';
 import { ProjectSettingsComponent } from './setting/project-settings.component';
 import { DashboardModule } from '../dashboard.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [ProjectSettingsComponent],
@@ -25,7 +26,8 @@ import { DashboardModule } from '../dashboard.module';
         TableModule,
         NgbTabsetModule,
         ProjectSettingRoutingModule,
-        DashboardModule
+        DashboardModule,
+        NgbModule
     ]
 })
 

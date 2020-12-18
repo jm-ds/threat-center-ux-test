@@ -8,7 +8,23 @@
 <app-card [hidHeader]="true" cardClass="tab-card">
     <div class="row">
         <div class="col-3">
-            <app-vertical-tab [tabList]="tabDetails" (tabActiveId)="getActiveTabId($event)"></app-vertical-tab>
+            <ngb-accordion [closeOthers]="true" activeIds="static-1" class="settings-tabs">
+                <ngb-panel id="static-1">
+                    <ng-template ngbPanelTitle>
+                        <span><i class="fas fa-bars"></i>&nbsp;<b> Settings</b></span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <ul class="settings-submenu">
+                            <li *ngFor="let item of tabDetails" (click)="onClickTab(item)">
+                                <a class="cursor-pointer" [ngClass]="{'active': item.isActive}">
+                                    {{item.tabName}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
         </div>
         <div class="col-9">
             <div class="tab-dtls">
@@ -18,12 +34,12 @@
                 </div>
                 <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'samlIntegrations'}">
                     <h4 class="tab-heading">SAML Integration</h4>
-                    
+
                 </div>
                 <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'integrations'}">
                     <h4 class="tab-heading">Integrations</h4>
                     <p> Jira Integration</p>
-                       <p> Slack Integration</p>
+                    <p> Slack Integration</p>
                 </div>
             </div>
         </div>

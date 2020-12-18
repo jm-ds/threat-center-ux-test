@@ -34,10 +34,17 @@ export class ProjectSettingsComponent implements OnInit {
     ]
   }
 
-  getActiveTabId(activeTabId: string) {
-    this.activeTabId = activeTabId;
+  onClickTab(item) {
+    this.tabDetails.forEach(tab => {
+        if (tab.tabId == item.tabId) {
+            tab.isActive = true;
+        } else {
+            tab.isActive = false;
+        }
+    });
+    this.activeTabId = item.tabId;
   }
-  
+
   back() {
     this.location.back();
   }
