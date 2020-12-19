@@ -7,40 +7,72 @@ import { Component, OnInit } from "@angular/core";
 })
 
 export class EntitySettingsComponent implements OnInit {
-  tabDetails: any = [];
-  activeTabId: string = "alerts";
-  constructor() {
+  activeTabId: string = "Alerts";
+  activeLink: string = "alerts";
+  panelAlerts = [
+    {
+      tabName: "Alerts",
+      tabId: "threatagentconfiguration",
+      isActive: true
+    },
+    {
+      tabName: "Test 1",
+      tabId: "test1",
+      isActive: false
+    }
+  ];
 
+  panelConfiguration = [
+    {
+      tabName: "Threat Agent Configuration",
+      tabId: "threatagentconfiguration",
+      isActive: true
+    }
+  ];
+
+  panelUserManage = [
+    {
+      tabName: "User Management",
+      tabId: "usermanage",
+      isActive: true
+    }
+  ];
+
+  constructor() {
+  }
+
+  beforeChange(event) {
+    this.activeTabId = event.panelId;
+    if (event.nextState) {
+      switch (event.panelId) {
+        case "Configuration": {
+          this.activeLink = !!this.panelConfiguration.find(f => f.isActive) ? this.panelConfiguration.find(f => f.isActive).tabName : '';
+          break;
+        }
+        case "Alerts": {
+          this.activeLink = !!this.panelAlerts.find(f => f.isActive) ? this.panelAlerts.find(f => f.isActive).tabName : '';
+          break;
+        }
+        case "UserManagement": {
+          this.activeLink = !!this.panelUserManage.find(f => f.isActive) ? this.panelUserManage.find(f => f.isActive).tabName : '';
+          break;
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
-    this.tabDetails = [
-      {
-        tabName: "Alerts",
-        tabId: "alerts",
-        isActive: true
-      },
-      {
-        tabName: "Threat Agent Configuration",
-        tabId: "threatagentconfiguration",
-        isActive: false
-      },
-      {
-        tabName: "User Management",
-        tabId: "usermanage",
-        isActive: false
-      },
-    ]
   }
 
-  onClickTab(item) {
-    this.tabDetails.forEach(tab => {
+  onClickTab(panelArray, item) {
+    panelArray.forEach(tab => {
       if (tab.tabId == item.tabId) {
         tab.isActive = true;
       } else {
         tab.isActive = false;
       }
     });
-    this.activeTabId = item.tabId;
+    this.activeLink = item.tabName;
+
   }
 }  

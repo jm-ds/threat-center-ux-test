@@ -8,39 +8,82 @@ import { Component, OnInit } from '@angular/core';
 export class OrganizationSettingComponent implements OnInit {
 
     tabDetails: any = [];
-    activeTabId: string = "threatagentconfiguration";
+    
+    activeTabId: string = "Configuration";
+    activeLink: string = "Threat Agent Configuration";
+
+    panelConfiguration = [
+        {
+            tabName: "Threat Agent Configuration",
+            tabId: "threatagentconfiguration",
+            isActive: true
+        },
+        {
+            tabName: "Test 1",
+            tabId: "test1",
+            isActive: false
+        },
+        {
+            tabName: "Test2",
+            tabId: "test2",
+            isActive: false
+        }
+    ];
+    panelSaml = [
+        {
+            tabName: "SAML",
+            tabId: "saml",
+            isActive: true
+        },
+    ];
+    panelIntegration = [
+        {
+            tabName: "JIRA Integration",
+            tabId: "jira",
+            isActive: true
+        },
+        {
+            tabName: "SLACK Integration",
+            tabId: "slack",
+            isActive: false
+        }
+    ];
+
     constructor(
     ) {
     }
 
     ngOnInit() {
-        this.tabDetails = [
-            {
-                tabName: "Threat Agent Configuration",
-                tabId: "threatagentconfiguration",
-                isActive: true
-            },
-            {
-                tabName: "SAML Integration",
-                tabId: "samlIntegrations",
-                isActive: false
-            },
-            {
-                tabName: "Integrations",
-                tabId: "integrations",
-                isActive: false
-            },
-        ];
     }
 
-    onClickTab(item) {
-        this.tabDetails.forEach(tab => {
+    beforeChange(event) {
+        this.activeTabId = event.panelId;
+        if (event.nextState) {
+            switch (event.panelId) {
+                case "Configuration": {
+                    this.activeLink = !!this.panelConfiguration.find(f => f.isActive) ? this.panelConfiguration.find(f => f.isActive).tabName : '';
+                    break;
+                }
+                case "Saml": {
+                    this.activeLink = !!this.panelSaml.find(f => f.isActive) ? this.panelSaml.find(f => f.isActive).tabName : '';
+                    break;
+                }
+                case "Integration": {
+                    this.activeLink = !!this.panelIntegration.find(f => f.isActive) ? this.panelIntegration.find(f => f.isActive).tabName : '';
+                    break;
+                }
+            }
+        }
+    }
+
+    onClickTab(panelArray, item) {
+        panelArray.forEach(tab => {
             if (tab.tabId == item.tabId) {
                 tab.isActive = true;
             } else {
                 tab.isActive = false;
             }
         });
-        this.activeTabId = item.tabId;
+        this.activeLink = item.tabName;
     }
 }
