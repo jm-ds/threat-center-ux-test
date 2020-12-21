@@ -32,6 +32,18 @@
               {{col}}
             </th>
           </tr>
+          <tr>
+            <th *ngFor="let col of columns">
+              <input *ngIf="col =='Name'" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='SPDX'" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='Threat Category'" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='Style'" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
+            </th>
+          </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-license>
@@ -39,17 +51,17 @@
             <td>{{license.node.name}}</td>
             <td>{{license.node.spdxId}}</td>
             <td>
-              <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong"
+              <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
                 class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-              <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak"
+              <span *ngIf="license.node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak"
                 class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-              <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial"
+              <span *ngIf="license.node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial"
                 class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-              <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited"
+              <span *ngIf="license.node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited"
                 class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-              <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft"
+              <span *ngIf="license.node.category === 'COPYLEFT'" title="Copyleft"
                 class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-              <span *ngIf="license.node.category === 'Permissive'" title="Permissive"
+              <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive"
                 class="badge m-r-5 badge-light-success">PERMISSIVE</span>
             </td>
             <td>{{license.node.style}}</td>

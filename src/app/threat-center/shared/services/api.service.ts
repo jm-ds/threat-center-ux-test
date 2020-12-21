@@ -386,7 +386,8 @@ export class ApiService {
       `, 'no-cache');
   }
 
-  getScanVulnerabilities(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanVulnerabilities(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    let vulnFilterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
@@ -395,7 +396,7 @@ export class ApiService {
       query {
         scan(scanId:"${scanId}") {
             scanId,
-            vulnerabilities(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+            vulnerabilities(${vulnFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
                  hasNextPage
                  hasPreviousPage
@@ -434,53 +435,10 @@ export class ApiService {
         }
       }
   `);
-    // return this.coreGraphQLService.coreGQLReq<Scan>(gql`
-    //     query {
-    //       scan(scanId:"${scanId}") {
-    //         scanId,
-    //         components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
-    //           pageInfo {
-    //             hasNextPage
-    //             hasPreviousPage
-    //             startCursor
-    //             endCursor
-    //           }
-    //           totalCount
-    //           edges {
-    //             node {
-    //               componentId,
-    //               name,
-    //               group,
-    //               version,
-    //               vulnerabilities {
-    //                 edges {
-    //                   node {
-    //                     vulnerabilityId,
-    //                     vulnId,
-    //                     source,
-    //                     recommendation,
-    //                     vulnerableVersions,
-    //                     patchedVersions
-    //                     published,
-    //                     cwe{
-    //                        cweId,
-    //                        name
-    //                     },
-    //                     cvssV2BaseScore,
-    //                     cvssV3BaseScore,
-    //                     severity
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         }
-    //     	}
-    //     }
-    //   `);
   }
 
-  getScanComponents(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanComponents(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    let compFilterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
@@ -489,7 +447,7 @@ export class ApiService {
           query {
             scan(scanId:"${scanId}") {
               scanId,
-              components(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              components(${compFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
                 pageInfo {
                   hasNextPage
                   hasPreviousPage
@@ -551,7 +509,8 @@ export class ApiService {
       `);
   }
 
-  getScanLicenses(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanLicenses(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
@@ -560,7 +519,7 @@ export class ApiService {
          query {
             scan(scanId:"${scanId}") {
               scanId,
-              licenses(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              licenses(${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
                 pageInfo {
                   hasNextPage
                   hasPreviousPage
@@ -757,7 +716,8 @@ export class ApiService {
       `);
   }
 
-  getScanAssets(scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanAssets(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
@@ -766,7 +726,7 @@ export class ApiService {
         query {
         	 scan(scanId:"${scanId}") {
             scanId
-            scanAssets(${firstArg}${lastArg}${afterArg}${beforeArg}) {
+            scanAssets(${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
                 hasNextPage
                 hasPreviousPage
