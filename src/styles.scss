@@ -218,17 +218,17 @@
             overflow: hidden;
         }
 
-        .card-header  {
+        .card-header {
             padding: 0;
 
-            .btn  {
+            .btn {
                 padding: 10px 40px 10px 15px;
                 color: #fff;
-                border-radius: 4px 4px  0 0;
+                border-radius: 4px 4px 0 0;
                 background: rgba(255, 255, 255, 0.05);
                 text-decoration: none;
                 width: 100%;
-                font-size: 16px;
+                font-size: 14px;
                 color: #adb7be;
                 text-align: left;
                 box-shadow: none !important;
@@ -247,9 +247,15 @@
                 }
 
             }
+
+            .no-collapse {
+                &:after {
+                    display: none;
+                }
+            }
         }
 
-        .collapse  {
+        .collapse {
             width: 100%;
             display: block;
 
@@ -257,7 +263,15 @@
                 padding: 0;
                 background: rgba(255, 255, 255, 0.05);
                 border-radius: 0 0 4px 4px;
-                border-top: 1px solid #202932;
+                border-top: none;
+                min-height: inherit;
+                margin-top: -1px;
+            }
+
+            &.show {
+                .card-body {
+                    border-top: 1px solid #202932;
+                }
             }
         }
 
@@ -266,6 +280,7 @@
             margin: 0;
             width: 100%;
             list-style: none;
+
             li {
                 display: block;
 
@@ -284,12 +299,17 @@
                 }
 
                 &:last-child {
-                   a {
-                    border-bottom: none;
-                   }
+                    a {
+                        border-bottom: none;
+                    }
                 }
             }
         }
     }
 }
 
+.no-collapse {
+    &:after {
+        display: none;
+    }
+}

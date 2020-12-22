@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
 
 @Component({
   selector: 'app-entity-settings',
@@ -6,7 +6,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ['./entity-settings.component.scss']
 })
 
-export class EntitySettingsComponent implements OnInit {
+export class EntitySettingsComponent implements OnInit, AfterViewInit {
   activeTabId: string = "Alerts";
   activeLink: string = "alerts";
   panelAlerts = [
@@ -22,19 +22,24 @@ export class EntitySettingsComponent implements OnInit {
     }
   ];
 
-  panelConfiguration = [
+  accordianDetails = [
     {
-      tabName: "Threat Agent Configuration",
-      tabId: "threatagentconfiguration",
-      isActive: true
-    }
-  ];
-
-  panelUserManage = [
+      panelId: "Alerts",
+      panelName: "Alerts",
+      panelList: this.panelAlerts,
+      panelIcon: "fas fa-bars"
+    },
     {
-      tabName: "User Management",
-      tabId: "usermanage",
-      isActive: true
+      panelId: "Configuration",
+      panelName: "Threat Agent Configuration",
+      panelList: [],
+      panelIcon:"fas fa-cog"
+    },
+    {
+      panelId: "UserManagement",
+      panelName: "User Management",
+      panelList: [],
+      panelIcon:"fas fa-users"
     }
   ];
 
@@ -46,7 +51,7 @@ export class EntitySettingsComponent implements OnInit {
     if (event.nextState) {
       switch (event.panelId) {
         case "Configuration": {
-          this.activeLink = !!this.panelConfiguration.find(f => f.isActive) ? this.panelConfiguration.find(f => f.isActive).tabName : '';
+          this.activeLink = "Threat Agent Configuration";
           break;
         }
         case "Alerts": {
@@ -54,7 +59,7 @@ export class EntitySettingsComponent implements OnInit {
           break;
         }
         case "UserManagement": {
-          this.activeLink = !!this.panelUserManage.find(f => f.isActive) ? this.panelUserManage.find(f => f.isActive).tabName : '';
+          this.activeLink = "User Management";
           break;
         }
       }
@@ -64,15 +69,25 @@ export class EntitySettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClickTab(panelArray, item) {
-    panelArray.forEach(tab => {
-      if (tab.tabId == item.tabId) {
-        tab.isActive = true;
-      } else {
-        tab.isActive = false;
+  ngAfterViewInit(): void {
+    this.accordianDetails.forEach(panel => {
+      if (!!panel && panel.panelList.length == 0) {
+        const aPanelId = "#" + panel.panelId + '-header';
+        $(aPanelId).children('button').addClass('no-collapse');
       }
     });
-    this.activeLink = item.tabName;
+  }
 
+  onClickTab(panelArray, item) {
+    if (!!panelArray && panelArray.length >= 1) {
+      panelArray.forEach(tab => {
+        if (tab.tabId == item.tabId) {
+          tab.isActive = true;
+        } else {
+          tab.isActive = false;
+        }
+      });
+      this.activeLink = item.tabName;
+    }
   }
 }  
