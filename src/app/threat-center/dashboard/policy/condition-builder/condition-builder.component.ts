@@ -1,5 +1,5 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
-import { PolicyCondition, PolicyConditionGroup } from '@app/models';
+import { Policy, PolicyCondition, PolicyConditionGroup } from '@app/models';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +12,7 @@ import { PolicyCondition, PolicyConditionGroup } from '@app/models';
 export class ConditionBuilderComponent implements OnInit {
     @Input() public group: PolicyConditionGroup;
     @Input() public parentGroup: PolicyConditionGroup;
+    @Input() public policy: Policy;
     @Input() public readonly: Boolean;
 
     securityOperators: CodeNamePair[];
@@ -23,14 +24,14 @@ export class ConditionBuilderComponent implements OnInit {
     codeQualityOperators: CodeNamePair[];
     workflowReleasePhases: CodeNamePair[];
 
-
     conditionTypeItems: CodeNamePair[];
 
     conditionTypes: object;
 
-    constructor(group: PolicyConditionGroup, parentGroup: PolicyConditionGroup){
+    constructor(group: PolicyConditionGroup, parentGroup: PolicyConditionGroup, policy: Policy){
         this.group = group;
         this.parentGroup = parentGroup;
+        this.policy = policy;
     }
 
 
@@ -115,7 +116,7 @@ export class ConditionBuilderComponent implements OnInit {
     addChildGroup() {
         if (this.group.groupOperator) {
         let newGroup = new PolicyConditionGroup();
-        newGroup.groupOperator="AND";
+        newGroup.groupOperator="OR";
         if (!this.group.groups) {
             this.group.groups=[];
         }
@@ -126,11 +127,28 @@ export class ConditionBuilderComponent implements OnInit {
     addCondition() {
         if (this.group.groupOperator) {
         let newCondition = new PolicyCondition();
-        newCondition.conditionType="SECURITY";
+        newCondition.conditionType=this.policy.conditionType;
         if (!this.group.conditions) {
             this.group.conditions=[];
         }
         this.group.conditions.push(newCondition);
+        }
+    }
+
+    setConditionType(conditionType: string) {
+        console.log("new condition type "+conditionType);
+        this.setGroupConditionType(this.group, conditionType);
+    }
+
+    setGroupConditionType(group: PolicyConditionGroup, conditionType: string) {
+        if (group.conditions) {
+            group.conditions = group.conditions.filter(item => item.conditionType === conditionType);
+        }
+        if (group.groups) {
+            for (const grp of group.groups) {
+                this.setGroupConditionType(grp,conditionType);
+            }
+            group.groups = group.groups.filter(item => item.conditions.length>0);
         }
     }
 }

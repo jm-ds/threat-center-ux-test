@@ -1,7 +1,7 @@
 <div style="width: 100%;">
   <div class = "card pr-2">
     <div class="mb-0">
-    <button *ngIf="!readonly && parentGroup.groupId" type="button" class="btn btn-icon" title="Remove group" (click)="this.removeGroup(group)" 
+    <button *ngIf="!readonly && parentGroup.groupOperator" type="button" class="btn btn-icon" title="Remove group" (click)="this.removeGroup(group)" 
     style="color: #c9d0d5; float: right;">
       <i class="feather icon-x" style="font-size: 14px; font-weight: 800;"></i>
     </button>
@@ -27,15 +27,15 @@
           style="color: #c9d0d5;">
             <i class="feather icon-x" style="font-size: 12px; font-weight: 800;"></i>
           </button>
-          <div *ngIf="readonly;  else editableConditionType" class="font-weight-bolder float-left" style="margin-top: 7px;">
+           <div class="font-weight-bolder float-left" style="margin-top: 7px;">
             {{conditionTypes[condition.conditionType]}}</div>
-          <ng-template #editableConditionType>
+<!--           <ng-template #editableConditionType>
             <select [(ngModel)]="condition.conditionType" 
                 class="form-control form-control-sm float-left input-sm ng-select" style="width: min-content;">
               <option disabled [ngValue]="undefined"> </option>  
               <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
             </select>
-          </ng-template>
+          </ng-template> -->
         </div>  
         <ng-template ngSwitchCase="SECURITY">
             <div class="form-group" *ngIf="!readonly || condition.securitySeverityValue">

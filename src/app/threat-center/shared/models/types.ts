@@ -132,6 +132,7 @@ export class AssetMetrics {
 
 export class Project {
   projectId:string;
+  entityId:string;
   name:string;
   created:any;
   latestScan: Scan;

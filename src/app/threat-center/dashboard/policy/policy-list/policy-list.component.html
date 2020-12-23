@@ -18,7 +18,7 @@
                 <label class="custom-control-label" for="onlyActive">Only active</label>
               </div>
             <div class="text-left">
-                <a routerLink="/dashboard/policy/create" class="btn btn-outline-info">Add Policy</a>
+                <a routerLink="/dashboard/policy/create/{{entityId}}/{{projectId}}" class="btn btn-outline-info">Add Policy</a>
             </div>
         </div>
       </ng-template>
@@ -26,14 +26,17 @@
         <tr>
             <th>Name</th>
             <th>Title</th>
+            <th>Type</th>
             <th>Active</th>
             <th>Description</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-policy let-columns="columns">
-        <tr [routerLink]="['/dashboard/policy/show',policy.node.policyId]">
+        <tr [routerLink]="['/dashboard/policy/show',policy.node.policyId, policy.node.entityId==='00000000-0000-0000-0000-000000000000'? '': policy.node.entityId, 
+          policy.node.projectId==='00000000-0000-0000-0000-000000000000'? '': policy.node.projectId]">
             <td>{{policy.node.name}}</td>
             <td>{{policy.node.title}}</td>
+            <td>{{conditionTypes[policy.node.conditionType]}}</td>
             <td>
                 <ng-template [ngIf]="policy.node.active == true">
                   <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>

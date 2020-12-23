@@ -11,18 +11,25 @@ export class PolicyService {
     constructor(private apollo: Apollo) {
     }
 
-    getPolicyList(onlyActive: Boolean) {
-        let filter = (onlyActive==undefined)?``:`(onlyActive: ${onlyActive})`;
+    getPolicyList(entityId: string, projectId: string, onlyActive: Boolean) {
+        const entityIdParam = (!!entityId) ? `entityId: "${entityId}"` : '';
+        const projectIdParam = (!!projectId) ? `projectId: "${projectId}"` : '';
+        const onlyActiveParam = (!!onlyActive) ? `onlyActive: ${onlyActive}` : '';
+        const filter=this.collectString(entityIdParam, projectIdParam, onlyActiveParam);
+        
         return this.apollo.watchQuery<PoliciesQuery>({
             query: gql(`query {
-                policies ${filter} {
+                policies (${filter}) {
                     edges {
                       node {
                         orgId
+                        entityId
+                        projectId
                         policyId
                         name
                         active
                         title
+                        conditionType
                         description
                       }
                     }
@@ -32,7 +39,11 @@ export class PolicyService {
         }).valueChanges;
     }
 
-    getPolicy(policyId: string) {
+    getPolicy(entityId: string, projectId: string, policyId: string) {
+        const entityIdParam = (!!entityId) ? `entityId: "${entityId}"` : '';
+        const projectIdParam = (!!projectId) ? `projectId: "${projectId}"` : '';
+        const policyIdParam = (!!policyId) ? `policyId: "${policyId}"` : '';
+        const params=this.collectString(entityIdParam, projectIdParam, policyIdParam);
         let groupsQuery = `groups {
             policyId
             groupId
@@ -68,13 +79,23 @@ export class PolicyService {
             %groups%
         }`;
         let query = `query {
-            policy(policyId: "${policyId}") {
+            policy(${params}) {
                 orgId
                 policyId
+                entityId
+                projectId
                 name
                 title
                 description
+                applyToChilds
+                conditionType
                 createdBy
+                entity {
+                    name
+                } 
+                project {
+                    name
+                }
                 active
                 createDate
                 dateRemoved
@@ -135,6 +156,8 @@ export class PolicyService {
             mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
                 createPolicy(policyRequest: $policyRequest) {
                     orgId,
+                    entityId,
+                    projectId,
                     policyId
                 }
             }`,
@@ -144,6 +167,30 @@ export class PolicyService {
         });
     }
 
+    // clear uuid if null uuid  
+    nullUUID(uuid) {
+        if (uuid==="00000000-0000-0000-0000-000000000000") {
+            return undefined;
+        } else {
+            return uuid;
+        }
+    }
+
+    collectString(...strings) {
+        let result='';
+        for (const str of strings) {
+            if (!!str) {
+                if (!!result) {
+                    result=result+',';
+                }
+                result=result+str;
+            }
+        }
+        return result;
+    }
+
+
+
     removePolicy(policy: Policy) {
         const policyRequest = new PolicyRequestInput(policy);
 
@@ -151,6 +198,8 @@ export class PolicyService {
             mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
                 removePolicy(policyRequest: $policyRequest) {
                     orgId,
+                    entityId,
+                    projectId,
                     policyId,
                     active
                 }
@@ -160,6 +209,27 @@ export class PolicyService {
             }
         });
 
+    }
+
+    getConditionTypes() {
+        return {
+            "SECURITY": "Security",
+            "LEGAL": "Legal",
+            "COMPONENT": "Component" ,
+            "CODE_QUALITY": "Code quality",
+            "WORKFLOW": "Workflow"
+        };
+    }
+
+    getConditionTypeItems() {
+        let conditionTypes = this.getConditionTypes();
+        let conditionTypeItems = [];
+        for (const key in conditionTypes) {
+            if (Object.prototype.hasOwnProperty.call(conditionTypes, key)) {
+                conditionTypeItems.push({code: key, name: conditionTypes[key]})
+            }
+        }
+        return conditionTypeItems;
     }
 
 }

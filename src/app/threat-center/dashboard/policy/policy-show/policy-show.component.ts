@@ -7,12 +7,16 @@ import {PolicyService} from "@app/threat-center/dashboard/services/policy.servic
     selector: 'app-policy-view',
     templateUrl: './policy-show.component.html',
     styleUrls: ['./policy-show.component.scss'],
-    providers: [PolicyConditionGroup]
+    providers: [PolicyConditionGroup, Policy]
 })
 export class PolicyShowComponent implements OnInit {
 
     policy: Policy;
     messages: Messages;
+    entityId: string;
+    projectId: string
+    conditionTypes: any;
+
 
     public actionCols = ['ActionType','ActionName'];
 
@@ -27,8 +31,11 @@ export class PolicyShowComponent implements OnInit {
 
     ngOnInit() {
         this.policy = null;
+        this.conditionTypes = this.policyService.getConditionTypes();
         const policyId = this.route.snapshot.paramMap.get('policyId');
-        this.policyService.getPolicy(policyId).subscribe(
+        this.entityId = this.policyService.nullUUID(this.route.snapshot.paramMap.get('entityId'));
+        this.projectId = this.policyService.nullUUID(this.route.snapshot.paramMap.get('projectId'));
+        this.policyService.getPolicy(this.entityId, this.projectId, policyId).subscribe(
             data => {
                 this.policy = data.data.policy;
                 if (this.policy) {
@@ -70,11 +77,17 @@ export class PolicyShowComponent implements OnInit {
         if (confirm("Are you sure you want to delete the policy ?")) {
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
-                    this.router.navigate(['/dashboard/policy/list'],
+                    const link = '/dashboard/policy/list'+
+                        ((!!this.entityId)? ('/'+this.entityId):'')+
+                        ((!!this.projectId)? ('/'+this.projectId):'');
+                    this.router.navigate([link],
                         {state: {messages: [Message.success("Policy removed successfully.")]}});
                 }, (error) => {
                     console.error('Policy Removing', error);
-                    this.router.navigate(['/dashboard/policy/show/' + this.policy.policyId],
+                    const link = '/dashboard/policy/show/'+ this.policy.policyId+
+                        ((!!this.entityId)? ('/'+this.entityId):'')+
+                        ((!!this.projectId)? ('/'+this.projectId):'');
+                    this.router.navigate([link],
                         {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy.")]}});
                 });
         }

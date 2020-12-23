@@ -1,13 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
+import { Entity } from '@app/threat-center/shared/models/types';
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
 
 @Component({
   selector: 'app-policy-edit',
   templateUrl: './policy-edit.component.html',
   styleUrls: ['./policy-edit.component.scss'],
-  providers: [PolicyConditionGroup]
+  providers: [PolicyConditionGroup, Policy]
 })
 export class PolicyEditComponent implements OnInit {
 
@@ -17,6 +20,11 @@ export class PolicyEditComponent implements OnInit {
     confirmed: Array<any>;
     source: Array<any>;
     display: any;
+    entityId: string;
+    projectId: string
+    conditionTypeItems: any;
+    @ViewChild(ConditionBuilderComponent, {static: false}) conditions: ConditionBuilderComponent;
+
     public actionTypes = [{label: 'ALERT', value: 'ALERT'},{label: 'ISSUE', value: 'ISSUE'},{label: 'RELEASE', value: 'RELEASE'}];
     public actionNames = {
         'ALERT': [{label: 'SLACK', value: 'SLACK'},{label: 'EMAIL', value: 'EMAIL'},{label: 'DASHBOARD', value:'DASHBOARD'}],
@@ -30,6 +38,7 @@ export class PolicyEditComponent implements OnInit {
 
     constructor(
         private policyService: PolicyService,
+        private apiService: ApiService,
         protected router: Router,
         private route: ActivatedRoute,
     ) {
@@ -38,10 +47,13 @@ export class PolicyEditComponent implements OnInit {
 
     ngOnInit() {
         this.policy = null;
+        this.conditionTypeItems = this.policyService.getConditionTypeItems();
         const policyId = this.route.snapshot.paramMap.get('policyId');
+        this.entityId = this.policyService.nullUUID(this.route.snapshot.paramMap.get('entityId'));
+        this.projectId = this.policyService.nullUUID(this.route.snapshot.paramMap.get('projectId'));
         if (policyId !== null && policyId !== undefined) {
             this.newPolicy = false;
-            this.policyService.getPolicy(policyId).subscribe(
+            this.policyService.getPolicy(this.entityId, this.projectId, policyId).subscribe(
                 data => {
                     this.policy = data.data.policy;
                     if (this.policy) {
@@ -60,8 +72,22 @@ export class PolicyEditComponent implements OnInit {
             this.newPolicy = true;
             this.policy = new Policy();
             this.policy.rootGroup=new PolicyConditionGroup();
-            this.policy.rootGroup.groupOperator = "AND";
+            this.policy.rootGroup.groupOperator = "OR";
+            this.policy.entityId=this.entityId;
+            this.policy.projectId=this.projectId;
+            this.policy.conditionType = "SECURITY";
+            this.policy.applyToChilds = true;
             this.confirmed = [];
+            if (!!this.entityId) {
+                this.apiService.getEntity(this.entityId).subscribe(data=>{
+                    this.policy.entity=data.data.entity;
+                })
+            }
+            if (!!this.projectId) {
+                this.apiService.getProject(this.projectId, 0).subscribe(data=>{
+                    this.policy.project=data.data.project;
+                })
+            }
         }
     }
 
@@ -74,7 +100,10 @@ export class PolicyEditComponent implements OnInit {
         this.prepareConditionsBeforeSave(this.policy.rootGroup);
         this.policyService.savePolicy(this.policy)
             .subscribe(data => {
-                this.router.navigate(['/dashboard/policy/show/' + data.data.createPolicy.policyId],
+                const link = '/dashboard/policy/show/'+ data.data.createPolicy.policyId+
+                    ((!!this.entityId)? ('/'+this.entityId):'')+
+                    ((!!this.projectId)? ('/'+this.projectId):'');
+                this.router.navigate([link],
                     {state: {messages: [Message.success("Policy saved successfully.")]}});
             }, (error) => {
                 console.error('Policy Saving', error);
@@ -298,6 +327,13 @@ export class PolicyEditComponent implements OnInit {
         if (index > -1) {
             this.policy.actions.splice(index, 1);
         }
+    }
+
+    onTypeChange(event: any) {
+        console.log(event);
+        this.conditions.setConditionType(event);
+
+        console.log(this.conditions);
     }
 
 }

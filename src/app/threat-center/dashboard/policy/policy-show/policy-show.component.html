@@ -21,6 +21,14 @@
             <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
           </ng-template>
           
+          <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
+            <label >Entity</label>
+            <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
+          </div>
+          <div *ngIf="policy.project" class="form-group " style="padding-left: 0px">
+            <label >Project</label>
+            <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
+          </div>
           <div class="form-group " style="padding-left: 0px">
             <label >Name</label>
             <input disabled class="form-control" style="width: 100%;" value="{{policy.name}}"/>
@@ -30,8 +38,16 @@
             <input disabled class="form-control" value="{{policy.title}}"/>
           </div>
           <div class="form-group">
+            <label class="font-weight-bolder">Type</label>
+            <input disabled class="form-control" value="{{conditionTypes[policy.conditionType]}}"/>
+          </div>
+          <div class="form-group">
             <label class="font-weight-bolder">Description</label>
             <input disabled class="form-control" value="{{policy.description}}"/>
+          </div>
+          <div class="form-group">
+            <label class="font-weight-bolder">Apply to childs</label>
+            <input disabled type="checkbox" class="ml-3" [ngModel]="policy.applyToChilds"/>
           </div>
           <div class="form-group" style="padding-left: 0px">
               <label class="font-weight-bolder">Created by</label>
@@ -52,7 +68,7 @@
     <!-- Conditions -->
     <div class="col-lg-6 col-md-12 mb-4">
       <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
-        <condition-builder style="width: 100%" [group]="policy.rootGroup" [readonly]="true">
+        <condition-builder style="width: 100%" [group]="policy.rootGroup" [readonly]="true" [policy]="policy">
         </condition-builder>  
       </app-card>  
     </div>   
@@ -91,13 +107,13 @@
   </div>    
   <div class="actions mt-4">
       <ng-template [ngIf]="policy.active == true">
-        <a routerLink="/dashboard/policy/edit/{{policy.policyId}}" class="btn btn-outline-info">
+        <a routerLink="/dashboard/policy/edit/{{policy.policyId}}/{{entityId}}/{{projectId}}" class="btn btn-outline-info">
             <i class="feather icon-edit"></i>
             Edit
         </a>
       </ng-template>  
 
-      <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
+      <a routerLink="/dashboard/policy/list/{{entityId}}/{{projectId}}" class="btn btn-outline-secondary">
           <i class="feather icon-list"></i>
           Back to list
       </a>
@@ -115,7 +131,7 @@
 <ng-template [ngIf]="policy === undefined">
   <app-alert type="warning">Policy not found.</app-alert>
 
-  <a routerLink="/dashboard/policy/list" class="btn btn-outline-secondary">
+  <a routerLink="/dashboard/policy/list/{{entityId}}/{{projectId}}" class="btn btn-outline-secondary">
       <i class="feather icon-list"></i>
       Back to list
   </a>
