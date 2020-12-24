@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-6">
+        <h3>Organization Settings</h3>
+    </div>
+    <div class="col-6"></div>
+</div>
+
+<app-card [hidHeader]="true" cardClass="tab-card">
+    <div class="row">
+        <div class="col-3">
+            <ngb-accordion [closeOthers]="true" [activeIds]="activeTabId" class="settings-tabs"
+                (panelChange)="beforeChange($event)">
+                <ngb-panel id="{{panel.panelId}}" *ngFor="let panel of accordianDetails">
+                    <ng-template ngbPanelTitle>
+                        <span><i *ngIf="!!panel.panelIcon && panel.panelIcon !== ''" class="{{panel.panelIcon}}"></i>&nbsp;<b> {{panel.panelName}}</b></span>
+                    </ng-template>
+                    <ng-template ngbPanelContent *ngIf="!!panel.panelList && panel.panelList.length >= 1">
+                        <ul class="settings-submenu">
+                            <li *ngFor="let item of panel.panelList" (click)="onClickTab(panel.panelList,item)">
+                                <a class="cursor-pointer" [ngClass]="{'active': item.isActive}">
+                                    {{item.tabName}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+        </div>
+        <div class="col-9">
+            <div class="tab-dtls">
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Configuration'}">
+                    <h4 class="tab-heading">Configuration</h4>
+                    {{activeLink}}
+                </div>
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Saml'}">
+                    <h4 class="tab-heading">SAML Integration</h4>
+                    {{activeLink}}
+                </div>
+                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Integration'}">
+                    <h4 class="tab-heading">Integrations</h4>
+                    <p> {{activeLink}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-card>
