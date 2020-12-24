@@ -1,94 +1,130 @@
-import { Component, Input, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { MatPaginator } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Scan } from '@app/threat-center/shared/models/types';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { Observable } from 'rxjs';
-import { debounceTime, map, filter, startWith } from 'rxjs/operators';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Scan} from '@app/threat-center/shared/models/types';
+import {ApiService} from '@app/threat-center/shared/services/api.service';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
-  selector: 'licenses',
-  templateUrl: './licenses.component.html',
-  styles: []
+    selector: 'app-licenses',
+    templateUrl: './licenses.component.html',
+    styles: []
 })
 export class LicensesComponent implements OnInit {
 
-  @Input() scanId;
-  @Input() obsScan: Observable<Scan>;
+    @Input() scanId;
+    @Input() obsScan: Observable<Scan>;
 
-  columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+    columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
-  defaultPageSize = 25;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  licensesDetails: any;
+    defaultPageSize = 25;
+    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+    licensesDetails: any;
 
-  constructor(private apiService: ApiService,
-    private router: Router,
-    private route: ActivatedRoute) { }
+    columnsFilter = new Map();
+    timeOut;
+    timeOutDuration = 1000;
 
-  ngOnInit() {
-    console.log("Loading LicensesComponent for scanId: ", this.scanId);
-    if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanLicenses(this.scanId, Number(this.defaultPageSize))
-        .pipe(map(result => result.data.scan));
-
-      this.initData();
-    } else {
-      this.initData();
+    constructor(private apiService: ApiService,
+                private router: Router,
+                private route: ActivatedRoute) {
     }
 
-  }
+    ngOnInit() {
+        console.log("Loading LicensesComponent for scanId: ", this.scanId);
+        if (!this.obsScan) {
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+                .pipe(map(result => result.data.scan));
 
-  //While any changes occurred in page
-  changePage(pageInfo) {
-    if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
-      //page size changed...
-      this.defaultPageSize = pageInfo.pageSize;
-      //API Call
-      this.loadLicensesData(Number(this.defaultPageSize), undefined, undefined, undefined);
-      this.paginator.firstPage();
-    }
-    else {
-      //Next and Previous changed
-      if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
-        //call with after...
-        if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo['hasNextPage']) {
-          this.loadLicensesData(Number(this.defaultPageSize), undefined,
-            this.licensesDetails.licenses.pageInfo['endCursor'], undefined);
+            this.initData();
+        } else {
+            this.initData();
         }
-      } else {
-        //call with before..
-        if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo['hasPreviousPage']) {
-          this.loadLicensesData(undefined, Number(this.defaultPageSize),
-            undefined, this.licensesDetails.licenses.pageInfo['startCursor']);
-        }
-      }
+
     }
-  }
 
-  //Loading Licenses data after paggination for scan tab.
-  loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
-    let licenses = this.apiService.getScanLicenses(this.scanId, first, last, endCursor, startCursor)
-      .pipe(map(result => result.data.scan));
+    // While any changes occurred in page
+    changePage(pageInfo) {
+        if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
+            // page size changed...
+            this.defaultPageSize = pageInfo.pageSize;
+            // API Call
+            this.loadLicensesData(Number(this.defaultPageSize), undefined, undefined, undefined);
+            this.paginator.firstPage();
+        } else {
+            // Next and Previous changed
+            if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
+                // call with after...
+                if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasNextPage) {
+                    this.loadLicensesData(Number(this.defaultPageSize), undefined,
+                        this.licensesDetails.licenses.pageInfo.endCursor, undefined);
+                }
+            } else {
+                // call with before..
+                if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasPreviousPage) {
+                    this.loadLicensesData(undefined, Number(this.defaultPageSize),
+                        undefined, this.licensesDetails.licenses.pageInfo.startCursor);
+                }
+            }
+        }
+    }
 
-      licenses.subscribe(license => {
-      this.licensesDetails = license;
-    });
+    // Loading Licenses data after paggination for scan tab.
+    loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
+        let licenses = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+            .pipe(map(result => result.data.scan));
 
-  }
+        licenses.subscribe(license => {
+            this.licensesDetails = license;
+        });
 
-  //goto detail Page
-  gotoDetails(lId) {
-    const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
-    const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
-    this.router.navigate([decodeURIComponent(url)]);
-  }
+    }
 
-  //initializing data
-  private initData() {
-    this.obsScan.subscribe(licenses => {
-      this.licensesDetails = licenses;
-    });
-  }
+    // goto detail Page
+    gotoDetails(lId) {
+        const entityId = this.route.snapshot.paramMap.get('entityId'),
+            projectId = this.route.snapshot.paramMap.get('projectId');
+        const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
+        this.router.navigate([decodeURIComponent(url)]);
+    }
+
+    filterColumn(column, value) {
+        if (value.length === 0) {
+            this.columnsFilter.delete(column);
+        } else {
+            this.columnsFilter.set(column, value);
+        }
+        clearTimeout(this.timeOut);
+        this.timeOut = setTimeout(() => {
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+                .pipe(map(result => result.data.scan));
+            this.initData();
+        }, this.timeOutDuration);
+    }
+
+    getColumnFilterValue(key) {
+        let value = this.columnsFilter.get(key);
+        if (value === undefined) {
+            return '';
+        } else {
+            return value;
+        }
+    }
+
+    private makeFilterMapForService() {
+        let filterString = '';
+        this.columnsFilter.forEach((val, key) => {
+            filterString += key + ":" + val + ",";
+        });
+        return filterString;
+    }
+
+    // initializing data
+    private initData() {
+        this.obsScan.subscribe(licenses => {
+            this.licensesDetails = licenses;
+        });
+    }
 
 }

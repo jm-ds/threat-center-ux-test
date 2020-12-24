@@ -273,8 +273,8 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
-            </vulnerabilities>
+            <app-vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
+            </app-vulnerabilities>
           </ng-template>
         </ngb-tab>
 
@@ -287,7 +287,7 @@
           </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></components>
+            <app-components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></app-components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -326,7 +326,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></licenses>
+            <app-licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></app-licenses>
           </ng-template>
         </ngb-tab>
 
@@ -427,7 +427,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></scanassets>
+            <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></app-scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>
