@@ -74,7 +74,7 @@ export class PolicyShowComponent implements OnInit {
 
 
     removePolicy() {
-        if (confirm("Are you sure you want to delete the policy ?")) {
+        if (confirm("Are you sure you want to delete the policy?")) {
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -89,6 +89,33 @@ export class PolicyShowComponent implements OnInit {
                         ((!!this.projectId)? ('/'+this.projectId):'');
                     this.router.navigate([link],
                         {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy.")]}});
+                });
+        }
+    }
+
+    // enable/disable policy
+    enablePolicy() {
+        let confirmText = "Are you sure you want to disable the policy?";
+        if (!this.policy.active) {
+            confirmText = "Are you sure you want to enable the policy?";
+        }
+        if (confirm(confirmText)) {
+            let policy = Object.assign({}, this.policy);
+            policy.active=!policy.active;
+            this.policyService.enablePolicy(policy)
+                .subscribe(({data}) => {
+                    const link = '/dashboard/policy/list'+
+                        ((!!this.entityId)? ('/'+this.entityId):'')+
+                        ((!!this.projectId)? ('/'+this.projectId):'');
+                    this.router.navigate([link],
+                        {state: {messages: [Message.success("Policy state changed successfully.")]}});
+                }, (error) => {
+                    console.error('Policy state change', error);
+                    const link = '/dashboard/policy/show/'+ this.policy.policyId+
+                        ((!!this.entityId)? ('/'+this.entityId):'')+
+                        ((!!this.projectId)? ('/'+this.projectId):'');
+                    this.router.navigate([link],
+                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state.")]}});
                 });
         }
     }

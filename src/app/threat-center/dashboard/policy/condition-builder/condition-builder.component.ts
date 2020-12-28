@@ -17,7 +17,7 @@ export class ConditionBuilderComponent implements OnInit {
 
     securityOperators: CodeNamePair[];
     securitySeverityValues: CodeNamePair[];
-    securityCVSS3ScoreValues: CodeNamePair[]
+    securityCVSS3ScoreValues: NumCodeNamePair[]
     legalOperators: CodeNamePair[];
     legalFoundInValues: CodeNamePair[];
     componentOperators: CodeNamePair[];
@@ -67,16 +67,16 @@ export class ConditionBuilderComponent implements OnInit {
             { code: "CRITICAL", name: "Critical" }
         ];
         this.securityCVSS3ScoreValues = [
-            { code: "1", name: "1" },
-            { code: "2", name: "2" },
-            { code: "3", name: "3" },
-            { code: "4", name: "4" },
-            { code: "5", name: "5" },
-            { code: "6", name: "6" },
-            { code: "7", name: "7" },
-            { code: "8", name: "8" },
-            { code: "9", name: "9" },
-            { code: "10", name: "10" }
+            { code: 1, name: "1" },
+            { code: 2, name: "2" },
+            { code: 3, name: "3" },
+            { code: 4, name: "4" },
+            { code: 5, name: "5" },
+            { code: 6, name: "6" },
+            { code: 7, name: "7" },
+            { code: 8, name: "8" },
+            { code: 9, name: "9" },
+            { code: 10, name: "10" }
         ];
         this.legalFoundInValues = [
             { code: "COMPONENT", name: "Component" },
@@ -157,3 +157,9 @@ class CodeNamePair {
   code: String;
   name: String;
 }
+
+class NumCodeNamePair {
+    code: number;
+    name: String;
+  }
+  

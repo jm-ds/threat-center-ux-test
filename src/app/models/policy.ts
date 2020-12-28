@@ -16,8 +16,10 @@ export class Policy {
     entity: Entity;
     project: Project;
     createDate: Date;
-    dateRemoved: Date;
+    dateLastStateChange: Date;
     conditionType: string;
+    overridePolicyId: string;
+    overridePolicyTitle: string;
     rootGroup: PolicyConditionGroup;
     actions: PolicyAction[];
 }
@@ -109,7 +111,7 @@ export class PolicyRequestInput {
         delete policy['project'];
         delete policy["__typename"];
         let gr=[policy.rootGroup];
-        while (gr.length>0) {
+        while (gr.length>0 && gr[0]) {
             let group = gr.shift();
             delete group["__typename"];
             if (group.conditions) {

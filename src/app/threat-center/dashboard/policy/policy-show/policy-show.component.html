@@ -1,7 +1,7 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
       <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a routerLink="/dashboard/policy/list">Policies</a></li>
+          <li class="breadcrumb-item"><a routerLink="/dashboard/policy/list/{{entityId}}/{{projectId}}">Policies</a></li>
           <li class="breadcrumb-item active text-muted" aria-current="page">Policy</li>
       </ol>
   </nav>
@@ -50,6 +50,10 @@
             <input disabled type="checkbox" class="ml-3" [ngModel]="policy.applyToChilds"/>
           </div>
           <div class="form-group" style="padding-left: 0px">
+            <label class="font-weight-bolder">Overrides policy</label>
+            <input disabled class="form-control" value="{{policy.overridePolicyTitle}}"/>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
               <label class="font-weight-bolder">Created by</label>
               <input disabled class="form-control" value="{{policy.createdBy}}"/>
           </div>
@@ -57,9 +61,9 @@
             <label class="font-weight-bolder">Created date</label>
             <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
           </div>
-          <div *ngIf="!policy.active" class="form-group">
-            <label class="font-weight-bolder">Removed date</label>
-            <input disabled class="form-control" value="{{policy.dateRemoved | date :'M/d/y h:mmaa' | lowercase}}"/>
+          <div *ngIf="policy.active!=undefined" class="form-group">
+            <label class="font-weight-bolder">Last state change</label>
+            <input disabled class="form-control" value="{{policy.dateLastStateChange | date :'M/d/y h:mmaa' | lowercase}}"/>
           </div>
 
         </div>
@@ -118,12 +122,15 @@
           Back to list
       </a>
 
-      <ng-template [ngIf]="policy.active == true">
-        <a  (click)="removePolicy()" class="btn btn-outline-danger float-right">
-            <i class="feather icon-trash"></i>
-            Delete
-        </a>
-      </ng-template>  
+      <a  (click)="enablePolicy()" class="btn btn-outline-danger float-right">
+          <i class="feather icon-x"></i>
+          {{policy.active? 'Disable': 'Enable'}}
+      </a>
+
+      <a  (click)="removePolicy()" class="btn btn-outline-danger float-right">
+          <i class="feather icon-trash"></i>
+          Delete
+      </a>
   </div>
 </ng-template>
 

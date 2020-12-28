@@ -15,11 +15,14 @@ export class PolicyService {
         const entityIdParam = (!!entityId) ? `entityId: "${entityId}"` : '';
         const projectIdParam = (!!projectId) ? `projectId: "${projectId}"` : '';
         const onlyActiveParam = (!!onlyActive) ? `onlyActive: ${onlyActive}` : '';
-        const filter=this.collectString(entityIdParam, projectIdParam, onlyActiveParam);
+        let filter=this.collectString(entityIdParam, projectIdParam, onlyActiveParam);
+        if (filter) {
+            filter = '('+filter+')';
+        }
         
         return this.apollo.watchQuery<PoliciesQuery>({
             query: gql(`query {
-                policies (${filter}) {
+                policies ${filter} {
                     edges {
                       node {
                         orgId
@@ -98,7 +101,9 @@ export class PolicyService {
                 }
                 active
                 createDate
-                dateRemoved
+                dateLastStateChange
+                overridePolicyId
+                overridePolicyTitle
                 rootGroup {
                     policyId
                     groupId
@@ -189,14 +194,34 @@ export class PolicyService {
         return result;
     }
 
-
-
     removePolicy(policy: Policy) {
         const policyRequest = new PolicyRequestInput(policy);
 
         return this.apollo.mutate({
             mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
                 removePolicy(policyRequest: $policyRequest) {
+                    orgId,
+                    entityId,
+                    projectId,
+                    policyId,
+                    active
+                }
+            }`,
+            variables: {
+                policyRequest: policyRequest
+            }
+        });
+
+    }
+
+
+    // enable/disable policy
+    enablePolicy(policy: Policy) {
+        const policyRequest = new PolicyRequestInput(policy);
+
+        return this.apollo.mutate({
+            mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
+                enablePolicy(policyRequest: $policyRequest) {
                     orgId,
                     entityId,
                     projectId,
