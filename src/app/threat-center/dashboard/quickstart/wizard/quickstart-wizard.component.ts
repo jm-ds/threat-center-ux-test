@@ -12,6 +12,9 @@ import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
+import { ScanHelperService } from '../../services/scan.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 
 @Component({
     selector: 'app-quickstart',
@@ -44,7 +47,9 @@ export class QuickstartWizardComponent implements OnInit {
         private route: ActivatedRoute,
         private taskService: TaskService,
         private spinner: NgxSpinnerService,
-        public authService: AuthenticationService) {
+        public authService: AuthenticationService,
+        private scanHelperService: ScanHelperService,
+        private modalService: NgbModal) {
     }
 
     public ghUserCols = [
@@ -62,7 +67,7 @@ export class QuickstartWizardComponent implements OnInit {
     submitScan(repoType) {
         let scanRequest = new ScanRequest();
         scanRequest.repoType = repoType;
-        this.spinner.show();
+        // this.spinner.show();
         if (!this.entityId) {
             if (this.authService.currentUser) {
                 this.entityId = this.authService.currentUser.defaultEntityId;
@@ -108,26 +113,39 @@ export class QuickstartWizardComponent implements OnInit {
         this.taskService.scanRequest = scanRequest;
 
         console.log("SUBMITTING TASK..");
-        this.taskService.submitScanRequest()
-            .pipe(map(task => task.data.task_submitScanRequest))
-            .subscribe(task => {
-                console.log("TASK TOKEN:", task);
-                let sub = interval(1000).pipe(take(100)).subscribe(x => {
-                    this.taskService.getTaskUpdate(task.taskToken)
-                        .pipe(map(taskUpdate => taskUpdate.data.task_update))
-                        .subscribe(taskUpdate => {
-                            console.log("STATUS:", taskUpdate.status);
-                            if (taskUpdate.status === 'COMPLETE') {
-                                sub.unsubscribe();
-                                this.spinner.hide();
-                                const projectId = taskUpdate.resourceId;
-                                console.log("Task Complete: ", task);
-                                const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
-                                this.router.navigate([url]);
-                            }
-                        });
-                });
+
+        //open dialog box with message..
+        // this.scanHelperService.submitingScanForProject();
+
+        const modalRef = this.modalService.open(LoadingDialogComponent,
+            {
+                backdrop: 'static',
+                keyboard: false,
             });
+        modalRef.componentInstance.message = scanRequest.repository + ' Scan started...';
+        modalRef.componentInstance.projectName = scanRequest.repository;
+
+        // this.taskService.submitScanRequest()
+        //     .pipe(map(task => task.data.task_submitScanRequest))
+        //     .subscribe(task => {
+        //         console.log("TASK TOKEN:", task);
+        //         let sub = interval(1000).pipe(take(100)).subscribe(x => {
+        //             this.taskService.getTaskUpdate(task.taskToken)
+        //                 .pipe(map(taskUpdate => taskUpdate.data.task_update))
+        //                 .subscribe(taskUpdate => {
+        //                     console.log("STATUS:", taskUpdate.status);
+        //                     if (taskUpdate.status === 'COMPLETE') {
+        //                         sub.unsubscribe();
+        //                         this.spinner.hide();
+        //                         const projectId = taskUpdate.resourceId;
+        //                         console.log("Task Complete: ", task);
+        //                         debugger;
+        //                         const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
+        //                         this.router.navigate([url]);
+        //                     }
+        //                 });
+        //         });
+        //     });
 
         // Create new ScanRequest and set it in the TaskService
         // then forward to dashboard where we can display the task component.

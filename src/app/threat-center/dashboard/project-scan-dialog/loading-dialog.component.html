@@ -1,0 +1,22 @@
+<!-- <div class="modal-header">
+    <h4 class="modal-title">Header</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div> -->
+<div class="modal-body">
+
+    <p *ngIf="!isMessageButtonClick && !isError">{{message}}</p>
+
+    <button class="btn btn-primary btn-lg" *ngIf="!isMessageButtonClick && !isError"
+        (click)="isMessageButtonClick = !isMessageButtonClick">
+        got it!</button>
+
+    <p *ngIf="isMessageButtonClick && !isError">{{projectName}} scans in {{statusMessageFromback == 'RUNNING' ? 'Progress.' : 'Completed.' }}.</p>
+
+    <p *ngIf="isError">{{statusMessageFromback}}</p>
+    
+</div>
+<!-- <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div> -->
