@@ -13,6 +13,7 @@ import { ChartDB } from '../../../fack-db/chart-data';
 import { MatPaginator } from '@angular/material';
 import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { ScanHelperService } from '../services/scan.service';
 
 @Component({
   selector: 'project-dashboard',
@@ -27,9 +28,19 @@ export class ProjectComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService:CoreHelperService) {
+    private coreHelperService: CoreHelperService,
+    private scanHelperService: ScanHelperService) {
     this.chartDB = ChartDB;
+    this.scanHelperService.isHighlightNewScanObservable$
+      .subscribe(x => {
+        this.isHighlightNewScan = x;
+        if (x == true) {
+          // get new scan and highlight it.
+          this.getProjectScanData();
+        }
+      });
   }
+
 
   public chartDB: any;
   obsProject: Observable<Project>;
@@ -51,12 +62,15 @@ export class ProjectComponent implements OnInit {
   projectDetails = null;
   scanList = [];
 
-  vulScanData:any = {};
-  componentScanData:any = {};
-  licensesScanData:any = {};
-  assetScanData:any = {};
+  vulScanData: any = {};
+  componentScanData: any = {};
+  licensesScanData: any = {};
+  assetScanData: any = {};
 
+  isHighlightNewScan: boolean = false;
   ngOnInit() {
+    this.obsProject = this.route.data
+      .pipe(map(res => res.project.data.project));
     this.initProjectData();
     this.stateService.project_tabs_selectedTab = "scan";
     this.route.data.subscribe(projData => {
@@ -82,9 +96,20 @@ export class ProjectComponent implements OnInit {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
+  public getProjectScanData() {
+    this.projectId = this.route.snapshot.paramMap.get('projectId');
+    this.obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
+      .pipe(map(result => result.data.project));
+    // this.initProjectData();
+    this.obsProject.subscribe(project => {
+      this.scanList = project.scans.edges;
+      this.projectDetails = project;
+      this.stateService.obsProject = this.obsProject;
+      this.stateService.selectedScan = project.scans.edges[0];
+    });
+  }
+
   initProjectData() {
-    this.obsProject = this.route.data
-      .pipe(map(res => res.project.data.project));
     this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe(project => {
       this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
@@ -512,10 +537,10 @@ export class ProjectComponent implements OnInit {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId,Number(this.defaultPageSize));
-    const res2 = this.projectDashboardService.getScanComponents(scanId,Number(this.defaultPageSize));
-    const res3 = this.projectDashboardService.getScanLicenses(scanId,Number(this.defaultPageSize));
-    const res4 = this.projectDashboardService.getScanAssets(scanId,Number(this.defaultPageSize));
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId, Number(this.defaultPageSize));
+    const res2 = this.projectDashboardService.getScanComponents(scanId, Number(this.defaultPageSize));
+    const res3 = this.projectDashboardService.getScanLicenses(scanId, Number(this.defaultPageSize));
+    const res4 = this.projectDashboardService.getScanAssets(scanId, Number(this.defaultPageSize));
     return forkJoin([res1, res2, res3, res4]);
   }
 
@@ -539,7 +564,7 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  private populateScanComponents(data){
+  private populateScanComponents(data) {
     this.vulScanData = Observable.of(data[0].data);
     this.componentScanData = Observable.of(data[1].data.scan);
     this.licensesScanData = Observable.of(data[2].data.scan);

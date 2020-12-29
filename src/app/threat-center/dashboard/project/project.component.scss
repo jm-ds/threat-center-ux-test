@@ -195,3 +195,12 @@
     flex: inherit;
     }
 }
+
+.selected-table-row {
+    background: #748892;
+    box-shadow: none;
+
+    .badge {
+        box-shadow: 0 0 2px 2px rgba(0,0,0,0.04);
+    }
+}

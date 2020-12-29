@@ -111,20 +111,19 @@ export class QuickstartWizardComponent implements OnInit {
         console.log("OWDER: ", scanRequest.login);
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
-
         console.log("SUBMITTING TASK..");
-
         //open dialog box with message..
-        // this.scanHelperService.submitingScanForProject();
 
+        this.scanHelperService.submitingScanForProject();
         const modalRef = this.modalService.open(LoadingDialogComponent,
             {
                 backdrop: 'static',
                 keyboard: false,
             });
-        modalRef.componentInstance.message = scanRequest.repository + ' Scan started...';
+        modalRef.componentInstance.message = scanRequest.repository + ' Scan started';
         modalRef.componentInstance.projectName = scanRequest.repository;
-
+        modalRef.componentInstance.entityId = this.entityId;
+        
         // this.taskService.submitScanRequest()
         //     .pipe(map(task => task.data.task_submitScanRequest))
         //     .subscribe(task => {

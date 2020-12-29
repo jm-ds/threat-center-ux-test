@@ -11,6 +11,10 @@ export class ScanHelperService {
 
     private projectScanloadingStatus = new BehaviorSubject(null);
     projectScanloadingStatusObservable$ = this.projectScanloadingStatus.asObservable();
+
+    private isHighlightNewScan = new BehaviorSubject(false);
+    isHighlightNewScanObservable$ = this.isHighlightNewScan.asObservable();
+
     sub: Subscription;
     constructor(private taskService: TaskService) {
     }
@@ -45,6 +49,10 @@ export class ScanHelperService {
 
     public updateProjectScanLoadingStatus(message, projectId) {
         this.projectScanloadingStatus.next({ message: message, projectId: projectId });
+    }
+
+    public updateIsHighlightNewScan(val) {
+        this.isHighlightNewScan.next(val);
     }
 
 }

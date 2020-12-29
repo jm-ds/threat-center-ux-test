@@ -4,7 +4,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div> -->
-<div class="modal-body">
+<!-- <div class="modal-body">
 
     <p *ngIf="!isMessageButtonClick && !isError">{{message}}</p>
 
@@ -16,7 +16,47 @@
 
     <p *ngIf="isError">{{statusMessageFromback}}</p>
     
-</div>
+</div> -->
 <!-- <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
 </div> -->
+
+
+
+
+
+
+<div class="modal-body">
+
+    <div class="scan-started-blk" *ngIf="!isMessageButtonClick && !isError" style="display: block;">
+        <i class="scan-icon"><img src="assets/images/scan-icon.png" alt=""></i>
+        <p *ngIf="!isMessageButtonClick && !isError" class="loader">{{message}}</p>
+        <button class="btn btn-primary scan-btn" *ngIf="!isMessageButtonClick && !isError"
+            (click)="gotItBtn();isMessageButtonClick = !isMessageButtonClick">
+            Got It!</button>
+    </div>
+
+    <div class="scan-started-blk" *ngIf="isMessageButtonClick && !isError">
+        <i class="loader-img" *ngIf="statusMessageFromback == 'RUNNING'">
+            <img src="assets/images/scan-loader.gif" alt="">
+        </i>
+        <i class="scan-icon far fa-thumbs-up status-success" *ngIf="statusMessageFromback == 'COMPLETE'">
+        </i>
+        <i class="scan-icon" *ngIf="statusMessageFromback == ''"><img src="assets/images/scan-icon.png" alt=""></i>
+        <p *ngIf="statusMessageFromback == ''">{{message}}</p>
+        <p *ngIf="statusMessageFromback == 'RUNNING'">{{projectName}} scans in Progress.</p>
+
+        <p *ngIf="statusMessageFromback == 'COMPLETE'">
+            <span>Scan of {{projectName}} is completed. Take a look at <a (click)="gotoProjectPage()">results</a></span>
+        </p>
+
+    </div>
+
+    <div class="scan-started-blk" *ngIf="isError == true">
+        <i class="scan-icon fas fa-exclamation-circle status-error">
+        </i>
+        <p *ngIf="isError">{{statusMessageFromback}}</p>
+        <button class="btn btn-primary" (click)="closeModel()">Close</button>
+    </div>
+
+</div>
