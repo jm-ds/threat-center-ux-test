@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
@@ -71,13 +71,12 @@ export class PolicyEditComponent implements OnInit {
         } else {
             this.newPolicy = true;
             this.policy = new Policy();
-            this.policy.rootGroup=new PolicyConditionGroup();
-            this.policy.rootGroup.groupOperator = "OR";
+            this.createRootGroup();
+            this.policy.actions=[];
+            this.policy.conditionType = "SECURITY";
             this.policy.entityId=this.entityId;
             this.policy.projectId=this.projectId;
-            this.policy.conditionType = "SECURITY";
             this.policy.applyToChilds = true;
-            this.policy.actions=[];
             this.confirmed = [];
             if (!!this.entityId) {
                 this.apiService.getEntity(this.entityId).subscribe(data=>{
@@ -91,6 +90,11 @@ export class PolicyEditComponent implements OnInit {
             }
         }
     }
+
+    createRootGroup() {
+        this.policy.rootGroup=new PolicyConditionGroup();
+        this.policy.rootGroup.groupOperator = "OR";
+    }    
 
     savePolicy() {
         let messages: Message[] = this.validatePolicy();
@@ -134,7 +138,7 @@ export class PolicyEditComponent implements OnInit {
     validateConditionsExists(group: PolicyConditionGroup): Message[] {
         if ((!group.conditions || group.conditions.length===0) && 
             (!group.groups || group.groups.length===0)) {
-            return [Message.error("Condition group must contain conditions or nested groups.")];
+            return [Message.error("Condition group must contain conditions.")];
         }
         if (group.groups && group.groups.length>0) {
             for (const grp of group.groups) {
@@ -331,10 +335,27 @@ export class PolicyEditComponent implements OnInit {
     }
 
     onTypeChange(event: any) {
-        console.log(event);
-        this.conditions.setConditionType(event);
+        if (this.policy.rootGroup) {
+            const conditionType = this.getConditionTypeFromGroup(this.policy.rootGroup);
+            if (conditionType && conditionType!=event) {
+                this.createRootGroup();
+            }
+        }
+    }
 
-        console.log(this.conditions);
+    getConditionTypeFromGroup(group: PolicyConditionGroup) {
+        if (group.conditions && group.conditions.length>0) {
+            return group.conditions[0].conditionType;
+        }
+        if (group.groups && group.groups.length>0) {
+            group.groups.forEach(grp => {
+                let conditionType = this.getConditionTypeFromGroup(grp);
+                if (conditionType) {
+                    return conditionType;
+                }
+            });
+        }
+        return undefined;
     }
 
 }
