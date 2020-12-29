@@ -77,6 +77,7 @@ export class PolicyEditComponent implements OnInit {
             this.policy.projectId=this.projectId;
             this.policy.conditionType = "SECURITY";
             this.policy.applyToChilds = true;
+            this.policy.actions=[];
             this.confirmed = [];
             if (!!this.entityId) {
                 this.apiService.getEntity(this.entityId).subscribe(data=>{

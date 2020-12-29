@@ -13,101 +13,120 @@
 
 
 <ng-template [ngIf]="policy != undefined">
-  <div class="row" style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
-    <div class="col-lg-3 col-md-12 mb-4">
-      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Policy">
-        <div class="pt-4" style="width: 100%;">
-          <ng-template [ngIf]="policy.active == true">
-            <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
-          </ng-template>
-          
-          <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
-            <label >Entity</label>
-            <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
-          </div>
-          <div *ngIf="policy.project" class="form-group " style="padding-left: 0px">
-            <label >Project</label>
-            <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
-          </div>
-          <div class="form-group " style="padding-left: 0px">
-            <label >Name</label>
-            <input disabled class="form-control" style="width: 100%;" value="{{policy.name}}"/>
-          </div>
-          <div class="form-group" style="padding-left: 0px">
-            <label>Title</label>
-            <input disabled class="form-control" value="{{policy.title}}"/>
-          </div>
-          <div class="form-group">
-            <label class="font-weight-bolder">Type</label>
-            <input disabled class="form-control" value="{{conditionTypes[policy.conditionType]}}"/>
-          </div>
-          <div class="form-group">
-            <label class="font-weight-bolder">Description</label>
-            <input disabled class="form-control" value="{{policy.description}}"/>
-          </div>
-          <div class="form-group">
-            <label class="font-weight-bolder">Apply to childs</label>
-            <input disabled type="checkbox" class="ml-3" [ngModel]="policy.applyToChilds"/>
-          </div>
-          <div class="form-group" style="padding-left: 0px">
-            <label class="font-weight-bolder">Overrides policy</label>
-            <input disabled class="form-control" value="{{policy.overridePolicyTitle}}"/>
-          </div>
-          <div class="form-group" style="padding-left: 0px">
-              <label class="font-weight-bolder">Created by</label>
-              <input disabled class="form-control" value="{{policy.createdBy}}"/>
-          </div>
-          <div class="form-group" style="padding-left: 0px">
-            <label class="font-weight-bolder">Created date</label>
-            <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
-          </div>
-          <div *ngIf="policy.active!=undefined" class="form-group">
-            <label class="font-weight-bolder">Last state change</label>
-            <input disabled class="form-control" value="{{policy.dateLastStateChange | date :'M/d/y h:mmaa' | lowercase}}"/>
-          </div>
-
-        </div>
-      </app-card>
-    </div>    
-    <!-- Conditions -->
-    <div class="col-lg-6 col-md-12 mb-4">
-      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
-        <condition-builder style="width: 100%" [group]="policy.rootGroup" [readonly]="true" [policy]="policy">
-        </condition-builder>  
-      </app-card>  
-    </div>   
-    <!-- Actions  -->
-    <div class="col-lg-3 col-md-12">
-      <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
-        <perfect-scrollbar [style.max-height]="'500px'">
-          <p-table #dt [columns]="actionCols" [value]="policy.actions" [paginator]="false" [rows]="50"
-                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                   [filterDelay]="0" [globalFilterFields]="['actionType', 'actionName']">
-
-            <ng-template pTemplate="caption">
-              <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
-                <input type="text" pInputText size="30" placeholder="Filter"
-                       (input)="dt.filterGlobal($event.target.value, 'contains')"
-                       style="width:100px;display:inline" class="form-control">
+  <div style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
+    <ngb-tabset type="pills" >    
+      <ngb-tab title="Policy" >
+        <ng-template ngbTabContent>
+          <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="General Info">
+            <div class="pt-4" style="width: 100%;">
+              <ng-template [ngIf]="policy.active == true">
+                <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
+              </ng-template>
+              
+              <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
+                <label >Entity</label>
+                <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
               </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Type</th>
-                <th>Name</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-action>
-              <tr>
-                <td>{{action.actionType}}</td>
-                <td>{{action.actionName}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </perfect-scrollbar>
+              <div *ngIf="policy.project" class="form-group " style="padding-left: 0px">
+                <label >Project</label>
+                <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
+              </div>
+              <div class="form-group " style="padding-left: 0px">
+                <label >Name</label>
+                <input disabled class="form-control" style="width: 100%;" value="{{policy.name}}"/>
+              </div>
+              <div class="form-group" style="padding-left: 0px">
+                <label>Title</label>
+                <input disabled class="form-control" value="{{policy.title}}"/>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bolder">Type</label>
+                <input disabled class="form-control" value="{{conditionTypes[policy.conditionType]}}"/>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bolder">Description</label>
+                <input disabled class="form-control" value="{{policy.description}}"/>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bolder">Apply to childs</label>
+                <input disabled type="checkbox" class="ml-3" [ngModel]="policy.applyToChilds"/>
+              </div>
+              <div class="form-group" style="padding-left: 0px">
+                <label class="font-weight-bolder">Overrides policy</label>
+                <input disabled class="form-control" value="{{policy.overridePolicyTitle}}"/>
+              </div>
+              <div class="form-group" style="padding-left: 0px">
+                  <label class="font-weight-bolder">Created by</label>
+                  <input disabled class="form-control" value="{{policy.createdBy}}"/>
+              </div>
+              <div class="form-group" style="padding-left: 0px">
+                <label class="font-weight-bolder">Created date</label>
+                <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
+              </div>
+              <div *ngIf="policy.active!=undefined" class="form-group">
+                <label class="font-weight-bolder">Last state change</label>
+                <input disabled class="form-control" value="{{policy.dateLastStateChange | date :'M/d/y h:mmaa' | lowercase}}"/>
+              </div>
 
-      </app-card>
-    </div>
+            </div>
+          </app-card>
+        </ng-template>
+      </ngb-tab>
+      <!-- Conditions -->
+      <ngb-tab>
+        <ng-template ngbTabTitle>Conditions&nbsp;
+          <span class="badge badge-light">
+            {{policy.rootGroup?.conditions.length+policy.rootGroup?.groups.length}}
+          </span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
+            <condition-builder style="width: 100%" [group]="policy.rootGroup" [readonly]="true" [policy]="policy">
+            </condition-builder>  
+          </app-card>  
+        </ng-template>
+      </ngb-tab>
+      <!-- Actions  -->
+      <ngb-tab>
+        <ng-template ngbTabTitle>Actions&nbsp;
+          <span class="badge badge-light">
+            {{policy.actions.length}}
+          </span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
+            <perfect-scrollbar [style.max-height]="'500px'">
+              <p-table #dt [columns]="actionCols" [value]="policy.actions" [paginator]="false" [rows]="50"
+                       tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                       [filterDelay]="0" [globalFilterFields]="['actionType', 'actionName']">
+    
+                <ng-template pTemplate="caption">
+                  <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
+                    <input type="text" pInputText size="30" placeholder="Filter"
+                           (input)="dt.filterGlobal($event.target.value, 'contains')"
+                           style="width:100px;display:inline" class="form-control">
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-action>
+                  <tr>
+                    <td>{{action.actionType}}</td>
+                    <td>{{action.actionName}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </perfect-scrollbar>
+    
+          </app-card>
+        </ng-template>
+      </ngb-tab>
+
+    </ngb-tabset> 
   </div>    
   <div class="actions mt-4">
       <ng-template [ngIf]="policy.active == true">

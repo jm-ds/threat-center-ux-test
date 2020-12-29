@@ -5,7 +5,7 @@
           <li class="breadcrumb-item active text-muted" aria-current="page">Policy</li>
       </ol>
   </nav>
-  <h1>Policy</h1>
+  <h1>Edit Policy</h1>
 </div>
 
 
@@ -14,136 +14,154 @@
 
 <ng-template [ngIf]="policy != undefined">
   <form>
-    <div class="row" style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
-      <div class="col-lg-3 col-md-12 mb-4">
-        <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Policy">
-          <div class="pt-4" style="width: 100%;">
-            <ng-template [ngIf]="policy.active">
-              <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
-            </ng-template>
-            
-            <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
-              <label class="font-weight-bolder">Entity</label>
-              <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
-            </div>
-            <div *ngIf="policy.project" class="form-group " style="padding-left: 0px">
-              <label class="font-weight-bolder">Project</label>
-              <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
-            </div>
-              <div class="form-group " style="padding-left: 0px">
-              <label class="font-weight-bolder">Name</label>
-              <input name="name" required placeholder="Name..." class="form-control" style="width: 100%;" [(ngModel)]="policy.name"/>
-            </div>
-            <div class="form-group" style="padding-left: 0px">
-              <label class="font-weight-bolder">Title</label>
-              <input name="title" required placeholder="Title..." class="form-control" [(ngModel)]="policy.title"/>
-            </div>
-            <div class="form-group" style="padding-left: 0px">
-              <label class="font-weight-bolder">Type</label>
-              <select [(ngModel)]="policy.conditionType" name="conditionType" (ngModelChange)="onTypeChange($event)"
-                  class="form-control form-control-sm input-sm ng-select">
-                <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
-              </select>
-            </div>  
-            <div class="form-group">
-              <label class="font-weight-bolder">Description</label>
-              <input name="description" placeholder="Description..." class="form-control" [(ngModel)]="policy.description"/>
-            </div>
-            <div class="form-group">
-              <label class="font-weight-bolder">Apply to childs</label>
-              <input name="applyToChilds" type="checkbox" class="ml-3" [(ngModel)]="policy.applyToChilds"/>
-            </div>
-            <div class="form-group" style="padding-left: 0px">
-              <label class="font-weight-bolder">Overrides</label>
-              <input disabled class="form-control" value="{{policy.overridePolicyTitle}}"/>
-            </div>
-            <div class="form-group" style="padding-left: 0px">
-                <label class="font-weight-bolder">Created by</label>
-                <input disabled class="form-control" value="{{policy.createdBy}}"/>
-            </div>
-            <div class="form-group" style="padding-left: 0px">
-              <label class="font-weight-bolder">Created date</label>
-              <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
-            </div>
-            <div *ngIf="policy.active!=undefined" class="form-group">
-              <label class="font-weight-bolder">Last state change</label>
-              <input disabled class="form-control" value="{{policy.dateLastStateChange | date :'M/d/y h:mmaa' | lowercase}}"/>
-            </div>
+    <div style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
+      <ngb-tabset type="pills" >    
+        <ngb-tab title="Policy" >
+          <ng-template ngbTabContent>
+            <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="General Info">
+              <div class="pt-4" style="width: 100%;">
+                <ng-template [ngIf]="policy.active">
+                  <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
+                </ng-template>
+                
+                <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
+                  <label class="font-weight-bolder">Entity</label>
+                  <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
+                </div>
+                <div *ngIf="policy.project" class="form-group " style="padding-left: 0px">
+                  <label class="font-weight-bolder">Project</label>
+                  <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
+                </div>
+                  <div class="form-group " style="padding-left: 0px">
+                  <label class="font-weight-bolder">Name</label>
+                  <input name="name" required placeholder="Name..." class="form-control" style="width: 100%;" [(ngModel)]="policy.name"/>
+                </div>
+                <div class="form-group" style="padding-left: 0px">
+                  <label class="font-weight-bolder">Title</label>
+                  <input name="title" required placeholder="Title..." class="form-control" [(ngModel)]="policy.title"/>
+                </div>
+                <div class="form-group" style="padding-left: 0px">
+                  <label class="font-weight-bolder">Type</label>
+                  <select [(ngModel)]="policy.conditionType" name="conditionType" (ngModelChange)="onTypeChange($event)"
+                      class="form-control form-control-sm input-sm ng-select">
+                    <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
+                  </select>
+                </div>  
+                <div class="form-group">
+                  <label class="font-weight-bolder">Description</label>
+                  <input name="description" placeholder="Description..." class="form-control" [(ngModel)]="policy.description"/>
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bolder">Apply to childs</label>
+                  <input name="applyToChilds" type="checkbox" class="ml-3" [(ngModel)]="policy.applyToChilds"/>
+                </div>
+                <div class="form-group" style="padding-left: 0px">
+                  <label class="font-weight-bolder">Overrides</label>
+                  <input disabled class="form-control" value="{{policy.overridePolicyTitle}}"/>
+                </div>
+                <div class="form-group" style="padding-left: 0px">
+                    <label class="font-weight-bolder">Created by</label>
+                    <input disabled class="form-control" value="{{policy.createdBy}}"/>
+                </div>
+                <div class="form-group" style="padding-left: 0px">
+                  <label class="font-weight-bolder">Created date</label>
+                  <input disabled class="form-control" value="{{policy.createDate | date :'M/d/y h:mmaa' | lowercase}}"/>
+                </div>
+                <div *ngIf="policy.active!=undefined" class="form-group">
+                  <label class="font-weight-bolder">Last state change</label>
+                  <input disabled class="form-control" value="{{policy.dateLastStateChange | date :'M/d/y h:mmaa' | lowercase}}"/>
+                </div>
 
-          </div>
-        </app-card>
-      </div>    
-      <!-- Conditions -->
-      <div class="col-lg-6 col-md-12 mb-4">
-        <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
-          <condition-builder id="conditions" style="width: 100%" [group]="policy.rootGroup" [readonly]="false" [policy]="policy">
-          </condition-builder>  
-        </app-card>  
-      </div>   
-      <!-- Actions  -->
-      <div class="col-lg-3 col-md-12">
-        <app-card blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
-            <div style="padding-bottom: 60px">
-              <p-table #dt [value]="policy.actions" [filterDelay]="0" [globalFilterFields]="['actionName']"  dataKey="actionName" tableStyleClass="table table-bordered">
+              </div>
+            </app-card>
+          </ng-template>
+        </ngb-tab>  
+        <!-- Conditions -->
+        <ngb-tab>
+          <ng-template ngbTabTitle>Conditions&nbsp;
+            <span class="badge badge-light">
+              {{policy.rootGroup?.conditions.length+policy.rootGroup?.groups.length}}
+            </span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="Conditions">
+              <condition-builder id="conditions" style="width: 100%" [group]="policy.rootGroup" [readonly]="false" [policy]="policy">
+              </condition-builder>  
+            </app-card>  
+          </ng-template>  
+        </ngb-tab>   
+        <!-- Actions  -->
+        <ngb-tab>
+          <ng-template ngbTabTitle>Actions&nbsp;
+            <span class="badge badge-light">
+              {{policy.actions?.length}}
+            </span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <app-card blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
+              <div style="padding-bottom: 60px">
+                <p-table #dt [value]="policy.actions" [filterDelay]="0" [globalFilterFields]="['actionName']"  dataKey="actionName" tableStyleClass="table table-bordered">
 
-                <ng-template pTemplate="caption">
-                  <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
-                    <button type="button" class="btn btn-icon" title="Add action" (click)="this.addAction()" style="color: #c9d0d5;">
-                      <i class="feather icon-plus" style="font-size: 20px; font-weight: 800;"></i>
-                    </button>
-                  </div>
-                </ng-template>
-                <ng-template pTemplate="colgroup" let-columns>
-                  <colgroup>
-                     <col style="width:40%;text-align: center">
-                     <col style="width:40%;text-align: center">
-                     <col style="width:30px;text-align: center">
-                  </colgroup>
-                </ng-template>
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th></th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-action>
-                  <tr>
-                    <td pEditableColumn>
-                      <p-cellEditor style="width: 100%">
-                          <ng-template pTemplate="input">
-                              <p-dropdown name="actionType" [options]="actionTypes" [(ngModel)]="action.actionType" (onChange)="onActionTypeChange(action,$event)"
-                              [style]="{'width':'100%','min-width': '4em' , 'margin-top': '6px'}"></p-dropdown>
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                              {{action.actionType}}
-                          </ng-template>
-                      </p-cellEditor>
-                    </td>  
-                    <td pEditableColumn>
-                      <p-cellEditor style="width: 100%">
-                          <ng-template pTemplate="input">
-                              <p-dropdown name="actionName" [options]="actionNames[action.actionType]" [(ngModel)]="action.actionName" 
-                              [style]="{'width':'100%','min-width': '4em', 'margin-top': '6px'}"></p-dropdown>
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                              {{action.actionName}}
-                          </ng-template>
-                      </p-cellEditor>
-                    </td> 
-                    <td>
-                      <button type="button" class="btn btn-icon" title="Remove action" (click)="this.removeAction(action)" 
-                      style="color: #c9d0d5; padding: 2px; margin: 0 auto;">
-                        <i class="feather icon-x" style="font-size: 10px; font-weight: 800;"></i>
+                  <ng-template pTemplate="caption">
+                    <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
+                      <button type="button" class="btn btn-icon" title="Add action" (click)="this.addAction()" style="color: #c9d0d5;">
+                        <i class="feather icon-plus" style="font-size: 20px; font-weight: 800;"></i>
                       </button>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                      <col style="width:40%;text-align: center">
+                      <col style="width:40%;text-align: center">
+                      <col style="width:30px;text-align: center">
+                    </colgroup>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Type</th>
+                      <th>Name</th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-action>
+                    <tr>
+                      <td pEditableColumn>
+                        <p-cellEditor style="width: 100%">
+                            <ng-template pTemplate="input">
+                                <p-dropdown name="actionType" [options]="actionTypes" [(ngModel)]="action.actionType" (onChange)="onActionTypeChange(action,$event)"
+                                [style]="{'width':'100%','min-width': '4em' , 'margin-top': '6px'}"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{action.actionType}}
+                            </ng-template>
+                        </p-cellEditor>
+                      </td>  
+                      <td pEditableColumn>
+                        <p-cellEditor style="width: 100%">
+                            <ng-template pTemplate="input">
+                                <p-dropdown name="actionName" [options]="actionNames[action.actionType]" [(ngModel)]="action.actionName" 
+                                [style]="{'width':'100%','min-width': '4em', 'margin-top': '6px'}"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{action.actionName}}
+                            </ng-template>
+                        </p-cellEditor>
+                      </td> 
+                      <td>
+                        <button type="button" class="btn btn-icon" title="Remove action" (click)="this.removeAction(action)" 
+                        style="color: #c9d0d5; padding: 2px; margin: 0 auto;">
+                          <i class="feather icon-x" style="font-size: 10px; font-weight: 800;"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
 
-        </app-card>
-      </div>
+            </app-card>
+          </ng-template>  
+        </ngb-tab>
+      </ngb-tabset>    
     </div>   
     <div class="actions mt-4">
       <button type="button" class="btn btn-success" (click)="savePolicy()" >

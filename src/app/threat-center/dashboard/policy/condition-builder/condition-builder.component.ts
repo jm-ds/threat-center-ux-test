@@ -115,12 +115,13 @@ export class ConditionBuilderComponent implements OnInit {
 
     addChildGroup() {
         if (this.group.groupOperator) {
-        let newGroup = new PolicyConditionGroup();
-        newGroup.groupOperator="OR";
-        if (!this.group.groups) {
-            this.group.groups=[];
-        }
-        this.group.groups.push(newGroup);
+            let newGroup = new PolicyConditionGroup();
+            newGroup.groupOperator="OR";
+            if (!this.group.groups) {
+                this.group.groups=[];
+            }
+            this.group.groups.push(newGroup);
+            this.setGroupConditionType(newGroup, this.policy.conditionType);
         }
     }
 
@@ -136,7 +137,6 @@ export class ConditionBuilderComponent implements OnInit {
     }
 
     setConditionType(conditionType: string) {
-        console.log("new condition type "+conditionType);
         this.setGroupConditionType(this.group, conditionType);
     }
 
