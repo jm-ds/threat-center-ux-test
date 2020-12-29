@@ -181,6 +181,13 @@ const NavigationItems = [
           },
         ]
       },
+      {
+        id: 'orgSetting',
+        title: 'Organization Settings',
+        type: 'item',
+        url: '/dashboard/org-setting',
+        icon: 'fas fa-cogs',
+      },
       /*
       {
         id: 'page-layouts',
