@@ -18,7 +18,7 @@
           <ng-template pTemplate="caption">
             <div style="text-align: right">
               <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="filterData($event.target.value)" style="width:auto;display:inline">
             </div>
           </ng-template>
           <ng-template pTemplate="header" let-columns>
@@ -26,6 +26,33 @@
               <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 {{col.header}}
                 <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+              </th>
+            </tr>
+            <tr>
+              <th *ngFor="let col of columns">
+                <input *ngIf="col.header =='Name'" type="text" placeholder="{{col.header}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col.header, $event.target.value)"
+                       [value]="getColumnFilterValue(col.header)"/>
+                <input *ngIf="col.header =='Group'" type="text" placeholder="{{col.header}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
+                <input *ngIf="col.header =='Version'" type="text" placeholder="{{col.header}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
+                <select *ngIf="col.header == 'Internal'" class="form-control"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="TRUE">True</option>
+                  <option value="FALSE">False</option>
+                </select>
+<!--                <input *ngIf="col.header =='Source'" type="text" placeholder="{{col.header}}" name="search-name"-->
+<!--                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>-->
+                <select *ngIf="col.header == 'Vulnerabilities'" class="form-control"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="TRUE">True</option>
+                  <option value="FALSE">False</option>
+                </select>
               </th>
             </tr>
           </ng-template>

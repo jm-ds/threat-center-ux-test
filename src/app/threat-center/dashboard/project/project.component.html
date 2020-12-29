@@ -1,9 +1,17 @@
 <div *ngIf='obsProject | async as project; '>
   <div class="row">
-    <div class="col-6">
+    <div class="col-md-6">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-            <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}</h3>
+            <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}
+      </h3>
+    </div>
+    <div class="col-6" style="text-align: right;">
+      <a [routerLink]="['/dashboard/project-setting']">
+        <button type="submit" class="btn btn-outline-secondary ml-2">
+          <i class="fas fa-cogs" style="margin-right:5px"></i>Settings
+        </button>
+      </a>
     </div>
     <div class="col-6" style="text-align:right">
       <a [routerLink]="['/dashboard/policy/list/',project.entityId, project.projectId]">
@@ -15,7 +23,7 @@
 
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
-    
+
     <div class="col-lg-2 col-xs-12 chart-lbl-blk">
       <div class="chart-lbl-indi">
         <label>Vulnerabilities</label>
@@ -258,8 +266,8 @@
 
             </perfect-scrollbar>
             <div class="col-sm-12">
-              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount" [pageSize]="defaultPageSize"
-                [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount"
+                [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
               </mat-paginator>
             </div>
           </ng-template>
@@ -273,8 +281,8 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
-            </vulnerabilities>
+            <app-vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
+            </app-vulnerabilities>
           </ng-template>
         </ngb-tab>
 
@@ -287,7 +295,7 @@
           </ng-template>
           <ng-template ngbTabContent>
 
-            <components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></components>
+            <app-components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></app-components>
             <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
@@ -326,7 +334,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></licenses>
+            <app-licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></app-licenses>
           </ng-template>
         </ngb-tab>
 
@@ -427,7 +435,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></scanassets>
+            <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></app-scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>
