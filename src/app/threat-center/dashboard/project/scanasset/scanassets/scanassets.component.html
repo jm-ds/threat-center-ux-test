@@ -29,6 +29,45 @@
               <th>Status</th>
               <th>Embedded Assets</th>
             </tr>
+            <tr>
+              <th *ngFor="let col of columns">
+                <input *ngIf="col=='Name'" type="text" placeholder="{{col}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col, $event.target.value)"
+                       [value]="getColumnFilterValue(col)"/>
+                <input *ngIf="col=='Workspace Path'" type="text" placeholder="{{col}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col, $event.target.value)"
+                       [value]="getColumnFilterValue(col)"/>
+                <select *ngIf="col == 'Status'" class="form-control"
+                        [value]="getColumnFilterValue(col)"
+                        (change)="filterColumn(col, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="IGNORED_SIZE_SMALL">IGNORED_SIZE_SMALL</option>
+                  <option value="IGNORED_SIZE_LARGE">IGNORED_SIZE_LARGE</option>
+                  <option value="IGNORED_SIZE_EMPTY">IGNORED_SIZE_EMPTY</option>
+                  <option value="IGNORED_TYPE_UNSUPPORTED">IGNORED_TYPE_UNSUPPORTED</option>
+                  <option value="ACCEPTED">ACCEPTED</option>
+                </select>
+                <select *ngIf="col == 'File Size'" class="form-control"
+                        [value]="getColumnFilterValue(col)"
+                        (change)="filterColumn(col, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="1kb">0-1kb</option>
+                  <option value="1kb-1mb">1kb-1mb</option>
+                  <option value="1mb-10mb">1mb-10mb</option>
+                  <option value="10mb+">10mb+</option>
+                </select>
+                <select *ngIf="col == 'Embedded Assets'" class="form-control"
+                        [value]="getColumnFilterValue(col)"
+                        (change)="filterColumn(col, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="0-10">0-10%</option>
+                  <option value="11-30">11-30%</option>
+                  <option value="31-50">31-50%</option>
+                  <option value="51-70">51-70%</option>
+                  <option value="71-100">71-100%</option>
+                </select>
+              </th>
+            </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset>
@@ -41,7 +80,7 @@
               <td>{{scanAsset.node.status}}</td>
               <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
             </tr>
-            <tr *ngIf="scanAsset.node.status != 'ACCEPTED'" >
+            <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED'" >
               <td>{{scanAsset.node.name}}</td>
               <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
               <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
