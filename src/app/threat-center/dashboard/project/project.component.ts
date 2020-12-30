@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TaskComponent } from '@app/threat-center/shared/task/task.component';
 import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
@@ -20,7 +20,7 @@ import { ScanHelperService } from '../services/scan.service';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit {
+export class ProjectComponent implements OnInit, AfterViewInit {
 
   constructor(
     private apiService: ApiService,
@@ -29,7 +29,8 @@ export class ProjectComponent implements OnInit {
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
     private coreHelperService: CoreHelperService,
-    private scanHelperService: ScanHelperService) {
+    private scanHelperService: ScanHelperService,
+    private router: Router) {
     this.chartDB = ChartDB;
     this.scanHelperService.isHighlightNewScanObservable$
       .subscribe(x => {
@@ -39,6 +40,20 @@ export class ProjectComponent implements OnInit {
           this.getProjectScanData();
         }
       });
+    
+      if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
+      const state = this.router.getCurrentNavigation().extras.state;
+      if (!!state && !!state["from"] && state["from"] === 'DIALOG') {
+        this.isScrollToTabs = true;
+      }
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isScrollToTabs) {
+      const ele = document.getElementById("tabPanels");
+      ele.scrollIntoView({ block: 'nearest' });
+    }
   }
 
 
@@ -68,6 +83,8 @@ export class ProjectComponent implements OnInit {
   assetScanData: any = {};
 
   isHighlightNewScan: boolean = false;
+  isScrollToTabs: boolean = false;
+
   ngOnInit() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));

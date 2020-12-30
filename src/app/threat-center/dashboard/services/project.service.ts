@@ -25,6 +25,12 @@ export class ProjectDashboardService {
                   name,
                   scans {
                     totalCount
+                    pageInfo {
+                      hasNextPage
+                      hasPreviousPage
+                      startCursor
+                      endCursor
+                    }
                     edges {
                       node {
                         scanId,

@@ -75,7 +75,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     gotoProjectPage() {
         this.activeModal.dismiss();
         const url = "dashboard/entity/" + this.entityId + "/project/" + this.projectId;
-        this.router.navigate([url]);
+        this.router.navigate([url], { state: { from: "DIALOG" } });
     }
 
     closeModel() {

@@ -160,9 +160,11 @@
                         </p-table>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button [ngClass]="{'disabled' : selectedRepos.length===0}" class="btn btn-primary"
-                                ngbtooltip="Run Scan" type="button" (click)="submitScan('github')"><i
-                                class="fas fa-power-off"></i> Execute Threat Scan
+                        <button [ngClass]="{'disabled' : !selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true }" class="btn btn-primary"
+                                ngbtooltip="Run Scan" [disabled]="!selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true" 
+                                type="button" (click)="submitScan('github')"><i
+                                class="fas fa-power-off" >
+                              </i> Execute Threat Scan
                         </button>
                       </div>
                     </div>

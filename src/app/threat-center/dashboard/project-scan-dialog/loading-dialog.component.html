@@ -1,33 +1,8 @@
-<!-- <div class="modal-header">
-    <h4 class="modal-title">Header</h4>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div> -->
-<!-- <div class="modal-body">
-
-    <p *ngIf="!isMessageButtonClick && !isError">{{message}}</p>
-
-    <button class="btn btn-primary btn-lg" *ngIf="!isMessageButtonClick && !isError"
-        (click)="isMessageButtonClick = !isMessageButtonClick">
-        got it!</button>
-
-    <p *ngIf="isMessageButtonClick && !isError">{{projectName}} scans in {{statusMessageFromback == 'RUNNING' ? 'Progress.' : 'Completed.' }}.</p>
-
-    <p *ngIf="isError">{{statusMessageFromback}}</p>
-    
-</div> -->
-<!-- <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
-</div> -->
-
-
-
-
-
 
 <div class="modal-body">
-
+    <button type="button" *ngIf="statusMessageFromback == 'COMPLETE'" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
     <div class="scan-started-blk" *ngIf="!isMessageButtonClick && !isError" style="display: block;">
         <i class="scan-icon"><img src="assets/images/scan-icon.png" alt=""></i>
         <p *ngIf="!isMessageButtonClick && !isError" class="loader">{{message}}</p>
@@ -37,19 +12,19 @@
     </div>
 
     <div class="scan-started-blk" *ngIf="isMessageButtonClick && !isError">
+        <i class="scan-icon" *ngIf="statusMessageFromback == '' || !statusMessageFromback"><img src="assets/images/scan-icon.png" alt=""></i>
+        <p *ngIf="statusMessageFromback == '' || !statusMessageFromback">{{message}}</p>
+
         <i class="loader-img" *ngIf="statusMessageFromback == 'RUNNING'">
             <img src="assets/images/scan-loader.gif" alt="">
         </i>
-        <i class="scan-icon far fa-thumbs-up status-success" *ngIf="statusMessageFromback == 'COMPLETE'">
-        </i>
-        <i class="scan-icon" *ngIf="statusMessageFromback == ''"><img src="assets/images/scan-icon.png" alt=""></i>
-        <p *ngIf="statusMessageFromback == ''">{{message}}</p>
         <p *ngIf="statusMessageFromback == 'RUNNING'">{{projectName}} scans in Progress.</p>
 
+        <i class="scan-icon far fa-thumbs-up status-success" *ngIf="statusMessageFromback == 'COMPLETE'">
+        </i>
         <p *ngIf="statusMessageFromback == 'COMPLETE'">
             <span>Scan of {{projectName}} is completed. Take a look at <a (click)="gotoProjectPage()">results</a></span>
         </p>
-
     </div>
 
     <div class="scan-started-blk" *ngIf="isError == true">

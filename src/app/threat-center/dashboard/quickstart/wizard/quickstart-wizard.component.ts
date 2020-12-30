@@ -38,6 +38,7 @@ export class QuickstartWizardComponent implements OnInit {
 
     activeTab = "1";
 
+    isDisableScanBtn: boolean = false;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
     constructor(
@@ -50,6 +51,19 @@ export class QuickstartWizardComponent implements OnInit {
         public authService: AuthenticationService,
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal) {
+
+        this.scanHelperService.projectScanloadingStatusObservable$
+            .subscribe(x => {
+                if (!!x) {
+                    if (!!x['message'] && (x['message'] === 'COMPLETE' || x['message'] === 'ERROR')) {
+                        this.isDisableScanBtn = false;
+                    } else {
+                        this.isDisableScanBtn = true;
+                    }
+                } else {
+                    this.isDisableScanBtn = false;
+                }
+            });
     }
 
     public ghUserCols = [
@@ -113,7 +127,8 @@ export class QuickstartWizardComponent implements OnInit {
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
         //open dialog box with message..
-
+        this.isDisableScanBtn = true;
+        this.modalService.dismissAll();
         this.scanHelperService.submitingScanForProject();
         const modalRef = this.modalService.open(LoadingDialogComponent,
             {
@@ -123,7 +138,6 @@ export class QuickstartWizardComponent implements OnInit {
         modalRef.componentInstance.message = scanRequest.repository + ' Scan started';
         modalRef.componentInstance.projectName = scanRequest.repository;
         modalRef.componentInstance.entityId = this.entityId;
-        
         // this.taskService.submitScanRequest()
         //     .pipe(map(task => task.data.task_submitScanRequest))
         //     .subscribe(task => {
