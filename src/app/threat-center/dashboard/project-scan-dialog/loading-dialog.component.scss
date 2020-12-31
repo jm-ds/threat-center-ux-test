@@ -16,10 +16,13 @@
         font-size: 20px;
         color: #fff;
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 5px;
+        right: 5px;
         text-shadow: none;
         display: none;
+        z-index: 11;
+        width: 20px;
+        height: 20px;
     }
 }
 

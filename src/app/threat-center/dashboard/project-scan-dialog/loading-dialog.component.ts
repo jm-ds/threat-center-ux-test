@@ -66,6 +66,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.isError = false;
         this.isMessageButtonClick = false;
+        this.statusMessageFromback = "";
     }
 
     gotItBtn() {

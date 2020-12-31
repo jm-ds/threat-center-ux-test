@@ -40,8 +40,8 @@ export class ProjectComponent implements OnInit, AfterViewInit {
           this.getProjectScanData();
         }
       });
-    
-      if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
+
+    if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
       const state = this.router.getCurrentNavigation().extras.state;
       if (!!state && !!state["from"] && state["from"] === 'DIALOG') {
         this.isScrollToTabs = true;
