@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ThemeSharedModule} from '../../../theme/shared/theme-shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgbPopoverModule, NgbProgressbarModule,NgbTabsetModule,NgbDropdownModule,NgbButtonsModule,NgbTooltipModule,NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {NgbPopoverModule, NgbProgressbarModule,NgbTabsetModule,NgbDropdownModule,NgbButtonsModule,NgbTooltipModule,NgbTabChangeEvent, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@app/shared/shared.module';
 import {TableModule} from 'primeng/table';
 import { ProjectRoutingModule } from './project-routing.module';
@@ -35,7 +35,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     TcSharedModule,
     MarkdownModule,
     NgxSpinnerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgbModule
   ],
   declarations: [
     ProjectComponent,

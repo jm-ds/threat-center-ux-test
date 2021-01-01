@@ -166,7 +166,57 @@
                   <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
                       <perfect-scrollbar >
-                        <table class="table table-hover m-b-0">
+                        <p-treeTable class="table table-hover m-b-0" [value]="projects">
+                          <ng-template pTemplate="header">
+                              <tr>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="200px">PROJECT NAME</th>
+                                <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">DIVISION</th>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="140px">Vulnerabilities</th>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="200px">Licenses</th>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="100px">Components</th>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="100px">Assets</th>
+                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan</th>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
+                              <tr [ttRow]="rowNode">
+                                  <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
+                                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                    <a [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
+                                  </td>
+                                   <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td>
+                                    <td style="padding: 0.75rem;">
+                                    <span title="Critical" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
+                                    <span title="High" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.high}}</span>
+                                    <span title="Medium" class="badge m-r-5 badge-light-success">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.medium}}</span>
+                                    <span title="Low" class="badge m-r-5 badge-light-info">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.low}}</span>
+                                    <span title="Info" class="badge m-r-5 badge-light-primary">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.info}}</span>
+                                  </td>
+                                  <td style="padding: 0.75rem;">
+                                    <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
+                                    <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
+                                    <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
+                                    <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                                    <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                                    <span title="Dual" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.dual}}</span>
+                                    <span title="Custom" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.custom}}</span>
+                                    <span title="Permissive" class="badge m-r-5 badge-light-primary">{{rowData.latestScan.scanMetrics?.licenseMetrics?.permissive}}</span>
+                                  </td>
+                                  <td style="padding: 0.75rem;">
+                                    <span title="Latest" class="badge m-r-5 badge-light-success">{{rowData.latestScan.scanMetrics?.componentMetrics.latest}}</span>
+                                    <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
+                                    <span title="Dual" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
+                                  </td>
+                                  <td style="padding: 0.75rem;">
+                                    <span title="Analyzed" class="badge m-r-5 badge-light-success">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
+                                    <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
+                                    <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
+                                  </td>
+                                  <td style="padding: 0.75rem;">{{project.node.data.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                                </tr>
+                          </ng-template>
+                        </p-treeTable>                        
+<!--                         <table class="table table-hover m-b-0">
                           <thead>
                           <tr>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">PROJECT NAME</th>
@@ -176,7 +226,7 @@
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Components</th>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Assets</th>
                             <!-- <th style="border-bottom:1px solid #4680ff;font-weight:bold">Leaked Assets</th> -->
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">Last Scan</th>
+<!--                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">Last Scan</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -205,7 +255,7 @@
                               <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
                               <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                               <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
-                            </td>
+<!--                            </td>
                             <td>
                               <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
@@ -216,7 +266,7 @@
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td> -->
-                            <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+<!--                            <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                           </tr>
                           <ng-container *ngFor="let childEntityEdge of entity.childEntities?.edges">
                             <tr *ngFor="let projectEdge of childEntityEdge.node.projects?.edges">
@@ -244,7 +294,7 @@
                                 <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
                                 <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                                 <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
-                              </td>
+<!--                              </td>
                               <td>
                                 <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                                 <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
@@ -255,14 +305,14 @@
                                 <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                                 <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                               </td> -->
-                              <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+<!--                              <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-container>
 
 
                           </tbody>
-                        </table>
-                      </perfect-scrollbar>
+                        </table>-->
+                       </perfect-scrollbar>
                     </div>
                   </app-card>
                 </div>

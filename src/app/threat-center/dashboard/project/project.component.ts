@@ -13,6 +13,7 @@ import { ChartDB } from '../../../fack-db/chart-data';
 import { MatPaginator } from '@angular/material';
 import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'project-dashboard',
@@ -27,7 +28,8 @@ export class ProjectComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService:CoreHelperService) {
+    private coreHelperService:CoreHelperService,
+    private modalService: NgbModal) {
     this.chartDB = ChartDB;
   }
 
@@ -35,6 +37,7 @@ export class ProjectComponent implements OnInit {
   obsProject: Observable<Project>;
   //selectedScan:Scan;
   projectId: string;
+  errorMsg: string;
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
@@ -544,5 +547,11 @@ export class ProjectComponent implements OnInit {
     this.componentScanData = Observable.of(data[1].data.scan);
     this.licensesScanData = Observable.of(data[2].data.scan);
     this.assetScanData = Observable.of(data[3].data.scan);
+  }
+
+  openErrorMsg(content, errorMsg:string) {
+    // open error messages
+    this.errorMsg = errorMsg;
+    this.modalService.open(content);
   }
 }

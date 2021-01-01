@@ -8,6 +8,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgbPopoverModule, NgbProgressbarModule,NgbTabsetModule,NgbDropdownModule,NgbButtonsModule,NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TableModule} from 'primeng/table';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {TreeTableModule} from 'primeng/treetable';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     NgbButtonsModule,
     NgbTooltipModule,
     TableModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    TreeTableModule
   ],
   declarations: [
     EntityComponent,

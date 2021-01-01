@@ -136,6 +136,8 @@ export class Project {
   created:any;
   latestScan: Scan;
   scans: ScanConnection;
+  childProjects: ProjectConnection;
+  errorMsg: string;
 }
 
 export class Scan {
