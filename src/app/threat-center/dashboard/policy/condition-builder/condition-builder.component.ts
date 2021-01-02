@@ -1,5 +1,5 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
-import { PolicyCondition, PolicyConditionGroup } from '@app/models';
+import { Policy, PolicyCondition, PolicyConditionGroup } from '@app/models';
 
 @Injectable({
     providedIn: 'root'
@@ -12,25 +12,26 @@ import { PolicyCondition, PolicyConditionGroup } from '@app/models';
 export class ConditionBuilderComponent implements OnInit {
     @Input() public group: PolicyConditionGroup;
     @Input() public parentGroup: PolicyConditionGroup;
+    @Input() public policy: Policy;
     @Input() public readonly: Boolean;
 
     securityOperators: CodeNamePair[];
     securitySeverityValues: CodeNamePair[];
-    securityCVSS3ScoreValues: CodeNamePair[]
+    securityCVSS3ScoreValues: NumCodeNamePair[]
     legalOperators: CodeNamePair[];
     legalFoundInValues: CodeNamePair[];
     componentOperators: CodeNamePair[];
     codeQualityOperators: CodeNamePair[];
     workflowReleasePhases: CodeNamePair[];
 
-
     conditionTypeItems: CodeNamePair[];
 
     conditionTypes: object;
 
-    constructor(group: PolicyConditionGroup, parentGroup: PolicyConditionGroup){
+    constructor(group: PolicyConditionGroup, parentGroup: PolicyConditionGroup, policy: Policy){
         this.group = group;
         this.parentGroup = parentGroup;
+        this.policy = policy;
     }
 
 
@@ -66,16 +67,16 @@ export class ConditionBuilderComponent implements OnInit {
             { code: "CRITICAL", name: "Critical" }
         ];
         this.securityCVSS3ScoreValues = [
-            { code: "1", name: "1" },
-            { code: "2", name: "2" },
-            { code: "3", name: "3" },
-            { code: "4", name: "4" },
-            { code: "5", name: "5" },
-            { code: "6", name: "6" },
-            { code: "7", name: "7" },
-            { code: "8", name: "8" },
-            { code: "9", name: "9" },
-            { code: "10", name: "10" }
+            { code: 1, name: "1" },
+            { code: 2, name: "2" },
+            { code: 3, name: "3" },
+            { code: 4, name: "4" },
+            { code: 5, name: "5" },
+            { code: 6, name: "6" },
+            { code: 7, name: "7" },
+            { code: 8, name: "8" },
+            { code: 9, name: "9" },
+            { code: 10, name: "10" }
         ];
         this.legalFoundInValues = [
             { code: "COMPONENT", name: "Component" },
@@ -114,23 +115,40 @@ export class ConditionBuilderComponent implements OnInit {
 
     addChildGroup() {
         if (this.group.groupOperator) {
-        let newGroup = new PolicyConditionGroup();
-        newGroup.groupOperator="AND";
-        if (!this.group.groups) {
-            this.group.groups=[];
-        }
-        this.group.groups.push(newGroup);
+            let newGroup = new PolicyConditionGroup();
+            newGroup.groupOperator="OR";
+            if (!this.group.groups) {
+                this.group.groups=[];
+            }
+            this.group.groups.push(newGroup);
+            this.setGroupConditionType(newGroup, this.policy.conditionType);
         }
     }
 
     addCondition() {
         if (this.group.groupOperator) {
         let newCondition = new PolicyCondition();
-        newCondition.conditionType="SECURITY";
+        newCondition.conditionType=this.policy.conditionType;
         if (!this.group.conditions) {
             this.group.conditions=[];
         }
         this.group.conditions.push(newCondition);
+        }
+    }
+
+    setConditionType(conditionType: string) {
+        this.setGroupConditionType(this.group, conditionType);
+    }
+
+    setGroupConditionType(group: PolicyConditionGroup, conditionType: string) {
+        if (group.conditions) {
+            group.conditions = group.conditions.filter(item => item.conditionType === conditionType);
+        }
+        if (group.groups) {
+            for (const grp of group.groups) {
+                this.setGroupConditionType(grp,conditionType);
+            }
+            group.groups = group.groups.filter(item => item.conditions.length>0);
         }
     }
 }
@@ -139,3 +157,9 @@ class CodeNamePair {
   code: String;
   name: String;
 }
+
+class NumCodeNamePair {
+    code: number;
+    name: String;
+  }
+  

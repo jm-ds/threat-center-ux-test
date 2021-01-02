@@ -1,16 +1,25 @@
 import { Injectable } from '@angular/core';
-import { PageInfo } from '@app/threat-center/shared/models/types';
+import { Entity, PageInfo, Project } from '@app/threat-center/shared/models/types';
 
+@Injectable()
 export class Policy {
     readonly orgId: string;
     readonly policyId: string;
+    entityId: string;
+    projectId: string;
     name: string;
     title: string;
     description: string;
     createdBy: string;
     active: boolean;
+    applyToChilds: boolean;
+    entity: Entity;
+    project: Project;
     createDate: Date;
-    dateRemoved: Date;
+    dateLastStateChange: Date;
+    conditionType: string;
+    overridePolicyId: string;
+    overridePolicyTitle: string;
     rootGroup: PolicyConditionGroup;
     actions: PolicyAction[];
 }
@@ -98,9 +107,11 @@ export interface PolicyQuery {
 export class PolicyRequestInput {
     readonly policy: Policy;
     constructor(policy: Policy) {
+        delete policy['entity'];
+        delete policy['project'];
         delete policy["__typename"];
         let gr=[policy.rootGroup];
-        while (gr.length>0) {
+        while (gr.length>0 && gr[0]) {
             let group = gr.shift();
             delete group["__typename"];
             if (group.conditions) {

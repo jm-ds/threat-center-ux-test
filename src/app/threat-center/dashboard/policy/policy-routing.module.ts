@@ -18,16 +18,47 @@ const routes: Routes = [
                 component: PolicyListComponent
             },
             {
+                path: 'list/:entityId',
+                component: PolicyListComponent
+            },
+            {
+                path: 'list/:entityId/:projectId',
+                component: PolicyListComponent
+            },
+            {
                 path: 'show/:policyId',
                 component: PolicyShowComponent
             },
             {
+                path: 'show/:policyId/:entityId',
+                component: PolicyShowComponent
+            },
+            {
+                path: 'show/:policyId/:entityId/:projectId',
+                component: PolicyShowComponent
+            },
+            {
                 path: 'create',
-                component: PolicyEditComponent,
-                pathMatch: 'full'
+                component: PolicyEditComponent
+            },
+            {
+                path: 'create/:entityId',
+                component: PolicyEditComponent
+            },
+            {
+                path: 'create/:entityId/:projectId',
+                component: PolicyEditComponent
             },
             {
                 path: 'edit/:policyId',
+                component: PolicyEditComponent
+            },
+            {
+                path: 'edit/:policyId/:entityId',
+                component: PolicyEditComponent
+            },
+            {
+                path: 'edit/:policyId/:entityId/:projectId',
                 component: PolicyEditComponent
             }
         ]
