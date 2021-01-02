@@ -5,21 +5,9 @@
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
 @import '@angular/material/prebuilt-themes/purple-green.css';
 
-.mat-paginator {
-    background: none;
-}
 
-.mat-selected {
-    color: #fff !important;
-}
 
-#projectVulnerabilityChart {
-    filter: saturate(70%) !important;
-}
 
-#projectLicenseChart {
-    filter: saturate(70%) !important;
-}
 
 #projectComponentChart {
     filter: saturate(70%) !important;

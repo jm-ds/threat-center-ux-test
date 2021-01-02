@@ -20,7 +20,7 @@ export class EntityModel {
     childEntities: ChildModel;
     entityMetrics: any;
     projects: ChildModel;
-    entityType?: string;
+    entityType?: string = "";
     isChildEntity?: boolean;
     isProjects?: boolean;
     constructor(init?: Partial<EntityModel>) {
