@@ -24,6 +24,7 @@ export class ScanAssetsComponent implements OnInit {
   columnsFilter = new Map();
   timeOut;
   timeOutDuration = 1000;
+  parentScanAssetId: string = null;
 
   constructor(private apiService: ApiService,
               private route: ActivatedRoute,
@@ -33,7 +34,7 @@ export class ScanAssetsComponent implements OnInit {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
     if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
         .pipe(map(result => result.data.scan));
       this.initData();
     } else {
@@ -42,7 +43,10 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   sort(scanAssets: any) {
-    return scanAssets.sort((a, b) => a.node.status.localeCompare(b.node.status)).sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length);
+    return scanAssets
+        .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+        // .sort((a, b) => a.node.status.localeCompare(b.node.status))
+        // .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length);
   }
 
   // While any changes occurred in page
@@ -74,7 +78,7 @@ export class ScanAssetsComponent implements OnInit {
 
   // Loading Scan Assets data after paggination.
   loadScanAssetData(first, last, endCursor = undefined, startCursor = undefined) {
-    let scanAsset = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+    let scanAsset = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
@@ -82,10 +86,25 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   // goto Detail
-  gotoDetails(sAssetId) {
-    const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
-    const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
-    this.router.navigate([decodeURIComponent(url)]);
+  gotoDetails(scanAsset) {
+    if (scanAsset.node.assetType === 'DIR') {
+      this.parentScanAssetId = scanAsset.node.scanAssetId;
+      console.log(this.parentScanAssetId);
+      this.reload();
+    } else {
+      let sAssetId = scanAsset.node.scanAssetId;
+      const entityId = this.route.snapshot.paramMap.get('entityId');
+      const projectId = this.route.snapshot.paramMap.get('projectId');
+      const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+      this.router.navigate([decodeURIComponent(url)]);
+    }
+  }
+  
+  reload() {
+    console.log("reload...");
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+        .pipe(map(result => result.data.scan));
+    this.initData();
   }
 
   filterColumn(column, value) {
@@ -96,7 +115,7 @@ export class ScanAssetsComponent implements OnInit {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
           .pipe(map(result => result.data.scan));
       this.initData();
     }, this.timeOutDuration);

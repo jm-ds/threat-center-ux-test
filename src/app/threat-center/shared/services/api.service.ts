@@ -821,7 +821,8 @@ export class ApiService {
       `);
   }
 
-  getScanAssets(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanAssets(scanId: string, parentScanAssetId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    let parentId = 'parentScanAssetId: \"' + parentScanAssetId + '\", ';
     let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
@@ -829,9 +830,9 @@ export class ApiService {
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
         query {
-        	 scan(scanId:"${scanId}") {
+        	scan(scanId:"${scanId}") {
             scanId
-            scanAssets(${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+            scanAssets(${parentId}${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -848,6 +849,8 @@ export class ApiService {
                   originAssetId
                   workspacePath
                   status,
+                  assetType,
+                  parentScanAssetId,
                   embeddedAssets {
                     edges {
                       node {
@@ -862,7 +865,7 @@ export class ApiService {
             }
           }
         }
-      `,'no-cache');
+      `, 'no-cache');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
@@ -875,6 +878,8 @@ export class ApiService {
             scanAssetId,
             originAssetId
             workspacePath,
+            assetType,
+            parentScanAssetId,
             status,
             embeddedAssets {
               edges {
