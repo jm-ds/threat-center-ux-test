@@ -32,6 +32,8 @@ export class ProjectComponent implements OnInit, AfterViewInit {
     private scanHelperService: ScanHelperService,
     private router: Router) {
     this.chartDB = ChartDB;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     this.scanHelperService.isHighlightNewScanObservable$
       .subscribe(x => {
         this.isHighlightNewScan = x;
@@ -43,6 +45,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
     if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
       const state = this.router.getCurrentNavigation().extras.state;
+
       if (!!state && !!state["from"] && state["from"] === 'DIALOG') {
         this.isScrollToTabs = true;
       }

@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="modal-body">
     <button type="button" *ngIf="statusMessageFromback == 'COMPLETE'" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -32,6 +32,84 @@
         </i>
         <p *ngIf="isError">{{statusMessageFromback}}</p>
         <button class="btn btn-primary" (click)="closeModel()">Close</button>
+    </div>
+
+</div> -->
+
+
+<div class="modal-body">
+
+    <div *ngFor="let item of filter(recentlyScanCompleted)">
+        <div class="scan-modal-blk scan-success-blk">
+            <div class="scan-started-blk">
+                <div class="scan-progress">
+                    <i class="scan-icon far fa-thumbs-up status-success loader-img"></i>
+                    <div class="scan-progress-rt">
+                        <p>{{item.projectName}} scan is complete. <a class="cursor-pointer"
+                                (click)="gotoProject(item)"><u>View
+                                    results</u></a> &nbsp;<i class="fas fa-external-link-alt"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scan-modal-blk scan-success-blk scan-failure-blk" *ngFor="let item of filterErrorPro(errorScanProject)">
+        <div class="scan-started-blk">
+            <div class="scan-progress">
+                <i class="scan-icon fas fa-exclamation-circle status-failure loader-img"></i>
+                <div class="scan-progress-rt">
+                    <p>Something went wrong in {{item.projectName}} project!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="scan-modal-blk">
+        <div class="scan-started-blk">
+            <div class="scan-main-blk" *ngIf="projectScanResults.length >= 1">
+                <ngb-accordion #acc="ngbAccordion">
+                    <ngb-panel>
+                        <ng-template ngbPanelTitle>
+                            <div class="scan-progress">
+                                <i class="scan-icon loader-img"><img src="assets/images/scan-loader.gif" alt=""></i>
+                                <div class="scan-progress-rt">
+                                    <p>
+                                        {{projectScanResults.length}} projects scan in progress
+                                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            <div class="scan-progress" *ngFor="let project of projectScanResults">
+                                <div class="scan-progress-rt">
+                                    <p>
+                                        {{project.projectName}} project scan.
+                                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+            <div class="scan-main-blk recently-completed-scan" *ngIf="recentlyScanCompleted.length >= 1">
+                <button type="button" class="close" aria-label="Close" (click)="closeModel()"
+                    *ngIf="projectScanResults.length == 0">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h6>Recently Completed Scans</h6>
+                <ul>
+                    <li *ngFor="let project of filterUniqRecords()">
+                        <a (click)="gotoProject(project)"
+                            style="color: #4680ff !important;"><u>{{project.projectName}}</u></a>
+                        project. <i class="fas fa-external-link-alt"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
 </div>

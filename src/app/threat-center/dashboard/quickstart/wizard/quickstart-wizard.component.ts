@@ -14,6 +14,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 
 @Component({
@@ -50,20 +52,8 @@ export class QuickstartWizardComponent implements OnInit {
         private spinner: NgxSpinnerService,
         public authService: AuthenticationService,
         private scanHelperService: ScanHelperService,
-        private modalService: NgbModal) {
-
-        this.scanHelperService.projectScanloadingStatusObservable$
-            .subscribe(x => {
-                if (!!x) {
-                    if (!!x['message'] && (x['message'] === 'COMPLETE' || x['message'] === 'ERROR')) {
-                        this.isDisableScanBtn = false;
-                    } else {
-                        this.isDisableScanBtn = true;
-                    }
-                } else {
-                    this.isDisableScanBtn = false;
-                }
-            });
+        private modalService: NgbModal,
+        private coreHelperService: CoreHelperService) {
     }
 
     public ghUserCols = [
@@ -127,17 +117,21 @@ export class QuickstartWizardComponent implements OnInit {
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
         //open dialog box with message..
-        this.isDisableScanBtn = true;
-        this.modalService.dismissAll();
-        this.scanHelperService.submitingScanForProject();
-        const modalRef = this.modalService.open(LoadingDialogComponent,
-            {
-                backdrop: 'static',
-                keyboard: false,
-            });
-        modalRef.componentInstance.message = scanRequest.repository + ' Scan started';
-        modalRef.componentInstance.projectName = scanRequest.repository;
-        modalRef.componentInstance.entityId = this.entityId;
+
+        // this.openFloatingModel();
+        const preScanProjectData = {
+            uniqId: this.coreHelperService.uuidv4(),
+            message: scanRequest.repository + ' scan started.',
+            projectName: scanRequest.repository,
+            entityId: this.entityId
+        };
+
+        if (this.scanHelperService.projectScanResults.length == 0 && this.scanHelperService.recentlyScanCompleted.length == 0 && this.scanHelperService.errorScanProject.length == 0) {
+            this.openScanModel(preScanProjectData);
+        }
+
+        this.scanHelperService.submitingScanForProject(preScanProjectData);
+
         // this.taskService.submitScanRequest()
         //     .pipe(map(task => task.data.task_submitScanRequest))
         //     .subscribe(task => {
@@ -164,6 +158,25 @@ export class QuickstartWizardComponent implements OnInit {
         // then forward to dashboard where we can display the task component.
 
         // this.router.navigate(['dashboard/quickstart/dashboard']);
+    }
+
+    openScanModel(preScanProjectData) {
+        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
+            {
+                backdrop: 'static',
+                keyboard: false,
+            });
+        modalRef.componentInstance.preScanProjectData = preScanProjectData;
+        modalRef.result.then((result) => {
+            this.openFloatingModel();
+        }, (reason) => { });
+    }
+
+    private openFloatingModel() {
+        const modalRef = this.modalService.open(LoadingDialogComponent, {
+            backdrop: 'static',
+            keyboard: false,
+        });
     }
 
     loadGitHubUser() {
@@ -246,6 +259,13 @@ export class QuickstartWizardComponent implements OnInit {
             }
             return parseInt(filter) > value;
         };
+    }
+
+    onRowSelect(event) {
+    }
+
+    onRowUnselect(event) {
+        this.selectedRepos = [];
     }
 
     private isEmail(userName: string): boolean {

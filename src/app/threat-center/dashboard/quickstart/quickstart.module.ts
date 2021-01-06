@@ -14,11 +14,15 @@ import { TcSharedModule } from '@app/threat-center/shared/tc-shared.module';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { LoadingDialogComponent } from '../project-scan-dialog/loading-dialog.component';
+import { PreScanLoadingDialogComponent } from '../pre-scan-dialog/pre-scan-dialog.component';
+import { MatProgressBarModule } from '@angular/material';
+
 
 @NgModule({
   declarations: [
     QuickstartWizardComponent,
-    LoadingDialogComponent
+    LoadingDialogComponent,
+    PreScanLoadingDialogComponent
   ],
   imports: [
     CommonModule,
@@ -36,9 +40,10 @@ import { LoadingDialogComponent } from '../project-scan-dialog/loading-dialog.co
     TcSharedModule,
     FileUploadModule,
     NgxSpinnerModule,
-    NgbModule
+    NgbModule,
+    MatProgressBarModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [LoadingDialogComponent]
+  entryComponents: [LoadingDialogComponent, PreScanLoadingDialogComponent]
 })
 export class QuickstartModule { }
