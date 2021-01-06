@@ -12,6 +12,11 @@
           <i class="fas fa-cogs" style="margin-right:5px"></i>Settings
         </button>
       </a>
+      <a [routerLink]="['/dashboard/policy/list/',project.entityId, project.projectId]">
+        <button type="submit" class="btn btn-outline-info ml-2">
+          <i class="fas fa-feather-alt" style="margin-right:5px"></i>Policies
+        </button>
+      </a>
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
@@ -190,6 +195,7 @@
                     <th>Components</th>
                     <th>Embedded Assets</th>
                     <th>Leaked Assets</th>
+                    <th>Success</th>
                     <!--<th>Policy Violations</th>-->
                   </tr>
                 </ng-template>
@@ -249,6 +255,16 @@
                       <span title="Partial Asset Leaks" class="badge m-r-5 badge-light-primary">5</span>
                       <span title="Asset Leaks" class="badge m-r-5 badge-light-warning">5</span>
                       <span title="Project Leaks" class="badge m-r-5 badge-light-primary">5</span>
+                    </td>
+                    <td style="text-align: center">
+                      <span *ngIf="scan.node?.errorMsg;else successMsg">
+                        <button class="btn badge-light-danger error-btn" title="Show error messages" (click)="openErrorMsg(scanError, scan.node.errorMsg)">
+                          <i class="feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
+                        </button>
+                      </span>
+                      <ng-template #successMsg><span>
+                        <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
+                      </span></ng-template>
                     </td>
 
                     <!--<th>Policy Violations</th -->
@@ -446,4 +462,15 @@
       <!--</app-card>-->
     </div>
   </div>
+  <ng-template #scanError let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Scan errors</h4>
+    </div>
+    <div class="modal-body">
+      <pre>{{errorMsg}}</pre>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+    </div>
+  </ng-template>
 </div>

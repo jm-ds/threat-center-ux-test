@@ -2,14 +2,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { Project, Entity, User } from '@app/threat-center/shared/models/types';
+import { Project, Entity, User, ProjectEdge } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
 import { ChartDB } from '../../../fack-db/chart-data';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
-import { TableModule } from 'primeng/table';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import {TreeNode} from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
@@ -27,6 +27,7 @@ export class EntityComponent implements OnInit {
 
   //public entityId:string;
   public obsEntity: Observable<Entity>;
+  public projects: TreeNode[];
   public componentsEntity: Entity;
   public uniqueLicenses = [];
 
@@ -111,6 +112,8 @@ export class EntityComponent implements OnInit {
     this.obsEntity.subscribe(entity => {
       this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
       //this.stateService.selectedScan = project.scans[0];
+      this.buildProjectTree(entity);
+
       let critical = [];
       let high = [];
       let medium = [];
@@ -225,6 +228,40 @@ export class EntityComponent implements OnInit {
       }
 
     });
+  }
+
+  buildProjectTree(entity: Entity) {
+    let edges = entity.projects.edges;
+
+    let nodes: TreeNode[] = edges.map(projectEdge => {
+      let node : TreeNode = {
+        label: projectEdge.node.name,
+        data: projectEdge.node,
+        expandedIcon: "fa fa-folder-open",
+        collapsedIcon: "fa fa-folder",
+        children: []
+      };
+      this.buildProjectTreeHier(projectEdge, node);
+      return node;
+    });
+    this.projects = nodes;
+  }
+
+  buildProjectTreeHier(projectEdge: ProjectEdge, treeNode: TreeNode) {
+    if (projectEdge.node.childProjects) {
+      projectEdge.node.childProjects.edges.forEach(edge=> {
+        let childNode : TreeNode = {
+          label: edge.node.name,
+          data: edge.node,
+          expandedIcon: "fa fa-folder-open",
+          collapsedIcon: "fa fa-folder",
+          children: []
+        };
+        treeNode.children.push(childNode);
+        this.buildProjectTreeHier(edge, childNode);
+      });
+    }
+
   }
 
   changeEntity(entityId: string) {
