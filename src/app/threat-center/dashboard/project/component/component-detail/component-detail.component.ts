@@ -21,6 +21,8 @@ export class ComponentDetailComponent implements OnInit {
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
   projectId: string = "";
+  scanId: string="";
+  licenseId: string="";
 
   defaultPageSize = 25;
   pageIndex = 0;
@@ -39,6 +41,8 @@ export class ComponentDetailComponent implements OnInit {
     console.log("Loading ComponentDetailComponent");
     let componentId = this.route.snapshot.paramMap.get('componentId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
+    this.scanId = this.route.snapshot.paramMap.get('scanId');
+    this.licenseId = this.route.snapshot.paramMap.get('licenseId');
     console.log("componentId:", componentId);
     this.obsComponent = this.apiService.getComponent(componentId, Number(this.defaultPageSize))
       .pipe(map(result => result.data.component));
@@ -78,6 +82,13 @@ export class ComponentDetailComponent implements OnInit {
   gotoProject() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
+    this.router.navigate([url]);
+  }
+
+  //goto license page
+  gotoLicense() {
+    const entityId = this.route.snapshot.paramMap.get('entityId');
+    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId+"/scan/"+this.scanId+"/license/"+this.licenseId;
     this.router.navigate([url]);
   }
 
