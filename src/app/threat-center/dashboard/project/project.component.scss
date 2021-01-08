@@ -197,8 +197,30 @@
 }
 
 .selected-table-row {
-    background: #748892;
     box-shadow: none;
+
+    td {
+        &:first-child {
+            position: relative;
+        overflow: hidden;
+        padding-left: 35px !important;
+
+        &:before {
+            content: 'New';
+            position: absolute;
+            top: 4px;
+            left: -27px;
+            color: #fff;
+            background: #ff5252;
+            width: 83px;
+            line-height: 12px;
+            text-align: center;
+            transform: rotate(-43deg);
+            padding: 3px 5px;
+            font-weight: 700;
+        }
+        }
+    }
 
     .badge {
         box-shadow: 0 0 2px 2px rgba(0,0,0,0.04);
