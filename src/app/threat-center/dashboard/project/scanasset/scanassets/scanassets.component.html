@@ -11,7 +11,7 @@
       </div>
 
       <perfect-scrollbar [style.max-height]="'650px'">
-        <p-table #dt [columns]="columns" [value]="sort(scanAssetDetails.scanAssets.edges)" [paginator]="false" [rows]="50"
+        <p-table *ngIf="scanAssetDetails" #dt [columns]="columns" [value]="sort(scanAssetDetails.scanAssetsTree.edges)" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
 
@@ -71,6 +71,9 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset>
+            <tr *ngIf="scanAsset.node.root!=true">
+              <td>..</td>
+            </tr>
             <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
               <td>{{scanAsset.node.name}}</td>
@@ -92,7 +95,7 @@
         </p-table>
       </perfect-scrollbar>
       <div class="col-sm-12">
-        <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="scanAssetDetails.scanAssets?.totalCount"
+        <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="scanAssetDetails.scanAssetsTree?.totalCount"
           [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
         </mat-paginator>
       </div>

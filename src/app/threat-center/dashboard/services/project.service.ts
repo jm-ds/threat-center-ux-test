@@ -225,13 +225,13 @@ export class ProjectDashboardService {
    `);
     }
 
-    // get assets
+    //get assets
     getScanAssets(scanId: string, defaultPage) {
-      return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
       query {
          scan(scanId:"${scanId}") {
           scanId
-          scanAssets(parentScanAssetId: null, first:${defaultPage}) {
+          scanAssets(first:${defaultPage}) {
             pageInfo {
               hasNextPage
               hasPreviousPage
@@ -248,8 +248,6 @@ export class ProjectDashboardService {
                 originAssetId
                 workspacePath
                 status,
-                assetType,
-                parentScanAssetId,
                 embeddedAssets {
                   edges {
                     node {
@@ -264,7 +262,7 @@ export class ProjectDashboardService {
           }
         }
       }
-    `,'no-cache');
+    `, 'no-cache');
     }
 }
 

@@ -24,7 +24,7 @@ export class ScanAssetsComponent implements OnInit {
   columnsFilter = new Map();
   timeOut;
   timeOutDuration = 1000;
-  parentScanAssetId: string = null;
+  parentScanAssetId = '';
 
   constructor(private apiService: ApiService,
               private route: ActivatedRoute,
@@ -33,13 +33,13 @@ export class ScanAssetsComponent implements OnInit {
   ngOnInit() {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+    // if (!this.obsScan) {
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
         .pipe(map(result => result.data.scan));
-      this.initData();
-    } else {
-      this.initData();
-    }
+    this.initData();
+    // } else {
+    //   this.initData();
+    // }
   }
 
   sort(scanAssets: any) {
@@ -62,15 +62,15 @@ export class ScanAssetsComponent implements OnInit {
       // Next and Previous changed
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         // call with after...
-        if (!!this.scanAssetDetails.scanAssets.pageInfo && this.scanAssetDetails.scanAssets.pageInfo.hasNextPage) {
+        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasNextPage) {
           this.loadScanAssetData(Number(this.defaultPageSize), undefined,
-            this.scanAssetDetails.scanAssets.pageInfo.endCursor, undefined);
+            this.scanAssetDetails.scanAssetsTree.pageInfo.endCursor, undefined);
         }
       } else {
         // call with before..
-        if (!!this.scanAssetDetails.scanAssets.pageInfo && this.scanAssetDetails.scanAssets.pageInfo.hasPreviousPage) {
+        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasPreviousPage) {
           this.loadScanAssetData(undefined, Number(this.defaultPageSize),
-            undefined, this.scanAssetDetails.scanAssets.pageInfo.startCursor);
+            undefined, this.scanAssetDetails.scanAssetsTree.pageInfo.startCursor);
         }
       }
     }

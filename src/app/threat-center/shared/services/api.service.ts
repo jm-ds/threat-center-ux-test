@@ -822,7 +822,7 @@ export class ApiService {
   }
 
   getScanAssets(scanId: string, parentScanAssetId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
-    let parentId = 'parentScanAssetId: \"' + parentScanAssetId + '\", ';
+    let parentId = (parentScanAssetId.length > 0) ?'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
     let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
@@ -832,7 +832,7 @@ export class ApiService {
         query {
         	scan(scanId:"${scanId}") {
             scanId
-            scanAssets(${parentId}${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+            scanAssetsTree(${parentId}${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -878,8 +878,6 @@ export class ApiService {
             scanAssetId,
             originAssetId
             workspacePath,
-            assetType,
-            parentScanAssetId,
             status,
             embeddedAssets {
               edges {
