@@ -45,10 +45,14 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     }
 
     filter(items): Array<any> {
-        const cDate: any = new Date();
-        return items.filter(pro => {
-            return ((cDate - pro['CompletedTime']) / 1000) < this.successToasterTime;
-        });
+        if (!!items && items.length >= 1) {
+            const cDate: any = new Date();
+            return items.filter(pro => {
+                return ((cDate - pro['CompletedTime']) / 1000) < this.successToasterTime;
+            });
+        } else {
+            return [];
+        }
     }
 
     filterErrorPro(items): Array<any> {
@@ -86,8 +90,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
         }
         const cDate: any = new Date();
         if (!!this.startTimerToCloseModel) {
-            console.log((cDate - this.startTimerToCloseModel) / 1000 > 10);
-            if ((cDate - this.startTimerToCloseModel) / 1000 > 10) {
+            if ((cDate - this.startTimerToCloseModel) / 1000 > 25) {
                 this.closeModel();
             }
         }

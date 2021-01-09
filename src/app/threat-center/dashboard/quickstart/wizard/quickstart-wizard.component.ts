@@ -119,6 +119,7 @@ export class QuickstartWizardComponent implements OnInit {
         //open dialog box with message..
 
         // this.openFloatingModel();
+        this.isDisableScanBtn = true;
         const preScanProjectData = {
             uniqId: this.coreHelperService.uuidv4(),
             message: scanRequest.repository + ' scan started.',
@@ -262,6 +263,7 @@ export class QuickstartWizardComponent implements OnInit {
     }
 
     onRowSelect(event) {
+        this.isDisableScanBtn = false;
     }
 
     onRowUnselect(event) {

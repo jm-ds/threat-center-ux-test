@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskComponent } from '@app/threat-center/shared/task/task.component';
@@ -21,7 +21,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit, AfterViewInit {
+export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
 
   constructor(
     private apiService: ApiService,
@@ -52,6 +52,9 @@ export class ProjectComponent implements OnInit, AfterViewInit {
         this.isScrollToTabs = true;
       }
     }
+  }
+  ngOnDestroy(): void {
+    this.scanHelperService.updateIsHighlightNewScan(false);
   }
 
   ngAfterViewInit(): void {
@@ -121,13 +124,12 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    this.obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
+    const obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
       .pipe(map(result => result.data.project));
-    // this.initProjectData();
-    this.obsProject.subscribe(project => {
+    obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
       this.projectDetails = project;
-      this.stateService.obsProject = this.obsProject;
+      this.stateService.obsProject = obsProject;
       this.stateService.selectedScan = project.scans.edges[0];
     });
   }
