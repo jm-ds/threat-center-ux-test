@@ -822,7 +822,7 @@ export class ApiService {
   }
 
   getScanAssets(scanId: string, parentScanAssetId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
-    let parentId = (parentScanAssetId.length > 0) ?'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
+    let parentId = (parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
     let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';

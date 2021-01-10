@@ -25,6 +25,7 @@ export class ScanAssetsComponent implements OnInit {
   timeOut;
   timeOutDuration = 1000;
   parentScanAssetId = '';
+  story = [];
 
   constructor(private apiService: ApiService,
               private route: ActivatedRoute,
@@ -33,13 +34,9 @@ export class ScanAssetsComponent implements OnInit {
   ngOnInit() {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    // if (!this.obsScan) {
     this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
         .pipe(map(result => result.data.scan));
     this.initData();
-    // } else {
-    //   this.initData();
-    // }
   }
 
   sort(scanAssets: any) {
@@ -85,11 +82,15 @@ export class ScanAssetsComponent implements OnInit {
     });
   }
 
-  // goto Detail
+  goBack() {
+    this.parentScanAssetId = this.story.pop();
+    this.reload();
+  }
+
   gotoDetails(scanAsset) {
     if (scanAsset.node.assetType === 'DIR') {
+      this.story.push(this.parentScanAssetId);
       this.parentScanAssetId = scanAsset.node.scanAssetId;
-      console.log(this.parentScanAssetId);
       this.reload();
     } else {
       let sAssetId = scanAsset.node.scanAssetId;

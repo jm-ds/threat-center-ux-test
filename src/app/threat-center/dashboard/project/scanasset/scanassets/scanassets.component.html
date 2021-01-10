@@ -70,9 +70,9 @@
             </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-scanAsset>
-            <tr *ngIf="scanAsset.node.root!=true">
-              <td>..</td>
+          <ng-template pTemplate="body" let-scanAsset let-rowIndex="rowIndex">
+            <tr *ngIf="story.length>0 && rowIndex==0">
+              <td (click)="goBack()">..</td>
             </tr>
             <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
