@@ -461,8 +461,8 @@ export class ProjectComponent implements OnInit {
 
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-      return data[0];
-      //return data.reduce((prev, next) => prev + (+next), 0);
+      // return data[0];
+      return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
