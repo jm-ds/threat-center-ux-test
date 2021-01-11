@@ -20,6 +20,8 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   //vulnerabilityColumns = ['Vulnerability','Cwe','Severity','CVSS2','CVSS3'];
 
   projectId:string = ""
+  scanId: string="";
+  entityId: string="";
   constructor(
     private apiService:ApiService,
     public stateService:StateService,
@@ -35,6 +37,9 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
     console.log("Loading LicenseDetailComponent");
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
+    this.scanId = this.route.snapshot.paramMap.get('scanId');
+    this.entityId = this.route.snapshot.paramMap.get('entityId');
+
     /*let componentId = this.route.snapshot.paramMap.get('componentId');
     console.log("componentId:",componentId);
     this.obsComponent = this.apiService.getComponent(componentId)
@@ -65,20 +70,21 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   ];*/
 
   gotoProject() {
-    const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId;
+    const url = "dashboard/entity/" + this.entityId + "/project/" + this.projectId;
     this.router.navigate([url]);
   }
 
   gotoComponent() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId + "/component/" + this.breadcumDetail.SelectedComponent['id'];
+    this.coreHelperService.settingProjectBreadcum("License", "", "", false);
     this.router.navigate([url]);
   }
 
   //Getting license name after emiting
   getLicenseName(name){
     this.licenseName = name;
+    this.coreHelperService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);
   }
 
   //Initialize breadcum details

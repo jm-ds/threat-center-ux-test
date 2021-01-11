@@ -705,6 +705,62 @@ export class ApiService {
       `);
   }
 
+  getLicenseComponents(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const firstArg = (!!first) ? `, first: ${first}` : '';
+    const lastArg = (!!last) ? `, last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+          query {
+            license(licenseId:"${licenseId}") {
+              licenseId,
+              components(scanId:"${scanId}"${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
+                totalCount
+                edges {
+                  node {
+                    componentId,
+                    name,
+                    group,
+                    version,
+                    isInternal,
+                    lastInheritedRiskScore,
+                    licenses {
+                      edges {
+                        node {
+                          licenseId,
+                          name,
+                          category
+                        }
+                      }
+                    }
+                    resolvedLicense {
+                      licenseId,
+                      name
+                    }
+                    vulnerabilities {
+                      edges {
+                        node {
+                          vulnerabilityId,
+                          vulnId,
+                          severity,
+                          patchedVersions
+                        }
+                      }
+                    }
+                  }    
+                }
+              }  
+            }    
+          }
+        `);  
+  }
+
   getVulnerability(vulnerabilityId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
         query {
