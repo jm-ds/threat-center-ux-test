@@ -76,7 +76,11 @@
             </tr>
             <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
-              <td>{{scanAsset.node.name}}</td>
+              <td>
+                <i *ngIf="scanAsset.node.assetType === 'DIR'" class="fas fa-folder"></i>
+                <i *ngIf="scanAsset.node.assetType != 'DIR'" class="fas fa-file"></i>
+                &nbsp;&nbsp;{{scanAsset.node.name}}
+              </td>
               <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
               <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td>{{scanAsset.node.workspacePath}}</td>
@@ -84,7 +88,11 @@
               <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.assetType != 'DIR'" >
-              <td>{{scanAsset.node.name}}</td>
+              <td>
+                <i *ngIf="scanAsset.node.assetType === 'DIR'" class="fas fa-folder"></i>
+                <i *ngIf="scanAsset.node.assetType != 'DIR'" class="fas fa-file"></i>
+                &nbsp;&nbsp;{{scanAsset.node.name}}
+              </td>
               <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
               <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td>{{scanAsset.node.workspacePath}}</td>
