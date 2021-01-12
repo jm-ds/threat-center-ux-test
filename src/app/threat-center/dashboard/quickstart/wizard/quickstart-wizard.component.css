@@ -26,4 +26,41 @@
   color: #ffffff;
 }
 
+.repository-usr {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 10px;
+}
 
+.repo-usr-img {
+  width: 35px;
+  height: 35px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+
+.repo-usr-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.repo-usr-lbl {
+  font-size: 14px;
+  color: #adb7be;
+}
+
+.repo-filter {
+  width: 100%;
+  display: block;
+  margin: 10px 0 0;;
+}
+
+.repo-filter input {
+  height: 30px;
+}
