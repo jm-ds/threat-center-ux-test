@@ -1,7 +1,7 @@
 <div *ngIf='obsEntity | async as entity;'>
   <div class="row">
     <div class="col-6">
-      <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
+      <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
     </div>
     <div class="col-6" style="text-align:right" *ngIf="entity.entityMetrics">
       <a [routerLink]="['/admin/entity']">
@@ -59,25 +59,25 @@
 
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities</div>
         <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="this.vulnerabilityChart"></app-apex-chart>
       </app-card>
     </div>
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 p-r-5"></i>Licenses</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</div>
         <app-apex-chart chartID="licenseChart" [chartConfig]="this.licenseChart"></app-apex-chart>
       </app-card>
     </div>
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 p-r-5"></i>Components</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</div>
         <app-apex-chart chartID="componentChart" [chartConfig]="this.componentChart"></app-apex-chart>
       </app-card>
     </div>
     <div class="col-md-3">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 p-r-5"></i>Assets</div>
+        <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets</div>
         <app-apex-chart chartID="assetChart" [chartConfig]="this.assetChart"></app-apex-chart>
       </app-card>
     </div>
