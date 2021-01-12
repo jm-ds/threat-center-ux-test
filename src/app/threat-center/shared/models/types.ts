@@ -190,6 +190,7 @@ export class License {
   isFsfLibre:boolean;
   isDeprecated:boolean;
   attributes:LicenseAttribute[];
+  components: any;
 }
 
 export class LicenseAttribute {

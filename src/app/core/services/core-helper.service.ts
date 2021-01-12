@@ -51,6 +51,8 @@ export class CoreHelperService {
             projectBreadcum['SelectedEntity'] = { id: id, name: name };
         } else if (tag === 'Component') {
             projectBreadcum['SelectedComponent'] = { id: id, name: name };
+        } else if (tag === 'License') {
+            projectBreadcum['SelectedLicense'] = { id: id, name: name };
         }
         projectBreadcum['IsFromComponent'] = isFromComponent;
         sessionStorage.setItem("ProjectBreadcum", JSON.stringify(projectBreadcum));

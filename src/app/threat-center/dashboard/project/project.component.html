@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-            <i class="fas fa-level-up-alt p-r-5"></i>Parent BU</a> / </span> {{project.name}}
+          <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
       </h3>
     </div>
     <div class="col-6" style="text-align: right;">
@@ -105,7 +105,7 @@
           <div  style="clear:both"></div>
           -->
             <div style="margin-bottom:20px;"><i
-                class="fas fa-exclamation-triangle text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
+                class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities</div>
             <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart">
             </app-apex-chart>
           </app-card>
@@ -113,7 +113,7 @@
 
         <div class="col-md-6">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 p-r-5"></i>Licenses</div>
+            <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</div>
             <app-apex-chart chartID="projectLicenseChart" [chartConfig]="this.licenseChart"></app-apex-chart>
           </app-card>
         </div>
@@ -121,7 +121,7 @@
         <div class="col-md-4">
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 p-r-5"></i>Components</div>
+            <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</div>
             <app-apex-chart chartID="projectComponentChart" [chartConfig]="this.componentChart"></app-apex-chart>
           </app-card>
         </div>
@@ -129,14 +129,14 @@
         <div class="col-md-4">
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 p-r-5"></i>Assets</div>
+            <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets</div>
             <app-apex-chart chartID="projectAssetChart" [chartConfig]="this.assetChart"></app-apex-chart>
           </app-card>
         </div>
 
         <div class="col-md-4">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-file-export text-c-red f-15 p-r-5"></i>Source Code Leaks
+            <div style="margin-bottom:20px;"><i class="fas fa-file-export text-c-red f-15 m-r-5"></i>Source Code Leaks
             </div>
             <app-apex-chart chartID="projectSourceCodeLeakChart" [chartConfig]="sourceCodeLeakChart"></app-apex-chart>
           </app-card>
@@ -145,9 +145,9 @@
     </div>
   </div>
 
-  <div class="row" >
-    <div class="col-md-12" >
-
+  <div class="row">
+    <div class="col-md-12">
+      <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
       <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
         <!-- SCANS TAB -->
@@ -459,7 +459,7 @@
         </ngb-tab>
 
       </ngb-tabset>
-      <!--</app-card>-->
+      </app-card>
     </div>
   </div>
   <ng-template #scanError let-modal>
