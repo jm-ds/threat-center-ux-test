@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ScanHelperService } from "../services/scan.service";
 import * as $ from 'jquery'
 import { interval, Subscription } from "rxjs";
+import { NextConfig } from "@app/app-config";
 
 
 @Component({
@@ -21,9 +22,9 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    successToasterTime: number = 5;
-    errorToasterTime: number = 5;
-    closePopup:number = 25;
+    successToasterTime: number = NextConfig.config.successToasterTime;
+    errorToasterTime: number = NextConfig.config.errorToasterTime;
+    closePopup:number = NextConfig.config.closePopup;
 
     startTimerToCloseModel: Date | any = null;
     constructor
