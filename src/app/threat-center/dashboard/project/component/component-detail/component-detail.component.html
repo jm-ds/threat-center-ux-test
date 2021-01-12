@@ -5,6 +5,7 @@
         <span style="font-size:15px">
             <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
             <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
+            <a  *ngIf="breadcumDetail.SelectedLicense && licenseId" class="cursor-pointer" (click)="gotoLicense()">{{breadcumDetail.SelectedLicense.name}}/</a> 
             <span style="color: #ffffff;">{{component.name}}</span>
           </span>
       </div>
