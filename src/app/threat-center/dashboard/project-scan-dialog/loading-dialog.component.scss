@@ -191,17 +191,17 @@ body.next-dark.loading-float .modal .accordion .card {
                 content: "";
                 background: url(../../../../assets/images/next.png) no-repeat;
                 position: absolute;
-                top: 50%;
-                transform: translateY(-50%) rotate(90deg);
+                top: 0;
                 width: 12px;
                 height: 16px;
                 background-size: cover;
                 right: 0;
+                transform: rotate(90deg);
             }
 
             &.collapsed  {
                 &:after {
-                    transform: translateY(-50%) rotate(-90deg);
+                    transform: rotate(-90deg);
                     width: 14px;
                 }
             }

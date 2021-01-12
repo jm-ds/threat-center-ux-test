@@ -23,6 +23,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
 
     successToasterTime: number = 5;
     errorToasterTime: number = 5;
+    closePopup:number = 25;
 
     startTimerToCloseModel: Date | any = null;
     constructor
@@ -90,7 +91,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
         }
         const cDate: any = new Date();
         if (!!this.startTimerToCloseModel) {
-            if ((cDate - this.startTimerToCloseModel) / 1000 > 25) {
+            if ((cDate - this.startTimerToCloseModel) / 1000 > this.closePopup) {
                 this.closeModel();
             }
         }
