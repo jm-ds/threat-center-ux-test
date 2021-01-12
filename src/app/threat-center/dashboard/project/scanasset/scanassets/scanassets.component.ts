@@ -41,9 +41,9 @@ export class ScanAssetsComponent implements OnInit {
 
   sort(scanAssets: any) {
     return scanAssets
+        .sort((a, b) => a.node.status.localeCompare(b.node.status))
+        .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
         .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
-        // .sort((a, b) => a.node.status.localeCompare(b.node.status))
-        // .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length);
   }
 
   // While any changes occurred in page
@@ -102,14 +102,13 @@ export class ScanAssetsComponent implements OnInit {
   }
   
   reload() {
-    console.log("reload...");
     this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
         .pipe(map(result => result.data.scan));
     this.initData();
   }
 
   filterColumn(column, value) {
-    if (value.length === 0) {
+    if (value.length === 0 || value === 'ALL') {
       this.columnsFilter.delete(column);
     } else {
       this.columnsFilter.set(column, value);

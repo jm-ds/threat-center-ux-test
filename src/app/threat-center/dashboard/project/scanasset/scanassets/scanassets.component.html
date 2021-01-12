@@ -72,7 +72,7 @@
 
           <ng-template pTemplate="body" let-scanAsset let-rowIndex="rowIndex">
             <tr *ngIf="story.length>0 && rowIndex==0">
-              <td (click)="goBack()">..</td>
+              <td (click)="goBack()" colspan="5"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
             </tr>
             <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
@@ -81,11 +81,13 @@
                 <i *ngIf="scanAsset.node.assetType != 'DIR'" class="fas fa-file"></i>
                 &nbsp;&nbsp;{{scanAsset.node.name}}
               </td>
-              <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
-              <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td *ngIf="scanAsset.node.assetSize >= 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.workspacePath}}</td>
               <td>{{scanAsset.node.status}}</td>
-              <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.assetType != 'DIR'" >
               <td>
@@ -93,11 +95,13 @@
                 <i *ngIf="scanAsset.node.assetType != 'DIR'" class="fas fa-file"></i>
                 &nbsp;&nbsp;{{scanAsset.node.name}}
               </td>
-              <td *ngIf='scanAsset.node.assetSize >= 1024'>{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
-              <td *ngIf='scanAsset.node.assetSize < 1024'>{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td *ngIf="scanAsset.node.assetSize >= 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
+              <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.workspacePath}}</td>
               <td>{{scanAsset.node.status}}</td>
-              <td>{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
         </ng-template>
         </p-table>
