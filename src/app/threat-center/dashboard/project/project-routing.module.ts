@@ -29,6 +29,10 @@ const routes: Routes = [
         component: ComponentDetailComponent
       },
       {
+        path: 'scan/:scanId/license/:licenseId/component/:componentId',
+        component: ComponentDetailComponent
+      },
+      {
         path: 'vulnerability/:vulnerabilityId',
         component: VulnerabilityDetailComponent
       },

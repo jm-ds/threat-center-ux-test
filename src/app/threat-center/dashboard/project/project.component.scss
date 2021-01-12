@@ -31,14 +31,14 @@
       flex-wrap: wrap;
 
       li {
-          width: 33px;
-          height: 33px;
-          margin: 0 12px 12px 0;
+          width: 35px;
+          height: 35px;
+          margin: 0 10px 10px 0;
           background: #ccc;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 16px;
+          font-size: 13px;
           color: var(--white);
           position: relative;
           font-weight: bolder;
@@ -196,6 +196,36 @@
     }
 }
 
+.selected-table-row {
+    box-shadow: none;
+
+    td {
+        &:first-child {
+            position: relative;
+        overflow: hidden;
+        padding-left: 35px !important;
+
+        &:before {
+            content: 'New';
+            position: absolute;
+            top: 4px;
+            left: -27px;
+            color: #fff;
+            background: #ff5252;
+            width: 83px;
+            line-height: 12px;
+            text-align: center;
+            transform: rotate(-43deg);
+            padding: 3px 5px;
+            font-weight: 700;
+        }
+        }
+    }
+
+    .badge {
+        box-shadow: 0 0 2px 2px rgba(0,0,0,0.04);
+    }
+}
 button.error-btn {
     padding-top: 0;
     padding-bottom: 0;

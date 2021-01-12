@@ -24,7 +24,8 @@
                                    [rows]="50"
                                    selectionMode="single" [(selection)]="selectedRepos[0]"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                                   [filterDelay]="0" [globalFilterFields]="['node.name']">
+                                   [filterDelay]="0" [globalFilterFields]="['node.name']"
+                                   (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
 
                             <ng-template pTemplate="caption">
                               <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
@@ -137,16 +138,16 @@
                             <tr>
                               <td>
                                 <div style="width:18px;float:left;">
-                                  <i *ngIf='selectedRepo.node.private' class="fas fa-lock"></i>
-                                  <i *ngIf='!selectedRepo.node.private' class="fas fa-unlock"></i>
+                                  <i *ngIf='selectedRepo?.node.private' class="fas fa-lock"></i>
+                                  <i *ngIf='!selectedRepo?.node.private' class="fas fa-unlock"></i>
                                 </div>
-                                <div style="float:left">{{selectedRepo.node.name}}</div>
+                                <div style="float:left">{{selectedRepo?.node.name}}</div>
                               </td>
                               <td>
-                                <div *ngIf="selectedRepo.node.refs.edges.length == 1">
-                                  {{selectedRepo.node.defaultBranchRef?.name}}
+                                <div *ngIf="selectedRepo?.node.refs.edges.length == 1">
+                                  {{selectedRepo?.node.defaultBranchRef?.name}}
                                 </div>
-                                <div *ngIf="selectedRepo.node.refs.edges.length > 1">
+                                <div *ngIf="selectedRepo?.node.refs.edges.length > 1">
                                   <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"
                                           class="form-control" style="height:25px;padding:2px">
                                     <option *ngFor="let branch of selectedRepo.node.refs.edges"
@@ -160,9 +161,11 @@
                         </p-table>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button [ngClass]="{'disabled' : selectedRepos.length===0}" class="btn btn-primary"
-                                ngbtooltip="Run Scan" type="button" (click)="submitScan('github')"><i
-                                class="fas fa-power-off"></i> Execute Threat Scan
+                        <button [ngClass]="{'disabled' : !selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true }" class="btn btn-primary"
+                                ngbtooltip="Run Scan" [disabled]="!selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true" 
+                                type="button" (click)="submitScan('github')"><i
+                                class="fas fa-power-off" >
+                              </i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -380,7 +383,8 @@
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
                         <button [ngClass]="{'disabled' : selectedRepos.length===0}" class="btn btn-primary"
-                                ngbtooltip="Run Scan" type="button" (click)="submitScan('bitbucket')"><i
+                                ngbtooltip="Run Scan" type="button" (click)="submitScan('bitbucket')"
+                                [disabled]="!selectedRepos || selectedRepos.length === 0"><i
                                 class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
