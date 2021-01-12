@@ -110,6 +110,7 @@ File: style.css
 @import "threatrix/breadcrumbs";
 @import "threatrix/buttons";
 @import "threatrix/cards";
+@import "threatrix/captions";
 @import "threatrix/datepicker";
 @import "threatrix/forms";
 @import "threatrix/tables";
@@ -120,3 +121,4 @@ File: style.css
 // threatrix styles module specific
 @import "threatrix/reports";
 @import "threatrix/module-alerts";
+@import "threatrix/entry-pages";

@@ -6,18 +6,22 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
 import {CreateAccountComponent} from '@app/security/create-account/create-account.component';
+import { AwaitingApprovalComponent } from './awaiting-approval/awaiting-approval.component';
+import {AlertModule} from "@app/theme/shared/components";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SecurityRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule
-  ],
+    imports: [
+        CommonModule,
+        SecurityRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        AlertModule
+    ],
   declarations: [
       LoginComponent,
-      CreateAccountComponent
+      CreateAccountComponent,
+      AwaitingApprovalComponent
   ]
 })
 export class SecurityModule { }

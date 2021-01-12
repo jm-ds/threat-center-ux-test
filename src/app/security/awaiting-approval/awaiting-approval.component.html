@@ -1,0 +1,55 @@
+<div class="row entry-page">
+    <div class="col-6 graph-background-col">
+        <div class="graph-background"></div>
+        <div class="threatrix-title">
+            <div><img class="logo" src="/assets/images/website_logo_white-letters-transparent_background-large.png"></div>
+            <div class="app-title">ThreatCenter</div>
+            <div class="app-tagline">Advanced Threat Intelligence</div>
+        </div>
+    </div>
+    <div class="col-6 white-col">
+        <div>
+
+            <h5 class="mb-4">We are currently in beta, so all accounts are pre-moderated.</h5>
+
+            <app-alert type="warning"><p class="lead mb-0">Your account has not been approved yet.</p></app-alert>
+
+
+            <div class="mt-5">
+                <app-alert type="info" dismiss="true" *ngIf="messageInfo">{{messageInfo}}</app-alert>
+                <app-alert type="danger" dismiss="true" *ngIf="messageError">{{messageError}}</app-alert>
+            </div>
+
+            <form *ngIf="user.email == null || user.email == '' || user.organization == null || user.organization.name == null || user.coverLetter == null"
+                  name="form" class="auth-form mt-2" (ngSubmit)="f.form.valid && updateAccount()" #f="ngForm" novalidate>
+
+                <h6>Please provide missing info</h6>
+
+                <div class="form-group" *ngIf="user.email == null || user.email == ''" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                    <input class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" [email]="true" required placeholder="Email (to receive notifications)">
+                    <div class="text-danger" *ngIf="f.submitted && !email.valid">Please provide valid email to receive account approval and other notifications.</div>
+                </div>
+
+                <div class="form-group" *ngIf="user.organization == null || user.organization.name == null || user.organization.name == '' || user.organization.name == user.organization.orgId"
+                     [ngClass]="{ 'has-error': f.submitted && !orgName.valid }">
+                    <input class="form-control" name="companyName" [(ngModel)]="model.orgName" #orgName="ngModel" required placeholder="Company name">
+                    <div class="text-danger" *ngIf="f.submitted && !orgName.valid">Please provide the name of the the company you represent.</div>
+                </div>
+
+                <div class="form-group" *ngIf="user.coverLetter == null || user.coverLetter == ''" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
+                    <textarea class="form-control" name="coverLetter" [(ngModel)]="model.coverLetter" #coverLetter="ngModel" rows="4"
+                              placeholder="Cover letter. Please tell us a little bit about your interest in Threatrix."></textarea>
+                    <div class="text-danger" *ngIf="f.submitted && !coverLetter.valid">Please tell us a little bit about your interest in Threatrix.</div>
+                </div>
+
+
+                <button [disabled]="loading" class="btn btn-primary btn-block ">Submit</button>
+            </form>
+
+
+            <div class="lead mt-5">If you have another (approved) account <a href="javascript:" (click)="logout()">log in as another user</a></div>
+
+
+        </div>
+    </div>
+</div>
