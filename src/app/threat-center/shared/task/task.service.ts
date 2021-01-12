@@ -42,9 +42,8 @@ export class TaskService {
   }
 
   getTaskUpdate(taskToken: string) {
-
-    return this.coreGraphQLService.coreGQLReq<TaskQuery>(
-      gql`  query {
+    return this.apollo.watchQuery<TaskQuery>({
+      query: gql`  query {
         task_update(taskToken:"${taskToken}") {
         taskToken,
         pctComplete,
@@ -60,6 +59,7 @@ export class TaskService {
         }
       }
     }
-  `, 'no-cache');
+  `, fetchPolicy: 'no-cache'
+    }).valueChanges;
   }
 }

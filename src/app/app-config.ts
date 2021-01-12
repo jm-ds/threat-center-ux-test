@@ -10,5 +10,8 @@ export class NextConfig {
     navFixedLayout: true,
     headerFixedLayout: true,
     boxLayout: false,
+    successToasterTime: 5,
+    errorToasterTime: 5,
+    closePopup: 25
   };
 }

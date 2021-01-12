@@ -154,7 +154,7 @@
         <ngb-tab id="scan">
           <ng-template ngbTabTitle>Scans&nbsp;
             <span class="badge badge-light">
-              {{project.scans?.totalCount}}
+              {{projectDetails.scans?.totalCount}}
             </span>
           </ng-template>
           <ng-template ngbTabContent>
@@ -172,7 +172,7 @@
             </div>
 
             <perfect-scrollbar [style.max-height]="'500px'">
-              <p-table [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
+              <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
                 [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
                 (onRowSelect)="onRowSelect($event)">
@@ -200,7 +200,7 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-scan let-columns="columns">
-                  <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex">
+                  <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" [ngClass]="{'selected-table-row': isHighlightNewScan == true && stateService.selectedScan.node?.scanId == scan.node?.scanId }">
                     <td>{{scan.node?.version}}</td>
                     <td>{{scan.node?.branch}}</td>
                     <td>{{scan.node?.tag}}</td>

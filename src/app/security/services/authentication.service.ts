@@ -7,13 +7,15 @@ import * as jwt_decode from 'jwt-decode';
 import { User } from '../../models';
 import { environment } from '../../../environments/environment';
 import { LocalService } from '@app/core/services/local.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
   private currentUserSubject: BehaviorSubject<User>;
 
-  constructor(private http: HttpClient, private localService: LocalService) {
+  constructor(private http: HttpClient, private localService: LocalService,
+    private modalService: NgbModal) {
     // let user = this.getFromStorageBasedEnv('currentUser');
     let user = this.getFromSessionStorageBasedEnv('currentUser');
     this.currentUserSubject = new BehaviorSubject<User>(user);
@@ -88,6 +90,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("jwt");
     sessionStorage.removeItem("currentUser");
     sessionStorage.removeItem("ProjectBreadcum");
+    this.modalService.dismissAll();
     this.currentUserSubject.next(null);
   }
 
