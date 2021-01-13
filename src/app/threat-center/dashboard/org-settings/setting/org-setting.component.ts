@@ -1,10 +1,12 @@
+import { ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as $ from 'jquery'
 
 @Component({
     selector: 'app-org-setting',
     templateUrl: './org-setting.component.html',
-    styleUrls: ['./org-setting.component.scss']
+    styleUrls: ['./org-setting.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class OrganizationSettingComponent implements OnInit, AfterViewInit {
 

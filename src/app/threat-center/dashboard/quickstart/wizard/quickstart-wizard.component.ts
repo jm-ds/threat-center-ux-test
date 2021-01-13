@@ -12,6 +12,11 @@ import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
+import { ScanHelperService } from '../../services/scan.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 
 @Component({
     selector: 'app-quickstart',
@@ -35,6 +40,7 @@ export class QuickstartWizardComponent implements OnInit {
 
     activeTab = "1";
 
+    isDisableScanBtn: boolean = false;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
     constructor(
@@ -44,7 +50,10 @@ export class QuickstartWizardComponent implements OnInit {
         private route: ActivatedRoute,
         private taskService: TaskService,
         private spinner: NgxSpinnerService,
-        public authService: AuthenticationService) {
+        public authService: AuthenticationService,
+        private scanHelperService: ScanHelperService,
+        private modalService: NgbModal,
+        private coreHelperService: CoreHelperService) {
     }
 
     public ghUserCols = [
@@ -62,7 +71,7 @@ export class QuickstartWizardComponent implements OnInit {
     submitScan(repoType) {
         let scanRequest = new ScanRequest();
         scanRequest.repoType = repoType;
-        this.spinner.show();
+        // this.spinner.show();
         if (!this.entityId) {
             if (this.authService.currentUser) {
                 this.entityId = this.authService.currentUser.defaultEntityId;
@@ -106,33 +115,69 @@ export class QuickstartWizardComponent implements OnInit {
         console.log("OWDER: ", scanRequest.login);
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
-
         console.log("SUBMITTING TASK..");
-        this.taskService.submitScanRequest()
-            .pipe(map(task => task.data.task_submitScanRequest))
-            .subscribe(task => {
-                console.log("TASK TOKEN:", task);
-                let sub = interval(1000).pipe(take(100)).subscribe(x => {
-                    this.taskService.getTaskUpdate(task.taskToken)
-                        .pipe(map(taskUpdate => taskUpdate.data.task_update))
-                        .subscribe(taskUpdate => {
-                            console.log("STATUS:", taskUpdate.status);
-                            if (taskUpdate.status === 'COMPLETE') {
-                                sub.unsubscribe();
-                                this.spinner.hide();
-                                const projectId = taskUpdate.resourceId;
-                                console.log("Task Complete: ", task);
-                                const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
-                                this.router.navigate([url]);
-                            }
-                        });
-                });
-            });
+        //open dialog box with message..
+
+        // this.openFloatingModel();
+        this.isDisableScanBtn = true;
+        const preScanProjectData = {
+            uniqId: this.coreHelperService.uuidv4(),
+            message: scanRequest.repository + ' scan started.',
+            projectName: scanRequest.repository,
+            entityId: this.entityId
+        };
+
+        if (this.scanHelperService.projectScanResults.length == 0 && this.scanHelperService.recentlyScanCompleted.length == 0 && this.scanHelperService.errorScanProject.length == 0) {
+            this.openScanModel(preScanProjectData);
+        }
+
+        this.scanHelperService.submitingScanForProject(preScanProjectData);
+
+        // this.taskService.submitScanRequest()
+        //     .pipe(map(task => task.data.task_submitScanRequest))
+        //     .subscribe(task => {
+        //         console.log("TASK TOKEN:", task);
+        //         let sub = interval(1000).pipe(take(100)).subscribe(x => {
+        //             this.taskService.getTaskUpdate(task.taskToken)
+        //                 .pipe(map(taskUpdate => taskUpdate.data.task_update))
+        //                 .subscribe(taskUpdate => {
+        //                     console.log("STATUS:", taskUpdate.status);
+        //                     if (taskUpdate.status === 'COMPLETE') {
+        //                         sub.unsubscribe();
+        //                         this.spinner.hide();
+        //                         const projectId = taskUpdate.resourceId;
+        //                         console.log("Task Complete: ", task);
+        //                         debugger;
+        //                         const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
+        //                         this.router.navigate([url]);
+        //                     }
+        //                 });
+        //         });
+        //     });
 
         // Create new ScanRequest and set it in the TaskService
         // then forward to dashboard where we can display the task component.
 
         // this.router.navigate(['dashboard/quickstart/dashboard']);
+    }
+
+    openScanModel(preScanProjectData) {
+        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
+            {
+                backdrop: 'static',
+                keyboard: false,
+            });
+        modalRef.componentInstance.preScanProjectData = preScanProjectData;
+        modalRef.result.then((result) => {
+            this.openFloatingModel();
+        }, (reason) => { });
+    }
+
+    private openFloatingModel() {
+        const modalRef = this.modalService.open(LoadingDialogComponent, {
+            backdrop: 'static',
+            keyboard: false,
+        });
     }
 
     loadGitHubUser() {
@@ -215,6 +260,14 @@ export class QuickstartWizardComponent implements OnInit {
             }
             return parseInt(filter) > value;
         };
+    }
+
+    onRowSelect(event) {
+        this.isDisableScanBtn = false;
+    }
+
+    onRowUnselect(event) {
+        this.selectedRepos = [];
     }
 
     private isEmail(userName: string): boolean {

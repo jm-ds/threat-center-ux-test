@@ -1,6 +1,6 @@
 
 <div class="col-xl-12" *ngIf='obsLicense | async as license;'>
-  <ngb-tabset type="pills" class="tab-card">    
+  <ngb-tabset type="pills" class="tab-card">
     <ngb-tab title="License" >
       <ng-template ngbTabContent>
         <div class="row">
@@ -78,19 +78,19 @@
                         <div class="col-xl-4">
                           <div class="caption">Permissions</div>
                           <div *ngFor="let licenseAttribute of permissions">
-                            <i class="fas fa-check color-success p-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-check color-success m-r-5"></i> {{licenseAttribute.key}}
                           </div>
                         </div>
                         <div class="col-xl-4">
                           <div class="caption">Limitations</div>
                           <div *ngFor="let licenseAttribute of limitations">
-                            <i class="fas fa-times color-danger p-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-times color-danger m-r-5"></i> {{licenseAttribute.key}}
                           </div>
                         </div>
                         <div class="col-xl-4">
                           <div class="caption">Conditions</div>
                           <div *ngFor="let licenseAttribute of conditions">
-                            <i class="fas fa-info-circle color-info p-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-info-circle color-info m-r-5"></i> {{licenseAttribute.key}}
                           </div>
                         </div>
                       </div>

@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@circlon/angular-tree-component": "^10.0.0",
-    "@fortawesome/fontawesome-pro": "^5.14.0",
+    "@fortawesome/fontawesome-pro": "^5.15.1",
     "@fullcalendar/angular": "^4.2.1",
     "@fullcalendar/core": "^4.2.0",
     "@fullcalendar/daygrid": "^4.2.0",
