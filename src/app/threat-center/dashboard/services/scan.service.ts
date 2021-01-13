@@ -1,5 +1,6 @@
 import { Injectable, TemplateRef } from "@angular/core";
 import { Router } from "@angular/router";
+import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BehaviorSubject, interval, Subscription } from "rxjs";
@@ -27,7 +28,8 @@ export class ScanHelperService {
     constructor(
         private taskService: TaskService,
         private router: Router,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private coreHelperService: CoreHelperService,) {
     }
 
     public submitingScanForProject(preScanProjectData) {
@@ -76,7 +78,7 @@ export class ScanHelperService {
             .pipe(map(taskUpdate => taskUpdate.data.task_update))
             .subscribe(tUpdate => {
                 this.updateProjectArray(tUpdate);
-                if (tUpdate.status === 'COMPLETE') {
+                if (tUpdate.status === 'COMPLETE' || tUpdate.status === 'COMPLETE_WITH_ERRORS') {
                     //show toaster and pop one from main list and add into recent scan..
                     let obj = this.projectScanResults.find(pro => { return pro.taskToken === tUpdate.taskToken });
                     if (!!obj) {
@@ -84,7 +86,14 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.highlightNewScanIfInSamePage(tUpdate);
+                    if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
+                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning").then(()=>this.highlightNewScanIfInSamePage(tUpdate));
+                    } else {
+                        this.highlightNewScanIfInSamePage(tUpdate);
+                    }
+                } else if (tUpdate.status === 'ERROR') {
+                    console.error("Task Error: ", tUpdate.statusMessage);
+                    this.coreHelperService.swalALertBox(tUpdate.statusMessage);
                 } else {
                     this.getTaskUpdate(task);
                 }
