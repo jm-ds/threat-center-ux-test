@@ -24,6 +24,8 @@ export class ScanAssetsComponent implements OnInit {
   columnsFilter = new Map();
   timeOut;
   timeOutDuration = 1000;
+  parentScanAssetId = '';
+  story = [];
 
   constructor(private apiService: ApiService,
               private route: ActivatedRoute,
@@ -32,17 +34,16 @@ export class ScanAssetsComponent implements OnInit {
   ngOnInit() {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
         .pipe(map(result => result.data.scan));
-      this.initData();
-    } else {
-      this.initData();
-    }
+    this.initData();
   }
 
   sort(scanAssets: any) {
-    return scanAssets.sort((a, b) => a.node.status.localeCompare(b.node.status)).sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length);
+    return scanAssets
+        .sort((a, b) => a.node.status.localeCompare(b.node.status))
+        .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+        .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
   }
 
   // While any changes occurred in page
@@ -58,15 +59,15 @@ export class ScanAssetsComponent implements OnInit {
       // Next and Previous changed
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         // call with after...
-        if (!!this.scanAssetDetails.scanAssets.pageInfo && this.scanAssetDetails.scanAssets.pageInfo.hasNextPage) {
+        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasNextPage) {
           this.loadScanAssetData(Number(this.defaultPageSize), undefined,
-            this.scanAssetDetails.scanAssets.pageInfo.endCursor, undefined);
+            this.scanAssetDetails.scanAssetsTree.pageInfo.endCursor, undefined);
         }
       } else {
         // call with before..
-        if (!!this.scanAssetDetails.scanAssets.pageInfo && this.scanAssetDetails.scanAssets.pageInfo.hasPreviousPage) {
+        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasPreviousPage) {
           this.loadScanAssetData(undefined, Number(this.defaultPageSize),
-            undefined, this.scanAssetDetails.scanAssets.pageInfo.startCursor);
+            undefined, this.scanAssetDetails.scanAssetsTree.pageInfo.startCursor);
         }
       }
     }
@@ -74,29 +75,47 @@ export class ScanAssetsComponent implements OnInit {
 
   // Loading Scan Assets data after paggination.
   loadScanAssetData(first, last, endCursor = undefined, startCursor = undefined) {
-    let scanAsset = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+    let scanAsset = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
     });
   }
 
-  // goto Detail
-  gotoDetails(sAssetId) {
-    const entityId = this.route.snapshot.paramMap.get('entityId'), projectId = this.route.snapshot.paramMap.get('projectId');
-    const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
-    this.router.navigate([decodeURIComponent(url)]);
+  goBack() {
+    this.parentScanAssetId = this.story.pop();
+    this.reload();
+  }
+
+  gotoDetails(scanAsset) {
+    if (scanAsset.node.assetType === 'DIR') {
+      this.story.push(this.parentScanAssetId);
+      this.parentScanAssetId = scanAsset.node.scanAssetId;
+      this.reload();
+    } else {
+      let sAssetId = scanAsset.node.scanAssetId;
+      const entityId = this.route.snapshot.paramMap.get('entityId');
+      const projectId = this.route.snapshot.paramMap.get('projectId');
+      const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+      this.router.navigate([decodeURIComponent(url)]);
+    }
+  }
+  
+  reload() {
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+        .pipe(map(result => result.data.scan));
+    this.initData();
   }
 
   filterColumn(column, value) {
-    if (value.length === 0) {
+    if (value.length === 0 || value === 'ALL') {
       this.columnsFilter.delete(column);
     } else {
       this.columnsFilter.set(column, value);
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
           .pipe(map(result => result.data.scan));
       this.initData();
     }, this.timeOutDuration);

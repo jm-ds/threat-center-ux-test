@@ -211,6 +211,7 @@ export class ScanAsset {
   originAssetId:string;
   workspacePath:string;
   status:string;
+  assetType:string;
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];

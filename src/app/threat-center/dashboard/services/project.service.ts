@@ -232,8 +232,8 @@ export class ProjectDashboardService {
     }
 
     //get assets
-    getScanAssets(scanId: string,defaultPage) {
-      return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+    getScanAssets(scanId: string, defaultPage) {
+        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
       query {
          scan(scanId:"${scanId}") {
           scanId
@@ -268,7 +268,7 @@ export class ProjectDashboardService {
           }
         }
       }
-    `,'no-cache');
+    `, 'no-cache');
     }
 }
 
