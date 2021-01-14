@@ -30,6 +30,7 @@ import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthInterceptor, ErrorInterceptor } from './security/helpers';
 import { CoreModule } from './core/core.module';
 import { ToastrModule } from 'ngx-toastr';
+import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.component";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ToastrModule } from 'ngx-toastr';
     NavSearchComponent,
     NavRightComponent,
     ConfigurationComponent,
-    ToggleFullScreenDirective
+    ToggleFullScreenDirective,
+    UnauthorizedComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,7 @@ import { ToastrModule } from 'ngx-toastr';
     GraphQLModule,
     HttpClientModule,
     CoreModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

@@ -1,0 +1,95 @@
+.entry-page {
+    &.row {
+        height: 100vh;
+        margin: 0px;
+        min-width: 800px;
+    }
+
+    > .row {
+        height: 100vh;
+        margin: 0px;
+        min-width: 800px;
+    }
+
+
+    .graph-background-col {
+        background-color:#384359;
+        // height:100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .graph-background {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url("/assets/images/node-graph-login.png");
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            width: 100%;
+            height: 100%;
+        }
+
+        .threatrix-title {
+            float: right;
+            margin: 0 100px 0 0;
+            color: #adb7be;
+
+            font-size: 25px;
+            text-align: right;
+
+            img.logo {
+                width: 300px;
+            }
+
+            .app-title {
+                position: relative;
+                top: -17px;
+                padding-right: 1px;
+            }
+
+            .app-tagline {
+                color: #41a8e3;
+                padding-top: 40px;
+                padding-right: 1px;
+            }
+        }
+
+
+    }
+
+    .white-col {
+        padding: 10px 80px;
+        background-color:#FFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+.auth-form {
+    .form-control {
+        background: #fff;
+        color: #384359;
+        border-color: #d4d4d4;
+    }
+}
+
+.auth-button {
+    color: #535763;
+    border: 1px solid #d4d4d4;
+    text-align: center;
+    height: 40px;
+    font-size: 25px;
+    padding-top: 3px;
+    border-radius: 2px;
+
+    &:hover {
+        color: #41a8e3;
+        border: 1px solid #41a8e3;
+        cursor: pointer;
+    }
+}

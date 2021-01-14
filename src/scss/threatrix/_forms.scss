@@ -6,6 +6,74 @@
 
 // dark theme styles
 body.next-dark {
+
+    // Common Input,Button, select dropdown and other input controls styles
+    .input-group-text {
+        background: #586580;
+        border-color: #7a8085;
+    }
+
+    button {
+        &:focus {
+            box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+        }
+
+        &.btn-outline-warning:focus {
+            box-shadow: 0 0 0.4rem 0.15rem rgba(255, 157, 20, 0.5);
+        }
+    }
+
+    select {
+        &:focus {
+            //box-shadow: 0 1px 20px 0 rgba(255, 255, 255, 0.16);
+            //box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+            box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+        }
+    }
+
+    input.form-control {
+        //background: #586580;
+        border: 1px solid #7a8085 !important;
+        &:focus {
+            //box-shadow: 0 1px 20px 0 rgba(255, 255, 255, 0.16);
+            //box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+            box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+        }
+    }
+
+    .table {
+        .ui-dropdown {
+            background: #2a3641;
+            border: 1px solid #6c757d;
+            height: 35px;
+
+            .ui-dropdown-trigger-icon {
+                margin-top: -.4em;
+            }
+
+            &:hover {
+                background: #6c757d;
+                border-color: #6c757d;
+                color: #fff;
+
+                .ui-dropdown-trigger-icon {
+                    color: #fff;
+                }
+            }
+
+            .ui-dropdown-label {
+                height: 100%;
+                line-height: 29px;
+            }
+        }
+
+        .ui-dropdown-panel {
+            background: #2a3641;
+            border-color: #6c757d;
+            box-shadow: none;
+        }
+    }
+
     select.form-control {
         cursor: pointer;
         border-color: #6c757d;

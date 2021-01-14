@@ -12,12 +12,36 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     ) {
     }
 
+
+    checkPermissionsAndRedirect(auth) {
+        const user = this.authenticationService.currentUser;
+
+        console.log(user);
+
+        if (!user.approved) {
+            this.router.navigateByUrl('/awaiting-approval');
+            return false;
+        }
+
+        // if logged in and has access rights to current route then return true
+        if (this.authorizationService.hasPermissions(auth)) {
+            console.log("has permissions...");
+            return true;
+        }
+        else {
+            // otherwise redirect to "unauthorized" page
+            console.log("!!! HAS NO PERMISSIONS !!!");
+            this.router.navigateByUrl('/unauthorized');
+            return false;
+        }
+    }
+
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let jwt = route.queryParams['jwt'];
         if (jwt) {
             this.authenticationService.setInSessionStorageBasedEnv("jwt", jwt);
             await this.authenticationService.loadAuthenticatedUser();
-            return this.authorizationService.hasPermissions(route.data.auth);
+            return this.checkPermissionsAndRedirect(route.data.auth);
         } else {
             jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
             if (jwt) {
@@ -31,8 +55,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 if (!this.authenticationService.getFromSessionStorageBasedEnv("currentUser")) {
                     await this.authenticationService.loadAuthenticatedUser();
                 }
-                // logged in so return true
-                return this.authorizationService.hasPermissions(route.data.auth);
+                return this.checkPermissionsAndRedirect(route.data.auth);
             }
         }
 
@@ -42,6 +65,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this.authorizationService.hasPermissions(childRoute.data.auth);
+        // return this.authorizationService.hasPermissions(childRoute.data.auth);
+        return this.checkPermissionsAndRedirect(childRoute.data.auth);
     }
 }

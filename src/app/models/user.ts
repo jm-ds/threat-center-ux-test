@@ -28,8 +28,11 @@ export class User {
 
     authorities: Authority[];
 
-    //organization
-    organization: OrganizationModel
+    // organization
+    organization: OrganizationModel;
+
+    approved: boolean;
+    coverLetter: string;
 }
 
 export class OrganizationModel {

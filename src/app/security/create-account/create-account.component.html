@@ -1,29 +1,31 @@
-<div class="row" style="height:100vh;margin: 0px;min-width:800px">
-    <div class="col-6 col-lg-6 col-xl-8 auth-left-panel">
-        <div class="auth-bgimg-div"></div>
-        <div style="float:right;margin:250px 100px 0 0;color:#adb7be;">
-            <div style="font-size:25px">
-                <img width="300" src="/assets/images/website_logo_white-letters-transparent_background-large.png">
+<div class="row entry-page">
+    <div class="col-6 col-lg-6 col-xl-8 graph-background-col">
+        <div class="graph-background"></div>
+        <div class="threatrix-title">
+            <div><img class="logo" src="/assets/images/website_logo_white-letters-transparent_background-large.png">
             </div>
-            <div style="position:relative;top:-17px;text-align:right;font-size:25px;">ThreatCenter</div>
-            <div style="color:#41a8e3;text-align:right;font-size:25px;padding-left:10px;padding-top:40px">Advanced
-                Threat Intelligence
-            </div>
+            <div class="app-title">ThreatCenter</div>
+            <div class="app-tagline">Advanced Threat Intelligence</div>
         </div>
     </div>
-    <div class="col-6 col-lg-6 col-xl-4 auth-div">
+    <div class="col-6 col-lg-6 col-xl-4 white-col">
 
         <div>
 
-            <div>
+            <div class="row">
+                <h5>We are currently in beta, so all accounts are pre-moderated.</h5>
+            </div>
+
+            <div class="mt-40">
                 {{errorMessage}}
             </div>
 
-            <div class="row" style="margin-top:40px;border-bottom:2px solid #41a8e3;font-size:15px;font-weight:bold">
+            <div class="caption-blue-underline">
                 Create account
             </div>
 
-            <form name="form" (ngSubmit)="f.form.valid && createAccount()" #f="ngForm" novalidate>
+
+            <form name="form" class="auth-form" (ngSubmit)="f.form.valid && createAccount()" #f="ngForm" novalidate>
 
                 <div [ngClass]="{ 'has-error': f.submitted && !companyName.valid }" class="row" style="padding:0px 10px 10px 10px">
                     <div class="col-xl-12" style="padding:10px 0px 10px 0px">
@@ -67,7 +69,7 @@
                     </div>
                 </div>
 
-                By clicking "Sign up" button you agree to our <a href="#">Terms of Service</a>
+                <div class="hint-block">By clicking "Sign up" button you agree to our <a href="#">Terms of Service</a></div>
             </form>
 
         </div>
