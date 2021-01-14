@@ -599,6 +599,6 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
   openErrorMsg(content, errorMsg:string) {
     // open error messages
     this.errorMsg = errorMsg;
-    this.modalService.open(content);
+    this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 }

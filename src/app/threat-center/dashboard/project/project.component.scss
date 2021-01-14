@@ -235,3 +235,9 @@ button.error-btn {
 div.modal-body pre {
     color: white;
 }
+
+::ng-deep .md-class .modal-dialog { 
+    max-width: 80%;
+    width: 80%;
+    max-height: 500px;
+}

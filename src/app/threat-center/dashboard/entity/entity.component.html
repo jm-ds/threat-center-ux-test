@@ -217,7 +217,7 @@
                                     <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                                     <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                                   </td>
-                                  <td style="padding: 0.75rem;">{{project.node.data.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                                  <td style="padding: 0.75rem;">{{project.node.data.latestScan.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                                 </tr>
                           </ng-template>
                         </p-treeTable>                        

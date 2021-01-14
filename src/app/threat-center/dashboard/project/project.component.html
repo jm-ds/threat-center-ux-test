@@ -467,7 +467,11 @@
       <h4 class="modal-title" id="modal-basic-title">Scan errors</h4>
     </div>
     <div class="modal-body">
-      <pre>{{errorMsg}}</pre>
+      <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+        <div style="display: inline-block;">
+          <pre>{{errorMsg}}</pre>
+        </div>  
+      </perfect-scrollbar>  
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
