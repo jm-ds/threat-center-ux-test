@@ -70,6 +70,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
   //selectedScan:Scan;
   projectId: string;
   errorMsg: string;
+  log: string;
 
   columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
@@ -596,9 +597,10 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
     this.assetScanData = Observable.of(data[3].data.scan);
   }
 
-  openErrorMsg(content, errorMsg:string) {
-    // open error messages
+  openLogs(content, errorMsg:string, log: string) {
+    // open logs popup
     this.errorMsg = errorMsg;
+    this.log = log;
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 }
