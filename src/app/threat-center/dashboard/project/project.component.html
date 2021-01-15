@@ -470,7 +470,7 @@
       <h4 class="modal-title" id="modal-basic-title">Scan info</h4>
     </div>
     <div class="modal-body">
-      <ngb-tabset type="pills">
+      <ngb-tabset style="margin-top: 10px;" type="pills">
         <!-- ERRORS TAB -->
         <ngb-tab id="scanErrors" *ngIf="!!errorMsg">
           <ng-template ngbTabTitle>
@@ -478,7 +478,7 @@
           </ng-template>
           <ng-template ngbTabContent>
             <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
-              <div style="display: inline-block;">
+              <div style="display: inline-block; margin-top: 10px;">
                 <pre style="text-align: left">{{errorMsg}}</pre>
               </div>  
             </perfect-scrollbar>  
@@ -491,7 +491,7 @@
           </ng-template>
           <ng-template ngbTabContent>
             <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
-              <div style="display: inline-block;">
+              <div style="display: inline-block; margin-top: 10px;">
                 <pre style="text-align: left">{{log}}</pre>
               </div>  
             </perfect-scrollbar>  
