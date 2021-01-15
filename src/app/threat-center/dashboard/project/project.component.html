@@ -263,7 +263,7 @@
                         </button>
                       </span>
                       <ng-template #successMsg><span>
-                        <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log" class="btn badge-light-danger error-btn" title="Show log" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                        <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log" class="btn badge-light-success error-btn" title="Show log" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
                           <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
                         </button>
                         <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log" class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
@@ -479,7 +479,7 @@
           <ng-template ngbTabContent>
             <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <div style="display: inline-block;">
-                <pre>{{errorMsg}}</pre>
+                <pre style="text-align: left">{{errorMsg}}</pre>
               </div>  
             </perfect-scrollbar>  
           </ng-template>  
@@ -492,7 +492,7 @@
           <ng-template ngbTabContent>
             <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <div style="display: inline-block;">
-                <pre>{{log}}</pre>
+                <pre style="text-align: left">{{log}}</pre>
               </div>  
             </perfect-scrollbar>  
           </ng-template>  
