@@ -57,23 +57,6 @@ export class ScanHelperService {
     }
 
     getTaskUpdate(task) {
-        // this.sub = interval(1000).pipe(take(100)).subscribe(x => {
-        //     this.taskService.getTaskUpdate(task.taskToken)
-        //         .pipe(map(taskUpdate => taskUpdate.data.task_update))
-        //         .subscribe(taskUpdate => {
-        //             if (taskUpdate.status === 'COMPLETE') {
-        //                 this.sub.unsubscribe();
-        //             }
-        //             // observable call to next in component
-        //             this.updateProjectScanLoadingStatus(taskUpdate.status, taskUpdate.resourceId);
-        //         }, error => {
-        //             this.sub.unsubscribe();
-        //             this.updateProjectScanLoadingStatus("ERROR", null);
-        //         });
-        // }, error => {
-        //     this.sub.unsubscribe();
-        // });
-
         this.taskService.getTaskUpdate(task.taskToken)
             .pipe(map(taskUpdate => taskUpdate.data.task_update))
             .subscribe(tUpdate => {
@@ -87,7 +70,7 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning").then(()=>this.highlightNewScanIfInSamePage(tUpdate));
+                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning").then(() => this.highlightNewScanIfInSamePage(tUpdate));
                     } else {
                         this.highlightNewScanIfInSamePage(tUpdate);
                     }
