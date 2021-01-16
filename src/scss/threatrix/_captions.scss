@@ -3,4 +3,10 @@
     border-bottom: 2px solid #41a8e3;
     font-size: 15px;
     font-weight: bold;
+
+    i[class*="fa-"], svg[class*="fa-"] {
+        vertical-align: top;
+        margin-top: 4px;
+        margin-left: 3px;
+    }
 }

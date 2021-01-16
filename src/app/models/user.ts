@@ -33,6 +33,8 @@ export class User {
 
     approved: boolean;
     coverLetter: string;
+    phone: string;
+    position: string;
 }
 
 export class OrganizationModel {

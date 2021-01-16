@@ -8,6 +8,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import {CreateAccountComponent} from '@app/security/create-account/create-account.component';
 import { AwaitingApprovalComponent } from './awaiting-approval/awaiting-approval.component';
 import {AlertModule} from "@app/theme/shared/components";
+import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {AlertModule} from "@app/theme/shared/components";
         FormsModule,
         ReactiveFormsModule,
         SharedModule,
-        AlertModule
+        AlertModule,
+        NgbPopoverModule
     ],
   declarations: [
       LoginComponent,

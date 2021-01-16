@@ -32,12 +32,15 @@ export class CreateAccountComponent implements OnInit {
 
     ngOnInit() {
         // sessionStorage.setItem('token', '');
+
+        // todo: check if it still in use, I doubt about it (task: )
         this.createAccountForm = this.formBuilder.group({
-            email:       ['', Validators.required],
+            email:       ['', Validators.required, Validators.email],
             fullName:    ['', Validators.required],
             phone:       ['', Validators.required],
-            password:    ['', Validators.required],
+            password:    ['', Validators.required, Validators.pattern],
             companyName: ['', Validators.required],
+            position:    ['', Validators.required],
         });
 
         // get return url from route parameters or default to '/'
@@ -50,23 +53,25 @@ export class CreateAccountComponent implements OnInit {
     }
 
     createAccount() {
-      this.loading = true;
-      this.authenticationService.createAccount(
-          this.model.email,
-          this.model.fullName,
-          this.model.phone,
-          this.model.password,
-          this.model.companyName,
-      )
-        .pipe(first())
-        .subscribe(
-          data => {
-            this.router.navigate([this.returnUrl]);
-          },
-          error => {
-            console.error('CREATE ACCOUNT ERROR', error);
-            this.error = error;
-            this.loading = false;
-       });
+        this.loading = true;
+        this.authenticationService.createAccount(
+            this.model.email,
+            this.model.fullName,
+            this.model.phone,
+            this.model.password,
+            this.model.companyName,
+            this.model.position,
+            this.model.coverLetter,
+        )
+            .pipe(first())
+            .subscribe(
+                data => {
+                    this.router.navigate([this.returnUrl]);
+                },
+                error => {
+                    console.error('CREATE ACCOUNT ERROR', error);
+                    this.error = error;
+                    this.loading = false;
+                });
     }
 }
