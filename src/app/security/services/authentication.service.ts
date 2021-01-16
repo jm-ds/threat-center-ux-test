@@ -68,10 +68,10 @@ export class AuthenticationService {
         }));
   }
 
-  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string) {
+  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string, position: string, coverLetter: string) {
     // todo[5]: don't forget to that "this.host_url" to "environment.apiUrl" on merge
     const url = environment.apiUrl + '/account/create';
-    const body = { email, fullName, phone, password, companyName };
+    const body = { email, fullName, phone, password, companyName, position, coverLetter };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
         const user = response.user;

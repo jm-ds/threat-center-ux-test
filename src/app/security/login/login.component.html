@@ -11,14 +11,14 @@
     <div class="col-6 col-lg-6 col-xl-4 white-col">
         <div>
 
-            <div class="row">
-                <h5>We are currently in beta, so all accounts are pre-moderated.</h5>
-            </div>
-
 
             <!-- OAuth login -->
-            <div class="caption-blue-underline mt-40">OAuth
-                Authentication<i style="margin-top:3px;margin-left:3px" class="far fa-question-circle"></i></div>
+            <div class="caption-blue-underline">
+                OAuth Authentication
+                <a href="javascript:" [placement]="'top'" [popoverTitle]="'OAuth Authentication'" ngbPopover="Login or sign up with your GitHub, GitLab, BitBucket or Google account.">
+                    <i class="far fa-question-circle" ></i>
+                </a>
+            </div>
             <div>
                 {{errorMessage}}
             </div>
@@ -49,33 +49,28 @@
             <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
 
 
-            <!-- link to registration -->
+            <!-- Registration via username/password -->
             <div class="caption-blue-underline mt-50">Don't have an account?</div>
             <a routerLink="/create-account" class="btn btn-primary btn-block">Sign Up!</a>
 
 
             <!-- Basic Authentication -->
-            <!--<div class="caption-blue-underline mt-50">Basic Authentication</div>
+            <div class="caption-blue-underline mt-50">Basic Authentication</div>
             <form name="form" class="auth-form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-              <div [ngClass]="{ 'has-error': f.submitted && !username.valid }" class="row" style="padding:0px 10px 10px 10px">
-                <div class="col-xl-12" style="padding:10px 0px 10px 0px">
-                  <input  class="form-control" name="username"  [(ngModel)]="model.username" #username="ngModel"  required placeholder="Username or email">
-                  <div *ngIf="f.submitted && !username.valid">Username is required</div>
+                <!-- username || email -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                    <input class="form-control" name="username" [(ngModel)]="model.username" #username="ngModel" required placeholder="Username or email">
+                    <div class="text-danger" *ngIf="f.submitted && !username.valid">Username is required</div>
                 </div>
-              </div>
-              <div [ngClass]="{ 'has-error': f.submitted && !password.valid }" class="row" style="padding:0px 10px 10px 10px">
-                <div class="col-xl-12" style="padding:10px 0px 10px 0px">
-                  <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password" #password="ngModel"  required text="password">
-                  <div *ngIf="f.submitted && !password.valid">Password is required</div>
+                <!-- password -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                    <input class="form-control" name="password" type="password" [(ngModel)]="model.password" #password="ngModel" required placeholder="Password">
+                    <div class="text-danger" *ngIf="f.submitted && !password.valid">Password is required</div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12" style="padding:0px 10px 0px 10px">
-                  <button [disabled]="loading" class="btn btn-primary btn-block ">Login</button>
-                </div>
-              </div>
-              <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
-            </form>-->
+                <!-- submit -->
+                <button [disabled]="loading" class="btn btn-primary btn-block ">Login</button>
+                <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
+            </form>
 
         </div>
     </div>

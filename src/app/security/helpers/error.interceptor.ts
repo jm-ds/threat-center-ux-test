@@ -33,6 +33,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                     }
                 }
+                // todo: AT THIS POINT ERROR IS SILENTLY GONE (task: https://github.com/threatrix/product/issues/270)
             } else {
                 this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                 this.authenticationService.logout();
@@ -47,6 +48,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                     dataObjToShow.message = errObj.error;
                 } else if (!!errObj.error && !!errObj.error.reason && typeof errObj.error.reason === 'string') {
                     dataObjToShow.message = errObj.error.reason;
+                } else if (!!errObj.error && !!errObj.error.message && typeof errObj.error.message === 'string') {
+                    dataObjToShow.message = errObj.error.message;
                 } else {
                     dataObjToShow.message = this.getMessageStatusWise(Number(dataObjToShow.status));
                 }
