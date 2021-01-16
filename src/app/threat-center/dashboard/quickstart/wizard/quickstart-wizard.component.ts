@@ -41,6 +41,7 @@ export class QuickstartWizardComponent implements OnInit {
     activeTab = "1";
 
     isDisableScanBtn: boolean = false;
+    selectedItem: string = "";
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
     constructor(
@@ -133,27 +134,6 @@ export class QuickstartWizardComponent implements OnInit {
 
         this.scanHelperService.submitingScanForProject(preScanProjectData);
 
-        // this.taskService.submitScanRequest()
-        //     .pipe(map(task => task.data.task_submitScanRequest))
-        //     .subscribe(task => {
-        //         console.log("TASK TOKEN:", task);
-        //         let sub = interval(1000).pipe(take(100)).subscribe(x => {
-        //             this.taskService.getTaskUpdate(task.taskToken)
-        //                 .pipe(map(taskUpdate => taskUpdate.data.task_update))
-        //                 .subscribe(taskUpdate => {
-        //                     console.log("STATUS:", taskUpdate.status);
-        //                     if (taskUpdate.status === 'COMPLETE') {
-        //                         sub.unsubscribe();
-        //                         this.spinner.hide();
-        //                         const projectId = taskUpdate.resourceId;
-        //                         console.log("Task Complete: ", task);
-        //                         debugger;
-        //                         const url = "dashboard/entity/" + this.entityId + '/project/' + projectId;
-        //                         this.router.navigate([url]);
-        //                     }
-        //                 });
-        //         });
-        //     });
 
         // Create new ScanRequest and set it in the TaskService
         // then forward to dashboard where we can display the task component.
@@ -264,6 +244,25 @@ export class QuickstartWizardComponent implements OnInit {
 
     onRowSelect(event) {
         this.isDisableScanBtn = false;
+        const selectRepo = this.selectedRepos[0];
+        if (!!selectRepo) {
+            if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
+                this.selectedItem = selectRepo.node.defaultBranchRef.name;
+            } else {
+                if (!!selectRepo.node.refs && selectRepo.node.refs.edges.length >= 1) {
+                    const masterData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'master' });
+                    if (!!masterData) {
+                        this.selectedItem = masterData.node.name;
+                    } else {
+                        const mainData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'main' });
+                        if (!!mainData) {
+                            this.selectedItem = mainData.node.name;
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
     onRowUnselect(event) {
