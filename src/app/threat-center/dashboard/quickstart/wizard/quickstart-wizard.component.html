@@ -159,8 +159,9 @@
                         </p-table>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button [ngClass]="{'disabled' : !selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true }" class="btn btn-primary"
-                                ngbtooltip="Run Scan" [disabled]="!selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true" 
+                        <button [ngClass]="{'disabled' : !selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true || (!!scanHelperService.projectScanResults && scanHelperService.projectScanResults.length >= 1) }" class="btn btn-primary"
+                                ngbtooltip="Run Scan"
+                                [disabled]="!selectedRepos || selectedRepos.length === 0 || isDisableScanBtn == true || (!!scanHelperService.projectScanResults && scanHelperService.projectScanResults.length >= 1)"
                                 type="button" (click)="submitScan('github')"><i
                                 class="fas fa-power-off" >
                               </i> Execute Threat Scan
