@@ -40,6 +40,7 @@ export class ProjectDashboardService {
                         version
                         created,
                         errorMsg,
+                        log,
                         scanMetrics {
                           vulnerabilityMetrics {
                             critical,

@@ -93,6 +93,12 @@ export class ScanHelperService {
                     }
                 } else if (tUpdate.status === 'ERROR') {
                     console.error("Task Error: ", tUpdate.statusMessage);
+                    let obj = this.projectScanResults.find(pro => { return pro.taskToken === tUpdate.taskToken });
+                    if (!!obj) {
+                        obj['CompletedTime'] = new Date();
+                        this.recentlyScanCompleted.push(obj);
+                    }
+                    this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     this.coreHelperService.swalALertBox(tUpdate.statusMessage);
                 } else {
                     this.getTaskUpdate(task);

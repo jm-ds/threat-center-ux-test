@@ -395,6 +395,7 @@ export class ApiService {
                     version
                     created,
                     errorMsg,
+                    log,
                     scanMetrics {
                       vulnerabilityMetrics {
                         critical,

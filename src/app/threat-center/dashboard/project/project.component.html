@@ -257,13 +257,16 @@
                       <span title="Project Leaks" class="badge m-r-5 badge-light-primary">5</span>
                     </td>
                     <td style="text-align: center">
-                      <span *ngIf="scan.node?.errorMsg;else successMsg">
-                        <button class="btn badge-light-danger error-btn" title="Show error messages" (click)="openErrorMsg(scanError, scan.node.errorMsg)">
+                      <span *ngIf="!!scan.node?.errorMsg;else successMsg">
+                        <button class="btn badge-light-danger error-btn" title="Show log and error messages" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
                           <i class="feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
                         </button>
                       </span>
                       <ng-template #successMsg><span>
-                        <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
+                        <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log" class="btn badge-light-success error-btn" title="Show log" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                          <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
+                        </button>
+                        <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log" class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
                       </span></ng-template>
                     </td>
 
@@ -464,14 +467,37 @@
   </div>
   <ng-template #scanError let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Scan errors</h4>
+      <h4 class="modal-title" id="modal-basic-title">Scan info</h4>
     </div>
     <div class="modal-body">
-      <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
-        <div style="display: inline-block;">
-          <pre>{{errorMsg}}</pre>
-        </div>  
-      </perfect-scrollbar>  
+      <ngb-tabset style="margin-top: 10px;" type="pills">
+        <!-- ERRORS TAB -->
+        <ngb-tab id="scanErrors" *ngIf="!!errorMsg">
+          <ng-template ngbTabTitle>
+            ERRORS
+          </ng-template>
+          <ng-template ngbTabContent>
+            <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+              <div style="display: inline-block; margin-top: 10px;">
+                <pre style="text-align: left">{{errorMsg}}</pre>
+              </div>  
+            </perfect-scrollbar>  
+          </ng-template>  
+        </ngb-tab>
+        <!-- LOGS TAB -->
+        <ngb-tab id="scanLogs" *ngIf="!!log">
+          <ng-template ngbTabTitle>
+            LOG
+          </ng-template>
+          <ng-template ngbTabContent>
+            <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+              <div style="display: inline-block; margin-top: 10px;">
+                <pre style="text-align: left">{{log}}</pre>
+              </div>  
+            </perfect-scrollbar>  
+          </ng-template>  
+        </ngb-tab>
+      </ngb-tabset>    
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
