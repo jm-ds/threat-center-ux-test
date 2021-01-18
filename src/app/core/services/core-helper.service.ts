@@ -72,4 +72,7 @@ export class CoreHelperService {
         });
     }
 
+    removeNextDarkClassFormBody(){
+        document.querySelector('body').classList.remove('next-dark');
+    }
 }
