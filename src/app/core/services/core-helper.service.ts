@@ -16,7 +16,7 @@ export class CoreHelperService {
     swalALertBox(text: string, title: string = "Error!", type: string = "error") {
         return Swal.fire({
             type: "error",
-            title: "Error!",
+            title: title,
             text: text
         });
     }
