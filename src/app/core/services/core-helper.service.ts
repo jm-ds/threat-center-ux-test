@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '@app/security/services/authentication.service';
 import { Observable, Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -9,7 +11,7 @@ import Swal from 'sweetalert2';
 export class CoreHelperService {
     private subject = new Subject();
 
-    constructor() { }
+    constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
 
     // Core alert message
@@ -72,4 +74,16 @@ export class CoreHelperService {
         });
     }
 
+    logoutUser() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
+    }
+}
+
+
+export class LogOutStaticHelper {
+    static coreSer: CoreHelperService;
+    static logoutUser(coreHelperService: CoreHelperService) {
+        coreHelperService.logoutUser();
+    }
 }
