@@ -1,13 +1,14 @@
 
 <app-card [hidHeader]="true" cardClass="tab-card">
 
-  <ngb-tabset [activeId]=activeTab type="pills" *ngIf="!loadingScan; else loading">
-    <ngb-tab id="1">
+  <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
+    <!-- Github -->
+    <ngb-tab id="Github">
       <ng-template ngbTabTitle >
         <span class="tab-title">Github</span>
       </ng-template>
       <ng-template ngbTabContent>
-        <div *ngIf='activeTab=="1"; else getGithub'>
+        <div *ngIf='activeTab=="Github"; else getGithub'>
           <div *ngIf='obsGithubUser | async as user; else loading' style="margin-top:40px">
             <div class="container">
               <div class="row">
@@ -179,12 +180,12 @@
 
 
     <!--GitLab-->
-    <ngb-tab class="mb-3" id="2">
+    <ngb-tab class="mb-3" id="Gitlab">
       <ng-template ngbTabTitle>
         <span class="tab-title">Gitlab</span>
       </ng-template>
       <ng-template ngbTabContent>
-        <div *ngIf='activeTab=="2"; else getGitlab'>
+        <div *ngIf='activeTab=="Gitlab"; else getGitlab'>
           <div *ngIf='obsGitlabUser | async as user; else loading' style="margin-top:40px">
             <div class="container">
               <div class="row">
@@ -280,12 +281,12 @@
 
 
     <!--Bitbucket-->
-    <ngb-tab class="mb-3" id="3">
+    <ngb-tab class="mb-3" id="Bitbucket">
       <ng-template ngbTabTitle>
         <span class="tab-title">Bitbucket</span>
       </ng-template>
       <ng-template ngbTabContent>
-        <div *ngIf='activeTab=="3"; else getBitbucket'>
+        <div *ngIf='activeTab=="Bitbucket"; else getBitbucket'>
           <div *ngIf='obsBitbucketUser | async as user; else loading' style="margin-top:40px">
             <div class="container">
               <div class="row">
@@ -394,7 +395,8 @@
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab class="mb-3" id="4">
+
+    <ngb-tab class="mb-3" id="DragDrop">
       <ng-template ngbTabTitle>
         <span class="tab-title">Drag And Drop</span>
       </ng-template>
