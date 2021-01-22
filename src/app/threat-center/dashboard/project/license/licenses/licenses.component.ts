@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import {Scan} from '@app/threat-center/shared/models/types';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
@@ -28,20 +29,21 @@ export class LicensesComponent implements OnInit {
 
     constructor(private apiService: ApiService,
                 private router: Router,
-                private route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                private coreHelperService:CoreHelperService) {
     }
 
     ngOnInit() {
         console.log("Loading LicensesComponent for scanId: ", this.scanId);
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
 
             this.initData();
         } else {
             this.initData();
         }
-
+        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
     // While any changes occurred in page
@@ -49,21 +51,23 @@ export class LicensesComponent implements OnInit {
         if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
+            //Setting item per page into session..
+            this.coreHelperService.settingUserPreference("Project", null, { componentName: "Licenses", value: pageInfo.pageSize });
             // API Call
-            this.loadLicensesData(Number(this.defaultPageSize), undefined, undefined, undefined);
+            this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined, undefined, undefined);
             this.paginator.firstPage();
         } else {
             // Next and Previous changed
             if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
                 // call with after...
                 if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasNextPage) {
-                    this.loadLicensesData(Number(this.defaultPageSize), undefined,
+                    this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined,
                         this.licensesDetails.licenses.pageInfo.endCursor, undefined);
                 }
             } else {
                 // call with before..
                 if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasPreviousPage) {
-                    this.loadLicensesData(undefined, Number(this.defaultPageSize),
+                    this.loadLicensesData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")),
                         undefined, this.licensesDetails.licenses.pageInfo.startCursor);
                 }
             }
@@ -97,7 +101,7 @@ export class LicensesComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         }, this.timeOutDuration);

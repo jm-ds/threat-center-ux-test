@@ -8,6 +8,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import Swal from "sweetalert2";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Component({
     selector: 'app-components',
@@ -44,20 +45,21 @@ export class ComponentsComponent implements OnInit {
         private fixService: FixService,
         private spinner: NgxSpinnerService,
         private router: Router,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private coreHelperService: CoreHelperService) {
     }
 
     ngOnInit() {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         } else {
             this.initData();
         }
-
+        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
     fixVersion(groupId: string, artifactId: string) {
@@ -78,21 +80,23 @@ export class ComponentsComponent implements OnInit {
         if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
+            //Setting item per page into session..
+            this.coreHelperService.settingUserPreference("Project", null, { componentName: "Components", value: pageInfo.pageSize });
             // API Call
-            this.loadComponentData(Number(this.defaultPageSize), undefined, undefined, undefined);
+            this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined, undefined, undefined);
             this.paginator.firstPage();
         } else {
             // Next and Previous changed
             if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
                 // call with after...
                 if (!!this.componentDetails.components.pageInfo && this.componentDetails.components.pageInfo['hasNextPage']) {
-                    this.loadComponentData(Number(this.defaultPageSize), undefined,
+                    this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined,
                         this.componentDetails.components.pageInfo['endCursor'], undefined);
                 }
             } else {
                 // call with before..
                 if (!!this.componentDetails.components.pageInfo && this.componentDetails.components.pageInfo['hasPreviousPage']) {
-                    this.loadComponentData(undefined, Number(this.defaultPageSize),
+                    this.loadComponentData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")),
                         undefined, this.componentDetails.components.pageInfo['startCursor']);
                 }
             }
@@ -128,7 +132,7 @@ export class ComponentsComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.defaultPageSize))
+            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         }, this.timeOutDuration);

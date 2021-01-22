@@ -9,7 +9,7 @@ import { AuthenticationService } from '@app/security/services';
 import { ChartDB } from '../../../fack-db/chart-data';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import {TreeNode} from 'primeng/api';
+import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 
@@ -30,7 +30,7 @@ export class EntityComponent implements OnInit {
   public projects: TreeNode[];
   public componentsEntity: Entity;
   public uniqueLicenses = [];
-
+  activeTab: string;
   columns = [
     { field: 'projectId', header: 'ProjectId' },
     { field: 'name', header: 'Name' },
@@ -78,6 +78,7 @@ export class EntityComponent implements OnInit {
     console.log("Loading Entity");
     this.loadEntity(entityId);
     this.loadVulnerabilities(entityId);
+    this.getLastTabSelected();
   }
 
   loadVulnerabilities(entityId: any) {
@@ -234,7 +235,7 @@ export class EntityComponent implements OnInit {
     let edges = entity.projects.edges;
 
     let nodes: TreeNode[] = edges.map(projectEdge => {
-      let node : TreeNode = {
+      let node: TreeNode = {
         label: projectEdge.node.name,
         data: projectEdge.node,
         expandedIcon: "fa fa-folder-open",
@@ -249,8 +250,8 @@ export class EntityComponent implements OnInit {
 
   buildProjectTreeHier(projectEdge: ProjectEdge, treeNode: TreeNode) {
     if (projectEdge.node.childProjects) {
-      projectEdge.node.childProjects.edges.forEach(edge=> {
-        let childNode : TreeNode = {
+      projectEdge.node.childProjects.edges.forEach(edge => {
+        let childNode: TreeNode = {
           label: edge.node.name,
           data: edge.node,
           expandedIcon: "fa fa-folder-open",
@@ -271,6 +272,12 @@ export class EntityComponent implements OnInit {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
+    this.activeTab = $event.nextId;
+    this.coreHelperService.settingUserPreference("Entity", this.activeTab);
+  }
+
+  private getLastTabSelected() {
+    this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
   }
 
   chart = {
