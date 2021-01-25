@@ -84,7 +84,9 @@ export class ScanHelperService {
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     this.coreHelperService.swalALertBox(tUpdate.statusMessage);
                 } else {
-                    this.getTaskUpdate(task);
+                    setTimeout(() => {                           //<<<---using ()=> syntax
+                        this.getTaskUpdate(task);
+                    }, 1000);
                 }
             }, err => {
                 this.updatingDataWhileGetError(task);
