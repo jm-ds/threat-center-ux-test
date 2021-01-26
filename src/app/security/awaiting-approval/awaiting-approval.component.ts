@@ -1,16 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from "@app/security/services";
-import {Router} from "@angular/router";
-import {User} from "@app/models";
-import {environment} from "../../../environments/environment";
-import {first, map} from "rxjs/operators";
-import {HttpClient} from "@angular/common/http";
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from "@app/security/services";
+import { Router } from "@angular/router";
+import { User } from "@app/models";
+import { environment } from "../../../environments/environment";
+import { first, map } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Component({
     selector: 'app-awaiting-approval',
     templateUrl: './awaiting-approval.component.html',
     styleUrls: ['./awaiting-approval.component.scss']
 })
+
+@CommonUIMethodsDecorator()
+
 export class AwaitingApprovalComponent implements OnInit {
 
     user: User;
@@ -22,8 +27,9 @@ export class AwaitingApprovalComponent implements OnInit {
     messageError: string;
 
     constructor(private authenticationService: AuthenticationService,
-                private router: Router,
-                private http: HttpClient) {
+        private router: Router,
+        private http: HttpClient,
+        private coreHelperService: CoreHelperService) {
     }
 
 
@@ -32,7 +38,7 @@ export class AwaitingApprovalComponent implements OnInit {
         this.user = this.authenticationService.currentUser;
         this.model = {
             email: this.user.email,
-            orgName: this.user.organization != null && this.user.organization.name != this.user.organization.orgId  ? this.user.organization.name : null,
+            orgName: this.user.organization != null && this.user.organization.name != this.user.organization.orgId ? this.user.organization.name : null,
             coverLetter: this.user.coverLetter,
             phone: this.user.phone,
             position: this.user.position
@@ -49,35 +55,30 @@ export class AwaitingApprovalComponent implements OnInit {
         // const body = { email, fullName, phone, password, companyName };
         this.http.post<any>(url, /*body*/ this.model)
             .pipe(map(response => {
-                    const user = response.user;
-                    console.log("response:");
-                    console.log(user);
-                    this.loading = false;
-                    return user;
-                },
+                const user = response.user;
+                console.log("response:");
+                console.log(user);
+                this.loading = false;
+                return user;
+            },
                 (err) => {
                     console.error('AwaitingApproval component error: ', err);
                     this.loading = false;
                 }))
             .pipe(first())
             .subscribe(data => {
-                    // this.router.navigate([this.returnUrl]);
-                    this.loading = false;
-                    this.messageInfo = 'Thank you for providing additional info. Your data saved successfully.';
-                    this.authenticationService.loadAuthenticatedUser().then(user => {
-                        this.user = user;
-                    });
-                },
+                // this.router.navigate([this.returnUrl]);
+                this.loading = false;
+                this.messageInfo = 'Thank you for providing additional info. Your data saved successfully.';
+                this.authenticationService.loadAuthenticatedUser().then(user => {
+                    this.user = user;
+                });
+            },
                 error => {
                     console.error('CREATE ACCOUNT ERROR', error);
                     // this.error = error;
                     this.loading = false;
                     this.messageInfo = 'Unexpected error occurred while trying to save your data.';
                 });
-    }
-
-    logout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
     }
 }
