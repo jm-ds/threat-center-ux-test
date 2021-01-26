@@ -15,7 +15,6 @@ import { AuthenticationService } from '../services';
 })
 export class CreateAccountComponent implements OnInit {
 
-    createAccountForm: FormGroup;
     returnUrl: string;
     loading = false;
     error = '';
@@ -33,23 +32,8 @@ export class CreateAccountComponent implements OnInit {
     ngOnInit() {
         // sessionStorage.setItem('token', '');
 
-        // todo: check if it still in use, I doubt about it (task: )
-        this.createAccountForm = this.formBuilder.group({
-            email:       ['', Validators.required, Validators.email],
-            fullName:    ['', Validators.required],
-            phone:       ['', Validators.required],
-            password:    ['', Validators.required, Validators.pattern],
-            companyName: ['', Validators.required],
-            position:    ['', Validators.required],
-        });
-
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    }
-
-    // convenience getter for easy access to form fields
-    get f() {
-        return this.createAccountForm.controls;
     }
 
     createAccount() {

@@ -1,10 +1,11 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Scan} from '@app/threat-center/shared/models/types';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { Scan } from '@app/threat-center/shared/models/types';
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scanassets',
@@ -28,22 +29,25 @@ export class ScanAssetsComponent implements OnInit {
   story = [];
 
   constructor(private apiService: ApiService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+    private route: ActivatedRoute,
+    private router: Router,
+    private coreHelperService: CoreHelperService) { }
 
   ngOnInit() {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
-        .pipe(map(result => result.data.scan));
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      .pipe(map(result => result.data.scan));
     this.initData();
+
+    this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets");
   }
 
   sort(scanAssets: any) {
     return scanAssets
-        .sort((a, b) => a.node.status.localeCompare(b.node.status))
-        .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
-        .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+      .sort((a, b) => a.node.status.localeCompare(b.node.status))
+      .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+      .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
   }
 
   // While any changes occurred in page
@@ -51,8 +55,10 @@ export class ScanAssetsComponent implements OnInit {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
+      //Setting item per page into session..
+      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Assets", value: pageInfo.pageSize });
       // API Call
-      this.loadScanAssetData(Number(this.defaultPageSize), undefined, undefined, undefined);
+      this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
       this.paginator.firstPage();
     }
     else {
@@ -60,13 +66,13 @@ export class ScanAssetsComponent implements OnInit {
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         // call with after...
         if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasNextPage) {
-          this.loadScanAssetData(Number(this.defaultPageSize), undefined,
+          this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined,
             this.scanAssetDetails.scanAssetsTree.pageInfo.endCursor, undefined);
         }
       } else {
         // call with before..
         if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasPreviousPage) {
-          this.loadScanAssetData(undefined, Number(this.defaultPageSize),
+          this.loadScanAssetData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
             undefined, this.scanAssetDetails.scanAssetsTree.pageInfo.startCursor);
         }
       }
@@ -100,10 +106,10 @@ export class ScanAssetsComponent implements OnInit {
       this.router.navigate([decodeURIComponent(url)]);
     }
   }
-  
+
   reload() {
-    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
-        .pipe(map(result => result.data.scan));
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      .pipe(map(result => result.data.scan));
     this.initData();
   }
 
@@ -115,8 +121,8 @@ export class ScanAssetsComponent implements OnInit {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.defaultPageSize))
-          .pipe(map(result => result.data.scan));
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+        .pipe(map(result => result.data.scan));
       this.initData();
     }, this.timeOutDuration);
   }

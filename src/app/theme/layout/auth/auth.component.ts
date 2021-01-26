@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Component({
   selector: 'app-auth',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _coreHelperService: CoreHelperService) {
+  }
 
   ngOnInit() {
+    //removing darlk theme class from body if available.
+    this._coreHelperService.removeNextDarkClassFormBody();
   }
 
 }
