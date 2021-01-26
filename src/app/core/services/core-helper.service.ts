@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/security/services/authentication.service';
+import { NextConfig } from '@app/app-config';
 import { Observable, Subject } from 'rxjs';
 import Swal from 'sweetalert2';
+import { UserPreferenceModel } from '../core.class';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,7 @@ export class CoreHelperService {
     swalALertBox(text: string, title: string = "Error!", type: string = "error") {
         return Swal.fire({
             type: "error",
-            title: "Error!",
+            title: title,
             text: text
         });
     }
@@ -67,6 +69,90 @@ export class CoreHelperService {
         return null;
     }
 
+    settingUserPreference(moduleName: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
+        let preferenceDetails: Array<UserPreferenceModel> = [];
+        if (!!sessionStorage.getItem("UserPreference")) {
+            preferenceDetails = this.getPreferenceDetailsFromSession();
+        }
+        if (preferenceDetails.filter(pre => { return pre.moduleName === moduleName }).length >= 1) {
+            //Update Data
+            preferenceDetails.forEach(prefrence => {
+                if (prefrence.moduleName === moduleName) {
+                    prefrence.lastTabSelectedName = !!lastTabSelectedName && lastTabSelectedName !== '' ? lastTabSelectedName : prefrence.lastTabSelectedName;
+                    if (!!itemPerPageD) {
+                        if (!!prefrence.itemPerPageDetails && prefrence.itemPerPageDetails.length >= 1) {
+                            if (prefrence.itemPerPageDetails.filter(item => { return item.componentName === itemPerPageD.componentName }).length >= 1) {
+                                //Update
+                                prefrence.itemPerPageDetails.forEach(item => {
+                                    if (item.componentName === itemPerPageD.componentName) {
+                                        item.value = itemPerPageD.value;
+                                    }
+                                });
+                            } else {
+                                //Push Data..
+                                prefrence.itemPerPageDetails.push(itemPerPageD);
+                            }
+                        } else {
+                            //Push Data it's new
+                            prefrence.itemPerPageDetails.push(itemPerPageD);
+                        }
+                    }
+                }
+            });
+        } else {
+            //push Data
+            let itemPPage = [];
+            if (!!itemPerPageD) {
+                itemPPage.push(itemPerPageD);
+            }
+            preferenceDetails.push(
+                {
+                    moduleName: moduleName,
+                    itemPerPageDetails: itemPPage,
+                    lastTabSelectedName: lastTabSelectedName
+                }
+            )
+        }
+        sessionStorage.setItem("UserPreference", JSON.stringify(preferenceDetails));
+    }
+
+    getLastTabSelectedNameByModule(moduleName: string) {
+        if (!!sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                return !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ? preferenceDetails.find(pre => { return pre.moduleName === moduleName }).lastTabSelectedName : null;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    getItemPerPageByModuleAndComponentName(moduleName: string, componentName: string) {
+        if (!!sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                let moduleItem = preferenceDetails.find(pre => { return pre.moduleName === moduleName });
+                if (!!moduleItem && !!moduleItem.itemPerPageDetails && moduleItem.itemPerPageDetails.length >= 1) {
+                    return !!moduleItem.itemPerPageDetails.find(item => { return item.componentName === componentName })
+                        ? moduleItem.itemPerPageDetails.find(item => { return item.componentName === componentName }).value :
+                        NextConfig.config.defaultItemPerPage;
+                } else {
+                    return NextConfig.config.defaultItemPerPage;
+                }
+            } else {
+                return NextConfig.config.defaultItemPerPage;
+            }
+        } else {
+            return NextConfig.config.defaultItemPerPage;
+        }
+    }
+
+    getPreferenceDetailsFromSession() {
+        return JSON.parse(sessionStorage.getItem("UserPreference"));
+    }
+
     uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -85,5 +171,7 @@ export class LogOutStaticHelper {
     static coreSer: CoreHelperService;
     static logoutUser(coreHelperService: CoreHelperService) {
         coreHelperService.logoutUser();
+    removeNextDarkClassFormBody(){
+        document.querySelector('body').classList.remove('next-dark');
     }
 }

@@ -1,5 +1,6 @@
 import { Injectable, TemplateRef } from "@angular/core";
 import { Router } from "@angular/router";
+import { NextConfig } from "@app/app-config";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -84,7 +85,10 @@ export class ScanHelperService {
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     this.coreHelperService.swalALertBox(tUpdate.statusMessage);
                 } else {
-                    this.getTaskUpdate(task);
+
+                    setTimeout(() => {
+                        this.getTaskUpdate(task);
+                    }, NextConfig.config.delaySeconds);
                 }
             }, err => {
                 this.updatingDataWhileGetError(task);
