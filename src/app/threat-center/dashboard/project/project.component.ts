@@ -343,7 +343,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
             data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
+          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
@@ -379,7 +379,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
             data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
+          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
@@ -415,7 +415,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
             data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
+          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
@@ -451,7 +451,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
             data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
+          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
@@ -487,7 +487,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
           let data = 0;
           if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
             data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + "(" + data + ")</li>";
+          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
         }
         let orgData = 0;
         if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {

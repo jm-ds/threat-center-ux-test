@@ -106,7 +106,7 @@
           -->
             <div style="margin-bottom:20px;"><i
                 class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities</div>
-            <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart">
+            <app-apex-chart chartID="projectVulnerabilityChart" [className]="'chart-class'" [chartConfig]="this.vulnerabilityChart">
             </app-apex-chart>
           </app-card>
         </div>
@@ -114,7 +114,7 @@
         <div class="col-md-6">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
             <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</div>
-            <app-apex-chart chartID="projectLicenseChart" [chartConfig]="this.licenseChart"></app-apex-chart>
+            <app-apex-chart chartID="projectLicenseChart" [className]="'chart-class'" [chartConfig]="this.licenseChart"></app-apex-chart>
           </app-card>
         </div>
 
@@ -122,7 +122,7 @@
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
             <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</div>
-            <app-apex-chart chartID="projectComponentChart" [chartConfig]="this.componentChart"></app-apex-chart>
+            <app-apex-chart chartID="projectComponentChart" [className]="'chart-class'" [chartConfig]="this.componentChart"></app-apex-chart>
           </app-card>
         </div>
 
@@ -130,7 +130,7 @@
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
             <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets</div>
-            <app-apex-chart chartID="projectAssetChart" [chartConfig]="this.assetChart"></app-apex-chart>
+            <app-apex-chart chartID="projectAssetChart" [className]="'chart-class'" [chartConfig]="this.assetChart"></app-apex-chart>
           </app-card>
         </div>
 
@@ -138,7 +138,7 @@
           <app-card [hidHeader]="true" cardClass="proj-t-card">
             <div style="margin-bottom:20px;"><i class="fas fa-file-export text-c-red f-15 m-r-5"></i>Source Code Leaks
             </div>
-            <app-apex-chart chartID="projectSourceCodeLeakChart" [chartConfig]="sourceCodeLeakChart"></app-apex-chart>
+            <app-apex-chart chartID="projectSourceCodeLeakChart" [className]="'chart-class'" [chartConfig]="sourceCodeLeakChart"></app-apex-chart>
           </app-card>
         </div>
       </div>
