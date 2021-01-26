@@ -164,6 +164,10 @@ export class CoreHelperService {
         this.authenticationService.logout();
         this.router.navigate(['/login']);
     }
+
+    removeNextDarkClassFormBody(){
+        document.querySelector('body').classList.remove('next-dark');
+    }
 }
 
 
@@ -171,7 +175,5 @@ export class LogOutStaticHelper {
     static coreSer: CoreHelperService;
     static logoutUser(coreHelperService: CoreHelperService) {
         coreHelperService.logoutUser();
-    removeNextDarkClassFormBody(){
-        document.querySelector('body').classList.remove('next-dark');
     }
 }
