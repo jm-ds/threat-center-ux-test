@@ -13,7 +13,7 @@ import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { ScanHelperService } from '../../services/scan.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
@@ -217,18 +217,18 @@ export class QuickstartWizardComponent implements OnInit {
         let accessToken = this.authService.currentUser.accessToken;
         console.log("accessToken: " + accessToken);
         if (this.isEmail(accessToken)) {
-            this.activeTab = "4";
+            this.activeTab = "DragDrop";
         } else if (accessToken.startsWith("github-")) {
             this.loadGitHubUser();
-            this.activeTab = "1";
+            this.activeTab = "Github";
         } else if (accessToken.startsWith("gitlab-")) {
             this.loadGitLabUser();
-            this.activeTab = "2";
+            this.activeTab = "Gitlab";
         } else if (accessToken.startsWith("bitbucket-")) {
             this.loadBitbucketUser();
-            this.activeTab = "3";
+            this.activeTab = "Bitbucket";
         } else if (accessToken.startsWith("google-")) {
-            this.activeTab = "4";
+            this.activeTab = "DragDrop";
         }
 
         FilterUtils['custom'] = (value, filter): boolean => {
@@ -240,6 +240,7 @@ export class QuickstartWizardComponent implements OnInit {
             }
             return parseInt(filter) > value;
         };
+        this.getLastTabSelected();
     }
 
     onRowSelect(event) {
@@ -269,9 +270,17 @@ export class QuickstartWizardComponent implements OnInit {
         this.selectedRepos = [];
     }
 
+    onTabChange($event: NgbTabChangeEvent) {
+        this.activeTab = $event.nextId;
+        this.coreHelperService.settingUserPreference("ThreatScan", this.activeTab);
+    }
+
     private isEmail(userName: string): boolean {
         let re = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
         return re.test(userName);
     }
 
+    private getLastTabSelected() {
+        this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") ? this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") : this.activeTab;
+    }
 }

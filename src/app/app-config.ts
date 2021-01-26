@@ -12,6 +12,7 @@ export class NextConfig {
     boxLayout: false,
     successToasterTime: 5,
     errorToasterTime: 5,
-    closePopup: 25
+    closePopup: 25,
+    defaultItemPerPage:25
   };
 }

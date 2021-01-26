@@ -21,7 +21,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
+export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
@@ -111,12 +111,14 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
+      this.obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
     }
     this.subscribeProjectData();
+    this.getLastTabSelected();
+    this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan");
   }
 
   subscribeProjectData() {
@@ -125,7 +127,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
 
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    const obsProject = this.apiService.getProject(this.projectId, Number(this.defaultPageSize))
+    const obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
     obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -261,6 +263,7 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
+    this.coreHelperService.settingUserPreference("Project", $event.nextId);
   }
 
   rowUnselect($event: any) {
@@ -521,8 +524,10 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
+      //Setting item per page into session..
+      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Scan", value: pageInfo.pageSize });
       //API Call
-      this.loadProjectData(Number(this.defaultPageSize), undefined, undefined, undefined);
+      this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
       this.paginator.firstPage();
     }
     else {
@@ -530,12 +535,12 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         //call with after...
         if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasNextPage']) {
-          this.loadProjectData(Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
+          this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
         }
       } else {
         //call with before..
         if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasPreviousPage']) {
-          this.loadProjectData(undefined, Number(this.defaultPageSize), undefined, this.projectDetails.scans.pageInfo['startCursor']);
+          this.loadProjectData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['startCursor']);
         }
       }
     }
@@ -563,10 +568,10 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId, Number(this.defaultPageSize));
-    const res2 = this.projectDashboardService.getScanComponents(scanId, Number(this.defaultPageSize));
-    const res3 = this.projectDashboardService.getScanLicenses(scanId, Number(this.defaultPageSize));
-    const res4 = this.projectDashboardService.getScanAssets(scanId, Number(this.defaultPageSize));
+    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities")));
+    const res2 = this.projectDashboardService.getScanComponents(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")));
+    const res3 = this.projectDashboardService.getScanLicenses(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")));
+    const res4 = this.projectDashboardService.getScanAssets(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")));
     return forkJoin([res1, res2, res3, res4]);
   }
 
@@ -597,7 +602,11 @@ export class ProjectComponent implements OnInit, AfterViewInit,OnDestroy {
     this.assetScanData = Observable.of(data[3].data.scan);
   }
 
-  openLogs(content, errorMsg:string, log: string) {
+  private getLastTabSelected() {
+    this.stateService.project_tabs_selectedTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Project") ? this.coreHelperService.getLastTabSelectedNameByModule("Project") : this.stateService.project_tabs_selectedTab;
+  }
+
+  openLogs(content, errorMsg: string, log: string) {
     // open logs popup
     this.errorMsg = errorMsg;
     this.log = log;

@@ -90,6 +90,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("jwt");
     sessionStorage.removeItem("currentUser");
     sessionStorage.removeItem("ProjectBreadcum");
+    sessionStorage.removeItem("UserPreference");
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
   }
