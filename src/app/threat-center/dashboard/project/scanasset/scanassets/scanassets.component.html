@@ -37,7 +37,7 @@
                 <input *ngIf="col=='Workspace Path'" type="text" placeholder="{{col}}" name="search-name"
                        class="form-control" (input)="filterColumn(col, $event.target.value)"
                        [value]="getColumnFilterValue(col)"/>
-                <select *ngIf="col == 'Status'" class="form-control"
+                <select *ngIf="col == 'Status'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -47,7 +47,7 @@
                   <option value="IGNORED_TYPE_UNSUPPORTED">IGNORED_TYPE_UNSUPPORTED</option>
                   <option value="ACCEPTED">ACCEPTED</option>
                 </select>
-                <select *ngIf="col == 'File Size'" class="form-control"
+                <select *ngIf="col == 'File Size'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -56,7 +56,7 @@
                   <option value="1mb-10mb">1mb-10mb</option>
                   <option value="10mb+">10mb+</option>
                 </select>
-                <select *ngIf="col == 'Embedded Assets'" class="form-control"
+                <select *ngIf="col == 'Embedded Assets'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>

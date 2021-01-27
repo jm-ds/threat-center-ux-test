@@ -37,7 +37,7 @@
                        class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
                 <input *ngIf="col.header =='Version'" type="text" placeholder="{{col.header}}" name="search-name"
                        class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
-                <select *ngIf="col.header == 'Internal'" class="form-control"
+                <select *ngIf="col.header == 'Internal'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col.header)"
                         (change)="filterColumn(col.header, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -46,7 +46,7 @@
                 </select>
 <!--                <input *ngIf="col.header =='Source'" type="text" placeholder="{{col.header}}" name="search-name"-->
 <!--                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>-->
-                <select *ngIf="col.header == 'Vulnerabilities'" class="form-control"
+                <select *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col.header)"
                         (change)="filterColumn(col.header, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
