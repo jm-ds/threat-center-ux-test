@@ -29,7 +29,7 @@ export class AwaitingApprovalComponent implements OnInit {
     constructor(private authenticationService: AuthenticationService,
         private router: Router,
         private http: HttpClient,
-        private coreHelperService: CoreHelperService) {
+        public coreHelperService: CoreHelperService) {
     }
 
 
@@ -80,5 +80,9 @@ export class AwaitingApprovalComponent implements OnInit {
                     this.loading = false;
                     this.messageInfo = 'Unexpected error occurred while trying to save your data.';
                 });
+    }
+
+    logout() {
+        this.coreHelperService.logoutUser();
     }
 }
