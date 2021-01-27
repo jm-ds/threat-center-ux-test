@@ -21,7 +21,11 @@ export class NavRightComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
-    private coreHelperService: CoreHelperService) { }
+    public coreHelperService: CoreHelperService) { }
 
   ngOnInit() { }
+
+  logout() {
+    this.coreHelperService.logoutUser();
+  }
 }
