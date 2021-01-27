@@ -36,10 +36,10 @@
                         <div class="form-group row">
                             <label for="entityType" class="col-sm-3 col-form-label">Entity type</label>
                             <div class="col-sm-9">
-                                <select class="form-control form-control-sm" id="entityType"
+                                <select class="form-control form-control-sm custom-select" id="entityType"
                                     [(ngModel)]="selectedTreeNode.entityType" #entityType="ngModel" name="entityType"
                                     required>
-                                    <option value="" selected disabled>Select entity type</option>
+                                    <option value="" selected>Select entity type</option>
                                     <option value="DASHBOARD">Dashboard</option>
                                     <option value="DIVISION">Divison</option>
                                     <option value="BUSINESS_UNIT">Business Unit</option>

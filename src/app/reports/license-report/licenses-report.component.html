@@ -44,7 +44,7 @@ METRICS
 
             <div>
                 <label>License Type</label>
-                <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+                <select name="typeFilter" class="form-control custom-select" [(ngModel)]="typeFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="Open Source">Open Source</option>
                     <option value="Proprietary">Proprietary</option>
@@ -54,7 +54,7 @@ METRICS
 
             <div>
                 <label>License Category</label>
-                <select name="categoryFilter" class="form-control" [(ngModel)]="categoryFilter">
+                <select name="categoryFilter" class="form-control custom-select" [(ngModel)]="categoryFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="UNDEFINED">UNDEFINED</option>
                     <option value="PUBLIC_DOMAIN">PUBLIC_DOMAIN</option>
@@ -70,7 +70,7 @@ METRICS
 
             <div>
                 <label>License Style</label>
-                <select name="styleFilter" class="form-control" [(ngModel)]="styleFilter">
+                <select name="styleFilter" class="form-control custom-select" [(ngModel)]="styleFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="Apache 1.1-Style">Apache 1.1-Style</option>
                     <option value="Attribution">Attribution</option>

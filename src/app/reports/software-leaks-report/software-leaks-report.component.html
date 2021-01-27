@@ -48,7 +48,7 @@ METRICS
 
             <div>
                 <label>Source</label>
-                <select name="sourceFilter" class="form-control" [(ngModel)]="sourceFilter">
+                <select name="sourceFilter" class="form-control custom-select" [(ngModel)]="sourceFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="Pastebin">Pastebin</option>
                     <option value="GitHub">GitHub</option>
@@ -59,7 +59,7 @@ METRICS
 
             <div>
                 <label>Type</label>
-                <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+                <select name="typeFilter" class="form-control custom-select" [(ngModel)]="typeFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="PARTIAL">Partial</option>
                     <option value="ASSET">Asset</option>
@@ -69,7 +69,7 @@ METRICS
 
             <div>
                 <label>Status</label>
-                <select name="statusFilter" class="form-control" [(ngModel)]="statusFilter">
+                <select name="statusFilter" class="form-control custom-select" [(ngModel)]="statusFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="ACTIVE">Active</option>
                     <option value="REMOVED">Removed</option>

@@ -48,7 +48,7 @@ METRICS
 
             <div>
                 <label>License Type</label>
-                <select name="typeFilter" class="form-control" [(ngModel)]="typeFilter">
+                <select name="typeFilter" class="form-control custom-select" [(ngModel)]="typeFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="Open Source">Open Source</option>
                     <option value="Proprietary">Proprietary</option>
@@ -57,7 +57,7 @@ METRICS
 
             <div>
                 <label>Severity</label>
-                <select name="severityFilter" class="form-control" [(ngModel)]="severityFilter">
+                <select name="severityFilter" class="form-control custom-select" [(ngModel)]="severityFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="CRITICAL">CRITICAL</option>
                     <option value="HIGH">HIGH</option>
@@ -69,7 +69,7 @@ METRICS
 
             <div>
                 <label>Fix</label>
-                <select name="fixFilter" class="form-control" [(ngModel)]="fixFilter">
+                <select name="fixFilter" class="form-control custom-select" [(ngModel)]="fixFilter">
                     <option value="ALL" selected>- All -</option>
                     <option value="HASFIX">Has Fix</option>
                     <option value="NOFIX">No Fix</option>

@@ -148,7 +148,7 @@
                                 </div>
                                 <div *ngIf="selectedRepo?.node.refs.edges.length > 1">
                                   <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"
-                                    class="form-control" style="height:25px;padding:2px">
+                                    class="form-control custom-select" style="height:25px;padding:2px">
                                     <option *ngFor="let branch of selectedRepo.node.refs.edges"
                                       [selected]="branch.node.name == selectedRepo.node.defaultBranchRef?.name"
                                       value='{{branch.node.name}}'>{{branch.node.name}}</option>
@@ -368,7 +368,7 @@
                                 </div>
                                 <div *ngIf="selectedRepo.branches.length > 1">
                                   <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"
-                                    class="form-control" style="height:25px;padding:2px">
+                                    class="form-control custom-select" style="height:25px;padding:2px">
                                     <option *ngFor="let branch of selectedRepo.branches"
                                       [selected]="branch == selectedRepo.mainBranch" value='{{branch}}'>{{branch}}
                                     </option>
