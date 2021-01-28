@@ -89,7 +89,7 @@
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
-          <ngb-tab title="BUSINESS UNITS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="BUSINESSUNITS">
+          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="BUSINESSUNITS">
             <ng-template ngbTabContent>
               <!-- product-section start -->
               <div class="row">
@@ -327,7 +327,7 @@
           </ngb-tab>
 
           <!-- VULNERABILITIES -->
-          <ngb-tab title="VULNERABILITIES" class="mb-3 ml-0 pl-0" *ngIf="entity.entityMetrics?.projectCount > 0" id="VULNERABILITIES">
+          <!-- <ngb-tab title="VULNERABILITIES" class="mb-3 ml-0 pl-0" *ngIf="entity.entityMetrics?.projectCount > 0" id="VULNERABILITIES">
             <ng-template ngbTabContent>
 
               <div class="row">
@@ -361,7 +361,7 @@
                                   <span *ngIf="vulnerabilityEdge?.node.severity === 'LOW'" class="badge m-r-5 badge-light-info" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
                                   <span *ngIf="vulnerabilityEdge?.node.severity === 'INFO'" class="badge m-r-5 badge-light-success" style="width:60px">{{vulnerabilityEdge?.node.severity}}</span>
                                 </td>
-                                <td><!--{{vulnerabilityEdge?.node.vulnerabilityInfection.projectCount}}-->Unknown</td>
+                                <td>Unknown</td>
                                 <td>{{vulnerabilityEdge?.node.cvssV2BaseScore | number : '1.1-1'}} / {{vulnerabilityEdge?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
                                 <td>{{componentEdge?.node.name}}</td>
                                 <td>{{componentEdge?.node.group}}</td>
@@ -376,19 +376,14 @@
                   </app-card>
                 </div>
               </div>
-              <!-- product-section end -->
-
-
-
-
-            </ng-template>
-          </ngb-tab>
+               </ng-template>
+          </ngb-tab> -->
 
 
           <!-- COMPONENTS -->
-          <ngb-tab title="COMPONENTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="COMPONENTS">
+          <!-- <ngb-tab title="COMPONENTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="COMPONENTS">
             <ng-template ngbTabContent>
-              <!-- embedded assets-section start -->
+              
               <div class="row">
                 <div class="col-sm-12">
                   <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
@@ -425,16 +420,15 @@
                   </app-card>
                 </div>
               </div>
-              <!-- embedded assets-section end -->
+              
             </ng-template>
-          </ngb-tab>
+          </ngb-tab> -->
 
 
           <!-- LICENSES -->
-          <ngb-tab title="LICENSES" *ngIf="entity.entityMetrics?.projectCount > 0" id="LICENSES">
+          <!-- <ngb-tab title="LICENSES" *ngIf="entity.entityMetrics?.projectCount > 0" id="LICENSES">
             <ng-template ngbTabContent>
 
-              <!-- license-section start -->
               <div class="row">
                 <div class="col-sm-12">
                   <app-card cardTitle="License Data By License Type" cardClass="table-card" blockClass="px-0 py-0">
@@ -474,13 +468,13 @@
                   </app-card>
                 </div>
               </div>
-              <!-- license-section end -->
+              
             </ng-template>
-          </ngb-tab>
+          </ngb-tab> -->
 
 
 
-          <ngb-tab title="ASSETS" *ngIf="entity.entityMetrics?.projectCount > 0" id="ASSETS">
+          <!-- <ngb-tab title="ASSETS" *ngIf="entity.entityMetrics?.projectCount > 0" id="ASSETS">
             <ng-template ngbTabContent>
 
 
@@ -522,14 +516,13 @@
 
 
             </ng-template>
-          </ngb-tab>
+          </ngb-tab> -->
 
 
 
           <!-- COPYRIGHTS -->
-          <ngb-tab title="COPYRIGHTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="COPYRIGHTS">
+          <!-- <ngb-tab title="COPYRIGHTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="COPYRIGHTS">
             <ng-template ngbTabContent>
-              <!-- embedded assets-section start -->
               <div class="row">
                 <div class="col-sm-12">
                   <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
@@ -607,9 +600,9 @@
                   </app-card>
                 </div>
               </div>
-              <!-- embedded assets-section end -->
+              
             </ng-template>
-          </ngb-tab>
+          </ngb-tab> -->
 
           <!-- <ngb-tab title="LEAKED ASSETS">
             
