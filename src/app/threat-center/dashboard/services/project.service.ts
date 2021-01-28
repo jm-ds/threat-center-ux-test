@@ -283,13 +283,13 @@ export class ProjectDashboardService {
 export class GetProjectData implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService:CoreHelperService) { }
+    private coreHelperService: CoreHelperService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
     let projectId = route.paramMap.get('projectId');
-    return this.projectDashboardService.getProject(projectId,Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")));
+    return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")));
   }
 }
 
@@ -309,13 +309,14 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
     return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(
         mergeMap((data: any) => {
-          if (!!data.data.project.scans.edges[0]) {
+          if (!!data.data.project && !!data.data.project.scans.edges[0]) {
             const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities")));
             const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")));
             const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")));
             const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")));
             return forkJoin([res1, res2, res3, res4]);
           } else {
+            this.coreHelperService.swalALertBox("Project data not found!");
             return EMPTY;
           }
         })

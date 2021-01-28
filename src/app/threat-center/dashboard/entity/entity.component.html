@@ -191,33 +191,33 @@
                                   </td>
                                    <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td>
                                     <td style="padding: 0.75rem;">
-                                    <span title="Critical" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.critical}}</span>
-                                    <span title="High" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.high}}</span>
-                                    <span title="Medium" class="badge m-r-5 badge-light-success">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.medium}}</span>
-                                    <span title="Low" class="badge m-r-5 badge-light-info">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.low}}</span>
-                                    <span title="Info" class="badge m-r-5 badge-light-primary">{{rowData.latestScan.scanMetrics?.vulnerabilityMetrics.info}}</span>
+                                    <span title="Critical" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.critical}}</span>
+                                    <span title="High" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.high}}</span>
+                                    <span title="Medium" class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.medium}}</span>
+                                    <span title="Low" class="badge m-r-5 badge-light-info">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.low}}</span>
+                                    <span title="Info" class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.info}}</span>
                                   </td>
                                   <td style="padding: 0.75rem;">
-                                    <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
-                                    <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
-                                    <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
-                                    <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
-                                    <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.copyleft}}</span>
-                                    <span title="Dual" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.dual}}</span>
-                                    <span title="Custom" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.licenseMetrics?.custom}}</span>
-                                    <span title="Permissive" class="badge m-r-5 badge-light-primary">{{rowData.latestScan.scanMetrics?.licenseMetrics?.permissive}}</span>
+                                    <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
+                                    <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
+                                    <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
+                                    <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                                    <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                                    <span title="Dual" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.dual}}</span>
+                                    <span title="Custom" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.custom}}</span>
+                                    <span title="Permissive" class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.permissive}}</span>
                                   </td>
                                   <td style="padding: 0.75rem;">
-                                    <span title="Latest" class="badge m-r-5 badge-light-success">{{rowData.latestScan.scanMetrics?.componentMetrics.latest}}</span>
-                                    <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{rowData.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
-                                    <span title="Dual" class="badge m-r-5 badge-light-danger">{{rowData.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
+                                    <span title="Latest" class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.componentMetrics.latest}}</span>
+                                    <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.componentMetrics.notLatest}}</span>
+                                    <span title="Dual" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                                   </td>
                                   <td style="padding: 0.75rem;">
-                                    <span title="Analyzed" class="badge m-r-5 badge-light-success">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
-                                    <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
-                                    <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project.node.data.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
+                                    <span title="Analyzed" class="badge m-r-5 badge-light-success">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.analyzed}}</span>
+                                    <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.embedded}}</span>
+                                    <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.skipped}}</span>
                                   </td>
-                                  <td style="padding: 0.75rem;">{{project.node.data.latestScan.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                                  <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                                 </tr>
                           </ng-template>
                         </p-treeTable>                        
