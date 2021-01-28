@@ -12,8 +12,8 @@ export class PreScanLoadingDialogComponent implements OnInit, OnDestroy {
 
     @Input() preScanProjectData: any = {};
     scanPoPuptimeout: number = 3000;
-    constructor
-        (
+
+    constructor(
             public activeModal: NgbActiveModal,
     ) {
     }

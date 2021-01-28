@@ -24,11 +24,11 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
 
     successToasterTime: number = NextConfig.config.successToasterTime;
     errorToasterTime: number = NextConfig.config.errorToasterTime;
-    closePopup:number = NextConfig.config.closePopup;
+    closePopup: number = NextConfig.config.closePopup;
 
     startTimerToCloseModel: Date | any = null;
-    constructor
-        (
+
+    constructor(
             private scanHelperService: ScanHelperService,
             public activeModal: NgbActiveModal,
     ) {
