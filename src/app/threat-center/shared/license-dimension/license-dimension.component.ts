@@ -99,9 +99,9 @@ export class LicenseDimensionComponent implements OnInit {
     });
   }
 
-  licenseAttributeFilter(license:any, attributeType:string) {
+  licenseAttributeFilter(license:any, type:string) {
     return license.attributes.filter(function(attribute) {
-      return attribute.attributeType == attributeType;
+      return attribute.type == type;
     });
   }
 

@@ -324,7 +324,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   xaxis = {
     categories: [],
     labels: {
-      show: true,
+      show: false,
       rotate: -45,
     },
   };
