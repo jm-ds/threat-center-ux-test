@@ -698,8 +698,9 @@ export class ApiService {
                  isFsfLibre,
                  isDeprecated,
                  attributes {
-                     key,
-                     attributeType
+                   name,
+                   type,
+                   description
                  }
             }
          }

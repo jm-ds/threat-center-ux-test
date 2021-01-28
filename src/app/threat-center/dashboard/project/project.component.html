@@ -20,11 +20,10 @@
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
-
+<!--
     <div class="col-lg-2 col-xs-12 chart-lbl-blk">
       <div class="chart-lbl-indi">
         <label>Vulnerabilities</label>
-
         <ul *ngIf="!!vulnerabilityChart.series && vulnerabilityChart.series.length >= 1">
           <li *ngFor="let item of vulnerabilityChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
             (mouseleave)="item.hover=false">
@@ -86,11 +85,11 @@
         </ul>
       </div>
 
+    </div>-->
 
-    </div>
-    <div class="col-lg-10 col-xs-12  chart-blk">
-      <div class="row project-chart-blk">
-        <div class="col-md-6">
+
+
+        <div class="col-lg-3 col-md-3">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
             <!--<div>
             <div style="margin-bottom:20px;float:left"><i class="fas fa-bug text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
@@ -104,45 +103,141 @@
           </div>
           <div  style="clear:both"></div>
           -->
-            <div style="margin-bottom:20px;"><i
-                class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities</div>
+            <div style="margin-bottom:-15px;margin-top:-10px;">
+
+              <div class="chart-lbl-indi">
+
+                <div style="margin-bottom:10px" class="chart-lbl">
+                  <i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities
+                </div>
+
+                  <div style="display: flex;">
+                    <div style="text-align: right;">
+                      <ul *ngIf="!!vulnerabilityChart.series && vulnerabilityChart.series.length >= 1">
+                        <li *ngFor="let item of vulnerabilityChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
+                            (mouseleave)="item.hover=false">
+                          {{getAdditionData(item.data)}}
+                          <div *ngIf="item.hover" class="lgnd-tltp">
+                            {{item.name}}
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+
             <app-apex-chart chartID="projectVulnerabilityChart" [chartConfig]="this.vulnerabilityChart">
             </app-apex-chart>
           </app-card>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-lg-3 col-md-3">
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</div>
+
+            <div style="margin-bottom:-15px;margin-top:-10px;">
+
+              <div class="chart-lbl-indi">
+
+                <div style="margin-bottom:10px" class="chart-lbl">
+                  <i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses
+                </div>
+
+                <div style="display: flex;">
+                  <div style="text-align: right;">
+                    <ul *ngIf="!!licenseChart.series && licenseChart.series.length >= 1">
+                      <li *ngFor="let item of licenseChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
+                          (mouseleave)="item.hover=false">
+                        {{getAdditionData(item.data)}}
+                        <div *ngIf="item.hover" class="lgnd-tltp">
+                          {{item.name}}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
             <app-apex-chart chartID="projectLicenseChart" [chartConfig]="this.licenseChart"></app-apex-chart>
           </app-card>
         </div>
 
-        <div class="col-md-4">
+
+        <div class="col-lg-3 col-md-3">
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</div>
+
+            <div style="margin-bottom:-15px;margin-top:-10px;">
+              <div class="chart-lbl-indi">
+
+                <div style="margin-bottom:10px"class="chart-lbl">
+                  <i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components
+                </div>
+
+                <div style="display: flex;">
+                  <div style="text-align: right;">
+                    <ul *ngIf="!!componentChart.series && componentChart.series.length >= 1">
+                      <li *ngFor="let item of componentChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
+                          (mouseleave)="item.hover=false">
+                        {{getAdditionData(item.data)}}
+                        <div *ngIf="item.hover" class="lgnd-tltp">
+                          {{item.name}}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
             <app-apex-chart chartID="projectComponentChart" [chartConfig]="this.componentChart"></app-apex-chart>
           </app-card>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-3 col-md-3">
 
           <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets</div>
+            <div style="margin-bottom:-15px;margin-top:-10px;">
+              <div class="chart-lbl-indi">
+
+
+                <div style="margin-bottom:10px" class="chart-lbl">
+                  <i class="fas fa-code text-c-red f-15 m-r-5"></i>Components
+                </div>
+
+                <div style="display: flex;text-align: right;">
+                  <div style="">
+                    <ul *ngIf="!!assetChart.series && assetChart.series.length >= 1">
+                      <li *ngFor="let item of assetChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
+                          (mouseleave)="item.hover=false">
+                        {{getAdditionData(item.data)}}
+                        <div *ngIf="item.hover" class="lgnd-tltp">
+                          {{item.name}}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
             <app-apex-chart chartID="projectAssetChart" [chartConfig]="this.assetChart"></app-apex-chart>
           </app-card>
         </div>
 
-        <div class="col-md-4">
-          <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:20px;"><i class="fas fa-file-export text-c-red f-15 m-r-5"></i>Source Code Leaks
-            </div>
-            <app-apex-chart chartID="projectSourceCodeLeakChart" [chartConfig]="sourceCodeLeakChart"></app-apex-chart>
-          </app-card>
-        </div>
-      </div>
-    </div>
+
+
+
+
+
+
   </div>
 
   <div class="row">
@@ -451,7 +546,7 @@
           </ng-template>
         </ngb-tab>
 
-        <!-- SOURCE CODE ASSETS -->
+        <!-- SOURCE CODE ASSETS
         <ngb-tab id="leakedassets">
           <ng-template ngbTabTitle>Leaked Assets&nbsp;
             <span class="badge badge-light">
@@ -459,7 +554,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent></ng-template>
-        </ngb-tab>
+        </ngb-tab>-->
 
       </ngb-tabset>
       </app-card>
