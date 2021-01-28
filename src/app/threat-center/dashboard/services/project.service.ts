@@ -1,29 +1,31 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ProjectQuery, Scan, ScanQuery } from '@app/threat-center/shared/models/types';
 import gql from 'graphql-tag';
 import { EMPTY, forkJoin, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 
 export class ProjectDashboardService {
-    constructor(private coreGraphQLService: CoreGraphQLService) {
-    }
+  constructor(private coreGraphQLService: CoreGraphQLService) {
+  }
 
-    //Get Project Data
-    getProject(projectId: string) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<ProjectQuery>(gql`
+  //Get Project Data
+  getProject(projectId: string, first) {
+    
+    return this.coreGraphQLService.coreGQLReqWithQuery<ProjectQuery>(gql`
             query {
                 project(projectId:"${projectId}") {
                   projectId,
                   entityId,
                   name,
-                  scans {
+                  scans(first:${first}) {
                     totalCount
                     pageInfo {
                       hasNextPage
@@ -79,11 +81,11 @@ export class ProjectDashboardService {
                   }
             }
           `, 'no-cache');
-    }
+  }
 
-    //Get Scan Vulnerabilities
-    getScanVulnerabilities(scanId: string,defaultPage) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
+  //Get Scan Vulnerabilities
+  getScanVulnerabilities(scanId: string, defaultPage) {
+    return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
           query {
             scan(scanId:"${scanId}") {
                 scanId,
@@ -127,11 +129,11 @@ export class ProjectDashboardService {
           }
       `);
 
-    }
+  }
 
-    //Get Scan Components
-    getScanComponents(scanId: string,defaultPage) {
-     return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+  //Get Scan Components
+  getScanComponents(scanId: string, defaultPage) {
+    return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
         query {
           scan(scanId:"${scanId}") {
             scanId,
@@ -196,11 +198,11 @@ export class ProjectDashboardService {
         }
     `);
 
-    }
+  }
 
-    //get Scan License
-    getScanLicenses(scanId: string,defaultPage) {
-      return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+  //get Scan License
+  getScanLicenses(scanId: string, defaultPage) {
+    return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
       query {
          scan(scanId:"${scanId}") {
            scanId,
@@ -230,11 +232,11 @@ export class ProjectDashboardService {
          }
        }
    `);
-    }
+  }
 
-    //get assets
-    getScanAssets(scanId: string, defaultPage) {
-        return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
+  //get assets
+  getScanAssets(scanId: string, defaultPage) {
+    return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
       query {
          scan(scanId:"${scanId}") {
           scanId
@@ -270,52 +272,55 @@ export class ProjectDashboardService {
         }
       }
     `, 'no-cache');
-    }
+  }
 }
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class GetProjectData implements Resolve<Observable<any>> {
-    constructor(
-        private projectDashboardService: ProjectDashboardService) { }
-    resolve(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<any> {
-        let projectId = route.paramMap.get('projectId');
-        return this.projectDashboardService.getProject(projectId);
-    }
+  constructor(
+    private projectDashboardService: ProjectDashboardService,
+    private coreHelperService: CoreHelperService) { }
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<any> {
+    let projectId = route.paramMap.get('projectId');
+    return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")));
+  }
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class ProjectDashboardResolver implements Resolve<Observable<any>> {
-    constructor(
-        private projectDashboardService: ProjectDashboardService) { }
-    resolve(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<any> {
-        let projectId = route.paramMap.get('projectId');
-        return this.projectDashboardService.getProject(projectId)
-            .pipe(
-                mergeMap((data: any) => {
-                    if (!!data.data.project.scans.edges[0]) {
-                        const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId,25);
-                        const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId,25);
-                        const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId,25);
-                        const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId,25);
-                        return forkJoin([res1, res2, res3, res4]);
-                    } else {
-                        return EMPTY;
-                    }
-                })
-            );
+  constructor(
+    private projectDashboardService: ProjectDashboardService,
+    private coreHelperService: CoreHelperService) { }
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<any> {
+    let projectId = route.paramMap.get('projectId');
+    return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      .pipe(
+        mergeMap((data: any) => {
+          if (!!data.data.project && !!data.data.project.scans.edges[0]) {
+            const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities")));
+            const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")));
+            const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")));
+            const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")));
+            return forkJoin([res1, res2, res3, res4]);
+          } else {
+            this.coreHelperService.swalALertBox("Project data not found!");
+            return EMPTY;
+          }
+        })
+      );
 
-    }
+  }
 }

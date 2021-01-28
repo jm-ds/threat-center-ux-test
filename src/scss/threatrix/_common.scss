@@ -43,6 +43,22 @@
     cursor: pointer;
 }
 
+#vulnerabilityChart {
+    filter: saturate(70%) !important;
+}
+
+#licenseChart {
+    filter: saturate(70%) !important;
+}
+
+#componentChart {
+    filter: saturate(70%) !important;
+}
+
+#assetChart {
+    filter: saturate(70%) !important;
+}
+
 // Entity managemnet style start
 .invalid-form {
     width: 100%;

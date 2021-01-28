@@ -33,6 +33,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                         this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                     }
                 }
+                else {
+                    this.coreHelperService.swalALertBox("You don't have permission to access / on this server.",dataObjToShow.message);
+                    this.router.navigate(['/login']);
+                }
                 // todo: AT THIS POINT ERROR IS SILENTLY GONE (task: https://github.com/threatrix/product/issues/270)
             } else {
                 this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());

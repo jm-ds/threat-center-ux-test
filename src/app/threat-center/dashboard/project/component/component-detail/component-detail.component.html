@@ -218,9 +218,9 @@
                           <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
                         </div>
                       </div>
+
+
                       <div style="width:50%;float:right;">
-
-
                         <perfect-scrollbar [style.max-height]="'400px'">
                           <p-table #dt [columns]="releaseCols" [value]="releases" [paginator]="false" [rows]="50"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
@@ -247,10 +247,9 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
-
-
-
                       </div>
+
+
                     </div>
 
                   </app-card>
