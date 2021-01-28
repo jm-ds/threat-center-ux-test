@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import ApexCharts from 'apexcharts/dist/apexcharts.common.js';
-import {ApexChartService} from './apex-chart.service';
+import { ApexChartService } from './apex-chart.service';
 
 @Component({
   selector: 'app-apex-chart',
@@ -12,6 +12,7 @@ export class ApexChartComponent implements OnInit {
   @Input() chartConfig: any;
   @Input() xAxis: any;
   @Input() newData: any;
+  @Input() className: string = "";
 
   public chart: any;
 
