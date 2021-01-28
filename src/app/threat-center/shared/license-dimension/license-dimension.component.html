@@ -73,24 +73,45 @@
                         </div>
 
 
-                      <!-- ATTRIBUTES -->
+                      <!-- ATTRIBUTES
                       <div class="row" style="padding-left:15px;margin-top:40px">
                         <div class="col-xl-4">
                           <div class="caption">Permissions</div>
                           <div *ngFor="let licenseAttribute of permissions">
-                            <i class="fas fa-check color-success m-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-check color-success m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
                           </div>
                         </div>
                         <div class="col-xl-4">
                           <div class="caption">Limitations</div>
                           <div *ngFor="let licenseAttribute of limitations">
-                            <i class="fas fa-times color-danger m-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-times color-danger m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
                           </div>
                         </div>
                         <div class="col-xl-4">
                           <div class="caption">Conditions</div>
                           <div *ngFor="let licenseAttribute of conditions">
-                            <i class="fas fa-info-circle color-info m-r-5"></i> {{licenseAttribute.key}}
+                            <i class="fas fa-info-circle color-info m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
+                          </div>
+                        </div>
+                      </div>-->
+
+                      <div style="display: flex;margin-top: 20px;margin-left:15px">
+                        <div style="flex-grow: 1">
+                          <div class="caption">Permissions</div>
+                          <div *ngFor="let licenseAttribute of permissions">
+                            <i class="fas fa-check color-success m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
+                          </div>
+                        </div>
+                        <div style="flex-grow: 1">
+                          <div class="caption">Limitations</div>
+                          <div *ngFor="let licenseAttribute of limitations">
+                            <i class="fas fa-times color-danger m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
+                          </div>
+                        </div>
+                        <div style="flex-grow: 2">
+                          <div class="caption">Conditions</div>
+                          <div *ngFor="let licenseAttribute of conditions">
+                            <i class="fas fa-info-circle color-info m-r-5"></i> {{licenseAttribute.name.replaceAll('_', ' ')}}<i class="m-l-5 fas fa-question-circle" title="{{licenseAttribute.description}}"></i>
                           </div>
                         </div>
                       </div>
