@@ -146,6 +146,8 @@ export class QuickstartWizardComponent implements OnInit {
             {
                 backdrop: 'static',
                 keyboard: false,
+                windowClass: 'pre-scan-loading-dialog',
+                backdropClass: 'pre-scan-loading-dialog-backdrop'
             });
         modalRef.componentInstance.preScanProjectData = preScanProjectData;
         modalRef.result.then((result) => {
@@ -157,6 +159,8 @@ export class QuickstartWizardComponent implements OnInit {
         const modalRef = this.modalService.open(LoadingDialogComponent, {
             backdrop: 'static',
             keyboard: false,
+            windowClass: 'loading-dialog',
+            backdropClass: 'loading-dialog-backdrop'
         });
     }
 
