@@ -48,7 +48,7 @@ export class CoreHelperService {
                 break;
             }
             case 403: {
-                msg = "The HTTP 403 is a HTTP status code meaning access to the requested resource is forbidden.";
+                msg = "the requested resource is forbidden.";
                 break;
             }
             case 404: {
