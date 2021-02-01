@@ -93,11 +93,11 @@ export class CoreGraphQLService {
                             this.authenticationService.logout();
                             this.router.navigate(['/login']);
                         } else {
-                            this.coreHelperService.swalALertBox(er.message);
+                            this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
                         }
                     }
                 } else {
-                    this.coreHelperService.swalALertBox(er.message);
+                    this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
                     if (er.networkError.status === 401) {
                         this.authenticationService.logout();
                         this.router.navigate(['/login']);
