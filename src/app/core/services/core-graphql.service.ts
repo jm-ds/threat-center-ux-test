@@ -86,6 +86,7 @@ export class CoreGraphQLService {
             let er = JSON.parse(JSON.stringify(error));
             console.log(er.message);
             if (!!er.networkError) {
+                console.log(er.networkError);
                 if (er.networkError.status === 403) {
                     const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
                     if (!!jwt) {
