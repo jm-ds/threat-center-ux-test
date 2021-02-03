@@ -14,12 +14,14 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     //Error intersaptor
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        debugger;
         return next.handle(request).pipe(catchError(this.errorHandler))
     }
 
 
     //error handler
     private errorHandler = (errObj: HttpErrorResponse): Observable<any> => {
+        debugger;
         let dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: '' };
         if (errObj.status === 401 || errObj.status === 403) {
             dataObjToShow.message = !!errObj.error && !!errObj.error.message ? errObj.error.message : "Unauthorized user!";
@@ -43,6 +45,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
                 this.router.navigate(['/login']);
             }
+
+            // PRINTING ERROR MESSAGE TO CONSOLE FOR DEVELOPER ONLY
+            this.coreHelperService.printErrorMessageToConsol(dataObjToShow.message);
         } else {
             if (!errObj || !dataObjToShow.status) {
                 dataObjToShow.status = "Error!";
@@ -59,6 +64,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
             }
             this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+
+            // PRINTING ERROR MESSAGE TO CONSOLE FOR DEVELOPER ONLY
+            this.coreHelperService.printErrorMessageToConsol(dataObjToShow.message);
         }
         console.log("error: " + errObj.message);
         return throwError(errObj);
