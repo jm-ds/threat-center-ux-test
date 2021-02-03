@@ -14,7 +14,7 @@
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12">
 
-        <app-card [hidHeader]="true">
+        <app-card [hidHeader]="true" *ngIf="!!selectedTreeNode.entityId">
             <div class="row col-12">
                 <h4>Selected entity</h4>
             </div>
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </app-card>
-        <app-card [hidHeader]="true" cardTitle="Child Entity" *ngIf="!!selectedTreeNode.entityId">
+        <app-card [hidHeader]="true" cardTitle="Child Entity">
             <div class="row">
                 <div class="col-12 text-right actions">
                     <button type="button" class="btn btn-outline-info" (click)="addChildEntity()">
