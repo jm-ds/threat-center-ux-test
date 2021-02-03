@@ -55,6 +55,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.scanHelperService.updateIsHighlightNewScan(false);
+    this.highlitedScanId = "";
   }
 
   ngAfterViewInit(): void {
@@ -93,6 +94,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetScanData: any = {};
 
   isHighlightNewScan: boolean = false;
+  highlitedScanId:string = "";
   isScrollToTabs: boolean = false;
 
   ngOnInit() {
@@ -134,6 +136,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectDetails = project;
       this.stateService.obsProject = obsProject;
       this.stateService.selectedScan = project.scans.edges[0];
+      this.highlitedScanId = project.scans.edges[0].node.scanId;
     });
   }
 
@@ -512,8 +515,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
+      return data[0];
       // return data[0];
-      return data.reduce((prev, next) => prev + (+next), 0);
+      // return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }

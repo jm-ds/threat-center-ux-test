@@ -83,8 +83,11 @@
 }
 // Entity managemnet style End
 
-
 // https://github.com/threatrix/product/issues/314
 .swal2-container {
     z-index: 10001 !important;
+}
+//asset details and vulnerability detail popup fixed width
+.popup-Width-fix.modal-dialog-centered {
+    width: 800px;
 }
