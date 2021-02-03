@@ -30,7 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         this.authenticationService.logout();
                         this.router.navigate(['/login']);
                     } else {
-                        this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+                        this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(dataObjToShow.status), dataObjToShow.status.toString());
                     }
                 }
                 else {
@@ -55,7 +55,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 } else if (!!errObj.error && !!errObj.error.message && typeof errObj.error.message === 'string') {
                     dataObjToShow.message = errObj.error.message;
                 } else {
-                    dataObjToShow.message = this.getMessageStatusWise(Number(dataObjToShow.status));
+                    dataObjToShow.message = this.coreHelperService.getMessageStatusWise(Number(dataObjToShow.status));
                 }
             }
             this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
@@ -64,36 +64,4 @@ export class ErrorInterceptor implements HttpInterceptor {
         return throwError(errObj);
     }
 
-
-    //get messages according to status
-    private getMessageStatusWise(status) {
-        let msg = "";
-        switch (status) {
-            case 500: {
-                msg = "The server encountered an unexpected condition which prevented it from fulfilling the request.";
-                break;
-            }
-            case 400: {
-                msg = "The request had bad syntax or was inherently impossible to be satisfied.";
-                break;
-            }
-            case 403: {
-                msg = "The request is for something forbidden. Authorization will not help.";
-                break;
-            }
-            case 404: {
-                msg = "The server has not found anything matching the URI given.";
-                break;
-            }
-            case 501: {
-                msg = "The server does not support the facility required.";
-                break;
-            }
-            default: {
-                //statements; 
-                break;
-            }
-        }
-        return msg;
-    }
 }
