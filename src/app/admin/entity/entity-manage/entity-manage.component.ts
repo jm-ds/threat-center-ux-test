@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
 import * as _ from 'lodash';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-entity-manage',
@@ -91,7 +92,15 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //add child entity button call
     addChildEntity() {
-        this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
+        if (this.selectedTreeNode && !!this.selectedTreeNode.entityId) {
+            this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
+        } else {
+            if (!this.authService.currentUser || !this.authService.currentUser.orgId) {
+                Swal.fire('Not Found', 'Organization not found!', 'error');
+            } else {
+                this.manageChildEntity("ADD", { parentEntityId: null });
+            }
+        }
     }
 
     //edit child entity data with server call
@@ -118,23 +127,26 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //while select any tree node.
     private initSelectedEntity(data) {
+        
+        this.childDataList = new Array<EntityModel>();
+
         if (!!data.tagData) {
             this.selectedTreeNode = Object.assign({}, data.tagData);
             this.selectedTreeNode.isChildEntity = data.isChildEntity;
             this.selectedTreeNode.isProjects = data.isProjects;
             this.selectedTreeNode.isChildEntity = data.children.length >= 1 ? true : false;
-            this.childDataList = new Array<EntityModel>();
-            //Init child table list.
-            if (!!data.children && data.children.length >= 1) {
-                data.children.forEach(d => {
-                    const entity = Object.assign({}, d['tagData']);
-                    entity['isChildEntity'] = d['isChildEntity'];
-                    entity['isProjects'] = d['isProjects'];
-                    this.childDataList.push(entity);
-                });
-            }
         } else {
             this.selectedTreeNode = new EntityModel();
+        }
+
+        //Init child table list.
+        if (!!data.children && data.children.length >= 1) {
+            data.children.forEach(d => {
+                const entity = Object.assign({}, d['tagData']);
+                entity['isChildEntity'] = d['isChildEntity'];
+                entity['isProjects'] = d['isProjects'];
+                this.childDataList.push(entity);
+            });
         }
     }
 
@@ -299,7 +311,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                 break;
             }
             case 'ADD_CHILD': {
-                const pNode = this.tree.treeModel.getNodeById(entityId);
+                entityId = !entityId || entityId == '' ? this.authService.currentUser.orgId : entityId;
+                const pNode =  this.tree.treeModel.getNodeById(entityId);
                 pNode.data['children'].push({
                     id: eData.entityId,
                     name: eData.name,
