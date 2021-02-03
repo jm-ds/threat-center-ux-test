@@ -48,7 +48,7 @@ export class CoreHelperService {
                 break;
             }
             case 403: {
-                msg = "the requested resource is forbidden. Authorization will not help.";
+                msg = "The requested resource is forbidden.";
                 break;
             }
             case 404: {
