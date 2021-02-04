@@ -11,6 +11,9 @@ import { ApexChartService } from '../../../theme/shared/components/chart/apex-ch
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { TaskService } from '@app/threat-center/shared/task/task.service';
+import { NextConfig } from "@app/app-config";
+
 
 
 
@@ -36,6 +39,8 @@ export class EntityComponent implements OnInit {
     { field: 'name', header: 'Name' },
     { field: 'created', header: 'Created' }
   ];
+  activeScanCount: number;
+  checkRunningScans: boolean = false;
 
   constructor(
     private router: Router,
@@ -44,7 +49,8 @@ export class EntityComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
-    private coreHelperService: CoreHelperService
+    private coreHelperService: CoreHelperService,
+    private taskService: TaskService
   ) {
     this.chartDB = ChartDB;
     //this.licensePieChart.legend.show=true;
@@ -62,12 +68,15 @@ export class EntityComponent implements OnInit {
         value: 8
       }
     ];
+    this.activeScanCount = 0;
   }
+
   navigateToProject(projectId) {
     const entityId = this.route.snapshot.paramMap.get('entityId')
     const url = "dashboard/entity/" + entityId + '/project/' + projectId;
     this.router.navigate([url]);
   }
+
   ngOnInit() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
     // if an entityId isn't provided in params, use User defaultEntityId
@@ -79,6 +88,12 @@ export class EntityComponent implements OnInit {
     this.loadEntity(entityId);
     this.loadVulnerabilities(entityId);
     this.getLastTabSelected();
+    this.checkRunningScans = true;
+    this.getRunningScansCount(entityId);
+  }
+
+  ngOnDestroy() {
+    this.checkRunningScans = false;
   }
 
   loadVulnerabilities(entityId: any) {
@@ -520,4 +535,24 @@ export class EntityComponent implements OnInit {
       return 0;
     }
   }
+
+  // Fetch active scan count
+  getRunningScansCount(entityId) {
+    if (!this.checkRunningScans) {
+      return;
+    }
+    this.taskService.getRunningScanTasksCount(entityId)
+        .pipe(map(countData => countData.data.running_scan_tasks_count))   
+        .subscribe(count => {
+            this.activeScanCount = count;
+            setTimeout(() => {
+                this.getRunningScansCount(entityId);
+            }, NextConfig.config.delaySeconds);
+        }, err => {
+            setTimeout(() => {
+                this.getRunningScansCount(entityId);
+            }, NextConfig.config.delaySeconds);
+        });
+}
+
 }

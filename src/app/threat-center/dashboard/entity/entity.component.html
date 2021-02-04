@@ -1,7 +1,12 @@
 <div *ngIf='obsEntity | async as entity;'>
   <div class="row">
     <div class="col-6">
-      <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
+      <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span>{{entity.name}} 
+        <sup style="display: inline-block; padding-left: 12px; font-weight: 400; font-size: 14px;" *ngIf="activeScanCount"> {{activeScanCount}} active 
+          <span *ngIf="activeScanCount==1">scan</span>
+          <span *ngIf="activeScanCount>1">scans</span>
+        </sup>
+      </h3>
     </div>
     <div class="col-6" style="text-align:right">
       <a [routerLink]="['/admin/entity']">
