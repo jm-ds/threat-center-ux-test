@@ -15,6 +15,7 @@ import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'project-dashboard',
@@ -94,9 +95,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetScanData: any = {};
 
   isHighlightNewScan: boolean = false;
-  highlitedScanId:string = "";
+  highlitedScanId: string = "";
   isScrollToTabs: boolean = false;
 
+  lastTabChangesInfo: NgbTabChangeEvent = undefined;
   ngOnInit() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
@@ -265,6 +267,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabChange($event: NgbTabChangeEvent) {
+    this.lastTabChangesInfo = $event;
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.coreHelperService.settingUserPreference("Project", $event.nextId);
   }
@@ -615,5 +618,33 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.errorMsg = errorMsg;
     this.log = log;
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
+  }
+
+  //Callled when component deactivate or destrory
+  canDeactivate(): Observable<boolean> | boolean {
+    //Need to check here is browser back button clicked or not if clicked then do below things..
+    if (this.coreHelperService.getBrowserBackButton()) {
+      this.coreHelperService.setBrowserBackButton(false);
+      if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
+        this.stateService.project_tabs_selectedTab = this.lastTabChangesInfo.activeId;
+        this.lastTabChangesInfo.activeId = this.lastTabChangesInfo.nextId;
+        this.lastTabChangesInfo.nextId = this.stateService.project_tabs_selectedTab;
+        this.coreHelperService.settingUserPreference("Project", this.stateService.project_tabs_selectedTab);
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  //Below method will fire when click on browser back button.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    this.coreHelperService.setBrowserBackButton(true);
+    if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
+      history.pushState(null, null, window.location.href);
+    }
   }
 }

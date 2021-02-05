@@ -12,7 +12,7 @@ import { UserPreferenceModel } from '../core.class';
 
 export class CoreHelperService {
     private subject = new Subject();
-
+    isBrowserBackclick:boolean = false;
     constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
 
@@ -200,6 +200,14 @@ export class CoreHelperService {
 
     removeNextDarkClassFormBody(){
         document.querySelector('body').classList.remove('next-dark');
+    }
+
+    setBrowserBackButton(isBack){
+        this.isBrowserBackclick = isBack;
+    }
+
+    getBrowserBackButton(){
+        return this.isBrowserBackclick;
     }
 }
 
