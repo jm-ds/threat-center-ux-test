@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
@@ -322,8 +322,37 @@ export class EntityComponent implements OnInit {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.activeTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Entity", this.activeTab);
+    this.coreHelperService.settingUserPreference("Entity", $event.activeId, this.activeTab);
   }
+
+  //Callled when component deactivate or destrory
+  canDeactivate(): Observable<boolean> | boolean {
+    //Need to check here is browser back button clicked or not if clicked then do below things..
+    if (this.coreHelperService.getBrowserBackButton()) {
+      this.coreHelperService.setBrowserBackButton(false);
+      if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
+        this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("Entity", true);
+        this.coreHelperService.settingUserPreference("Entity", null, this.activeTab);
+        return false;
+      } else {
+        this.coreHelperService.settingUserPreference("Entity", "", null);
+        return true;
+      }
+    } else {
+      this.coreHelperService.settingUserPreference("Entity", "", null);
+      return true;
+    }
+  }
+
+  //Below method will fire when click on browser back button.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    this.coreHelperService.setBrowserBackButton(true);
+    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
+      history.pushState(null, null, window.location.href);
+    }
+  }
+
 
   private getLastTabSelected() {
     this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;

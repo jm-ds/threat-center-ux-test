@@ -98,7 +98,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   highlitedScanId: string = "";
   isScrollToTabs: boolean = false;
 
-  lastTabChangesInfo: NgbTabChangeEvent = undefined;
   ngOnInit() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
@@ -267,9 +266,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabChange($event: NgbTabChangeEvent) {
-    this.lastTabChangesInfo = $event;
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Project", $event.nextId);
+    this.coreHelperService.settingUserPreference("Project", $event.activeId, $event.nextId);
   }
 
   rowUnselect($event: any) {
@@ -532,7 +530,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Scan", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Scan", value: pageInfo.pageSize });
       //API Call
       this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
       this.paginator.firstPage();
@@ -625,16 +623,16 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     //Need to check here is browser back button clicked or not if clicked then do below things..
     if (this.coreHelperService.getBrowserBackButton()) {
       this.coreHelperService.setBrowserBackButton(false);
-      if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
-        this.stateService.project_tabs_selectedTab = this.lastTabChangesInfo.activeId;
-        this.lastTabChangesInfo.activeId = this.lastTabChangesInfo.nextId;
-        this.lastTabChangesInfo.nextId = this.stateService.project_tabs_selectedTab;
-        this.coreHelperService.settingUserPreference("Project", this.stateService.project_tabs_selectedTab);
+      if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
+        this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
+        this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
         return false;
       } else {
+        this.coreHelperService.settingUserPreference("Project", "", null);
         return true;
       }
     } else {
+      this.coreHelperService.settingUserPreference("Project", "", null);
       return true;
     }
   }
@@ -643,7 +641,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
+    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
       history.pushState(null, null, window.location.href);
     }
   }

@@ -12,7 +12,7 @@ import { UserPreferenceModel } from '../core.class';
 
 export class CoreHelperService {
     private subject = new Subject();
-    isBrowserBackclick:boolean = false;
+    isBrowserBackclick: boolean = false;
     constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
 
@@ -102,7 +102,7 @@ export class CoreHelperService {
         return null;
     }
 
-    settingUserPreference(moduleName: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
+    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -111,7 +111,23 @@ export class CoreHelperService {
             //Update Data
             preferenceDetails.forEach(prefrence => {
                 if (prefrence.moduleName === moduleName) {
+
+                    //current tab settings
                     prefrence.lastTabSelectedName = !!lastTabSelectedName && lastTabSelectedName !== '' ? lastTabSelectedName : prefrence.lastTabSelectedName;
+
+                    //Previous tab settings
+                    if (previousLastTabSelected !== null && previousLastTabSelected !== "") {
+                        if (!!prefrence.lastSelectedTabLists && prefrence.lastSelectedTabLists.length >= 1) {
+                            prefrence.lastSelectedTabLists.push(previousLastTabSelected);
+                        } else {
+                            prefrence.lastSelectedTabLists = [];
+                            prefrence.lastSelectedTabLists.push(previousLastTabSelected);
+                        }
+                    } else {
+                        prefrence.lastSelectedTabLists = previousLastTabSelected == "" ? [] : prefrence.lastSelectedTabLists;
+                    }
+
+                    // Item per page setting
                     if (!!itemPerPageD) {
                         if (!!prefrence.itemPerPageDetails && prefrence.itemPerPageDetails.length >= 1) {
                             if (prefrence.itemPerPageDetails.filter(item => { return item.componentName === itemPerPageD.componentName }).length >= 1) {
@@ -133,16 +149,21 @@ export class CoreHelperService {
                 }
             });
         } else {
-            //push Data
+            //push Data first time.
             let itemPPage = [];
+            let prevousTabList = [];
             if (!!itemPerPageD) {
                 itemPPage.push(itemPerPageD);
+            }
+            if (!!previousLastTabSelected && previousLastTabSelected !== '') {
+                prevousTabList.push(previousLastTabSelected);
             }
             preferenceDetails.push(
                 {
                     moduleName: moduleName,
                     itemPerPageDetails: itemPPage,
-                    lastTabSelectedName: lastTabSelectedName
+                    lastTabSelectedName: lastTabSelectedName,
+                    lastSelectedTabLists: prevousTabList
                 }
             )
         }
@@ -161,6 +182,37 @@ export class CoreHelperService {
             return null;
         }
     }
+
+    getPreviousTabSelectedByModule(moduleName: string, isUpdate: boolean = false) {
+        if (sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                const lists = !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ?
+                    preferenceDetails.find(pre => { return pre.moduleName === moduleName }).lastSelectedTabLists : null;
+                if (!!lists && lists.length >= 1) {
+                    // return last record and pop it as well
+                    const returnVal = lists[lists.length - 1];
+                    lists.splice(-1, 1);
+                    preferenceDetails.forEach(element => {
+                        if (element.moduleName === moduleName) {
+                            element['lastSelectedTabLists'] = lists;
+                        }
+                    });
+                    if (isUpdate) {
+                        sessionStorage.setItem("UserPreference", JSON.stringify(preferenceDetails));
+                    }
+                    return returnVal;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
 
     getItemPerPageByModuleAndComponentName(moduleName: string, componentName: string) {
         if (!!sessionStorage.getItem("UserPreference")) {
@@ -198,15 +250,15 @@ export class CoreHelperService {
         this.router.navigate(['/login']);
     }
 
-    removeNextDarkClassFormBody(){
+    removeNextDarkClassFormBody() {
         document.querySelector('body').classList.remove('next-dark');
     }
 
-    setBrowserBackButton(isBack){
+    setBrowserBackButton(isBack) {
         this.isBrowserBackclick = isBack;
     }
 
-    getBrowserBackButton(){
+    getBrowserBackButton() {
         return this.isBrowserBackclick;
     }
 }
