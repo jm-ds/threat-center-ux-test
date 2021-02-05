@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EntityComponent} from './entity.component';
+import { CanDeactivateGuard } from '@app/security/helpers/auth.guard';
+import { EntityComponent } from './entity.component';
 
 const routes: Routes = [
   {
     path: ':entityId',
-    component: EntityComponent
+    component: EntityComponent,
+    canDeactivate: [CanDeactivateGuard],
   },
   {
     path: '',
-    component: EntityComponent
+    component: EntityComponent,
+    canDeactivate: [CanDeactivateGuard],
   },
 ];
 

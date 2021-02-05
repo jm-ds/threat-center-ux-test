@@ -56,7 +56,7 @@ export class ScanAssetsComponent implements OnInit {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Assets", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null,{ componentName: "Assets", value: pageInfo.pageSize });
       // API Call
       this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
       this.paginator.firstPage();

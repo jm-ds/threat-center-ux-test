@@ -279,37 +279,37 @@ export class QuickstartWizardComponent implements OnInit {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", this.activeTab);
+        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId,this.activeTab);
     }
 
 
     //Callled when component deactivate or destrory
-  canDeactivate(): Observable<boolean> | boolean {
-    //Need to check here is browser back button clicked or not if clicked then do below things..
-    if (this.coreHelperService.getBrowserBackButton()) {
-      this.coreHelperService.setBrowserBackButton(false);
-      if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
-        this.activeTab = this.lastTabChangesInfo.activeId;
-        this.lastTabChangesInfo.activeId = this.lastTabChangesInfo.nextId;
-        this.lastTabChangesInfo.nextId = this.activeTab;
-        this.coreHelperService.settingUserPreference("ThreatScan", this.activeTab);
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
+    canDeactivate(): Observable<boolean> | boolean {
+        //Need to check here is browser back button clicked or not if clicked then do below things..
+        if (this.coreHelperService.getBrowserBackButton()) {
+            this.coreHelperService.setBrowserBackButton(false);
+            if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+                this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan", true);
+                this.coreHelperService.settingUserPreference("ThreatScan", null, this.activeTab);
+                return false;
+            } else {
+                this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+                return true;
+            }
+        } else {
+            this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+            return true;
+        }
     }
-  }
 
-  //Below method will fire when click on browser back button.
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event) {
-    this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.lastTabChangesInfo && !!this.lastTabChangesInfo.activeId) {
-      history.pushState(null, null, window.location.href);
+    //Below method will fire when click on browser back button.
+    @HostListener('window:popstate', ['$event'])
+    onPopState(event) {
+        this.coreHelperService.setBrowserBackButton(true);
+        if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+            history.pushState(null, null, window.location.href);
+        }
     }
-  }
 
 
     private isEmail(userName: string): boolean {
