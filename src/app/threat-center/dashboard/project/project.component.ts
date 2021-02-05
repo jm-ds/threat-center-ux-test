@@ -98,6 +98,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   highlitedScanId: string = "";
   isScrollToTabs: boolean = false;
 
+  scrollX;
+  scrollY;
   ngOnInit() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
@@ -626,6 +628,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
         this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
         this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
+        window.scroll(this.scrollX, this.scrollY);
         return false;
       } else {
         this.coreHelperService.settingUserPreference("Project", "", null);
@@ -644,5 +647,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
       history.pushState(null, null, window.location.href);
     }
+  }
+
+  @HostListener("window:scroll", ["$event"])
+  onWindowScroll() {
+    this.scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
   }
 }
