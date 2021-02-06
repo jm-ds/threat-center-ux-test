@@ -207,7 +207,7 @@
 
 
                 <div style="margin-bottom:10px" class="chart-lbl">
-                  <i class="fas fa-code text-c-red f-15 m-r-5"></i>Components
+                  <i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets
                 </div>
 
                 <div style="display: flex;text-align: right;">
@@ -295,7 +295,7 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-scan let-columns="columns">
-                  <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" [ngClass]="{'selected-table-row': isHighlightNewScan == true && stateService.selectedScan.node?.scanId == scan.node?.scanId }">
+                  <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
                     <td>{{scan.node?.version}}</td>
                     <td>{{scan.node?.branch}}</td>
                     <td>{{scan.node?.tag}}</td>
