@@ -12,14 +12,16 @@ export class FixService {
 
     }
 
-    fixComponentVersion(scanId: string, groupId: string, artifactId: string, newVersion: string): Observable<FixResult> {
-        const url = environment.apiUrl + '/fixMvnDepVersion';
+    fixComponentVersion(scanId: string, componentId: string, groupId: string, artifactId: string, oldVersion: string, newVersion: string): Observable<FixResult[]> {
+        const url = environment.apiUrl + '/fixComponentVersion';
         const body = new FormData();
 
         body.append('scanId', scanId);
+        body.append('componentId', componentId);
         body.append('groupId', groupId);
         body.append('artifactId', artifactId);
         body.append('newVersion', newVersion);
+        body.append('oldVersion', oldVersion);
         return this.http.post<any>(url, body).pipe();
     }
 }

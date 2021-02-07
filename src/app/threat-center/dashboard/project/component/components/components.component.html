@@ -116,7 +116,7 @@
                     </div>
                     <div class="app-modal-footer">
                       <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal" (click)="$event.stopPropagation();selectVersionDialog.hide()">Close</button>
-                      <button type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.group,component.node.name)">Fix</button>
+                      <button type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.componentId,component.node.group,component.node.name,component.node.version)">Fix</button>
                     </div>
                   </app-ui-modal>
                   <!--
@@ -139,7 +139,7 @@
                     </div>
                     <div class="app-modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="$event.stopPropagation();selectVersionDialog.hide()">Close</button>
-                      <button type="button" class="btn btn-primary" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.group,component.node.name)">Fix</button>
+                      <button type="button" class="btn btn-primary" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.componentId, component.node.group,component.node.name,component.node.version)">Fix</button>
                     </div>
                   </app-ui-modal>
                   -->

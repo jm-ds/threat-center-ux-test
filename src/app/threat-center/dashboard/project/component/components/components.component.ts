@@ -19,7 +19,7 @@ export class ComponentsComponent implements OnInit {
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
-    fixResultObservable: Observable<FixResult>;
+    fixResultObservable: Observable<FixResult[]>;
     newVersion: string;
 
     defaultPageSize = 25;
@@ -62,16 +62,23 @@ export class ComponentsComponent implements OnInit {
         this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    fixVersion(groupId: string, artifactId: string) {
+    fixVersion(componentId: string, groupId: string, artifactId: string, oldVersion: string) {
         this.spinner.show();
-        //this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion.split("||")[1]);
-        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion);
-        this.fixResultObservable.subscribe(res => {
+        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, groupId, artifactId, oldVersion, this.newVersion);
+        this.fixResultObservable.subscribe(results => {
             this.spinner.hide();
-            if (res) {
-                Swal.fire('Good job!', 'Mvn dependency version updated!', 'success');
+            let success = true;
+            let message = 'Result of updating the component version:\n';
+            results.forEach(result => {
+                if (!result.success) {
+                    success = false;
+                }
+                message += result.success + ' ' + result.buildFile + ' ' + result.errorMessage;
+            });
+            if (success) {
+                Swal.fire('Good job!', message, 'success');
             } else {
-                Swal.fire('Error!', 'Something went wrong, try later!', 'warning');
+                Swal.fire('Warning!', message, 'warning');
             }
         });
     }

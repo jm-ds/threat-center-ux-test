@@ -32,7 +32,7 @@ export class LicenseDimensionComponent implements OnInit {
   obsLicense:Observable<License>;
   obsLicenseComponents:Observable<any>;
   licenseComponents : any;
-  fixResultObservable: Observable<FixResult>;
+  fixResultObservable: Observable<FixResult[]>;
   newVersion: string;
   defaultPageSize = 25;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -111,13 +111,13 @@ export class LicenseDimensionComponent implements OnInit {
     this.router.navigate([decodeURIComponent(url)]);
   }
 
-  fixVersion(groupId: string, artifactId: string) {
+  fixVersion(componentId: string, groupId: string, artifactId: string, oldVersion: string) {
     this.spinner.show();
-    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion.split("||")[1]);
+    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, groupId, artifactId, oldVersion, this.newVersion.split("||")[1]);
     this.fixResultObservable.subscribe(res => {
         this.spinner.hide();
         if (res) {
-            Swal.fire('Good job!', 'Mvn dependency version updated!', 'success');
+            Swal.fire('Good job!', 'Dependency version updated!', 'success');
         } else {
             Swal.fire('Error!', 'Something went wrong, try later!', 'warning');
         }
