@@ -16,6 +16,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
+import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
 
 @Component({
   selector: 'project-dashboard',
@@ -100,6 +101,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   scrollX;
   scrollY;
+  isAssetStory: boolean = false;
+  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+
   ngOnInit() {
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
@@ -620,19 +624,28 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 
+  getStory(event) {
+    this.isAssetStory = event;
+  }
+
   //Callled when component deactivate or destrory
   canDeactivate(): Observable<boolean> | boolean {
     //Need to check here is browser back button clicked or not if clicked then do below things..
     if (this.coreHelperService.getBrowserBackButton()) {
       this.coreHelperService.setBrowserBackButton(false);
-      if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
-        this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
-        this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
-        window.scroll(this.scrollX, this.scrollY);
+      if (this.isAssetStory) {
+        this.child.goBack();
         return false;
       } else {
-        this.coreHelperService.settingUserPreference("Project", "", null);
-        return true;
+        if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
+          this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
+          this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
+          window.scroll(this.scrollX, this.scrollY);
+          return false;
+        } else {
+          this.coreHelperService.settingUserPreference("Project", "", null);
+          return true;
+        }
       }
     } else {
       this.coreHelperService.settingUserPreference("Project", "", null);
@@ -644,7 +657,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
+    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project") || this.isAssetStory) {
       history.pushState(null, null, window.location.href);
     }
   }
