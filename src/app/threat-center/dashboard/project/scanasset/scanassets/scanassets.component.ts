@@ -92,7 +92,7 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   goBack() {
-    this.parentScanAssetId = this.story.pop().id;
+    this.parentScanAssetId = this.story.pop();
     if (!this.story || this.story.length == 0) {
       this.isAssetStory.emit(false);
     }
