@@ -113,9 +113,9 @@ export class LicenseDimensionComponent implements OnInit {
     this.router.navigate([decodeURIComponent(url)]);
   }
 
-  fixVersion(componentId: string, groupId: string, artifactId: string, oldVersion: string) {
+  fixVersion(componentId: string, oldVersion: string) {
     this.spinner.show();
-    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, groupId, artifactId, oldVersion, this.newVersion.split("||")[1]);
+    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion.split("||")[1]);
     this.fixResultObservable.subscribe(res => {
       this.spinner.hide();
       const modalRef = this.modalService.open(FixResultComponent, {

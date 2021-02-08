@@ -65,9 +65,9 @@ export class ComponentsComponent implements OnInit {
         this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    fixVersion(componentId: string, groupId: string, artifactId: string, oldVersion: string) {
+    fixVersion(componentId: string, oldVersion: string) {
         this.spinner.show();
-        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, groupId, artifactId, oldVersion, this.newVersion);
+        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion);
         this.fixResultObservable.subscribe(results => {
             this.spinner.hide();
             const modalRef = this.modalService.open(FixResultComponent, {
