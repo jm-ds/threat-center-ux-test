@@ -11,7 +11,7 @@ import { FixService } from '@app/threat-center/dashboard/project/services/fix.se
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material';
-import {FixResultComponent} from "@app/threat-center/dashboard/project/fix-result/fix-result.component";
+import {FixComponentResultDialog} from "@app/threat-center/dashboard/project/fix-component-result-dialog/fix-component-result-dialog";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 
@@ -118,7 +118,7 @@ export class LicenseDimensionComponent implements OnInit {
     this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion.split("||")[1]);
     this.fixResultObservable.subscribe(res => {
       this.spinner.hide();
-      const modalRef = this.modalService.open(FixResultComponent, {
+      const modalRef = this.modalService.open(FixComponentResultDialog, {
         keyboard: false,
       });
       modalRef.componentInstance.fixResults = res;

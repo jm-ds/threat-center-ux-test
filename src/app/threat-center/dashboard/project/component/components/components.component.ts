@@ -10,7 +10,7 @@ import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixResultComponent} from "@app/threat-center/dashboard/project/fix-result/fix-result.component";
+import {FixComponentResultDialog} from "@app/threat-center/dashboard/project/fix-component-result-dialog/fix-component-result-dialog";
 
 @Component({
     selector: 'app-components',
@@ -70,7 +70,7 @@ export class ComponentsComponent implements OnInit {
         this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion);
         this.fixResultObservable.subscribe(results => {
             this.spinner.hide();
-            const modalRef = this.modalService.open(FixResultComponent, {
+            const modalRef = this.modalService.open(FixComponentResultDialog, {
                 keyboard: false,
             });
             modalRef.componentInstance.fixResults = results;

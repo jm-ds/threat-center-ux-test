@@ -4,10 +4,10 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-fix-result',
-  templateUrl: './fix-result.component.html',
-  styleUrls: ['./fix-result.component.scss']
+  templateUrl: './fix-component-result-dialog.component.html',
+  styleUrls: ['./fix-component-result-dialog.scss']
 })
-export class FixResultComponent implements OnInit {
+export class FixComponentResultDialog implements OnInit {
 
   @Input() fixResults: FixResult[];
 

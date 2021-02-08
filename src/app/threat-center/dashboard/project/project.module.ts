@@ -16,7 +16,7 @@ import {TcSharedModule} from '@app/threat-center/shared/tc-shared.module';
 import { MarkdownModule } from 'ngx-markdown';
 import {NgxSpinnerModule} from "ngx-spinner";
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { FixResultComponent } from './fix-result/fix-result.component';
+import { FixComponentResultDialog } from './fix-component-result-dialog/fix-component-result-dialog';
 
 @NgModule({
   imports: [
@@ -50,8 +50,8 @@ import { FixResultComponent } from './fix-result/fix-result.component';
     LicenseDetailComponent,
     ScanAssetsComponent,
     ScanAssetDetailComponent,
-    FixResultComponent
+    FixComponentResultDialog
   ],
-  entryComponents: [FixResultComponent]
+  entryComponents: [FixComponentResultDialog]
 })
 export class ProjectModule { }
