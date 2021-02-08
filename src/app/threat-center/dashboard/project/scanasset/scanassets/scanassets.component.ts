@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -16,6 +16,7 @@ export class ScanAssetsComponent implements OnInit {
 
   @Input() scanId;
   @Input() obsScan: Observable<Scan>;
+  @Output() isAssetStory = new EventEmitter<boolean>();
 
   columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets'];
 
@@ -34,6 +35,8 @@ export class ScanAssetsComponent implements OnInit {
     private coreHelperService: CoreHelperService) { }
 
   ngOnInit() {
+    this.story = [];
+    this.isAssetStory.emit(false);
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
     this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
@@ -56,7 +59,7 @@ export class ScanAssetsComponent implements OnInit {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, null,{ componentName: "Assets", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Assets", value: pageInfo.pageSize });
       // API Call
       this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
       this.paginator.firstPage();
@@ -89,16 +92,21 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   goBack() {
-    this.parentScanAssetId = this.story.pop();
+    this.parentScanAssetId = this.story.pop().id;
+    if (!this.story || this.story.length == 0) {
+      this.isAssetStory.emit(false);
+    }
     this.reload();
   }
 
   gotoDetails(scanAsset) {
     if (scanAsset.node.assetType === 'DIR') {
       this.story.push(this.parentScanAssetId);
+      this.isAssetStory.emit(true);
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reload();
     } else {
+      this.isAssetStory.emit(false);
       let sAssetId = scanAsset.node.scanAssetId;
       const entityId = this.route.snapshot.paramMap.get('entityId');
       const projectId = this.route.snapshot.paramMap.get('projectId');

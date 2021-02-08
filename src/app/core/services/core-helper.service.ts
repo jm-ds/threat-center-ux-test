@@ -76,6 +76,7 @@ export class CoreHelperService {
         return this.subject.asObservable();
     }
 
+    //PROJECT(PROJECT DASHBOARD) PAGE BREADCUM START
     settingProjectBreadcum(tag, name, id, isFromComponent: boolean = false) {
         let projectBreadcum: any = {};
         if (!!sessionStorage.getItem("ProjectBreadcum")) {
@@ -101,7 +102,9 @@ export class CoreHelperService {
         }
         return null;
     }
+    //===========================PROJECT(PROJECT DASHBOARD) PAGE BREADCUM END ==========================
 
+    //USER PREFERENCES START (Store User visited last(previous) tab sleceted and Item per page by module)
     settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
@@ -237,6 +240,8 @@ export class CoreHelperService {
     getPreferenceDetailsFromSession() {
         return JSON.parse(sessionStorage.getItem("UserPreference"));
     }
+    //==================================USER PREFERENCES END ============================================
+
 
     uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
