@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FixResultComponent} from "@app/threat-center/dashboard/project/fix-result/fix-result.component";
 
 @Component({
     selector: 'app-components',
@@ -46,7 +48,8 @@ export class ComponentsComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private router: Router,
         private route: ActivatedRoute,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -67,19 +70,10 @@ export class ComponentsComponent implements OnInit {
         this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, groupId, artifactId, oldVersion, this.newVersion);
         this.fixResultObservable.subscribe(results => {
             this.spinner.hide();
-            let success = true;
-            let message = 'Result of updating the component version:\n';
-            results.forEach(result => {
-                if (!result.success) {
-                    success = false;
-                }
-                message += result.success + ' ' + result.buildFile + ' ' + result.errorMessage;
+            const modalRef = this.modalService.open(FixResultComponent, {
+                keyboard: false,
             });
-            if (success) {
-                Swal.fire('Good job!', message, 'success');
-            } else {
-                Swal.fire('Warning!', message, 'warning');
-            }
+            modalRef.componentInstance.fixResults = results;
         });
     }
 
