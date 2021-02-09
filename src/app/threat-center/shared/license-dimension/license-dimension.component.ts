@@ -1,18 +1,15 @@
-import { Component, OnInit,Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { debounceTime,map,filter,startWith } from 'rxjs/operators';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { FixResult, License } from '@app/threat-center/shared/models/types';
-import { SelectItem } from 'primeng/api';
-import { FilterUtils } from 'primeng/utils';
-import { Router } from '@angular/router';
-import { FixService } from '@app/threat-center/dashboard/project/services/fix.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import Swal from 'sweetalert2';
-import { MatPaginator } from '@angular/material';
-import {FixComponentResultDialog} from "@app/threat-center/dashboard/project/fix-component-result-dialog/fix-component-result-dialog";
+import {ApiService} from '@app/threat-center/shared/services/api.service';
+import {FixResult, License} from '@app/threat-center/shared/models/types';
+import {Router} from '@angular/router';
+import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MatPaginator} from '@angular/material';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 
 
 @Component({
@@ -55,12 +52,13 @@ export class LicenseDimensionComponent implements OnInit {
   limitations:any[];
   conditions:any[];
 
-  constructor(private apiService:ApiService,
-    private router:Router,
-    private fixService: FixService,
-    private spinner: NgxSpinnerService,
-              private modalService: NgbModal
-    ) { }
+  constructor(
+      private apiService: ApiService,
+      private router: Router,
+      private fixService: FixService,
+      private modalService: NgbModal
+  ) {
+  }
 
   ngOnInit() {
     if(this.licenseId) {
@@ -114,15 +112,13 @@ export class LicenseDimensionComponent implements OnInit {
   }
 
   fixVersion(componentId: string, oldVersion: string) {
-    this.spinner.show();
-    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion.split("||")[1]);
-    this.fixResultObservable.subscribe(res => {
-      this.spinner.hide();
-      const modalRef = this.modalService.open(FixComponentResultDialog, {
-        keyboard: false,
-      });
-      modalRef.componentInstance.fixResults = res;
+    const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+      keyboard: false,
     });
+    modalRef.componentInstance.scanId = this.scanId;
+    modalRef.componentInstance.newVersion = this.newVersion;
+    modalRef.componentInstance.oldVersion = oldVersion;
+    modalRef.componentInstance.componentId = componentId;
   }
 
   // While any changes occurred in page

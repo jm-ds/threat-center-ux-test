@@ -5,12 +5,11 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import Swal from "sweetalert2";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixComponentResultDialog} from "@app/threat-center/dashboard/project/fix-component-result-dialog/fix-component-result-dialog";
+import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 
 @Component({
     selector: 'app-components',
@@ -45,7 +44,6 @@ export class ComponentsComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private fixService: FixService,
-        private spinner: NgxSpinnerService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
@@ -66,15 +64,13 @@ export class ComponentsComponent implements OnInit {
     }
 
     fixVersion(componentId: string, oldVersion: string) {
-        this.spinner.show();
-        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, componentId, oldVersion, this.newVersion);
-        this.fixResultObservable.subscribe(results => {
-            this.spinner.hide();
-            const modalRef = this.modalService.open(FixComponentResultDialog, {
-                keyboard: false,
-            });
-            modalRef.componentInstance.fixResults = results;
+        const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+            keyboard: false,
         });
+        modalRef.componentInstance.scanId = this.scanId;
+        modalRef.componentInstance.newVersion = this.newVersion;
+        modalRef.componentInstance.oldVersion = oldVersion;
+        modalRef.componentInstance.componentId = componentId;
     }
 
     // While any changes occurred in page
