@@ -16,11 +16,21 @@
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
 
           <ng-template pTemplate="caption">
-            <div style="text-align: right">
-              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+            <div class="row">
+              <div class="col-md-7" style="text-align: left;">
+                <span *ngFor="let bread of story; let i = index">
+                  <span [ngClass]="{'text-primary': i  != (story.length - 1)}" (click)="goBackfromBreadcum(bread.id,i)">{{bread.name}}</span> <span *ngIf="i  != (story.length - 1)"> / </span>
+                </span>
+              </div>
+              <div class="col-md-5">
+                <div style="text-align: right">
+                  <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                  <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+                </div>
+              </div>
             </div>
           </ng-template>
+
           <ng-template pTemplate="header">
             <tr>
               <th>Name</th>
