@@ -10,7 +10,12 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-scanassets',
   templateUrl: './scanassets.component.html',
-  styles: []
+  styles: [
+    `.text-primary:hover{
+      text-decoration: underline;
+      cursor: pointer;
+    }`
+  ]
 })
 export class ScanAssetsComponent implements OnInit {
 
@@ -92,16 +97,13 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   goBack() {
-    this.parentScanAssetId = this.story.pop();
-    if (!this.story || this.story.length == 0) {
-      this.isAssetStory.emit(false);
-    }
-    this.reload();
+    this.parentScanAssetId = this.story.pop().id;
+    this.refreshAssetListHelper();
   }
 
   gotoDetails(scanAsset) {
     if (scanAsset.node.assetType === 'DIR') {
-      this.story.push(this.parentScanAssetId);
+      this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.breadcumSetting(scanAsset) });
       this.isAssetStory.emit(true);
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reload();
@@ -148,6 +150,22 @@ export class ScanAssetsComponent implements OnInit {
     }
   }
 
+  goBackfromBreadcum(id, currentIndex) {
+    if (currentIndex != (this.story.length - 1)) {
+      const startIndexToRemove = currentIndex + 1;
+      this.parentScanAssetId = this.story[startIndexToRemove].id;
+      this.story.splice(startIndexToRemove, this.story.length - (startIndexToRemove));
+      this.refreshAssetListHelper();
+    }
+  }
+
+  refreshAssetListHelper() {
+    if (!this.story || this.story.length == 0) {
+      this.isAssetStory.emit(false);
+    }
+    this.reload();
+  }
+
   private makeFilterMapForService() {
     let filterString = '';
     this.columnsFilter.forEach((val, key) => {
@@ -162,4 +180,19 @@ export class ScanAssetsComponent implements OnInit {
       this.scanAssetDetails = asset;
     });
   }
+
+  private breadcumSetting(scanAsset) {
+    if (!!this.story && this.story.length >= 1) {
+      const lastRecord = this.story[this.story.length - 1].originalName;
+      if (!!lastRecord) {
+        const diffrence = this.coreHelperService.getDifferencebetweenStrings(lastRecord, scanAsset.node.name);
+        return diffrence.replace('/', "");
+      } else {
+        return scanAsset.node.name;
+      }
+    } else {
+      return scanAsset.node.name;
+    }
+  }
+
 }
