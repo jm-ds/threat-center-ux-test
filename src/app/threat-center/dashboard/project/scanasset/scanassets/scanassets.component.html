@@ -71,10 +71,10 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset let-rowIndex="rowIndex">
-            <tr *ngIf="story.length>0 && rowIndex==0">
+            <tr *ngIf="story.length>0 && rowIndex==0" class="cursor-pointer">
               <td (click)="goBack()" colspan="5"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
             </tr>
-            <tr style="cursor: pointer;" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
+            <tr class="cursor-pointer" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
               <td>
                 <i *ngIf="scanAsset.node.assetType === 'DIR'" class="fas fa-folder"></i>
