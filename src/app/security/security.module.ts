@@ -9,6 +9,7 @@ import {CreateAccountComponent} from '@app/security/create-account/create-accoun
 import { AwaitingApprovalComponent } from './awaiting-approval/awaiting-approval.component';
 import {AlertModule} from "@app/theme/shared/components";
 import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
   declarations: [
       LoginComponent,
       CreateAccountComponent,
-      AwaitingApprovalComponent
+      AwaitingApprovalComponent,
+      UnauthorizedComponent
   ]
 })
 export class SecurityModule { }
