@@ -266,7 +266,7 @@
               </ng-template>
             </div>
 
-            <perfect-scrollbar [style.max-height]="'500px'">
+            <perfect-scrollbar [style.max-height]="'650px'">
               <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                 tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
                 [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
@@ -541,7 +541,7 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"></app-scanassets>
+            <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData" (isAssetStory)="getStory($event)"></app-scanassets>
             <p></p>
           </ng-template>
         </ngb-tab>
