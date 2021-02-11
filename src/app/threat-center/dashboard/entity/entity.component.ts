@@ -11,6 +11,7 @@ import { ApexChartService } from '../../../theme/shared/components/chart/apex-ch
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { ScanHelperService } from '../services/scan.service';
 
 
 
@@ -44,7 +45,8 @@ export class EntityComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
-    private coreHelperService: CoreHelperService
+    private coreHelperService: CoreHelperService,
+    private scanHelperService: ScanHelperService
   ) {
     this.chartDB = ChartDB;
     //this.licensePieChart.legend.show=true;
@@ -62,6 +64,19 @@ export class EntityComponent implements OnInit {
         value: 8
       }
     ];
+
+    this.scanHelperService.isRefreshObjectPageObservable$
+      .subscribe(x => {
+        if (x == true) {
+          this.obsEntity.subscribe(entity => {
+            entity.entityMetrics = null;
+            if (!!entity && !entity.entityMetrics) {
+              //refresh Object page..
+              this.loadEntityPage();
+            }
+          });
+        }
+      });
   }
   navigateToProject(projectId) {
     const entityId = this.route.snapshot.paramMap.get('entityId')
@@ -69,6 +84,10 @@ export class EntityComponent implements OnInit {
     this.router.navigate([url]);
   }
   ngOnInit() {
+    this.loadEntityPage();
+  }
+
+  loadEntityPage() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
     // if an entityId isn't provided in params, use User defaultEntityId
     if (!entityId) {
@@ -196,7 +215,7 @@ export class EntityComponent implements OnInit {
         // this.vulnerabilityChart.series.push({ name: 'Critical', data: critical });
         // this.vulnerabilityChart.series.push({ name: 'High', data: high });
         // this.vulnerabilityChart.series.push({ name: 'Medium', data: medium });
-        
+
         // this.vulnerabilityChart.series.push({ name: 'Low', data: low });
         // this.vulnerabilityChart.series.push({ name: 'Info', data: info });
 
@@ -228,31 +247,31 @@ export class EntityComponent implements OnInit {
 
 
         // set vulnerabilityChart data
-      this.vulnerabilityChart.series.push({ name: 'Critical', data: critical, colorClass: "red", hover: false });
-      this.vulnerabilityChart.series.push({ name: 'High', data: high, colorClass: "orange", hover: false });
-      this.vulnerabilityChart.series.push({ name: 'Medium', data: medium, colorClass: "yellow", hover: false });
-      this.vulnerabilityChart.series.push({ name: 'Low', data: low, colorClass: "lgt-blue", hover: false });
-      this.vulnerabilityChart.series.push({ name: 'Info', data: info, colorClass: "green", hover: false });
+        this.vulnerabilityChart.series.push({ name: 'Critical', data: critical, colorClass: "red", hover: false });
+        this.vulnerabilityChart.series.push({ name: 'High', data: high, colorClass: "orange", hover: false });
+        this.vulnerabilityChart.series.push({ name: 'Medium', data: medium, colorClass: "yellow", hover: false });
+        this.vulnerabilityChart.series.push({ name: 'Low', data: low, colorClass: "lgt-blue", hover: false });
+        this.vulnerabilityChart.series.push({ name: 'Info', data: info, colorClass: "green", hover: false });
 
-      // set licenseChart data
-      this.licenseChart.series.push({ name: 'CL Strong', data: copyleftStrong, colorClass: "red", hover: false });
-      this.licenseChart.series.push({ name: 'CL Weak', data: copyleftWeak, colorClass: "orange", hover: false });
-      this.licenseChart.series.push({ name: 'CL Partial', data: copyleftPartial, colorClass: "yellow", hover: false });
-      this.licenseChart.series.push({ name: 'CL Limited', data: copyleftLimited, colorClass: "lgt-blue", hover: false });
-      this.licenseChart.series.push({ name: 'Copyleft', data: copyleft, colorClass: "green", hover: false });
-      this.licenseChart.series.push({ name: 'Custom', data: custom, colorClass: "pink", hover: false });
-      this.licenseChart.series.push({ name: 'Dual', data: dual, colorClass: "white", hover: false });
-      this.licenseChart.series.push({ name: 'Permissive', data: permissive, colorClass: "blue", hover: false });
+        // set licenseChart data
+        this.licenseChart.series.push({ name: 'CL Strong', data: copyleftStrong, colorClass: "red", hover: false });
+        this.licenseChart.series.push({ name: 'CL Weak', data: copyleftWeak, colorClass: "orange", hover: false });
+        this.licenseChart.series.push({ name: 'CL Partial', data: copyleftPartial, colorClass: "yellow", hover: false });
+        this.licenseChart.series.push({ name: 'CL Limited', data: copyleftLimited, colorClass: "lgt-blue", hover: false });
+        this.licenseChart.series.push({ name: 'Copyleft', data: copyleft, colorClass: "green", hover: false });
+        this.licenseChart.series.push({ name: 'Custom', data: custom, colorClass: "pink", hover: false });
+        this.licenseChart.series.push({ name: 'Dual', data: dual, colorClass: "white", hover: false });
+        this.licenseChart.series.push({ name: 'Permissive', data: permissive, colorClass: "blue", hover: false });
 
-      // set componentChart data
-      this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
-      this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
-      this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
+        // set componentChart data
+        this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
+        this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
+        this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
 
-      // set assetChart data
-      this.assetChart.series.push({ name: 'Analyzed', data: analyzed, colorClass: "green", hover: false });
-      this.assetChart.series.push({ name: 'Skipped', data: skipped, colorClass: "lgt-blue", hover: false });
-      this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "yellow", hover: false });
+        // set assetChart data
+        this.assetChart.series.push({ name: 'Analyzed', data: analyzed, colorClass: "green", hover: false });
+        this.assetChart.series.push({ name: 'Skipped', data: skipped, colorClass: "lgt-blue", hover: false });
+        this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "yellow", hover: false });
 
         // set categories on bar charts
         this.xaxis.categories = categories;
@@ -331,7 +350,7 @@ export class EntityComponent implements OnInit {
     },
   };
   legend = {
-    show:false,
+    show: false,
     position: 'top',
     horizontalAlign: 'center',
     offsetX: 0,
