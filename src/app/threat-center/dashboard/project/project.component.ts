@@ -15,6 +15,8 @@ import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HostListener } from '@angular/core';
+import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
 
 @Component({
   selector: 'project-dashboard',
@@ -94,8 +96,13 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetScanData: any = {};
 
   isHighlightNewScan: boolean = false;
-  highlitedScanId:string = "";
+  highlitedScanId: string = "";
   isScrollToTabs: boolean = false;
+
+  scrollX;
+  scrollY;
+  isAssetStory: boolean = false;
+  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
 
   ngOnInit() {
     this.obsProject = this.route.data
@@ -266,7 +273,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Project", $event.nextId);
+    this.coreHelperService.settingUserPreference("Project", $event.activeId, $event.nextId);
   }
 
   rowUnselect($event: any) {
@@ -529,7 +536,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Scan", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Scan", value: pageInfo.pageSize });
       //API Call
       this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
       this.paginator.firstPage();
@@ -615,5 +622,49 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.errorMsg = errorMsg;
     this.log = log;
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
+  }
+
+  getStory(event) {
+    this.isAssetStory = event;
+  }
+
+  //Callled when component deactivate or destrory
+  canDeactivate(): Observable<boolean> | boolean {
+    //Need to check here is browser back button clicked or not if clicked then do below things..
+    if (this.coreHelperService.getBrowserBackButton()) {
+      this.coreHelperService.setBrowserBackButton(false);
+      if (this.isAssetStory) {
+        this.child.goBack();
+        return false;
+      } else {
+        if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
+          this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
+          this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
+          window.scroll(this.scrollX, this.scrollY);
+          return false;
+        } else {
+          this.coreHelperService.settingUserPreference("Project", "", null);
+          return true;
+        }
+      }
+    } else {
+      this.coreHelperService.settingUserPreference("Project", "", null);
+      return true;
+    }
+  }
+
+  //Below method will fire when click on browser back button.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    this.coreHelperService.setBrowserBackButton(true);
+    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project") || this.isAssetStory) {
+      history.pushState(null, null, window.location.href);
+    }
+  }
+
+  @HostListener("window:scroll", ["$event"])
+  onWindowScroll() {
+    this.scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
   }
 }
