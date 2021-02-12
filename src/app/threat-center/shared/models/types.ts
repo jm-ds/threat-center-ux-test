@@ -204,6 +204,8 @@ export class Cwe {
   name:string;
 }
 
+
+// ScanAsset -------------------------------------------------------------------------------------------------
 export class ScanAsset {
   name:string;
   size:number;
@@ -216,6 +218,36 @@ export class ScanAsset {
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
+  embeddedAssets: EmbeddedAssetConnection;
+}
+
+export class EmbeddedAssetConnection {
+  edges: EmbeddedAssetEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class EmbeddedAssetEdge {
+  node: EmbeddedAsset;
+  cursor: string;
+  constructor(node: EmbeddedAsset, cursor: string) {
+    this.node = node;
+    this.cursor = cursor;
+  }
+}
+
+export class EmbeddedAsset {
+  matchLicenses: ScanAssetMatchLicense[];
+}
+
+export class ScanAssetMatchLicense {
+  licenseId: string;
+  licenseName: string;
+  licenseCategory: string;
+  earliestReleaseDate: Date;
+  latestReleaseDate: Date;
+  earliestReleaseVersion: string;
+  latestReleaseVersion: string;
 }
 
 export class ScanAssetMatch {

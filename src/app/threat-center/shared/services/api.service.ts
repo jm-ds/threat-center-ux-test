@@ -909,6 +909,15 @@ export class ApiService {
                         }
                     }
                   },
+                  matchLicenses {
+                    licenseId,
+                    licenseName,
+                    licenseCategory,
+                    earliestReleaseDate,
+                    latestReleaseDate,
+                    earliestReleaseVersion,
+                    latestReleaseVersion
+                  },
                   releases{
                     edges {
                       node {

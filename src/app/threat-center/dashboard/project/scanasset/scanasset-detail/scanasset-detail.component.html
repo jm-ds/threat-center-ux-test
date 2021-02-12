@@ -53,8 +53,12 @@
                   </a>
                 </td>
                 <td style="word-spacing: 6px;">
-                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
-                    Apache License 2.0<span title="Permissive" class="p-l-5 badge m-r-5 badge-light-success">PERMISSIVE</span>
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node); licensesModal.show()">
+                    <span *ngFor="let matchLicense of embeddedAsset.node.matchLicenses">
+                      {{matchLicense.licenseName}}
+                      <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
+                        {{matchLicense.licenseCategory.replace("_", " ")}}</span>
+                    </span>
                   </a>
                 </td>
               </tr>
@@ -64,6 +68,50 @@
       </div>
     </div>
 
+
+    <!-- Licenses Dialog -->
+    <app-ui-modal #licensesModal dialogClass="modal-dialog-centered popup-Width-fix">
+      <div class="app-modal-header">
+        <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="licensesModal.hide()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="app-modal-body">
+        <perfect-scrollbar [style.max-height]="'550px'">
+          <p-table #dt [value]="selectedEmbeddedAsset?.matchLicenses" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>License ID</th>
+                <th>License Name</th>
+                <th>License Catgory</th>
+                <th>Earliest Version/Date</th>
+                <th>Latest Version/Date</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-matchLicense >
+              <tr>
+                <td>{{matchLicense.licenseId}}</td>
+                <td>{{matchLicense.licenseName}}</td>
+                <td>
+                  <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
+                        {{matchLicense.licenseCategory.replace("_", " ")}}
+                  </span>
+                </td>
+                <td>{{matchLicense.earliestReleaseVersion}} / {{matchLicense.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                <td>{{matchLicense.latestReleaseVersion}} / {{matchLicense.latestReleaseDate | date :'MMMM d, y'}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="licensesModal.hide()">Close</button>
+      </div>
+    </app-ui-modal><!-- licensesModal -->
+
+
+    <!-- Asset Releases Dialog -->
       <app-ui-modal #exampleModalCenter dialogClass="modal-dialog-centered popup-Width-fix">
         <div class="app-modal-header">
           <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
@@ -79,21 +127,21 @@
 
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th>AssetId</th>
-                  <th>Earliest Version/Date</th>
-                  <th>Latest Version/Date</th>
+                  <th>Asset ID</th>
+                  <!--<th>Earliest Version/Date</th>
+                  <th>Latest Version/Date</th>-->
+                  <th>Release Version</th>
+                  <th>Release Date</th>
                 </tr>
               </ng-template>
 
               <ng-template pTemplate="body" let-release >
                 <tr>
                   <td>{{release.node.assetMatchId | slice:32}}</td>
-                  <td>
-                    {{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}
-                  </td>
-                  <td>
-                    {{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}
-                  </td>
+                  <!--<td>{{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                  <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>-->
+                  <td>{{release.node.earliestReleaseVersion}}</td>
+                  <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
                   <!--
                   <td style="border-left:1px solid gray">
                     license
