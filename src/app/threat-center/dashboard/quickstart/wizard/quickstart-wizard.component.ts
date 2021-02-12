@@ -57,11 +57,13 @@ export class QuickstartWizardComponent implements OnInit {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService) {
+        this.scanHelperService.isEnabaleNewScanObservable$
+            .subscribe(x => {
+                this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
+            });
     }
 
-    public ghUserCols = [
-        { field: 'name', header: 'Name' }
-    ];
+    public ghUserCols = [{ field: 'name', header: 'Name' }];
 
     public demoForm = new FormGroup({
         files: this.filesControl
@@ -250,7 +252,6 @@ export class QuickstartWizardComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.isDisableScanBtn = false;
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
             if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
@@ -279,7 +280,7 @@ export class QuickstartWizardComponent implements OnInit {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId,this.activeTab);
+        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
     }
 
 
