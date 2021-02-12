@@ -265,10 +265,10 @@
                               </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
-                              <tr [ttRow]="rowNode">
+                              <tr [ttRow]="rowNode" class="cursor-pointer" [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">
                                   <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
                                     <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                    <a [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
+                                    <a [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]" class="cursor-pointer">{{rowData.name}}</a>
                                   </td>
                                    <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td>
                                     <td style="padding: 0.75rem;">
