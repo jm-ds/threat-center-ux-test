@@ -11,6 +11,7 @@ import { ApexChartService } from '../../../theme/shared/components/chart/apex-ch
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { ScanHelperService } from '../services/scan.service';
 
 
 
@@ -44,7 +45,8 @@ export class EntityComponent implements OnInit {
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
-    private coreHelperService: CoreHelperService
+    private coreHelperService: CoreHelperService,
+    private scanHelperService: ScanHelperService
   ) {
     this.chartDB = ChartDB;
     //this.licensePieChart.legend.show=true;
@@ -62,6 +64,19 @@ export class EntityComponent implements OnInit {
         value: 8
       }
     ];
+
+    this.scanHelperService.isRefreshObjectPageObservable$
+      .subscribe(x => {
+        if (x == true) {
+          this.obsEntity.subscribe(entity => {
+            entity.entityMetrics = null;
+            if (!!entity && !entity.entityMetrics) {
+              //refresh Object page..
+              this.loadEntityPage();
+            }
+          });
+        }
+      });
   }
   navigateToProject(projectId) {
     const entityId = this.route.snapshot.paramMap.get('entityId')
@@ -69,6 +84,10 @@ export class EntityComponent implements OnInit {
     this.router.navigate([url]);
   }
   ngOnInit() {
+    this.loadEntityPage();
+  }
+
+  loadEntityPage() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
     // if an entityId isn't provided in params, use User defaultEntityId
     if (!entityId) {
