@@ -52,7 +52,7 @@ export class LicensesComponent implements OnInit {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null, { componentName: "Licenses", value: pageInfo.pageSize });
+            this.coreHelperService.settingUserPreference("Project", null,null, { componentName: "Licenses", value: pageInfo.pageSize });
             // API Call
             this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined, undefined, undefined);
             this.paginator.firstPage();
