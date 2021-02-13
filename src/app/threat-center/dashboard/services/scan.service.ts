@@ -20,8 +20,11 @@ export class ScanHelperService {
 
     private isEnabaleNewScan = new BehaviorSubject(false);
     isEnabaleNewScanObservable$ = this.isEnabaleNewScan.asObservable();
+    private isRefreshObjectPage = new BehaviorSubject(false);
+    isRefreshObjectPageObservable$ = this.isRefreshObjectPage.asObservable();
 
     sub: Subscription;
+
 
     projectScanResults: Array<any> = [];
     recentlyScanCompleted: Array<any> = [];
@@ -73,9 +76,14 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning").then(() => this.highlightNewScanIfInSamePage(tUpdate));
+                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning")
+                            .then(() => {
+                                this.highlightNewScanIfInSamePage(tUpdate);
+                                this.refreshObjectPageIfFirstScan();
+                            });
                     } else {
                         this.highlightNewScanIfInSamePage(tUpdate);
+                        this.refreshObjectPageIfFirstScan();
                     }
 
                     //Update Execute Scan Button
@@ -151,6 +159,11 @@ export class ScanHelperService {
     //execute scan button diable and enebale
     private updateEnabaleNewScan(val: boolean) {
         this.isEnabaleNewScan.next(val);
+    }
+
+    //refresh entity page if fisrt scan.
+    private refreshObjectPageIfFirstScan() {
+        this.isRefreshObjectPage.next(true);
     }
 
 }
