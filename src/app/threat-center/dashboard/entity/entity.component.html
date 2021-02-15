@@ -249,7 +249,7 @@
               <!-- product-section start -->
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                  <app-card cardTitle="" [customHeader]="false" [options]="false" [hasManualCardRestore]="true" [hasManualCardReload] = "true" [hasManualCardColleps] = "true" [hasManualCardRemove]="true" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
                       <perfect-scrollbar >
                         <p-treeTable class="table table-hover m-b-0" [value]="projects">
@@ -301,7 +301,7 @@
                                   <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                                 </tr>
                           </ng-template>
-                        </p-treeTable>                        
+                        </p-treeTable>
 <!--                         <table class="table table-hover m-b-0">
                           <thead>
                           <tr>
