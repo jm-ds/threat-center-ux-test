@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AnimationBuilder, AnimationService } from 'css-animator';
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
@@ -36,7 +36,8 @@ import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular
       })),
       transition('open <=> closed', animate('400ms')),
     ])
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class CardComponent implements OnInit {
