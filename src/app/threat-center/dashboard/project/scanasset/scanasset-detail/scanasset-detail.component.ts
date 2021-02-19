@@ -32,6 +32,19 @@ export class ScanAssetDetailComponent implements OnInit {
 
   projectId: string = "";
   breadcumDetail: any = {};
+  selectedMatchId: string = "";
+  selectedPercent: number;
+  scanAssetId: string = "";
+  scanId: string = "";
+  attributionStatus: string = "";
+  attributionComment: string = "";
+
+  attributionStatuses: CodeNamePair[] = [
+                                              { code: "REVIEWED", name: "Reviewed" },
+                                              { code: "IGNORED", name: "Ignored" },
+                                              { code: "COMPLETE", name: "Complete" }
+                                         ];
+
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -45,18 +58,18 @@ export class ScanAssetDetailComponent implements OnInit {
     // we could use the scanId to load scan, which has the repository,
     // then use the scanAssetId to load scanAsset.
     // it's no ideal but will work for the demo.
-    let scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
-    let scanId = this.route.snapshot.paramMap.get('scanId');
+    this.scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
+    this.scanId = this.route.snapshot.paramMap.get('scanId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     // get the scan asset for this page
-    let obsScanAsset = this.apiService.getScanAsset(scanId, scanAssetId)
+    let obsScanAsset = this.apiService.getScanAsset(this.scanId, this.scanAssetId)
       .pipe(map(result => result.data.scanAsset));
 
     // https://github.com/threatrix/threat-center-ux/issues/4
     // Don't attempt to pull data for files that were not ACCEPTED status
 
     // lookup scan repository(it's attached to scan, not scanasset)
-    this.apiService.getScanRepository(scanId)
+    this.apiService.getScanRepository(this.scanId)
       .pipe(map(result => result.data.scan))
       .subscribe(result => {
         let scanRepository = result.scanRepository;
@@ -82,10 +95,14 @@ export class ScanAssetDetailComponent implements OnInit {
                   this.sourceAsset.content = atob(result.content);
                 });
             }
+            if (this.sourceAsset.embeddedAssets && this.sourceAsset.embeddedAssets.edges.length>0) {
+              this.selectedMatchId = this.sourceAsset.embeddedAssets.edges[0].node.assetMatchId;
+              this.selectedPercent = this.sourceAsset.embeddedAssets.edges[0].node.percentMatch;
+            }
           });
         }
       });
-
+      this.attributionStatus = "COMPLETE";
       this.initBreadcum();
   }
 
@@ -145,4 +162,26 @@ export class ScanAssetDetailComponent implements OnInit {
   private initBreadcum() {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
+
+  isSelected(matchId, percent) {
+    return matchId == this.selectedMatchId;
+  }
+
+  attributeAsset(assetMatch) {
+    this.apiService.attributeAsset(this.scanId, this.scanAssetId, 
+      this.selectedMatchId, this.selectedPercent, this.attributionStatus, this.attributionComment)
+      .subscribe(data => {
+        console.info('AttributeAsset successful');
+      }, (error) => {
+        console.error('AttributeAsset error', error);
+    });
+
+  }
+
 }
+
+class CodeNamePair {
+  code: String;
+  name: String;
+}
+

@@ -216,6 +216,7 @@ export class ScanAsset {
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
+  embeddedAssets: any;
 }
 
 export class ScanAssetMatch {

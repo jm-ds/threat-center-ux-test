@@ -26,12 +26,17 @@
 
             <ng-template pTemplate="caption">
               <div style="text-align: right">
+                <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mr-4" (click)="attributionModal.show()">
+                  <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
+                </button>
+        
                 <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
                 <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
               </div>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
               <tr>
+                <th></th>
                 <th>Name</th>
                 <th>Repository</th>
                 <th>Percent match <i class="badge-light-primary fas fa-question-circle"></i></th>
@@ -42,6 +47,8 @@
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
               <tr>
+                <td><input type="radio" [id]="embeddedAsset.node.assetMatchId" name="selectedAssetMatch" [value]="embeddedAsset.node.assetMatchId"
+                  [checked]="isSelected(embeddedAsset.node.assetMatchId)" (click)="selectedMatchId = embeddedAsset.node.assetMatchId; selectedPercent = embeddedAsset.node.percentMatch;"></td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.name}}</td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}</td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>
@@ -135,6 +142,25 @@
 
     <app-simm #simmtool [sourceAsset]="sourceAsset" [matchAsset]="matchAsset"></app-simm>
 
+    <app-ui-modal #attributionModal dialogClass="modal-dialog-centered popup-Width-fix">
+      <div class="app-modal-header">
+        <h5 class="modal-title">Attribute License</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="attributionModal.hide()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="app-modal-body">
+        <label class="font-weight-bolder pt-2">Attribution Status</label>
+        <select name="attributionStatus" [(ngModel)]="attributionStatus" 
+        class="form-control mt-2 ng-select" style="overflow-y: auto;" >
+          <option *ngFor="let item of attributionStatuses" [ngValue]="item.code">{{ item.name }}</option> 
+        </select>
+        <label class="font-weight-bolder pt-2 mt-4">Attribution Comment</label>
+        <textarea class="form-control mt-2" name="attributionComment" [(ngModel)]="attributionComment"  placeholder="Attribution Comment"></textarea>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" (click)="attributeAsset(selectedEmbeddedAsset);attributionModal.hide()">Attribute</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributionModal.hide()">Close</button>
+      </div>
+    </app-ui-modal>    
 
   </div>
 

@@ -853,6 +853,7 @@ export class ApiService {
                   status,
                   assetType,
                   parentScanAssetId,
+                  attributionStatus, 
                   embeddedAssets {
                     edges {
                       node {
@@ -887,6 +888,7 @@ export class ApiService {
                   percentMatch,
                   name,
                   assetSize,
+                  assetMatchId,
                   originAssetId,
                   earliestReleaseDate,
                   earliestReleaseVersion,
@@ -1105,5 +1107,14 @@ export class ApiService {
                 }
               `,
     }).valueChanges;
+  }
+
+  attributeAsset(scanId: string, scanAssetId: string, assetMatchId: string, percentMatch: number, attributeStatus: string, attributeComment: string): any {
+    return this.coreGraphQLService.coreGQLReqForMutation(
+      gql`mutation {
+        attributeAsset(scanId: "${scanId}", scanAssetId:"${scanAssetId}", 
+            assetMatchId: "${assetMatchId}", percentMatch: ${percentMatch}, 
+            attributeStatus: "${attributeStatus}", attributeComment: "${attributeComment}")
+      }`);
   }
 }
