@@ -9,6 +9,7 @@ import { ApiService, StateService, RepositoryService } from '@app/threat-center/
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService } from '@app/security/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import Swal from "sweetalert2";
 
 
 @Component({
@@ -171,9 +172,13 @@ export class ScanAssetDetailComponent implements OnInit {
     this.apiService.attributeAsset(this.scanId, this.scanAssetId, 
       this.selectedMatchId, this.selectedPercent, this.attributionStatus, this.attributionComment)
       .subscribe(data => {
-        console.info('AttributeAsset successful');
+        if (data.data.attributeAsset) {
+          Swal.fire('License attribution', 'Attribution is successful', 'success');
+        } else {
+          Swal.fire('License attribution', 'Attribution is not required', 'warning');
+        }
       }, (error) => {
-        console.error('AttributeAsset error', error);
+        Swal.fire('License attribution', 'Attribution error', 'error');
     });
 
   }
