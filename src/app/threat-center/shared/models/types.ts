@@ -369,3 +369,18 @@ export class SimmMatch {
   rightStart: number;
   rightEnd: number;
 }
+
+export class Cvss3 {
+  cveId: string;
+  cvssV3BaseScore: string;
+}
+
+export class VulnCodeByNameWithCVEsIsVulnerable {
+  namespace: string;
+  name: string;
+  version: string;
+  purl: string;
+  releaseDate: string;
+  vulnerable: boolean;
+  cvss3s: Cvss3[];
+}

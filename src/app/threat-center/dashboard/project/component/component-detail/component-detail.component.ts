@@ -4,10 +4,14 @@ import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
-import { Scan, License, TxComponent } from '@app/threat-center/shared/models/types';
+import {Scan, License, TxComponent, VulnCodeByNameWithCVEsIsVulnerable} from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+
+import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
+import {dateToLocalArray} from "@fullcalendar/core/datelib/marker";
+import {valueReferenceToExpression} from "@angular/compiler-cli/src/ngtsc/annotations/src/util";
 
 
 @Component({
@@ -19,6 +23,9 @@ export class ComponentDetailComponent implements OnInit {
 
   obsComponent: Observable<TxComponent>;
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
+
+  public releaseCols = ['Name', 'Version'];
+  public releases: VulnCodeByNameWithCVEsIsVulnerable[] = [];
 
   projectId: string = "";
   scanId: string="";
@@ -35,7 +42,8 @@ export class ComponentDetailComponent implements OnInit {
     private stateService: StateService,
     private route: ActivatedRoute,
     private router: Router,
-    private coreHelperService:CoreHelperService) { }
+    private coreHelperService: CoreHelperService,
+    private vulnerableCodeMappingService: VulnerableCodeMappingService) { }
 
   ngOnInit() {
     console.log("Loading ComponentDetailComponent");
@@ -52,6 +60,10 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
 
+    this.vulnerableCodeMappingService.vulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnCodeByNameWithCVEsIsVulnerable[]) => {
+      this.releases = data;
+    });
+
     this.initBreadcum();
   }
 
@@ -64,6 +76,7 @@ export class ComponentDetailComponent implements OnInit {
     }, 1000);
   }
 
+  /*
   public releaseCols = ['Name', 'Version'];
   public releases = [
     { version: '2.12.1', date: 'Jan 09, 2021' },
@@ -92,6 +105,7 @@ export class ComponentDetailComponent implements OnInit {
     { version: '2.9.10.5', date: 'Jun 22, 2020' },
     { version: '2.9.10.4', date: 'Apr 11, 2020' },
   ];
+  */
 
   //goto project page
   gotoProject() {
