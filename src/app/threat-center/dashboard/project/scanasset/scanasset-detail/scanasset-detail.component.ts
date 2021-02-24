@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
-import { Scan, License, ScanAsset, User, Repository } from '@app/threat-center/shared/models/types';
+import { Scan, License, ScanAsset, User, Repository, ScanAssetMatch } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService } from '@app/security/services';
@@ -33,12 +33,11 @@ export class ScanAssetDetailComponent implements OnInit {
 
   projectId: string = "";
   breadcumDetail: any = {};
-  selectedMatchId: string = "";
-  selectedPercent: number;
   scanAssetId: string = "";
   scanId: string = "";
   attributionStatus: string = "";
   attributionComment: string = "";
+  selectedMatches: ScanAssetMatch[] = [];
 
   attributionStatuses: CodeNamePair[] = [
                                               { code: "REVIEWED", name: "Reviewed" },
@@ -95,10 +94,6 @@ export class ScanAssetDetailComponent implements OnInit {
                 .subscribe(result => {
                   this.sourceAsset.content = atob(result.content);
                 });
-            }
-            if (this.sourceAsset.embeddedAssets && this.sourceAsset.embeddedAssets.edges.length>0) {
-              this.selectedMatchId = this.sourceAsset.embeddedAssets.edges[0].node.assetMatchId;
-              this.selectedPercent = this.sourceAsset.embeddedAssets.edges[0].node.percentMatch;
             }
           });
         }
@@ -164,13 +159,11 @@ export class ScanAssetDetailComponent implements OnInit {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
 
-  isSelected(matchId, percent) {
-    return matchId == this.selectedMatchId;
-  }
-
+  
+  // send attribute asset request
   attributeAsset(assetMatch) {
     this.apiService.attributeAsset(this.scanId, this.scanAssetId, 
-      this.selectedMatchId, this.selectedPercent, this.attributionStatus, this.attributionComment)
+      this.selectedMatches, this.attributionStatus, this.attributionComment)
       .subscribe(data => {
         if (data.data.attributeAsset) {
           Swal.fire('License attribution', 'Attribution is successful', 'success');
@@ -181,6 +174,27 @@ export class ScanAssetDetailComponent implements OnInit {
         Swal.fire('License attribution', 'Attribution error', 'error');
     });
 
+  }
+
+  
+  //  selected matches change handler
+  onSelectedChange(selectedAssetMatchId, selectedPercentMatch, isChecked) {
+    if(isChecked) {
+      this.selectedMatches.push({
+        assetMatchId: selectedAssetMatchId,
+        percentMatch : selectedPercentMatch
+      });
+    } else {
+      let index = -1
+      for (let i=0; i<this.selectedMatches.length; i++) {
+        if (this.selectedMatches[i].assetMatchId === selectedAssetMatchId) {
+          index = i;
+        }
+        if (index!=-1) {
+          this.selectedMatches.splice(index,1);
+        }
+      }
+    }
   }
 
 }

@@ -47,8 +47,8 @@
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
               <tr>
-                <td><input type="radio" [id]="embeddedAsset.node.assetMatchId" name="selectedAssetMatch" [value]="embeddedAsset.node.assetMatchId"
-                  [checked]="isSelected(embeddedAsset.node.assetMatchId)" (click)="selectedMatchId = embeddedAsset.node.assetMatchId; selectedPercent = embeddedAsset.node.percentMatch;"></td>
+                <td><input type="checkbox" [id]="embeddedAsset.node.assetMatchId" name="selectedAssetMatch" [value]="embeddedAsset.node"
+                  (change)="onSelectedChange(embeddedAsset.node.assetMatchId, embeddedAsset.node.percentMatch, $event.target.checked)"></td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.name}}</td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}</td>
                 <td (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()" class="pointer">{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>

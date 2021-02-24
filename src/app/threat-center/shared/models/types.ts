@@ -370,3 +370,27 @@ export class SimmMatch {
   rightStart: number;
   rightEnd: number;
 }
+
+export class ScanAssetMatchRequest {
+  readonly assetMatchId: string;
+  readonly percentMatch: number;
+  constructor(assetMatchId: string, percentMatch: number) {
+    this.assetMatchId = assetMatchId;
+    this.percentMatch = percentMatch;
+  }
+}
+
+export class AttributeAssetRequestInput {
+  readonly scanId: string;
+  readonly scanAssetId: string;
+  readonly assetMatchRequests: ScanAssetMatchRequest[];
+  readonly attributeStatus: string;
+  readonly attributeComment: string;
+  constructor(scanId: string, scanAssetId: string, assetMatchRequests: ScanAssetMatchRequest[], attributeStatus: string, attributeComment: string) {
+    this.scanId = scanId;
+    this.scanAssetId = scanAssetId;
+    this.assetMatchRequests = assetMatchRequests;
+    this.attributeStatus = attributeStatus;
+    this.attributeComment = attributeComment;
+  }
+}
