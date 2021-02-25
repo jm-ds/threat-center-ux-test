@@ -370,17 +370,19 @@ export class SimmMatch {
   rightEnd: number;
 }
 
-export class Cvss3 {
+export class CvssV3 {
   cveId: string;
   cvssV3BaseScore: string;
+  severity: string;
 }
 
-export class VulnCodeByNameWithCVEsIsVulnerable {
+export class VulnerableRelease {
   namespace: string;
   name: string;
   version: string;
+  type: string;
   purl: string;
   releaseDate: string;
   vulnerable: boolean;
-  cvss3s: Cvss3[];
+  cvssV3: CvssV3;
 }

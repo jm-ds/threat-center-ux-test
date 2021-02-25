@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
-import {Scan, License, TxComponent, VulnCodeByNameWithCVEsIsVulnerable} from '@app/threat-center/shared/models/types';
+import { Scan, License, TxComponent, VulnerableRelease } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -12,6 +12,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
 import {dateToLocalArray} from "@fullcalendar/core/datelib/marker";
 import {valueReferenceToExpression} from "@angular/compiler-cli/src/ngtsc/annotations/src/util";
+import {release} from "os";
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ComponentDetailComponent implements OnInit {
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
   public releaseCols = ['Name', 'Version'];
-  public releases: VulnCodeByNameWithCVEsIsVulnerable[] = [];
+  public releases: VulnerableRelease[] = [];
 
   projectId: string = "";
   scanId: string="";
@@ -60,8 +61,9 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
 
-    this.vulnerableCodeMappingService.vulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnCodeByNameWithCVEsIsVulnerable[]) => {
+    this.vulnerableCodeMappingService.vulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableRelease[]) => {
       this.releases = data;
+      // console.log(this.releases);
     });
 
     this.initBreadcum();
@@ -75,37 +77,6 @@ export class ComponentDetailComponent implements OnInit {
       }
     }, 1000);
   }
-
-  /*
-  public releaseCols = ['Name', 'Version'];
-  public releases = [
-    { version: '2.12.1', date: 'Jan 09, 2021' },
-    { version: '2.12.0', date: 'Nov 29, 2020' },
-    { version: '2.12.0-rc2', date: 'Nov 15, 2020' },
-    { version: '2.12.0-rc1', date: 'Oct 12, 2020' },
-    { version: '2.11.4', date: 'Dec 12, 2020' },
-    { version: '2.11.3', date: 'Oct 02, 2020' },
-    { version: '2.11.2', date: 'Aug 02, 2020' },
-    { version: '2.11.1', date: 'Jun 25, 2020' },
-    { version: '2.11.0', date: 'Apr 26, 2020' },
-    { version: '2.11.0.rc1', date: 'Mar 24, 2020' },
-    { version: '2.10.5.1', date: 'Dec 02, 2020' },
-    { version: '2.10.5', date: 'Jul 21, 2020' },
-    { version: '2.10.4', date: 'May 03, 2020' },
-    { version: '2.10.3', date: 'Mar 03, 2020' },
-    { version: '2.10.2', date: 'Jan 05, 2020' },
-    { version: '2.10.1', date: 'Nov 09, 2019' },
-    { version: '2.10.0', date: 'Sep 26, 2019' },
-    { version: '2.10.0.pr3', date: 'Sep 17, 2019' },
-    { version: '2.10.0.pr2', date: 'Aug 31, 2019' },
-    { version: '2.10.0.pr1', date: 'Jul 19, 2019' },
-    { version: '2.9.10.8', date: 'Jan 06, 2021' },
-    { version: '2.9.10.7', date: 'Dec 02, 2020' },
-    { version: '2.9.10.6', date: 'Aug 25, 2020' },
-    { version: '2.9.10.5', date: 'Jun 22, 2020' },
-    { version: '2.9.10.4', date: 'Apr 11, 2020' },
-  ];
-  */
 
   //goto project page
   gotoProject() {
