@@ -145,3 +145,161 @@
 
 //Project dashboard chart styles End
 ////////////////////////////////////////////////////////////////
+
+//Entity Page Chart Style
+.entity-chart-tabbing {
+    .nav-tabs {
+        display: table;
+        margin: 0 auto;
+        border-radius: 2px;
+        padding: 7px;
+        background: #242e38;
+  
+        .nav-item {
+          margin: 0 3px;
+          display: inline-block;
+          .nav-link {
+            box-shadow: none;
+            min-width: 80px;
+            line-height: 27px;
+            text-align: center;
+            padding: 0 10px;
+            background: #32404e !important;
+  
+            &.active, &:hover {
+              background: #4680ff !important;
+              border-color: #4680ff !important;
+            }
+  
+  
+          }
+        }
+    }
+  
+    .tab-content {
+      box-shadow: none !important;
+  
+      .tab-info-text {
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
+    background: #4680ff !important;
+    border-color: #4680ff !important;
+  }
+  
+  .entity-chart-row {
+    padding: 10px 0 0;
+  
+    .proj-t-card {
+      .card-body {
+        padding: 10px;
+  
+        app-apex-chart {
+          div:first-of-type {
+            height: 150px;
+            min-height: inherit !important;
+          }
+        }
+      }
+    }
+  
+    .apexcharts-canvas {
+      transform: scale(0.75);
+      -webkit-transform-origin: top center;
+      transform-origin: top center;
+      svg {
+          overflow: inherit;
+      }
+    }
+  
+    .card {
+      margin-bottom: 15px;
+    }
+  }
+  
+  .entity-ttl {
+    margin-bottom: 3px;
+  }
+  
+  .entity-btns {
+    .btn {
+      padding: 0.25rem 0.5rem;
+    }
+  }
+
+
+  .ui-treetable .ui-treetable-thead>tr>th, .ui-treetable .ui-treetable-tbody>tr>td, .ui-treetable .ui-treetable-tfoot>tr>td {
+    padding: 5px 7px;
+    height: 40px;
+    font-size: 14px;
+    font-family: "Mada", sans-serif;
+    line-height: 16px;
+}
+
+.ui-treetable .ui-treetable-thead>tr>th {
+    background: #2e3d48;
+    font-weight: 400;
+
+    &:nth-child(2) {
+        padding-left: 15px;
+    }
+
+    &.lg-col {
+        width: 270px;
+    }
+
+    &.type-col {
+        width: 115px;
+    }
+
+    &.projects-col {
+        width: 75px;
+    }
+
+    &.license-risk-col {
+        width: 85px;
+    }
+}
+
+.ui-treetable .ui-treetable-toggler {
+    font-size: 10px;
+    top: 0;
+    margin-right: 3px;
+}
+
+.ui-treetable {
+    .ui-treetable-tbody {
+        tr {
+            td {
+                font-size: 13px;
+                padding: 2px 7px;
+                height: 34px;
+
+                &:first-child {
+                    border-right: 1px solid #1082fe;
+                }
+
+                &:nth-child(2) {
+                    padding-left: 15px;
+                }
+
+                .tree-data-parent {
+                    display: flex;
+                    align-items: flex-start;
+                }
+            }
+
+            &:first-child {
+                td {
+                    padding-top: 5px;
+                }
+            }
+        }
+    }
+}
+
+
+/////////////////////////================Entity Page style End================//////////////

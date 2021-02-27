@@ -14,6 +14,8 @@ export class NextConfig {
     errorToasterTime: 5, // Visibilities of Suceess toaster after scan completed
     closePopup: 25, // Visibilities of scan bottom right panel after all scan completed,
     delaySeconds: 1500, //pause(delay) between scan requests while scaning project
-    defaultItemPerPage: 25
+    defaultItemPerPage: 25,
+    stackedChartType: 'area',
+    sparkChartType: 'line'
   };
 }
