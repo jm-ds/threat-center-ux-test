@@ -317,17 +317,17 @@
                     border-radius: 2px;
                 }
                 .ui-organizationchart-node-content {
-                    max-width: 100%;
+                    // max-width: 100%;
                     background: #242e38;
-                    min-width: 220px;
+                    // min-width: 220px;
                     border-radius: 2px;
                     padding: 5px;
                     color: #adb7be;
-                    font-size: 13px;
+                    font-size: 12px;
 
                     p {
                         color: #adb7be;
-                        font-size: 14px;
+                        font-size: 12px;
                     }
                 }
 
@@ -342,7 +342,7 @@
                         align-items: center;
                         justify-content: center;
                         flex-direction: column;
-                        padding: 10px 10px 0;
+                        padding: 5px 5px 0;
                         margin: 0 5px;
 
                         p {
@@ -371,7 +371,7 @@
                         }
 
                         span {
-                            color: 14px;
+                            color: 12px;
                             font-weight: 700;
                         }
 

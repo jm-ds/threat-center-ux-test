@@ -645,16 +645,13 @@ export class EntityComponent implements OnInit, OnDestroy {
       map[list[i].id] = i; // initialize the map
       list[i].children = []; // initialize the children
     }
+    let j = 0;
     for (i = 0; i < list.length; i += 1) {
       node = list[i];
       if (node.parentId !== "0" && !!node.parentId) {
         // if you have dangling branches check that map[node.parentId] exists
         list[map[node.parentId]].children.push(node);
-        if (isFromOrg) {
-          list[map[node.parentId]].expanded = (i <= 3);
-        } else {
-          list[map[node.parentId]].expanded = true;
-        }
+        list[map[node.parentId]].expanded = true;
       } else {
         roots.push(node);
       }

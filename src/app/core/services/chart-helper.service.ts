@@ -11,10 +11,20 @@ export class ChartHelperService {
 
     public initDonutChartConfiguration() {
         return {
+            stroke: {
+                width: 1
+            },
             dataLabels: {
                 enabled: true,
                 formatter: function (value, { seriesIndex, dataPointIndex, w }) {
                     return w.config.series[seriesIndex];
+                },
+                textAnchor: 'middle',
+                style: {
+                    fontSize: '16px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    // fontWeight: 'bold',
+                    colors: undefined
                 }
             },
             // fill: {
@@ -64,6 +74,7 @@ export class ChartHelperService {
                 offsetX: 0,
                 offsetY: 0,
                 customScale: 1,
+
                 dataLabels: {
                     offset: 0,
                     minAngleToShowLabel: 10
@@ -117,6 +128,9 @@ export class ChartHelperService {
 
     getStackedChartCommonConfiguration() {
         return {
+            stroke: {
+                width: 2,
+            },
             chart: {
                 toolbar: {
                     show: false
@@ -154,7 +168,7 @@ export class ChartHelperService {
             chart: {
                 type: "line",
                 width: 100,
-                height: 30,
+                height: 24,
                 sparkline: {
                     enabled: true
                 }
