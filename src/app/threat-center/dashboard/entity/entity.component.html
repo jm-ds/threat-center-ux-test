@@ -95,7 +95,7 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</h6>
               <div class="chart-options">
-                <div class="chart-opt-selected" (click)="isShowLicensedropdown = !isShowLicensedropdown">
+                <div class="chart-opt-selected" (click)="isShowLicensedropdown = !isShowLicensedropdown;isShowStackedChart = false">
                   <span>{{selectedlicenseChartDropValue}} </span><i class="fas fa-angle-down"></i>
                 </div>
                 <div class="entity-opt-list" [ngClass]="{'entity-opt-list-open': isShowLicensedropdown}">
@@ -133,7 +133,7 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
               <div class="chart-options">
-                <div class="chart-opt-selected" (click)="isShowComponentdropdown = !isShowComponentdropdown">
+                <div class="chart-opt-selected" (click)="isShowComponentdropdown = !isShowComponentdropdown;isShowStackedChart = false">
                   <span>{{selectedComponentChartDropvalue}}</span> <i class="fas fa-angle-down"></i>
                 </div>
                 <div class="entity-opt-list" [ngClass]="{'entity-opt-list-open': isShowComponentdropdown}">
@@ -261,6 +261,45 @@
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
+          <ngb-tab title="ORGANIZATION" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
+            id="ORGANIZATION">
+            <ng-template ngbTabContent>
+              <div class="row">
+                <div class="col-sm-12">
+                  <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
+                    <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
+                      [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
+                      <ng-template let-node pTemplate="entity">
+                        <div class="node-header node-header-top p-corner-top">{{node.name}}</div>
+                        <div class="node-content node-content-top">
+                        <div class="chart-hdr-box" *ngIf="!!node.data.entityMetrics">
+                            <div class="count-blk vulnerabilities-col">
+                          <p *ngIf="!!node?.data?.entityMetrics?.vulnerabilityMetrics">Vulnerabilities</p>
+                          <span>{{node?.data?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
+                        </div>
+                        <div class="count-blk license-col">
+                          <p *ngIf="!!node?.data?.entityMetrics?.licenseMetrics">Licenses</p>
+                          <span>{{node?.data?.entityMetrics?.licenseMetrics?.total}}</span>
+                          </div>
+                          <div class="count-blk components-col">
+                          <p *ngIf="!!node?.data?.entityMetrics?.componentMetrics">Components</p>
+                          <span>{{node?.data?.entityMetrics?.componentMetrics?.total}}</span>
+                        </div>
+                        <div class="count-blk assets-col">
+                          <p *ngIf="!!node?.data?.entityMetrics?.assetMetrics">Assets</p>
+                          <span>{{node?.data?.entityMetrics?.assetMetrics?.total}}</span>
+                        </div>
+                        </div>
+                        </div>
+                      </ng-template>
+                    </p-organizationChart>
+
+                  </app-card>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
           <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
             id="BUSINESSUNITS">
             <ng-template ngbTabContent>
@@ -284,9 +323,10 @@
                         </tr>
                       </ng-template>
                       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-                        <tr>
+                        <tr *ngIf="showAndHideRow(rowData)">
                           <td>
-                            <div class="tree-data-parent cursor-pointer" (click)="onEntityTreeNameSelect(rowData,rowNode)">
+                            <div class="tree-data-parent cursor-pointer"
+                              (click)="onEntityTreeNameSelect(rowData,rowNode)">
                               <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                               {{rowData.name}}
                             </div>

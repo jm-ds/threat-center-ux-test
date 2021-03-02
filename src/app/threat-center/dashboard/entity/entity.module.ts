@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { TreeTableModule } from 'primeng/treetable';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { OrganizationChartModule } from 'primeng/organizationchart';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,7 +27,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
     NgxDatatableModule,
     TreeTableModule,
     NgApexchartsModule,
-    NgbModule
+    NgbModule,
+    OrganizationChartModule
   ],
   declarations: [
     EntityComponent

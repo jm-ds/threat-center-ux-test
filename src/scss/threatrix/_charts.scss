@@ -302,4 +302,121 @@
 }
 
 
+//Entity Page Organization chart
+.ui-organizationchart {
+    padding: 30px;
+    .ui-organizationchart-table {
+        // margin: 30px auto !important;
+        tr {
+            td {
+
+                .node-header  {
+                    color: rgba(255,255,255,0.8);
+                    background: #2e3944;
+                    padding: 5px;
+                    border-radius: 2px;
+                }
+                .ui-organizationchart-node-content {
+                    max-width: 100%;
+                    background: #242e38;
+                    min-width: 220px;
+                    border-radius: 2px;
+                    padding: 5px;
+                    color: #adb7be;
+                    font-size: 13px;
+
+                    p {
+                        color: #adb7be;
+                        font-size: 14px;
+                    }
+                }
+
+                .chart-hdr-box {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .count-blk {
+                        border-radius: 2px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        padding: 10px 10px 0;
+                        margin: 0 5px;
+
+                        p {
+                            color: rgba(255,255,255,0.4);
+                            font-size: 12px;
+                        }
+
+                        &.vulnerabilities-col {
+                            color: #ffa21d;
+                        }
+
+                        &.license-col {
+                            color: #d61bad;
+                        }
+
+                        &.components-col {
+                            color: #00acc1;
+                        }
+
+                        &.assets-col {
+                            color: #4680ff;
+                        }
+
+                        p {
+                            margin: 0 0 5px 0;
+                        }
+
+                        span {
+                            color: 14px;
+                            font-weight: 700;
+                        }
+
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.ui-organizationchart .ui-organizationchart-line-down {
+    background: rgba(255,255,255,0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-line-top {
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-line-left {
+    border-right: 1px solid rgba(255,255,255,0.06);
+}
+.ui-organizationchart .ui-organizationchart-line-left {
+    border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler {
+    position: absolute;
+    bottom: -13px;
+    margin: 0 auto;
+    z-index: 2;
+    left: 50%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #242e38;
+    width: 22px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 50% 50%;
+    left: 0;
+    right: 0;
+}
+
 /////////////////////////================Entity Page style End================//////////////

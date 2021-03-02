@@ -66,8 +66,10 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   entityPageBreadCums: Array<any> = [];
   recursionHelperArray = new Array();
+  recursivehelperArrayForIrgTree = new Array();
 
   entityTreeModel: TreeNode | any = { data: [] };
+  organizationTreeModel = [];
 
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
@@ -85,6 +87,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   ];
   selectedlicenseChartDropValue = "License Count";
   public commonLineSparklineOptions: any = {};
+
+  currentEntityId: string = "";
+  isShowStackedChart: boolean = true;
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -129,6 +134,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       });
   }
 
+
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
   }
@@ -149,52 +155,56 @@ export class EntityComponent implements OnInit, OnDestroy {
   };
 
   initStackedChartAccordingToDonut(value: string) {
-    this.selectedDonut = value;
-    this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
-    switch (this.selectedDonut) {
-      case 'Vulnerability':
-        // check active tab as well..
-        this.monthSericeOverTime['series'] = [{
-          name: "South",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2017 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 60
-            }
-          )
-        },
-        {
-          name: "North",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2017 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 20
-            }
-          )
-        },
-        {
-          name: "Central",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2017 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 15
-            }
-          )
-        }];
-        break;
 
-      default:
-        break;
-    }
-    if (this.selectedDonut === 'Vulnerability') {
+    if (this.isShowStackedChart) {
+      this.selectedDonut = value;
+      this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
+      switch (this.selectedDonut) {
+        case 'Vulnerability':
+          // check active tab as well..
+          this.monthSericeOverTime['series'] = [{
+            name: "South",
+            data: this.generateDayWiseTimeSeries(
+              new Date("11 Feb 2017 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 60
+              }
+            )
+          },
+          {
+            name: "North",
+            data: this.generateDayWiseTimeSeries(
+              new Date("11 Feb 2017 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 20
+              }
+            )
+          },
+          {
+            name: "Central",
+            data: this.generateDayWiseTimeSeries(
+              new Date("11 Feb 2017 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 15
+              }
+            )
+          }];
+          break;
 
+        default:
+          break;
+      }
+      if (this.selectedDonut === 'Vulnerability') {
+
+      }
     }
+    this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
   }
 
   onStackedChartTabChange($event: NgbTabChangeEvent) {
@@ -339,7 +349,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   loadEntity(entityId: string, isPush: boolean = false) {
+    this.currentEntityId = entityId;
     this.entityTreeModel = { data: [] };
+    this.organizationTreeModel = [];
     this.selectedDonut = 'Vulnerability';
     this.router.navigateByUrl('dashboard/entity/' + entityId);
     this.obsEntity = this.apiService.getEntity(entityId)
@@ -395,20 +407,30 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   async entityTreeLogic(entity: any) {
     this.recursionHelperArray = [];
+    this.recursivehelperArrayForIrgTree = [];
     if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
       await this.populateChildernRecusivaly(entity.childEntities.edges, null);
       let w = {};
-      w['data'] = entity;
-      w['children'] = [];
-      w['expanded'] = true;
-      w['parent'] = null;
       this.entityTreeModel.data = [
         {
           "data": entity,
-          "children": this.list_to_tree(this.recursionHelperArray),
-          expanded: true
+          "children": this.list_to_tree(this.recursionHelperArray, false),
+          expanded: true,
+          visible: false
         }
       ];
+      this.organizationTreeModel = [
+        {
+          data: entity,
+          expanded: true,
+          name: entity.name,
+          styleClass: 'p-person',
+          type: "entity",
+          children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
+        }
+      ];
+
+      console.log(this.organizationTreeModel);
     }
   }
 
@@ -502,6 +524,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   changeComponentChartDropdown(item: { id: string, name: string, isActive: boolean }) {
+    this.isShowStackedChart = false;
     this.isShowComponentdropdown = false;
     this.selectedComponentChartDropvalue = item.name;
     _.each(this.componentChartDropValues, value => { value.isActive = (value.id !== item.id) ? false : true; });
@@ -524,6 +547,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   changeLincesChartDropdown(item: { id: string, name: string, isActive: boolean }) {
+    this.isShowStackedChart = false;
     this.isShowLicensedropdown = false;
     this.selectedlicenseChartDropValue = item.name;
     _.each(this.licenseChartDropValues, value => { value.isActive = (value.id !== item.id) ? false : true; })
@@ -553,18 +577,13 @@ export class EntityComponent implements OnInit, OnDestroy {
       this.newParentChildDataPush = [];
 
       this.recursiveArrayPopulate(rowNode.parent, { id: rowNode.node.id, name: rowNode.node.name });
-      console.log(this.newParentChildDataPush);
       for (var i = this.newParentChildDataPush.length - 1; i >= 0; i--) {
         this.entityPageBreadCums.push(this.newParentChildDataPush[i]);
       }
-      console.log(this.entityPageBreadCums);
       this.setEntityBreadcumToSession();
       this.router.navigateByUrl('dashboard/entity/' + rowData.entityId);
       this.loadEntity(rowData.entityId, false);
     }
-
-    // const modelRef = this.modalService.open(EntitySelcetComponent, { ariaLabelledBy: 'modal-basic-title' });
-    // modelRef.componentInstance.entityData = Object.assign({}, rowData);
   }
 
   recursiveArrayPopulate(parent, dataToPush) {
@@ -584,11 +603,17 @@ export class EntityComponent implements OnInit, OnDestroy {
       return 0;
     }
   }
+
+  onNodeSelect($event) {
+  }
+
+  showAndHideRow(rowData) {
+    return this.currentEntityId !== rowData.entityId;
+  }
+
   private getLastTabSelected() {
     this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
   }
-
-
 
   private async populateChildernRecusivaly(childData, prId) {
     if (childData.length >= 1) {
@@ -602,6 +627,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           d['name'] = childData[i].node.name;
           d['children'] = null;
           this.recursionHelperArray.push(d);
+          this.recursivehelperArrayForIrgTree.push({ parentId: prId, id: childData[i].node.entityId, name: childData[i].node.name, children: null, data: cData.data.entity, type: 'entity', expanded: false, styleClass: 'p-person' });
           if (!!cData.data && !!cData.data.entity && !!cData.data.entity.childEntities
             && cData.data.entity.childEntities.edges.length >= 1) {
             await this.populateChildernRecusivaly(cData.data.entity.childEntities.edges, cData.data.entity.entityId);
@@ -613,7 +639,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  private list_to_tree(list) {
+  private list_to_tree(list, isFromOrg: boolean = false) {
     var map = {}, node, roots = [], i;
     for (i = 0; i < list.length; i += 1) {
       map[list[i].id] = i; // initialize the map
@@ -624,7 +650,11 @@ export class EntityComponent implements OnInit, OnDestroy {
       if (node.parentId !== "0" && !!node.parentId) {
         // if you have dangling branches check that map[node.parentId] exists
         list[map[node.parentId]].children.push(node);
-        list[map[node.parentId]].expanded = true;
+        if (isFromOrg) {
+          list[map[node.parentId]].expanded = (i <= 3);
+        } else {
+          list[map[node.parentId]].expanded = true;
+        }
       } else {
         roots.push(node);
       }
