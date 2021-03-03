@@ -154,84 +154,96 @@
         border-radius: 2px;
         padding: 7px;
         background: #242e38;
-  
+
         .nav-item {
-          margin: 0 3px;
-          display: inline-block;
-          .nav-link {
-            box-shadow: none;
-            min-width: 80px;
-            line-height: 27px;
-            text-align: center;
-            padding: 0 10px;
-            background: #32404e !important;
-  
-            &.active, &:hover {
-              background: #4680ff !important;
-              border-color: #4680ff !important;
+            margin: 0 3px;
+            display: inline-block;
+
+            .nav-link {
+                box-shadow: none;
+                min-width: 50px;
+                line-height: 20px;
+                text-align: center;
+                padding: 0 10px;
+                background: #32404e !important;
+
+                &.active,
+                &:hover {
+                    background: #4680ff !important;
+                    border-color: #4680ff !important;
+                }
+
+
             }
-  
-  
-          }
         }
     }
-  
+
     .tab-content {
-      box-shadow: none !important;
-  
-      .tab-info-text {
-        margin-bottom: 0;
-      }
+        box-shadow: none !important;
+
+        .tab-info-text {
+            margin-bottom: 0;
+        }
     }
-  }
-  
-  body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
+}
+
+body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     background: #4680ff !important;
     border-color: #4680ff !important;
-  }
-  
-  .entity-chart-row {
+}
+
+.entity-chart-row {
     padding: 10px 0 0;
-  
+
+    .entity-chart-blk {
+        flex: 0 1 20%;
+        max-width: 20%;
+        padding: 0 5px;
+    }
+
     .proj-t-card {
-      .card-body {
-        padding: 10px;
-  
-        app-apex-chart {
-          div:first-of-type {
-            height: 150px;
-            min-height: inherit !important;
-          }
+        .card-body {
+            padding: 10px;
+
+            app-apex-chart {
+                div:first-of-type {
+                    height: 125px !important;
+                    min-height: inherit !important;
+                }
+            }
         }
-      }
     }
-  
+
     .apexcharts-canvas {
-      transform: scale(0.75);
-      -webkit-transform-origin: top center;
-      transform-origin: top center;
-      svg {
-          overflow: inherit;
-      }
+        transform: scale(0.6);
+        -webkit-transform-origin: top center;
+        transform-origin: top center;
+
+        svg {
+            overflow: inherit;
+        }
     }
-  
+
     .card {
-      margin-bottom: 15px;
+        margin-bottom: 15px;
+        height: calc(100% - 15px);
     }
-  }
-  
-  .entity-ttl {
+}
+
+.entity-ttl {
     margin-bottom: 3px;
-  }
-  
-  .entity-btns {
+}
+
+.entity-btns {
     .btn {
-      padding: 0.25rem 0.5rem;
+        padding: 0.25rem 0.5rem;
     }
-  }
+}
 
 
-  .ui-treetable .ui-treetable-thead>tr>th, .ui-treetable .ui-treetable-tbody>tr>td, .ui-treetable .ui-treetable-tfoot>tr>td {
+.ui-treetable .ui-treetable-thead>tr>th,
+.ui-treetable .ui-treetable-tbody>tr>td,
+.ui-treetable .ui-treetable-tfoot>tr>td {
     padding: 5px 7px;
     height: 40px;
     font-size: 14px;
@@ -242,6 +254,7 @@
 .ui-treetable .ui-treetable-thead>tr>th {
     background: #2e3d48;
     font-weight: 400;
+    position: relative;
 
     &:nth-child(2) {
         padding-left: 15px;
@@ -289,6 +302,13 @@
                 .tree-data-parent {
                     display: flex;
                     align-items: flex-start;
+                    position: relative;
+
+                    .tree-tbl-icn {
+                        position: absolute;
+                        right: 0;
+                        top: 3px;
+                    }
                 }
             }
 
@@ -305,17 +325,20 @@
 //Entity Page Organization chart
 .ui-organizationchart {
     padding: 30px;
+
     .ui-organizationchart-table {
+
         // margin: 30px auto !important;
         tr {
             td {
 
-                .node-header  {
-                    color: rgba(255,255,255,0.8);
+                .node-header {
+                    color: rgba(255, 255, 255, 0.8);
                     background: #2e3944;
                     padding: 5px;
                     border-radius: 2px;
                 }
+
                 .ui-organizationchart-node-content {
                     // max-width: 100%;
                     background: #242e38;
@@ -346,7 +369,7 @@
                         margin: 0 5px;
 
                         p {
-                            color: rgba(255,255,255,0.4);
+                            color: rgba(255, 255, 255, 0.4);
                             font-size: 12px;
                         }
 
@@ -384,18 +407,19 @@
 }
 
 .ui-organizationchart .ui-organizationchart-line-down {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .ui-organizationchart .ui-organizationchart-line-top {
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .ui-organizationchart .ui-organizationchart-line-left {
-    border-right: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
+
 .ui-organizationchart .ui-organizationchart-line-left {
-    border-right: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler {
@@ -417,6 +441,31 @@
     border-radius: 0 0 50% 50%;
     left: 0;
     right: 0;
+}
+
+.sparkline-chart-blk {
+    display: flex;
+    align-items: center;
+
+    span {
+        margin-left: 10px;
+    }
+}
+
+.ui-organizationchart .ui-organizationchart-table>tr>td {
+    padding: 0 5px;
+}
+
+
+.tree-table-card {
+    position: relative;
+
+    .type-icon {
+        position: absolute;
+        bottom: -25px;
+        right: 10px;
+        font-size: 14px;
+    }
 }
 
 /////////////////////////================Entity Page style End================//////////////

@@ -25,6 +25,7 @@ import { ChartHelperService } from '@app/core/services/chart-helper.service';
     '(document:click)': 'onClick($event)',
   }
 })
+
 export class EntityComponent implements OnInit, OnDestroy {
   public chartDB: any;
   public dailyVisitorStatus: string;
@@ -90,6 +91,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   currentEntityId: string = "";
   isShowStackedChart: boolean = true;
+
+  public supplyChainChart: Partial<any>;
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -132,6 +135,8 @@ export class EntityComponent implements OnInit, OnDestroy {
           });
         }
       });
+
+    this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
   }
 
 
