@@ -50,7 +50,7 @@ export class EntityComponent implements OnInit {
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
     private coreHelperService: CoreHelperService,
-    private scanHelperService: ScanHelperService
+    private scanHelperService: ScanHelperService,
     private taskService: TaskService
   ) {
     this.chartDB = ChartDB;
