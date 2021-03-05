@@ -1,28 +1,48 @@
 <div class="modal-body">
     <div class="app-modal-header">
         <h5 class="modal-title">Fix component version</h5>
-        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="$event.stopPropagation();closeBtn()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close"
+                (click)="$event.stopPropagation();closeBtn()"><span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    <div class="app-modal-body">
-        <p><b>Fix vulnerabilities version <span class="badge m-r-5 badge-light-danger">{{oldVersion}}</span></b></p>
-        <p>Choose version:</p>
-        <div class="form-group">
-            <div class="radio radio-primary d-inline">
-                <input [(ngModel)]="newVersion" type="radio" value="2.12.1" name="{{componentId}}-latest" id="latest">
-                <label for="latest" class="cr">Update to latest secure version <span class="badge m-r-5 badge-light-success">2.12.1</span></label><!--{{vulnerability.patchedVersions}}-->
-            </div>
+    <div class="app-modal-body" *ngIf="!loading">
+        <div *ngIf="patchedVersions">
+            <p><b>Fix vulnerabilities version <span class="badge m-r-5 badge-light-danger">{{oldVersion}}</span></b></p>
+            <p>Choose version:</p>
+            <div class="form-group">
+                <div class="radio radio-primary d-inline">
+                    <input [(ngModel)]="newVersion" type="radio"
+                           value="{{patchedVersions.latestPatchedVersion.version}}" name="{{componentId}}-latest"
+                           id="latest">
+                    <label for="latest" class="cr">Update to latest secure version <span
+                            class="badge m-r-5 badge-light-success">{{patchedVersions.latestPatchedVersion.version}}</span></label>
+                </div>
 
-        </div>
-        <div class="form-group">
-            <div class="radio radio-primary d-inline">
-                <input [(ngModel)]="newVersion" type="radio" value="2.9.10.4" name="{{componentId}}-next" id="next">
-                <label for="next" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">2.9.10.4</span>(lowest risk of breaking build)</label><!--{{vulnerability.patchedVersions}}-->
+            </div>
+            <div class="form-group">
+                <div class="radio radio-primary d-inline">
+                    <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.nextPatchedVersion.version}}"
+                           name="{{componentId}}-next" id="next">
+                    <label for="next" class="cr">Update to next secure version <span
+                            class="badge m-r-5 badge-light-success">{{patchedVersions.nextPatchedVersion.version}}</span></label>
+                    (lowest risk of breaking build)
+                </div>
             </div>
         </div>
+        <div *ngIf="!patchedVersions">
+            Patched version was not found
+        </div>
+    </div>
+    <div class="app-modal-body" *ngIf="loading">
+        Loading...
     </div>
     <div class="app-modal-footer">
-        <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal" (click)="$event.stopPropagation();closeBtn()">Close</button>
-        <button type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix</button>
+        <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal"
+                (click)="$event.stopPropagation();closeBtn()">Close
+        </button>
+        <button *ngIf="patchedVersions && newVersion" type="button" class="btn btn-primary  m-r-5"
+                (click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix
+        </button>
     </div>
 </div>
 

@@ -88,7 +88,7 @@
 
                 <div *ngIf="component.node.vulnerabilities.edges.length>0">
                   <div style="margin-left: 5px;">
-                    <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
+                    <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Check patched version</button>
                   </div>
                 </div>
               </td>

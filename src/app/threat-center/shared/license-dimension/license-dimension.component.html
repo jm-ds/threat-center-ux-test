@@ -195,7 +195,7 @@
                           <span *ngIf="vulnerabilityEdge.node.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
                       </div>
                       <div *ngIf="component.node.vulnerabilities.edges.length>0">
-                        <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
+                        <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Check patched version</button>
                       </div>
                     </td>
                   </tr>
