@@ -1,0 +1,82 @@
+<div>
+  <nav aria-label="breadcrumb" class="float-right">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
+      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(user?.username)">User</a></li>
+<li class="breadcrumb-item active text-muted" aria-current="page">API key</li>
+  </ol>
+</nav>
+  <h1>API key</h1>
+</div>
+
+
+<app-messages [messages]="messages"></app-messages>
+
+
+<ng-template [ngIf]="apiKey !== undefined">
+  <div class="row">
+    <div class="col-md-4">
+
+      <!-- User card -->
+      <app-user-card [user]="user" [showMenu]="true"></app-user-card>
+
+    </div>
+    <div class="col-md-8">
+      <app-card cardTitle="API key data">
+        <div class="pt-4" style="width: 100%;">
+          <div class="form-group " style="padding-left: 0px">
+            <label >Title</label>
+            <input disabled class="form-control" style="width: 100%;" value="{{apiKey.title}}"/>
+          </div>
+          <div class="form-group " style="padding-left: 0px">
+            <button type="button" class="btn float-right" style="margin-bottom: 4px;" title="Copy API key to clipboard" (click)="copyKey()" >
+              <i class="feather icon-copy"></i>
+            </button>
+            <label >Key</label>
+            <textarea disabled name="title" style="width: 100%;"
+            class="form-control input-contrast comment-form-textarea js-comment-field"
+            value="{{apiKey.apiKey}}"></textarea>
+          </div>
+          <div class="form-group " style="padding-left: 0px">
+            <label >Description</label>
+            <textarea disabled name="description" style="width: 100%;"
+            class="form-control input-contrast comment-form-textarea js-comment-field"
+            value="{{apiKey.description}}"></textarea>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
+            <label class="font-weight-bolder">Created date</label>
+            <input disabled class="form-control" value="{{apiKey.createdDate | date :'M/d/y h:mmaa' | lowercase}}"/>
+          </div>
+          <div class="form-group" style="padding-left: 0px">
+            <label class="font-weight-bolder">Expired date</label>
+            <input disabled class="form-control" value="{{apiKey.expiredDate | date :'M/d/y h:mmaa' | lowercase}}"/>
+          </div>
+        </div>
+        <div class="actions mt-5">
+          <a routerLink="/admin/user/show/{{username}}/create/apikey/{{keyId}}" class="btn btn-outline-info">
+            <i class="feather icon-edit"></i>
+            Edit
+          </a>
+          <a  (click)="removeApiKey()" class="btn btn-outline-danger float-right">
+            <i class="feather icon-trash"></i>
+            Delete
+          </a>
+          <a routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+            <i class="feather  icon-user"></i>
+            Back to user
+          </a>
+        </div>
+      </app-card>
+    </div>          
+  </div>
+</ng-template>  
+
+
+<ng-template [ngIf]="apiKey === undefined">
+  <app-alert type="warning">API key is not found.</app-alert>
+
+  <a routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+      <i class="feather icon-user"></i>
+      Back to user
+  </a>
+</ng-template>
