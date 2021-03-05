@@ -76,7 +76,8 @@
 
   <div class="row entity-chart-row" *ngIf="entity.entityMetrics">
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer" (click)="initStackedChartAccordingToDonut('Vulnerability')">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Vulnerability')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -89,7 +90,8 @@
       </app-card>
     </div>
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer" (click)="initStackedChartAccordingToDonut('Licenses')">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Licenses')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -129,7 +131,8 @@
     </div>
 
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer" (click)="initStackedChartAccordingToDonut('SupplyChain')">
+    <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('SupplyChain')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -139,25 +142,20 @@
           </div>
         </div>
         <!-- <app-apex-chart chartID="supplychainradialBar" [chartConfig]="supplyChainChart"></app-apex-chart> -->
-        
-        <div id="chartk">
-          <apx-chart
-            [series]="supplyChainChart.series"
-            [fill]="supplyChainChart.fill"
-            [chart]="supplyChainChart.chart"
-            [plotOptions]="supplyChainChart.plotOptions"
-            [labels]="supplyChainChart.labels"
-            [legend]="supplyChainChart.legend"
-            [colors]="supplyChainChart.colors"
-            [responsive]="supplyChainChart.responsive"
-          ></apx-chart>
+
+        <div class="supply-external-class">
+          <apx-chart [series]="supplyChainChart.series" [fill]="supplyChainChart.fill" [chart]="supplyChainChart.chart"
+            [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
+            [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
+            [responsive]="supplyChainChart.responsive"></apx-chart>
         </div>
-        
+
       </app-card>
     </div>
 
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer" (click)="initStackedChartAccordingToDonut('Components')">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Components')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -323,7 +321,6 @@
 
                               <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                               {{rowData.name}}
-                              {{rowData.entityType}}
                               <!-- <span class="tree-tbl-icn">
                                 <i [ngClass]="{'fal fa-tachometer-alt': rowData.entityType === 'DASHBOARD',
                                 'fas fa-divide': rowData.entityType === 'DIVISION',
@@ -337,38 +334,41 @@
                           <td class="text-left text-danger">HIGH</td>
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
-                                [tooltip]="commonLineSparklineOptions.tooltip">
-                              </apx-chart>
                               <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
-                            </div>
-                          </td>
-                          <td class="text-left">
-                            <div class="sparkline-chart-blk">
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
-                                [tooltip]="commonLineSparklineOptions.tooltip"
-                                [colors]="commonLineSparklineOptions.colors"></apx-chart>
-                              <span>{{rowData?.entityMetrics?.componentMetrics?.total}}</span>
-                            </div>
-                          </td>
-                          <td class="text-left">
-                            <div class="sparkline-chart-blk">
                               <apx-chart [series]="commonLineSparklineOptions.series"
                                 [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
-                              <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
                             </div>
                           </td>
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
+                              <span>{{rowData?.entityMetrics?.componentMetrics?.total}}</span>
                               <apx-chart [series]="commonLineSparklineOptions.series"
                                 [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"
                                 [colors]="commonLineSparklineOptions.colors"></apx-chart>
+
+                            </div>
+                          </td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
+                              <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
+                              <apx-chart [series]="commonLineSparklineOptions.series"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip">
+                              </apx-chart>
+
+                            </div>
+                          </td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
+                              <apx-chart [series]="commonLineSparklineOptions.series"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip"
+                                [colors]="commonLineSparklineOptions.colors"></apx-chart>
+
                             </div>
                           </td>
                         </tr>

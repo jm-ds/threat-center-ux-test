@@ -204,6 +204,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     .proj-t-card {
         .card-body {
             padding: 10px;
+            min-height: 180px;
 
             app-apex-chart {
                 div:first-of-type {
@@ -226,7 +227,6 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
     .card {
         margin-bottom: 15px;
-        height: calc(100% - 15px);
     }
 }
 
@@ -448,7 +448,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     align-items: center;
 
     span {
-        margin-left: 10px;
+        margin-right: 10px;
     }
 }
 
@@ -469,3 +469,21 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 }
 
 /////////////////////////================Entity Page style End================//////////////
+
+.supply-chart {
+    svg {
+        height: 130px;
+    }
+
+    .apexcharts-canvas  {
+        height: auto !important;
+    }
+}
+
+.supply-external-class {
+    div {
+        &:first-child {
+            min-height: inherit !important;
+        }
+    }
+}

@@ -323,6 +323,18 @@
                     color: #fff;
                 }
             }
+
+            &:hover {
+                li {
+                    background: #6c757d;
+
+                    &:hover,
+                    &.active {
+                        background: #1e90ff;
+                        color: #fff;
+                    }
+                }
+            }
         }
     }
 }

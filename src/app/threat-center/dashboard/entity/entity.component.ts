@@ -163,6 +163,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
     if (this.isShowStackedChart) {
       this.selectedDonut = value;
+      
       this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
       switch (this.selectedDonut) {
         case 'Vulnerability':
