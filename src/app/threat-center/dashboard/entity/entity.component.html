@@ -335,8 +335,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
+                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
                             </div>
@@ -344,8 +344,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.componentMetrics?.total}}</span>
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
+                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"
                                 [colors]="commonLineSparklineOptions.colors"></apx-chart>
 
@@ -354,8 +354,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
+                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
 
@@ -364,8 +364,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
-                              <apx-chart [series]="commonLineSparklineOptions.series"
-                                [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
+                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"
                                 [colors]="commonLineSparklineOptions.colors"></apx-chart>
 
@@ -398,18 +398,18 @@
                           <ng-template pTemplate="header">
                             <tr>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="200px">PROJECT NAME</th>
-                              <th
+                                width="250px">PROJECT NAME</th>
+                              <!-- <th
                                 style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">
-                                DIVISION</th>
+                                DIVISION</th> -->
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
                                 width="140px">Vulnerabilities</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
                                 width="200px">Licenses</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="100px">Components</th>
+                                width="120px">Components</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="100px">Assets</th>
+                                width="120px">Assets</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
                               </th>
                             </tr>
@@ -421,7 +421,7 @@
                                 <a
                                   [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
                               </td>
-                              <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td>
+                              <!-- <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td> -->
                               <td style="padding: 0.75rem;">
                                 <span title="Critical"
                                   class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.critical}}</span>

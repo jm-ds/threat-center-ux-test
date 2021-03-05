@@ -81,7 +81,7 @@ export class ChartHelperService {
                     shade: "dark",
                     type: "horizontal",
                     shadeIntensity: 0.5,
-                    gradientToColors: ["#ff5252", "#ffa21d"],
+                    gradientToColors: ["#11c15b", "#ffa21d"],
                     inverseColors: true,
                     opacityFrom: 1,
                     opacityTo: 1,
@@ -109,21 +109,34 @@ export class ChartHelperService {
                     }
                 }
             },
-            colors: ["#11c15b", "#4680ff"],
+            colors: ["#ff5252", "#4680ff"],
             labels: ["Risk", "Quality"],
             legend: {
                 show: true,
                 floating: true,
-                fontSize: "20px",
+                fontSize: "22px",
                 position: "left",
-                offsetX: -20,
-                offsetY: 30,
+                offsetX: -25,
+                offsetY: 10,
+                
                 labels: {
                     useSeriesColors: true
                 },
                 formatter: function (seriesName, opts) {
                     return seriesName;
                     // + ":  " + opts.w.globals.series[opts.seriesIndex];
+                },
+                markers: {
+                    width: 0,
+                    height: 0,
+                    strokeWidth: 0,
+                    strokeColor: '',
+                    fillColors: undefined,
+                    radius: 0,
+                    customHTML: undefined,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
                 },
                 itemMargin: {
                     horizontal: 6
@@ -282,6 +295,9 @@ export class ChartHelperService {
 
     sparkLineChartCommonConfiguration() {
         return {
+            stroke: {
+                width: 2,
+            },
             chart: {
                 type: "line",
                 width: 100,
