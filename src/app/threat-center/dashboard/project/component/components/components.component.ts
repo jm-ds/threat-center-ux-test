@@ -5,10 +5,11 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import Swal from "sweetalert2";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import {CoreHelperService} from '@app/core/services/core-helper.service';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 
 @Component({
     selector: 'app-components',
@@ -19,7 +20,7 @@ export class ComponentsComponent implements OnInit {
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
-    fixResultObservable: Observable<FixResult>;
+    fixResultObservable: Observable<FixResult[]>;
     newVersion: string;
 
     defaultPageSize = 25;
@@ -43,10 +44,10 @@ export class ComponentsComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private fixService: FixService,
-        private spinner: NgxSpinnerService,
         private router: Router,
         private route: ActivatedRoute,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -62,18 +63,14 @@ export class ComponentsComponent implements OnInit {
         this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    fixVersion(groupId: string, artifactId: string) {
-        this.spinner.show();
-        //this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion.split("||")[1]);
-        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion);
-        this.fixResultObservable.subscribe(res => {
-            this.spinner.hide();
-            if (res) {
-                Swal.fire('Good job!', 'Mvn dependency version updated!', 'success');
-            } else {
-                Swal.fire('Error!', 'Something went wrong, try later!', 'warning');
-            }
+    fixVersion(componentId: string, oldVersion: string) {
+        const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+            keyboard: false,
         });
+        modalRef.componentInstance.scanId = this.scanId;
+        modalRef.componentInstance.newVersion = this.newVersion;
+        modalRef.componentInstance.oldVersion = oldVersion;
+        modalRef.componentInstance.componentId = componentId;
     }
 
     // While any changes occurred in page
@@ -82,7 +79,7 @@ export class ComponentsComponent implements OnInit {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null, { componentName: "Components", value: pageInfo.pageSize });
+            this.coreHelperService.settingUserPreference("Project", null, null,{ componentName: "Components", value: pageInfo.pageSize });
             // API Call
             this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined, undefined, undefined);
             this.paginator.firstPage();

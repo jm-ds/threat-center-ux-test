@@ -17,6 +17,7 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
+import { HostListener } from '@angular/core';
 
 @Component({
     selector: 'app-quickstart',
@@ -42,6 +43,7 @@ export class QuickstartWizardComponent implements OnInit {
 
     isDisableScanBtn: boolean = false;
     selectedItem: string = "";
+    lastTabChangesInfo: NgbTabChangeEvent = undefined;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
     constructor(
@@ -88,7 +90,7 @@ export class QuickstartWizardComponent implements OnInit {
             let repo = resourcePath[2];
             let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
-                branch = 'master';
+                branch = this.selectedRepos[0].node.defaultBranchRef.name;
             }
             scanRequest.login = owner;
             scanRequest.branch = branch;
@@ -117,7 +119,7 @@ export class QuickstartWizardComponent implements OnInit {
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
-        //open dialog box with message..
+        // open dialog box with message..
 
         // this.openFloatingModel();
         this.isDisableScanBtn = true;
@@ -275,9 +277,40 @@ export class QuickstartWizardComponent implements OnInit {
     }
 
     onTabChange($event: NgbTabChangeEvent) {
+        this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", this.activeTab);
+        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId,this.activeTab);
     }
+
+
+    //Callled when component deactivate or destrory
+    canDeactivate(): Observable<boolean> | boolean {
+        //Need to check here is browser back button clicked or not if clicked then do below things..
+        if (this.coreHelperService.getBrowserBackButton()) {
+            this.coreHelperService.setBrowserBackButton(false);
+            if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+                this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan", true);
+                this.coreHelperService.settingUserPreference("ThreatScan", null, this.activeTab);
+                return false;
+            } else {
+                this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+                return true;
+            }
+        } else {
+            this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+            return true;
+        }
+    }
+
+    //Below method will fire when click on browser back button.
+    @HostListener('window:popstate', ['$event'])
+    onPopState(event) {
+        this.coreHelperService.setBrowserBackButton(true);
+        if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+            history.pushState(null, null, window.location.href);
+        }
+    }
+
 
     private isEmail(userName: string): boolean {
         let re = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
