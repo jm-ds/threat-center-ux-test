@@ -325,6 +325,9 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 //Entity Page Organization chart
 .ui-organizationchart {
     padding: 30px;
+    overflow-x: auto;
+    display: block;
+    width: 100%;
 
     .ui-organizationchart-table {
 
@@ -334,9 +337,14 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
                 .node-header {
                     color: rgba(255, 255, 255, 0.8);
-                    background: #2e3944;
+                    // background: #2e3944;
                     padding: 5px;
                     border-radius: 2px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                    max-width: 250px;
                 }
 
                 .ui-organizationchart-node-content {
@@ -347,6 +355,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     padding: 5px;
                     color: #adb7be;
                     font-size: 12px;
+                    height: 61px;
 
                     p {
                         color: #adb7be;
@@ -354,18 +363,27 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     }
                 }
 
+                .no-data-text {
+                    display: block;
+                    width: 100%;
+                    margin: 0px 0 0;
+                    p {
+                        font-size: 11px;
+                        color: #adb7be;
+                        margin: 0;
+                    }
+                }
+
                 .chart-hdr-box {
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
+                    justify-content: center;
 
                     .count-blk {
                         border-radius: 2px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        flex-direction: column;
-                        padding: 5px 5px 0;
                         margin: 0 5px;
 
                         p {
@@ -390,7 +408,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                         }
 
                         p {
-                            margin: 0 0 5px 0;
+                            margin: 0 5px 0 0;
                         }
 
                         span {
@@ -454,6 +472,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
 .ui-organizationchart .ui-organizationchart-table>tr>td {
     padding: 0 5px;
+    min-width: 85px;
 }
 
 
@@ -486,4 +505,11 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
             min-height: inherit !important;
         }
     }
+}
+
+.tooltip-inner {
+    background: #2e3944;
+}
+.tooltip .arrow:before {
+    border-top-color: #2e3944 !important;
 }

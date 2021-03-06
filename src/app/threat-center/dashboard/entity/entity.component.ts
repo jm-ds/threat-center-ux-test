@@ -15,6 +15,7 @@ import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 
 @Component({
@@ -93,6 +94,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   isShowStackedChart: boolean = true;
 
   public supplyChainChart: Partial<any>;
+  public config: PerfectScrollbarConfigInterface = {};
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -529,11 +531,8 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeComponentChartDropdown(item: { id: string, name: string, isActive: boolean }) {
+  changeComponentChartDropdown() {
     this.isShowStackedChart = false;
-    this.isShowComponentdropdown = false;
-    this.selectedComponentChartDropvalue = item.name;
-    _.each(this.componentChartDropValues, value => { value.isActive = (value.id !== item.id) ? false : true; });
     //binding value accroding to dropdown...
     switch (this.selectedComponentChartDropvalue) {
       case 'Components':
@@ -552,11 +551,8 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeLincesChartDropdown(item: { id: string, name: string, isActive: boolean }) {
+  changeLincesChartDropdown() {
     this.isShowStackedChart = false;
-    this.isShowLicensedropdown = false;
-    this.selectedlicenseChartDropValue = item.name;
-    _.each(this.licenseChartDropValues, value => { value.isActive = (value.id !== item.id) ? false : true; })
     //bind value accroding to dropdown...
     switch (this.selectedlicenseChartDropValue) {
       case 'License Count':

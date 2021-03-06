@@ -70,7 +70,7 @@ export class ChartHelperService {
 
     getSupplyChartConfig() {
         return {
-            series: [76, 67],
+            series: [50, 50],
             chart: {
                 height: 260,
                 type: "radialBar"
@@ -81,7 +81,7 @@ export class ChartHelperService {
                     shade: "dark",
                     type: "horizontal",
                     shadeIntensity: 0.5,
-                    gradientToColors: ["#11c15b", "#ffa21d"],
+                    gradientToColors: ["#11c15b", "#4680ff"],
                     inverseColors: true,
                     opacityFrom: 1,
                     opacityTo: 1,
@@ -109,16 +109,15 @@ export class ChartHelperService {
                     }
                 }
             },
-            colors: ["#ff5252", "#4680ff"],
+            colors: ["#ff5252", "#ffa21d"],
             labels: ["Risk", "Quality"],
             legend: {
                 show: true,
                 floating: true,
-                fontSize: "22px",
+                fontSize: "18px",
                 position: "left",
-                offsetX: -25,
+                offsetX: -22,
                 offsetY: 10,
-                
                 labels: {
                     useSeriesColors: true
                 },
@@ -139,7 +138,7 @@ export class ChartHelperService {
                     offsetY: 0
                 },
                 itemMargin: {
-                    horizontal: 6
+                    horizontal: 3
                 }
             },
             responsive: [

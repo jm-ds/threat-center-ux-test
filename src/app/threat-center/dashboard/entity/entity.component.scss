@@ -254,6 +254,18 @@
 .chart-options {
     position: relative;
 
+    select {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 70px;
+        border: none;
+        height: 20px;
+        padding: 0;
+        background: none;
+    }
+
     .chart-opt-selected {
         display: flex;
         align-items: center;
@@ -324,17 +336,17 @@
                 }
             }
 
-            &:hover {
-                li {
-                    background: #6c757d;
+            // &:hover {
+            //     li {
+            //         background: #6c757d;
 
-                    &:hover,
-                    &.active {
-                        background: #1e90ff;
-                        color: #fff;
-                    }
-                }
-            }
+            //         &:hover,
+            //         &.active {
+            //             background: #1e90ff;
+            //             color: #fff;
+            //         }
+            //     }
+            // }
         }
     }
 }
