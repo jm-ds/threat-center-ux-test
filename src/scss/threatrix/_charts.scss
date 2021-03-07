@@ -367,6 +367,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     display: block;
                     width: 100%;
                     margin: 0px 0 0;
+
                     p {
                         font-size: 11px;
                         color: #adb7be;
@@ -494,7 +495,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
         height: 130px;
     }
 
-    .apexcharts-canvas  {
+    .apexcharts-canvas {
         height: auto !important;
     }
 }
@@ -510,6 +511,19 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 .tooltip-inner {
     background: #2e3944;
 }
+
 .tooltip .arrow:before {
     border-top-color: #2e3944 !important;
+}
+
+.tree-spinner {
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    .mat-progress-spinner circle,
+    .mat-spinner circle {
+        stroke: #6078ea !important;
+        height: 50px;
+        width: 50px;
+    }
 }
