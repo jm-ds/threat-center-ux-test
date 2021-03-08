@@ -35,8 +35,8 @@ export class EntityService {
                   name
                   entityType
                   removed
-                }  
-              }
+                }
+              }    
             }
           }
         }

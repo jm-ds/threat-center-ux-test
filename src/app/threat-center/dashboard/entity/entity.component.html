@@ -114,8 +114,7 @@
                 </div> -->
 
                 <select class="form-control form-control-sm" id="license" (click)="isShowStackedChart = false"
-                        (change)="changeLincesChartDropdown()"
-                        [(ngModel)]="selectedlicenseChartDropValue" name="license">
+                  (change)="changeLincesChartDropdown()" [(ngModel)]="selectedlicenseChartDropValue" name="license">
                   <option *ngFor="let item of licenseChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -182,8 +181,7 @@
                   </ul>
                 </div> -->
                 <select class="form-control form-control-sm" id="component" (click)="isShowStackedChart = false"
-                        (change)="changeComponentChartDropdown()"
-                        [(ngModel)]="selectedComponentChartDropvalue" name="component">
+                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue" name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -313,12 +311,11 @@
           <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
             id="BUSINESSUNITS">
             <ng-template ngbTabContent>
-              <!-- product-section start -->
+
               <div class="row">
                 <div class="col-sm-12">
                   <app-card [hidHeader]="true" cardClass="table-card tree-table-card" blockClass="px-0 py-0">
-                    <!-- <div class="table-responsive"> -->
-                    <!-- <perfect-scrollbar> -->
+
                     <p-treeTable [value]="entityTreeModel.data">
                       <ng-template pTemplate="header">
                         <tr>
@@ -388,13 +385,15 @@
                       </ng-template>
                     </p-treeTable>
 
+                    <div class="tree-spinner" *ngIf="isTreeProgressBar">
+                      <mat-progress-spinner style="margin:0 auto;" [mode]="'indeterminate'">
+                      </mat-progress-spinner>
+                    </div>
 
-                    <!-- </perfect-scrollbar> -->
-                    <!-- </div> -->
                   </app-card>
                 </div>
               </div>
-              <!-- product-section end -->
+
             </ng-template>
           </ngb-tab>
 
@@ -481,8 +480,7 @@
                                 <span title="Skipped"
                                   class="badge m-r-5 badge-light-primary">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.skipped}}</span>
                               </td>
-                              <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y
-                                h:mmaa' | lowercase}}</td>
+                              <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-template>
                         </p-treeTable>
@@ -598,38 +596,40 @@
               <div class="row">
                 <div class="col-sm-12">
                   <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
-                    <!-- <perfect-scrollbar [style.max-height]="'500px'" style="position: relative;" [config]="config"> -->
-                      <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
-                        [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
-                        <ng-template let-node pTemplate="entity">
-                          <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
-                            tooltipClass="my-custom-class">{{node.name}}</div>
-                          <div class="node-content node-content-top">
-                            <div class="node-no-data" *ngIf="!node.data || !node.data.entityMetrics">
-                              <p class="no-data-text">No metrics data yet</p>
+                    <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
+                      [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
+                      <ng-template let-node pTemplate="entity">
+                        <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
+                          tooltipClass="my-custom-class">{{node.name}}</div>
+                        <div class="node-content node-content-top">
+                          <div class="node-no-data" *ngIf="!node.data || !node.data.entityMetrics">
+                            <p class="no-data-text">No metrics data yet</p>
+                          </div>
+                          <div class="chart-hdr-box" *ngIf="!!node.data.entityMetrics">
+                            <div class="count-blk vulnerabilities-col">
+                              <p *ngIf="!!node?.data?.entityMetrics?.vulnerabilityMetrics">Vuln:</p>
+                              <span>{{node?.data?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
                             </div>
-                            <div class="chart-hdr-box" *ngIf="!!node.data.entityMetrics">
-                              <div class="count-blk vulnerabilities-col">
-                                <p *ngIf="!!node?.data?.entityMetrics?.vulnerabilityMetrics">Vuln:</p>
-                                <span>{{node?.data?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
-                              </div>
-                              <div class="count-blk license-col">
-                                <p *ngIf="!!node?.data?.entityMetrics?.licenseMetrics">Licns:</p>
-                                <span>{{node?.data?.entityMetrics?.licenseMetrics?.total}}</span>
-                              </div>
-                              <div class="count-blk components-col">
-                                <p *ngIf="!!node?.data?.entityMetrics?.componentMetrics">Comp:</p>
-                                <span>{{node?.data?.entityMetrics?.componentMetrics?.total}}</span>
-                              </div>
-                              <div class="count-blk assets-col">
-                                <p *ngIf="!!node?.data?.entityMetrics?.assetMetrics">Assets:</p>
-                                <span>{{node?.data?.entityMetrics?.assetMetrics?.total}}</span>
-                              </div>
+                            <div class="count-blk license-col">
+                              <p *ngIf="!!node?.data?.entityMetrics?.licenseMetrics">Licns:</p>
+                              <span>{{node?.data?.entityMetrics?.licenseMetrics?.total}}</span>
+                            </div>
+                            <div class="count-blk components-col">
+                              <p *ngIf="!!node?.data?.entityMetrics?.componentMetrics">Comp:</p>
+                              <span>{{node?.data?.entityMetrics?.componentMetrics?.total}}</span>
+                            </div>
+                            <div class="count-blk assets-col">
+                              <p *ngIf="!!node?.data?.entityMetrics?.assetMetrics">Assets:</p>
+                              <span>{{node?.data?.entityMetrics?.assetMetrics?.total}}</span>
                             </div>
                           </div>
-                        </ng-template>
-                      </p-organizationChart>
-                    <!-- </perfect-scrollbar> -->
+                        </div>
+                      </ng-template>
+                    </p-organizationChart>
+                    <div class="tree-spinner" *ngIf="isTreeProgressBar">
+                      <mat-progress-spinner style="margin:0 auto;" [mode]="'indeterminate'">
+                      </mat-progress-spinner>
+                    </div>
                   </app-card>
                 </div>
               </div>

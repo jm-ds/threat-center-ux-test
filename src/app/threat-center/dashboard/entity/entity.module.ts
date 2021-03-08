@@ -10,6 +10,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { TreeTableModule } from 'primeng/treetable';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { OrganizationChartModule } from 'primeng/organizationchart';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
     TreeTableModule,
     NgApexchartsModule,
     NgbModule,
-    OrganizationChartModule
+    OrganizationChartModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     EntityComponent

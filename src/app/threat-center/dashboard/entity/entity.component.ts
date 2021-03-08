@@ -88,13 +88,13 @@ export class EntityComponent implements OnInit, OnDestroy {
     { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
   ];
   selectedlicenseChartDropValue = "License Count";
-  public commonLineSparklineOptions: any = {};
+  commonLineSparklineOptions: any = {};
 
   currentEntityId: string = "";
   isShowStackedChart: boolean = true;
 
-  public supplyChainChart: Partial<any>;
-  public config: PerfectScrollbarConfigInterface = {};
+  supplyChainChart: Partial<any>;
+  isTreeProgressBar:boolean = false;
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -165,7 +165,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
     if (this.isShowStackedChart) {
       this.selectedDonut = value;
-      
+
       this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
       switch (this.selectedDonut) {
         case 'Vulnerability':
@@ -361,6 +361,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.entityTreeModel = { data: [] };
     this.organizationTreeModel = [];
     this.selectedDonut = 'Vulnerability';
+    this.isTreeProgressBar = true;
     this.router.navigateByUrl('dashboard/entity/' + entityId);
     this.obsEntity = this.apiService.getEntity(entityId)
       .pipe(map(result => result.data.entity));
@@ -475,6 +476,8 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
       if (!!entity) {
         this.entityTreeLogic(entity);
+      }else{
+        this.isTreeProgressBar = false;
       }
     });
   }
@@ -503,8 +506,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
         }
       ];
-
-      console.log(this.organizationTreeModel);
+      this.isTreeProgressBar = false;
     }
   }
 
