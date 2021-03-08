@@ -206,6 +206,7 @@ export class Vulnerability {
   credits:string;
   vulnerableVersions:string;
   patchedVersions:string;
+  components: any;
 }
 
 export class License {
