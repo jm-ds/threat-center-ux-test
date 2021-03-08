@@ -58,41 +58,9 @@ export class ApiService {
             tag
             version
             created
-            scanMetrics {
-              vulnerabilityMetrics {
-                critical
-                high
-                medium
-                low
-                info
-                avgCvss2
-                avgCvss3
-              }
-              licenseMetrics {
-                copyleftStrong
-                copyleftWeak
-                copyleftPartial
-                copyleftLimited
-                copyleft
-                custom
-                dual
-                permissive
-                total
-              }
-              componentMetrics {
-                notLatest
-                latest
-                vulnerabilities
-                riskyLicenses
-              }
-              assetMetrics {
-                embedded
-                analyzed
-                skipped
-              }
-            }
+            
           }
-          %childProjects%          
+          %childProjects%
         }
       }
     }`;
@@ -117,79 +85,41 @@ export class ApiService {
                 tag
                 version
                 created
-                scanMetrics {
-                  vulnerabilityMetrics {
-                    critical
-                    high
-                    medium
-                    low
-                    info
-                    avgCvss2
-                    avgCvss3
-                  }
-                  licenseMetrics {
-                    copyleftStrong
-                    copyleftWeak
-                    copyleftPartial
-                    copyleftLimited
-                    copyleft
-                    custom
-                    dual
-                    permissive
-                    total
-                  }
-                  componentMetrics {
-                    notLatest
-                    latest
-                    vulnerabilities
-                    riskyLicenses
-                  }
-                  assetMetrics {
-                    embedded
-                    analyzed
-                    skipped
-                  }
-                }
+                
+                
+                
               }
               %childProjects%
             }
           }
         }
+        
         entityMetrics {
           projectCount
-          vulnerabilityMetrics {
-            total
-            critical
-            high
-            medium
-            low
-            info
-            avgCvss2
-            avgCvss3
+          entityVulnerabilityMetrics {
+            measureDate
+            severityMetrics
           }
-          licenseMetrics {
-            copyleftStrong
-            copyleftWeak
-            copyleftPartial
-            copyleftLimited
-            copyleft
-            custom
-            dual
-            permissive
-            total
+          entityComponentMetrics {
+            measureDate
+            vulnerabilityMetrics
+            licenseMetrics
+            licenseCategoryMetrics
+            licenseFamilyMetrics
           }
-          componentMetrics {
-            total
-            notLatest
-            latest
-            vulnerabilities
-            riskyLicenses
+          entityLicenseMetrics {
+            measureDate
+            licenseMetrics
+            licenseCategoryMetrics
+            licenseFamilyMetrics
           }
-          assetMetrics {
-            total
-            embedded
-            analyzed
-            skipped
+          entityAssetMetrics {
+            measureDate,
+            assetCompositionMetrics
+          }
+          entitySupplyChainMetrics {
+            measureDate
+            supplyChainMetrics
           }
         }
 
@@ -214,81 +144,23 @@ export class ApiService {
                       tag
                       version
                       created
-                      scanMetrics {
-                        vulnerabilityMetrics {
-                          critical
-                          high
-                          medium
-                          low
-                          info
-                          avgCvss2
-                          avgCvss3
-                        }
-                        licenseMetrics {
-                          copyleftStrong
-                          copyleftWeak
-                          copyleftPartial
-                          copyleftLimited
-                          copyleft
-                          custom
-                          dual
-                          permissive
-                          total
-                        }
-                        componentMetrics {
-                          notLatest
-                          latest
-                          vulnerabilities
-                          riskyLicenses
-                        }
-                        assetMetrics {
-                          embedded
-                          analyzed
-                          skipped
-                        }
-                      }
+                      
+                      
                     }
                     %childEntityChildProjects%                    
                   }
                 }
               }
-              entityMetrics {
+             
+             entityMetricsSummary {
                 projectCount
-                vulnerabilityMetrics {
-                  total
-                  critical
-                  high
-                  medium
-                  low
-                  info
-                  avgCvss2
-                  avgCvss3
-                }
-                licenseMetrics {
-                  copyleftStrong
-                  copyleftWeak
-                  copyleftPartial
-                  copyleftLimited
-                  copyleft
-                  custom
-                  dual
-                  permissive
-                  total
-                }
-                componentMetrics {
-                  total
-                  notLatest
-                  latest
-                  vulnerabilities
-                  riskyLicenses
-                }
-                assetMetrics {
-                  total
-                  embedded
-                  analyzed
-                  skipped
-                }
+                projectRiskCount
+                vulnerabilityRisk
+                licenseRisk
+                supplyChainRisk
+                embeddedAssetsPct             
               }
+             
             }
           }
         }
@@ -396,38 +268,11 @@ export class ApiService {
                     created,
                     errorMsg,
                     log,
-                    scanMetrics {
-                      vulnerabilityMetrics {
-                        critical,
-                        high,
-                        medium,
-                        low,
-                        info,
-                        avgCvss2,
-                        avgCvss3
-                      },
-                      licenseMetrics {
-                        copyleftStrong,
-                         copyleftWeak,
-                         copyleftPartial,
-                         copyleftLimited,
-                         copyleft,
-                         custom,
-                         dual,
-                         permissive,
-                         total
-                      },
-                      componentMetrics {
-                        notLatest,
-                        vulnerabilities,
-                        riskyLicenses
-                      },
-                      assetMetrics {
-                        embedded,
-                        analyzed,
-                        skipped
-                      }
-                    }
+                    
+                    
+                    
+                    
+                    
                   }
                 }
               }
@@ -1045,32 +890,32 @@ export class ApiService {
   getGitLabUser() {
     return this.apollo.watchQuery<GitLabUserQuery>({
       query: gql`
-                query {
-                  gitLabUser {
-                    id,
-                    avatarUrl,
-                    email,
-                    name,
-                    username,
-                    gitLabProjects {
-                      id,
-                      name,
-                      fullPath,
-                      description,
-                      httpUrlToRepo,
-                      sshUrlToRepo,
-                      path,
-                      webUrl,
-                      archived,
-                      createdAt,
-                      repository {
-                          rootRef,
-                          exists
-                      }
-                    }
-                  }
+          query {
+            gitLabUser {
+              id,
+              avatarUrl,
+              email,
+              name,
+              username,
+              gitLabProjects {
+                id,
+                name,
+                fullPath,
+                description,
+                httpUrlToRepo,
+                sshUrlToRepo,
+                path,
+                webUrl,
+                archived,
+                createdAt,
+                repository {
+                    rootRef,
+                    exists
                 }
-              `,
+              }
+            }
+          }
+        `,
     }).valueChanges;
   }
 
@@ -1079,31 +924,31 @@ export class ApiService {
   getBitbucketUser() {
     return this.apollo.watchQuery<BitbucketUserQuery>({
       query: gql`
-                query {
-                  bitbucketUser {
-                    id,
-                    name,
-                    username,
-                    state,
-                    email,
-                    avatarUrl,
-                    webUrl,
-                    organization,
-                    bitBucketRepositories {
-                        name,
-                        fullName,
-                        url,
-                        sshUrl,
-                        owner,
-                        createdOn,
-                        description,
-                        language,
-                        mainBranch,
-                        branches
-                    }
-                  }
-                }
-              `,
+          query {
+            bitbucketUser {
+              id,
+              name,
+              username,
+              state,
+              email,
+              avatarUrl,
+              webUrl,
+              organization,
+              bitBucketRepositories {
+                  name,
+                  fullName,
+                  url,
+                  sshUrl,
+                  owner,
+                  createdOn,
+                  description,
+                  language,
+                  mainBranch,
+                  branches
+              }
+            }
+          }
+        `,
     }).valueChanges;
   }
 }

@@ -87,48 +87,64 @@ export class Entity {
   name:string;
   projects:ProjectConnection;
   entityMetrics:EntityMetrics;
+  entityMetricsSummary:EntityMetricsSummary;
   entityComponents:any;
   vulnerabilities: Vulnerability[];
   licenses: License[];
 }
 
+export class EntityMetricsSummary {
+  projectCount:number;
+  projectRiskCount:number;
+  vulnerabilityRisk: number[];
+  licenseRisk: number[];
+  supplyChainRisk: number[];
+  embeddedAssetsPct: number[];
+}
+
 export class EntityMetrics {
-  vulnerabilityMetrics:VulnerabilityMetrics;
-  licenseMetrics:LicenseMetrics;
-  componentMetrics:ComponentMetrics;
-  assetMetrics:AssetMetrics;
+  projectCount:number;
+  entityVulnerabilityMetrics: EntityVulnerabilityMetrics[];
+  entityComponentMetrics: EntityComponentMetrics[];
+  entityAssetMetrics: EntityAssetMetrics[];
+  entityLicenseMetrics: EntityLicenseMetrics[];
+  entitySupplyChainMetrics: EntitySupplyChainMetrics[];
 }
 
-export class VulnerabilityMetrics {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
-  info: number;
+export interface EntityVulnerabilityMetrics extends IVulnerabilityMetrics {}
+export interface EntityComponentMetrics extends IComponentMetrics {}
+export interface EntityLicenseMetrics extends ILicenseMetrics {}
+export interface EntityAssetMetrics extends IAssetMetrics {}
+export interface EntitySupplyChainMetrics extends ISupplyChainMetrics {}
+
+export interface IVulnerabilityMetrics {
+  measureDate: string;
+  severityMetrics: Map<string, number>;
 }
 
-export class LicenseMetrics {
-  copyleftStrong: number;
-  copyleftWeak: number;
-  copyleftPartial: number;
-  copyleftLimited: number;
-  copyleft: number;
-  custom: number;
-  dual: number;
-  permissive: number;
+export interface IComponentMetrics {
+  vulnerabilityMetrics: Map<string, number>;
+  licenseMetrics: Map<string, number>;
+  licenseCategoryMetrics: Map<string, number>;
+  licenseFamilyMetrics: Map<string, number>;
 }
 
-export class ComponentMetrics {
-  notLatest: number;
-  vulnerabilities: number;
-  riskyLicenses: number;
+export interface ILicenseMetrics {
+  measureDate: string;
+  licenseMetrics: Map<string, number>;
+  licenseCategoryMetrics: Map<string, number>;
+  licenseFamilyMetrics: Map<string, number>;
 }
 
-export class AssetMetrics {
-  embedded: number;
-  analyzed: number;
-  skipped: number;
+export interface IAssetMetrics {
+  assetCompositionMetrics: Map<string, number>;
 }
+
+export interface ISupplyChainMetrics {
+  supplyChainMetrics: Map<string, number>;
+}
+
+
 
 export class Project {
   projectId:string;

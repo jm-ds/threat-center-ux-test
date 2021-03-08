@@ -328,7 +328,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       this.entityPageBreadCums = JSON.parse(sessionStorage.getItem('EntityBreadCums'));
     }
     this.loadEntity(entityId, isPush);
-    this.loadVulnerabilities(entityId);
+    //this.loadVulnerabilities(entityId);
     this.getLastTabSelected();
     this.commonLineSparklineOptions = Object.assign(this.chartHelperService.sparkLineChartCommonConfiguration());
   }
@@ -375,17 +375,81 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.setEntityBreadcumToSession();
       }
 
+
       if (entity.entityMetrics) {
-        const vulnerabilityMetrics = entity.entityMetrics.vulnerabilityMetrics;
-        const licenseMetrics = entity.entityMetrics.licenseMetrics;
-        const componentMetrics = entity.entityMetrics.componentMetrics;
-        const assetMetrics = entity.entityMetrics.assetMetrics;
+
+        // NOTES:
+        // Metrics are ordered by date DESC (most recent to least recent)
+        // Period defaults to week, so you'll get 7 days worth of data for stack chart
+        // The data is all stored in Maps. I suggest that we use the map key for the chart label and value for the series.
+        //    This data will change over time and this will allow the server side to drive the chart data without
+        //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
+        //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
+        //    on an updated demonstration.
+
+        // VULNERABILITY METRICS
+        // 1 dimension for vulnerability metrics (vulnerability severity)
+        const vulnerabilityMetrics = entity.entityMetrics.entityVulnerabilityMetrics
+        // data for pie charts
+        const vulnerabilityMetrics_severityDimension = vulnerabilityMetrics[0].severityMetrics
+
+        // COMPONENT METRICS
+        // 4 dimensions for component metrics
+        // 1) vulnerability severity
+        // 2) license family
+        // 3) license category
+        // 4) license name
+        const componentMetrics = entity.entityMetrics.entityComponentMetrics;
+        // data for pie charts
+        const componentMetrics_vulDimension = componentMetrics[0].vulnerabilityMetrics;
+        const componentMetrics_licenseFamilyDimension = componentMetrics[0].licenseFamilyMetrics; // <- NO DATA YET
+        const componentMetrics_licenseCategoryDimension = componentMetrics[0].licenseCategoryMetrics;
+        const componentMetrics_licenseDimension = componentMetrics[0].licenseMetrics;
+
+        // ASSET METRICS
+        const assetMetrics = entity.entityMetrics.entityAssetMetrics;
+        // data for pie charts
+        const assetMetrics_assetCompDimension = assetMetrics[0].assetCompositionMetrics;
+
+        // LICENSE METRICS
+        const licenseMetrics = entity.entityMetrics.entityLicenseMetrics;
+        // data for pie charts
+        const licenseMetrics_licenseFamilyDimension = licenseMetrics[0].licenseFamilyMetrics; // <- NO DATA YET
+        const licenseMetrics_licenseCategoryDimension = licenseMetrics[0].licenseCategoryMetrics;
+        const licenseMetrics_licenseDimension = licenseMetrics[0].licenseMetrics;
+
+        // SUPPLY CHAIN METRICS
+        const supplyChainMetrics = entity.entityMetrics.entitySupplyChainMetrics;
+        // data for pie charts
+        const supplyChainMetrics_riskAndQuality = supplyChainMetrics[0].supplyChainMetrics;
+
+        // CHILD ENTITY METRICS SUMMARY DATA
+        const child1 = entity.childEntities.edges[0].node;//.entityMetricsSummary.licenseRisk
+        const licenseRisk = entity.childEntities.edges[0].node.entityMetricsSummary.licenseRisk
+
+        console.log("Child1:", child1.name);
+        console.log(child1.name,"License Risk:", licenseRisk);
+
+
+        // Gets most recent vulnerability metrics to be used for pie charts
+        console.log("vulnerabilityMetrics_severityDimension",vulnerabilityMetrics_severityDimension);
+        console.log("componentMetrics_vulDimension",componentMetrics_vulDimension);
+        console.log("componentMetrics_licenseFamilyDimension",componentMetrics_licenseFamilyDimension);
+        console.log("componentMetrics_licenseCategoryDimension",componentMetrics_licenseCategoryDimension);
+        console.log("componentMetrics_licenseDimension",componentMetrics_licenseDimension);
+        console.log("assetMetrics_assetCompDimension",assetMetrics_assetCompDimension);
+        console.log("licenseMetrics_licenseFamilyDimension",licenseMetrics_licenseFamilyDimension);
+        console.log("licenseMetrics_licenseCategoryDimension",licenseMetrics_licenseCategoryDimension);
+        console.log("licenseMetrics_licenseDimension",licenseMetrics_licenseDimension);
+        console.log("supplyChainMetrics_riskAndQuality",supplyChainMetrics_riskAndQuality);
+
+
 
         this.vulnerabilityDonutChart = {};
         this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.vulnerabilityDonutChart['labels'] = ['Critical', 'High', 'Medium', 'Low', 'Info'];
         this.vulnerabilityDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'];
-        this.vulnerabilityDonutChart['series'] = [vulnerabilityMetrics.critical, vulnerabilityMetrics.high, vulnerabilityMetrics.medium, vulnerabilityMetrics.low, vulnerabilityMetrics.info];
+        this.vulnerabilityDonutChart['series'] = [vulnerabilityMetrics_severityDimension.Critical, vulnerabilityMetrics_severityDimension.High, vulnerabilityMetrics_severityDimension.Medium, vulnerabilityMetrics_severityDimension.Low, vulnerabilityMetrics_severityDimension.Info];
 
         this.licenseDonutChart = this.licenseRiskChart = this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.licenseDonutChart['labels'] = this.licenseRiskChart['labels'] = this.licenseCategoryChart['labels'] = ['CL Strong', 'CL Weak', 'CL Partial', 'CL Limited', 'Copyleft', 'Custom', 'Dual', 'Permissive'];
@@ -406,6 +470,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.assetDonutChart['series'] = [assetMetrics.analyzed, assetMetrics.skipped, assetMetrics.embedded];
 
         this.initStackedChartAccordingToDonut(this.selectedDonut);
+
+
       }
       if (!!entity) {
         this.entityTreeLogic(entity);
