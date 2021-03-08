@@ -425,11 +425,10 @@ export class EntityComponent implements OnInit, OnDestroy {
         const supplyChainMetrics_riskAndQuality = supplyChainMetrics[0].supplyChainMetrics;
 
         // CHILD ENTITY METRICS SUMMARY DATA
-        const child1 = entity.childEntities.edges[0].node;//.entityMetricsSummary.licenseRisk
-        const licenseRisk = entity.childEntities.edges[0].node.entityMetricsSummary.licenseRisk
-
-        console.log("Child1:", child1.name);
-        console.log(child1.name,"License Risk:", licenseRisk);
+        //const child1 = entity.childEntities.edges[0].node;
+        //const licenseRisk = entity.childEntities.edges[0].node.entityMetricsSummary.licenseRisk
+        //console.log("Child1:", child1.name);
+        //console.log(child1.name,"License Risk:", licenseRisk);
 
 
         // Gets most recent vulnerability metrics to be used for pie charts
@@ -445,7 +444,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         console.log("supplyChainMetrics_riskAndQuality",supplyChainMetrics_riskAndQuality);
 
 
-
+/*
         this.vulnerabilityDonutChart = {};
         this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.vulnerabilityDonutChart['labels'] = ['Critical', 'High', 'Medium', 'Low', 'Info'];
@@ -469,6 +468,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.assetDonutChart['labels'] = ['Analyzed', 'Skipped', 'Embedded'];
         this.assetDonutChart['colors'] = ['#11c15b', '#4680ff', '#ffa21d'];
         this.assetDonutChart['series'] = [assetMetrics.analyzed, assetMetrics.skipped, assetMetrics.embedded];
+
+ */
 
         this.initStackedChartAccordingToDonut(this.selectedDonut);
 

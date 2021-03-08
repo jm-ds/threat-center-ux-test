@@ -91,6 +91,7 @@ export class Entity {
   entityComponents:any;
   vulnerabilities: Vulnerability[];
   licenses: License[];
+  childEntities:Entity[];
 }
 
 export class EntityMetricsSummary {

@@ -58,6 +58,39 @@ export class ApiService {
             tag
             version
             created
+            scanMetrics {
+              vulnerabilityMetrics {
+                critical
+                high
+                medium
+                low
+                info
+                avgCvss2
+                avgCvss3
+              }
+              licenseMetrics {
+                copyleftStrong
+                copyleftWeak
+                copyleftPartial
+                copyleftLimited
+                copyleft
+                custom
+                dual
+                permissive
+                total
+              }
+              componentMetrics {
+                notLatest
+                latest
+                vulnerabilities
+                riskyLicenses
+              }
+              assetMetrics {
+                embedded
+                analyzed
+                skipped
+              }
+            }
             
           }
           %childProjects%
@@ -85,8 +118,39 @@ export class ApiService {
                 tag
                 version
                 created
-                
-                
+                scanMetrics {
+                  vulnerabilityMetrics {
+                    critical
+                    high
+                    medium
+                    low
+                    info
+                    avgCvss2
+                    avgCvss3
+                  }
+                  licenseMetrics {
+                    copyleftStrong
+                    copyleftWeak
+                    copyleftPartial
+                    copyleftLimited
+                    copyleft
+                    custom
+                    dual
+                    permissive
+                    total
+                  }
+                  componentMetrics {
+                    notLatest
+                    latest
+                    vulnerabilities
+                    riskyLicenses
+                  }
+                  assetMetrics {
+                    embedded
+                    analyzed
+                    skipped
+                  }
+                }
                 
               }
               %childProjects%
@@ -131,28 +195,7 @@ export class ApiService {
               name
               entityType
               removed
-              projects {
-                edges {
-                  node {
-                    projectId
-                    name
-                    created
-                    latestScan {
-                      scanId
-                      projectId
-                      branch
-                      tag
-                      version
-                      created
-                      
-                      
-                    }
-                    %childEntityChildProjects%                    
-                  }
-                }
-              }
-             
-             entityMetricsSummary {
+              entityMetricsSummary {
                 projectCount
                 projectRiskCount
                 vulnerabilityRisk
@@ -160,7 +203,6 @@ export class ApiService {
                 supplyChainRisk
                 embeddedAssetsPct             
               }
-             
             }
           }
         }
@@ -276,7 +318,7 @@ export class ApiService {
                   }
                 }
               }
-              }
+            }
         }
       `, 'no-cache');
   }
