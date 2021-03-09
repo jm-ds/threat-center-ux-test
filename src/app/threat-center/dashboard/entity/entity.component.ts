@@ -52,7 +52,9 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   componentVulnerabilityRiskChart: any = {};
   componentLicenseRiskChart: any = {};
-  componentSourceChart: any = {};
+  componentLicenseCategory: any = {};
+  componentLicense: any = {};
+
   licenseCategoryChart: any = {};
   licenseRiskChart: any = {};
 
@@ -94,7 +96,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   isShowStackedChart: boolean = true;
 
   supplyChainChart: Partial<any>;
-  isTreeProgressBar:boolean = false;
+  isTreeProgressBar: boolean = false;
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -432,52 +434,60 @@ export class EntityComponent implements OnInit, OnDestroy {
 
 
         // Gets most recent vulnerability metrics to be used for pie charts
-        console.log("vulnerabilityMetrics_severityDimension",vulnerabilityMetrics_severityDimension);
-        console.log("componentMetrics_vulDimension",componentMetrics_vulDimension);
-        console.log("componentMetrics_licenseFamilyDimension",componentMetrics_licenseFamilyDimension);
-        console.log("componentMetrics_licenseCategoryDimension",componentMetrics_licenseCategoryDimension);
-        console.log("componentMetrics_licenseDimension",componentMetrics_licenseDimension);
-        console.log("assetMetrics_assetCompDimension",assetMetrics_assetCompDimension);
-        console.log("licenseMetrics_licenseFamilyDimension",licenseMetrics_licenseFamilyDimension);
-        console.log("licenseMetrics_licenseCategoryDimension",licenseMetrics_licenseCategoryDimension);
-        console.log("licenseMetrics_licenseDimension",licenseMetrics_licenseDimension);
-        console.log("supplyChainMetrics_riskAndQuality",supplyChainMetrics_riskAndQuality);
+        console.log("vulnerabilityMetrics_severityDimension", vulnerabilityMetrics_severityDimension);
+        console.log("componentMetrics_vulDimension", componentMetrics_vulDimension);
+        console.log("componentMetrics_licenseFamilyDimension", componentMetrics_licenseFamilyDimension);
+        console.log("componentMetrics_licenseCategoryDimension", componentMetrics_licenseCategoryDimension);
+        console.log("componentMetrics_licenseDimension", componentMetrics_licenseDimension);
+        console.log("assetMetrics_assetCompDimension", assetMetrics_assetCompDimension);
+        console.log("licenseMetrics_licenseFamilyDimension", licenseMetrics_licenseFamilyDimension);
+        console.log("licenseMetrics_licenseCategoryDimension", licenseMetrics_licenseCategoryDimension);
+        console.log("licenseMetrics_licenseDimension", licenseMetrics_licenseDimension);
+        console.log("supplyChainMetrics_riskAndQuality", supplyChainMetrics_riskAndQuality);
 
 
-/*
+
         this.vulnerabilityDonutChart = {};
         this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.vulnerabilityDonutChart['labels'] = ['Critical', 'High', 'Medium', 'Low', 'Info'];
         this.vulnerabilityDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'];
-        this.vulnerabilityDonutChart['series'] = [vulnerabilityMetrics_severityDimension.Critical, vulnerabilityMetrics_severityDimension.High, vulnerabilityMetrics_severityDimension.Medium, vulnerabilityMetrics_severityDimension.Low, vulnerabilityMetrics_severityDimension.Info];
+        this.vulnerabilityDonutChart['series'] = [vulnerabilityMetrics_severityDimension.get('Critical'), vulnerabilityMetrics_severityDimension.get('High'), vulnerabilityMetrics_severityDimension.get('Medium'), vulnerabilityMetrics_severityDimension.get('Low'), vulnerabilityMetrics_severityDimension.get('Info')];
 
+        //License Donut charts
         this.licenseDonutChart = this.licenseRiskChart = this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.licenseDonutChart['labels'] = this.licenseRiskChart['labels'] = this.licenseCategoryChart['labels'] = ['CL Strong', 'CL Weak', 'CL Partial', 'CL Limited', 'Copyleft', 'Custom', 'Dual', 'Permissive'];
         this.licenseDonutChart['colors'] = this.licenseRiskChart['colors'] = this.licenseCategoryChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
-        this.licenseDonutChart['series'] = [licenseMetrics.copyleftStrong, licenseMetrics.copyleftWeak, licenseMetrics.copyleftPartial, licenseMetrics.copyleftLimited, licenseMetrics.copyleft, licenseMetrics.custom, licenseMetrics.dual, licenseMetrics.permissive];
 
-        this.componentDonutChart = this.componentVulnerabilityRiskChart = this.componentLicenseRiskChart = this.componentSourceChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-        this.componentDonutChart['labels'] = this.componentVulnerabilityRiskChart['labels'] = this.componentLicenseRiskChart['labels'] = this.componentSourceChart['labels'] = ['Not Latest', 'Vulnerabilities', 'Risky Licenses'];
-        this.componentDonutChart['colors'] = this.componentVulnerabilityRiskChart['colors'] = this.componentLicenseRiskChart['colors'] = this.componentSourceChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d'];
+        this.licenseDonutChart['series'] = [licenseMetrics_licenseDimension.get('copyleftStrong'), licenseMetrics_licenseDimension.get('copyleftWeak'), licenseMetrics_licenseDimension.get('copyleftPartial'), licenseMetrics_licenseDimension.get('copyleftLimited'),
+        licenseMetrics_licenseDimension.get('copyleft'), licenseMetrics_licenseDimension.get('custom'), licenseMetrics_licenseDimension.get('dual'), licenseMetrics_licenseDimension.get('permissive')];
+        this.licenseRiskChart['series'] = [licenseMetrics_licenseFamilyDimension.get('copyleftStrong'), licenseMetrics_licenseFamilyDimension.get('copyleftWeak'), licenseMetrics_licenseDimension.get('copyleftPartial'), licenseMetrics_licenseFamilyDimension.get('copyleftLimited'),
+        licenseMetrics_licenseFamilyDimension.get('copyleft'), licenseMetrics_licenseFamilyDimension.get('custom'), licenseMetrics_licenseFamilyDimension.get('dual'), licenseMetrics_licenseDimension.get('permissive')];
+        this.licenseCategoryChart['series'] = [licenseMetrics_licenseCategoryDimension.get('copyleftStrong'), licenseMetrics_licenseCategoryDimension.get('copyleftWeak'), licenseMetrics_licenseCategoryDimension.get('copyleftPartial'), licenseMetrics_licenseCategoryDimension.get('copyleftLimited'),
+        licenseMetrics_licenseCategoryDimension.get('copyleft'), licenseMetrics_licenseCategoryDimension.get('custom'), licenseMetrics_licenseCategoryDimension.get('dual'), licenseMetrics_licenseCategoryDimension.get('permissive')];
 
-        this.componentDonutChart['series'] = [componentMetrics.notLatest, componentMetrics.vulnerabilities, componentMetrics.riskyLicenses];
-        this.componentVulnerabilityRiskChart['series'] = [componentMetrics.notLatest, componentMetrics.vulnerabilities, componentMetrics.riskyLicenses];
 
+        //Component donut charts
+        this.componentDonutChart = this.componentVulnerabilityRiskChart = this.componentLicenseRiskChart = this.componentLicense = this.componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+        this.componentDonutChart['labels'] = this.componentVulnerabilityRiskChart['labels'] = this.componentLicenseRiskChart['labels'] = this.componentLicense['labels'] = this.componentLicenseCategory = ['Not Latest', 'Vulnerabilities', 'Risky Licenses'];
+        this.componentDonutChart['colors'] = this.componentVulnerabilityRiskChart['colors'] = this.componentLicenseRiskChart['colors'] = this.componentLicense['colors'] = this.componentLicenseCategory = ['#ff2b2b', '#ff5252', '#ffa21d'];
+        this.componentDonutChart['series'] = [componentMetrics_vulDimension.get('notLatest'), componentMetrics_vulDimension.get('vulnerabilities'), componentMetrics_vulDimension.get('riskyLicenses')];
+        this.componentLicenseRiskChart['series'] = [componentMetrics_licenseFamilyDimension.get('notLatest'), componentMetrics_licenseFamilyDimension.get('vulnerabilities'), componentMetrics_licenseFamilyDimension.get('riskyLicenses')];
+        this.componentLicenseCategory = [componentMetrics_licenseCategoryDimension.get('notLatest'), componentMetrics_licenseCategoryDimension.get('vulnerabilities'), componentMetrics_licenseCategoryDimension.get('riskyLicenses')];
+        this.componentLicense = [componentMetrics_licenseDimension.get('notLatest'), componentMetrics_licenseDimension.get('vulnerabilities'), componentMetrics_licenseDimension.get('riskyLicenses')];
+
+        //Asset donut chart
         this.assetDonutChart = {};
         this.assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.assetDonutChart['labels'] = ['Analyzed', 'Skipped', 'Embedded'];
         this.assetDonutChart['colors'] = ['#11c15b', '#4680ff', '#ffa21d'];
-        this.assetDonutChart['series'] = [assetMetrics.analyzed, assetMetrics.skipped, assetMetrics.embedded];
-
- */
+        this.assetDonutChart['series'] = [assetMetrics_assetCompDimension.get('analyzed'), assetMetrics_assetCompDimension.get('skipped'), assetMetrics_assetCompDimension.get('embedded')];
 
         this.initStackedChartAccordingToDonut(this.selectedDonut);
-
 
       }
       if (!!entity) {
         this.entityTreeLogic(entity);
-      }else{
+      } else {
         this.isTreeProgressBar = false;
       }
     });
@@ -613,7 +623,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.componentLicenseRiskChart['series'] = [10, 6, 4];
         break;
       case 'Source':
-        this.componentSourceChart['series'] = [99, 55, 77];
+        this.componentLicenseCategory['series'] = [99, 55, 77];
         break;
       default:
         break;

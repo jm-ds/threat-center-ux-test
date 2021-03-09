@@ -79,7 +79,7 @@
   <div class="row entity-chart-row" *ngIf="entity.entityMetrics">
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
-         (click)="initStackedChartAccordingToDonut('Vulnerability')">
+      (click)="initStackedChartAccordingToDonut('Vulnerability')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -93,7 +93,7 @@
     </div>
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
-         (click)="initStackedChartAccordingToDonut('Licenses')">
+      (click)="initStackedChartAccordingToDonut('Licenses')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -140,7 +140,7 @@
 
 
     <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
-         (click)="initStackedChartAccordingToDonut('SupplyChain')">
+      (click)="initStackedChartAccordingToDonut('SupplyChain')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -152,9 +152,9 @@
 
         <div class="supply-external-class">
           <apx-chart [series]="supplyChainChart.series" [fill]="supplyChainChart.fill" [chart]="supplyChainChart.chart"
-                     [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
-                     [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
-                     [responsive]="supplyChainChart.responsive"></apx-chart>
+            [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
+            [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
+            [responsive]="supplyChainChart.responsive"></apx-chart>
         </div>
 
       </app-card>
@@ -162,7 +162,7 @@
 
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
-         (click)="initStackedChartAccordingToDonut('Components')">
+      (click)="initStackedChartAccordingToDonut('Components')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <div>
           <div class="chart-lbl-indi">
@@ -181,7 +181,8 @@
                   </ul>
                 </div> -->
                 <select class="form-control form-control-sm" id="component" (click)="isShowStackedChart = false"
-                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue" name="component">
+                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue"
+                  name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -200,7 +201,7 @@
           </app-apex-chart>
         </span>
         <span *ngIf="selectedComponentChartDropvalue == 'Source'">
-          <app-apex-chart chartID="componentSourceChart" [chartConfig]="componentSourceChart">
+          <app-apex-chart chartID="componentLicenseCategory" [chartConfig]="componentLicenseCategory">
           </app-apex-chart>
         </span>
 
@@ -225,11 +226,11 @@
 
   <div class="row" *ngIf="entity.entityMetrics">
     <div class="col-12 entity-chart-tabbing"
-         [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
+      [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
     'licenses-donut': selectedDonut == 'Licenses', 'supply-donut': selectedDonut == 'SupplyChain','Components-donut': selectedDonut == 'Components','Assets-donut': selectedDonut == 'Assets'}">
       <div class="card mb-3">
         <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
-                    (tabChange)="onStackedChartTabChange($event)">
+          (tabChange)="onStackedChartTabChange($event)">
           <ngb-tab id="Month">
             <ng-template ngbTabTitle>Month</ng-template>
             <ng-template ngbTabContent>
@@ -237,9 +238,9 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="monthSericeOverTime.series"
-                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -252,9 +253,9 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="quarterSericeOverTime.series"
-                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -267,9 +268,9 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="yearSericeOverTime.series"
-                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -282,9 +283,9 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="intervalSericeOverTime.series"
-                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -376,9 +377,9 @@
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                         [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
-                                         [tooltip]="commonLineSparklineOptions.tooltip"
-                                         [colors]="commonLineSparklineOptions.colors"></apx-chart>
+                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip"
+                                [colors]="commonLineSparklineOptions.colors"></apx-chart>
                             </div>
                           </td>
                         </tr>
@@ -480,7 +481,8 @@
                                 <span title="Skipped"
                                   class="badge m-r-5 badge-light-primary">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.skipped}}</span>
                               </td>
-                              <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                              <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y
+                                h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-template>
                         </p-treeTable>
