@@ -131,8 +131,8 @@ export class EntityComponent implements OnInit, OnDestroy {
       .subscribe(x => {
         if (x == true) {
           this.obsEntity.subscribe(entity => {
-            entity.entityMetrics = null;
-            if (!!entity && !entity.entityMetrics) {
+            entity.entityMetricsGroup.entityMetrics = null;
+            if (!!entity && !entity.entityMetricsGroup.entityMetrics) {
               //refresh Object page..
               this.loadEntityPage();
             }
