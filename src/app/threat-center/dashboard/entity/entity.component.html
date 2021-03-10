@@ -44,7 +44,7 @@
   </div>
 
 
-  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetrics">
+  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetricsGroup">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <span style="font-size:20px;color:#4680ff">
@@ -76,7 +76,7 @@
   </div>
 
   <!-- CHART DATA -->
-  <div class="row entity-chart-row" *ngIf="entity.entityMetrics">
+  <div class="row entity-chart-row" *ngIf="entity.entityMetricsGroup">
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
       (click)="initStackedChartAccordingToDonut('Vulnerability')">
@@ -224,13 +224,27 @@
   </div>
 
 
-  <div class="row" *ngIf="entity.entityMetrics">
+  <div class="row" *ngIf="entity.entityMetricsGroup">
     <div class="col-12 entity-chart-tabbing"
       [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
     'licenses-donut': selectedDonut == 'Licenses', 'supply-donut': selectedDonut == 'SupplyChain','Components-donut': selectedDonut == 'Components','Assets-donut': selectedDonut == 'Assets'}">
       <div class="card mb-3">
-        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
-          (tabChange)="onStackedChartTabChange($event)">
+        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"  (tabChange)="onStackedChartTabChange($event)">
+          <ngb-tab id="Week">
+            <ng-template ngbTabTitle>Week</ng-template>
+            <ng-template ngbTabContent>
+              <div class="entity-tab-chart">
+                <div class="row">
+                  <div class="col-12">
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSericeOverTime.series"
+                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
           <ngb-tab id="Month">
             <ng-template ngbTabTitle>Month</ng-template>
             <ng-template ngbTabContent>
@@ -276,21 +290,6 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab id="Interval">
-            <ng-template ngbTabTitle>Select Interval</ng-template>
-            <ng-template ngbTabContent>
-              <div class="entity-tab-chart">
-                <div class="row">
-                  <div class="col-12">
-                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="intervalSericeOverTime.series"
-                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
-                  </div>
-                </div>
-              </div>
-            </ng-template>
-          </ngb-tab>
         </ngb-tabset>
       </div>
     </div>
@@ -303,14 +302,13 @@
 
 
 
-  <div class="row" *ngIf="entity.childEntities.edges.length > 0 || entity.entityMetrics?.projectCount > 0">
+  <div class="row" *ngIf="entity.childEntities.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
 
-          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
-            id="BUSINESSUNITS">
+          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="BUSINESSUNITS">
             <ng-template ngbTabContent>
 
               <div class="row">
@@ -322,11 +320,10 @@
                         <tr>
                           <th class="lg-col">Name</th>
                           <th class="text-left projects-col">Projects</th>
-                          <th class="license-risk-col">Project Risk</th>
                           <th class="text-left">Vulnerability Risk</th>
                           <th class="text-left">License Risk</th>
                           <th class="text-left">Supply Chain Risk</th>
-                          <th class="text-left">Embedded Assets</th>
+                          <th class="text-left">Asset Composition</th>
                         </tr>
                       </ng-template>
                       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
@@ -345,7 +342,6 @@
                             </div>
                           </td>
                           <td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>
-                          <td class="text-left text-danger">{{rowData?.entityMetrics?.projectCount}}</td>
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
@@ -399,30 +395,30 @@
           </ngb-tab>
 
           <!-- PROJECTS -->
-          <ngb-tab title="PROJECTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="PROJECTS">
+          <ngb-tab title="PROJECTS" *ngIf="entity.entityMetricsGroup?.projectCount > 0" id="PROJECTS">
             <ng-template ngbTabContent>
               <!-- product-section start -->
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                  <app-card [hidHeader]="true" cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
                       <perfect-scrollbar>
-                        <p-treeTable class="table table-hover m-b-0" [value]="projects">
+                        <p-treeTable class="table  m-b-0" [value]="projects">
                           <ng-template pTemplate="header">
                             <tr>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="250px">PROJECT NAME</th>
+                                width="25%">PROJECT NAME</th>
                               <!-- <th
                                 style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">
                                 DIVISION</th> -->
+                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
+                                width="15%">Vulnerability Risk</th>
+                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
+                                width="15%">License Risk</th>
+                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
+                                width="15%">Supply Chain Risk</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="140px">Vulnerabilities</th>
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="200px">Licenses</th>
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="120px">Components</th>
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="120px">Assets</th>
+                                width="15%">Asset Composition</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
                               </th>
                             </tr>
@@ -437,52 +433,50 @@
                               <!-- <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td> -->
                               <td style="padding: 0.75rem;">
                                 <span title="Critical"
-                                  class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.critical}}</span>
+
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
                                 <span title="High"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.high}}</span>
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
                                 <span title="Medium"
-                                  class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.medium}}</span>
+                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.medium}}</span>
                                 <span title="Low"
-                                  class="badge m-r-5 badge-light-info">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.low}}</span>
+                                  class="badge m-r-5 badge-light-info">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.low}}</span>
                                 <span title="Info"
-                                  class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.info}}</span>
+                                  class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.info}}</span>
                               </td>
                               <td style="padding: 0.75rem;">
                                 <span title="Copyleft Strong"
-                                  class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
-                                <span title="Copyleft Weak"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
-                                <span title="Copyleft Partial"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
-                                <span title="Copyleft Limited"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
                                 <span title="Copyleft"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleft}}</span>
+                                      class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleft}}</span>
+                                <span title="Copyleft Weak"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
+                                <span title="Copyleft Partial"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
+                                <span title="Copyleft Limited"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
                                 <span title="Dual"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.dual}}</span>
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.dual}}</span>
                                 <span title="Custom"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.custom}}</span>
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.custom}}</span>
                                 <span title="Permissive"
-                                  class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.permissive}}</span>
+                                  class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.licenseMetrics?.permissive}}</span>
                               </td>
                               <td style="padding: 0.75rem;">
-                                <span title="Latest"
-                                  class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.componentMetrics.latest}}</span>
-                                <span title="Not Latest"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.componentMetrics.notLatest}}</span>
-                                <span title="Dual"
-                                  class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.componentMetrics.vulnerabilities}}</span>
+                                <span title="Risk Score"
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.supplyChainMetrics.risk}}</span>
+                                <span title="Quality Score"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.supplyChainMetrics.quality}}</span>
                               </td>
                               <td style="padding: 0.75rem;">
-                                <span title="Analyzed"
-                                  class="badge m-r-5 badge-light-success">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.analyzed}}</span>
+                                <span title="Open Source"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
                                 <span title="Embedded"
-                                  class="badge m-r-5 badge-light-warning">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.embedded}}</span>
-                                <span title="Skipped"
-                                  class="badge m-r-5 badge-light-primary">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.skipped}}</span>
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.embedded}}</span>
+                                <span title="Unique"
+                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
                               </td>
-                              <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y
-                                h:mmaa' | lowercase}}</td>
+                              <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date :'M/d/y h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-template>
                         </p-treeTable>
@@ -592,8 +586,7 @@
           </ngb-tab>
 
           <!-- ORG TREE -->
-          <ngb-tab title="ORG TREE" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
-            id="ORGANIZATION">
+          <ngb-tab title="ORG TREE" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="ORGANIZATION">
             <ng-template ngbTabContent>
               <div class="row">
                 <div class="col-sm-12">

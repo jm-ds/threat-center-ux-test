@@ -58,39 +58,7 @@ export class ApiService {
             tag
             version
             created
-            scanMetrics {
-              vulnerabilityMetrics {
-                critical
-                high
-                medium
-                low
-                info
-                avgCvss2
-                avgCvss3
-              }
-              licenseMetrics {
-                copyleftStrong
-                copyleftWeak
-                copyleftPartial
-                copyleftLimited
-                copyleft
-                custom
-                dual
-                permissive
-                total
-              }
-              componentMetrics {
-                notLatest
-                latest
-                vulnerabilities
-                riskyLicenses
-              }
-              assetMetrics {
-                embedded
-                analyzed
-                skipped
-              }
-            }
+            
             
           }
           %childProjects%
@@ -105,87 +73,77 @@ export class ApiService {
         name
         entityType
         removed
+        
+        entityMetricsGroup {
+            projectCount
+            entityMetrics{
+                measureDate
+                vulnerabilityMetrics {
+                    severityMetrics
+                }
+                assetMetrics {
+                    assetCompositionMetrics
+                }
+                componentMetrics {
+                    vulnerabilityMetrics
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                licenseMetrics {
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                supplyChainMetrics {
+                    supplyChainMetrics
+                }
+            }
+        }
         projects {
           edges {
             node {
               projectId
               name
               created
-              latestScan {
-                scanId
-                projectId
-                branch
-                tag
-                version
-                created
-                scanMetrics {
-                  vulnerabilityMetrics {
-                    critical
-                    high
-                    medium
-                    low
-                    info
-                    avgCvss2
-                    avgCvss3
-                  }
-                  licenseMetrics {
-                    copyleftStrong
-                    copyleftWeak
-                    copyleftPartial
-                    copyleftLimited
-                    copyleft
-                    custom
-                    dual
-                    permissive
-                    total
-                  }
-                  componentMetrics {
-                    notLatest
-                    latest
-                    vulnerabilities
-                    riskyLicenses
-                  }
-                  assetMetrics {
-                    embedded
-                    analyzed
-                    skipped
-                  }
+              
+             
+              projectMetricsSummary {
+                measureDateTime
+                vulnerabilityMetrics {
+					critical
+					high
+					medium
+					low
+					info
                 }
-                
-              }
+                licenseMetrics {
+					copyleftStrong
+					copyleftWeak
+					copyleftPartial
+					copyleftLimited
+					copyleft
+					custom
+					dual
+					permissive
+                }
+                supplyChainMetrics {
+					risk
+					quality
+                }
+                assetMetrics {
+					embedded
+					openSource
+					unique
+                }
+			  }
+              
+              
               %childProjects%
             }
           }
         }
         
-        entityMetrics {
-          projectCount
-          entityVulnerabilityMetrics {
-            measureDate
-            severityMetrics
-          }
-          entityComponentMetrics {
-            measureDate
-            vulnerabilityMetrics
-            licenseMetrics
-            licenseCategoryMetrics
-            licenseFamilyMetrics
-          }
-          entityLicenseMetrics {
-            measureDate
-            licenseMetrics
-            licenseCategoryMetrics
-            licenseFamilyMetrics
-          }
-          entityAssetMetrics {
-            measureDate,
-            assetCompositionMetrics
-          }
-          entitySupplyChainMetrics {
-            measureDate
-            supplyChainMetrics
-          }
-        }
 
         childEntities {
           edges {
@@ -195,14 +153,39 @@ export class ApiService {
               name
               entityType
               removed
-              entityMetricsSummary {
-                projectCount
-                projectRiskCount
-                vulnerabilityRisk
-                licenseRisk
-                supplyChainRisk
-                embeddedAssetsPct             
+              
+              entityMetricsSummaryGroup {
+                entityMetricsSummaries {
+                  vulnerabilityMetrics {
+                      critical
+                      high
+                      medium
+                      low
+                      info
+                  }
+                  licenseMetrics {
+                      copyleftStrong
+                      copyleftWeak
+                      copyleftPartial
+                      copyleftLimited
+                      copyleft
+                      custom
+                      dual
+                      permissive
+                  }
+                  supplyChainMetrics {
+                      risk
+                      quality
+                  }
+                  assetMetrics {
+                      embedded
+                      openSource
+                      unique
+                  }
+                }  
               }
+              
+              
             }
           }
         }
@@ -309,11 +292,35 @@ export class ApiService {
                     version
                     created,
                     errorMsg,
-                    log,
+                    log
                     
                     
-                    
-                    
+                    projectMetricsGroup {
+                      projectMetrics{
+                          measureDate
+                          vulnerabilityMetrics {
+                              severityMetrics
+                          }
+                          assetMetrics {
+                              assetCompositionMetrics
+                          }
+                          componentMetrics {
+                              vulnerabilityMetrics
+                              licenseCategoryMetrics
+                              licenseFamilyMetrics
+                              licenseNameMetrics
+                          }
+                          licenseMetrics {
+                              licenseCategoryMetrics
+                              licenseFamilyMetrics
+                              licenseNameMetrics
+                          }
+                          supplyChainMetrics {
+                              supplyChainMetrics
+                          }
+                      }
+                    }
+                   
                     
                   }
                 }

@@ -86,64 +86,136 @@ export class Entity {
   parentEntityId: string;
   name:string;
   projects:ProjectConnection;
-  entityMetrics:EntityMetrics;
-  entityMetricsSummary:EntityMetricsSummary;
+  entityMetricsGroup:EntityMetricsGroup;
+  entityMetricsSummaryGroup:EntityMetricsSummaryGroup;
   entityComponents:any;
   vulnerabilities: Vulnerability[];
   licenses: License[];
   childEntities:Entity[];
 }
 
-export class EntityMetricsSummary {
-  projectCount:number;
-  projectRiskCount:number;
-  vulnerabilityRisk: number[];
-  licenseRisk: number[];
-  supplyChainRisk: number[];
-  embeddedAssetsPct: number[];
-}
 
-export class EntityMetrics {
-  projectCount:number;
-  entityVulnerabilityMetrics: EntityVulnerabilityMetrics[];
-  entityComponentMetrics: EntityComponentMetrics[];
-  entityAssetMetrics: EntityAssetMetrics[];
-  entityLicenseMetrics: EntityLicenseMetrics[];
-  entitySupplyChainMetrics: EntitySupplyChainMetrics[];
-}
-
-export interface EntityVulnerabilityMetrics extends IVulnerabilityMetrics {}
-export interface EntityComponentMetrics extends IComponentMetrics {}
-export interface EntityLicenseMetrics extends ILicenseMetrics {}
-export interface EntityAssetMetrics extends IAssetMetrics {}
-export interface EntitySupplyChainMetrics extends ISupplyChainMetrics {}
-
-export interface IVulnerabilityMetrics {
-  measureDate: string;
+// COMMON METRICS
+export class DimensionalVulnerabilityMetrics {
   severityMetrics: Map<string, number>;
 }
 
-export interface IComponentMetrics {
+export class DimensionalComponentMetrics {
   vulnerabilityMetrics: Map<string, number>;
-  licenseMetrics: Map<string, number>;
+  licenseNameMetrics: Map<string, number>;
   licenseCategoryMetrics: Map<string, number>;
   licenseFamilyMetrics: Map<string, number>;
 }
 
-export interface ILicenseMetrics {
+export class DimensionalLicenseMetrics {
   measureDate: string;
-  licenseMetrics: Map<string, number>;
+  licenseNameMetrics: Map<string, number>;
   licenseCategoryMetrics: Map<string, number>;
   licenseFamilyMetrics: Map<string, number>;
 }
 
-export interface IAssetMetrics {
+export class DimensionalAssetMetrics {
   assetCompositionMetrics: Map<string, number>;
 }
 
-export interface ISupplyChainMetrics {
+export class DimensionalSupplyChainMetrics {
   supplyChainMetrics: Map<string, number>;
 }
+
+export class VulnerabilityMetrics {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+  info: number;
+}
+
+export class LicenseMetrics {
+  copyleftStrong: number;
+  copyleftWeak: number;
+  copyleftPartial: number;
+  copyleftLimited: number;
+  copyleft: number;
+  custom: number;
+  dual: number;
+  permissive: number;
+}
+
+export class SupplyChainMetrics {
+  risk: number;
+  quality: number;
+}
+
+export class AssetMetrics {
+  embedded: number;
+  openSource: number;
+  unique: number;
+}
+
+export class Metrics {
+  vulnerabilityMetrics: DimensionalVulnerabilityMetrics;
+  assetMetrics: DimensionalAssetMetrics;
+  componentMetrics: DimensionalComponentMetrics;
+  licenseMetrics: DimensionalLicenseMetrics;
+  supplyChainMetrics: DimensionalSupplyChainMetrics;
+}
+
+// ENTITY METRICS
+export class EntityMetrics extends Metrics {
+  projectCount:number;
+  measureDate: any;
+}
+
+export class EntityMetricsGroup {
+  period:any;
+  projectCount:number;
+  entityMetrics: EntityMetrics[];
+}
+
+export class entityMetricsSummaries {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+export class EntityMetricsSummaryGroup {
+  entityMetricsSummaries:EntityMetricsSummary[];
+}
+
+export class EntityMetricsSummary {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+// PROJECT METRICS
+export class ProjectMetrics extends Metrics {
+  measureDate: any;
+}
+
+export class ProjectMetricsGroup {
+  period:any;
+  projectMetrics: ProjectMetrics[];
+}
+
+export class ProjectMetricsSummary {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+export class ScanMetricsSummary {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+
+
 
 
 

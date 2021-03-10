@@ -378,8 +378,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.setEntityBreadcumToSession();
       }
 
-
-      if (entity.entityMetrics) {
+      console.log("ENTITY: ", entity);
+      if (entity.entityMetricsGroup) {
 
         // NOTES:
         // Metrics are ordered by date DESC (most recent to least recent)
@@ -392,9 +392,10 @@ export class EntityComponent implements OnInit, OnDestroy {
 
         // VULNERABILITY METRICS
         // 1 dimension for vulnerability metrics (vulnerability severity)
-        const vulnerabilityMetrics = entity.entityMetrics.entityVulnerabilityMetrics
+        const entityMetrics = entity.entityMetricsGroup.entityMetrics;
+
         // data for pie charts
-        const vulnerabilityMetrics_severityDimension = vulnerabilityMetrics[0].severityMetrics
+        const vulnerabilityMetrics_severityDimension = entityMetrics[0].vulnerabilityMetrics.severityMetrics;
 
         // COMPONENT METRICS
         // 4 dimensions for component metrics
@@ -402,36 +403,38 @@ export class EntityComponent implements OnInit, OnDestroy {
         // 2) license family
         // 3) license category
         // 4) license name
-        const componentMetrics = entity.entityMetrics.entityComponentMetrics;
+        const componentMetrics = entityMetrics[0].componentMetrics;
+
         // data for pie charts
-        const componentMetrics_vulDimension = componentMetrics[0].vulnerabilityMetrics;
-        const componentMetrics_licenseFamilyDimension = componentMetrics[0].licenseFamilyMetrics; // <- NO DATA YET
-        const componentMetrics_licenseCategoryDimension = componentMetrics[0].licenseCategoryMetrics;
-        const componentMetrics_licenseDimension = componentMetrics[0].licenseMetrics;
+        const componentMetrics_vulDimension = componentMetrics.vulnerabilityMetrics;
+        const componentMetrics_licenseFamilyDimension = componentMetrics.licenseFamilyMetrics; // <- NO DATA YET
+        const componentMetrics_licenseCategoryDimension = componentMetrics.licenseCategoryMetrics;
+        const componentMetrics_licenseDimension = componentMetrics.licenseNameMetrics;
 
         // ASSET METRICS
-        const assetMetrics = entity.entityMetrics.entityAssetMetrics;
+        const assetMetrics = entityMetrics[0].assetMetrics;
+
         // data for pie charts
-        const assetMetrics_assetCompDimension = assetMetrics[0].assetCompositionMetrics;
+        const assetMetrics_assetCompDimension = assetMetrics.assetCompositionMetrics;
 
         // LICENSE METRICS
-        const licenseMetrics = entity.entityMetrics.entityLicenseMetrics;
+        const licenseMetrics = entityMetrics[0].licenseMetrics;
+
         // data for pie charts
-        const licenseMetrics_licenseFamilyDimension = licenseMetrics[0].licenseFamilyMetrics; // <- NO DATA YET
-        const licenseMetrics_licenseCategoryDimension = licenseMetrics[0].licenseCategoryMetrics;
-        const licenseMetrics_licenseDimension = licenseMetrics[0].licenseMetrics;
+        const licenseMetrics_licenseFamilyDimension = licenseMetrics.licenseFamilyMetrics; // <- NO DATA YET
+        const licenseMetrics_licenseCategoryDimension = licenseMetrics.licenseCategoryMetrics;
+        const licenseMetrics_licenseDimension = licenseMetrics.licenseNameMetrics;
 
         // SUPPLY CHAIN METRICS
-        const supplyChainMetrics = entity.entityMetrics.entitySupplyChainMetrics;
+        const supplyChainMetrics =entityMetrics[0].supplyChainMetrics;
         // data for pie charts
-        const supplyChainMetrics_riskAndQuality = supplyChainMetrics[0].supplyChainMetrics;
+        const supplyChainMetrics_riskAndQuality = supplyChainMetrics.supplyChainMetrics;
 
         // CHILD ENTITY METRICS SUMMARY DATA
         //const child1 = entity.childEntities.edges[0].node;
         //const licenseRisk = entity.childEntities.edges[0].node.entityMetricsSummary.licenseRisk
         //console.log("Child1:", child1.name);
         //console.log(child1.name,"License Risk:", licenseRisk);
-
 
         // Gets most recent vulnerability metrics to be used for pie charts
         console.log("vulnerabilityMetrics_severityDimension", vulnerabilityMetrics_severityDimension);

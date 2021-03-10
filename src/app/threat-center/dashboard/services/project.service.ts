@@ -43,15 +43,13 @@ export class ProjectDashboardService {
                         created,
                         errorMsg,
                         log,
-                        scanMetrics {
+                        scanMetricsSummary {
                           vulnerabilityMetrics {
                             critical,
                             high,
                             medium,
                             low,
                             info,
-                            avgCvss2,
-                            avgCvss3
                           },
                           licenseMetrics {
                             copyleftStrong,
@@ -62,23 +60,21 @@ export class ProjectDashboardService {
                              custom,
                              dual,
                              permissive,
-                             total
                           },
-                          componentMetrics {
-                            notLatest,
-                            vulnerabilities,
-                            riskyLicenses
-                          },
+                          supplyChainMetrics {
+                            risk
+                            quality
+                          }
                           assetMetrics {
                             embedded,
-                            analyzed,
-                            skipped
+                            openSource,
+                            unique
                           }
                         }
                       }
                     }
                   }
-                  }
+                }
             }
           `, 'no-cache');
   }
