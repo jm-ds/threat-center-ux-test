@@ -134,9 +134,9 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.scanHelperService.isRefreshObjectPageObservable$
       .subscribe(x => {
         if (x == true) {
-          this.obsEntity.subscribe((entity) => {
-            entity.entityMetricsGroup = null;
-            if (!!entity && !entity.entityMetricsGroup) {
+          this.obsEntity.subscribe(entity => {
+            entity.entityMetricsGroup.entityMetrics = null;
+            if (!!entity && !entity.entityMetricsGroup.entityMetrics) {
               //refresh Object page..
               this.loadEntityPage();
             }
