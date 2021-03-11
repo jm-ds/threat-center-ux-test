@@ -14,6 +14,20 @@ export class ChartHelperService {
             stroke: {
                 width: 1
             },
+            labels: [], series: [],
+            noData: {
+                text: "There's no data",
+                align: 'center',
+                verticalAlign: 'middle',
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                    color: undefined,
+                    fontSize: '22px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: '300'
+                }
+            },
             dataLabels: {
                 enabled: true,
                 formatter: function (value, { seriesIndex, dataPointIndex, w }) {
@@ -70,7 +84,7 @@ export class ChartHelperService {
 
     getSupplyChartConfig() {
         return {
-            series: [50, 50],
+            series: [],
             chart: {
                 height: 260,
                 type: "radialBar"
@@ -110,7 +124,7 @@ export class ChartHelperService {
                 }
             },
             colors: ["#ff5252", "#ffa21d"],
-            labels: ["Risk", "Quality"],
+            labels: [],
             legend: {
                 show: true,
                 floating: true,
@@ -221,6 +235,19 @@ export class ChartHelperService {
             stroke: {
                 width: 2,
             },
+            noData: {
+                text: "There's no data",
+                align: 'center',
+                verticalAlign: 'middle',
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                    color: undefined,
+                    fontSize: '22px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: '300'
+                }
+            },
             chart: {
                 toolbar: {
                     show: false
@@ -309,11 +336,27 @@ export class ChartHelperService {
             labels: [],
             series: [
                 {
-                    name: "",
+                    name: "SSS",
                     data: this.randomizeArray([
                         47,
                         45,
                         54,
+                        38,
+                        10,
+                        200,
+                        300,
+                        500,
+                        45,
+                        8,
+                        1
+                    ].slice(0, 10))
+                },
+                {
+                    name: "AAA",
+                    data: this.randomizeArray([
+                        55,
+                        55,
+                        88,
                         38,
                         10,
                         200,
@@ -360,7 +403,7 @@ export class ChartHelperService {
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
         }
-
+        
         return array;
     }
 }

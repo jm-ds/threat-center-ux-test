@@ -15,7 +15,6 @@ import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 
 @Component({
@@ -45,18 +44,17 @@ export class EntityComponent implements OnInit, OnDestroy {
     { field: 'created', header: 'Created' }
   ];
 
-  vulnerabilityDonutChart: any = {};
-  licenseDonutChart: any = {};
-  componentDonutChart: any = {};
-  assetDonutChart: any = {};
+  vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
 
-  componentVulnerabilityRiskChart: any = {};
-  componentLicenseRiskChart: any = {};
-  componentLicenseCategory: any = {};
-  componentLicense: any = {};
+  componentVulnerabilityRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  componentLicenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  componentLicense = Object.assign(this.chartHelperService.initDonutChartConfiguration());
 
-  licenseCategoryChart: any = {};
-  licenseRiskChart: any = {};
+  licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+  licenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
 
   stackedChartCommonOptions: Partial<any> = {};
   lineChartOptions: any;
@@ -82,7 +80,8 @@ export class EntityComponent implements OnInit, OnDestroy {
     // { id: this.coreHelperService.uuidv4(), name: "Components", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "Vulnerability Risk", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
-    { id: this.coreHelperService.uuidv4(), name: "Source", isActive: false }
+    { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
+    { id: this.coreHelperService.uuidv4(), name: "License Count", isActive: false }
   ];
   selectedComponentChartDropvalue = "Vulnerability Risk";
   isShowLicensedropdown: boolean = false;
@@ -152,73 +151,303 @@ export class EntityComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('EntityBreadCums');
   }
 
-  public generateDayWiseTimeSeries = function (baseval, count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = baseval;
-      var y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-      series.push([x, y]);
-      baseval += 86400000;
-      i++;
-    }
-    return series;
-  };
-
   initStackedChartAccordingToDonut(value: string) {
-
+    let properties = [];
     if (this.isShowStackedChart) {
       this.selectedDonut = value;
-
       this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
       switch (this.selectedDonut) {
         case 'Vulnerability':
           // check active tab as well..
-          this.monthSeriesOverTime['series'] = [{
-            name: "South",
-            data: this.generateDayWiseTimeSeries(
-              new Date("11 Feb 2017 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 60
-              }
-            )
-          },
-          {
-            name: "North",
-            data: this.generateDayWiseTimeSeries(
-              new Date("11 Feb 2017 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 20
-              }
-            )
-          },
-          {
-            name: "Central",
-            data: this.generateDayWiseTimeSeries(
-              new Date("11 Feb 2017 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 15
-              }
-            )
-          }];
+          this.weekSeriesOverTime['series'] = [];
+          this.entityMetricList.forEach(d => {
+            if (d.vulnerabilityMetrics && !!d.vulnerabilityMetrics['severityMetrics']) {
+              Object.keys(d.vulnerabilityMetrics['severityMetrics']).forEach(p => {
+                if (!properties.includes(p)) {
+                  properties.push(p);
+                }
+              });
+            }
+          });
+          for (var index in properties) {
+            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+            this.weekSeriesOverTime['series'].push(obj);
+          }
+          break;
+        case 'Assets':
+          this.weekSeriesOverTime['series'] = [];
+          this.entityMetricList.forEach(d => {
+            if (d.assetMetrics && !!d.assetMetrics['assetCompositionMetrics']) {
+              Object.keys(d.assetMetrics['assetCompositionMetrics']).forEach(p => {
+                if (!properties.includes(p)) {
+                  properties.push(p);
+                }
+              });
+            }
+          });
+          for (var index in properties) {
+            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+            this.weekSeriesOverTime['series'].push(obj);
+          }
+          break;
+        case 'SupplyChain':
+          this.weekSeriesOverTime['series'] = [];
+          this.entityMetricList.forEach(d => {
+            if (d.supplyChainMetrics && !!d.supplyChainMetrics['supplyChainMetrics']) {
+              Object.keys(d.supplyChainMetrics['supplyChainMetrics']).forEach(p => {
+                if (!properties.includes(p)) {
+                  properties.push(p);
+                }
+              });
+            }
+          });
+          for (var index in properties) {
+            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+            this.weekSeriesOverTime['series'].push(obj);
+          }
+          break;
+        case 'Licenses':
+          this.weekSeriesOverTime['series'] = [];
+          this.licenseStackedChartConfig(this.selectedlicenseChartDropValue);
+          break;
+        case 'Components':
+          this.weekSeriesOverTime['series'] = [];
+          this.componentStackedChartConfig(this.selectedComponentChartDropvalue);
           break;
 
         default:
           break;
       }
-      if (this.selectedDonut === 'Vulnerability') {
-
-      }
     }
     this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
+  }
+
+  // this method is for get stacked chart logical data form vul,supplychain,and assets stacked charts
+  private getStackChartLogicalData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'Vulnerability':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.vulnerabilityMetrics['severityMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'SupplyChain':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.supplyChainMetrics['supplyChainMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'Assets':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.assetMetrics['assetCompositionMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+
+      default:
+        break;
+    }
+
+    return data;
+  }
+
+
+  //Helper function to initialize Component stacked chart configuration
+  private componentStackedChartConfig(nameOfChart) {
+    let properties = [];
+    switch (nameOfChart) {
+      case 'Vulnerability Risk':
+        this.entityMetricList.forEach(d => {
+          if (d.componentMetrics && !!d.componentMetrics['vulnerabilityMetrics']) {
+            Object.keys(d.componentMetrics['vulnerabilityMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        }
+        break;
+      case 'License Risk':
+        this.entityMetricList.forEach(d => {
+          if (d.componentMetrics && !!d.componentMetrics['licenseFamilyMetrics']) {
+            Object.keys(d.componentMetrics['licenseFamilyMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        }
+        break;
+      case 'License Category':
+        this.entityMetricList.forEach(d => {
+          if (d.componentMetrics && !!d.componentMetrics['licenseCategoryMetrics']) {
+            Object.keys(d.componentMetrics['licenseCategoryMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        }
+        break;
+      case 'License Count':
+        this.entityMetricList.forEach(d => {
+          if (d.componentMetrics && !!d.componentMetrics['licenseNameMetrics']) {
+            Object.keys(d.componentMetrics['licenseNameMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  //this method is for get stacked chart logical data for Component charts (dropdown)
+  private getStackChartLogicalForComponentData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'Vulnerability Risk':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['vulnerabilityMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'License Risk':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseFamilyMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'License Category':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseCategoryMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      case 'License Count':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseNameMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      default:
+        break;
+    }
+    return data;
+  }
+
+  //Helper function to initialize License stacked chart configuration
+  private licenseStackedChartConfig(nameOfChart) {
+    let properties = [];
+    switch (nameOfChart) {
+      case 'License Count':
+        this.entityMetricList.forEach(d => {
+          if (d.licenseMetrics && !!d.licenseMetrics['licenseNameMetrics']) {
+            Object.keys(d.licenseMetrics['licenseNameMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+        }
+        break;
+      case 'Category':
+        this.entityMetricList.forEach(d => {
+          if (d.licenseMetrics && !!d.licenseMetrics['licenseCategoryMetrics']) {
+            Object.keys(d.licenseMetrics['licenseCategoryMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+        }
+        break;
+      case 'Risk':
+        this.entityMetricList.forEach(d => {
+          if (d.licenseMetrics && !!d.licenseMetrics['licenseFamilyMetrics']) {
+            Object.keys(d.licenseMetrics['licenseFamilyMetrics']).forEach(p => {
+              if (!properties.includes(p)) {
+                properties.push(p);
+              }
+            });
+          }
+        });
+        for (var index in properties) {
+          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  //this method is for get stacked chart logical data for Liceses charts (dropdown)
+  private getStackChartLogicalForLicenseData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'License Count':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseNameMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'Category':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseCategoryMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'Risk':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseFamilyMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      default:
+        break;
+    }
+
+    return data;
+  }
+
+  //fired when changing License chart dropdown from donut chart
+  changeLincesChartDropdown() {
+    this.isShowStackedChart = false;
+    if (this.selectedDonut === 'Licenses') {
+      this.weekSeriesOverTime['series'] = [];
+      this.licenseStackedChartConfig(this.selectedlicenseChartDropValue);
+    }
+  }
+
+  //fired when changing component chart dropdown from donut chart
+  changeComponentChartDropdown() {
+    this.isShowStackedChart = false;
+    if (this.selectedDonut === 'Components') {
+      this.weekSeriesOverTime['series'] = [];
+      this.componentStackedChartConfig(this.selectedComponentChartDropvalue);
+    }
   }
 
   onStackedChartTabChange($event: NgbTabChangeEvent) {
@@ -227,7 +456,39 @@ export class EntityComponent implements OnInit, OnDestroy {
     switch (this.lineChartActiveTab) {
       case 'Month':
         // here init month chart according to selected donut
-
+        this.monthSeriesOverTime['series'] = [{
+          name: "South",
+          data: this.generateDayWiseTimeSeries(
+            new Date("1 Feb 2019 GMT").getTime(),
+            20,
+            {
+              min: 10,
+              max: 60
+            }
+          )
+        },
+        {
+          name: "North",
+          data: this.generateDayWiseTimeSeries(
+            new Date("11 Feb 2020 GMT").getTime(),
+            20,
+            {
+              min: 10,
+              max: 20
+            }
+          )
+        },
+        {
+          name: "Central",
+          data: this.generateDayWiseTimeSeries(
+            new Date("11 Feb 2021 GMT").getTime(),
+            20,
+            {
+              min: 10,
+              max: 15
+            }
+          )
+        }];
         break;
       case 'Quarter':
         // here init Quarter chart according to selected donut
@@ -302,7 +563,8 @@ export class EntityComponent implements OnInit, OnDestroy {
             )
           }];
         break;
-      case 'Interval':
+      case 'Week':
+        this.initStackedChartAccordingToDonut(this.selectedDonut);
         // here init Quarter chart according to selected donut
         break;
       default:
@@ -310,6 +572,21 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
     }
   }
+
+  public generateDayWiseTimeSeries = function (baseval, count, yrange) {
+    var i = 0;
+    var series = [];
+    while (i < count) {
+      var x = baseval;
+      var y =
+        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+
+      series.push([x, y]);
+      baseval += 86400000;
+      i++;
+    }
+    return series;
+  };
 
   navigateToProject(projectId) {
     const entityId = this.route.snapshot.paramMap.get('entityId')
@@ -338,6 +615,56 @@ export class EntityComponent implements OnInit, OnDestroy {
     //this.loadVulnerabilities(entityId);
     this.getLastTabSelected();
     this.commonLineSparklineOptions = Object.assign(this.chartHelperService.sparkLineChartCommonConfiguration());
+  }
+
+  initSparkLineChart(data, str) {
+    let dataToReturn = [];
+    const vul = ['critical', 'high', 'medium', 'low', 'info'];
+    const lic = ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'];
+    const supply = ['risk', 'quality'];
+    const asset = ['embedded', 'openSource', 'unique'];
+    switch (str) {
+      case 'vulnerabilityMetrics':
+        _.each(vul, value => {
+          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
+            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.vulnerabilityMetrics[value] }) });
+          } else {
+            dataToReturn.push({ name: value, data: [] });
+          }
+        });
+        break;
+      case 'licenseMetrics':
+        _.each(lic, value => {
+          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
+            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.licenseMetrics[value] }) });
+          } else {
+            dataToReturn.push({ name: value, data: [] });
+          }
+        });
+        break;
+      case 'supplyChainMetrics':
+        _.each(supply, value => {
+          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
+            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.supplyChainMetrics[value] }) });
+          } else {
+            dataToReturn.push({ name: value, data: [] });
+          }
+        });
+        break;
+      case 'assetMetrics':
+        _.each(asset, value => {
+          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
+            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.assetMetrics[value] }) });
+          } else {
+            dataToReturn.push({ name: value, data: [] });
+          }
+        });
+        break;
+      default:
+        break;
+    }
+
+    return dataToReturn;
   }
 
   loadVulnerabilities(entityId: any) {
@@ -382,7 +709,6 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.entityPageBreadCums.push({ id: entityId, name: entity.name });
         this.setEntityBreadcumToSession();
       }
-
       console.log("ENTITY: ", entity);
       if (entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1) {
         // NOTES:
@@ -400,7 +726,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
 
         // data for pie charts
-        const vulnerabilityMetrics_severityDimension = entityMetrics[0].vulnerabilityMetrics.severityMetrics;
+        // const vulnerabilityMetrics_severityDimension = entityMetrics[0].vulnerabilityMetrics.severityMetrics;
 
         // COMPONENT METRICS
         // 4 dimensions for component metrics
@@ -408,32 +734,32 @@ export class EntityComponent implements OnInit, OnDestroy {
         // 2) license family
         // 3) license category
         // 4) license name
-        const componentMetrics = entityMetrics[0].componentMetrics;
+        // const componentMetrics = entityMetrics[0].componentMetrics;
 
-        // data for pie charts
-        const componentMetrics_vulDimension = componentMetrics.vulnerabilityMetrics;
-        const componentMetrics_licenseFamilyDimension = componentMetrics.licenseFamilyMetrics; // <- NO DATA YET
-        const componentMetrics_licenseCategoryDimension = componentMetrics.licenseCategoryMetrics;
-        const componentMetrics_licenseDimension = componentMetrics.licenseNameMetrics;
+        // // data for pie charts
+        // const componentMetrics_vulDimension = componentMetrics.vulnerabilityMetrics;
+        // const componentMetrics_licenseFamilyDimension = componentMetrics.licenseFamilyMetrics; // <- NO DATA YET
+        // const componentMetrics_licenseCategoryDimension = componentMetrics.licenseCategoryMetrics;
+        // const componentMetrics_licenseDimension = componentMetrics.licenseNameMetrics;
 
-        // ASSET METRICS
-        const assetMetrics = entityMetrics[0].assetMetrics;
+        // // ASSET METRICS
+        // const assetMetrics = entityMetrics[0].assetMetrics;
 
-        // data for pie charts
-        const assetMetrics_assetCompDimension = assetMetrics.assetCompositionMetrics;
+        // // data for pie charts
+        // // const assetMetrics_assetCompDimension = assetMetrics.assetCompositionMetrics;
 
-        // LICENSE METRICS
-        const licenseMetrics = entityMetrics[0].licenseMetrics;
+        // // LICENSE METRICS
+        // const licenseMetrics = entityMetrics[0].licenseMetrics;
 
-        // data for pie charts
-        const licenseMetrics_licenseFamilyDimension = licenseMetrics.licenseFamilyMetrics; // <- NO DATA YET
-        const licenseMetrics_licenseCategoryDimension = licenseMetrics.licenseCategoryMetrics;
-        const licenseMetrics_licenseDimension = licenseMetrics.licenseNameMetrics;
+        // // data for pie charts
+        // const licenseMetrics_licenseFamilyDimension = licenseMetrics.licenseFamilyMetrics; // <- NO DATA YET
+        // const licenseMetrics_licenseCategoryDimension = licenseMetrics.licenseCategoryMetrics;
+        // const licenseMetrics_licenseDimension = licenseMetrics.licenseNameMetrics;
 
         // SUPPLY CHAIN METRICS
-        const supplyChainMetrics = entityMetrics[0].supplyChainMetrics;
-        // data for pie charts
-        const supplyChainMetrics_riskAndQuality = supplyChainMetrics.supplyChainMetrics;
+        // const supplyChainMetrics = entityMetrics[0].supplyChainMetrics;
+        // // data for pie charts
+        // const supplyChainMetrics_riskAndQuality = supplyChainMetrics.supplyChainMetrics;
 
         // CHILD ENTITY METRICS SUMMARY DATA
         //const child1 = entity.childEntities.edges[0].node;
@@ -442,56 +768,33 @@ export class EntityComponent implements OnInit, OnDestroy {
         //console.log(child1.name,"License Risk:", licenseRisk);
 
         // Gets most recent vulnerability metrics to be used for pie charts
-        console.log("vulnerabilityMetrics_severityDimension", vulnerabilityMetrics_severityDimension);
-        console.log("componentMetrics_vulDimension", componentMetrics_vulDimension);
-        console.log("componentMetrics_licenseFamilyDimension", componentMetrics_licenseFamilyDimension);
-        console.log("componentMetrics_licenseCategoryDimension", componentMetrics_licenseCategoryDimension);
-        console.log("componentMetrics_licenseDimension", componentMetrics_licenseDimension);
-        console.log("assetMetrics_assetCompDimension", assetMetrics_assetCompDimension);
-        console.log("licenseMetrics_licenseFamilyDimension", licenseMetrics_licenseFamilyDimension);
-        console.log("licenseMetrics_licenseCategoryDimension", licenseMetrics_licenseCategoryDimension);
-        console.log("licenseMetrics_licenseDimension", licenseMetrics_licenseDimension);
-        console.log("supplyChainMetrics_riskAndQuality", supplyChainMetrics_riskAndQuality);
+        // console.log("vulnerabilityMetrics_severityDimension", vulnerabilityMetrics_severityDimension);
+        // console.log("componentMetrics_vulDimension", componentMetrics_vulDimension);
+        // console.log("componentMetrics_licenseFamilyDimension", componentMetrics_licenseFamilyDimension);
+        // console.log("componentMetrics_licenseCategoryDimension", componentMetrics_licenseCategoryDimension);
+        // console.log("componentMetrics_licenseDimension", componentMetrics_licenseDimension);
+        // // console.log("assetMetrics_assetCompDimension", assetMetrics_assetCompDimension);
+        // console.log("licenseMetrics_licenseFamilyDimension", licenseMetrics_licenseFamilyDimension);
+        // console.log("licenseMetrics_licenseCategoryDimension", licenseMetrics_licenseCategoryDimension);
+        // console.log("licenseMetrics_licenseDimension", licenseMetrics_licenseDimension);
+        // console.log("supplyChainMetrics_riskAndQuality", supplyChainMetrics_riskAndQuality);
 
-
-
-        this.vulnerabilityDonutChart = {};
-        this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-        this.vulnerabilityDonutChart['labels'] = ['Critical', 'High', 'Medium', 'Low', 'Info'];
-        this.vulnerabilityDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'];
-        this.vulnerabilityDonutChart['series'] = [vulnerabilityMetrics_severityDimension.get('Critical'), vulnerabilityMetrics_severityDimension.get('High'), vulnerabilityMetrics_severityDimension.get('Medium'), vulnerabilityMetrics_severityDimension.get('Low'), vulnerabilityMetrics_severityDimension.get('Info')];
+        //Vul donut chart
+        this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
 
         //License Donut charts
-        this.licenseDonutChart = this.licenseRiskChart = this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-        this.licenseDonutChart['labels'] = this.licenseRiskChart['labels'] = this.licenseCategoryChart['labels'] = ['CL Strong', 'CL Weak', 'CL Partial', 'CL Limited', 'Copyleft', 'Custom', 'Dual', 'Permissive'];
-        this.licenseDonutChart['colors'] = this.licenseRiskChart['colors'] = this.licenseCategoryChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
-
-        this.licenseDonutChart['series'] = [licenseMetrics_licenseDimension.get('copyleftStrong'), licenseMetrics_licenseDimension.get('copyleftWeak'), licenseMetrics_licenseDimension.get('copyleftPartial'), licenseMetrics_licenseDimension.get('copyleftLimited'),
-        licenseMetrics_licenseDimension.get('copyleft'), licenseMetrics_licenseDimension.get('custom'), licenseMetrics_licenseDimension.get('dual'), licenseMetrics_licenseDimension.get('permissive')];
-        this.licenseRiskChart['series'] = [licenseMetrics_licenseFamilyDimension.get('copyleftStrong'), licenseMetrics_licenseFamilyDimension.get('copyleftWeak'), licenseMetrics_licenseDimension.get('copyleftPartial'), licenseMetrics_licenseFamilyDimension.get('copyleftLimited'),
-        licenseMetrics_licenseFamilyDimension.get('copyleft'), licenseMetrics_licenseFamilyDimension.get('custom'), licenseMetrics_licenseFamilyDimension.get('dual'), licenseMetrics_licenseDimension.get('permissive')];
-        this.licenseCategoryChart['series'] = [licenseMetrics_licenseCategoryDimension.get('copyleftStrong'), licenseMetrics_licenseCategoryDimension.get('copyleftWeak'), licenseMetrics_licenseCategoryDimension.get('copyleftPartial'), licenseMetrics_licenseCategoryDimension.get('copyleftLimited'),
-        licenseMetrics_licenseCategoryDimension.get('copyleft'), licenseMetrics_licenseCategoryDimension.get('custom'), licenseMetrics_licenseCategoryDimension.get('dual'), licenseMetrics_licenseCategoryDimension.get('permissive')];
-
+        this.initLicenseDonut(entityMetrics[0].licenseMetrics);
 
         //Component donut charts
-        this.componentDonutChart = this.componentVulnerabilityRiskChart = this.componentLicenseRiskChart = this.componentLicense = this.componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-        this.componentDonutChart['labels'] = this.componentVulnerabilityRiskChart['labels'] = this.componentLicenseRiskChart['labels'] = this.componentLicense['labels'] = this.componentLicenseCategory = ['Not Latest', 'Vulnerabilities', 'Risky Licenses'];
-        this.componentDonutChart['colors'] = this.componentVulnerabilityRiskChart['colors'] = this.componentLicenseRiskChart['colors'] = this.componentLicense['colors'] = this.componentLicenseCategory = ['#ff2b2b', '#ff5252', '#ffa21d'];
-        this.componentDonutChart['series'] = [componentMetrics_vulDimension.get('notLatest'), componentMetrics_vulDimension.get('vulnerabilities'), componentMetrics_vulDimension.get('riskyLicenses')];
-        this.componentLicenseRiskChart['series'] = [componentMetrics_licenseFamilyDimension.get('notLatest'), componentMetrics_licenseFamilyDimension.get('vulnerabilities'), componentMetrics_licenseFamilyDimension.get('riskyLicenses')];
-        this.componentLicenseCategory = [componentMetrics_licenseCategoryDimension.get('notLatest'), componentMetrics_licenseCategoryDimension.get('vulnerabilities'), componentMetrics_licenseCategoryDimension.get('riskyLicenses')];
-        this.componentLicense = [componentMetrics_licenseDimension.get('notLatest'), componentMetrics_licenseDimension.get('vulnerabilities'), componentMetrics_licenseDimension.get('riskyLicenses')];
+        this.initComponentDonutChart(entityMetrics[0].componentMetrics);
 
         //Asset donut chart
-        this.assetDonutChart = {};
-        this.assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-        this.assetDonutChart['labels'] = ['Analyzed', 'Skipped', 'Embedded'];
-        this.assetDonutChart['colors'] = ['#11c15b', '#4680ff', '#ffa21d'];
-        this.assetDonutChart['series'] = [assetMetrics_assetCompDimension.get('analyzed'), assetMetrics_assetCompDimension.get('skipped'), assetMetrics_assetCompDimension.get('embedded')];
+        this.initAssetDonut(entityMetrics[0].assetMetrics.assetCompositionMetrics);
+
+        //Supply chain chart
+        this.initSupplyChainChart(entityMetrics[0].supplyChainMetrics.supplyChainMetrics);
 
         this.initStackedChartAccordingToDonut(this.selectedDonut);
-
       }
       if (!!entity) {
         this.entityTreeLogic(entity);
@@ -507,6 +810,11 @@ export class EntityComponent implements OnInit, OnDestroy {
     if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
       await this.populateChildernRecusivaly(entity.childEntities.edges, null);
       let w = {};
+
+      entity['vulSericeData'] = this.initSparkLineChart(entity, 'vulnerabilityMetrics');
+      entity['licSericeData'] = this.initSparkLineChart(entity, 'licenseMetrics');
+      entity['supplySericeData'] = this.initSparkLineChart(entity, 'supplyChainMetrics');
+      entity['assetSericeData'] = this.initSparkLineChart(entity, 'assetMetrics');
       this.entityTreeModel.data = [
         {
           "data": entity,
@@ -560,7 +868,6 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.buildProjectTreeHier(edge, childNode);
       });
     }
-
   }
 
   changeEntity(entityId: string, name: string, isPush: boolean) {
@@ -618,43 +925,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeComponentChartDropdown() {
-    this.isShowStackedChart = false;
-    //binding value accroding to dropdown...
-    switch (this.selectedComponentChartDropvalue) {
-      case 'Components':
-        break;
-      case 'Vulnerability Risk':
-        // this.componentVulnerabilityRiskChart['series'] = [25, 30, 99];
-        break;
-      case 'License Risk':
-        this.componentLicenseRiskChart['series'] = [10, 6, 4];
-        break;
-      case 'Source':
-        this.componentLicenseCategory['series'] = [99, 55, 77];
-        break;
-      default:
-        break;
-    }
-  }
-
-  changeLincesChartDropdown() {
-    this.isShowStackedChart = false;
-    //bind value accroding to dropdown...
-    switch (this.selectedlicenseChartDropValue) {
-      case 'License Count':
-        break;
-      case 'Category':
-        this.licenseCategoryChart['series'] = [10, 55, 60, 70, 80, 99, 105, 109];
-        break;
-      case 'Risk':
-        this.licenseRiskChart['series'] = [10, 20, 30, 70, 90, 48, 7, 88];
-        break;
-      default:
-        break;
-    }
-  }
-
   newParentChildDataPush = [];
   onEntityTreeNameSelect(rowData, rowNode) {
     if (!!rowNode.parent) {
@@ -693,6 +963,16 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
+  getSum(obj) {
+    var sum = 0;
+    for (var el in obj) {
+      if (obj.hasOwnProperty(el) && typeof obj[el] == "number") {
+        sum += parseFloat(obj[el]);
+      }
+    }
+    return sum;
+  }
+
   onNodeSelect($event) {
   }
 
@@ -710,6 +990,10 @@ export class EntityComponent implements OnInit, OnDestroy {
         if (!!childData[i].node) {
           let cData: any = await this.entityService.getTreeEntity(childData[i].node.entityId).toPromise();
           let d = {};
+          cData.data.entity['vulSericeData'] = this.initSparkLineChart(cData.data.entity, 'vulnerabilityMetrics');
+          cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
+          cData.data.entity['supplySericeData'] = this.initSparkLineChart(cData.data.entity, 'supplyChainMetrics');
+          cData.data.entity['assetSericeData'] = this.initSparkLineChart(cData.data.entity, 'assetMetrics');
           d['id'] = childData[i].node.entityId;
           d['data'] = cData.data.entity;
           d['parentId'] = prId;
@@ -746,6 +1030,124 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
     }
     return roots;
+  }
+
+  private initVulDonutChartData(vulData) {
+    this.vulnerabilityDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'];
+    Object.keys(vulData).forEach(key => {
+      const pascalCasestr = _.upperFirst(_.camelCase(key));
+      this.vulnerabilityDonutChart['labels'].push(pascalCasestr);
+      this.vulnerabilityDonutChart['series'].push(vulData[key]);
+    });
+  }
+
+  private initAssetDonut(assetData) {
+    this.assetDonutChart['colors'] = ['#11c15b', '#4680ff', '#ffa21d'];
+    Object.keys(assetData).forEach(key => {
+      const pascalCasestr = _.upperFirst(_.camelCase(key));
+      this.assetDonutChart['labels'].push(pascalCasestr);
+      this.assetDonutChart['series'].push(assetData[key]);
+    });
+  }
+
+  private initLicenseDonut(licensedonutData) {
+    if (!!licensedonutData) {
+      if (!!licensedonutData.licenseNameMetrics) {
+        Object.keys(licensedonutData.licenseNameMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.licenseDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
+          this.licenseDonutChart['labels'].push(pascalCasestr);
+          this.licenseDonutChart['series'].push(licensedonutData.licenseNameMetrics[key]);
+        });
+      } else {
+        //If no data then?
+      }
+
+      if (!!licensedonutData.licenseFamilyMetrics) {
+        Object.keys(licensedonutData.licenseFamilyMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.licenseRiskChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
+          this.licenseRiskChart['labels'].push(pascalCasestr);
+          this.licenseRiskChart['series'].push(licensedonutData.licenseFamilyMetrics[key]);
+        });
+      } else {
+        //if no data...
+      }
+
+      if (!!licensedonutData.licenseCategoryMetrics) {
+        Object.keys(licensedonutData.licenseCategoryMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.licenseCategoryChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
+          this.licenseCategoryChart['labels'].push(pascalCasestr);
+          this.licenseCategoryChart['series'].push(licensedonutData.licenseCategoryMetrics[key]);
+        });
+      } else {
+        //if no data...
+      }
+
+    } else {
+      // if no data In license then?
+    }
+  }
+
+  private initComponentDonutChart(componentData) {
+    if (!!componentData) {
+      if (!!componentData.licenseCategoryMetrics) {
+        Object.keys(componentData.licenseCategoryMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.componentLicenseCategory['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentLicenseCategory['labels'].push(pascalCasestr);
+          this.componentLicenseCategory['series'].push(componentData.licenseCategoryMetrics[key]);
+        });
+      } else {
+
+      }
+
+      if (!!componentData.licenseFamilyMetrics) {
+        Object.keys(componentData.licenseFamilyMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.componentLicenseRiskChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentLicenseRiskChart['labels'].push(pascalCasestr);
+          this.componentLicenseRiskChart['series'].push(componentData.licenseFamilyMetrics[key]);
+        });
+      } else {
+
+      }
+
+      if (!!componentData.licenseNameMetrics) {
+        Object.keys(componentData.licenseNameMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.componentLicense['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentLicense['labels'].push(pascalCasestr);
+          this.componentLicense['series'].push(componentData.licenseNameMetrics[key]);
+        });
+      } else {
+
+      }
+
+      if (!!componentData.vulnerabilityMetrics) {
+        Object.keys(componentData.vulnerabilityMetrics).forEach(key => {
+          const pascalCasestr = _.upperFirst(_.camelCase(key));
+          this.componentVulnerabilityRiskChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentVulnerabilityRiskChart['labels'].push(pascalCasestr);
+          this.componentVulnerabilityRiskChart['series'].push(componentData.vulnerabilityMetrics[key]);
+        });
+      } else {
+
+      }
+    } else {
+      //No data then ?
+    }
+  }
+
+  private initSupplyChainChart(supplyChainData) {
+    if (!!supplyChainData) {
+      Object.keys(supplyChainData).forEach(key => {
+        const pascalCasestr = _.upperFirst(_.camelCase(key));
+        this.supplyChainChart['labels'].push(pascalCasestr);
+        this.supplyChainChart['series'].push(supplyChainData[key]);
+      });
+    }
   }
 
   //clicking on any where in the screen below method will fire

@@ -74,6 +74,37 @@ export class ApiService {
         entityType
         removed
         
+        entityMetricsSummaryGroup {
+          entityMetricsSummaries {
+            vulnerabilityMetrics {
+                critical
+                high
+                medium
+                low
+                info
+            }
+            licenseMetrics {
+                copyleftStrong
+                copyleftWeak
+                copyleftPartial
+                copyleftLimited
+                copyleft
+                custom
+                dual
+                permissive
+            }
+            supplyChainMetrics {
+                risk
+                quality
+            }
+            assetMetrics {
+                embedded
+                openSource
+                unique
+            }
+          }
+        }
+
         entityMetricsGroup {
             projectCount
             entityMetrics{

@@ -44,7 +44,8 @@
   </div>
 
 
-  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
+  <div class="row" style="padding:20px 0px 20px 0px"
+    *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <span style="font-size:20px;color:#4680ff">
@@ -76,7 +77,8 @@
   </div>
 
   <!-- CHART DATA -->
-  <div class="row entity-chart-row" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
+  <div class="row entity-chart-row"
+    *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
       (click)="initStackedChartAccordingToDonut('Vulnerability')">
@@ -88,7 +90,7 @@
             </div>
           </div>
         </div>
-        <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="this.vulnerabilityDonutChart"></app-apex-chart>
+        <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="vulnerabilityDonutChart"></app-apex-chart>
       </app-card>
     </div>
 
@@ -100,19 +102,6 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</h6>
               <div class="chart-options">
-                <!-- <div class="chart-opt-selected"
-                  (click)="isShowLicensedropdown = !isShowLicensedropdown;isShowStackedChart = false">
-                  <span>{{selectedlicenseChartDropValue}} </span><i class="fas fa-angle-down"></i>
-                </div> -->
-                <!-- <div class="entity-opt-list" [ngClass]="{'entity-opt-list-open': isShowLicensedropdown}">
-                  <ul>
-                    <li *ngFor="let item of licenseChartDropValues" [ngClass]="{'active': item.isActive == true}"
-                      (click)="changeLincesChartDropdown(item)">
-                      {{item.name}}</li>
-                  </ul>
-
-                </div> -->
-
                 <select class="form-control form-control-sm" id="license" (click)="isShowStackedChart = false"
                   (change)="changeLincesChartDropdown()" [(ngModel)]="selectedlicenseChartDropValue" name="license">
                   <option *ngFor="let item of licenseChartDropValues">{{item.name}}</option>
@@ -169,20 +158,8 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
               <div class="chart-options">
-                <!-- <div class="chart-opt-selected"
-                  (click)="isShowComponentdropdown = !isShowComponentdropdown;isShowStackedChart = false">
-                  <span>{{selectedComponentChartDropvalue}}</span> <i class="fas fa-angle-down"></i>
-                </div>
-                <div class="entity-opt-list" [ngClass]="{'entity-opt-list-open': isShowComponentdropdown}">
-                  <ul>
-                    <li *ngFor="let item of componentChartDropValues" [ngClass]="{'active': item.isActive == true}"
-                      (click)="changeComponentChartDropdown(item)">
-                      {{item.name}}</li>
-                  </ul>
-                </div> -->
                 <select class="form-control form-control-sm" id="component" (click)="isShowStackedChart = false"
-                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue"
-                  name="component">
+                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue" name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -191,8 +168,6 @@
         </div>
 
         <span *ngIf="selectedComponentChartDropvalue == 'Vulnerability Risk'">
-          <!-- <app-apex-chart chartID="componentVulnerabilityRiskChart" [chartConfig]="componentVulnerabilityRiskChart">
-          </app-apex-chart> -->
           <app-apex-chart chartID="componentChart" [chartConfig]="componentVulnerabilityRiskChart">
           </app-apex-chart>
         </span>
@@ -200,11 +175,14 @@
           <app-apex-chart chartID="componentLicenseRiskChart" [chartConfig]="componentLicenseRiskChart">
           </app-apex-chart>
         </span>
-        <span *ngIf="selectedComponentChartDropvalue == 'Source'">
+        <span *ngIf="selectedComponentChartDropvalue == 'License Category'">
           <app-apex-chart chartID="componentLicenseCategory" [chartConfig]="componentLicenseCategory">
           </app-apex-chart>
         </span>
-
+        <span *ngIf="selectedComponentChartDropvalue == 'License Count'">
+          <app-apex-chart chartID="componentLicenseCategory" [chartConfig]="componentLicense">
+          </app-apex-chart>
+        </span>
       </app-card>
     </div>
 
@@ -229,7 +207,8 @@
       [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
     'licenses-donut': selectedDonut == 'Licenses', 'supply-donut': selectedDonut == 'SupplyChain','Components-donut': selectedDonut == 'Components','Assets-donut': selectedDonut == 'Assets'}">
       <div class="card mb-3">
-        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"  (tabChange)="onStackedChartTabChange($event)">
+        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
+          (tabChange)="onStackedChartTabChange($event)">
           <ngb-tab id="Week">
             <ng-template ngbTabTitle>Week</ng-template>
             <ng-template ngbTabContent>
@@ -237,9 +216,9 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSeriesOverTime.series"
-                               [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                               [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                               [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -308,7 +287,8 @@
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
 
-          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="BUSINESSUNITS">
+          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
+            id="BUSINESSUNITS">
             <ng-template ngbTabContent>
 
               <div class="row">
@@ -344,9 +324,9 @@
                           <td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
-                              <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
+                              <!-- <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span> -->
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
+                                [series]="rowData.vulSericeData" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
                             </div>
@@ -355,7 +335,7 @@
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
+                                [series]="rowData.licSericeData" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
                             </div>
@@ -364,7 +344,7 @@
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
+                                [series]="rowData.supplySericeData" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"
                                 [colors]="commonLineSparklineOptions.colors"></apx-chart>
                             </div>
@@ -373,7 +353,7 @@
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="commonLineSparklineOptions.series" [chart]="commonLineSparklineOptions.chart"
+                                [series]="rowData.assetSericeData" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"
                                 [colors]="commonLineSparklineOptions.colors"></apx-chart>
                             </div>
@@ -411,12 +391,15 @@
                               <!-- <th
                                 style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">
                                 DIVISION</th> -->
-                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="15%">Vulnerability Risk</th>
-                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="15%">License Risk</th>
-                              <th class="text-left" style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                width="15%">Supply Chain Risk</th>
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                Vulnerability Risk</th>
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                License Risk</th>
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                Supply Chain Risk</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
                                 width="15%">Asset Composition</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
@@ -433,7 +416,6 @@
                               <!-- <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td> -->
                               <td style="padding: 0.75rem;">
                                 <span title="Critical"
-
                                   class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
                                 <span title="High"
                                   class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
@@ -448,7 +430,7 @@
                                 <span title="Copyleft Strong"
                                   class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
                                 <span title="Copyleft"
-                                      class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleft}}</span>
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleft}}</span>
                                 <span title="Copyleft Weak"
                                   class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
                                 <span title="Copyleft Partial"
@@ -476,7 +458,8 @@
                                 <span title="Unique"
                                   class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
                               </td>
-                              <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date :'M/d/y h:mmaa' | lowercase}}</td>
+                              <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date
+                                :'M/d/y h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-template>
                         </p-treeTable>
@@ -586,7 +569,8 @@
           </ngb-tab>
 
           <!-- ORG TREE -->
-          <ngb-tab title="ORG TREE" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="ORGANIZATION">
+          <ngb-tab title="ORG TREE" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
+            id="ORGANIZATION">
             <ng-template ngbTabContent>
               <div class="row">
                 <div class="col-sm-12">
@@ -597,25 +581,25 @@
                         <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
                           tooltipClass="my-custom-class">{{node.name}}</div>
                         <div class="node-content node-content-top">
-                          <div class="node-no-data" *ngIf="!node.data || !node.data.entityMetrics">
+                          <div class="node-no-data" *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
                             <p class="no-data-text">No metrics data yet</p>
                           </div>
-                          <div class="chart-hdr-box" *ngIf="!!node.data.entityMetrics">
+                          <div class="chart-hdr-box" *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
                             <div class="count-blk vulnerabilities-col">
-                              <p *ngIf="!!node?.data?.entityMetrics?.vulnerabilityMetrics">Vuln:</p>
-                              <span>{{node?.data?.entityMetrics?.vulnerabilityMetrics?.total}}</span>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Vuln:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)}}</span>
                             </div>
                             <div class="count-blk license-col">
-                              <p *ngIf="!!node?.data?.entityMetrics?.licenseMetrics">Licns:</p>
-                              <span>{{node?.data?.entityMetrics?.licenseMetrics?.total}}</span>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Licns:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)}}</span>
                             </div>
                             <div class="count-blk components-col">
-                              <p *ngIf="!!node?.data?.entityMetrics?.componentMetrics">Comp:</p>
-                              <span>{{node?.data?.entityMetrics?.componentMetrics?.total}}</span>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Supply:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics)}}</span>
                             </div>
                             <div class="count-blk assets-col">
-                              <p *ngIf="!!node?.data?.entityMetrics?.assetMetrics">Assets:</p>
-                              <span>{{node?.data?.entityMetrics?.assetMetrics?.total}}</span>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Assets:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics)}}</span>
                             </div>
                           </div>
                         </div>
