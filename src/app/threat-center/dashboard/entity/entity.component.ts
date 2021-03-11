@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, El
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { Project, Entity, User, ProjectEdge } from '@app/threat-center/shared/models/types';
+import { Project, Entity, User, ProjectEdge, EntityMetrics } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
@@ -60,13 +60,15 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   stackedChartCommonOptions: Partial<any> = {};
   lineChartOptions: any;
-  selectedDonut: string = "Vulnerability";
-  lineChartActiveTab: string = "Month";
 
-  monthSericeOverTime: any = {};
-  quarterSericeOverTime: any = {};
-  yearSericeOverTime: any = {};
-  intervalSericeOverTime: any = {};
+  selectedDonut: string = "Vulnerability";
+  lineChartActiveTab: string = "Week";
+
+  weekSeriesOverTime: any = {};
+  monthSeriesOverTime: any = {};
+  quarterSeriesOverTime: any = {};
+  yearSeriesOverTime: any = {};
+
 
   entityPageBreadCums: Array<any> = [];
   recursionHelperArray = new Array();
@@ -97,6 +99,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   supplyChainChart: Partial<any>;
   isTreeProgressBar: boolean = false;
+
+  entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -130,9 +134,9 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.scanHelperService.isRefreshObjectPageObservable$
       .subscribe(x => {
         if (x == true) {
-          this.obsEntity.subscribe(entity => {
-            entity.entityMetrics = null;
-            if (!!entity && !entity.entityMetrics) {
+          this.obsEntity.subscribe((entity) => {
+            entity.entityMetricsGroup = null;
+            if (!!entity && !entity.entityMetricsGroup) {
               //refresh Object page..
               this.loadEntityPage();
             }
@@ -172,7 +176,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       switch (this.selectedDonut) {
         case 'Vulnerability':
           // check active tab as well..
-          this.monthSericeOverTime['series'] = [{
+          this.monthSeriesOverTime['series'] = [{
             name: "South",
             data: this.generateDayWiseTimeSeries(
               new Date("11 Feb 2017 GMT").getTime(),
@@ -227,7 +231,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
       case 'Quarter':
         // here init Quarter chart according to selected donut
-        this.quarterSericeOverTime['series'] = [{
+        this.quarterSeriesOverTime['series'] = [{
           name: "South",
           data: this.generateDayWiseTimeSeries(
             new Date("1 Feb 2019 GMT").getTime(),
@@ -263,39 +267,40 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
       case 'Year':
         // here init Quarter chart according to selected donut
-        this.yearSericeOverTime['series'] = [{
-          name: "South",
-          data: this.generateDayWiseTimeSeries(
-            new Date("1 Feb 2020 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 60
-            }
-          )
-        },
-        {
-          name: "North",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2020 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 20
-            }
-          )
-        },
-        {
-          name: "Central",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2020 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 15
-            }
-          )
-        }];
+        this.yearSeriesOverTime['series'] = [
+          {
+            name: "South",
+            data: this.generateDayWiseTimeSeries(
+              new Date("1 Feb 2020 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 60
+              }
+            )
+          },
+          {
+            name: "North",
+            data: this.generateDayWiseTimeSeries(
+              new Date("11 Feb 2020 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 20
+              }
+            )
+          },
+          {
+            name: "Central",
+            data: this.generateDayWiseTimeSeries(
+              new Date("11 Feb 2020 GMT").getTime(),
+              20,
+              {
+                min: 10,
+                max: 15
+              }
+            )
+          }];
         break;
       case 'Interval':
         // here init Quarter chart according to selected donut
@@ -379,8 +384,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
 
       console.log("ENTITY: ", entity);
-      if (entity.entityMetricsGroup) {
-
+      if (entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1) {
         // NOTES:
         // Metrics are ordered by date DESC (most recent to least recent)
         // Period defaults to week, so you'll get 7 days worth of data for stack chart
@@ -393,6 +397,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         // VULNERABILITY METRICS
         // 1 dimension for vulnerability metrics (vulnerability severity)
         const entityMetrics = entity.entityMetricsGroup.entityMetrics;
+        this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
 
         // data for pie charts
         const vulnerabilityMetrics_severityDimension = entityMetrics[0].vulnerabilityMetrics.severityMetrics;
@@ -426,7 +431,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         const licenseMetrics_licenseDimension = licenseMetrics.licenseNameMetrics;
 
         // SUPPLY CHAIN METRICS
-        const supplyChainMetrics =entityMetrics[0].supplyChainMetrics;
+        const supplyChainMetrics = entityMetrics[0].supplyChainMetrics;
         // data for pie charts
         const supplyChainMetrics_riskAndQuality = supplyChainMetrics.supplyChainMetrics;
 

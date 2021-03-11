@@ -44,7 +44,7 @@
   </div>
 
 
-  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetricsGroup">
+  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <span style="font-size:20px;color:#4680ff">
@@ -76,7 +76,7 @@
   </div>
 
   <!-- CHART DATA -->
-  <div class="row entity-chart-row" *ngIf="entity.entityMetricsGroup">
+  <div class="row entity-chart-row" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
 
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
       (click)="initStackedChartAccordingToDonut('Vulnerability')">
@@ -224,7 +224,7 @@
   </div>
 
 
-  <div class="row" *ngIf="entity.entityMetricsGroup">
+  <div class="row" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
     <div class="col-12 entity-chart-tabbing"
       [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
     'licenses-donut': selectedDonut == 'Licenses', 'supply-donut': selectedDonut == 'SupplyChain','Components-donut': selectedDonut == 'Components','Assets-donut': selectedDonut == 'Assets'}">
@@ -236,7 +236,7 @@
               <div class="entity-tab-chart">
                 <div class="row">
                   <div class="col-12">
-                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSericeOverTime.series"
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSeriesOverTime.series"
                                [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                                [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
                                [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
@@ -251,7 +251,7 @@
               <div class="entity-tab-chart">
                 <div class="row">
                   <div class="col-12">
-                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="monthSericeOverTime.series"
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="monthSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
                       [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
@@ -266,7 +266,7 @@
               <div class="entity-tab-chart">
                 <div class="row">
                   <div class="col-12">
-                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="quarterSericeOverTime.series"
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="quarterSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
                       [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
@@ -281,7 +281,7 @@
               <div class="entity-tab-chart">
                 <div class="row">
                   <div class="col-12">
-                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="yearSericeOverTime.series"
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="yearSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
                       [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
@@ -302,7 +302,7 @@
 
 
 
-  <div class="row" *ngIf="entity.childEntities.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
+  <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
