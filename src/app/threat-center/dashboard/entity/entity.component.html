@@ -159,7 +159,8 @@
               <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
               <div class="chart-options">
                 <select class="form-control form-control-sm" id="component" (click)="isShowStackedChart = false"
-                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue" name="component">
+                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue"
+                  name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -216,9 +217,10 @@
                 <div class="row">
                   <div class="col-12">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSeriesOverTime.series"
-                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
-                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [colors]="weekSeriesOverTime.colors" [chart]="stackedChartCommonOptions.chart"
+                      [xaxis]="stackedChartCommonOptions.xaxis" [dataLabels]="stackedChartCommonOptions.dataLabels"
+                      [colors]="stackedChartCommonOptions.colors" [legend]="stackedChartCommonOptions.legend"
+                      [fill]="stackedChartCommonOptions.fill"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -325,8 +327,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <!-- <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span> -->
-                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="rowData.vulSericeData" [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.vulSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
                             </div>
@@ -334,8 +336,8 @@
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
-                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="rowData.licSericeData" [chart]="commonLineSparklineOptions.chart"
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.licSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip">
                               </apx-chart>
                             </div>
@@ -345,17 +347,15 @@
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
                                 [series]="rowData.supplySericeData" [chart]="commonLineSparklineOptions.chart"
-                                [tooltip]="commonLineSparklineOptions.tooltip"
-                                [colors]="commonLineSparklineOptions.colors"></apx-chart>
+                                [tooltip]="commonLineSparklineOptions.tooltip"></apx-chart>
                             </div>
                           </td>
                           <td class="text-left">
                             <div class="sparkline-chart-blk">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
-                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
-                                [series]="rowData.assetSericeData" [chart]="commonLineSparklineOptions.chart"
-                                [tooltip]="commonLineSparklineOptions.tooltip"
-                                [colors]="commonLineSparklineOptions.colors"></apx-chart>
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.assetSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip"></apx-chart>
                             </div>
                           </td>
                         </tr>
@@ -581,24 +581,30 @@
                         <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
                           tooltipClass="my-custom-class">{{node.name}}</div>
                         <div class="node-content node-content-top">
-                          <div class="node-no-data" *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
+                          <div class="node-no-data"
+                            *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
                             <p class="no-data-text">No metrics data yet</p>
                           </div>
-                          <div class="chart-hdr-box" *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
+                          <div class="chart-hdr-box"
+                            *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
                             <div class="count-blk vulnerabilities-col">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Vuln:</p>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Vuln:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)}}</span>
                             </div>
                             <div class="count-blk license-col">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Licns:</p>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Licns:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)}}</span>
                             </div>
                             <div class="count-blk components-col">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Supply:</p>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Supply:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics)}}</span>
                             </div>
                             <div class="count-blk assets-col">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">Assets:</p>
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Assets:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics)}}</span>
                             </div>
                           </div>

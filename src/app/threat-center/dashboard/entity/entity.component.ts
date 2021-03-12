@@ -161,6 +161,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         case 'Vulnerability':
           // check active tab as well..
           this.weekSeriesOverTime['series'] = [];
+          this.weekSeriesOverTime['colors'] = [];
           this.entityMetricList.forEach(d => {
             if (d.vulnerabilityMetrics && !!d.vulnerabilityMetrics['severityMetrics']) {
               Object.keys(d.vulnerabilityMetrics['severityMetrics']).forEach(p => {
@@ -173,6 +174,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           for (var index in properties) {
             const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
             this.weekSeriesOverTime['series'].push(obj);
+            this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
           }
           break;
         case 'Assets':
@@ -259,6 +261,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     let properties = [];
     switch (nameOfChart) {
       case 'Vulnerability Risk':
+        this.weekSeriesOverTime['colors'] = [];
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['vulnerabilityMetrics']) {
             Object.keys(d.componentMetrics['vulnerabilityMetrics']).forEach(p => {
@@ -270,6 +273,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         });
         for (var index in properties) {
           this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'License Risk':
@@ -287,6 +291,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         }
         break;
       case 'License Category':
+        this.weekSeriesOverTime['colors'] = [];
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['licenseCategoryMetrics']) {
             Object.keys(d.componentMetrics['licenseCategoryMetrics']).forEach(p => {
@@ -298,6 +303,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         });
         for (var index in properties) {
           this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'License Count':
@@ -372,6 +378,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         }
         break;
       case 'Category':
+        this.weekSeriesOverTime['colors'] = [];
         this.entityMetricList.forEach(d => {
           if (d.licenseMetrics && !!d.licenseMetrics['licenseCategoryMetrics']) {
             Object.keys(d.licenseMetrics['licenseCategoryMetrics']).forEach(p => {
@@ -383,6 +390,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         });
         for (var index in properties) {
           this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'Risk':
@@ -748,64 +756,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
         //    on an updated demonstration.
 
-        // VULNERABILITY METRICS
-        // 1 dimension for vulnerability metrics (vulnerability severity)
         const entityMetrics = entity.entityMetricsGroup.entityMetrics;
         this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
-
-        // data for pie charts
-        // const vulnerabilityMetrics_severityDimension = entityMetrics[0].vulnerabilityMetrics.severityMetrics;
-
-        // COMPONENT METRICS
-        // 4 dimensions for component metrics
-        // 1) vulnerability severity
-        // 2) license family
-        // 3) license category
-        // 4) license name
-        // const componentMetrics = entityMetrics[0].componentMetrics;
-
-        // // data for pie charts
-        // const componentMetrics_vulDimension = componentMetrics.vulnerabilityMetrics;
-        // const componentMetrics_licenseFamilyDimension = componentMetrics.licenseFamilyMetrics; // <- NO DATA YET
-        // const componentMetrics_licenseCategoryDimension = componentMetrics.licenseCategoryMetrics;
-        // const componentMetrics_licenseDimension = componentMetrics.licenseNameMetrics;
-
-        // // ASSET METRICS
-        // const assetMetrics = entityMetrics[0].assetMetrics;
-
-        // // data for pie charts
-        // // const assetMetrics_assetCompDimension = assetMetrics.assetCompositionMetrics;
-
-        // // LICENSE METRICS
-        // const licenseMetrics = entityMetrics[0].licenseMetrics;
-
-        // // data for pie charts
-        // const licenseMetrics_licenseFamilyDimension = licenseMetrics.licenseFamilyMetrics; // <- NO DATA YET
-        // const licenseMetrics_licenseCategoryDimension = licenseMetrics.licenseCategoryMetrics;
-        // const licenseMetrics_licenseDimension = licenseMetrics.licenseNameMetrics;
-
-        // SUPPLY CHAIN METRICS
-        // const supplyChainMetrics = entityMetrics[0].supplyChainMetrics;
-        // // data for pie charts
-        // const supplyChainMetrics_riskAndQuality = supplyChainMetrics.supplyChainMetrics;
-
-        // CHILD ENTITY METRICS SUMMARY DATA
-        //const child1 = entity.childEntities.edges[0].node;
-        //const licenseRisk = entity.childEntities.edges[0].node.entityMetricsSummary.licenseRisk
-        //console.log("Child1:", child1.name);
-        //console.log(child1.name,"License Risk:", licenseRisk);
-
-        // Gets most recent vulnerability metrics to be used for pie charts
-        // console.log("vulnerabilityMetrics_severityDimension", vulnerabilityMetrics_severityDimension);
-        // console.log("componentMetrics_vulDimension", componentMetrics_vulDimension);
-        // console.log("componentMetrics_licenseFamilyDimension", componentMetrics_licenseFamilyDimension);
-        // console.log("componentMetrics_licenseCategoryDimension", componentMetrics_licenseCategoryDimension);
-        // console.log("componentMetrics_licenseDimension", componentMetrics_licenseDimension);
-        // // console.log("assetMetrics_assetCompDimension", assetMetrics_assetCompDimension);
-        // console.log("licenseMetrics_licenseFamilyDimension", licenseMetrics_licenseFamilyDimension);
-        // console.log("licenseMetrics_licenseCategoryDimension", licenseMetrics_licenseCategoryDimension);
-        // console.log("licenseMetrics_licenseDimension", licenseMetrics_licenseDimension);
-        // console.log("supplyChainMetrics_riskAndQuality", supplyChainMetrics_riskAndQuality);
 
         //Vul donut chart
         this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
@@ -1056,8 +1008,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   private initVulDonutChartData(vulData) {
-    this.vulnerabilityDonutChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'];
+    this.vulnerabilityDonutChart['colors'] = [];
     Object.keys(vulData).forEach(key => {
+      this.vulnerabilityDonutChart['colors'].push(this.chartHelperService.getColorByLabel(key));
       const pascalCasestr = _.upperFirst(_.camelCase(key));
       this.vulnerabilityDonutChart['labels'].push(pascalCasestr);
       this.vulnerabilityDonutChart['series'].push(vulData[key]);
@@ -1098,9 +1051,10 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
 
       if (!!licensedonutData.licenseCategoryMetrics) {
+        this.licenseCategoryChart['colors'] = [];
         Object.keys(licensedonutData.licenseCategoryMetrics).forEach(key => {
+          this.licenseCategoryChart['colors'].push(this.chartHelperService.getColorByLabel(key));
           const pascalCasestr = _.upperFirst(_.camelCase(key));
-          this.licenseCategoryChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
           this.licenseCategoryChart['labels'].push(pascalCasestr);
           this.licenseCategoryChart['series'].push(licensedonutData.licenseCategoryMetrics[key]);
         });
@@ -1116,9 +1070,10 @@ export class EntityComponent implements OnInit, OnDestroy {
   private initComponentDonutChart(componentData) {
     if (!!componentData) {
       if (!!componentData.licenseCategoryMetrics) {
+        this.componentLicenseCategory['colors'] = [];
         Object.keys(componentData.licenseCategoryMetrics).forEach(key => {
           const pascalCasestr = _.upperFirst(_.camelCase(key));
-          this.componentLicenseCategory['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentLicenseCategory['colors'].push(this.chartHelperService.getColorByLabel(key));
           this.componentLicenseCategory['labels'].push(pascalCasestr);
           this.componentLicenseCategory['series'].push(componentData.licenseCategoryMetrics[key]);
         });
@@ -1151,7 +1106,8 @@ export class EntityComponent implements OnInit, OnDestroy {
       if (!!componentData.vulnerabilityMetrics) {
         Object.keys(componentData.vulnerabilityMetrics).forEach(key => {
           const pascalCasestr = _.upperFirst(_.camelCase(key));
-          this.componentVulnerabilityRiskChart['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          // this.componentVulnerabilityRiskChart['colors'] = ['#ff2b2b', '#ffa21d', '#e6e600', '#11c15b', '#4680ff'];
+          this.componentVulnerabilityRiskChart['colors'].push(this.chartHelperService.getColorByLabel(key));
           this.componentVulnerabilityRiskChart['labels'].push(pascalCasestr);
           this.componentVulnerabilityRiskChart['series'].push(componentData.vulnerabilityMetrics[key]);
         });

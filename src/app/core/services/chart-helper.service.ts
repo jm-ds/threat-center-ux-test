@@ -14,7 +14,7 @@ export class ChartHelperService {
             stroke: {
                 width: 1
             },
-            labels: [], series: [],
+            labels: [], series: [],colors:[],
             noData: {
                 text: "There's no data",
                 align: 'center',
@@ -403,7 +403,49 @@ export class ChartHelperService {
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
         }
-        
+
         return array;
+    }
+
+    getColorByLabel(label: string) {
+        let color = '';
+        switch (label) {
+            case 'UNDEFINED':
+            case 'PROPRIETARY':
+            case 'COPYLEFT_STRONG':
+            case 'COPYLEF':
+                color = "#FF0000";
+                break;
+            case 'PROPRIETARY_FREE':
+            case 'PUBLIC_DOMAIN':
+            case 'PERMISSIVE':
+            case 'COPYLEF':
+                color = "#11c15b";
+                break;
+            case 'COPYLEFT_WEAK':
+            case 'COPYLEFT_PARTIAL':
+            case 'COPYLEFT_LIMITED':
+                color = "#ffa21d";
+                break;
+            case 'CRITICAL':
+                color = "#ff2b2b";
+                break;
+            case 'HIGH':
+                color = "#ffa21d";
+                break;
+            case 'MEDIUM':
+                color = "#e6e600";
+                break;
+            case 'LOW':
+                color = "#11c15b";
+                break;
+            case 'INFO':
+                color = "#4680ff";
+                break;
+            default:
+                break;
+        }
+
+        return color;
     }
 }
