@@ -77,7 +77,6 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
-    // { id: this.coreHelperService.uuidv4(), name: "Components", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "Vulnerability Risk", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
@@ -690,7 +689,34 @@ export class EntityComponent implements OnInit, OnDestroy {
       });
   }
 
+  private initCharts() {
+    this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+
+    this.componentVulnerabilityRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicense = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+
+    this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.licenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
+
+    this.weekSeriesOverTime = {};
+    this.monthSeriesOverTime = {};
+    this.quarterSeriesOverTime = {};
+    this.yearSeriesOverTime = {};
+
+    this.selectedDonut = "Vulnerability";
+    this.lineChartActiveTab = "Week";
+    this.selectedComponentChartDropvalue = "Vulnerability Risk";
+    this.selectedlicenseChartDropValue = "License Count";
+
+  }
+
   loadEntity(entityId: string, isPush: boolean = false) {
+    this.initCharts();
     this.currentEntityId = entityId;
     this.entityTreeModel = { data: [] };
     this.organizationTreeModel = [];
