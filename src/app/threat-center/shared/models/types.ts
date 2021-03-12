@@ -184,6 +184,7 @@ export class EntityMetricsSummaryGroup {
 }
 
 export class EntityMetricsSummary {
+  measureDate: any;
   vulnerabilityMetrics: VulnerabilityMetrics;
   licenseMetrics: LicenseMetrics;
   supplyChainMetrics: SupplyChainMetrics;
@@ -201,6 +202,7 @@ export class ProjectMetricsGroup {
 }
 
 export class ProjectMetricsSummary {
+  measureDate: any;
   vulnerabilityMetrics: VulnerabilityMetrics;
   licenseMetrics: LicenseMetrics;
   supplyChainMetrics: SupplyChainMetrics;
@@ -215,6 +217,14 @@ export class ScanMetricsSummary {
 }
 
 
+
+export enum Period {
+  CURRENT="CURRENT",
+  WEEK="WEEK",
+  MONTH="MONTH",
+  QUARTER="QUARTER",
+  YEAR="YEAR"
+}
 
 
 
