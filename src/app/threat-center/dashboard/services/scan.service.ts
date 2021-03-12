@@ -19,7 +19,7 @@ export class ScanHelperService {
     private isHighlightNewScan = new BehaviorSubject(false);
     isHighlightNewScanObservable$ = this.isHighlightNewScan.asObservable();
 
-    private isRefreshObjectPage = new BehaviorSubject(false);
+    isRefreshObjectPage = new BehaviorSubject(false);
     isRefreshObjectPageObservable$ = this.isRefreshObjectPage.asObservable();
 
     sub: Subscription;
@@ -33,7 +33,7 @@ export class ScanHelperService {
         private taskService: TaskService,
         private router: Router,
         private modalService: NgbModal,
-        private coreHelperService: CoreHelperService,) {
+        private coreHelperService: CoreHelperService) {
     }
 
     public submitingScanForProject(preScanProjectData) {
@@ -75,10 +75,10 @@ export class ScanHelperService {
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
                         this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning")
-                        .then(() => {
-                            this.highlightNewScanIfInSamePage(tUpdate);
-                            this.refreshObjectPageIfFirstScan();
-                        });
+                            .then(() => {
+                                this.highlightNewScanIfInSamePage(tUpdate);
+                                this.refreshObjectPageIfFirstScan();
+                            });
                     } else {
                         this.highlightNewScanIfInSamePage(tUpdate);
                         this.refreshObjectPageIfFirstScan();

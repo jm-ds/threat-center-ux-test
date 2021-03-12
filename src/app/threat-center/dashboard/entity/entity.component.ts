@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { Project, Entity, User, ProjectEdge, EntityMetrics } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
@@ -99,6 +99,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   isTreeProgressBar: boolean = false;
 
   entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
+  requestObjectPageSubscriptions: Subscription;
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -129,7 +130,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.scanHelperService.isRefreshObjectPageObservable$
+    this.requestObjectPageSubscriptions = this.scanHelperService.isRefreshObjectPageObservable$
       .subscribe(x => {
         if (x == true) {
           this.obsEntity.subscribe(entity => {
@@ -148,6 +149,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
+    this.requestObjectPageSubscriptions.unsubscribe();
   }
 
   initStackedChartAccordingToDonut(value: string) {
@@ -836,11 +838,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
       await this.populateChildernRecusivaly(entity.childEntities.edges, null);
       let w = {};
-
-      entity['vulSericeData'] = this.initSparkLineChart(entity, 'vulnerabilityMetrics');
-      entity['licSericeData'] = this.initSparkLineChart(entity, 'licenseMetrics');
-      entity['supplySericeData'] = this.initSparkLineChart(entity, 'supplyChainMetrics');
-      entity['assetSericeData'] = this.initSparkLineChart(entity, 'assetMetrics');
       this.entityTreeModel.data = [
         {
           "data": entity,
