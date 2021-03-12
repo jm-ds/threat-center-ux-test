@@ -16,7 +16,8 @@ import {
   UserSelection,
   VulnerabilityQuery
 } from '../models/types';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service'
+import { Period } from '@app/threat-center/shared/models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class ApiService {
 
   getEntity(entityId: string) {
     let childProjects = `
-    childProjects(first:1000) {
+    childProjects(first:100) {
       edges {
         node {
           projectId
@@ -70,41 +71,13 @@ export class ApiService {
       entity(entityId: "${entityId}") {
         entityId
         parentEntityId
+        parents {
+          entityId
+          name
+        }
         name
         entityType
         removed
-        
-        entityMetricsSummaryGroup {
-          entityMetricsSummaries {
-            vulnerabilityMetrics {
-                critical
-                high
-                medium
-                low
-                info
-            }
-            licenseMetrics {
-                copyleftStrong
-                copyleftWeak
-                copyleftPartial
-                copyleftLimited
-                copyleft
-                custom
-                dual
-                permissive
-            }
-            supplyChainMetrics {
-                risk
-                quality
-            }
-            assetMetrics {
-                embedded
-                openSource
-                unique
-            }
-          }
-        }
-
         entityMetricsGroup {
             projectCount
             entityMetrics{
@@ -138,7 +111,6 @@ export class ApiService {
               name
               created
               
-             
               projectMetricsSummary {
                 measureDateTime
                 vulnerabilityMetrics {
@@ -187,6 +159,7 @@ export class ApiService {
               
               entityMetricsSummaryGroup {
                 entityMetricsSummaries {
+                  measureDate
                   vulnerabilityMetrics {
                       critical
                       high
@@ -1030,5 +1003,37 @@ export class ApiService {
           }
         `,
     }).valueChanges;
+  }
+
+  getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+       query {
+          entityMetricsPeriod(orgId:"${orgId}", entityId: "${entityId}", period:${period})  {
+            projectCount
+            entityMetrics{
+                measureDate
+                vulnerabilityMetrics {
+                    severityMetrics
+                }
+                assetMetrics {
+                    assetCompositionMetrics
+                }
+                componentMetrics {
+                    vulnerabilityMetrics
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                licenseMetrics {
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                supplyChainMetrics {
+                    supplyChainMetrics
+                }
+            }
+        }
+     `);
   }
 }
