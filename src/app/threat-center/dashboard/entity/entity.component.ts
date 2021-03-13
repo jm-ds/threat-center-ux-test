@@ -77,19 +77,19 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
-    { id: this.coreHelperService.uuidv4(), name: "Vulnerability Risk", isActive: true },
-    { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
+    { id: this.coreHelperService.uuidv4(), name: "Vulnerabilities", isActive: true },
+    // { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
-    { id: this.coreHelperService.uuidv4(), name: "License Count", isActive: false }
+    { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: false }
   ];
-  selectedComponentChartDropvalue = "Vulnerability Risk";
+  selectedComponentChartDropvalue = "Vulnerabilities";
   isShowLicensedropdown: boolean = false;
   licenseChartDropValues = [
-    { id: this.coreHelperService.uuidv4(), name: "License Count", isActive: true },
-    { id: this.coreHelperService.uuidv4(), name: "Category", isActive: false },
-    { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
+    { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: true },
+    { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
+    // { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
   ];
-  selectedlicenseChartDropValue = "License Count";
+  selectedlicenseChartDropValue = "License Name";
   commonLineSparklineOptions: any = {};
 
   currentEntityId: string = "";
@@ -100,6 +100,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
   requestObjectPageSubscriptions: Subscription;
+  areaChartCommonOption:any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
+
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -142,7 +144,6 @@ export class EntityComponent implements OnInit, OnDestroy {
           });
         }
       });
-
     this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
   }
 
@@ -260,7 +261,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   private componentStackedChartConfig(nameOfChart) {
     let properties = [];
     switch (nameOfChart) {
-      case 'Vulnerability Risk':
+      case 'Vulnerabilities':
         this.weekSeriesOverTime['colors'] = [];
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['vulnerabilityMetrics']) {
@@ -306,7 +307,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
-      case 'License Count':
+      case 'License Name':
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['licenseNameMetrics']) {
             Object.keys(d.componentMetrics['licenseNameMetrics']).forEach(p => {
@@ -329,7 +330,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   private getStackChartLogicalForComponentData(catName, chartName) {
     let data = [];
     switch (chartName) {
-      case 'Vulnerability Risk':
+      case 'Vulnerabilities':
         _.each(this.entityMetricList, metrics => {
           const mainObj = metrics.componentMetrics['vulnerabilityMetrics'];
           data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
@@ -347,7 +348,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
         });
         break;
-      case 'License Count':
+      case 'License Name':
         _.each(this.entityMetricList, metrics => {
           const mainObj = metrics.componentMetrics['licenseNameMetrics'];
           data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
@@ -363,7 +364,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   private licenseStackedChartConfig(nameOfChart) {
     let properties = [];
     switch (nameOfChart) {
-      case 'License Count':
+      case 'License Name':
         this.entityMetricList.forEach(d => {
           if (d.licenseMetrics && !!d.licenseMetrics['licenseNameMetrics']) {
             Object.keys(d.licenseMetrics['licenseNameMetrics']).forEach(p => {
@@ -377,7 +378,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
         }
         break;
-      case 'Category':
+      case 'License Category':
         this.weekSeriesOverTime['colors'] = [];
         this.entityMetricList.forEach(d => {
           if (d.licenseMetrics && !!d.licenseMetrics['licenseCategoryMetrics']) {
@@ -416,13 +417,13 @@ export class EntityComponent implements OnInit, OnDestroy {
   private getStackChartLogicalForLicenseData(catName, chartName) {
     let data = [];
     switch (chartName) {
-      case 'License Count':
+      case 'License Name':
         _.each(this.entityMetricList, metrics => {
           const mainObj = metrics.licenseMetrics['licenseNameMetrics'];
           data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
         });
         break;
-      case 'Category':
+      case 'License Category':
         _.each(this.entityMetricList, metrics => {
           const mainObj = metrics.licenseMetrics['licenseCategoryMetrics'];
           data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
@@ -720,8 +721,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 
     this.selectedDonut = "Vulnerability";
     this.lineChartActiveTab = "Week";
-    this.selectedComponentChartDropvalue = "Vulnerability Risk";
-    this.selectedlicenseChartDropValue = "License Count";
+    this.selectedComponentChartDropvalue = "Vulnerabilities";
+    this.selectedlicenseChartDropValue = "License Name";
 
   }
 
