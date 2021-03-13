@@ -50,22 +50,22 @@ export class EntityService {
       gql`mutation createEntity($entity: EntityRequestInput){
         createEntity(entity: $entity){
           entityId
-              parentEntityId
-              name
-              entityType
-              removed
-              childEntities {
-                edges {
-                  node {
-                    entityId
-                    parentEntityId
-                    name
-                    entityType
-                    removed
-                  }
-                }    
-              }
+            parentEntityId
+            name
+            entityType
+            removed
+            childEntities {
+              edges {
+                node {
+                  entityId
+                  parentEntityId
+                  name
+                  entityType
+                  removed
+                }
+              }    
             }
+          }
     }`, { entity: entityRequest });
   }
 
