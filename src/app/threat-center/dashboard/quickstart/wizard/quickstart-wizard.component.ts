@@ -93,7 +93,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
             let repo = resourcePath[2];
             let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
-                branch = 'master';
+                branch = this.selectedRepos[0].node.defaultBranchRef.name;
             }
             scanRequest.login = owner;
             scanRequest.branch = branch;
@@ -122,7 +122,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
-        //open dialog box with message..
+        // open dialog box with message..
 
         // this.openFloatingModel();
         this.isDisableScanBtn = true;

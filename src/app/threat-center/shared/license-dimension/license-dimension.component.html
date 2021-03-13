@@ -195,6 +195,7 @@
                           <span *ngIf="vulnerabilityEdge.node.severity === 'INFO'"  title="Critical" class="badge m-l-5 badge-light-success">INFO</span>
                       </div>
                       <div *ngIf="component.node.vulnerabilities.edges.length>0">
+
                         <button class="btn btn-outline-primary" data-toggle="modal" type="button" (click)="$event.stopPropagation();selectVersionDialog.show()">Fix</button>
                         <app-ui-modal #selectVersionDialog dialogClass="modal-dialog-centered" (click)="$event.stopPropagation();">
                           <div class="app-modal-header">
@@ -217,6 +218,9 @@
                             <button type="button" class="btn btn-primary" (click)="$event.stopPropagation();selectVersionDialog.hide(); fixVersion(component.node.group,component.node.name)">Fix</button>
                           </div>
                         </app-ui-modal>
+
+                        <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
+
                       </div>
                     </td>
                   </tr>
@@ -232,5 +236,5 @@
         </app-card>  
       </ng-template>
     </ngb-tab>
-  </ngb-tabset>      
+  </ngb-tabset>
 </div>

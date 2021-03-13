@@ -255,7 +255,13 @@ export class TxComponent {
 }
 
 export class FixResult {
-  result;
+  groupId: string;
+  artifactId: string;
+  oldVersion: string;
+  newVersion: string;
+  buildFile: string;
+  success: boolean;
+  errorMessage: string;
 }
 
 export class Vulnerability {
