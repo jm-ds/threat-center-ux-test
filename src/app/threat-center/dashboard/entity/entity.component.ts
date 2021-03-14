@@ -100,7 +100,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
   requestObjectPageSubscriptions: Subscription;
-  areaChartCommonOption:any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
+  areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
 
   constructor(
     private router: Router,
@@ -196,7 +196,9 @@ export class EntityComponent implements OnInit, OnDestroy {
           break;
         case 'SupplyChain':
           this.weekSeriesOverTime['series'] = [];
+          let dateLists = [];
           this.entityMetricList.forEach(d => {
+            dateLists.push(new Date(d['measureDate']));
             if (d.supplyChainMetrics && !!d.supplyChainMetrics['supplyChainMetrics']) {
               Object.keys(d.supplyChainMetrics['supplyChainMetrics']).forEach(p => {
                 if (!properties.includes(p)) {
@@ -209,6 +211,7 @@ export class EntityComponent implements OnInit, OnDestroy {
             const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
             this.weekSeriesOverTime['series'].push(obj);
           }
+          this.areaChartCommonOption.xaxis['categories'] = dateLists;
           break;
         case 'Licenses':
           this.weekSeriesOverTime['series'] = [];

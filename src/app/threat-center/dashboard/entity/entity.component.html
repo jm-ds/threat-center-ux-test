@@ -221,10 +221,10 @@
                       [xaxis]="stackedChartCommonOptions.xaxis" [dataLabels]="stackedChartCommonOptions.dataLabels"
                       [colors]="stackedChartCommonOptions.colors" [legend]="stackedChartCommonOptions.legend"
                       [fill]="stackedChartCommonOptions.fill"></apx-chart>
-
                   </div>
                   <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
-                    <apx-chart [series]="areaChartCommonOption.series" [chart]="areaChartCommonOption.chart"
+
+                    <apx-chart [series]="weekSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
                       [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
                       [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels">
                     </apx-chart>

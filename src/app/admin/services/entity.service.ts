@@ -20,27 +20,61 @@ export class EntityService {
   getTreeEntity(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
     return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
       gql`
-          query {
-            entity(entityId: "${entityId}") {
+        query {
+          entity(entityId: "${entityId}") {
+            entityId
+            parentEntityId
+            name
+            entityType
+            removed
+            parents {
               entityId
-              parentEntityId
               name
-              entityType
-              removed
-              childEntities {
-                edges {
-                  node {
-                    entityId
-                    parentEntityId
-                    name
-                    entityType
-                    removed
-                  }
-                }    
+            }
+            entityMetricsSummaryGroup {
+              entityMetricsSummaries {
+                vulnerabilityMetrics {
+                    critical
+                    high
+                    medium
+                    low
+                    info
+                }
+                licenseMetrics {
+                    copyleftStrong
+                    copyleftWeak
+                    copyleftPartial
+                    copyleftLimited
+                    copyleft
+                    custom
+                    dual
+                    permissive
+                }
+                supplyChainMetrics {
+                    risk
+                    quality
+                }
+                assetMetrics {
+                    embedded
+                    openSource
+                    unique
+                }
               }
             }
+            childEntities {
+              edges {
+                node {
+                  entityId
+                  parentEntityId
+                  name
+                  entityType
+                  removed
+                }
+              }    
+            }
           }
-        `, "no-cache");
+        }
+      `, "no-cache");
   }
 
   //create entitu server call
