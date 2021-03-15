@@ -199,7 +199,7 @@ export class ApiService {
     // max child project depth = 10
     for (let i = 0; i < 10; i++) {
       query = query.replace("%childProjects%", childProjects);
-      query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%","%childEntityChildProjects%"));
+      query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%", "%childEntityChildProjects%"));
     }
     query = query.replace("%childProjects%", "");
     query = query.replace("%childEntityChildProjects%", "");
@@ -658,7 +658,7 @@ export class ApiService {
               }  
             }    
           }
-        `);  
+        `);
   }
 
   getVulnerability(vulnerabilityId: string) {
@@ -835,6 +835,39 @@ export class ApiService {
       `);
   }
 
+  getEntityMetricsPeriod(orgId: string, entityId: string, period: Period) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+       query {
+          entityMetricsPeriod(orgId:"${orgId}" entityId:"${entityId}" period:${period})  {
+            projectCount
+            entityMetrics {
+                measureDate
+                vulnerabilityMetrics {
+                    severityMetrics
+                }
+                assetMetrics {
+                    assetCompositionMetrics
+                }
+                componentMetrics {
+                    vulnerabilityMetrics
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                licenseMetrics {
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                supplyChainMetrics {
+                    supplyChainMetrics
+                }
+            }
+        }
+      }
+      `);
+  }
+
   getGitHubUser() {
     return this.coreGraphQLService.coreGQLReq<GitHubUserQuery>(gql`
         query {
@@ -1005,35 +1038,5 @@ export class ApiService {
     }).valueChanges;
   }
 
-  getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
-    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
-       query {
-          entityMetricsPeriod(orgId:"${orgId}", entityId: "${entityId}", period:${period})  {
-            projectCount
-            entityMetrics{
-                measureDate
-                vulnerabilityMetrics {
-                    severityMetrics
-                }
-                assetMetrics {
-                    assetCompositionMetrics
-                }
-                componentMetrics {
-                    vulnerabilityMetrics
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                licenseMetrics {
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                supplyChainMetrics {
-                    supplyChainMetrics
-                }
-            }
-        }
-     `);
-  }
+
 }

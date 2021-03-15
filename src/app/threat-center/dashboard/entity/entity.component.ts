@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, El
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { Project, Entity, User, ProjectEdge, EntityMetrics } from '@app/threat-center/shared/models/types';
+import { Project, Entity, User, ProjectEdge, EntityMetrics, Period } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
@@ -63,12 +63,13 @@ export class EntityComponent implements OnInit, OnDestroy {
   lineChartActiveTab: string = "Week";
 
   weekSeriesOverTime: any = {};
-  monthSeriesOverTime: any = {};
+  monthSeriesOverTime: any = { series: [], colors: [] };
   quarterSeriesOverTime: any = {};
   yearSeriesOverTime: any = {};
 
 
   entityPageBreadCums: Array<any> = [];
+  entityNewBreadCum: Array<any> = [];
   recursionHelperArray = new Array();
   recursivehelperArrayForIrgTree = new Array();
 
@@ -99,6 +100,10 @@ export class EntityComponent implements OnInit, OnDestroy {
   isTreeProgressBar: boolean = false;
 
   entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
+  // entityMonthMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
+  // entityQuarterMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
+  // entityYearMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
+
   requestObjectPageSubscriptions: Subscription;
   areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
 
@@ -153,16 +158,35 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.requestObjectPageSubscriptions.unsubscribe();
   }
 
+
   initStackedChartAccordingToDonut(value: string) {
     let properties = [];
+    let activeTabVar: string = "";
+    // check active tab as well..
+    switch (this.lineChartActiveTab) {
+      case 'Month':
+        activeTabVar = 'monthSeriesOverTime';
+        break;
+      case 'Week':
+        activeTabVar = 'weekSeriesOverTime';
+        break;
+      case 'Quarter':
+        activeTabVar = 'quarterSeriesOverTime'
+        break;
+      case 'Year':
+        activeTabVar = 'yearSeriesOverTime';
+        break;
+      default:
+        break;
+    }
+    this[activeTabVar].series = [];
+    // let aciveTabMetricsArray: string = "";
     if (this.isShowStackedChart) {
       this.selectedDonut = value;
       this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
       switch (this.selectedDonut) {
         case 'Vulnerability':
-          // check active tab as well..
-          this.weekSeriesOverTime['series'] = [];
-          this.weekSeriesOverTime['colors'] = [];
+          this[activeTabVar].colors = [];
           this.entityMetricList.forEach(d => {
             if (d.vulnerabilityMetrics && !!d.vulnerabilityMetrics['severityMetrics']) {
               Object.keys(d.vulnerabilityMetrics['severityMetrics']).forEach(p => {
@@ -174,12 +198,12 @@ export class EntityComponent implements OnInit, OnDestroy {
           });
           for (var index in properties) {
             const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
-            this.weekSeriesOverTime['series'].push(obj);
-            this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
+            this[activeTabVar].series.push(obj);
+            this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
           }
           break;
         case 'Assets':
-          this.weekSeriesOverTime['series'] = [];
+          this[activeTabVar].series = [];
           this.entityMetricList.forEach(d => {
             if (d.assetMetrics && !!d.assetMetrics['assetCompositionMetrics']) {
               Object.keys(d.assetMetrics['assetCompositionMetrics']).forEach(p => {
@@ -191,11 +215,12 @@ export class EntityComponent implements OnInit, OnDestroy {
           });
           for (var index in properties) {
             const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
-            this.weekSeriesOverTime['series'].push(obj);
+            this[activeTabVar].series.push(obj);
           }
+          this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
           break;
         case 'SupplyChain':
-          this.weekSeriesOverTime['series'] = [];
+          this[activeTabVar].series = [];
           let dateLists = [];
           this.entityMetricList.forEach(d => {
             dateLists.push(new Date(d['measureDate']));
@@ -209,17 +234,15 @@ export class EntityComponent implements OnInit, OnDestroy {
           });
           for (var index in properties) {
             const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
-            this.weekSeriesOverTime['series'].push(obj);
+            this[activeTabVar].series.push(obj);
           }
           this.areaChartCommonOption.xaxis['categories'] = dateLists;
           break;
         case 'Licenses':
-          this.weekSeriesOverTime['series'] = [];
-          this.licenseStackedChartConfig(this.selectedlicenseChartDropValue);
+          this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
           break;
         case 'Components':
-          this.weekSeriesOverTime['series'] = [];
-          this.componentStackedChartConfig(this.selectedComponentChartDropvalue);
+          this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
           break;
 
         default:
@@ -261,11 +284,12 @@ export class EntityComponent implements OnInit, OnDestroy {
 
 
   //Helper function to initialize Component stacked chart configuration
-  private componentStackedChartConfig(nameOfChart) {
+  private componentStackedChartConfig(nameOfChart, activeTabVar) {
+    this[activeTabVar].series = [];
     let properties = [];
     switch (nameOfChart) {
       case 'Vulnerabilities':
-        this.weekSeriesOverTime['colors'] = [];
+        this[activeTabVar].colors = [];
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['vulnerabilityMetrics']) {
             Object.keys(d.componentMetrics['vulnerabilityMetrics']).forEach(p => {
@@ -276,8 +300,8 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
-          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'License Risk':
@@ -291,11 +315,11 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
         }
         break;
       case 'License Category':
-        this.weekSeriesOverTime['colors'] = [];
+        this[activeTabVar].colors = [];
         this.entityMetricList.forEach(d => {
           if (d.componentMetrics && !!d.componentMetrics['licenseCategoryMetrics']) {
             Object.keys(d.componentMetrics['licenseCategoryMetrics']).forEach(p => {
@@ -306,8 +330,8 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
-          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'License Name':
@@ -321,8 +345,9 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
         }
+        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
         break;
       default:
         break;
@@ -364,8 +389,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   //Helper function to initialize License stacked chart configuration
-  private licenseStackedChartConfig(nameOfChart) {
+  private licenseStackedChartConfig(nameOfChart, activeTabVar) {
     let properties = [];
+    this[activeTabVar].series = [];
     switch (nameOfChart) {
       case 'License Name':
         this.entityMetricList.forEach(d => {
@@ -378,11 +404,12 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
         }
+        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
         break;
       case 'License Category':
-        this.weekSeriesOverTime['colors'] = [];
+        this[activeTabVar].colors = [];
         this.entityMetricList.forEach(d => {
           if (d.licenseMetrics && !!d.licenseMetrics['licenseCategoryMetrics']) {
             Object.keys(d.licenseMetrics['licenseCategoryMetrics']).forEach(p => {
@@ -393,8 +420,8 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
-          this.weekSeriesOverTime['colors'].push(this.chartHelperService.getColorByLabel(properties[index]));
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
         }
         break;
       case 'Risk':
@@ -408,7 +435,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           }
         });
         for (var index in properties) {
-          this.weekSeriesOverTime['series'].push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
         }
         break;
       default:
@@ -447,141 +474,127 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   //fired when changing License chart dropdown from donut chart
   changeLincesChartDropdown() {
-    this.isShowStackedChart = false;
+    // this.isShowStackedChart = false;
+    let activeTabVar: string = "";
+    // check active tab as well..
+    switch (this.lineChartActiveTab) {
+      case 'Month':
+        activeTabVar = 'monthSeriesOverTime';
+        break;
+      case 'Week':
+        activeTabVar = 'weekSeriesOverTime';
+        break;
+      case 'Quarter':
+        activeTabVar = 'quarterSeriesOverTime'
+        break;
+      case 'Year':
+        activeTabVar = 'yearSeriesOverTime';
+        break;
+      default:
+        break;
+    }
     if (this.selectedDonut === 'Licenses') {
       this.weekSeriesOverTime['series'] = [];
-      this.licenseStackedChartConfig(this.selectedlicenseChartDropValue);
+      this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
     }
   }
 
   //fired when changing component chart dropdown from donut chart
   changeComponentChartDropdown() {
-    this.isShowStackedChart = false;
+    // this.isShowStackedChart = false;
+    let activeTabVar: string = "";
+    // check active tab as well..
+    switch (this.lineChartActiveTab) {
+      case 'Month':
+        activeTabVar = 'monthSeriesOverTime';
+        break;
+      case 'Week':
+        activeTabVar = 'weekSeriesOverTime';
+        break;
+      case 'Quarter':
+        activeTabVar = 'quarterSeriesOverTime'
+        break;
+      case 'Year':
+        activeTabVar = 'yearSeriesOverTime';
+        break;
+      default:
+        break;
+    }
     if (this.selectedDonut === 'Components') {
       this.weekSeriesOverTime['series'] = [];
-      this.componentStackedChartConfig(this.selectedComponentChartDropvalue);
+      this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
     }
   }
 
   onStackedChartTabChange($event: NgbTabChangeEvent) {
     this.lineChartActiveTab = $event.nextId;
+    let entityId = this.route.snapshot.paramMap.get('entityId');
+    // if an entityId isn't provided in params, use User defaultEntityId
+    if (!entityId) {
+      entityId = this.authService.currentUser.defaultEntityId;
+    }
     // stacked area chart tab chages..
     switch (this.lineChartActiveTab) {
       case 'Month':
-        // here init month chart according to selected donut
-        this.monthSeriesOverTime['series'] = [{
-          name: "South",
-          data: this.generateDayWiseTimeSeries(
-            new Date("1 Feb 2019 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 60
+        this.monthSeriesOverTime['series'] = [];
+        this.monthSeriesOverTime['colors'] = [];
+        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.MONTH)
+          .pipe(map(result => result))
+          .subscribe((res: any) => {
+            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
+              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
+              this.initStackedChartAccordingToDonut(this.selectedDonut);
+            } else {
+              this.entityMetricList = [];
             }
-          )
-        },
-        {
-          name: "North",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2020 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 20
-            }
-          )
-        },
-        {
-          name: "Central",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2021 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 15
-            }
-          )
-        }];
+          });
         break;
       case 'Quarter':
         // here init Quarter chart according to selected donut
-        this.quarterSeriesOverTime['series'] = [{
-          name: "South",
-          data: this.generateDayWiseTimeSeries(
-            new Date("1 Feb 2019 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 60
+        this.quarterSeriesOverTime['series'] = [];
+        this.quarterSeriesOverTime['colors'] = [];
+        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.QUARTER)
+          .pipe(map(result => result))
+          .subscribe((res: any) => {
+            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
+              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
+              this.initStackedChartAccordingToDonut(this.selectedDonut);
+            } else {
+              this.entityMetricList = [];
             }
-          )
-        },
-        {
-          name: "North",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2020 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 20
-            }
-          )
-        },
-        {
-          name: "Central",
-          data: this.generateDayWiseTimeSeries(
-            new Date("11 Feb 2021 GMT").getTime(),
-            20,
-            {
-              min: 10,
-              max: 15
-            }
-          )
-        }];
+          });
         break;
       case 'Year':
         // here init Quarter chart according to selected donut
-        this.yearSeriesOverTime['series'] = [
-          {
-            name: "South",
-            data: this.generateDayWiseTimeSeries(
-              new Date("1 Feb 2020 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 60
-              }
-            )
-          },
-          {
-            name: "North",
-            data: this.generateDayWiseTimeSeries(
-              new Date("11 Feb 2020 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 20
-              }
-            )
-          },
-          {
-            name: "Central",
-            data: this.generateDayWiseTimeSeries(
-              new Date("11 Feb 2020 GMT").getTime(),
-              20,
-              {
-                min: 10,
-                max: 15
-              }
-            )
-          }];
+        this.yearSeriesOverTime['series'] = [];
+        this.yearSeriesOverTime['colors'] = [];
+        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.YEAR)
+          .pipe(map(result => result))
+          .subscribe((res: any) => {
+            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
+              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
+              this.initStackedChartAccordingToDonut(this.selectedDonut);
+            } else {
+              this.entityMetricList = [];
+            }
+          });
         break;
       case 'Week':
-        this.initStackedChartAccordingToDonut(this.selectedDonut);
+        this.weekSeriesOverTime['series'] = [];
+        this.weekSeriesOverTime['colors'] = [];
+        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.WEEK)
+          .pipe(map(result => result))
+          .subscribe((res: any) => {
+            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
+              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
+              this.initStackedChartAccordingToDonut(this.selectedDonut);
+            } else {
+              this.entityMetricList = [];
+            }
+          });
         // here init Quarter chart according to selected donut
         break;
       default:
-        //
         break;
     }
   }
@@ -736,12 +749,19 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.organizationTreeModel = [];
     this.selectedDonut = 'Vulnerability';
     this.isTreeProgressBar = true;
+    this.entityNewBreadCum = [];
     this.router.navigateByUrl('dashboard/entity/' + entityId);
     this.obsEntity = this.apiService.getEntity(entityId)
       .pipe(map(result => result.data.entity));
 
 
-    this.obsEntity.subscribe(entity => {
+    this.obsEntity.subscribe((entity: any) => {
+      if (!!entity.parents && entity.parents.length >= 1) {
+        for (var i = entity.parents.length - 1; i >= 0; i--) {
+          this.entityNewBreadCum.push({ id: entity.parents[i].entityId, name: entity.parents[i].name });
+        }
+      }
+      this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
       this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
       this.buildProjectTree(entity);
 
@@ -864,8 +884,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   goBackfromBreadcum(entityId, currentIndex) {
     const startIndexToRemove = currentIndex + 1;
-    this.entityPageBreadCums.splice(startIndexToRemove, this.entityPageBreadCums.length - (startIndexToRemove));
-    this.setEntityBreadcumToSession();
+    this.entityNewBreadCum.splice(startIndexToRemove, this.entityNewBreadCum.length - (startIndexToRemove));
+    // this.setEntityBreadcumToSession();
     this.loadEntity(entityId);
   }
 
@@ -1099,7 +1119,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       if (!!componentData.licenseNameMetrics) {
         Object.keys(componentData.licenseNameMetrics).forEach(key => {
           const pascalCasestr = _.upperFirst(_.camelCase(key));
-          this.componentLicense['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d']
+          this.componentLicense['colors'] = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
           this.componentLicense['labels'].push(pascalCasestr);
           this.componentLicense['series'].push(componentData.licenseNameMetrics[key]);
         });

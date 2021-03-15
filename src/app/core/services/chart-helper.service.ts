@@ -235,20 +235,23 @@ export class ChartHelperService {
             stroke: {
                 width: 2
             },
-
+            
+            // noData: {
+            //     text: "There's no data",
+            //     align: 'center',
+            //     verticalAlign: 'middle',
+            //     offsetX: 0,
+            //     offsetY: 0,
+            //     style: {
+            //         color: undefined,
+            //         fontSize: '22px',
+            //         fontFamily: 'Helvetica, Arial, sans-serif',
+            //         fontWeight: '300'
+            //     }
+            // },
             noData: {
-                text: "There's no data",
-                align: 'center',
-                verticalAlign: 'middle',
-                offsetX: 0,
-                offsetY: 0,
-                style: {
-                    color: undefined,
-                    fontSize: '22px',
-                    fontFamily: 'Helvetica, Arial, sans-serif',
-                    fontWeight: '300'
-                }
-            },
+                text: 'Loading...'
+              },
             chart: {
                 toolbar: {
                     show: false
