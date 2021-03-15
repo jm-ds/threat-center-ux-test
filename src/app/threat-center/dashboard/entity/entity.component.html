@@ -32,12 +32,12 @@
       </a>
     </div>
     <div class="col-12 entity-breadcrumb">
-      <div *ngFor="let bread of entityPageBreadCums;let i = index">
-        <a *ngIf="i  != (entityPageBreadCums.length - 1)"
-          [ngClass]="{'text-primary': i  != (entityPageBreadCums.length - 1)}"
+      <div *ngFor="let bread of entityNewBreadCum;let i = index">
+        <a *ngIf="i  != (entityNewBreadCum.length - 1)"
+          [ngClass]="{'text-primary': i  != (entityNewBreadCum.length - 1)}"
           (click)="goBackfromBreadcum(bread.id,i)">{{bread.name}}</a>
-        <span *ngIf="i == (entityPageBreadCums.length -1)">{{bread.name}}</span>
-        <span *ngIf="i  != (entityPageBreadCums.length - 1)">/
+        <span *ngIf="i == (entityNewBreadCum.length -1)">{{bread.name}}</span>
+        <span *ngIf="i  != (entityNewBreadCum.length - 1)">/
         </span>
       </div>
     </div>
@@ -102,8 +102,8 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</h6>
               <div class="chart-options">
-                <select class="form-control form-control-sm" id="license" (click)="isShowStackedChart = false"
-                  (change)="changeLincesChartDropdown()" [(ngModel)]="selectedlicenseChartDropValue" name="license">
+                <select class="form-control form-control-sm" id="license" (change)="changeLincesChartDropdown()"
+                  [(ngModel)]="selectedlicenseChartDropValue" name="license">
                   <option *ngFor="let item of licenseChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -158,9 +158,8 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
               <div class="chart-options">
-                <select class="form-control form-control-sm" id="component" (click)="isShowStackedChart = false"
-                  (change)="changeComponentChartDropdown()" [(ngModel)]="selectedComponentChartDropvalue"
-                  name="component">
+                <select class="form-control form-control-sm" id="component" (change)="changeComponentChartDropdown()"
+                  [(ngModel)]="selectedComponentChartDropvalue" name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
               </div>
@@ -219,14 +218,14 @@
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSeriesOverTime.series"
                       [colors]="weekSeriesOverTime.colors" [chart]="stackedChartCommonOptions.chart"
                       [xaxis]="stackedChartCommonOptions.xaxis" [dataLabels]="stackedChartCommonOptions.dataLabels"
-                      [colors]="stackedChartCommonOptions.colors" [legend]="stackedChartCommonOptions.legend"
-                      [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
                   </div>
                   <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
-
                     <apx-chart [series]="weekSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
                       [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
-                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels">
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
                     </apx-chart>
                   </div>
                 </div>
@@ -238,11 +237,19 @@
             <ng-template ngbTabContent>
               <div class="entity-tab-chart">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="monthSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="monthSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
                   </div>
                 </div>
               </div>
@@ -253,11 +260,19 @@
             <ng-template ngbTabContent>
               <div class="entity-tab-chart">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="quarterSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="quarterSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
                   </div>
                 </div>
               </div>
@@ -268,11 +283,19 @@
             <ng-template ngbTabContent>
               <div class="entity-tab-chart">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
                     <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="yearSeriesOverTime.series"
                       [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
                       [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
-                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"></apx-chart>
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="yearSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
                   </div>
                 </div>
               </div>
@@ -281,10 +304,6 @@
         </ngb-tabset>
       </div>
     </div>
-
-
-
-
 
   </div>
 

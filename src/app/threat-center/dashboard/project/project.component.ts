@@ -177,54 +177,52 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       let riskyLicenses = [];
 
       let embedded = [];
-      let analyzed = [];
-      let skipped = [];
-
-      let partialAssetLeakes = [];
-      let assetLeakes = [];
-      let projectLeakes = [];
-
-      for (let i = 9; i >= 0; i--) {
+      let openSource = [];
+      let unique = [];
+      for (let i = 0; i <= project.scans.edges.length; i++) {
         let edge = project.scans.edges[i];
         if (edge) {
-          let scan = edge.node;
-          if (scan && scan.scanMetrics) {
-            let vulnerabilityMetrics = scan.scanMetrics.vulnerabilityMetrics;
-            let licenseMetrics = scan.scanMetrics.licenseMetrics;
-            let componentMetrics = scan.scanMetrics.componentMetrics;
-            let assetMetrics = scan.scanMetrics.assetMetrics;
-
+          const scan: any = edge.node;
+          if (scan && scan.scanMetricsSummary) {
             // Vulnerability chart data
-            critical.push(scan.scanMetrics.vulnerabilityMetrics.critical);
-            high.push(scan.scanMetrics.vulnerabilityMetrics.high);
-            medium.push(scan.scanMetrics.vulnerabilityMetrics.medium);
-            low.push(scan.scanMetrics.vulnerabilityMetrics.low);
-            info.push(scan.scanMetrics.vulnerabilityMetrics.info);
+
+            if (!!scan.scanMetricsSummary.vulnerabilityMetrics) {
+              critical.push(scan.scanMetricsSummary.vulnerabilityMetrics.critical);
+              high.push(scan.scanMetricsSummary.vulnerabilityMetrics.high);
+              medium.push(scan.scanMetricsSummary.vulnerabilityMetrics.medium);
+              low.push(scan.scanMetricsSummary.vulnerabilityMetrics.low);
+              info.push(scan.scanMetricsSummary.vulnerabilityMetrics.info);
+            }
 
             // License chart data
-            // License chart data
-            copyleftStrong.push(scan.scanMetrics.licenseMetrics.copyleftStrong);
-            copyleftWeak.push(scan.scanMetrics.licenseMetrics.copyleftWeak);
-            copyleftPartial.push(scan.scanMetrics.licenseMetrics.copyleftPartial);
-            copyleftLimited.push(scan.scanMetrics.licenseMetrics.copyleftLimited);
-            copyleft.push(scan.scanMetrics.licenseMetrics.copyleft);
-            custom.push(scan.scanMetrics.licenseMetrics.custom);
-            dual.push(scan.scanMetrics.licenseMetrics.dual);
-            permissive.push(scan.scanMetrics.licenseMetrics.permissive);
+            if (!!scan.scanMetricsSummary.licenseMetrics) {
+              copyleftStrong.push(scan.scanMetricsSummary.licenseMetrics.copyleftStrong);
+              copyleftWeak.push(scan.scanMetricsSummary.licenseMetrics.copyleftWeak);
+              copyleftPartial.push(scan.scanMetricsSummary.licenseMetrics.copyleftPartial);
+              copyleftLimited.push(scan.scanMetricsSummary.licenseMetrics.copyleftLimited);
+              copyleft.push(scan.scanMetricsSummary.licenseMetrics.copyleft);
+              custom.push(scan.scanMetricsSummary.licenseMetrics.custom);
+              dual.push(scan.scanMetricsSummary.licenseMetrics.dual);
+              permissive.push(scan.scanMetricsSummary.licenseMetrics.permissive);
+            }
+
 
             // Component chart data
-            notLatest.push(scan.scanMetrics.componentMetrics.notLatest);
-            vulnerabilities.push(scan.scanMetrics.componentMetrics.vulnerabilities);
-            riskyLicenses.push(scan.scanMetrics.componentMetrics.riskyLicenses);
+            if (!!scan.scanMetricsSummary.componentMetrics) {
+              notLatest.push(scan.scanMetricsSummary.componentMetrics.notLatest);
+              vulnerabilities.push(scan.scanMetricsSummary.componentMetrics.vulnerabilities);
+              riskyLicenses.push(scan.scanMetricsSummary.componentMetrics.riskyLicenses);
+            }
+
 
             // Asset chart data
-            embedded.push(scan.scanMetrics.assetMetrics.embedded);
-            analyzed.push(scan.scanMetrics.assetMetrics.analyzed);
-            skipped.push(scan.scanMetrics.assetMetrics.skipped);
+            if (!!scan.scanMetricsSummary.assetMetrics) {
+              embedded.push(scan.scanMetricsSummary.assetMetrics.embedded);
+              unique.push(scan.scanMetricsSummary.assetMetrics.unique);
+              openSource.push(scan.scanMetricsSummary.assetMetrics.openSource);
 
-            partialAssetLeakes.push(5);
-            assetLeakes.push(5);
-            projectLeakes.push(5);
+            }
+
             // categories for bar charts
             //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
             categories.push(scan.branch);
@@ -256,15 +254,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
 
       // set assetChart data
-      this.assetChart.series.push({ name: 'Analyzed', data: analyzed, colorClass: "green", hover: false });
-      this.assetChart.series.push({ name: 'Skipped', data: skipped, colorClass: "lgt-blue", hover: false });
-      this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "yellow", hover: false });
-
-      //set sourceCode Leak data
-      this.sourceCodeLeakChart.series.push({ name: "Partial Asset Leaks", data: partialAssetLeakes, colorClass: "blue", hover: false });
-      this.sourceCodeLeakChart.series.push({ name: "Asset Leaks", data: assetLeakes, colorClass: "white", hover: false });
-      this.sourceCodeLeakChart.series.push({ name: "Project Leaks", data: projectLeakes, colorClass: "green", hover: false });
-
+      this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "green", hover: false });
+      this.assetChart.series.push({ name: 'Open Source', data: openSource, colorClass: "lgt-blue", hover: false });
+      this.assetChart.series.push({ name: 'Unique', data: unique, colorClass: "yellow", hover: false });
       // set categories on bar charts
       this.xaxis.categories = categories;
 
@@ -349,6 +341,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -385,6 +389,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'],
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -421,6 +437,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -457,6 +485,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#11c15b', '#00acc1', '#ffa21d'],
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -522,7 +562,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
-      return data[0];
+      return !!data[0] ? data[0] : 0;
       // return data[0];
       // return data.reduce((prev, next) => prev + (+next), 0);
     } else {

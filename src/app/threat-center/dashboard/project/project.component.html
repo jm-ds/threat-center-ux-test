@@ -210,7 +210,7 @@
                 </div>
 
                 <div style="display: flex;text-align: right;">
-                  <div style="">
+                  <div>
                     <ul *ngIf="!!assetChart.series && assetChart.series.length >= 1">
                       <li *ngFor="let item of assetChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
                           (mouseleave)="item.hover=false">
