@@ -865,7 +865,7 @@ export class ApiService {
             }
         }
       }
-      `);
+      `,'no-cache');
   }
 
   getGitHubUser() {

@@ -100,9 +100,6 @@ export class EntityComponent implements OnInit, OnDestroy {
   isTreeProgressBar: boolean = false;
 
   entityMetricList: Array<EntityMetrics> = new Array<EntityMetrics>();
-  // entityMonthMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
-  // entityQuarterMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
-  // entityYearMetricsList: Array<EntityMetrics> = new Array<EntityMetrics>();
 
   requestObjectPageSubscriptions: Subscription;
   areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
@@ -159,8 +156,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
 
+
   initStackedChartAccordingToDonut(value: string) {
-    let properties = [];
+    // let properties = [];
     let activeTabVar: string = "";
     // check active tab as well..
     switch (this.lineChartActiveTab) {
@@ -187,34 +185,18 @@ export class EntityComponent implements OnInit, OnDestroy {
       switch (this.selectedDonut) {
         case 'Vulnerability':
           this[activeTabVar].colors = [];
-          this.entityMetricList.forEach(d => {
-            if (d.vulnerabilityMetrics && !!d.vulnerabilityMetrics['severityMetrics']) {
-              Object.keys(d.vulnerabilityMetrics['severityMetrics']).forEach(p => {
-                if (!properties.includes(p)) {
-                  properties.push(p);
-                }
-              });
-            }
-          });
-          for (var index in properties) {
-            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+          const vulproperties = this.getProperties('vulnerabilityMetrics', 'severityMetrics');
+          for (var index in vulproperties) {
+            const obj = { name: vulproperties[index], data: this.getStackChartLogicalData(vulproperties[index], this.selectedDonut) }
             this[activeTabVar].series.push(obj);
-            this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
+            this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulproperties[index]));
           }
           break;
         case 'Assets':
           this[activeTabVar].series = [];
-          this.entityMetricList.forEach(d => {
-            if (d.assetMetrics && !!d.assetMetrics['assetCompositionMetrics']) {
-              Object.keys(d.assetMetrics['assetCompositionMetrics']).forEach(p => {
-                if (!properties.includes(p)) {
-                  properties.push(p);
-                }
-              });
-            }
-          });
-          for (var index in properties) {
-            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+          const assetproperties = this.getProperties('assetMetrics', 'assetCompositionMetrics');
+          for (var index in assetproperties) {
+            const obj = { name: assetproperties[index], data: this.getStackChartLogicalData(assetproperties[index], this.selectedDonut) }
             this[activeTabVar].series.push(obj);
           }
           this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
@@ -222,18 +204,9 @@ export class EntityComponent implements OnInit, OnDestroy {
         case 'SupplyChain':
           this[activeTabVar].series = [];
           let dateLists = [];
-          this.entityMetricList.forEach(d => {
-            dateLists.push(new Date(d['measureDate']));
-            if (d.supplyChainMetrics && !!d.supplyChainMetrics['supplyChainMetrics']) {
-              Object.keys(d.supplyChainMetrics['supplyChainMetrics']).forEach(p => {
-                if (!properties.includes(p)) {
-                  properties.push(p);
-                }
-              });
-            }
-          });
-          for (var index in properties) {
-            const obj = { name: properties[index], data: this.getStackChartLogicalData(properties[index], this.selectedDonut) }
+          const supplyProperties = this.getProperties('supplyChainMetrics', 'supplyChainMetrics');
+          for (var index in supplyProperties) {
+            const obj = { name: supplyProperties[index], data: this.getStackChartLogicalData(supplyProperties[index], this.selectedDonut) }
             this[activeTabVar].series.push(obj);
           }
           this.areaChartCommonOption.xaxis['categories'] = dateLists;
@@ -286,66 +259,34 @@ export class EntityComponent implements OnInit, OnDestroy {
   //Helper function to initialize Component stacked chart configuration
   private componentStackedChartConfig(nameOfChart, activeTabVar) {
     this[activeTabVar].series = [];
-    let properties = [];
+    // let properties = [];
     switch (nameOfChart) {
       case 'Vulnerabilities':
         this[activeTabVar].colors = [];
-        this.entityMetricList.forEach(d => {
-          if (d.componentMetrics && !!d.componentMetrics['vulnerabilityMetrics']) {
-            Object.keys(d.componentMetrics['vulnerabilityMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
+        const vulProp = this.getProperties('componentMetrics', 'vulnerabilityMetrics');
+        for (var index in vulProp) {
+          this[activeTabVar].series.push({ name: vulProp[index], data: this.getStackChartLogicalForComponentData(vulProp[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulProp[index]));
         }
         break;
       case 'License Risk':
-        this.entityMetricList.forEach(d => {
-          if (d.componentMetrics && !!d.componentMetrics['licenseFamilyMetrics']) {
-            Object.keys(d.componentMetrics['licenseFamilyMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        const licenseRiskprop = this.getProperties('componentMetrics', 'licenseFamilyMetrics');
+        for (var index in licenseRiskprop) {
+          this[activeTabVar].series.push({ name: licenseRiskprop[index], data: this.getStackChartLogicalForComponentData(licenseRiskprop[index], nameOfChart) });
         }
         break;
       case 'License Category':
         this[activeTabVar].colors = [];
-        this.entityMetricList.forEach(d => {
-          if (d.componentMetrics && !!d.componentMetrics['licenseCategoryMetrics']) {
-            Object.keys(d.componentMetrics['licenseCategoryMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
+        const licenseCatProp = this.getProperties('componentMetrics', 'licenseCategoryMetrics');
+        for (var index in licenseCatProp) {
+          this[activeTabVar].series.push({ name: licenseCatProp[index], data: this.getStackChartLogicalForComponentData(licenseCatProp[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProp[index]));
         }
         break;
       case 'License Name':
-        this.entityMetricList.forEach(d => {
-          if (d.componentMetrics && !!d.componentMetrics['licenseNameMetrics']) {
-            Object.keys(d.componentMetrics['licenseNameMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForComponentData(properties[index], nameOfChart) });
+        const licenseNameProp = this.getProperties('componentMetrics', 'licenseNameMetrics');
+        for (var index in licenseNameProp) {
+          this[activeTabVar].series.push({ name: licenseNameProp[index], data: this.getStackChartLogicalForComponentData(licenseNameProp[index], nameOfChart) });
         }
         this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
         break;
@@ -390,52 +331,27 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   //Helper function to initialize License stacked chart configuration
   private licenseStackedChartConfig(nameOfChart, activeTabVar) {
-    let properties = [];
     this[activeTabVar].series = [];
     switch (nameOfChart) {
       case 'License Name':
-        this.entityMetricList.forEach(d => {
-          if (d.licenseMetrics && !!d.licenseMetrics['licenseNameMetrics']) {
-            Object.keys(d.licenseMetrics['licenseNameMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+        const licenseNameProperties = this.getProperties('licenseMetrics', 'licenseNameMetrics');
+        for (var index in licenseNameProperties) {
+          this[activeTabVar].series.push({ name: licenseNameProperties[index], data: this.getStackChartLogicalForLicenseData(licenseNameProperties[index], nameOfChart) });
         }
         this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
         break;
       case 'License Category':
         this[activeTabVar].colors = [];
-        this.entityMetricList.forEach(d => {
-          if (d.licenseMetrics && !!d.licenseMetrics['licenseCategoryMetrics']) {
-            Object.keys(d.licenseMetrics['licenseCategoryMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(properties[index]));
+        const licenseCatProperties = this.getProperties('licenseMetrics', 'licenseCategoryMetrics');
+        for (var index in licenseCatProperties) {
+          this[activeTabVar].series.push({ name: licenseCatProperties[index], data: this.getStackChartLogicalForLicenseData(licenseCatProperties[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProperties[index]));
         }
         break;
       case 'Risk':
-        this.entityMetricList.forEach(d => {
-          if (d.licenseMetrics && !!d.licenseMetrics['licenseFamilyMetrics']) {
-            Object.keys(d.licenseMetrics['licenseFamilyMetrics']).forEach(p => {
-              if (!properties.includes(p)) {
-                properties.push(p);
-              }
-            });
-          }
-        });
-        for (var index in properties) {
-          this[activeTabVar].series.push({ name: properties[index], data: this.getStackChartLogicalForLicenseData(properties[index], nameOfChart) });
+        const riskProperties = this.getProperties('licenseMetrics', 'licenseFamilyMetrics');
+        for (var index in riskProperties) {
+          this[activeTabVar].series.push({ name: riskProperties[index], data: this.getStackChartLogicalForLicenseData(riskProperties[index], nameOfChart) });
         }
         break;
       default:
@@ -527,9 +443,9 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   onStackedChartTabChange($event: NgbTabChangeEvent) {
+    let period: Period;
     this.lineChartActiveTab = $event.nextId;
     let entityId = this.route.snapshot.paramMap.get('entityId');
-    // if an entityId isn't provided in params, use User defaultEntityId
     if (!entityId) {
       entityId = this.authService.currentUser.defaultEntityId;
     }
@@ -538,65 +454,37 @@ export class EntityComponent implements OnInit, OnDestroy {
       case 'Month':
         this.monthSeriesOverTime['series'] = [];
         this.monthSeriesOverTime['colors'] = [];
-        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.MONTH)
-          .pipe(map(result => result))
-          .subscribe((res: any) => {
-            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
-              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
-              this.initStackedChartAccordingToDonut(this.selectedDonut);
-            } else {
-              this.entityMetricList = [];
-            }
-          });
+        period = Period.MONTH;
         break;
       case 'Quarter':
-        // here init Quarter chart according to selected donut
         this.quarterSeriesOverTime['series'] = [];
         this.quarterSeriesOverTime['colors'] = [];
-        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.QUARTER)
-          .pipe(map(result => result))
-          .subscribe((res: any) => {
-            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
-              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
-              this.initStackedChartAccordingToDonut(this.selectedDonut);
-            } else {
-              this.entityMetricList = [];
-            }
-          });
+        period = Period.QUARTER;
         break;
       case 'Year':
-        // here init Quarter chart according to selected donut
         this.yearSeriesOverTime['series'] = [];
         this.yearSeriesOverTime['colors'] = [];
-        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.YEAR)
-          .pipe(map(result => result))
-          .subscribe((res: any) => {
-            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
-              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
-              this.initStackedChartAccordingToDonut(this.selectedDonut);
-            } else {
-              this.entityMetricList = [];
-            }
-          });
+        period = Period.YEAR;
         break;
       case 'Week':
         this.weekSeriesOverTime['series'] = [];
         this.weekSeriesOverTime['colors'] = [];
-        this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, Period.WEEK)
-          .pipe(map(result => result))
-          .subscribe((res: any) => {
-            if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
-              this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
-              this.initStackedChartAccordingToDonut(this.selectedDonut);
-            } else {
-              this.entityMetricList = [];
-            }
-          });
-        // here init Quarter chart according to selected donut
+        period = Period.WEEK;
         break;
       default:
         break;
     }
+
+    this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, period)
+      .pipe(map(result => result))
+      .subscribe((res: any) => {
+        if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
+          this.entityMetricList = res.data.entityMetricsPeriod['entityMetrics'];
+          this.initStackedChartAccordingToDonut(this.selectedDonut);
+        } else {
+          this.entityMetricList = [];
+        }
+      });
   }
 
   public generateDayWiseTimeSeries = function (baseval, count, yrange) {
@@ -1151,6 +1039,24 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.supplyChainChart['series'].push(supplyChainData[key]);
       });
     }
+  }
+
+  //Get properties from metrics object condition wise..
+  private getProperties(objArray, metricsObjName) {
+    let properties = [];
+    this.entityMetricList.forEach(d => {
+      if (d[objArray]) {
+        const obj = d[objArray];
+        if (!!obj[metricsObjName]) {
+          Object.keys(obj[metricsObjName]).forEach(p => {
+            if (!properties.includes(p)) {
+              properties.push(p);
+            }
+          });
+        }
+      }
+    });
+    return properties;
   }
 
   //clicking on any where in the screen below method will fire
