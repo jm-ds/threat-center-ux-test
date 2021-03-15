@@ -1044,8 +1044,6 @@ export class ApiService {
   }
 
 
-
-
   // send attribute asset graphql mutation
   attributeAsset(scanId: string, scanAssetId: string, assetMatches: ScanAssetMatch[], attributeStatus: string, attributeComment: string): any {
     const assetMatchesInput = [];
@@ -1061,37 +1059,5 @@ export class ApiService {
         attributeAssetRequest: attributeAssetRequest
       }  
     });    
-  }  
-
-  getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
-    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
-       query {
-          entityMetricsPeriod(orgId:"${orgId}", entityId: "${entityId}", period:${period})  {
-            projectCount
-            entityMetrics{
-                measureDate
-                vulnerabilityMetrics {
-                    severityMetrics
-                }
-                assetMetrics {
-                    assetCompositionMetrics
-                }
-                componentMetrics {
-                    vulnerabilityMetrics
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                licenseMetrics {
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                supplyChainMetrics {
-                    supplyChainMetrics
-                }
-            }
-        }
-     `);
   }
 }
