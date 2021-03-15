@@ -14,7 +14,7 @@ export class ChartHelperService {
             stroke: {
                 width: 1
             },
-            labels: [], series: [],colors:[],
+            labels: [], series: [], colors: [],
             noData: {
                 text: "There's no data",
                 align: 'center',
@@ -233,8 +233,9 @@ export class ChartHelperService {
     getStackedChartCommonConfiguration() {
         return {
             stroke: {
-                width: 2,
+                width: 2
             },
+
             noData: {
                 text: "There's no data",
                 align: 'center',
@@ -317,6 +318,34 @@ export class ChartHelperService {
             }
 
         }
+    }
+
+    getAreaChartCommonConfiguration() {
+        return {
+            chart: {
+                toolbar: {
+                    show: false
+                },
+                height: 200,
+                type: "area"
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: "smooth",
+                width: 2
+            },
+            xaxis: {
+                type: "datetime",
+                categories: []
+            },
+            tooltip: {
+                x: {
+                    format: "dd/MM/yy HH:mm"
+                }
+            }
+        };
     }
 
     sparkLineChartCommonConfiguration() {
