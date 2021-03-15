@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import {
+  AttributeAssetRequestInput,
   BitbucketUserQuery,
   ComponentQuery,
   EntityListQuery,
@@ -11,6 +12,8 @@ import {
   LicenseQuery,
   ProjectQuery,
   Scan,
+  ScanAssetMatch,
+  ScanAssetMatchRequest,
   ScanAssetQuery,
   ScanQuery,
   UserSelection,
@@ -751,6 +754,7 @@ export class ApiService {
                   status,
                   assetType,
                   parentScanAssetId,
+                  attributionStatus, 
                   embeddedAssets {
                     edges {
                       node {
@@ -785,6 +789,7 @@ export class ApiService {
                   percentMatch,
                   name,
                   assetSize,
+                  assetMatchId,
                   originAssetId,
                   earliestReleaseDate,
                   earliestReleaseVersion,
@@ -1004,6 +1009,25 @@ export class ApiService {
         `,
     }).valueChanges;
   }
+
+
+
+  // send attribute asset graphql mutation
+  attributeAsset(scanId: string, scanAssetId: string, assetMatches: ScanAssetMatch[], attributeStatus: string, attributeComment: string): any {
+    const assetMatchesInput = [];
+    for (let match of assetMatches) {
+      assetMatchesInput.push(new ScanAssetMatchRequest(match.assetMatchId, match.percentMatch));
+    }
+    let attributeAssetRequest = new AttributeAssetRequestInput(scanId, scanAssetId, assetMatchesInput, attributeStatus, attributeComment);
+    return this.apollo.mutate({
+      mutation: gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
+        attributeAsset(attributeAssetRequest: $attributeAssetRequest)
+      }`,
+      variables: {
+        attributeAssetRequest: attributeAssetRequest
+      }  
+    });    
+  }  
 
   getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
     return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
