@@ -159,9 +159,9 @@
                       </div>
                       <div style="width:50%;float:right;">
                         <perfect-scrollbar [style.max-height]="'400px'">
-                          <p-table #dt [columns]="releaseCols" [value]="releases" [paginator]="false" [rows]="50"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                                   [filterDelay]="0" [globalFilterFields]="['name']">
+                          <p-table #dt [columns]="releaseCols" [value]="binaryReleases"
+                                   [paginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']"
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
 
                             <ng-template pTemplate="caption">
                               <div style="text-align: right;float:right;margin-bottom:10px">
@@ -176,16 +176,22 @@
                                 <th>Release Date</th>
                               </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-release>
-                              <tr [ngClass]="{'badge m-l-5 badge-light-danger': release.cvssV3.severity === 'CRITICAL',
-                              'badge m-l-5 badge-light-danger': release.cvssV3.severity === 'HIGH',
-                              'badge m-l-5 badge-light-warning': release.cvssV3.severity === 'MEDIUM',
-                              'badge m-l-5 badge-light-primary': release.cvssV3.severity === 'LOW',
-                              'badge m-l-5 badge-light-success': release.cvssV3.severity === 'INFO'
-                              }" [placement]="'top'" ngbTooltip="{{release.cvssV3.cveId}} : {{release.cvssV3.cvssV3BaseScore}} : {{release.cvssV3.severity}}">
-                                <td>{{release.version}}</td>
-                                <td>{{release.releaseDate}}</td>
+                            <ng-template pTemplate="body" let-binaryRelease>
+                              <tr *ngIf="binaryRelease.cvssV3 != null; else noCvssB" [ngClass]="{'badge m-l-5 badge-light-danger': binaryRelease.cvssV3.severity === 'CRITICAL',
+                              'badge m-l-5 badge-light-danger': binaryRelease.cvssV3.severity === 'HIGH',
+                              'badge m-l-5 badge-light-warning': binaryRelease.cvssV3.severity === 'MEDIUM',
+                              'badge m-l-5 badge-light-primary': binaryRelease.cvssV3.severity === 'LOW',
+                              'badge m-l-5 badge-light-success': binaryRelease.cvssV3.severity === 'INFO'
+                              }" [placement]="'top'" ngbTooltip="{{binaryRelease.cvssV3.cveId}} : {{binaryRelease.cvssV3.cvssV3BaseScore}} : {{binaryRelease.cvssV3.severity}}">
+                                <td>{{binaryRelease.version}}</td>
+                                <td>{{binaryRelease.releaseDate}}</td>
                               </tr>
+                              <ng-template #noCvssB>
+                                <tr>
+                                  <td style>{{binaryRelease.version}}</td>
+                                  <td style>{{binaryRelease.releaseDate}}</td>
+                                </tr>
+                              </ng-template>
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
@@ -198,7 +204,7 @@
                     <div>
                       <div style="width:45%;float:left;">
                         <div>
-                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">GitHub</span></div>
+                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{sourcePurlType.toUpperCase()}}</span></div>
                           <div style="width:50%;float:left;text-align:right;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-success">SOURCE</span></div>
                         </div>
                         <div class="form-group">
@@ -224,9 +230,9 @@
                       </div>
                       <div style="width:50%;float:right;">
                         <perfect-scrollbar [style.max-height]="'400px'">
-                          <p-table #dt [columns]="releaseCols" [value]="releases" [paginator]="false" [rows]="50"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                                   [filterDelay]="0" [globalFilterFields]="['name']">
+                          <p-table #dt [columns]="releaseCols" [value]="sourceReleases"
+                                   [paginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']"
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
 
                             <ng-template pTemplate="caption">
                               <div style="text-align: right;float:right;margin-bottom:10px">
@@ -241,16 +247,22 @@
                                 <th>Release Date</th>
                               </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-release>
-                              <tr [ngClass]="{'badge m-l-5 badge-light-danger': release.cvssV3.severity === 'CRITICAL',
-                              'badge m-l-5 badge-light-danger': release.cvssV3.severity === 'HIGH',
-                              'badge m-l-5 badge-light-warning': release.cvssV3.severity === 'MEDIUM',
-                              'badge m-l-5 badge-light-primary': release.cvssV3.severity === 'LOW',
-                              'badge m-l-5 badge-light-success': release.cvssV3.severity === 'INFO'
-                              }" [placement]="'top'" ngbTooltip="{{release.cvssV3.cveId}} : {{release.cvssV3.cvssV3BaseScore}} : {{release.cvssV3.severity}}">
-                                <td style>{{release.version}}</td>
-                                <td style>{{release.releaseDate}}</td>
+                            <ng-template pTemplate="body" let-sourceRelease>
+                              <tr *ngIf="sourceRelease.cvssV3 != null; else noCvssS" [ngClass]="{'badge m-l-5 badge-light-danger': sourceRelease.cvssV3.severity === 'CRITICAL',
+                              'badge m-l-5 badge-light-danger': sourceRelease.cvssV3.severity === 'HIGH',
+                              'badge m-l-5 badge-light-warning': sourceRelease.cvssV3.severity === 'MEDIUM',
+                              'badge m-l-5 badge-light-primary': sourceRelease.cvssV3.severity === 'LOW',
+                              'badge m-l-5 badge-light-success': sourceRelease.cvssV3.severity === 'INFO'
+                              }" [placement]="'top'" ngbTooltip="{{sourceRelease.cvssV3.cveId}} : {{sourceRelease.cvssV3.cvssV3BaseScore}} : {{sourceRelease.cvssV3.severity}}">
+                                <td style>{{sourceRelease.version}}</td>
+                                <td style>{{sourceRelease.releaseDate}}</td>
                               </tr>
+                              <ng-template #noCvssS>
+                                <tr>
+                                  <td style>{{sourceRelease.version}}</td>
+                                  <td style>{{sourceRelease.releaseDate}}</td>
+                                </tr>
+                              </ng-template>
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
@@ -266,5 +278,4 @@
       </div>
     </div>
   </div>
-
 

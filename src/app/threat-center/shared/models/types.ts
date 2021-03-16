@@ -516,3 +516,18 @@ export class VulnerableRelease {
   vulnerable: boolean;
   cvssV3: CvssV3;
 }
+
+export class VulnerableReleaseResponse {
+  nextPagingState: string;
+  repositoryType: string;
+  purlType: string;
+  group: string;
+  name: string;
+  size: number;
+  vulnerableReleases: VulnerableRelease[];
+}
+
+export interface VulnerableReleaseResponseMap {
+  "binaryVulnerableResponse": VulnerableReleaseResponse;
+  "sourceVulnerableResponse": VulnerableReleaseResponse;
+}

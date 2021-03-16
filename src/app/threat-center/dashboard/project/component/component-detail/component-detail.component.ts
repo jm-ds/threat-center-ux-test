@@ -3,17 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
-import { Scan, License, TxComponent, VulnerableRelease } from '@app/threat-center/shared/models/types';
+import { Scan, License, TxComponent, VulnerableRelease, VulnerableReleaseResponseMap } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
-import {dateToLocalArray} from "@fullcalendar/core/datelib/marker";
-import {valueReferenceToExpression} from "@angular/compiler-cli/src/ngtsc/annotations/src/util";
-import {release} from "os";
-
+import { LazyLoadEvent } from "primeng";
 
 @Component({
   selector: 'component-detail',
@@ -26,7 +24,11 @@ export class ComponentDetailComponent implements OnInit {
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
   public releaseCols = ['Name', 'Version'];
-  public releases: VulnerableRelease[] = [];
+  public binaryReleases: VulnerableRelease[] = [];
+  public sourceReleases: VulnerableRelease[] = [];
+  private virtualBinaryReleases: VulnerableRelease[];
+  private virtualSourceReleases: VulnerableRelease[];
+  public sourcePurlType: string;
 
   projectId: string = "";
   scanId: string="";
@@ -61,9 +63,12 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
 
-    this.vulnerableCodeMappingService.vulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableRelease[]) => {
-      this.releases = data;
-      // console.log(this.releases);
+    this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
+      this.binaryReleases = data.binaryVulnerableResponse.vulnerableReleases;
+      this.sourceReleases = data.sourceVulnerableResponse.vulnerableReleases;
+      this.sourcePurlType = data.sourceVulnerableResponse.purlType;
+      console.log('>>>>> binaryReleases length = ' + this.binaryReleases.length);
+      console.log('>>>>> sourceReleases length = ' + this.sourceReleases.length);
     });
 
     this.initBreadcum();
@@ -152,5 +157,31 @@ export class ComponentDetailComponent implements OnInit {
   //Initialize breadcum details
   private initBreadcum() {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+  }
+
+  loadBinaryReleasesLazy(event: LazyLoadEvent) {
+    setTimeout(() => {
+      // Load data of required page.
+      let loadedBinaryReleases = this.binaryReleases.slice(event.first, (event.first + event.rows));
+
+      // Populate page of virtual releases.
+      Array.prototype.splice.apply(this.virtualBinaryReleases, [...[event.first, event.rows], ...loadedBinaryReleases]);
+
+      // Trigger change detection.
+      this.virtualBinaryReleases = [...this.virtualBinaryReleases];
+    }, Math.random() * 1000 + 250);
+  }
+
+  loadSourceReleasesLazy(event: LazyLoadEvent) {
+    setTimeout(() => {
+      // Load data of required page.
+      let loadedSourceReleases = this.sourceReleases.slice(event.first, (event.first + event.rows));
+
+      // Populate page of virtual releases.
+      Array.prototype.splice.apply(this.virtualSourceReleases, [...[event.first, event.rows], ...loadedSourceReleases]);
+
+      // Trigger change detection.
+      this.virtualSourceReleases = [...this.virtualSourceReleases];
+    }, Math.random() * 1000 + 250);
   }
 }
