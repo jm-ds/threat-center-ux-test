@@ -1094,35 +1094,35 @@ export class ApiService {
     });    
   }  
 
-  getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
-    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
-       query {
-          entityMetricsPeriod(orgId:"${orgId}", entityId: "${entityId}", period:${period})  {
-            projectCount
-            entityMetrics{
-                measureDate
-                vulnerabilityMetrics {
-                    severityMetrics
-                }
-                assetMetrics {
-                    assetCompositionMetrics
-                }
-                componentMetrics {
-                    vulnerabilityMetrics
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                licenseMetrics {
-                    licenseCategoryMetrics
-                    licenseFamilyMetrics
-                    licenseNameMetrics
-                }
-                supplyChainMetrics {
-                    supplyChainMetrics
-                }
-            }
-        }
-     `);
-  }
+  // getEntityMetricsPeriod(orgId: string, entityId: string, period:Period) {
+  //   return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+  //      query {
+  //         entityMetricsPeriod(orgId:"${orgId}", entityId: "${entityId}", period:${period})  {
+  //           projectCount
+  //           entityMetrics{
+  //               measureDate
+  //               vulnerabilityMetrics {
+  //                   severityMetrics
+  //               }
+  //               assetMetrics {
+  //                   assetCompositionMetrics
+  //               }
+  //               componentMetrics {
+  //                   vulnerabilityMetrics
+  //                   licenseCategoryMetrics
+  //                   licenseFamilyMetrics
+  //                   licenseNameMetrics
+  //               }
+  //               licenseMetrics {
+  //                   licenseCategoryMetrics
+  //                   licenseFamilyMetrics
+  //                   licenseNameMetrics
+  //               }
+  //               supplyChainMetrics {
+  //                   supplyChainMetrics
+  //               }
+  //           }
+  //       }
+  //    `);
+  // }
 }
