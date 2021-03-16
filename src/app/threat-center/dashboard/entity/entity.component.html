@@ -1,9 +1,15 @@
 <div *ngIf='obsEntity | async as entity;'>
   <div class="row">
-    <div class="col-6">
+    <!-- <div class="col-6">
       <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span>{{entity.name}}</h3>
+    </div> -->
+    <div class="col-6">
+      <h3 class="entity-ttl"><i class="fas fa-layer-group entity-icon"></i> <span *ngIf="entity.parentEntityId">
+          <!-- <a (click)="changeEntity(entity.parentEntityId,entity.name,false)" style="font-size:15px;cursor: pointer;">
+            <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> /  -->
+        </span>{{entity.name}}</h3>
     </div>
-    <div class="col-6" style="text-align:right">
+    <div class="col-6 entity-btns" style="text-align:right">
       <a [routerLink]="['/admin/entity']">
         <button type="submit" class="btn btn-outline-warning ml-2">
           <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child
@@ -25,18 +31,32 @@
         </button>
       </a>
     </div>
+    <div class="col-12 entity-breadcrumb">
+      <div *ngFor="let bread of entityNewBreadCum;let i = index">
+        <a *ngIf="i  != (entityNewBreadCum.length - 1)"
+          [ngClass]="{'text-primary': i  != (entityNewBreadCum.length - 1)}"
+          (click)="goBackfromBreadcum(bread.id,i)">{{bread.name}}</a>
+        <span *ngIf="i == (entityNewBreadCum.length -1)">{{bread.name}}</span>
+        <span *ngIf="i  != (entityNewBreadCum.length - 1)">/
+        </span>
+      </div>
+    </div>
   </div>
 
-  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="!entity.entityMetrics">
+
+  <div class="row" style="padding:20px 0px 20px 0px"
+    *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
         <span style="font-size:20px;color:#4680ff">
           A fresh dashboard ready to get to work.
         </span>
         <div style="margin-top:20px;text-align: justify;">
-          <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a hierarchy of company Divisions, Business Units, Teams or even individual developers
-          who can scan their own projects while automatically sharing the data with your team.</p>
-          <p>Risk Metrics, from child entities, will also be rolled up to your dashboard so as to easily assess the risk across your organization.</p>
+          <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a
+            hierarchy of company Divisions, Business Units, Teams or even individual developers
+            who can scan their own projects while automatically sharing the data with your team.</p>
+          <p>Risk Metrics, from child entities, will also be rolled up to your dashboard so as to easily assess the risk
+            across your organization.</p>
           <a [routerLink]="['/admin/entity']">
             <button type="submit" class="btn btn-outline-warning ml-2">
               <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child Dashboard
@@ -44,7 +64,8 @@
           </a>
         </div>
         <div style="margin-top:20px;text-align: justify;">
-          <p>Get started quickly by connecting Threatrix with your Github, GitLab or Bitbucket accounts to see results in seconds.</p>
+          <p>Get started quickly by connecting Threatrix with your Github, GitLab or Bitbucket accounts to see results
+            in seconds.</p>
           <a [routerLink]="['/dashboard/scan/',entity.entityId]">
             <button type="submit" class="btn btn-outline-info ml-2">
               <i class="fas fa-fingerprint" style="margin-right:5px"></i>Execute ThreatScan
@@ -55,254 +76,420 @@
     </div>
   </div>
 
-  <div class="row" style="padding:20px 0px 20px 0px" *ngIf="entity.entityMetrics">
+  <!-- CHART DATA -->
+  <div class="row entity-chart-row"
+    *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
 
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Vulnerability')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:-15px;margin-top:-10px;">
+        <div>
           <div class="chart-lbl-indi">
             <div style="margin-bottom:10px" class="chart-lbl">
-              <i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities
-            </div>
-              <div style="display: flex;">
-                <div style="text-align: right;">
-                  <ul *ngIf="!!vulnerabilityChart.series && vulnerabilityChart.series.length >= 1">
-                    <li *ngFor="let item of vulnerabilityChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                        (mouseleave)="item.hover=false">
-                      {{getAdditionData(item.data)}}
-                      <div *ngIf="item.hover" class="lgnd-tltp">
-                        {{item.name}}
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+              <h6><i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities</h6>
             </div>
           </div>
         </div>
-        <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="this.vulnerabilityChart"></app-apex-chart>
+        <app-apex-chart chartID="vulnerabilityChart" [chartConfig]="vulnerabilityDonutChart"></app-apex-chart>
       </app-card>
     </div>
 
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Licenses')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:-15px;margin-top:-10px;">
+        <div>
           <div class="chart-lbl-indi">
             <div style="margin-bottom:10px" class="chart-lbl">
-              <i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses
-            </div>
-              <div style="display: flex;">
-              <div style="text-align: right;">
-                <ul *ngIf="!!licenseChart.series && licenseChart.series.length >= 1">
-                  <li *ngFor="let item of licenseChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                      (mouseleave)="item.hover=false">
-                    {{getAdditionData(item.data)}}
-                    <div *ngIf="item.hover" class="lgnd-tltp">
-                      {{item.name}}
-                    </div>
-                  </li>
-                </ul>
+              <h6><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</h6>
+              <div class="chart-options">
+                <select class="form-control form-control-sm" id="license" (change)="changeLincesChartDropdown()"
+                  [(ngModel)]="selectedlicenseChartDropValue" name="license">
+                  <option *ngFor="let item of licenseChartDropValues">{{item.name}}</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-        <app-apex-chart chartID="licenseChart" [chartConfig]="this.licenseChart"></app-apex-chart>
+
+
+        <div *ngIf="selectedlicenseChartDropValue == 'License Name'">
+          <app-apex-chart chartID="licenseChart" [chartConfig]="licenseDonutChart"></app-apex-chart>
+        </div>
+
+        <span *ngIf="selectedlicenseChartDropValue == 'License Category'">
+          <app-apex-chart chartID="assetChart" [chartConfig]="licenseCategoryChart"></app-apex-chart>
+        </span>
+
+        <span *ngIf="selectedlicenseChartDropValue == 'Risk'">
+          <app-apex-chart chartID="assetChart" [chartConfig]="licenseRiskChart"></app-apex-chart>
+        </span>
+
       </app-card>
     </div>
 
-    <div class="col-lg-3 col-md-3">
+
+    <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('SupplyChain')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:-15px;margin-top:-10px;">
+        <div>
           <div class="chart-lbl-indi">
-            <div style="margin-bottom:10px"class="chart-lbl">
-              <i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components
+            <div style="margin-bottom:10px" class="chart-lbl">
+              <h6><i class="fas fa-link text-c-red f-15 m-r-5"></i>Supply chain risk & quality</h6>
             </div>
-            <div style="display: flex;">
-              <div style="text-align: right;">
-                <ul *ngIf="!!componentChart.series && componentChart.series.length >= 1">
-                  <li *ngFor="let item of componentChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                      (mouseleave)="item.hover=false">
-                    {{getAdditionData(item.data)}}
-                    <div *ngIf="item.hover" class="lgnd-tltp">
-                      {{item.name}}
-                    </div>
-                  </li>
-                </ul>
+          </div>
+        </div>
+
+        <div class="supply-external-class">
+          <apx-chart [series]="supplyChainChart.series" [fill]="supplyChainChart.fill" [chart]="supplyChainChart.chart"
+            [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
+            [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
+            [responsive]="supplyChainChart.responsive"></apx-chart>
+        </div>
+
+      </app-card>
+    </div>
+
+
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+      (click)="initStackedChartAccordingToDonut('Components')">
+      <app-card [hidHeader]="true" cardClass="proj-t-card">
+        <div>
+          <div class="chart-lbl-indi">
+            <div style="margin-bottom:10px" class="chart-lbl">
+              <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
+              <div class="chart-options">
+                <select class="form-control form-control-sm" id="component" (change)="changeComponentChartDropdown()"
+                  [(ngModel)]="selectedComponentChartDropvalue" name="component">
+                  <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-        <app-apex-chart chartID="componentChart" [chartConfig]="this.componentChart"></app-apex-chart>
+
+        <span *ngIf="selectedComponentChartDropvalue == 'Vulnerabilities'">
+          <app-apex-chart chartID="componentChart" [chartConfig]="componentVulnerabilityRiskChart">
+          </app-apex-chart>
+        </span>
+        <span *ngIf="selectedComponentChartDropvalue == 'License Risk'">
+          <app-apex-chart chartID="componentLicenseRiskChart" [chartConfig]="componentLicenseRiskChart">
+          </app-apex-chart>
+        </span>
+        <span *ngIf="selectedComponentChartDropvalue == 'License Category'">
+          <app-apex-chart chartID="componentLicenseCategory" [chartConfig]="componentLicenseCategory">
+          </app-apex-chart>
+        </span>
+        <span *ngIf="selectedComponentChartDropvalue == 'License Name'">
+          <app-apex-chart chartID="componentLicenseCategory" [chartConfig]="componentLicense">
+          </app-apex-chart>
+        </span>
       </app-card>
     </div>
 
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer" (click)="initStackedChartAccordingToDonut('Assets')">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:-15px;margin-top:-10px;">
-              <div class="chart-lbl-indi">
-                <div style="margin-bottom:10px" class="chart-lbl">
-                  <i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets
-                </div>
-                <div style="display: flex;text-align: right;">
-                  <div style="text-align: right;">
-                    <ul *ngIf="!!assetChart.series && assetChart.series.length >= 1">
-                      <li *ngFor="let item of assetChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                          (mouseleave)="item.hover=false">
-                        {{getAdditionData(item.data)}}
-                        <div *ngIf="item.hover" class="lgnd-tltp">
-                          {{item.name}}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+        <div>
+          <div class="chart-lbl-indi">
+            <div style="margin-bottom:10px" class="chart-lbl">
+              <h6><i class="fas fa-code text-c-red f-15 m-r-5"></i>Assets</h6>
             </div>
-        <app-apex-chart chartID="assetChart" [chartConfig]="this.assetChart"></app-apex-chart>
+          </div>
+        </div>
+        <app-apex-chart chartID="assetChart" [chartConfig]="assetDonutChart"></app-apex-chart>
       </app-card>
     </div>
-
 
   </div>
 
 
-  <div class="row" *ngIf="entity.childEntities.edges.length > 0 || entity.entityMetrics?.projectCount > 0">
+  <div class="row" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
+    <div class="col-12 entity-chart-tabbing"
+      [ngClass]="{'vulnerability-donut': selectedDonut == 'Vulnerability',
+    'licenses-donut': selectedDonut == 'Licenses', 'supply-donut': selectedDonut == 'SupplyChain','Components-donut': selectedDonut == 'Components','Assets-donut': selectedDonut == 'Assets'}">
+      <div class="card mb-3">
+        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
+          (tabChange)="onStackedChartTabChange($event)">
+          <ngb-tab id="Week">
+            <ng-template ngbTabTitle>Week</ng-template>
+            <ng-template ngbTabContent>
+              <div class="entity-tab-chart">
+                <div class="row">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="weekSeriesOverTime.series"
+                      [colors]="weekSeriesOverTime.colors" [chart]="stackedChartCommonOptions.chart"
+                      [xaxis]="stackedChartCommonOptions.xaxis" [dataLabels]="stackedChartCommonOptions.dataLabels"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="weekSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="Month">
+            <ng-template ngbTabTitle>Month</ng-template>
+            <ng-template ngbTabContent>
+              <div class="entity-tab-chart">
+                <div class="row">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="monthSeriesOverTime.series"
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="monthSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="Quarter">
+            <ng-template ngbTabTitle>Quarter</ng-template>
+            <ng-template ngbTabContent>
+              <div class="entity-tab-chart">
+                <div class="row">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="quarterSeriesOverTime.series"
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="quarterSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="Year">
+            <ng-template ngbTabTitle>Year</ng-template>
+            <ng-template ngbTabContent>
+              <div class="entity-tab-chart">
+                <div class="row">
+                  <div class="col-12" *ngIf="selectedDonut !== 'SupplyChain'">
+                    <apx-chart [stroke]="stackedChartCommonOptions.stroke" [series]="yearSeriesOverTime.series"
+                      [chart]="stackedChartCommonOptions.chart" [xaxis]="stackedChartCommonOptions.xaxis"
+                      [dataLabels]="stackedChartCommonOptions.dataLabels" [colors]="stackedChartCommonOptions.colors"
+                      [legend]="stackedChartCommonOptions.legend" [fill]="stackedChartCommonOptions.fill"
+                      [noData]="stackedChartCommonOptions.noData"></apx-chart>
+                  </div>
+                  <div class="col-12" *ngIf="selectedDonut === 'SupplyChain'">
+                    <apx-chart [series]="yearSeriesOverTime.series" [chart]="areaChartCommonOption.chart"
+                      [xaxis]="areaChartCommonOption.xaxis" [stroke]="areaChartCommonOption.stroke"
+                      [tooltip]="areaChartCommonOption.tooltip" [dataLabels]="areaChartCommonOption.dataLabels"
+                      [noData]="stackedChartCommonOptions.noData">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
-          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0" id="BUSINESSUNITS">
+
+          <ngb-tab title="TEAMS" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
+            id="BUSINESSUNITS">
             <ng-template ngbTabContent>
-              <!-- product-section start -->
+
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
-                    <div class="table-responsive">
-                      <perfect-scrollbar [style.max-height]="'550px'">
-                        <table class="table table-hover m-b-0">
-                          <thead >
-                          <tr>
-                            <th width="250px">NAME</th>
-                            <th>TYPE</th>
-                            <th>PROJECTS</th>
-                            <th>LICENSE RISK</th>
-                            <th>THREATS</th>
-                            <th>COMPONENTS</th>
-                            <th>LICENSES</th><!-- pie chart? -->
-                            <th>ASSETS</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                            <!-- summary data -->
-                            <ng-container *ngIf="entity.entityMetrics">
-                              <tr >
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">All Business Units</td>
-                                <td style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">&nbsp;</td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.projectCount}}</td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold"><span class="text-c-red">HIGH</span></td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.vulnerabilityMetrics.total}}</td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.componentMetrics.total}}</td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.licenseMetrics.total}}</td>
-                                <td style="border-bottom:1px solid #4680ff;font-weight:bold">{{entity.entityMetrics?.assetMetrics.total}}</td>
-                              </tr>
-                            </ng-container>
-                            <!-- Data for THIS business unit. Commented for now, as it's weird and causes confusion
-                            <tr>
-                              <td>{{entity.name}}</td>
-                              <td style="border-left:1px solid #4680ff">{{entity.entityMetrics?.projectCount}}</td>
-                              <td><span class="text-c-red">HIGH</span></td>
-                              <td>{{entity.entityMetrics.vulnerabilityMetrics.total}}</td>
-                              <td>{{entity.entityMetrics.componentMetrics.total}}</td>
-                              <td>{{entity.entityMetrics.licenseMetrics.total}}</td>
-                              <td>{{entity.entityMetrics.assetMetrics.total}}</td>
-                            </tr>
-                            -->
-                            <tr *ngFor="let childEntity of entity.childEntities?.edges">
-                              <td><a (click)="changeEntity(childEntity.node.entityId)" style="cursor: pointer;">{{childEntity.node.name}}</a></td>
+                  <app-card [hidHeader]="true" cardClass="table-card tree-table-card" blockClass="px-0 py-0">
 
-                              <!-- display NO DATA field if no metrics -->
-                              <td *ngIf="!childEntity.node.entityMetrics" style="border-left:1px solid #4680ff" colspan="7">
-                                No projects found for this Business Unit
-                              </td>
-                              <td *ngIf="childEntity.node.entityMetrics" style="border-left:1px solid #4680ff">{{childEntity.node.entityType}}</td>
-                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.projectCount}}</td>
-                              <td *ngIf="childEntity.node.entityMetrics"><span class="text-c-red">HIGH</span></td>
-                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.vulnerabilityMetrics.total}}</td>
-                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.licenseMetrics.total}}</td>
-                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.componentMetrics.total}}</td>
-                              <td *ngIf="childEntity.node.entityMetrics">{{childEntity.node.entityMetrics?.assetMetrics.total}}</td>
+                    <p-treeTable [value]="entityTreeModel.data">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th class="lg-col">Name</th>
+                          <th class="text-left projects-col">Projects</th>
+                          <th class="text-left">Vulnerability Risk</th>
+                          <th class="text-left">License Risk</th>
+                          <th class="text-left">Supply Chain Risk</th>
+                          <th class="text-left">Asset Composition</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                        <tr *ngIf="showAndHideRow(rowData)">
+                          <td>
+                            <div class="tree-data-parent cursor-pointer"
+                              (click)="onEntityTreeNameSelect(rowData,rowNode)">
 
-                            </tr>
-                          </tbody>
-                        </table>
-                      </perfect-scrollbar>
+                              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                              {{rowData.name}}
+                              <!-- <span class="tree-tbl-icn">
+                                <i [ngClass]="{'fal fa-tachometer-alt': rowData.entityType === 'DASHBOARD',
+                                'fas fa-divide': rowData.entityType === 'DIVISION',
+                                'fas fa-users': rowData.entityType === 'TEAM',
+                                'far fa-building': rowData.entityType === 'BUSINESS_UNIT'}"></i></span> -->
+                            </div>
+                          </td>
+                          <td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
+                              <!-- <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span> -->
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.vulSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip">
+                              </apx-chart>
+                            </div>
+                          </td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
+                              <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.licSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip">
+                              </apx-chart>
+                            </div>
+                          </td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
+                              <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke"
+                                [series]="rowData.supplySericeData" [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip"></apx-chart>
+                            </div>
+                          </td>
+                          <td class="text-left">
+                            <div class="sparkline-chart-blk">
+                              <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
+                              <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.assetSericeData"
+                                [chart]="commonLineSparklineOptions.chart"
+                                [tooltip]="commonLineSparklineOptions.tooltip"></apx-chart>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-treeTable>
+
+                    <div class="tree-spinner" *ngIf="isTreeProgressBar">
+                      <mat-progress-spinner style="margin:0 auto;" [mode]="'indeterminate'">
+                      </mat-progress-spinner>
                     </div>
+
                   </app-card>
                 </div>
               </div>
-              <!-- product-section end -->
+
             </ng-template>
           </ngb-tab>
 
           <!-- PROJECTS -->
-          <ngb-tab title="PROJECTS" *ngIf="entity.entityMetrics?.projectCount > 0" id="PROJECTS">
+          <ngb-tab title="PROJECTS" *ngIf="entity.entityMetricsGroup?.projectCount > 0" id="PROJECTS">
             <ng-template ngbTabContent>
               <!-- product-section start -->
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
+                  <app-card [hidHeader]="true" cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
-                      <perfect-scrollbar >
-                        <p-treeTable class="table table-hover m-b-0" [value]="projects">
+                      <perfect-scrollbar>
+                        <p-treeTable class="table  m-b-0" [value]="projects">
                           <ng-template pTemplate="header">
-                              <tr>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="200px">PROJECT NAME</th>
-                                <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">DIVISION</th>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="140px">Vulnerabilities</th>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="200px">Licenses</th>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="100px">Components</th>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="100px">Assets</th>
-                                <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan</th>
-                              </tr>
+                            <tr>
+                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
+                                width="25%">PROJECT NAME</th>
+                              <!-- <th
+                                style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">
+                                DIVISION</th> -->
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                Vulnerability Risk</th>
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                License Risk</th>
+                              <th class="text-left"
+                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
+                                Supply Chain Risk</th>
+                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
+                                width="15%">Asset Composition</th>
+                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
+                              </th>
+                            </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
-                              <tr [ttRow]="rowNode">
-                                  <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
-                                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                    <a [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
-                                  </td>
-                                   <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td>
-                                    <td style="padding: 0.75rem;">
-                                    <span title="Critical" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.critical}}</span>
-                                    <span title="High" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.high}}</span>
-                                    <span title="Medium" class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.medium}}</span>
-                                    <span title="Low" class="badge m-r-5 badge-light-info">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.low}}</span>
-                                    <span title="Info" class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.vulnerabilityMetrics.info}}</span>
-                                  </td>
-                                  <td style="padding: 0.75rem;">
-                                    <span title="Copyleft Strong" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftStrong}}</span>
-                                    <span title="Copyleft Weak" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftWeak}}</span>
-                                    <span title="Copyleft Partial" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftPartial}}</span>
-                                    <span title="Copyleft Limited" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleftLimited}}</span>
-                                    <span title="Copyleft" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.copyleft}}</span>
-                                    <span title="Dual" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.dual}}</span>
-                                    <span title="Custom" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.custom}}</span>
-                                    <span title="Permissive" class="badge m-r-5 badge-light-primary">{{rowData?.latestScan?.scanMetrics?.licenseMetrics?.permissive}}</span>
-                                  </td>
-                                  <td style="padding: 0.75rem;">
-                                    <span title="Latest" class="badge m-r-5 badge-light-success">{{rowData?.latestScan?.scanMetrics?.componentMetrics.latest}}</span>
-                                    <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{rowData?.latestScan?.scanMetrics?.componentMetrics.notLatest}}</span>
-                                    <span title="Dual" class="badge m-r-5 badge-light-danger">{{rowData?.latestScan?.scanMetrics?.componentMetrics.vulnerabilities}}</span>
-                                  </td>
-                                  <td style="padding: 0.75rem;">
-                                    <span title="Analyzed" class="badge m-r-5 badge-light-success">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.analyzed}}</span>
-                                    <span title="Embedded" class="badge m-r-5 badge-light-warning">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.embedded}}</span>
-                                    <span title="Skipped" class="badge m-r-5 badge-light-primary">{{project?.node?.data?.latestScan?.scanMetrics?.assetMetrics?.skipped}}</span>
-                                  </td>
-                                  <td style="padding: 0.75rem;">{{project?.node?.data?.latestScan?.created | date :'M/d/y h:mmaa' | lowercase}}</td>
-                                </tr>
+                            <tr [ttRow]="rowNode">
+                              <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                <a
+                                  [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
+                              </td>
+                              <!-- <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td> -->
+                              <td style="padding: 0.75rem;">
+                                <span title="Critical"
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
+                                <span title="High"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
+                                <span title="Medium"
+                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.medium}}</span>
+                                <span title="Low"
+                                  class="badge m-r-5 badge-light-info">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.low}}</span>
+                                <span title="Info"
+                                  class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.info}}</span>
+                              </td>
+                              <td style="padding: 0.75rem;">
+                                <span title="Copyleft Strong"
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
+                                <span title="Copyleft"
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleft}}</span>
+                                <span title="Copyleft Weak"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
+                                <span title="Copyleft Partial"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
+                                <span title="Copyleft Limited"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
+                                <span title="Dual"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.dual}}</span>
+                                <span title="Custom"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.custom}}</span>
+                                <span title="Permissive"
+                                  class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.licenseMetrics?.permissive}}</span>
+                              </td>
+                              <td style="padding: 0.75rem;">
+                                <span title="Risk Score"
+                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.supplyChainMetrics.risk}}</span>
+                                <span title="Quality Score"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.supplyChainMetrics.quality}}</span>
+                              </td>
+                              <td style="padding: 0.75rem;">
+                                <span title="Open Source"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
+                                <span title="Embedded"
+                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.embedded}}</span>
+                                <span title="Unique"
+                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
+                              </td>
+                              <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date
+                                :'M/d/y h:mmaa' | lowercase}}</td>
+                            </tr>
                           </ng-template>
-                        </p-treeTable>                        
-<!--                         <table class="table table-hover m-b-0">
+                        </p-treeTable>
+                        <!--                         <table class="table table-hover m-b-0">
                           <thead>
                           <tr>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">PROJECT NAME</th>
@@ -312,7 +499,7 @@
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Components</th>
                             <th style="border-bottom:1px solid #4680ff;font-weight:bold">Assets</th>
                             <!-- <th style="border-bottom:1px solid #4680ff;font-weight:bold">Leaked Assets</th> -->
-<!--                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">Last Scan</th>
+                        <!--                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">Last Scan</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -341,7 +528,7 @@
                               <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
                               <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                               <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
-<!--                            </td>
+                        <!--                            </td>
                             <td>
                               <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
@@ -352,7 +539,7 @@
                               <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                               <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                             </td> -->
-<!--                            <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                        <!--                            <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                           </tr>
                           <ng-container *ngFor="let childEntityEdge of entity.childEntities?.edges">
                             <tr *ngFor="let projectEdge of childEntityEdge.node.projects?.edges">
@@ -380,7 +567,7 @@
                                 <span title="Not Latest" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.notLatest}}</span>
                                 <span title="Dual" class="badge m-r-5 badge-light-danger">{{projectEdge.node.latestScan.scanMetrics?.componentMetrics.vulnerabilities}}</span>
                                 <!--<span title="Custom" class="badge m-r-5 badge-light-success">{{project.latestScan.scanMetrics.componentMetrics.riskyLicenses}}</span>-->
-<!--                              </td>
+                        <!--                              </td>
                               <td>
                                 <span title="Analyzed" class="badge m-r-5 badge-light-success">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.analyzed}}</span>
                                 <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
@@ -391,19 +578,72 @@
                                 <span title="Embedded" class="badge m-r-5 badge-light-warning">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.embedded}}</span>
                                 <span title="Skipped" class="badge m-r-5 badge-light-primary">{{projectEdge.node.latestScan.scanMetrics?.assetMetrics?.skipped}}</span>
                               </td> -->
-<!--                              <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
+                        <!--                              <td>{{projectEdge.node.created | date :'M/d/y h:mmaa' | lowercase}}</td>
                             </tr>
                           </ng-container>
 
 
                           </tbody>
                         </table>-->
-                       </perfect-scrollbar>
+                      </perfect-scrollbar>
                     </div>
                   </app-card>
                 </div>
               </div>
               <!-- product-section end -->
+            </ng-template>
+          </ngb-tab>
+
+          <!-- ORG TREE -->
+          <ngb-tab title="ORG TREE" class="mb-3 ml-0 pl-0" *ngIf="entity.childEntities.edges.length > 0"
+            id="ORGANIZATION">
+            <ng-template ngbTabContent>
+              <div class="row">
+                <div class="col-sm-12">
+                  <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
+                    <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
+                      [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
+                      <ng-template let-node pTemplate="entity">
+                        <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
+                          tooltipClass="my-custom-class">{{node.name}}</div>
+                        <div class="node-content node-content-top">
+                          <div class="node-no-data"
+                            *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
+                            <p class="no-data-text">No metrics data yet</p>
+                          </div>
+                          <div class="chart-hdr-box"
+                            *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
+                            <div class="count-blk vulnerabilities-col">
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Vuln:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)}}</span>
+                            </div>
+                            <div class="count-blk license-col">
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Licns:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)}}</span>
+                            </div>
+                            <div class="count-blk components-col">
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Supply:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics)}}</span>
+                            </div>
+                            <div class="count-blk assets-col">
+                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                                Assets:</p>
+                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics)}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </p-organizationChart>
+                    <div class="tree-spinner" *ngIf="isTreeProgressBar">
+                      <mat-progress-spinner style="margin:0 auto;" [mode]="'indeterminate'">
+                      </mat-progress-spinner>
+                    </div>
+                  </app-card>
+                </div>
+              </div>
             </ng-template>
           </ngb-tab>
 
@@ -681,12 +921,12 @@
                   </app-card>
                 </div>
               </div>
-              
+
             </ng-template>
           </ngb-tab> -->
 
           <!-- <ngb-tab title="LEAKED ASSETS">
-            
+
           </ngb-tab> -->
 
 
@@ -695,5 +935,3 @@
     </div>
   </div>
 </div>
-
-
