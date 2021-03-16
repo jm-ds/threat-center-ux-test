@@ -104,6 +104,8 @@ export class EntityComponent implements OnInit, OnDestroy {
   requestObjectPageSubscriptions: Subscription;
   areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
 
+  sparkLinechartdelayFlag: boolean = true;
+
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -118,9 +120,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
   ) {
     this.chartDB = ChartDB;
-    //this.licensePieChart.legend.show=true;
     this.dailyVisitorStatus = '1y';
-
     this.deviceProgressBar = [
       {
         type: 'success',
@@ -149,14 +149,16 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
   }
 
+  ngOnInit() {
+    this.loadEntityPage();
+  }
 
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
     this.requestObjectPageSubscriptions.unsubscribe();
   }
 
-
-
+  //Initializing stacked chart according to donut chart selection
   initStackedChartAccordingToDonut(value: string) {
     // let properties = [];
     let activeTabVar: string = "";
@@ -178,7 +180,6 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
     }
     this[activeTabVar].series = [];
-    // let aciveTabMetricsArray: string = "";
     if (this.isShowStackedChart) {
       this.selectedDonut = value;
       this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
@@ -223,169 +224,6 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
     }
     this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
-  }
-
-  // this method is for get stacked chart logical data form vul,supplychain,and assets stacked charts
-  private getStackChartLogicalData(catName, chartName) {
-    let data = [];
-    switch (chartName) {
-      case 'Vulnerability':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.vulnerabilityMetrics['severityMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'SupplyChain':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.supplyChainMetrics['supplyChainMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'Assets':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.assetMetrics['assetCompositionMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-
-      default:
-        break;
-    }
-
-    return data;
-  }
-
-
-  //Helper function to initialize Component stacked chart configuration
-  private componentStackedChartConfig(nameOfChart, activeTabVar) {
-    this[activeTabVar].series = [];
-    // let properties = [];
-    switch (nameOfChart) {
-      case 'Vulnerabilities':
-        this[activeTabVar].colors = [];
-        const vulProp = this.getProperties('componentMetrics', 'vulnerabilityMetrics');
-        for (var index in vulProp) {
-          this[activeTabVar].series.push({ name: vulProp[index], data: this.getStackChartLogicalForComponentData(vulProp[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulProp[index]));
-        }
-        break;
-      case 'License Risk':
-        const licenseRiskprop = this.getProperties('componentMetrics', 'licenseFamilyMetrics');
-        for (var index in licenseRiskprop) {
-          this[activeTabVar].series.push({ name: licenseRiskprop[index], data: this.getStackChartLogicalForComponentData(licenseRiskprop[index], nameOfChart) });
-        }
-        break;
-      case 'License Category':
-        this[activeTabVar].colors = [];
-        const licenseCatProp = this.getProperties('componentMetrics', 'licenseCategoryMetrics');
-        for (var index in licenseCatProp) {
-          this[activeTabVar].series.push({ name: licenseCatProp[index], data: this.getStackChartLogicalForComponentData(licenseCatProp[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProp[index]));
-        }
-        break;
-      case 'License Name':
-        const licenseNameProp = this.getProperties('componentMetrics', 'licenseNameMetrics');
-        for (var index in licenseNameProp) {
-          this[activeTabVar].series.push({ name: licenseNameProp[index], data: this.getStackChartLogicalForComponentData(licenseNameProp[index], nameOfChart) });
-        }
-        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
-        break;
-      default:
-        break;
-    }
-  }
-
-  //this method is for get stacked chart logical data for Component charts (dropdown)
-  private getStackChartLogicalForComponentData(catName, chartName) {
-    let data = [];
-    switch (chartName) {
-      case 'Vulnerabilities':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.componentMetrics['vulnerabilityMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'License Risk':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.componentMetrics['licenseFamilyMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'License Category':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.componentMetrics['licenseCategoryMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
-        });
-        break;
-      case 'License Name':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.componentMetrics['licenseNameMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
-        });
-        break;
-      default:
-        break;
-    }
-    return data;
-  }
-
-  //Helper function to initialize License stacked chart configuration
-  private licenseStackedChartConfig(nameOfChart, activeTabVar) {
-    this[activeTabVar].series = [];
-    switch (nameOfChart) {
-      case 'License Name':
-        const licenseNameProperties = this.getProperties('licenseMetrics', 'licenseNameMetrics');
-        for (var index in licenseNameProperties) {
-          this[activeTabVar].series.push({ name: licenseNameProperties[index], data: this.getStackChartLogicalForLicenseData(licenseNameProperties[index], nameOfChart) });
-        }
-        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
-        break;
-      case 'License Category':
-        this[activeTabVar].colors = [];
-        const licenseCatProperties = this.getProperties('licenseMetrics', 'licenseCategoryMetrics');
-        for (var index in licenseCatProperties) {
-          this[activeTabVar].series.push({ name: licenseCatProperties[index], data: this.getStackChartLogicalForLicenseData(licenseCatProperties[index], nameOfChart) });
-          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProperties[index]));
-        }
-        break;
-      case 'Risk':
-        const riskProperties = this.getProperties('licenseMetrics', 'licenseFamilyMetrics');
-        for (var index in riskProperties) {
-          this[activeTabVar].series.push({ name: riskProperties[index], data: this.getStackChartLogicalForLicenseData(riskProperties[index], nameOfChart) });
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
-  //this method is for get stacked chart logical data for Liceses charts (dropdown)
-  private getStackChartLogicalForLicenseData(catName, chartName) {
-    let data = [];
-    switch (chartName) {
-      case 'License Name':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.licenseMetrics['licenseNameMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'License Category':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.licenseMetrics['licenseCategoryMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
-        });
-        break;
-      case 'Risk':
-        _.each(this.entityMetricList, metrics => {
-          const mainObj = metrics.licenseMetrics['licenseFamilyMetrics'];
-          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
-        });
-        break;
-      default:
-        break;
-    }
-
-    return data;
   }
 
   //fired when changing License chart dropdown from donut chart
@@ -442,6 +280,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
+  //this method will fire when changing tab of periods
   onStackedChartTabChange($event: NgbTabChangeEvent) {
     let period: Period;
     this.lineChartActiveTab = $event.nextId;
@@ -475,6 +314,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
     }
 
+    //API Call to get data for timeserice According to period selections
     this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, period)
       .pipe(map(result => result))
       .subscribe((res: any) => {
@@ -487,31 +327,14 @@ export class EntityComponent implements OnInit, OnDestroy {
       });
   }
 
-  public generateDayWiseTimeSeries = function (baseval, count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = baseval;
-      var y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-      series.push([x, y]);
-      baseval += 86400000;
-      i++;
-    }
-    return series;
-  };
-
+  //Used for to navigate into project dashboard
   navigateToProject(projectId) {
     const entityId = this.route.snapshot.paramMap.get('entityId')
     const url = "dashboard/entity/" + entityId + '/project/' + projectId;
     this.router.navigate([url]);
   }
 
-  ngOnInit() {
-    this.loadEntityPage();
-  }
-
+  //Load entity
   loadEntityPage() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
     // if an entityId isn't provided in params, use User defaultEntityId
@@ -531,6 +354,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.commonLineSparklineOptions = Object.assign(this.chartHelperService.sparkLineChartCommonConfiguration());
   }
 
+  //Initialize SparkLine charts 
   initSparkLineChart(data, str) {
     let dataToReturn = [];
     const vul = ['critical', 'high', 'medium', 'low', 'info'];
@@ -581,6 +405,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     return dataToReturn;
   }
 
+  //Load Vul
   loadVulnerabilities(entityId: any) {
     console.log("Loading entity components:", entityId);
     this.apiService.getEntityComponents(entityId)
@@ -604,32 +429,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       });
   }
 
-  private initCharts() {
-    this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-
-    this.componentVulnerabilityRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.componentLicenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.componentLicense = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-
-    this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.licenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
-    this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
-
-    this.weekSeriesOverTime = {};
-    this.monthSeriesOverTime = {};
-    this.quarterSeriesOverTime = {};
-    this.yearSeriesOverTime = {};
-
-    this.selectedDonut = "Vulnerability";
-    this.lineChartActiveTab = "Week";
-    this.selectedComponentChartDropvalue = "Vulnerabilities";
-    this.selectedlicenseChartDropValue = "License Name";
-
-  }
-
+  //Load Entity using entity id
   loadEntity(entityId: string, isPush: boolean = false) {
     this.initCharts();
     this.currentEntityId = entityId;
@@ -655,7 +455,6 @@ export class EntityComponent implements OnInit, OnDestroy {
 
       if (isPush) {
         this.entityPageBreadCums.push({ id: entityId, name: entity.name });
-        this.setEntityBreadcumToSession();
       }
       console.log("ENTITY: ", entity);
       if (entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1) {
@@ -696,34 +495,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     });
   }
 
-  async entityTreeLogic(entity: any) {
-    this.recursionHelperArray = [];
-    this.recursivehelperArrayForIrgTree = [];
-    if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
-      await this.populateChildernRecusivaly(entity.childEntities.edges, null);
-      let w = {};
-      this.entityTreeModel.data = [
-        {
-          "data": entity,
-          "children": this.list_to_tree(this.recursionHelperArray, false),
-          expanded: true,
-          visible: false
-        }
-      ];
-      this.organizationTreeModel = [
-        {
-          data: entity,
-          expanded: true,
-          name: entity.name,
-          styleClass: 'p-person',
-          type: "entity",
-          children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
-        }
-      ];
-      this.isTreeProgressBar = false;
-    }
-  }
-
   buildProjectTree(entity: Entity) {
     let edges = entity.projects.edges;
 
@@ -762,18 +533,12 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.loadEntity(entityId, isPush);
     if (!isPush) {
       this.entityPageBreadCums.pop();
-      this.setEntityBreadcumToSession();
     }
-  }
-
-  setEntityBreadcumToSession() {
-    sessionStorage.setItem('EntityBreadCums', JSON.stringify(this.entityPageBreadCums));
   }
 
   goBackfromBreadcum(entityId, currentIndex) {
     const startIndexToRemove = currentIndex + 1;
     this.entityNewBreadCum.splice(startIndexToRemove, this.entityNewBreadCum.length - (startIndexToRemove));
-    // this.setEntityBreadcumToSession();
     this.loadEntity(entityId);
   }
 
@@ -781,8 +546,14 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.activeTab = $event.nextId;
     this.coreHelperService.settingUserPreference("Entity", $event.activeId, this.activeTab);
+    if (this.activeTab === 'BUSINESSUNITS') {
+      setTimeout(() => {
+        this.sparkLinechartdelayFlag = true;
+      }, 500);
+    } else {
+      this.sparkLinechartdelayFlag = false;
+    }
   }
-
 
   //Called when component deactivate or destrory
   canDeactivate(): Observable<boolean> | boolean {
@@ -812,32 +583,10 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  newParentChildDataPush = [];
   onEntityTreeNameSelect(rowData, rowNode) {
     if (!!rowNode.parent) {
-      if (this.entityPageBreadCums.length == 1) {
-        const defaultEntity = this.entityPageBreadCums[0];
-        this.entityPageBreadCums = [];
-        this.entityPageBreadCums.push(defaultEntity);
-      }
-      this.newParentChildDataPush = [];
-
-      this.recursiveArrayPopulate(rowNode.parent, { id: rowNode.node.id, name: rowNode.node.name });
-      for (var i = this.newParentChildDataPush.length - 1; i >= 0; i--) {
-        this.entityPageBreadCums.push(this.newParentChildDataPush[i]);
-      }
-      this.setEntityBreadcumToSession();
       this.router.navigateByUrl('dashboard/entity/' + rowData.entityId);
       this.loadEntity(rowData.entityId, false);
-    }
-  }
-
-  recursiveArrayPopulate(parent, dataToPush) {
-    if (!!parent.parent) {
-      this.newParentChildDataPush.push(dataToPush);
-      this.recursiveArrayPopulate(parent.parent, { id: parent.id, name: parent.name });
-    } else {
-      this.newParentChildDataPush.push(dataToPush);
     }
   }
 
@@ -867,8 +616,228 @@ export class EntityComponent implements OnInit, OnDestroy {
     return this.currentEntityId !== rowData.entityId;
   }
 
+  //Entity Tree helper function
+  async entityTreeLogic(entity: any) {
+    this.recursionHelperArray = [];
+    this.recursivehelperArrayForIrgTree = [];
+    if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
+      await this.populateChildernRecusivaly(entity.childEntities.edges, null);
+      this.entityTreeModel.data = [
+        {
+          data: entity,
+          children: this.list_to_tree(this.recursionHelperArray, false),
+          expanded: true,
+          visible: false
+        }
+      ];
+      this.organizationTreeModel = [
+        {
+          data: entity,
+          expanded: true,
+          name: entity.name,
+          styleClass: 'p-person',
+          type: "entity",
+          children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
+        }
+      ];
+      this.isTreeProgressBar = false;
+    }
+  }
+
+  //clicking on any where in the screen below method will fire
+  onClick(event) {
+    this.isShowComponentdropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowComponentdropdown;
+    this.isShowLicensedropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowLicensedropdown;
+  }
+
+  private initCharts() {
+    this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.assetDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+
+    this.componentVulnerabilityRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicenseCategory = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.componentLicense = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+
+    this.licenseCategoryChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.licenseRiskChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
+    this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
+
+    this.weekSeriesOverTime = {};
+    this.monthSeriesOverTime = {};
+    this.quarterSeriesOverTime = {};
+    this.yearSeriesOverTime = {};
+
+    this.selectedDonut = "Vulnerability";
+    this.lineChartActiveTab = "Week";
+    this.selectedComponentChartDropvalue = "Vulnerabilities";
+    this.selectedlicenseChartDropValue = "License Name";
+  }
+
   private getLastTabSelected() {
     this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
+  }
+
+  //Helper function to initialize Component stacked chart configuration (dropdown)
+  private componentStackedChartConfig(nameOfChart, activeTabVar) {
+    this[activeTabVar].series = [];
+    switch (nameOfChart) {
+      case 'Vulnerabilities':
+        this[activeTabVar].colors = [];
+        const vulProp = this.getProperties('componentMetrics', 'vulnerabilityMetrics');
+        for (var index in vulProp) {
+          this[activeTabVar].series.push({ name: vulProp[index], data: this.getStackChartLogicalDataForComponentData(vulProp[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulProp[index]));
+        }
+        break;
+      case 'License Risk':
+        const licenseRiskprop = this.getProperties('componentMetrics', 'licenseFamilyMetrics');
+        for (var index in licenseRiskprop) {
+          this[activeTabVar].series.push({ name: licenseRiskprop[index], data: this.getStackChartLogicalDataForComponentData(licenseRiskprop[index], nameOfChart) });
+        }
+        break;
+      case 'License Category':
+        this[activeTabVar].colors = [];
+        const licenseCatProp = this.getProperties('componentMetrics', 'licenseCategoryMetrics');
+        for (var index in licenseCatProp) {
+          this[activeTabVar].series.push({ name: licenseCatProp[index], data: this.getStackChartLogicalDataForComponentData(licenseCatProp[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProp[index]));
+        }
+        break;
+      case 'License Name':
+        const licenseNameProp = this.getProperties('componentMetrics', 'licenseNameMetrics');
+        for (var index in licenseNameProp) {
+          this[activeTabVar].series.push({ name: licenseNameProp[index], data: this.getStackChartLogicalDataForComponentData(licenseNameProp[index], nameOfChart) });
+        }
+        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
+        break;
+      default:
+        break;
+    }
+  }
+
+  //Helper function to initialize License stacked chart configuration (dropdown)
+  private licenseStackedChartConfig(nameOfChart, activeTabVar) {
+    this[activeTabVar].series = [];
+    switch (nameOfChart) {
+      case 'License Name':
+        const licenseNameProperties = this.getProperties('licenseMetrics', 'licenseNameMetrics');
+        for (var index in licenseNameProperties) {
+          this[activeTabVar].series.push({ name: licenseNameProperties[index], data: this.getStackChartLogicalForLicenseData(licenseNameProperties[index], nameOfChart) });
+        }
+        this[activeTabVar].colors = ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'];
+        break;
+      case 'License Category':
+        this[activeTabVar].colors = [];
+        const licenseCatProperties = this.getProperties('licenseMetrics', 'licenseCategoryMetrics');
+        for (var index in licenseCatProperties) {
+          this[activeTabVar].series.push({ name: licenseCatProperties[index], data: this.getStackChartLogicalForLicenseData(licenseCatProperties[index], nameOfChart) });
+          this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(licenseCatProperties[index]));
+        }
+        break;
+      case 'Risk':
+        const riskProperties = this.getProperties('licenseMetrics', 'licenseFamilyMetrics');
+        for (var index in riskProperties) {
+          this[activeTabVar].series.push({ name: riskProperties[index], data: this.getStackChartLogicalForLicenseData(riskProperties[index], nameOfChart) });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  //This method is for get stacked chart logical data for Component Metrics (dropdown)
+  private getStackChartLogicalDataForComponentData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'Vulnerabilities':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['vulnerabilityMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'License Risk':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseFamilyMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'License Category':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseCategoryMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      case 'License Name':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.componentMetrics['licenseNameMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      default:
+        break;
+    }
+    return data;
+  }
+
+  // This method is for get stacked chart logical data form vul,supplychain,and assets Metrics
+  private getStackChartLogicalData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'Vulnerability':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.vulnerabilityMetrics['severityMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'SupplyChain':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.supplyChainMetrics['supplyChainMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'Assets':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.assetMetrics['assetCompositionMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+
+      default:
+        break;
+    }
+
+    return data;
+  }
+
+  //this method is for get stacked chart logical data for Liceses charts (dropdown)
+  private getStackChartLogicalForLicenseData(catName, chartName) {
+    let data = [];
+    switch (chartName) {
+      case 'License Name':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseNameMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'License Category':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseCategoryMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), mainObj[catName]]);
+        });
+        break;
+      case 'Risk':
+        _.each(this.entityMetricList, metrics => {
+          const mainObj = metrics.licenseMetrics['licenseFamilyMetrics'];
+          data.push([new Date(metrics.measureDate).getTime(), !!mainObj[catName] ? mainObj[catName] : null]);
+        });
+        break;
+      default:
+        break;
+    }
+
+    return data;
   }
 
   private async populateChildernRecusivaly(childData, prId) {
@@ -1059,9 +1028,4 @@ export class EntityComponent implements OnInit, OnDestroy {
     return properties;
   }
 
-  //clicking on any where in the screen below method will fire
-  onClick(event) {
-    this.isShowComponentdropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowComponentdropdown;
-    this.isShowLicensedropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowLicensedropdown;
-  }
 }

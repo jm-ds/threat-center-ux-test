@@ -342,16 +342,11 @@
 
                               <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                               {{rowData.name}}
-                              <!-- <span class="tree-tbl-icn">
-                                <i [ngClass]="{'fal fa-tachometer-alt': rowData.entityType === 'DASHBOARD',
-                                'fas fa-divide': rowData.entityType === 'DIVISION',
-                                'fas fa-users': rowData.entityType === 'TEAM',
-                                'far fa-building': rowData.entityType === 'BUSINESS_UNIT'}"></i></span> -->
                             </div>
                           </td>
                           <td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>
                           <td class="text-left">
-                            <div class="sparkline-chart-blk">
+                            <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <!-- <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span> -->
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.vulSericeData"
                                 [chart]="commonLineSparklineOptions.chart"
@@ -360,7 +355,7 @@
                             </div>
                           </td>
                           <td class="text-left">
-                            <div class="sparkline-chart-blk">
+                            <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <span>{{rowData?.entityMetrics?.licenseMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.licSericeData"
                                 [chart]="commonLineSparklineOptions.chart"
@@ -369,7 +364,7 @@
                             </div>
                           </td>
                           <td class="text-left">
-                            <div class="sparkline-chart-blk">
+                            <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke"
                                 [series]="rowData.supplySericeData" [chart]="commonLineSparklineOptions.chart"
@@ -377,7 +372,7 @@
                             </div>
                           </td>
                           <td class="text-left">
-                            <div class="sparkline-chart-blk">
+                            <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
                               <apx-chart [stroke]="commonLineSparklineOptions.stroke" [series]="rowData.assetSericeData"
                                 [chart]="commonLineSparklineOptions.chart"
