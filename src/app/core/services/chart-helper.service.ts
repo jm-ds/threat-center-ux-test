@@ -44,9 +44,6 @@ export class ChartHelperService {
                 offsetX: 0,
                 offsetY: 0,
             },
-            // fill: {
-            //   type: "gradient"
-            // },
             legend: {
                 show: false
             },
@@ -93,12 +90,13 @@ export class ChartHelperService {
                 type: "gradient",
                 gradient: {
                     shade: "dark",
-                    type: "horizontal",
-                    shadeIntensity: 0.5,
-                    gradientToColors: ["#11c15b", "#4680ff"],
-                    inverseColors: true,
-                    opacityFrom: 1,
-                    opacityTo: 1,
+                    type: "vertical",
+                    // shadeIntensity: 0.5,
+                    // gradientToColors: ["#11c15b", "#4680ff"],
+                    gradientToColors: ["#ff5252", "#ffa21d"],
+                    // inverseColors: true,
+                    // opacityFrom: 1,
+                    // opacityTo: 1,
                     stops: [0, 100]
                 }
             },
@@ -123,7 +121,8 @@ export class ChartHelperService {
                     }
                 }
             },
-            colors: ["#ff5252", "#ffa21d"],
+            // colors: ["#ff5252", "#ffa21d"],
+            colors:["#11c15b", "#4680ff"],
             labels: [],
             legend: {
                 show: true,
@@ -169,89 +168,14 @@ export class ChartHelperService {
 
     }
 
-    private getPloatoptions() {
-        return {
-            pie: {
-                startAngle: 0,
-                endAngle: 360,
-                expandOnClick: true,
-                offsetX: 0,
-                offsetY: 0,
-                customScale: 1,
-
-                dataLabels: {
-                    offset: 0,
-                    minAngleToShowLabel: 10
-                },
-                donut: {
-                    size: '50%',
-                    background: 'transparent',
-                    labels: {
-                        show: true,
-                        name: {
-                            show: false,
-                            fontSize: '20px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
-                            fontWeight: 600,
-                            color: undefined,
-                            offsetY: -10,
-                            formatter: function (val) {
-                                return val
-                            }
-                        },
-                        value: {
-                            show: true,
-                            fontSize: '28px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
-                            fontWeight: 300,
-                            color: undefined,
-                            offsetY: 10,
-                            formatter: function (val) {
-                                return val
-                            }
-                        },
-                        total: {
-                            show: true,
-                            showAlways: true,
-                            label: 'dddd',
-                            fontSize: '20px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
-                            fontWeight: 300,
-                            color: '#373d3f',
-                            formatter: function (w) {
-                                return w.globals.seriesTotals.reduce((a, b) => {
-                                    return a + b
-                                }, 0)
-                            }
-                        }
-                    }
-                },
-            }
-        }
-    }
-
     getStackedChartCommonConfiguration() {
         return {
             stroke: {
                 width: 2
             },
-            
-            // noData: {
-            //     text: "There's no data",
-            //     align: 'center',
-            //     verticalAlign: 'middle',
-            //     offsetX: 0,
-            //     offsetY: 0,
-            //     style: {
-            //         color: undefined,
-            //         fontSize: '22px',
-            //         fontFamily: 'Helvetica, Arial, sans-serif',
-            //         fontWeight: '300'
-            //     }
-            // },
             noData: {
                 text: 'Loading...'
-              },
+            },
             chart: {
                 toolbar: {
                     show: false
@@ -356,6 +280,9 @@ export class ChartHelperService {
             stroke: {
                 width: 2,
             },
+            noData: {
+                text: 'Loading...'
+            },
             chart: {
                 type: "line",
                 width: 100,
@@ -366,40 +293,7 @@ export class ChartHelperService {
             },
             colors: ['#F44336'],
             labels: [],
-            series: [
-                {
-                    name: "SSS",
-                    data: this.randomizeArray([
-                        47,
-                        45,
-                        54,
-                        38,
-                        10,
-                        200,
-                        300,
-                        500,
-                        45,
-                        8,
-                        1
-                    ].slice(0, 10))
-                },
-                {
-                    name: "AAA",
-                    data: this.randomizeArray([
-                        55,
-                        55,
-                        88,
-                        38,
-                        10,
-                        200,
-                        300,
-                        500,
-                        45,
-                        8,
-                        1
-                    ].slice(0, 10))
-                }
-            ], // will come dynamically
+            series: [],
             tooltip: {
                 fixed: {
                     enabled: false
@@ -419,24 +313,6 @@ export class ChartHelperService {
                 }
             }
         }
-    }
-
-    public randomizeArray(arg): number[] {
-        var array = arg.slice();
-        var currentIndex = array.length,
-            temporaryValue,
-            randomIndex;
-
-        while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-
-        return array;
     }
 
     getColorByLabel(label: string) {
@@ -479,5 +355,66 @@ export class ChartHelperService {
         }
 
         return color;
+    }
+
+    private getPloatoptions() {
+        return {
+            pie: {
+                startAngle: 0,
+                endAngle: 360,
+                expandOnClick: true,
+                offsetX: 0,
+                offsetY: 0,
+                customScale: 1,
+
+                dataLabels: {
+                    offset: 0,
+                    minAngleToShowLabel: 10
+                },
+                donut: {
+                    size: '50%',
+                    background: 'transparent',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: false,
+                            fontSize: '20px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 600,
+                            color: undefined,
+                            offsetY: -10,
+                            formatter: function (val) {
+                                return val
+                            }
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '28px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 300,
+                            color: undefined,
+                            offsetY: 10,
+                            formatter: function (val) {
+                                return val
+                            }
+                        },
+                        total: {
+                            show: true,
+                            showAlways: true,
+                            label: 'dddd',
+                            fontSize: '20px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 300,
+                            color: '#373d3f',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => {
+                                    return a + b
+                                }, 0)
+                            }
+                        }
+                    }
+                },
+            }
+        }
     }
 }

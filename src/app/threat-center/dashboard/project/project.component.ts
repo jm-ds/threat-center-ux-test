@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskComponent } from '@app/threat-center/shared/task/task.component';
 import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
@@ -17,6 +15,7 @@ import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
 import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'project-dashboard',
@@ -25,6 +24,7 @@ import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component
 })
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -103,6 +103,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   scrollY;
   isAssetStory: boolean = false;
   @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  projectMetrics = [];
 
   ngOnInit() {
     this.obsProject = this.route.data
@@ -134,6 +135,37 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
+  private getProperties(objArray, metricsObjName) {
+    let properties = [];
+    this.projectMetrics.forEach(d => {
+      if (d[objArray]) {
+        const obj = d[objArray];
+        if (!!obj[metricsObjName]) {
+          Object.keys(obj[metricsObjName]).forEach(p => {
+            if (!properties.includes(p)) {
+              properties.push(p);
+            }
+          });
+        }
+      }
+    });
+    return properties;
+  }
+
+  private initComponentchart() {
+    const properties = this.getProperties('componentMetrics', 'vulnerabilityMetrics');
+    this.componentChart.series = [];
+    properties.forEach((key, index) => {
+      this.componentChart.series.push(
+        {
+          data: this.projectMetrics.map(val => val['componentMetrics'].vulnerabilityMetrics[key]),
+          name: _.upperFirst(_.camelCase(key)),
+          hover: false,
+          colorClass: this.colorsClass[index]
+        }
+      )
+    });
+  }
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     const obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
@@ -147,9 +179,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
   initProjectData() {
     this.stateService.obsProject = this.obsProject;
-    this.obsProject.subscribe(project => {
+    this.obsProject.subscribe((project: any) => {
       this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
       //Taking sacn list to show in scan tab
       this.scanList = project.scans.edges;
@@ -179,6 +212,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       let embedded = [];
       let openSource = [];
       let unique = [];
+      this.projectMetrics = project.projectMetricsGroup.projectMetrics;
+      this.initComponentchart();
       for (let i = 0; i <= project.scans.edges.length; i++) {
         let edge = project.scans.edges[i];
         if (edge) {
@@ -206,13 +241,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
               permissive.push(scan.scanMetricsSummary.licenseMetrics.permissive);
             }
 
-
-            // Component chart data
-            if (!!scan.scanMetricsSummary.componentMetrics) {
-              notLatest.push(scan.scanMetricsSummary.componentMetrics.notLatest);
-              vulnerabilities.push(scan.scanMetricsSummary.componentMetrics.vulnerabilities);
-              riskyLicenses.push(scan.scanMetricsSummary.componentMetrics.riskyLicenses);
-            }
+            // // Component chart data
+            // if (!!scan.scanMetricsSummary.componentMetrics) {
+            //   notLatest.push(scan.scanMetricsSummary.componentMetrics.notLatest);
+            //   vulnerabilities.push(scan.scanMetricsSummary.componentMetrics.vulnerabilities);
+            //   riskyLicenses.push(scan.scanMetricsSummary.componentMetrics.riskyLicenses);
+            // }
 
 
             // Asset chart data
@@ -231,7 +265,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
 
-      // set vulnerabilityChart data
+
+      // // set vulnerabilityChart data
       this.vulnerabilityChart.series.push({ name: 'Critical', data: critical, colorClass: "red", hover: false });
       this.vulnerabilityChart.series.push({ name: 'High', data: high, colorClass: "orange", hover: false });
       this.vulnerabilityChart.series.push({ name: 'Medium', data: medium, colorClass: "yellow", hover: false });
@@ -249,9 +284,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.licenseChart.series.push({ name: 'Permissive', data: permissive, colorClass: "blue", hover: false });
 
       // set componentChart data
-      this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
-      this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
-      this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
+      // this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
+      // this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
+      // this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
 
       // set assetChart data
       this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "green", hover: false });
