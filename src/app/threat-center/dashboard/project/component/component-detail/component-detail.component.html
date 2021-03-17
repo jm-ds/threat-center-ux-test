@@ -127,14 +127,14 @@
           <!-- REPOSITORIES TAB -->
           <ngb-tab title="Repositories" id="repositories">
             <ng-template ngbTabContent>
-              <div class="row" style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
+              <div class="row" style="padding:20px 0px 20px 0px;margin-left:5px;margin-right:5px">
                 <div class="col-md-6">
                   <app-card [hidHeader]="true" cardClass="mb-5" blockClass="pb-0">
                     <div>
-                      <div style="width:45%;float:left;">
+                      <div style="width:40%;float:left;">
                         <div>
-                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{component.repositoryMeta.repositoryType}}</span></div>
-                          <div style="width:50%;float:left;text-align:right;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-success">BINARY</span></div>
+                          <div style="width:50%;float:left;margin-bottom:5px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{component.repositoryMeta.repositoryType}}</span></div>
+                          <div style="width:50%;float:left;text-align:right;margin-bottom:5px;font-size:16px"><span class="badge m-r-5 badge-light-success">BINARY</span></div>
                         </div>
                         <div class="form-group">
                           <label>Namespace</label>
@@ -157,23 +157,27 @@
                           <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
                         </div>
                       </div>
-                      <div style="width:50%;float:right;">
+                      <div style="width:58%;float:right;">
                         <perfect-scrollbar [style.max-height]="'400px'">
-                          <p-table #dt [columns]="releaseCols" [value]="binaryReleases"
-                                   [paginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']"
+                          <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
+                                   [scrollable]="true" [rows]="25" [style]="{width:'250px'}" scrollHeight="250px"
+                                   [virtualScroll]="true" [virtualRowHeight]="34" [loading]="binaryLoading" [lazy]="true" (onLazyLoad)="loadBinaryReleasesLazy($event)"
+                                   [filterDelay]="0" [globalFilterFields]="['version', 'releaseDate']"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
 
                             <ng-template pTemplate="caption">
-                              <div style="text-align: right;float:right;margin-bottom:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                       style="width:160px;display:inline" class="form-control">
+                              <div style="text-align:right;margin-bottom:10px">
+                                <label>
+                                  <input type="text" pInputText size="50" placeholder="Filter"
+                                         (input)="dtBinary.filterGlobal($event.target.value, 'contains')"
+                                         style="width:160px;display:inline" class="form-control">
+                                </label>
                               </div>
                             </ng-template>
                             <ng-template pTemplate="header">
                               <tr>
-                                <th>Version</th>
-                                <th>Release Date</th>
+                                <th pSelectableRow="version">Version</th>
+                                <th pSelectableRow="releaseDate">Release Date</th>
                               </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-binaryRelease>
@@ -202,10 +206,10 @@
                 <div class="col-md-6">
                   <app-card [hidHeader]="true" cardClass="mb-3" blockClass="pb-0">
                     <div>
-                      <div style="width:45%;float:left;">
+                      <div style="width:40%;float:left;">
                         <div>
-                          <div style="width:50%;float:left;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{sourcePurlType.toUpperCase()}}</span></div>
-                          <div style="width:50%;float:left;text-align:right;margin-bottom:10px;font-size:16px"><span class="badge m-r-5 badge-light-success">SOURCE</span></div>
+                          <div style="width:50%;float:left;margin-bottom:5px;font-size:16px"><span class="badge m-r-5 badge-light-info">{{sourcePurlType.toUpperCase()}}</span></div>
+                          <div style="width:50%;float:left;text-align:right;margin-bottom:5px;font-size:16px"><span class="badge m-r-5 badge-light-success">SOURCE</span></div>
                         </div>
                         <div class="form-group">
                           <label>Namespace</label>
@@ -228,23 +232,27 @@
                           <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
                         </div>
                       </div>
-                      <div style="width:50%;float:right;">
+                      <div style="width:58%;float:right;">
                         <perfect-scrollbar [style.max-height]="'400px'">
-                          <p-table #dt [columns]="releaseCols" [value]="sourceReleases"
-                                   [paginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']"
+                          <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases"
+                                   [scrollable]="true" [rows]="25" [style]="{width:'350px'}" scrollHeight="250px"
+                                   [virtualScroll]="true" [virtualRowHeight]="34" [loading]="sourceLoading" [lazy]="true" (onLazyLoad)="loadSourceReleasesLazy($event)"
+                                   [filterDelay]="0" [globalFilterFields]="['version', 'releaseDate']"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
 
                             <ng-template pTemplate="caption">
-                              <div style="text-align: right;float:right;margin-bottom:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                       style="width:160px;display:inline" class="form-control">
+                              <div style="text-align:right;margin-bottom:10px">
+                                <label>
+                                  <input type="text" pInputText size="50" placeholder="Filter"
+                                         (input)="dtSource.filterGlobal($event.target.value, 'contains')"
+                                         style="width:160px;display:inline" class="form-control">
+                                </label>
                               </div>
                             </ng-template>
                             <ng-template pTemplate="header">
                               <tr>
-                                <th>Version</th>
-                                <th>Release Date</th>
+                                <th pSelectableRow="version">Version</th>
+                                <th pSelectableRow="releaseDate">Release Date</th>
                               </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-sourceRelease>

@@ -5,7 +5,7 @@ import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
-import { Scan, License, TxComponent, VulnerableRelease, VulnerableReleaseResponseMap } from '@app/threat-center/shared/models/types';
+import { TxComponent, VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -23,12 +23,23 @@ export class ComponentDetailComponent implements OnInit {
   obsComponent: Observable<TxComponent>;
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
-  public releaseCols = ['Name', 'Version'];
-  public binaryReleases: VulnerableRelease[] = [];
-  public sourceReleases: VulnerableRelease[] = [];
-  private virtualBinaryReleases: VulnerableRelease[];
-  private virtualSourceReleases: VulnerableRelease[];
-  public sourcePurlType: string;
+  releaseCols = ['Version', 'Release Date'];
+
+  binaryLoading: boolean;
+  binaryReleases: VulnerableRelease[] = [];
+  binaryRepositoryType: string;
+  binaryPurlType: string;
+  binaryGroup: string;
+  binaryName: string;
+  binaryNextPagingState: string;
+
+  sourceLoading: boolean;
+  sourceReleases: VulnerableRelease[] = [];
+  sourceRepositoryType: string;
+  sourcePurlType: string;
+  sourceGroup: string;
+  sourceName: string;
+  sourceNextPagingState: string;
 
   projectId: string = "";
   scanId: string="";
@@ -64,9 +75,23 @@ export class ComponentDetailComponent implements OnInit {
     });
 
     this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
+
+      this.binaryLoading = true;
       this.binaryReleases = data.binaryVulnerableResponse.vulnerableReleases;
+      this.binaryRepositoryType = data.binaryVulnerableResponse.repositoryType;
+      this.binaryPurlType = data.binaryVulnerableResponse.purlType;
+      this.binaryGroup = data.binaryVulnerableResponse.group;
+      this.binaryName = data.binaryVulnerableResponse.name;
+      this.binaryNextPagingState = data.binaryVulnerableResponse.nextPagingState;
+
+      this.sourceLoading = true;
       this.sourceReleases = data.sourceVulnerableResponse.vulnerableReleases;
+      this.sourceRepositoryType = data.sourceVulnerableResponse.repositoryType;
       this.sourcePurlType = data.sourceVulnerableResponse.purlType;
+      this.sourceGroup = data.sourceVulnerableResponse.group;
+      this.sourceName = data.sourceVulnerableResponse.name;
+      this.sourceNextPagingState = data.sourceVulnerableResponse.nextPagingState;
+
       console.log('>>>>> binaryReleases length = ' + this.binaryReleases.length);
       console.log('>>>>> sourceReleases length = ' + this.sourceReleases.length);
     });
@@ -160,28 +185,28 @@ export class ComponentDetailComponent implements OnInit {
   }
 
   loadBinaryReleasesLazy(event: LazyLoadEvent) {
+    this.binaryLoading = true;
     setTimeout(() => {
-      // Load data of required page.
-      let loadedBinaryReleases = this.binaryReleases.slice(event.first, (event.first + event.rows));
-
-      // Populate page of virtual releases.
-      Array.prototype.splice.apply(this.virtualBinaryReleases, [...[event.first, event.rows], ...loadedBinaryReleases]);
-
-      // Trigger change detection.
-      this.virtualBinaryReleases = [...this.virtualBinaryReleases];
-    }, Math.random() * 1000 + 250);
+      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+          this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
+          .subscribe((data: VulnerableReleaseResponse) => {
+        this.binaryReleases.push(...data.vulnerableReleases);
+        this.binaryNextPagingState = data.nextPagingState;
+        this.binaryLoading = false;
+      });
+    }, 3000);
   }
 
   loadSourceReleasesLazy(event: LazyLoadEvent) {
+    this.sourceLoading = true;
     setTimeout(() => {
-      // Load data of required page.
-      let loadedSourceReleases = this.sourceReleases.slice(event.first, (event.first + event.rows));
-
-      // Populate page of virtual releases.
-      Array.prototype.splice.apply(this.virtualSourceReleases, [...[event.first, event.rows], ...loadedSourceReleases]);
-
-      // Trigger change detection.
-      this.virtualSourceReleases = [...this.virtualSourceReleases];
-    }, Math.random() * 1000 + 250);
+      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+          this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
+          .subscribe((data: VulnerableReleaseResponse) => {
+            this.sourceReleases.push(...data.vulnerableReleases);
+            this.sourceNextPagingState = data.nextPagingState;
+            this.sourceLoading = false;
+          });
+    }, 3000);
   }
 }
