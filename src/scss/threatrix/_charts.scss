@@ -145,3 +145,386 @@
 
 //Project dashboard chart styles End
 ////////////////////////////////////////////////////////////////
+
+//Entity Page Chart Style
+.entity-chart-tabbing {
+    .nav-tabs {
+        display: table;
+        margin: 0 auto;
+        border-radius: 2px;
+        padding: 7px;
+        background: #242e38;
+
+        .nav-item {
+            margin: 0 3px;
+            display: inline-block;
+
+            .nav-link {
+                box-shadow: none;
+                min-width: 50px;
+                line-height: 20px;
+                text-align: center;
+                padding: 0 10px;
+                background: #32404e !important;
+
+                &.active,
+                &:hover {
+                    background: #4680ff !important;
+                    border-color: #4680ff !important;
+                }
+
+
+            }
+        }
+    }
+
+    .tab-content {
+        box-shadow: none !important;
+
+        .tab-info-text {
+            margin-bottom: 0;
+        }
+    }
+}
+
+body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
+    background: #4680ff !important;
+    border-color: #4680ff !important;
+}
+
+.entity-chart-row {
+    padding: 10px 0 0;
+
+    .entity-chart-blk {
+        flex: 0 1 20%;
+        max-width: 20%;
+        padding: 0 5px;
+    }
+
+    .proj-t-card {
+        .card-body {
+            padding: 10px;
+            min-height: 180px;
+
+            app-apex-chart {
+                div:first-of-type {
+                    height: 125px !important;
+                    min-height: inherit !important;
+                }
+            }
+        }
+    }
+
+    .apexcharts-canvas {
+        transform: scale(0.6);
+        -webkit-transform-origin: top center;
+        transform-origin: top center;
+
+        svg {
+            overflow: inherit;
+        }
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
+}
+
+.entity-ttl {
+    margin-bottom: 3px;
+}
+
+.entity-btns {
+    .btn {
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+
+.ui-treetable .ui-treetable-thead>tr>th,
+.ui-treetable .ui-treetable-tbody>tr>td,
+.ui-treetable .ui-treetable-tfoot>tr>td {
+    padding: 5px 7px;
+    height: 40px;
+    font-size: 14px;
+    font-family: "Mada", sans-serif;
+    line-height: 16px;
+}
+
+.ui-treetable .ui-treetable-thead>tr>th {
+    background: #2e3d48;
+    font-weight: 400;
+    position: relative;
+
+    &:nth-child(2) {
+        padding-left: 15px;
+    }
+
+    &.lg-col {
+        width: 270px;
+    }
+
+    &.type-col {
+        width: 115px;
+    }
+
+    &.projects-col {
+        width: 75px;
+    }
+
+    &.license-risk-col {
+        width: 85px;
+    }
+}
+
+.ui-treetable .ui-treetable-toggler {
+    font-size: 10px;
+    top: 0;
+    margin-right: 3px;
+}
+
+.ui-treetable {
+    .ui-treetable-tbody {
+        tr {
+            td {
+                font-size: 13px;
+                padding: 2px 7px;
+                height: 34px;
+
+                &:first-child {
+                    border-right: 1px solid #1082fe;
+                }
+
+                &:nth-child(2) {
+                    padding-left: 15px;
+                }
+
+                .tree-data-parent {
+                    display: flex;
+                    align-items: flex-start;
+                    position: relative;
+
+                    .tree-tbl-icn {
+                        position: absolute;
+                        right: 0;
+                        top: 3px;
+                    }
+                }
+            }
+
+            &:first-child {
+                td {
+                    padding-top: 5px;
+                }
+            }
+        }
+    }
+}
+
+
+//Entity Page Organization chart
+.ui-organizationchart {
+    padding: 30px;
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+
+    .ui-organizationchart-table {
+
+        // margin: 30px auto !important;
+        tr {
+            td {
+
+                .node-header {
+                    color: rgba(255, 255, 255, 0.8);
+                    // background: #2e3944;
+                    padding: 5px;
+                    border-radius: 2px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                    max-width: 250px;
+                }
+
+                .ui-organizationchart-node-content {
+                    // max-width: 100%;
+                    background: #242e38;
+                    // min-width: 220px;
+                    border-radius: 2px;
+                    padding: 5px;
+                    color: #adb7be;
+                    font-size: 12px;
+                    height: 61px;
+
+                    p {
+                        color: #adb7be;
+                        font-size: 12px;
+                    }
+                }
+
+                .no-data-text {
+                    display: block;
+                    width: 100%;
+                    margin: 0px 0 0;
+
+                    p {
+                        font-size: 11px;
+                        color: #adb7be;
+                        margin: 0;
+                    }
+                }
+
+                .chart-hdr-box {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .count-blk {
+                        border-radius: 2px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 5px;
+
+                        p {
+                            color: rgba(255, 255, 255, 0.4);
+                            font-size: 12px;
+                        }
+
+                        &.vulnerabilities-col {
+                            color: #ffa21d;
+                        }
+
+                        &.license-col {
+                            color: #d61bad;
+                        }
+
+                        &.components-col {
+                            color: #00acc1;
+                        }
+
+                        &.assets-col {
+                            color: #4680ff;
+                        }
+
+                        p {
+                            margin: 0 5px 0 0;
+                        }
+
+                        span {
+                            color: 12px;
+                            font-weight: 700;
+                        }
+
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.ui-organizationchart .ui-organizationchart-line-down {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-line-top {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-line-left {
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-line-left {
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler {
+    position: absolute;
+    bottom: -13px;
+    margin: 0 auto;
+    z-index: 2;
+    left: 50%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #242e38;
+    width: 22px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 50% 50%;
+    left: 0;
+    right: 0;
+}
+
+.sparkline-chart-blk {
+    display: flex;
+    align-items: center;
+
+    span {
+        margin-right: 10px;
+    }
+}
+
+.ui-organizationchart .ui-organizationchart-table>tr>td {
+    padding: 0 5px;
+    min-width: 85px;
+}
+
+
+.tree-table-card {
+    position: relative;
+
+    .type-icon {
+        position: absolute;
+        bottom: -25px;
+        right: 10px;
+        font-size: 14px;
+    }
+}
+
+.supply-chart {
+    svg {
+        height: 130px;
+    }
+
+    .apexcharts-canvas {
+        height: auto !important;
+    }
+}
+
+.supply-external-class {
+    div {
+        &:first-child {
+            min-height: inherit !important;
+        }
+    }
+}
+
+.tooltip-inner {
+    background: #2e3944;
+}
+
+.tooltip .arrow:before {
+    border-top-color: #2e3944 !important;
+}
+
+.tree-spinner {
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    .mat-progress-spinner circle,
+    .mat-spinner circle {
+        stroke: #6078ea !important;
+        height: 50px;
+        width: 50px;
+    }
+}
+
+/////////////////////////================Entity Page style End================//////////////
+
