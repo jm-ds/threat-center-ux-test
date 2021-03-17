@@ -26,6 +26,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     selectedTreeNode: EntityModel = new EntityModel();
     recursionHelperArray = [];
     childDataList: Array<EntityModel> = new Array<EntityModel>();
+    isOrgChangeNameLinkAppear: boolean = false;
+
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -169,8 +171,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                     isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                     classes: ['text-bold'],
-                    children: this.list_to_tree(this.recursionHelperArray),
-                    isLink: false
+                    children: this.list_to_tree(this.recursionHelperArray)
                 }
             ];
         } else {
@@ -181,13 +182,12 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.entityTreeNodeList = [
                 {
                     id: this.authService.currentUser.orgId,
-                    name: this.getOrganizationInfo().orgName,
+                    name: this.getOrganizationInfo(),
                     isExpanded: true,
                     tagData: null,
                     isChildEntity: true,
                     isProjects: true,
                     classes: ['text-bold'],
-                    isLink: this.getOrganizationInfo().isLink,
                     children: [
                         {
                             id: this.userDefaultEntityDetails.entityId,
@@ -198,7 +198,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                             classes: ['text-bold'],
                             children: this.list_to_tree(this.recursionHelperArray),
-                            isLink: false
+
                         }
                     ]
                 }
@@ -206,23 +206,24 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    private getOrganizationInfo(): { orgName: string, isLink: boolean } {
+    private getOrganizationInfo(): string {
         let orgName = "";
-        let isLink: boolean = false;
         if (!!this.authService.currentUser.organization) {
             if (this.authService.currentUser.organization.name === this.authService.currentUser.organization.orgId) {
                 orgName = "PoC Company"
-                isLink = true;
+                this.isOrgChangeNameLinkAppear = true;
             } else {
-                isLink = false;
+                this.isOrgChangeNameLinkAppear = false;
+                orgName = this.authService.currentUser.organization.name;
             }
 
         } else {
             orgName = "PoC Company";
-            isLink = true;
+            this.isOrgChangeNameLinkAppear = true;
         }
-        return { orgName: orgName, isLink: isLink };
+        return orgName
     }
+
     //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
     private async populateChildernRecusivaly(childData, prId) {
         if (childData.length >= 1) {
@@ -332,7 +333,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             case 'ADD_CHILD': {
                 entityId = !entityId || entityId == '' ? this.authService.currentUser.orgId : entityId;
-                const pNode =  this.tree.treeModel.getNodeById(entityId);
+                const pNode = this.tree.treeModel.getNodeById(entityId);
                 pNode.data['children'].push({
                     id: eData.entityId,
                     name: eData.name,
