@@ -18,13 +18,37 @@ export class ProjectDashboardService {
 
   //Get Project Data
   getProject(projectId: string, first) {
-    
     return this.coreGraphQLService.coreGQLReqWithQuery<ProjectQuery>(gql`
             query {
                 project(projectId:"${projectId}") {
                   projectId,
                   entityId,
                   name,
+                  projectMetricsGroup {
+                    projectMetrics{
+                        measureDate
+                        vulnerabilityMetrics {
+                            severityMetrics
+                        }
+                        assetMetrics {
+                            assetCompositionMetrics
+                        }
+                        componentMetrics {
+                            vulnerabilityMetrics
+                            licenseCategoryMetrics
+                            licenseFamilyMetrics
+                            licenseNameMetrics
+                        }
+                        licenseMetrics {
+                            licenseCategoryMetrics
+                            licenseFamilyMetrics
+                            licenseNameMetrics
+                        }
+                        supplyChainMetrics {
+                            supplyChainMetrics
+                        }
+                    }
+                  }
                   scans(first:${first}) {
                     totalCount
                     pageInfo {
@@ -43,15 +67,13 @@ export class ProjectDashboardService {
                         created,
                         errorMsg,
                         log,
-                        scanMetrics {
+                        scanMetricsSummary {
                           vulnerabilityMetrics {
                             critical,
                             high,
                             medium,
                             low,
                             info,
-                            avgCvss2,
-                            avgCvss3
                           },
                           licenseMetrics {
                             copyleftStrong,
@@ -62,23 +84,21 @@ export class ProjectDashboardService {
                              custom,
                              dual,
                              permissive,
-                             total
                           },
-                          componentMetrics {
-                            notLatest,
-                            vulnerabilities,
-                            riskyLicenses
-                          },
+                          supplyChainMetrics {
+                            risk
+                            quality
+                          }
                           assetMetrics {
                             embedded,
-                            analyzed,
-                            skipped
+                            openSource,
+                            unique
                           }
                         }
                       }
                     }
                   }
-                  }
+                }
             }
           `, 'no-cache');
   }
