@@ -20,85 +20,27 @@ export class EntityService {
   getTreeEntity(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
     return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
       gql`
-            query {
-              entity(entityId: "${entityId}") {
-                entityId
-                parentEntityId
-                name
-                entityType
-                removed
-                projects {
-                  edges {
-                    node {
-                      projectId
-                      name
-                      created
-                      childProjects {
-                        edges {
-                          node {
-                            projectId
-                            name
-                            created
-                          }
-                        }
-                      }
-                      latestScan {
-                        scanId
-                        projectId
-                        branch
-                        tag
-                        version
-                        created
-                        scanMetrics {
-                          vulnerabilityMetrics {
-                            critical
-                            high
-                            medium
-                            low
-                            info
-                            avgCvss2
-                            avgCvss3
-                          }
-                          licenseMetrics {
-                            copyleftStrong
-                            copyleftWeak
-                            copyleftPartial
-                            copyleftLimited
-                            copyleft
-                            custom
-                            dual
-                            permissive
-                            total
-                          }
-                          componentMetrics {
-                            notLatest
-                            latest
-                            vulnerabilities
-                            riskyLicenses
-                          }
-                          assetMetrics {
-                            embedded
-                            analyzed
-                            skipped
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                entityMetrics {
-                  projectCount
-                  vulnerabilityMetrics {
-                    total
+        query {
+          entity(entityId: "${entityId}") {
+            entityId
+            parentEntityId
+            name
+            entityType
+            removed
+            parents {
+              entityId
+              name
+            }
+            entityMetricsSummaryGroup {
+              entityMetricsSummaries {
+                vulnerabilityMetrics {
                     critical
                     high
                     medium
                     low
                     info
-                    avgCvss2
-                    avgCvss3
-                  }
-                  licenseMetrics {
+                }
+                licenseMetrics {
                     copyleftStrong
                     copyleftWeak
                     copyleftPartial
@@ -107,133 +49,32 @@ export class EntityService {
                     custom
                     dual
                     permissive
-                    total
-                  }
-                  componentMetrics {
-                    total
-                    notLatest
-                    latest
-                    vulnerabilities
-                    riskyLicenses
-                  }
-                  assetMetrics {
-                    total
-                    embedded
-                    analyzed
-                    skipped
-                  }
                 }
-    
-                childEntities {
-                  edges {
-                    node {
-                      entityId
-                      parentEntityId
-                      name
-                      entityType
-                      removed
-                      projects {
-                        edges {
-                          node {
-                            projectId
-                            name
-                            created
-                            childProjects {
-                              edges {
-                                node {
-                                  projectId
-                                  name
-                                  created
-                                }
-                              }
-                            }
-                            latestScan {
-                              scanId
-                              projectId
-                              branch
-                              tag
-                              version
-                              created
-                              scanMetrics {
-                                vulnerabilityMetrics {
-                                  critical
-                                  high
-                                  medium
-                                  low
-                                  info
-                                  avgCvss2
-                                  avgCvss3
-                                }
-                                licenseMetrics {
-                                  copyleftStrong
-                                  copyleftWeak
-                                  copyleftPartial
-                                  copyleftLimited
-                                  copyleft
-                                  custom
-                                  dual
-                                  permissive
-                                  total
-                                }
-                                componentMetrics {
-                                  notLatest
-                                  latest
-                                  vulnerabilities
-                                  riskyLicenses
-                                }
-                                assetMetrics {
-                                  embedded
-                                  analyzed
-                                  skipped
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                      entityMetrics {
-                        projectCount
-                        vulnerabilityMetrics {
-                          total
-                          critical
-                          high
-                          medium
-                          low
-                          info
-                          avgCvss2
-                          avgCvss3
-                        }
-                        licenseMetrics {
-                          copyleftStrong
-                          copyleftWeak
-                          copyleftPartial
-                          copyleftLimited
-                          copyleft
-                          custom
-                          dual
-                          permissive
-                          total
-                        }
-                        componentMetrics {
-                          total
-                          notLatest
-                          latest
-                          vulnerabilities
-                          riskyLicenses
-                        }
-                        assetMetrics {
-                          total
-                          embedded
-                          analyzed
-                          skipped
-                        }
-                      }
-                    }
-                  }
+                supplyChainMetrics {
+                    risk
+                    quality
+                }
+                assetMetrics {
+                    embedded
+                    openSource
+                    unique
                 }
               }
             }
-          `, "no-cache");
+            childEntities {
+              edges {
+                node {
+                  entityId
+                  parentEntityId
+                  name
+                  entityType
+                  removed
+                }
+              }    
+            }
+          }
+        }
+      `, "no-cache");
   }
 
   //create entitu server call
@@ -243,216 +84,22 @@ export class EntityService {
       gql`mutation createEntity($entity: EntityRequestInput){
         createEntity(entity: $entity){
           entityId
-          parentEntityId
-          name
-          entityType
-          removed
-          projects {
-            edges {
-              node {
-                projectId
-                name
-                created
-                childProjects {
-                  edges {
-                    node {
-                      projectId
-                      name
-                      created
-                    }
-                  }
+            parentEntityId
+            name
+            entityType
+            removed
+            childEntities {
+              edges {
+                node {
+                  entityId
+                  parentEntityId
+                  name
+                  entityType
+                  removed
                 }
-                latestScan {
-                  scanId
-                  projectId
-                  branch
-                  tag
-                  version
-                  created
-                  scanMetrics {
-                    vulnerabilityMetrics {
-                      critical
-                      high
-                      medium
-                      low
-                      info
-                      avgCvss2
-                      avgCvss3
-                    }
-                    licenseMetrics {
-                      copyleftStrong
-                      copyleftWeak
-                      copyleftPartial
-                      copyleftLimited
-                      copyleft
-                      custom
-                      dual
-                      permissive
-                      total
-                    }
-                    componentMetrics {
-                      notLatest
-                      latest
-                      vulnerabilities
-                      riskyLicenses
-                    }
-                    assetMetrics {
-                      embedded
-                      analyzed
-                      skipped
-                    }
-                  }
-                }
-              }
+              }    
             }
           }
-          entityMetrics {
-            projectCount
-            vulnerabilityMetrics {
-              total
-              critical
-              high
-              medium
-              low
-              info
-              avgCvss2
-              avgCvss3
-            }
-            licenseMetrics {
-              copyleftStrong
-              copyleftWeak
-              copyleftPartial
-              copyleftLimited
-              copyleft
-              custom
-              dual
-              permissive
-              total
-            }
-            componentMetrics {
-              total
-              notLatest
-              latest
-              vulnerabilities
-              riskyLicenses
-            }
-            assetMetrics {
-              total
-              embedded
-              analyzed
-              skipped
-            }
-          }
-
-          childEntities {
-            edges {
-              node {
-                entityId
-                parentEntityId
-                name
-                entityType
-                removed
-                projects {
-                  edges {
-                    node {
-                      projectId
-                      name
-                      created
-                      childProjects {
-                        edges {
-                          node {
-                            projectId
-                            name
-                            created
-                          }
-                        }
-                      }
-                      latestScan {
-                        scanId
-                        projectId
-                        branch
-                        tag
-                        version
-                        created
-                        scanMetrics {
-                          vulnerabilityMetrics {
-                            critical
-                            high
-                            medium
-                            low
-                            info
-                            avgCvss2
-                            avgCvss3
-                          }
-                          licenseMetrics {
-                            copyleftStrong
-                            copyleftWeak
-                            copyleftPartial
-                            copyleftLimited
-                            copyleft
-                            custom
-                            dual
-                            permissive
-                            total
-                          }
-                          componentMetrics {
-                            notLatest
-                            latest
-                            vulnerabilities
-                            riskyLicenses
-                          }
-                          assetMetrics {
-                            embedded
-                            analyzed
-                            skipped
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                entityMetrics {
-                  projectCount
-                  vulnerabilityMetrics {
-                    total
-                    critical
-                    high
-                    medium
-                    low
-                    info
-                    avgCvss2
-                    avgCvss3
-                  }
-                  licenseMetrics {
-                    copyleftStrong
-                    copyleftWeak
-                    copyleftPartial
-                    copyleftLimited
-                    copyleft
-                    custom
-                    dual
-                    permissive
-                    total
-                  }
-                  componentMetrics {
-                    total
-                    notLatest
-                    latest
-                    vulnerabilities
-                    riskyLicenses
-                  }
-                  assetMetrics {
-                    total
-                    embedded
-                    analyzed
-                    skipped
-                  }
-                }
-              }
-            }
-          }
-
-        }
     }`, { entity: entityRequest });
   }
 

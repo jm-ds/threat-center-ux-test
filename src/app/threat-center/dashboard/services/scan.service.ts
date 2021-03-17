@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { map } from 'rxjs/operators';
 
@@ -20,7 +21,8 @@ export class ScanHelperService {
 
     private isEnabaleNewScan = new BehaviorSubject(false);
     isEnabaleNewScanObservable$ = this.isEnabaleNewScan.asObservable();
-    private isRefreshObjectPage = new BehaviorSubject(false);
+    // private isRefreshObjectPage = new BehaviorSubject(false);
+    isRefreshObjectPage = new BehaviorSubject(false);
     isRefreshObjectPageObservable$ = this.isRefreshObjectPage.asObservable();
 
     sub: Subscription;
@@ -33,7 +35,8 @@ export class ScanHelperService {
     constructor(
         private taskService: TaskService,
         private router: Router,
-        private coreHelperService: CoreHelperService,) {
+       private modalService: NgbModal,
+        private coreHelperService: CoreHelperService) {
     }
 
     //Scan submit and get task token to do further for scan.
