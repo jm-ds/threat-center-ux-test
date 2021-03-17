@@ -3,13 +3,17 @@
 
     <div class="col-lg-4 col-md-4 col-sm-12 entiy-tree">
         <app-card [hidHeader]="true">
+            <div class="change-name" *ngIf="isOrgChangeNameLinkAppear">
+                <a href="javascript:">change name</a>
+            </div>
             <tree-root #tree [nodes]="entityTreeNodeList" [focused]="true" (initialized)="onTreeLoad($event)"
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">
                 <ng-template #treeNodeTemplate let-node let-index="index">
-                    <span [ngClass]="node.data.classes">{{ node.data.name }}</span>&nbsp;
-                    <a *ngIf="node.data.isLink == true" href="javascript:">change name</a>
-                  </ng-template>
+                    <span [ngClass]="node.data.classes">{{ node.data.name }} </span>&nbsp;
+                </ng-template>
             </tree-root>
+
+
         </app-card>
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12">
@@ -20,7 +24,8 @@
             </div>
             <div class="row mt-20">
                 <div class="col-12">
-                    <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && entityForm.form.dirty && editEntity()">
+                    <form #entityForm="ngForm"
+                        (ngSubmit)="entityForm.form.valid && entityForm.form.dirty && editEntity()">
                         <div class="form-group row">
                             <label for="entity" class="col-sm-3 col-form-label">Entity</label>
                             <div class="col-sm-9">
@@ -57,8 +62,7 @@
                             <div class="col-sm-3">
                             </div>
                             <div class="col-sm-9 text-right actions">
-                                <button *ngIf="!!selectedTreeNode.entityId" type="submit"
-                                    class="btn btn-outline-info">
+                                <button *ngIf="!!selectedTreeNode.entityId" type="submit" class="btn btn-outline-info">
                                     <i class="feather icon-save"></i>&nbsp;
                                     Save
                                 </button>&nbsp;&nbsp;
