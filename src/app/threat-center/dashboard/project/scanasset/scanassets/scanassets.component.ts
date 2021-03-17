@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -10,14 +10,20 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-scanassets',
   templateUrl: './scanassets.component.html',
-  styles: []
+  styles: [
+    `.text-primary:hover{
+      text-decoration: underline;
+      cursor: pointer;
+    }`
+  ]
 })
 export class ScanAssetsComponent implements OnInit {
 
   @Input() scanId;
   @Input() obsScan: Observable<Scan>;
+  @Output() isAssetStory = new EventEmitter<boolean>();
 
-  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets'];
+  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets', 'Attribution'];
 
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -34,6 +40,8 @@ export class ScanAssetsComponent implements OnInit {
     private coreHelperService: CoreHelperService) { }
 
   ngOnInit() {
+    this.story = [];
+    this.isAssetStory.emit(false);
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
     this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
@@ -56,7 +64,7 @@ export class ScanAssetsComponent implements OnInit {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Assets", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Assets", value: pageInfo.pageSize });
       // API Call
       this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
       this.paginator.firstPage();
@@ -89,16 +97,18 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   goBack() {
-    this.parentScanAssetId = this.story.pop();
-    this.reload();
+    this.parentScanAssetId = this.story.pop().id;
+    this.refreshAssetListHelper();
   }
 
   gotoDetails(scanAsset) {
     if (scanAsset.node.assetType === 'DIR') {
-      this.story.push(this.parentScanAssetId);
+      this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.breadcumSetting(scanAsset) });
+      this.isAssetStory.emit(true);
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reload();
     } else {
+      this.isAssetStory.emit(false);
       let sAssetId = scanAsset.node.scanAssetId;
       const entityId = this.route.snapshot.paramMap.get('entityId');
       const projectId = this.route.snapshot.paramMap.get('projectId');
@@ -130,7 +140,7 @@ export class ScanAssetsComponent implements OnInit {
   getColumnFilterValue(key) {
     let value = this.columnsFilter.get(key);
     if (value === undefined) {
-      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets') {
+      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets' || key === 'Attribution') {
         return 'ALL';
       } else {
         return '';
@@ -138,6 +148,22 @@ export class ScanAssetsComponent implements OnInit {
     } else {
       return value;
     }
+  }
+
+  goBackfromBreadcum(id, currentIndex) {
+    if (currentIndex != (this.story.length - 1)) {
+      const startIndexToRemove = currentIndex + 1;
+      this.parentScanAssetId = this.story[startIndexToRemove].id;
+      this.story.splice(startIndexToRemove, this.story.length - (startIndexToRemove));
+      this.refreshAssetListHelper();
+    }
+  }
+
+  refreshAssetListHelper() {
+    if (!this.story || this.story.length == 0) {
+      this.isAssetStory.emit(false);
+    }
+    this.reload();
   }
 
   private makeFilterMapForService() {
@@ -154,4 +180,19 @@ export class ScanAssetsComponent implements OnInit {
       this.scanAssetDetails = asset;
     });
   }
+
+  private breadcumSetting(scanAsset) {
+    if (!!this.story && this.story.length >= 1) {
+      const lastRecord = this.story[this.story.length - 1].originalName;
+      if (!!lastRecord) {
+        const diffrence = this.coreHelperService.getDifferencebetweenStrings(lastRecord, scanAsset.node.name);
+        return diffrence.replace('/', "");
+      } else {
+        return scanAsset.node.name;
+      }
+    } else {
+      return scanAsset.node.name;
+    }
+  }
+
 }

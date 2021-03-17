@@ -86,17 +86,40 @@ export class Entity {
   parentEntityId: string;
   name:string;
   projects:ProjectConnection;
-  entityMetrics:EntityMetrics;
+  entityMetricsGroup:EntityMetricsGroup;
+  entityMetricsSummaryGroup:EntityMetricsSummaryGroup;
   entityComponents:any;
   vulnerabilities: Vulnerability[];
   licenses: License[];
+  childEntities:Entity[];
 }
 
-export class EntityMetrics {
-  vulnerabilityMetrics:VulnerabilityMetrics;
-  licenseMetrics:LicenseMetrics;
-  componentMetrics:ComponentMetrics;
-  assetMetrics:AssetMetrics;
+
+// COMMON METRICS
+export class DimensionalVulnerabilityMetrics {
+  severityMetrics: Map<string, number>;
+}
+
+export class DimensionalComponentMetrics {
+  vulnerabilityMetrics: Map<string, number>;
+  licenseNameMetrics: Map<string, number>;
+  licenseCategoryMetrics: Map<string, number>;
+  licenseFamilyMetrics: Map<string, number>;
+}
+
+export class DimensionalLicenseMetrics {
+  measureDate: string;
+  licenseNameMetrics: Map<string, number>;
+  licenseCategoryMetrics: Map<string, number>;
+  licenseFamilyMetrics: Map<string, number>;
+}
+
+export class DimensionalAssetMetrics {
+  assetCompositionMetrics: Map<string, number>;
+}
+
+export class DimensionalSupplyChainMetrics {
+  supplyChainMetrics: Map<string, number>;
 }
 
 export class VulnerabilityMetrics {
@@ -118,17 +141,93 @@ export class LicenseMetrics {
   permissive: number;
 }
 
-export class ComponentMetrics {
-  notLatest: number;
-  vulnerabilities: number;
-  riskyLicenses: number;
+export class SupplyChainMetrics {
+  risk: number;
+  quality: number;
 }
 
 export class AssetMetrics {
   embedded: number;
-  analyzed: number;
-  skipped: number;
+  openSource: number;
+  unique: number;
 }
+
+export class Metrics {
+  vulnerabilityMetrics: DimensionalVulnerabilityMetrics;
+  assetMetrics: DimensionalAssetMetrics;
+  componentMetrics: DimensionalComponentMetrics;
+  licenseMetrics: DimensionalLicenseMetrics;
+  supplyChainMetrics: DimensionalSupplyChainMetrics;
+}
+
+// ENTITY METRICS
+export class EntityMetrics extends Metrics {
+  projectCount:number;
+  measureDate: any;
+}
+
+export class EntityMetricsGroup {
+  period:any;
+  projectCount:number;
+  entityMetrics: EntityMetrics[];
+}
+
+export class entityMetricsSummaries {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+export class EntityMetricsSummaryGroup {
+  entityMetricsSummaries:EntityMetricsSummary[];
+}
+
+export class EntityMetricsSummary {
+  measureDate: any;
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+// PROJECT METRICS
+export class ProjectMetrics extends Metrics {
+  measureDate: any;
+}
+
+export class ProjectMetricsGroup {
+  period:any;
+  projectMetrics: ProjectMetrics[];
+}
+
+export class ProjectMetricsSummary {
+  measureDate: any;
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+export class ScanMetricsSummary {
+  vulnerabilityMetrics: VulnerabilityMetrics;
+  licenseMetrics: LicenseMetrics;
+  supplyChainMetrics: SupplyChainMetrics;
+  assetMetrics: AssetMetrics;
+}
+
+
+
+export enum Period {
+  CURRENT="CURRENT",
+  WEEK="WEEK",
+  MONTH="MONTH",
+  QUARTER="QUARTER",
+  YEAR="YEAR"
+}
+
+
+
 
 export class Project {
   projectId:string;
@@ -156,7 +255,13 @@ export class TxComponent {
 }
 
 export class FixResult {
-  result;
+  groupId: string;
+  artifactId: string;
+  oldVersion: string;
+  newVersion: string;
+  buildFile: string;
+  success: boolean;
+  errorMessage: string;
 }
 
 export class Vulnerability {
@@ -216,6 +321,7 @@ export class ScanAsset {
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
+  embeddedAssets: any;
 }
 
 export class ScanAssetMatch {
@@ -368,4 +474,28 @@ export class SimmMatch {
   leftEnd: number;
   rightStart: number;
   rightEnd: number;
+}
+
+export class ScanAssetMatchRequest {
+  readonly assetMatchId: string;
+  readonly percentMatch: number;
+  constructor(assetMatchId: string, percentMatch: number) {
+    this.assetMatchId = assetMatchId;
+    this.percentMatch = percentMatch;
+  }
+}
+
+export class AttributeAssetRequestInput {
+  readonly scanId: string;
+  readonly scanAssetId: string;
+  readonly assetMatchRequests: ScanAssetMatchRequest[];
+  readonly attributeStatus: string;
+  readonly attributeComment: string;
+  constructor(scanId: string, scanAssetId: string, assetMatchRequests: ScanAssetMatchRequest[], attributeStatus: string, attributeComment: string) {
+    this.scanId = scanId;
+    this.scanAssetId = scanAssetId;
+    this.assetMatchRequests = assetMatchRequests;
+    this.attributeStatus = attributeStatus;
+    this.attributeComment = attributeComment;
+  }
 }

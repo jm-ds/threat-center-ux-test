@@ -1,6 +1,6 @@
 //@import "/settings/theme-variables";
 
-.scan-modal {
+.loading-dialog {
     .modal-dialog {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -12,7 +12,6 @@
         max-width: 380px;
         text-align: center;
         margin: 0 auto;
-    
         .close {
             font-size: 20px;
             color: #fff;
@@ -101,7 +100,7 @@
 
 .loading-float {
     overflow: inherit;
-    .modal.scan-modal {
+    .modal.loading-dialog {
         position: fixed;
         right: 20px;
         bottom: 20px;
@@ -138,7 +137,7 @@
         position: relative;
     }
 
-    .modal-backdrop {
+    .modal-backdrop.loading-dialog-backdrop {
         display: none;
     }
 
@@ -169,7 +168,7 @@
     }
 }
 
-body.next-dark.loading-float .modal .accordion .card {
+body.next-dark.loading-float .modal.loading-dialog .accordion .card {
     border: none;
     box-shadow: none !important;
     background: transparent !important;

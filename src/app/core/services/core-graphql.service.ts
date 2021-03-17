@@ -86,6 +86,7 @@ export class CoreGraphQLService {
             let er = JSON.parse(JSON.stringify(error));
             console.log(er.message);
             if (!!er.networkError) {
+                console.log(er.networkError);
                 if (er.networkError.status === 403) {
                     const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
                     if (!!jwt) {
@@ -93,11 +94,11 @@ export class CoreGraphQLService {
                             this.authenticationService.logout();
                             this.router.navigate(['/login']);
                         } else {
-                            this.coreHelperService.swalALertBox(er.message);
+                            this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
                         }
                     }
                 } else {
-                    this.coreHelperService.swalALertBox(er.message);
+                    this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
                     if (er.networkError.status === 401) {
                         this.authenticationService.logout();
                         this.router.navigate(['/login']);
