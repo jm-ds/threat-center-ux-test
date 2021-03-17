@@ -1,0 +1,10 @@
+<div class="modal-body">
+    <p>Result of updating the component version:</p>
+    <div *ngFor="let result of fixResults">
+        <i *ngIf="result.success" class="fas fa-check"></i>
+        <i *ngIf="!result.success" class="fas fa-times"></i>
+        &nbsp;&nbsp;{{result.buildFile}}
+        <p *ngIf="result.errorMessage">{{result.errorMessage}}</p>
+    </div>
+    <button class="btn btn-primary" (click)="closeBtn()"> Got It!</button>
+</div>
