@@ -8,24 +8,26 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+
+    requestPayload: any;
     constructor(private authenticationService: AuthenticationService,
         private router: Router,
         private coreHelperService: CoreHelperService) { }
 
     //Error intersaptor
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        debugger;
+        this.requestPayload = request.body;
         return next.handle(request).pipe(catchError(this.errorHandler))
     }
 
 
     //error handler
     private errorHandler = (errObj: HttpErrorResponse): Observable<any> => {
-        debugger;
         let dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: '' };
         if (errObj.status === 401 || errObj.status === 403) {
             dataObjToShow.message = !!errObj.error && !!errObj.error.message ? errObj.error.message : "Unauthorized user!";
             if (errObj.status === 403) {
+                console.log("REQUEST PAYLOAD", this.requestPayload);
                 const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
                 if (!!jwt) {
                     if (this.authenticationService.isTokenExpired(jwt)) {
@@ -61,6 +63,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                     dataObjToShow.message = errObj.error.message;
                 } else {
                     dataObjToShow.message = this.coreHelperService.getMessageStatusWise(Number(dataObjToShow.status));
+                }
+
+                if (dataObjToShow.status == 500) {
+                    console.log("REQUEST PAYLOAD", this.requestPayload);
                 }
             }
             this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
