@@ -190,7 +190,7 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
           this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
           .subscribe((data: VulnerableReleaseResponse) => {
-        this.binaryReleases.push(...data.vulnerableReleases);
+        this.binaryReleases.concat(data.vulnerableReleases);
         this.binaryNextPagingState = data.nextPagingState;
         this.binaryLoading = false;
       });
@@ -203,7 +203,7 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
           this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
           .subscribe((data: VulnerableReleaseResponse) => {
-            this.sourceReleases.push(...data.vulnerableReleases);
+            this.sourceReleases.concat(data.vulnerableReleases);
             this.sourceNextPagingState = data.nextPagingState;
             this.sourceLoading = false;
           });
