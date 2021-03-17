@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskComponent } from '@app/threat-center/shared/task/task.component';
 import { Scan, Project } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
@@ -15,6 +13,9 @@ import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HostListener } from '@angular/core';
+import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'project-dashboard',
@@ -23,6 +24,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -55,6 +57,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.scanHelperService.updateIsHighlightNewScan(false);
+    this.highlitedScanId = "";
   }
 
   ngAfterViewInit(): void {
@@ -93,7 +96,14 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetScanData: any = {};
 
   isHighlightNewScan: boolean = false;
+  highlitedScanId: string = "";
   isScrollToTabs: boolean = false;
+
+  scrollX;
+  scrollY;
+  isAssetStory: boolean = false;
+  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  projectMetrics = [];
 
   ngOnInit() {
     this.obsProject = this.route.data
@@ -125,6 +135,37 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
+  private getProperties(objArray, metricsObjName) {
+    let properties = [];
+    this.projectMetrics.forEach(d => {
+      if (d[objArray]) {
+        const obj = d[objArray];
+        if (!!obj[metricsObjName]) {
+          Object.keys(obj[metricsObjName]).forEach(p => {
+            if (!properties.includes(p)) {
+              properties.push(p);
+            }
+          });
+        }
+      }
+    });
+    return properties;
+  }
+
+  private initComponentchart() {
+    const properties = this.getProperties('componentMetrics', 'vulnerabilityMetrics');
+    this.componentChart.series = [];
+    properties.forEach((key, index) => {
+      this.componentChart.series.push(
+        {
+          data: this.projectMetrics.map(val => val['componentMetrics'].vulnerabilityMetrics[key]),
+          name: _.upperFirst(_.camelCase(key)),
+          hover: false,
+          colorClass: this.colorsClass[index]
+        }
+      )
+    });
+  }
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     const obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
@@ -134,12 +175,14 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectDetails = project;
       this.stateService.obsProject = obsProject;
       this.stateService.selectedScan = project.scans.edges[0];
+      this.highlitedScanId = project.scans.edges[0].node.scanId;
     });
   }
 
+
   initProjectData() {
     this.stateService.obsProject = this.obsProject;
-    this.obsProject.subscribe(project => {
+    this.obsProject.subscribe((project: any) => {
       this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
       //Taking sacn list to show in scan tab
       this.scanList = project.scans.edges;
@@ -167,54 +210,53 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       let riskyLicenses = [];
 
       let embedded = [];
-      let analyzed = [];
-      let skipped = [];
-
-      let partialAssetLeakes = [];
-      let assetLeakes = [];
-      let projectLeakes = [];
-
-      for (let i = 9; i >= 0; i--) {
+      let openSource = [];
+      let unique = [];
+      this.projectMetrics = project.projectMetricsGroup.projectMetrics;
+      this.initComponentchart();
+      for (let i = 0; i <= project.scans.edges.length; i++) {
         let edge = project.scans.edges[i];
         if (edge) {
-          let scan = edge.node;
-          if (scan && scan.scanMetrics) {
-            let vulnerabilityMetrics = scan.scanMetrics.vulnerabilityMetrics;
-            let licenseMetrics = scan.scanMetrics.licenseMetrics;
-            let componentMetrics = scan.scanMetrics.componentMetrics;
-            let assetMetrics = scan.scanMetrics.assetMetrics;
-
+          const scan: any = edge.node;
+          if (scan && scan.scanMetricsSummary) {
             // Vulnerability chart data
-            critical.push(scan.scanMetrics.vulnerabilityMetrics.critical);
-            high.push(scan.scanMetrics.vulnerabilityMetrics.high);
-            medium.push(scan.scanMetrics.vulnerabilityMetrics.medium);
-            low.push(scan.scanMetrics.vulnerabilityMetrics.low);
-            info.push(scan.scanMetrics.vulnerabilityMetrics.info);
+
+            if (!!scan.scanMetricsSummary.vulnerabilityMetrics) {
+              critical.push(scan.scanMetricsSummary.vulnerabilityMetrics.critical);
+              high.push(scan.scanMetricsSummary.vulnerabilityMetrics.high);
+              medium.push(scan.scanMetricsSummary.vulnerabilityMetrics.medium);
+              low.push(scan.scanMetricsSummary.vulnerabilityMetrics.low);
+              info.push(scan.scanMetricsSummary.vulnerabilityMetrics.info);
+            }
 
             // License chart data
-            // License chart data
-            copyleftStrong.push(scan.scanMetrics.licenseMetrics.copyleftStrong);
-            copyleftWeak.push(scan.scanMetrics.licenseMetrics.copyleftWeak);
-            copyleftPartial.push(scan.scanMetrics.licenseMetrics.copyleftPartial);
-            copyleftLimited.push(scan.scanMetrics.licenseMetrics.copyleftLimited);
-            copyleft.push(scan.scanMetrics.licenseMetrics.copyleft);
-            custom.push(scan.scanMetrics.licenseMetrics.custom);
-            dual.push(scan.scanMetrics.licenseMetrics.dual);
-            permissive.push(scan.scanMetrics.licenseMetrics.permissive);
+            if (!!scan.scanMetricsSummary.licenseMetrics) {
+              copyleftStrong.push(scan.scanMetricsSummary.licenseMetrics.copyleftStrong);
+              copyleftWeak.push(scan.scanMetricsSummary.licenseMetrics.copyleftWeak);
+              copyleftPartial.push(scan.scanMetricsSummary.licenseMetrics.copyleftPartial);
+              copyleftLimited.push(scan.scanMetricsSummary.licenseMetrics.copyleftLimited);
+              copyleft.push(scan.scanMetricsSummary.licenseMetrics.copyleft);
+              custom.push(scan.scanMetricsSummary.licenseMetrics.custom);
+              dual.push(scan.scanMetricsSummary.licenseMetrics.dual);
+              permissive.push(scan.scanMetricsSummary.licenseMetrics.permissive);
+            }
 
-            // Component chart data
-            notLatest.push(scan.scanMetrics.componentMetrics.notLatest);
-            vulnerabilities.push(scan.scanMetrics.componentMetrics.vulnerabilities);
-            riskyLicenses.push(scan.scanMetrics.componentMetrics.riskyLicenses);
+            // // Component chart data
+            // if (!!scan.scanMetricsSummary.componentMetrics) {
+            //   notLatest.push(scan.scanMetricsSummary.componentMetrics.notLatest);
+            //   vulnerabilities.push(scan.scanMetricsSummary.componentMetrics.vulnerabilities);
+            //   riskyLicenses.push(scan.scanMetricsSummary.componentMetrics.riskyLicenses);
+            // }
+
 
             // Asset chart data
-            embedded.push(scan.scanMetrics.assetMetrics.embedded);
-            analyzed.push(scan.scanMetrics.assetMetrics.analyzed);
-            skipped.push(scan.scanMetrics.assetMetrics.skipped);
+            if (!!scan.scanMetricsSummary.assetMetrics) {
+              embedded.push(scan.scanMetricsSummary.assetMetrics.embedded);
+              unique.push(scan.scanMetricsSummary.assetMetrics.unique);
+              openSource.push(scan.scanMetricsSummary.assetMetrics.openSource);
 
-            partialAssetLeakes.push(5);
-            assetLeakes.push(5);
-            projectLeakes.push(5);
+            }
+
             // categories for bar charts
             //let cat = scan.branch.concat(' ').concat(formatDate(scan.created,'dd/MM/yyyy','en-US'));
             categories.push(scan.branch);
@@ -223,7 +265,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
 
-      // set vulnerabilityChart data
+
+      // // set vulnerabilityChart data
       this.vulnerabilityChart.series.push({ name: 'Critical', data: critical, colorClass: "red", hover: false });
       this.vulnerabilityChart.series.push({ name: 'High', data: high, colorClass: "orange", hover: false });
       this.vulnerabilityChart.series.push({ name: 'Medium', data: medium, colorClass: "yellow", hover: false });
@@ -241,20 +284,14 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.licenseChart.series.push({ name: 'Permissive', data: permissive, colorClass: "blue", hover: false });
 
       // set componentChart data
-      this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
-      this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
-      this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
+      // this.componentChart.series.push({ name: 'Not Latest', data: notLatest, colorClass: "red", hover: false });
+      // this.componentChart.series.push({ name: 'Vulnerabilities', data: vulnerabilities, colorClass: "orange", hover: false });
+      // this.componentChart.series.push({ name: 'Risky Licenses', data: riskyLicenses, colorClass: "yellow", hover: false });
 
       // set assetChart data
-      this.assetChart.series.push({ name: 'Analyzed', data: analyzed, colorClass: "green", hover: false });
-      this.assetChart.series.push({ name: 'Skipped', data: skipped, colorClass: "lgt-blue", hover: false });
-      this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "yellow", hover: false });
-
-      //set sourceCode Leak data
-      this.sourceCodeLeakChart.series.push({ name: "Partial Asset Leaks", data: partialAssetLeakes, colorClass: "blue", hover: false });
-      this.sourceCodeLeakChart.series.push({ name: "Asset Leaks", data: assetLeakes, colorClass: "white", hover: false });
-      this.sourceCodeLeakChart.series.push({ name: "Project Leaks", data: projectLeakes, colorClass: "green", hover: false });
-
+      this.assetChart.series.push({ name: 'Embedded', data: embedded, colorClass: "green", hover: false });
+      this.assetChart.series.push({ name: 'Open Source', data: openSource, colorClass: "lgt-blue", hover: false });
+      this.assetChart.series.push({ name: 'Unique', data: unique, colorClass: "yellow", hover: false });
       // set categories on bar charts
       this.xaxis.categories = categories;
 
@@ -263,7 +300,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Project", $event.nextId);
+    this.coreHelperService.settingUserPreference("Project", $event.activeId, $event.nextId);
   }
 
   rowUnselect($event: any) {
@@ -339,6 +376,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -375,6 +424,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'],
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -411,6 +472,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -447,6 +520,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     colors: ['#11c15b', '#00acc1', '#ffa21d'],
     series: [],
     xaxis: this.xaxis,
+    noData: {
+      text: "There's no data",
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: '14px',
+        fontFamily: undefined
+      }
+    },
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         let str = "";
@@ -512,8 +597,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getAdditionData(data) {
     if (!!data && data.length >= 1) {
+      return !!data[0] ? data[0] : 0;
       // return data[0];
-      return data.reduce((prev, next) => prev + (+next), 0);
+      // return data.reduce((prev, next) => prev + (+next), 0);
     } else {
       return 0;
     }
@@ -525,7 +611,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, { componentName: "Scan", value: pageInfo.pageSize });
+      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Scan", value: pageInfo.pageSize });
       //API Call
       this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
       this.paginator.firstPage();
@@ -611,5 +697,49 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.errorMsg = errorMsg;
     this.log = log;
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
+  }
+
+  getStory(event) {
+    this.isAssetStory = event;
+  }
+
+  //Callled when component deactivate or destrory
+  canDeactivate(): Observable<boolean> | boolean {
+    //Need to check here is browser back button clicked or not if clicked then do below things..
+    if (this.coreHelperService.getBrowserBackButton()) {
+      this.coreHelperService.setBrowserBackButton(false);
+      if (this.isAssetStory) {
+        this.child.goBack();
+        return false;
+      } else {
+        if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
+          this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
+          this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
+          window.scroll(this.scrollX, this.scrollY);
+          return false;
+        } else {
+          this.coreHelperService.settingUserPreference("Project", "", null);
+          return true;
+        }
+      }
+    } else {
+      this.coreHelperService.settingUserPreference("Project", "", null);
+      return true;
+    }
+  }
+
+  //Below method will fire when click on browser back button.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    this.coreHelperService.setBrowserBackButton(true);
+    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project") || this.isAssetStory) {
+      history.pushState(null, null, window.location.href);
+    }
+  }
+
+  @HostListener("window:scroll", ["$event"])
+  onWindowScroll() {
+    this.scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
   }
 }

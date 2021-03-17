@@ -13,7 +13,7 @@ import { environment } from 'environments/environment';
 
 export class CoreHelperService {
     private subject = new Subject();
-
+    isBrowserBackclick: boolean = false;
     constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
 
@@ -36,6 +36,39 @@ export class CoreHelperService {
         })
     }
 
+    //get messages according to status
+    public getMessageStatusWise(status) {
+        let msg = "";
+        switch (status) {
+            case 500: {
+                msg = "The server encountered an unexpected condition which prevented it from fulfilling the request.";
+                break;
+            }
+            case 400: {
+                msg = "The request had bad syntax or was inherently impossible to be satisfied.";
+                break;
+            }
+            case 403: {
+                msg = "The requested resource is forbidden.";
+                break;
+            }
+            case 404: {
+                msg = "The server has not found anything matching the URI given.";
+                break;
+            }
+            case 501: {
+                msg = "The server does not support the facility required.";
+                break;
+            }
+            default: {
+                //statements; 
+                msg = "Something went wrong!";
+                break;
+            }
+        }
+        return msg;
+    }
+
     spinnerEdit(isSpeenerVisible) {
         this.subject.next(isSpeenerVisible);
     }
@@ -44,6 +77,7 @@ export class CoreHelperService {
         return this.subject.asObservable();
     }
 
+    //PROJECT(PROJECT DASHBOARD) PAGE BREADCUM START
     settingProjectBreadcum(tag, name, id, isFromComponent: boolean = false) {
         let projectBreadcum: any = {};
         if (!!sessionStorage.getItem("ProjectBreadcum")) {
@@ -69,8 +103,10 @@ export class CoreHelperService {
         }
         return null;
     }
+    //===========================PROJECT(PROJECT DASHBOARD) PAGE BREADCUM END ==========================
 
-    settingUserPreference(moduleName: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
+    //USER PREFERENCES START (Store User visited last(previous) tab sleceted and Item per page by module)
+    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -79,7 +115,23 @@ export class CoreHelperService {
             //Update Data
             preferenceDetails.forEach(prefrence => {
                 if (prefrence.moduleName === moduleName) {
+
+                    //current tab settings
                     prefrence.lastTabSelectedName = !!lastTabSelectedName && lastTabSelectedName !== '' ? lastTabSelectedName : prefrence.lastTabSelectedName;
+
+                    //Previous tab settings
+                    if (previousLastTabSelected !== null && previousLastTabSelected !== "") {
+                        if (!!prefrence.lastSelectedTabLists && prefrence.lastSelectedTabLists.length >= 1) {
+                            prefrence.lastSelectedTabLists.push(previousLastTabSelected);
+                        } else {
+                            prefrence.lastSelectedTabLists = [];
+                            prefrence.lastSelectedTabLists.push(previousLastTabSelected);
+                        }
+                    } else {
+                        prefrence.lastSelectedTabLists = previousLastTabSelected == "" ? [] : prefrence.lastSelectedTabLists;
+                    }
+
+                    // Item per page setting
                     if (!!itemPerPageD) {
                         if (!!prefrence.itemPerPageDetails && prefrence.itemPerPageDetails.length >= 1) {
                             if (prefrence.itemPerPageDetails.filter(item => { return item.componentName === itemPerPageD.componentName }).length >= 1) {
@@ -101,16 +153,21 @@ export class CoreHelperService {
                 }
             });
         } else {
-            //push Data
+            //push Data first time.
             let itemPPage = [];
+            let prevousTabList = [];
             if (!!itemPerPageD) {
                 itemPPage.push(itemPerPageD);
+            }
+            if (!!previousLastTabSelected && previousLastTabSelected !== '') {
+                prevousTabList.push(previousLastTabSelected);
             }
             preferenceDetails.push(
                 {
                     moduleName: moduleName,
                     itemPerPageDetails: itemPPage,
-                    lastTabSelectedName: lastTabSelectedName
+                    lastTabSelectedName: lastTabSelectedName,
+                    lastSelectedTabLists: prevousTabList
                 }
             )
         }
@@ -129,6 +186,37 @@ export class CoreHelperService {
             return null;
         }
     }
+
+    getPreviousTabSelectedByModule(moduleName: string, isUpdate: boolean = false) {
+        if (sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                const lists = !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ?
+                    preferenceDetails.find(pre => { return pre.moduleName === moduleName }).lastSelectedTabLists : null;
+                if (!!lists && lists.length >= 1) {
+                    // return last record and pop it as well
+                    const returnVal = lists[lists.length - 1];
+                    lists.splice(-1, 1);
+                    preferenceDetails.forEach(element => {
+                        if (element.moduleName === moduleName) {
+                            element['lastSelectedTabLists'] = lists;
+                        }
+                    });
+                    if (isUpdate) {
+                        sessionStorage.setItem("UserPreference", JSON.stringify(preferenceDetails));
+                    }
+                    return returnVal;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
 
     getItemPerPageByModuleAndComponentName(moduleName: string, componentName: string) {
         if (!!sessionStorage.getItem("UserPreference")) {
@@ -153,6 +241,8 @@ export class CoreHelperService {
     getPreferenceDetailsFromSession() {
         return JSON.parse(sessionStorage.getItem("UserPreference"));
     }
+    //==================================USER PREFERENCES END ============================================
+
 
     uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -176,6 +266,28 @@ export class CoreHelperService {
         }
     }
 
+    setBrowserBackButton(isBack) {
+        this.isBrowserBackclick = isBack;
+    }
+
+    getBrowserBackButton() {
+        return this.isBrowserBackclick;
+    }
+
+    getDifferencebetweenStrings(a: string, b: string) {
+        var i = 0;
+        var j = 0;
+        var result = "";
+    
+        while (j < b.length) {
+          if (a[i] != b[j] || i == a.length)
+            result += b[j];
+          else
+            i++;
+          j++;
+        }
+        return result;
+      }
 }
 
 
