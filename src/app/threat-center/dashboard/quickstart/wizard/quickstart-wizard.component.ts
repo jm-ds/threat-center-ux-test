@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
@@ -25,7 +25,7 @@ import { HostListener } from '@angular/core';
     styleUrls: ['./quickstart-wizard.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class QuickstartWizardComponent implements OnInit {
+export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     public license: any;
     obsGithubUser: Observable<GitHubUser>;
@@ -57,6 +57,9 @@ export class QuickstartWizardComponent implements OnInit {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService) {
+    }
+    ngOnDestroy(): void {
+        this.scanHelperService.isRefreshObjectPage.next(false);
     }
 
     public ghUserCols = [
@@ -90,7 +93,7 @@ export class QuickstartWizardComponent implements OnInit {
             let repo = resourcePath[2];
             let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
-                branch = 'master';
+                branch = this.selectedRepos[0].node.defaultBranchRef.name;
             }
             scanRequest.login = owner;
             scanRequest.branch = branch;
@@ -119,7 +122,7 @@ export class QuickstartWizardComponent implements OnInit {
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
-        //open dialog box with message..
+        // open dialog box with message..
 
         // this.openFloatingModel();
         this.isDisableScanBtn = true;
@@ -279,7 +282,7 @@ export class QuickstartWizardComponent implements OnInit {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId,this.activeTab);
+        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
     }
 
 
