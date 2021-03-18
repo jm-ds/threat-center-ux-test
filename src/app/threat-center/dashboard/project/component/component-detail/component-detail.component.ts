@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { TxComponent, VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService } from '@app/threat-center/shared/services';
@@ -11,7 +10,7 @@ import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
-import { LazyLoadEvent } from "primeng";
+import { LazyLoadEvent, Table } from "primeng";
 
 @Component({
   selector: 'component-detail',
@@ -57,7 +56,8 @@ export class ComponentDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
-    private vulnerableCodeMappingService: VulnerableCodeMappingService) { }
+    private vulnerableCodeMappingService: VulnerableCodeMappingService,
+    private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
     console.log("Loading ComponentDetailComponent");
@@ -186,27 +186,35 @@ export class ComponentDetailComponent implements OnInit {
 
   loadBinaryReleasesLazy(event: LazyLoadEvent) {
     this.binaryLoading = true;
-    setTimeout(() => {
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
-          this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
-          .subscribe((data: VulnerableReleaseResponse) => {
-        this.binaryReleases.concat(data.vulnerableReleases);
-        this.binaryNextPagingState = data.nextPagingState;
-        this.binaryLoading = false;
-      });
-    }, 3000);
+    if (this.binaryNextPagingState != null) {
+      setTimeout(() => {
+        this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+            this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
+            .subscribe((data: VulnerableReleaseResponse) => {
+              this.binaryReleases.push(...data.vulnerableReleases);
+              this.binaryReleases = [...this.binaryReleases];
+              this.binaryNextPagingState = data.nextPagingState;
+            });
+        this.changeDetector.detectChanges();
+      }, 2000);
+    }
+    this.binaryLoading = false;
   }
 
   loadSourceReleasesLazy(event: LazyLoadEvent) {
     this.sourceLoading = true;
-    setTimeout(() => {
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
-          this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
-          .subscribe((data: VulnerableReleaseResponse) => {
-            this.sourceReleases.concat(data.vulnerableReleases);
-            this.sourceNextPagingState = data.nextPagingState;
-            this.sourceLoading = false;
-          });
-    }, 3000);
+    if (this.sourceNextPagingState != null) {
+      setTimeout(() => {
+        this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+            this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
+            .subscribe((data: VulnerableReleaseResponse) => {
+              this.sourceReleases.push(...data.vulnerableReleases);
+              this.sourceReleases = [...this.sourceReleases];
+              this.sourceNextPagingState = data.nextPagingState;
+            });
+        this.changeDetector.detectChanges();
+      }, 2000);
+    }
+    this.sourceLoading = false;
   }
 }
