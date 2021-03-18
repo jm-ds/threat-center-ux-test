@@ -7,6 +7,7 @@ export class TreeViewNodeModel {
     isChildEntity: boolean;
     isProjects: boolean;
     classes: Array<string>;
+    isOrg:boolean = false;
     constructor(init?: Partial<TreeViewNodeModel>) {
         Object.assign(this, init);
     }

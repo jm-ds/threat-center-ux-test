@@ -7,7 +7,7 @@
                 (toggleExpanded)="onEvent($event)" (activate)="onEvent($event)" [options]="treeNodeOptions">
                 <ng-template #treeNodeTemplate let-node let-index="index">
                     <span [ngClass]="node.data.classes">{{ node.data.name }}</span>
-                  </ng-template>
+                </ng-template>
             </tree-root>
         </app-card>
     </div>
@@ -19,7 +19,8 @@
             </div>
             <div class="row mt-20">
                 <div class="col-12">
-                    <form #entityForm="ngForm" (ngSubmit)="entityForm.form.valid && entityForm.form.dirty && editEntity()">
+                    <form #entityForm="ngForm"
+                        (ngSubmit)="entityForm.form.valid && entityForm.form.dirty && editEntity()">
                         <div class="form-group row">
                             <label for="entity" class="col-sm-3 col-form-label">Entity</label>
                             <div class="col-sm-9">
@@ -28,8 +29,8 @@
                                     placeholder="Enter entity name" required />
                                 <div class="invalid-form"
                                     *ngIf="entityForm.submitted || (entityName.errors && (entityName.dirty || entityName.touched))">
-                                    <p *ngIf="entityName.errors && entityName.errors?.required">Entity name is
-                                        required.</p>
+                                    <small *ngIf="entityName.errors && entityName.errors?.required">Entity name is
+                                        required.</small>
                                 </div>
                             </div>
                         </div>
@@ -47,8 +48,8 @@
                                 </select>
                                 <div class="invalid-form"
                                     *ngIf="entityForm.submitted || (entityType.errors && (entityType.dirty || entityType.touched))">
-                                    <p *ngIf="entityType.errors && entityType.errors?.required">Entity type is
-                                        required.</p>
+                                    <small *ngIf="entityType.errors && entityType.errors?.required">Entity type is
+                                        required.</small>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +57,7 @@
                             <div class="col-sm-3">
                             </div>
                             <div class="col-sm-9 text-right actions">
-                                <button *ngIf="!!selectedTreeNode.entityId" type="submit"
-                                    class="btn btn-outline-info">
+                                <button *ngIf="!!selectedTreeNode.entityId" type="submit" class="btn btn-outline-info">
                                     <i class="feather icon-save"></i>&nbsp;
                                     Save
                                 </button>&nbsp;&nbsp;
@@ -73,6 +73,43 @@
                 </div>
             </div>
         </app-card>
+
+        <app-card [hidHeader]="true" *ngIf="!!organizationInfo?.orgId">
+            <div class="row col-12">
+                <h4>Organization</h4>
+            </div>
+            <div class="row mt-20">
+                <div class="col-12">
+                    <form #orgForm="ngForm"
+                        (ngSubmit)="orgForm.form.valid && orgForm.form.dirty && saveOrgName()">
+                        <div class="form-group row">
+                            <label for="org" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control form-control-sm" id="org"
+                                    [(ngModel)]="organizationInfo.name" #orgName="ngModel" name="org"
+                                    placeholder="Organization name" required />
+                                <div class="invalid-form"
+                                    *ngIf="orgForm.submitted || (orgName.errors && (orgName.dirty || orgName.touched))">
+                                    <small *ngIf="orgName.errors && orgName.errors?.required">Organization name is
+                                        required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            </div>
+                            <div class="col-sm-9 text-right actions">
+                                <button *ngIf="!!organizationInfo?.orgId" type="submit" class="btn btn-outline-info">
+                                    <i class="feather icon-save"></i>&nbsp;
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+
         <app-card [hidHeader]="true" cardTitle="Child Entity">
             <div class="row">
                 <div class="col-12 text-right actions">

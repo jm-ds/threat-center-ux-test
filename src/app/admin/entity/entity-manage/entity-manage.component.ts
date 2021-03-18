@@ -26,6 +26,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     selectedTreeNode: EntityModel = new EntityModel();
     recursionHelperArray = [];
     childDataList: Array<EntityModel> = new Array<EntityModel>();
+    organizationInfo: { orgId: string, name: string };
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -90,6 +91,11 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
+    saveOrgName() {
+        //Save Organization name
+        debugger;
+    }
+
     //add child entity button call
     addChildEntity() {
         if (this.selectedTreeNode && !!this.selectedTreeNode.entityId) {
@@ -127,18 +133,25 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //while select any tree node.
     private initSelectedEntity(data) {
-        
         this.childDataList = new Array<EntityModel>();
-
+        this.organizationInfo = { orgId: null, name: null };
+        this.selectedTreeNode = new EntityModel();
         if (!!data.tagData) {
             this.selectedTreeNode = Object.assign({}, data.tagData);
             this.selectedTreeNode.isChildEntity = data.isChildEntity;
             this.selectedTreeNode.isProjects = data.isProjects;
             this.selectedTreeNode.isChildEntity = data.children.length >= 1 ? true : false;
         } else {
-            this.selectedTreeNode = new EntityModel();
-        }
+            if (data.isOrg) {
+                this.organizationInfo = {
+                    orgId: data.id,
+                    name: ''
+                };
+            } else {
+                this.selectedTreeNode = new EntityModel();
+            }
 
+        }
         //Init child table list.
         if (!!data.children && data.children.length >= 1) {
             data.children.forEach(d => {
@@ -169,7 +182,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                     isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                     classes: ['text-bold'],
-                    children: this.list_to_tree(this.recursionHelperArray)
+                    children: this.list_to_tree(this.recursionHelperArray),
+                    isOrg: false
                 }
             ];
         } else {
@@ -195,9 +209,11 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                             isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                             classes: ['text-bold'],
-                            children: this.list_to_tree(this.recursionHelperArray)
+                            children: this.list_to_tree(this.recursionHelperArray),
+                            isOrg: false
                         }
-                    ]
+                    ],
+                    isOrg: true
                 }
             ];
         }
@@ -312,7 +328,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             case 'ADD_CHILD': {
                 entityId = !entityId || entityId == '' ? this.authService.currentUser.orgId : entityId;
-                const pNode =  this.tree.treeModel.getNodeById(entityId);
+                const pNode = this.tree.treeModel.getNodeById(entityId);
                 pNode.data['children'].push({
                     id: eData.entityId,
                     name: eData.name,
@@ -342,7 +358,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     //Helper functions to remove children from tree...
-    removeNode(node: TreeNode) {
+    private removeNode(node: TreeNode) {
         let parentNode = node.realParent
             ? node.realParent
             : node.treeModel.virtualRoot;
