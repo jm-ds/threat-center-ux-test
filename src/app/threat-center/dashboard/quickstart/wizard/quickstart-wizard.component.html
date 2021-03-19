@@ -367,7 +367,7 @@
                                 </div>
                                 <div *ngIf="selectedRepo.branches.length > 1">
                                   <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"
-                                    class="form-control" style="height:25px;padding:2px">
+                                    class="form-control custom-select" style="height:25px;padding:2px">
                                     <option *ngFor="let branch of selectedRepo.branches"
                                       [selected]="branch == selectedRepo.mainBranch" value='{{branch}}'>{{branch}}
                                     </option>

@@ -264,6 +264,27 @@ export class FixResult {
   errorMessage: string;
 }
 
+export class VulnCodePatchedPackage {
+  namespace: string;
+  name: string;
+  pk: string;
+  version: string;
+  type: string;
+  purl: string;
+  id: number;
+  subpath: string;
+  qualifiers: string;
+}
+
+export class PatchedInfo {
+  namespace: string;
+  name: string;
+  vulnerableVersion: string;
+  cveId: string;
+  nextPatchedVersion: VulnCodePatchedPackage;
+  latestPatchedVersion: VulnCodePatchedPackage;
+}
+
 export class Vulnerability {
   vulnerabilityId:string;
   description:string;
@@ -284,6 +305,7 @@ export class Vulnerability {
   credits:string;
   vulnerableVersions:string;
   patchedVersions:string;
+  components: any;
 }
 
 export class License {
@@ -400,6 +422,8 @@ export class EntityConnection {
   edges: EntityEdge[];
   pageInfo: PageInfo;
   totalCount: number;
+
+  constructor(){}
 }
 
 export class EntityEdge {
