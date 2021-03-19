@@ -35,8 +35,8 @@ export class ScanHelperService {
     constructor(
         private taskService: TaskService,
         private router: Router,
-       private modalService: NgbModal,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private modalService: NgbModal) {
     }
 
     //Scan submit and get task token to do further for scan.
