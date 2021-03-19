@@ -21,6 +21,7 @@ export class ScanHelperService {
 
     private isEnabaleNewScan = new BehaviorSubject(false);
     isEnabaleNewScanObservable$ = this.isEnabaleNewScan.asObservable();
+    // private isRefreshObjectPage = new BehaviorSubject(false);
     isRefreshObjectPage = new BehaviorSubject(false);
     isRefreshObjectPageObservable$ = this.isRefreshObjectPage.asObservable();
 
