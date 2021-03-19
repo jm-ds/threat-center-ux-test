@@ -57,14 +57,16 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService) {
+        this.scanHelperService.isEnabaleNewScanObservable$
+            .subscribe(x => {
+                this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
+            });
     }
     ngOnDestroy(): void {
         this.scanHelperService.isRefreshObjectPage.next(false);
     }
 
-    public ghUserCols = [
-        { field: 'name', header: 'Name' }
-    ];
+    public ghUserCols = [{ field: 'name', header: 'Name' }];
 
     public demoForm = new FormGroup({
         files: this.filesControl
@@ -253,7 +255,6 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(event) {
-        this.isDisableScanBtn = false;
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
             if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
