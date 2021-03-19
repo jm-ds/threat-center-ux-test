@@ -43,7 +43,7 @@
                 <div class="form-group" style="padding-left: 0px">
                   <label class="font-weight-bolder">Type</label>
                   <select [(ngModel)]="policy.conditionType" name="conditionType" (ngModelChange)="onTypeChange($event)"
-                      class="form-control form-control-sm input-sm ng-select">
+                      class="form-control form-control-sm input-sm ng-select custom-select">
                     <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
                   </select>
                 </div>  
