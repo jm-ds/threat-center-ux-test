@@ -47,8 +47,7 @@ import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.com
     NavSearchComponent,
     NavRightComponent,
     ConfigurationComponent,
-    ToggleFullScreenDirective,
-    UnauthorizedComponent
+    ToggleFullScreenDirective
   ],
   imports: [
     BrowserModule,
