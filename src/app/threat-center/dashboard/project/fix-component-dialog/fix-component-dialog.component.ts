@@ -4,7 +4,8 @@ import {FixComponentResultDialogComponent} from "@app/threat-center/dashboard/pr
 import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from "rxjs";
-import {FixResult} from "@app/threat-center/shared/models/types";
+import { FixResult } from '@app/models';
+
 
 @Component({
     selector: 'app-fix-component-dialog',

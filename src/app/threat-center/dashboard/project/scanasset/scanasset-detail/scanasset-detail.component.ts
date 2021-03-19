@@ -3,13 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-
-import { Scan, License, ScanAsset, User, Repository, ScanAssetMatch } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService } from '@app/security/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import Swal from "sweetalert2";
+import { ScanAsset, ScanAssetMatch } from '@app/models';
 
 
 @Component({

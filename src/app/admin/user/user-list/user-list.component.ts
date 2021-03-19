@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {UserService} from "@app/admin/services/user.service";
 import {User, Role} from "@app/models";
-import {Entity} from "@app/threat-center/shared/models/types";
+
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserUtils} from "@app/admin/user/user-utils";
 
