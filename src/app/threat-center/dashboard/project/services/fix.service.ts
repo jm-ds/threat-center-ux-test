@@ -1,4 +1,5 @@
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {FixResult, PatchedInfo} from "@app/threat-center/shared/models/types";
 import {Observable} from "rxjs";
 import {environment} from "../../../../../environments/environment";
 import {Injectable} from "@angular/core";
@@ -20,6 +21,12 @@ export class FixService {
         body.append('componentId', componentId);
         body.append('newVersion', newVersion);
         body.append('oldVersion', oldVersion);
-        return this.http.post<any>(url, body).pipe();
+        return this.http.post<FixResult[]>(url, body).pipe();
+    }
+
+    getPatchedVersion(componentId: string): Observable<PatchedInfo> {
+        const url = environment.apiUrl + '/patchedInfoForAllById';
+        const opts = { params: new HttpParams().set('componentId', componentId) };
+        return this.http.get<PatchedInfo>(url, opts).pipe();
     }
 }
