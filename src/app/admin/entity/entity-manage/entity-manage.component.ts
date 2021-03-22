@@ -10,6 +10,7 @@ import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
+import { User } from '@app/models/user';
 
 @Component({
     selector: 'app-entity-manage',
@@ -93,9 +94,24 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
+    //Update Organization Name
     saveOrgName() {
         //Save Organization name
-        debugger;
+        this.entityService.updateOrganizationName(this.organizationInfo)
+            .subscribe((data: any) => {
+                if (!!data && !!data.data && !!data.data.updateOrgName) {
+                    this.toastr.success("Organization updated successfully.");
+                    let user: User = this.authService.getFromSessionStorageBasedEnv('currentUser');
+                    if (!!user) {
+                        if (!!user.organization) {
+                            user.organization.name = this.organizationInfo.name;
+                            this.authService.setInSessionStorageBasedEnv('currentUser', user);
+                            this.authService.currentUserSubject.next(user);
+                        }
+                    }
+                }
+
+            });
     }
 
     //add child entity button call
@@ -147,7 +163,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             if (data.isOrg) {
                 this.organizationInfo = {
                     orgId: data.id,
-                    name: ''
+                    name: data.name
                 };
             } else {
                 this.selectedTreeNode = new EntityModel();

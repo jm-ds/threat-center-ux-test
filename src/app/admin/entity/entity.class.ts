@@ -7,7 +7,7 @@ export class TreeViewNodeModel {
     isChildEntity: boolean;
     isProjects: boolean;
     classes: Array<string>;
-    isOrg:boolean = false;
+    isOrg: boolean = false;
     constructor(init?: Partial<TreeViewNodeModel>) {
         Object.assign(this, init);
     }
@@ -64,5 +64,18 @@ export class EntityUpdateRequestInput {
     }
     static from(entity) {
         return new EntityUpdateRequestInput(entity.entityId, entity.entityName, entity.entityType);
+    }
+}
+
+export class OrganizationUpdateRequestInput {
+    readonly orgId: string;
+    readonly name: string;
+
+    constructor(orgId: string, name: string) {
+        this.orgId = orgId;
+        this.name = name;
+    }
+    static from(org) {
+        return new OrganizationUpdateRequestInput(org.orgId, org.name);
     }
 }
