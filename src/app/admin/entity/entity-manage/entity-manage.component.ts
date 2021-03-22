@@ -27,6 +27,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     recursionHelperArray = [];
     childDataList: Array<EntityModel> = new Array<EntityModel>();
     organizationInfo: { orgId: string, name: string };
+    isOrgChangeNameLinkAppear: boolean = false;
+
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -194,7 +196,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.entityTreeNodeList = [
                 {
                     id: this.authService.currentUser.orgId,
-                    name: !!this.authService.currentUser.organization ? this.authService.currentUser.organization.name : "Organization",
+                    name: this.getOrganizationInfo(),
                     isExpanded: true,
                     tagData: null,
                     isChildEntity: true,
@@ -211,12 +213,31 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             classes: ['text-bold'],
                             children: this.list_to_tree(this.recursionHelperArray),
                             isOrg: false
+
                         }
                     ],
                     isOrg: true
                 }
             ];
         }
+    }
+
+    private getOrganizationInfo(): string {
+        let orgName = "";
+        if (!!this.authService.currentUser.organization) {
+            if (this.authService.currentUser.organization.name === this.authService.currentUser.organization.orgId) {
+                orgName = "PoC Company"
+                this.isOrgChangeNameLinkAppear = true;
+            } else {
+                this.isOrgChangeNameLinkAppear = false;
+                orgName = this.authService.currentUser.organization.name;
+            }
+
+        } else {
+            orgName = "PoC Company";
+            this.isOrgChangeNameLinkAppear = true;
+        }
+        return orgName
     }
 
     //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
