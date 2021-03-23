@@ -69,7 +69,8 @@
 
         <div class="scan-modal-blk">
             <div class="scan-started-blk">
-                <div class="scan-main-blk" *ngIf="projectScanResults.length >= 1">
+                <div class="scan-main-blk" [ngClass]="{'single-project': projectScanResults.length === 1 }"
+                    *ngIf="projectScanResults.length >= 1">
                     <ngb-accordion #acc="ngbAccordion" (panelChange)="beforeChange($event)">
                         <ngb-panel id="preventchange-2">
                             <ng-template ngbPanelTitle>
