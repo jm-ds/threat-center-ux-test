@@ -19,7 +19,7 @@ export class User {
 
     // lists returned by gql inner queries
     userRoles: Role[];
-    userEntities: EntityConnection;
+    userEntities: EntityConnection = new EntityConnection();
     userPermissions: Permission[];
 
     // lists as user class fields

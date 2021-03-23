@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AnimationBuilder, AnimationService } from 'css-animator';
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
@@ -36,7 +36,8 @@ import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular
       })),
       transition('open <=> closed', animate('400ms')),
     ])
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class CardComponent implements OnInit {
@@ -51,6 +52,10 @@ export class CardComponent implements OnInit {
   @Input() captionClass: string;
   @Input() isCardFooter: boolean;
   @Input() footerClass: string;
+  @Input() hasManualCardRestore: boolean = false;
+  @Input() hasManualCardColleps: boolean = false;
+  @Input() hasManualCardReload: boolean = false;
+  @Input() hasManualCardRemove: boolean = false;
 
   public animation: string;
   public fullIcon: string;
@@ -137,7 +142,7 @@ export class CardComponent implements OnInit {
   cardRefresh() {
     this.loadCard = true;
     this.cardClass = 'card-load';
-    setTimeout( () => {
+    setTimeout(() => {
       this.loadCard = false;
       this.cardClass = 'expanded';
     }, 3000);

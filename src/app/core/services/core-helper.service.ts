@@ -5,6 +5,7 @@ import { NextConfig } from '@app/app-config';
 import { Observable, Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { UserPreferenceModel } from '../core.class';
+import { environment } from 'environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -257,6 +258,12 @@ export class CoreHelperService {
 
     removeNextDarkClassFormBody() {
         document.querySelector('body').classList.remove('next-dark');
+    }
+
+    printErrorMessageToConsol(message: string) {
+        if (!environment.production && !environment.staging) {
+            console.log("ERROR:-", message);
+        }
     }
 
     setBrowserBackButton(isBack) {
