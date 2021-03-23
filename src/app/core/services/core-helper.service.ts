@@ -260,11 +260,6 @@ export class CoreHelperService {
         document.querySelector('body').classList.remove('next-dark');
     }
 
-    printErrorMessageToConsol(message: string) {
-        if (!environment.production && !environment.staging) {
-            console.log("ERROR:-", message);
-        }
-    }
 
     setBrowserBackButton(isBack) {
         this.isBrowserBackclick = isBack;
@@ -278,16 +273,16 @@ export class CoreHelperService {
         var i = 0;
         var j = 0;
         var result = "";
-    
+
         while (j < b.length) {
-          if (a[i] != b[j] || i == a.length)
-            result += b[j];
-          else
-            i++;
-          j++;
+            if (a[i] != b[j] || i == a.length)
+                result += b[j];
+            else
+                i++;
+            j++;
         }
         return result;
-      }
+    }
 }
 
 
