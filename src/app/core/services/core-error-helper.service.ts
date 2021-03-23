@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { Messages } from "@app/messages/messages";
 import { AuthenticationService } from "@app/security/services";
 import { environment } from "environments/environment";
 import { CoreHelperService } from "./core-helper.service";
@@ -17,7 +18,7 @@ export class CoreErrorHelperService {
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || !errObj.status || errObj.status === 0) {
-            this.coreHelperService.swalALertBox('Something went wrong!', 'Error!');
+            this.coreHelperService.swalALertBox(Messages.wrongMessage, 'Error!');
         } else {
             //getting server error if any other wise show default message according to status of server
             const dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: this.getDefaultErrorMessageFromServerIf(errObj) };
@@ -40,10 +41,11 @@ export class CoreErrorHelperService {
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
-                        this.redirectUserToLoginPage({ message: 'JWT Token not found!', status: 'Error!' });
+                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: 'Error!' });
                     }
                     break;
                 default:
+                    //Rest Of all status code perform over here..
                     if (errObj.status === 500) {
                         console.log("REQUEST PAYLOAD", requestPayload);
                     }
@@ -62,6 +64,38 @@ export class CoreErrorHelperService {
         }
     }
 
+    //get messages according to status
+    private getMessageStatusWise(status) {
+        let msg = "";
+        switch (status) {
+            case 500: {
+                msg = Messages.status500;
+                break;
+            }
+            case 400: {
+                msg = Messages.status400;
+                break;
+            }
+            case 403: {
+                msg = Messages.status403;
+                break;
+            }
+            case 404: {
+                msg = Messages.status404;
+                break;
+            }
+            case 501: {
+                msg = Messages.status501;
+                break;
+            }
+            default: {
+                msg = Messages.wrongMessage;
+                break;
+            }
+        }
+        return msg;
+    }
+
     //Get default error message from server if any
     private getDefaultErrorMessageFromServerIf(errObj: HttpErrorResponse) {
         let errorMessage: string = '';
@@ -74,7 +108,7 @@ export class CoreErrorHelperService {
         } else if (!!errObj.error && !!errObj.error.message && typeof errObj.error.message === 'string') {
             errorMessage = errObj.error.message;
         } else {
-            errorMessage = this.coreHelperService.getMessageStatusWise(Number(errObj.status));
+            errorMessage = this.getMessageStatusWise(Number(errObj.status));
         }
         return errorMessage;
     }

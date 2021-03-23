@@ -20,13 +20,11 @@ export class CoreGraphQLService {
     constructor(private apollo: Apollo,
         private coreHelperService: CoreHelperService,
         private spinner: NgxSpinnerService,
-        private authenticationService: AuthenticationService,
-        private router: Router,
         private coreErrorHelperService: CoreErrorHelperService
     ) { }
 
 
-    // Core graphQL service    
+    // Core graphQL service
     coreGQLReq<T>(
 
         query: DocumentNode,
@@ -91,7 +89,6 @@ export class CoreGraphQLService {
         console.log("ERROR:");
         console.log(error);
         this.spinner.hide();
-
         //Check if error is Object
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
@@ -107,7 +104,6 @@ export class CoreGraphQLService {
         } else {
             this.coreHelperService.swalALertBox("Something went wrong!");
         }
-        // Two way to return Observable<unknown>
         return EMPTY;
     }
 }
