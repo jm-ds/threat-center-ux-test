@@ -70,14 +70,19 @@
         <div class="scan-modal-blk">
             <div class="scan-started-blk">
                 <div class="scan-main-blk" *ngIf="projectScanResults.length >= 1">
-                    <ngb-accordion #acc="ngbAccordion">
-                        <ngb-panel>
+                    <ngb-accordion #acc="ngbAccordion" (panelChange)="beforeChange($event)">
+                        <ngb-panel id="preventchange-2">
                             <ng-template ngbPanelTitle>
                                 <div class="scan-progress">
                                     <i class="scan-icon loader-img"><img src="assets/images/scan-loader.gif" alt=""></i>
                                     <div class="scan-progress-rt">
                                         <p>
-                                            {{projectScanResults.length}} projects scan in progress
+                                            <span
+                                                *ngIf="projectScanResults.length === 1;else inprogress">{{projectScanResults[0].projectName}}
+                                                projects scan in progress</span>
+                                            <ng-template #inprogress>
+                                                {{projectScanResults.length}} projects scan in progress
+                                            </ng-template>
                                             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                                         </p>
                                     </div>
