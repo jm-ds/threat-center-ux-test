@@ -31,7 +31,7 @@ export class CoreErrorHelperService {
                 case 403:
                     console.log("REQUEST PAYLOAD", requestPayload);
                     const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
-                    //check jwt is expired or not..
+                    //check jwt is expired or not
                     if (!!jwt) {
                         if (this.authenticationService.isTokenExpired(jwt)) {
                             //Redirect user with notifying
@@ -58,6 +58,7 @@ export class CoreErrorHelperService {
 
     //helper function to print error in console if any from server side
     printErrorMessageToConsol(message: any) {
+        //Print error in console when system is in development mode
         if (!environment.production && !environment.staging) {
             console.log("ERROR:");
             console.log(message);
@@ -99,6 +100,7 @@ export class CoreErrorHelperService {
     //Get default error message from server if any
     private getDefaultErrorMessageFromServerIf(errObj: HttpErrorResponse) {
         let errorMessage: string = '';
+        //getting error message from server if any available otherwise get default message according to status code
         if (typeof errObj.error === 'string') {
             errorMessage = errObj.error
         } else if (!!errObj.error && !!errObj.error.reason && typeof errObj.error.reason === 'string') {
