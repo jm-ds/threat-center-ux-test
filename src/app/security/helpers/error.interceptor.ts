@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { CoreErrorHelperService } from '@app/core/services/core-error-helper.service';
+import { Messages } from '@app/messages/messages';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
