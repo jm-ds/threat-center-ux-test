@@ -890,9 +890,15 @@
     border-color: darken($dark-layout,3%);
 
     &:focus {
-      background: lighten($dark-layout,2%);
+      background: lighten($dark-layout,2%) ;
       color: $dark-layout-font;
-      border-color: lighten($dark-layout,2%);
+      border-color: #6c757d;
+    }
+  }
+
+  select.form-control {
+    &:focus {
+      background: lighten($dark-layout,2%) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.95rem center/8px 10px;
     }
   }
 
