@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from '@app/security/services';
 import { Router } from '@angular/router';
 import { CoreErrorHelperService } from './core-error-helper.service';
+import { Messages } from '@app/messages/messages';
 
 @Injectable({
     providedIn: 'root'
@@ -102,7 +103,7 @@ export class CoreGraphQLService {
             this.coreErrorHelperService.printErrorMessageToConsol(error);
             this.coreHelperService.swalALertBox(error);
         } else {
-            this.coreHelperService.swalALertBox("Something went wrong!");
+            this.coreHelperService.swalALertBox(Messages.wrongMessage);
         }
         return EMPTY;
     }
