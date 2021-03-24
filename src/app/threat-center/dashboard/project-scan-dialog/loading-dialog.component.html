@@ -80,7 +80,7 @@
                                         <p>
                                             <span
                                                 *ngIf="projectScanResults.length === 1;else inprogress">{{projectScanResults[0].projectName}}
-                                                projects scan in progress</span>
+                                                project scan in progress</span>
                                             <ng-template #inprogress>
                                                 {{projectScanResults.length}} projects scan in progress
                                             </ng-template>
