@@ -27,6 +27,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         // if logged in and has access rights to current route then return true
         if (this.authorizationService.hasPermissions(auth)) {
             console.log("has permissions...");
+            if (!!sessionStorage.getItem('ReturnUrl') && sessionStorage.getItem('ReturnUrl') !== '/' && sessionStorage.getItem('ReturnUrl') !== '') {
+                const returnUrl = sessionStorage.getItem('ReturnUrl')
+                sessionStorage.removeItem('ReturnUrl');
+                this.router.navigate([returnUrl]);
+            }
             return true;
         }
         else {
@@ -59,7 +64,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 return this.checkPermissionsAndRedirect(route.data.auth);
             }
         }
-
+        debugger;
         // not logged in so redirect to login page with the return url
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;
