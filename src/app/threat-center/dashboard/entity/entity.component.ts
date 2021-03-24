@@ -118,7 +118,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
     private coreHelperService: CoreHelperService,
-    private taskService: TaskService
+    private taskService: TaskService,
     private scanHelperService: ScanHelperService,
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
@@ -162,6 +162,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
     this.requestObjectPageSubscriptions.unsubscribe();
+    this.checkRunningScans = false;
   }
 
   //Initializing stacked chart according to donut chart selection
@@ -340,10 +341,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.router.navigate([url]);
   }
 
-  ngOnInit() {
-    this.loadEntityPage();
-  }
-
   //Load entity
   loadEntityPage() {
     let entityId = this.route.snapshot.paramMap.get('entityId');
@@ -364,10 +361,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.commonLineSparklineOptions = Object.assign(this.chartHelperService.sparkLineChartCommonConfiguration());
     this.checkRunningScans = true;
     this.getRunningScansCount(entityId);
-  }
-
-  ngOnDestroy() {
-    this.checkRunningScans = false;
   }
 
   //Initialize SparkLine charts
