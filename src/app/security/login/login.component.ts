@@ -45,9 +45,6 @@ export class LoginComponent implements OnInit {
     });
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
-      sessionStorage.setItem('ReturnUrl', this.returnUrl);
-    }
   }
 
   // convenience getter for easy access to form fields
@@ -67,4 +64,12 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         });
   }
+
+  redirectToExternalLogin(urlText: string) {
+    if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
+      sessionStorage.setItem('ReturnUrl', this.returnUrl);
+    }
+    window.location.href = this.apiUrl + '/' + urlText;
+  }
+
 }
