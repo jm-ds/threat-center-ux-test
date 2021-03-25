@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { User } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,12 +19,16 @@ import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 
 export class NavRightComponent implements OnInit {
 
+  currentUser: User;
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
     public coreHelperService: CoreHelperService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.currentUser = this.authenticationService.currentUser;
+  }
 
   logout() {
     this.coreHelperService.logoutUser();
