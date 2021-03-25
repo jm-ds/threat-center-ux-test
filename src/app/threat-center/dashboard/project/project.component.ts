@@ -222,23 +222,23 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
             // Vulnerability chart data
 
             if (!!scan.scanMetricsSummary.vulnerabilityMetrics) {
-              critical.push(scan.scanMetricsSummary.vulnerabilityMetrics.critical);
-              high.push(scan.scanMetricsSummary.vulnerabilityMetrics.high);
-              medium.push(scan.scanMetricsSummary.vulnerabilityMetrics.medium);
-              low.push(scan.scanMetricsSummary.vulnerabilityMetrics.low);
-              info.push(scan.scanMetricsSummary.vulnerabilityMetrics.info);
+              critical.push(!!scan.scanMetricsSummary.vulnerabilityMetrics.critical ? scan.scanMetricsSummary.vulnerabilityMetrics.critical : 0);
+              high.push(!!scan.scanMetricsSummary.vulnerabilityMetrics.high ? scan.scanMetricsSummary.vulnerabilityMetrics.high : 0);
+              medium.push(!!scan.scanMetricsSummary.vulnerabilityMetrics.medium ? scan.scanMetricsSummary.vulnerabilityMetrics.medium : 0);
+              low.push(!!scan.scanMetricsSummary.vulnerabilityMetrics.low ? scan.scanMetricsSummary.vulnerabilityMetrics.low : 0);
+              info.push(!!scan.scanMetricsSummary.vulnerabilityMetrics.info ? scan.scanMetricsSummary.vulnerabilityMetrics.info : 0);
             }
 
             // License chart data
             if (!!scan.scanMetricsSummary.licenseMetrics) {
-              copyleftStrong.push(scan.scanMetricsSummary.licenseMetrics.copyleftStrong);
-              copyleftWeak.push(scan.scanMetricsSummary.licenseMetrics.copyleftWeak);
-              copyleftPartial.push(scan.scanMetricsSummary.licenseMetrics.copyleftPartial);
-              copyleftLimited.push(scan.scanMetricsSummary.licenseMetrics.copyleftLimited);
-              copyleft.push(scan.scanMetricsSummary.licenseMetrics.copyleft);
-              custom.push(scan.scanMetricsSummary.licenseMetrics.custom);
-              dual.push(scan.scanMetricsSummary.licenseMetrics.dual);
-              permissive.push(scan.scanMetricsSummary.licenseMetrics.permissive);
+              copyleftStrong.push(!!scan.scanMetricsSummary.licenseMetrics.copyleftStrong ? scan.scanMetricsSummary.licenseMetrics.copyleftStrong : 0);
+              copyleftWeak.push(!!scan.scanMetricsSummary.licenseMetrics.copyleftWeak ? scan.scanMetricsSummary.licenseMetrics.copyleftWeak : 0);
+              copyleftPartial.push(!!scan.scanMetricsSummary.licenseMetrics.copyleftPartial ? scan.scanMetricsSummary.licenseMetrics.copyleftPartial : 0);
+              copyleftLimited.push(!!scan.scanMetricsSummary.licenseMetrics.copyleftLimited ? scan.scanMetricsSummary.licenseMetrics.copyleftLimited : 0);
+              copyleft.push(!!scan.scanMetricsSummary.licenseMetrics.copyleft ? scan.scanMetricsSummary.licenseMetrics.copyleft : 0);
+              custom.push(!!scan.scanMetricsSummary.licenseMetrics.custom ? scan.scanMetricsSummary.licenseMetrics.custom : 0);
+              dual.push(!!scan.scanMetricsSummary.licenseMetrics.dual ? scan.scanMetricsSummary.licenseMetrics.dual : 0);
+              permissive.push(!!scan.scanMetricsSummary.licenseMetrics.permissive ? scan.scanMetricsSummary.licenseMetrics.permissive : 0);
             }
 
             // // Component chart data
@@ -251,9 +251,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // Asset chart data
             if (!!scan.scanMetricsSummary.assetMetrics) {
-              embedded.push(scan.scanMetricsSummary.assetMetrics.embedded);
-              unique.push(scan.scanMetricsSummary.assetMetrics.unique);
-              openSource.push(scan.scanMetricsSummary.assetMetrics.openSource);
+              embedded.push(!!scan.scanMetricsSummary.assetMetrics.embedded ? scan.scanMetricsSummary.assetMetrics.embedded : 0);
+              unique.push(!!scan.scanMetricsSummary.assetMetrics.unique ? scan.scanMetricsSummary.assetMetrics.unique : 0);
+              openSource.push(!!scan.scanMetricsSummary.assetMetrics.openSource ? scan.scanMetricsSummary.assetMetrics.openSource : 0);
 
             }
 
