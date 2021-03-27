@@ -664,28 +664,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   //Helper function which will help to populate metrics count data
   private populateDataForTotalCountsOfMetrics(data) {
     if (!!data[0]) {
-      this.vulnerabilityCount = !!data[0].data ?
-        data[0].data.scan.vulnerabilities['totalCount'] : this.vulnerabilityCount;
-    }
-    if (!!data[1]) {
-      this.componentCount = !!data[1].data ?
-        data[1].data.scan.components['totalCount'] : this.componentCount;
-    }
-    if (!!data[2]) {
-      this.licensesCount = !!data[2].data ?
-        data[2].data.scan.licenses['totalCount'] : this.licensesCount;
-    }
-    if (!!data[3]) {
-      this.assetCount = !!data[3].data ?
-        data[3].data.scan.scanAssets['totalCount'] : this.assetCount;
+      this.vulnerabilityCount = data[0].data.scan.vulnerabilities['totalCount'];
+      this.componentCount = data[0].data.scan.components['totalCount'];
+      this.assetCount = data[0].data.scan.scanAssets['totalCount'];
+      this.licensesCount = data[0].data.scan.licenses['totalCount'];
     }
   }
 
   private populateScanComponents(data) {
     this.vulScanData = Observable.of(data[0].data);
-    this.componentScanData = Observable.of(data[1].data.scan);
-    this.licensesScanData = Observable.of(data[2].data.scan);
-    this.assetScanData = Observable.of(data[3].data.scan);
+    this.componentScanData = Observable.of(data[0].data.scan);
+    this.licensesScanData = Observable.of(data[0].data.scan);
+    this.assetScanData = Observable.of(data[0].data.scan);
   }
 
   private getLastTabSelected() {
