@@ -119,7 +119,7 @@ export class UserEditComponent implements OnInit {
 
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {
-                this.router.navigate(['/admin/user/show/' + this.user.username],
+                this.router.navigate(['/admin/user/show/' + this.user.email],
                     {state: {messages: [Message.success("User saved successfully.")]}});
             }, (error) => {
                 console.error('User Saving', error);
