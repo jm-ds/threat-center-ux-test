@@ -1,6 +1,7 @@
-<div class="card" [ngClass]="cardClass" [@cardRemove]="cardRemove" #toAnimate animates animatesInitMode="show" [animatesOnInit]="{useVisibility: false, disabled: true}">
+<div class="card" [ngClass]="cardClass" [@cardRemove]="cardRemove" #toAnimate animates animatesInitMode="show"
+  [animatesOnInit]="{useVisibility: false, disabled: true}">
   <div class="card-header" *ngIf="!hidHeader" [ngClass]="headerClass">
-    <h5 *ngIf="!customHeader">{{ cardTitle }}</h5>
+    <h5 *ngIf="!customHeader && !!cardTitle">{{ cardTitle }}</h5>
     <p *ngIf="!customHeader && cardCaption" [ngClass]="captionClass">{{cardCaption}}</p>
     <div class="card-header-right" *ngIf="this.options && !customHeader">
 
@@ -9,6 +10,7 @@
           <i class="feather icon-more-horizontal"></i>
         </button>
         <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+
           <li class="dropdown-item full-card" (click)="fullCardToggle(toAnimate, '', true)"><a href="javascript:"><span><i class="feather" [ngClass]="fullIcon"></i> {{this.cardClass === 'full-card' ? 'Restore' : 'Maximize'}}</span></a></li>
           <!--
           <li class="dropdown-item minimize-card" (click)="collapsedCardToggle()"><a href="javascript:"><span><i class="feather" [ngClass]="collapsedIcon"></i> {{this.collapsedCard === 'collapsed' ? 'Expand' : 'Collapse'}} </span>
@@ -16,10 +18,24 @@
           <li class="dropdown-item reload-card" (click)="cardRefresh($event)"><a href="javascript:"><i class="feather icon-refresh-cw"></i> Reload</a></li>
           <li class="dropdown-item close-card" (click)="cardRemoveAction()"><a href="javascript:"><i class="feather icon-trash"></i> Remove</a></li>
           -->
+
         </ul>
       </div>
     </div>
     <ng-content *ngIf="customHeader" select=".app-card-header"></ng-content>
+    <div class="card-action-items">
+      <ul class="list-unstyled card-option" *ngIf="hasManualCardRestore || hasManualCardReload">
+        <li *ngIf="hasManualCardRestore" ngbTooltip="{{cardClass === 'full-card' ? 'Restore' : 'Maximize'}}" tooltipClass="card-action-tooltip" class="full-card"
+          (click)="fullCardToggle(toAnimate, '', true)">
+          <a href="javascript:"><span><i class="feather" [ngClass]="fullIcon"></i>
+            </span></a>
+        </li>
+        <li *ngIf="hasManualCardReload" class="reload-card" ngbTooltip="Reload" tooltipClass="card-action-tooltip" (click)="cardRefresh($event)"><a href="javascript:"><i
+              class="feather icon-refresh-cw"></i></a></li>
+        <li *ngIf="hasManualCardRemove" class="close-card" ngbTooltip="Remove" tooltipClass="card-action-tooltip" (click)="cardRemoveAction()"><a href="javascript:"><i
+              class="feather icon-trash"></i></a></li>
+      </ul>
+    </div>
   </div>
   <div [@collapsedCard]="collapsedCard" *ngIf="this.options; else subMenuContent">
     <ng-container *ngTemplateOutlet="subMenuContent"></ng-container>

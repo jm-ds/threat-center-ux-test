@@ -7,3 +7,30 @@
   width: calc(100vw) !important;
   height: 100vh !important;
 }
+
+.card-action-items {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  ul {
+    display: flex;
+    margin: 0;
+
+    li {
+      font-size: 16px;
+      margin-left: 20px;
+    }
+  }
+}
+
+
+.card-action-tooltip .tooltip-inner {
+  background-color: #fff;
+  font-size: 100%;
+  color: #000;
+}
+
+.card-action-tooltip .arrow::before {
+  border-top-color: #fff;
+}

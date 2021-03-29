@@ -400,6 +400,8 @@ export class EntityConnection {
   edges: EntityEdge[];
   pageInfo: PageInfo;
   totalCount: number;
+
+  constructor(){}
 }
 
 export class EntityEdge {

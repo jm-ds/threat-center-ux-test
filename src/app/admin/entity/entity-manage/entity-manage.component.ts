@@ -26,6 +26,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     selectedTreeNode: EntityModel = new EntityModel();
     recursionHelperArray = [];
     childDataList: Array<EntityModel> = new Array<EntityModel>();
+    isOrgChangeNameLinkAppear: boolean = false;
+
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -180,7 +182,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.entityTreeNodeList = [
                 {
                     id: this.authService.currentUser.orgId,
-                    name: !!this.authService.currentUser.organization ? this.authService.currentUser.organization.name : "Organization",
+                    name: this.getOrganizationInfo(),
                     isExpanded: true,
                     tagData: null,
                     isChildEntity: true,
@@ -195,12 +197,31 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                             isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                             classes: ['text-bold'],
-                            children: this.list_to_tree(this.recursionHelperArray)
+                            children: this.list_to_tree(this.recursionHelperArray),
+
                         }
                     ]
                 }
             ];
         }
+    }
+
+    private getOrganizationInfo(): string {
+        let orgName = "";
+        if (!!this.authService.currentUser.organization) {
+            if (this.authService.currentUser.organization.name === this.authService.currentUser.organization.orgId) {
+                orgName = "PoC Company"
+                this.isOrgChangeNameLinkAppear = true;
+            } else {
+                this.isOrgChangeNameLinkAppear = false;
+                orgName = this.authService.currentUser.organization.name;
+            }
+
+        } else {
+            orgName = "PoC Company";
+            this.isOrgChangeNameLinkAppear = true;
+        }
+        return orgName
     }
 
     //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
@@ -312,7 +333,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             case 'ADD_CHILD': {
                 entityId = !entityId || entityId == '' ? this.authService.currentUser.orgId : entityId;
-                const pNode =  this.tree.treeModel.getNodeById(entityId);
+                const pNode = this.tree.treeModel.getNodeById(entityId);
                 pNode.data['children'].push({
                     id: eData.entityId,
                     name: eData.name,

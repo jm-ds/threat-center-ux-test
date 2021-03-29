@@ -77,6 +77,7 @@ body.next-dark {
     select.form-control {
         cursor: pointer;
         border-color: #6c757d;
+        // transition: background 0.3s ease-in-out;
 
         &:hover {
             color: #fff;
@@ -87,5 +88,11 @@ body.next-dark {
 
     .custom-select {
         background: #2a3641 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.95rem center/8px 10px;
+        transition: none !important;
+
+        option {
+            background: #8a8f94;
+            color: #fff;
+        }
     }
 }
