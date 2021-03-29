@@ -501,3 +501,35 @@ export class AttributeAssetRequestInput {
     this.attributeComment = attributeComment;
   }
 }
+
+export class CvssV3 {
+  cveId: string;
+  cvssV3BaseScore: string;
+  severity: string;
+}
+
+export class VulnerableRelease {
+  namespace: string;
+  name: string;
+  version: string;
+  type: string;
+  purl: string;
+  releaseDate: string;
+  vulnerable: boolean;
+  cvssV3: CvssV3;
+}
+
+export class VulnerableReleaseResponse {
+  nextPagingState: string;
+  repositoryType: string;
+  purlType: string;
+  group: string;
+  name: string;
+  size: number;
+  vulnerableReleases: VulnerableRelease[];
+}
+
+export interface VulnerableReleaseResponseMap {
+  "binaryVulnerableResponse": VulnerableReleaseResponse;
+  "sourceVulnerableResponse": VulnerableReleaseResponse;
+}
