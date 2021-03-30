@@ -6,6 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { UserPreferenceModel } from '../core.class';
 import { environment } from 'environments/environment';
+import { Messages } from '@app/messages/messages';
 
 @Injectable({
     providedIn: 'root'
@@ -41,28 +42,28 @@ export class CoreHelperService {
         let msg = "";
         switch (status) {
             case 500: {
-                msg = "The server encountered an unexpected condition which prevented it from fulfilling the request.";
+                msg = Messages.status500;
                 break;
             }
             case 400: {
-                msg = "The request had bad syntax or was inherently impossible to be satisfied.";
+                msg = Messages.status400;
                 break;
             }
             case 403: {
-                msg = "The requested resource is forbidden.";
+                msg = Messages.status403;
                 break;
             }
             case 404: {
-                msg = "The server has not found anything matching the URI given.";
+                msg = Messages.status404;
                 break;
             }
             case 501: {
-                msg = "The server does not support the facility required.";
+                msg = Messages.status501;
                 break;
             }
             default: {
-                //statements; 
-                msg = "Something went wrong!";
+                //statements;
+                msg = Messages.wrongMessage;
                 break;
             }
         }
@@ -278,16 +279,16 @@ export class CoreHelperService {
         var i = 0;
         var j = 0;
         var result = "";
-    
+
         while (j < b.length) {
-          if (a[i] != b[j] || i == a.length)
-            result += b[j];
-          else
-            i++;
-          j++;
+            if (a[i] != b[j] || i == a.length)
+                result += b[j];
+            else
+                i++;
+            j++;
         }
         return result;
-      }
+    }
 }
 
 
