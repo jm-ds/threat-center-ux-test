@@ -850,6 +850,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
           cData.data.entity['supplySericeData'] = this.initSparkLineChart(cData.data.entity, 'supplyChainMetrics');
           cData.data.entity['assetSericeData'] = this.initSparkLineChart(cData.data.entity, 'assetMetrics');
+
           d['id'] = childData[i].node.entityId;
           d['data'] = cData.data.entity;
           d['parentId'] = prId;
