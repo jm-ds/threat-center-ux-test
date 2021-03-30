@@ -104,7 +104,14 @@ export class ProjectDashboardService {
           `, 'no-cache');
   }
 
-  getAllScanData(scanId: string, defaultPage) {
+  getAllScanData(scanId: string, defaultPage, scanAssetDetails: any) {
+
+    //Scan Asset Config Start
+    let parentId = (scanAssetDetails.parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + scanAssetDetails.parentScanAssetId + '\", ' : "";
+    let filterArg = 'filter: \"' + scanAssetDetails.filter + '\"';
+    const firstArg = (!!scanAssetDetails.first) ? `first: ${scanAssetDetails.first}` : '';
+    //Scan Asset Config End
+
     return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
           query {
             scan(scanId:"${scanId}") {
@@ -230,8 +237,7 @@ export class ProjectDashboardService {
                   }
                 }
 
-
-                scanAssets(first:${defaultPage}) {
+                scanAssetsTree(${parentId}${filterArg}${firstArg}) {
                   pageInfo {
                     hasNextPage
                     hasPreviousPage
@@ -248,6 +254,9 @@ export class ProjectDashboardService {
                       originAssetId
                       workspacePath
                       status,
+                      assetType,
+                      parentScanAssetId,
+                      attributionStatus, 
                       embeddedAssets {
                         edges {
                           node {
@@ -493,11 +502,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
       .pipe(
         mergeMap((data: any) => {
           if (!!data.data.project && !!data.data.project.scans.edges[0]) {
-            // const res1 = this.projectDashboardService.getScanVulnerabilities(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities")));
-            // const res2 = this.projectDashboardService.getScanComponents(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")));
-            // const res3 = this.projectDashboardService.getScanLicenses(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")));
-            // const res4 = this.projectDashboardService.getScanAssets(data.data.project.scans.edges[0].node.scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")));
-            const res1= this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId,NextConfig.config.defaultItemPerPage);
+            const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
             this.coreHelperService.swalALertBox("Project data not found!");

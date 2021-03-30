@@ -1,11 +1,11 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import {Scan} from '@app/threat-center/shared/models/types';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Scan } from '@app/threat-center/shared/models/types';
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-licenses',
@@ -20,7 +20,7 @@ export class LicensesComponent implements OnInit {
     columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     licensesDetails: any;
 
     columnsFilter = new Map();
@@ -28,13 +28,20 @@ export class LicensesComponent implements OnInit {
     timeOutDuration = 1000;
 
     constructor(private apiService: ApiService,
-                private router: Router,
-                private route: ActivatedRoute,
-                private coreHelperService:CoreHelperService) {
+        private router: Router,
+        private route: ActivatedRoute,
+        private coreHelperService: CoreHelperService) {
     }
 
     ngOnInit() {
         console.log("Loading LicensesComponent for scanId: ", this.scanId);
+        this.checkScanDataExists();
+        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+    }
+
+    //https://github.com/threatrix/product/issues/410
+    //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
+    checkScanDataExists() {
         if (!this.obsScan) {
             this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
@@ -43,7 +50,6 @@ export class LicensesComponent implements OnInit {
         } else {
             this.initData();
         }
-        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
     // While any changes occurred in page
@@ -52,7 +58,7 @@ export class LicensesComponent implements OnInit {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null,null, { componentName: "Licenses", value: pageInfo.pageSize });
+            this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Licenses", value: pageInfo.pageSize });
             // API Call
             this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined, undefined, undefined);
             this.paginator.firstPage();

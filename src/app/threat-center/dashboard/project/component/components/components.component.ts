@@ -1,15 +1,15 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FixResult, Scan} from '@app/threat-center/shared/models/types';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {MatPaginator} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoreHelperService} from '@app/core/services/core-helper.service';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FixResult, Scan } from '@app/threat-center/shared/models/types';
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { FixService } from "@app/threat-center/dashboard/project/services/fix.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 
 @Component({
     selector: 'app-components',
@@ -24,17 +24,17 @@ export class ComponentsComponent implements OnInit {
     newVersion: string;
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
 
     columns = [
-        {field: 'name', header: 'Name'},
-        {field: 'group', header: 'Group'},
-        {field: 'version', header: 'Version'},
-        {field: 'isInternal', header: 'Internal'},
-        {field: 'disc', header: 'Source'},
-        {field: 'license.name', header: 'Licenses'},
-        {field: 'vulnerabilities', header: 'Vulnerabilities'},
+        { field: 'name', header: 'Name' },
+        { field: 'group', header: 'Group' },
+        { field: 'version', header: 'Version' },
+        { field: 'isInternal', header: 'Internal' },
+        { field: 'disc', header: 'Source' },
+        { field: 'license.name', header: 'Licenses' },
+        { field: 'vulnerabilities', header: 'Vulnerabilities' },
     ];
 
     columnsFilter = new Map();
@@ -53,6 +53,13 @@ export class ComponentsComponent implements OnInit {
     ngOnInit() {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
+        this.checkScanDataExists();
+        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
+    }
+
+    //https://github.com/threatrix/product/issues/410
+    //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
+    checkScanDataExists() {
         if (!this.obsScan) {
             this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
@@ -60,11 +67,10 @@ export class ComponentsComponent implements OnInit {
         } else {
             this.initData();
         }
-        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
     fixVersion(componentId: string, oldVersion: string) {
-        const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+        const modalRef = this.modalService.open(FixComponentDialogComponent, {
             keyboard: false,
         });
         modalRef.componentInstance.scanId = this.scanId;
@@ -79,7 +85,7 @@ export class ComponentsComponent implements OnInit {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null, null,{ componentName: "Components", value: pageInfo.pageSize });
+            this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Components", value: pageInfo.pageSize });
             // API Call
             this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined, undefined, undefined);
             this.paginator.firstPage();

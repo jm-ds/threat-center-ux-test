@@ -666,7 +666,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!data[0]) {
       this.vulnerabilityCount = data[0].data.scan.vulnerabilities['totalCount'];
       this.componentCount = data[0].data.scan.components['totalCount'];
-      this.assetCount = data[0].data.scan.scanAssets['totalCount'];
+      this.assetCount = data[0].data.scan.scanAssetsTree['totalCount'];
       this.licensesCount = data[0].data.scan.licenses['totalCount'];
     }
   }
