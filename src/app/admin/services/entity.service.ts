@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { EntityQuery } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
-import { EntityQuery } from '@app/threat-center/shared/models/types';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
