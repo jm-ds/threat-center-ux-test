@@ -3,8 +3,8 @@ import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
-import { ScanRequest, TaskQuery } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { ScanRequest, TaskQuery } from '@app/models';
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,9 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {Entity} from "@app/threat-center/shared/models/types";
 import {ReportService} from "@app/reports/report.service";
 import {ScrollStateService} from "@app/shared/scroll-state.service";
 import {compareByName} from "@app/shared/compare-utils";
 import {uniqueElements, uniqueObjects} from "@app/shared/array-utils";
+import { Entity } from '@app/models';
 
 @Component({
     selector: 'app-software-leaks-report',

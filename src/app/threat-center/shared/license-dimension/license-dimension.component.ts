@@ -3,13 +3,13 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {FixResult, License} from '@app/threat-center/shared/models/types';
 import {Router} from '@angular/router';
 import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MatPaginator} from '@angular/material';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { FixResult, License } from '@app/models';
 
 
 @Component({
