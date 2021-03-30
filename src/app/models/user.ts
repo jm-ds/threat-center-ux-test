@@ -37,6 +37,8 @@ export class User {
     coverLetter: string;
     phone: string;
     position: string;
+
+    avatarUrl: string;
 }
 
 export class OrganizationModel {
