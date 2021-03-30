@@ -1,6 +1,8 @@
 import { EntityModel } from '@app/admin/entity/entity.class';
 import { Permission, Role } from "@app/models/role";
-import { EntityConnection, PageInfo } from "@app/threat-center/shared/models/types";
+import { PageInfo } from './common';
+import { EntityConnection } from './entity';
+
 
 export class User {
     accessToken: string;
