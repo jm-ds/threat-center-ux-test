@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, El
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { Project, Entity, User, ProjectEdge, EntityMetrics, Period } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
@@ -17,6 +16,7 @@ import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 
 
 @Component({
@@ -859,6 +859,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
           cData.data.entity['supplySericeData'] = this.initSparkLineChart(cData.data.entity, 'supplyChainMetrics');
           cData.data.entity['assetSericeData'] = this.initSparkLineChart(cData.data.entity, 'assetMetrics');
+
           d['id'] = childData[i].node.entityId;
           d['data'] = cData.data.entity;
           d['parentId'] = prId;

@@ -364,6 +364,7 @@ export class User {
   permissions:string[];
   repositoryAccounts: RepositoryAccounts;
   roles:Role[];
+  avatarUrl: string;
 }
 
 

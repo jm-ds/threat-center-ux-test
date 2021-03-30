@@ -2,7 +2,6 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
-import { Entity } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
 
