@@ -1,6 +1,6 @@
+
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute,RouterLink } from '@angular/router';
-import { Project,Scan } from '@app/threat-center/shared/models/types';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 

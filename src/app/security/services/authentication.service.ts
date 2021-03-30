@@ -12,7 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-  private currentUserSubject: BehaviorSubject<User>;
+  public currentUserSubject: BehaviorSubject<User>;
 
   constructor(private http: HttpClient, private localService: LocalService,
     private modalService: NgbModal) {
