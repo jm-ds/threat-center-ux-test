@@ -296,15 +296,15 @@ export class ChartHelperService {
             series: [],
             tooltip: {
                 fixed: {
-                    enabled: false
+                    enabled: true
                 },
                 x: {
-                    show: false
+                    show: true
                 },
                 y: {
                     title: {
                         formatter: function (seriesName) {
-                            return "";
+                            return seriesName;
                         }
                     }
                 },
