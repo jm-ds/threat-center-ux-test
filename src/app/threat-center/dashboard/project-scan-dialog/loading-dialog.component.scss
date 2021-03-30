@@ -12,6 +12,7 @@
         max-width: 380px;
         text-align: center;
         margin: 0 auto;
+
         .close {
             font-size: 20px;
             color: #fff;
@@ -23,6 +24,7 @@
             z-index: 11;
             width: 20px;
             height: 20px;
+
             &:focus {
                 box-shadow: none;
                 outline: none;
@@ -100,6 +102,7 @@
 
 .loading-float {
     overflow: inherit;
+
     .modal.loading-dialog {
         position: fixed;
         right: 20px;
@@ -183,7 +186,8 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
             width: 100%;
             border: none;
 
-            &:focus, &:hover {
+            &:focus,
+            &:hover {
                 box-shadow: none;
                 text-decoration: none;
             }
@@ -200,7 +204,7 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
                 transform: rotate(90deg);
             }
 
-            &.collapsed  {
+            &.collapsed {
                 &:after {
                     transform: rotate(-90deg);
                     width: 14px;
@@ -218,8 +222,8 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
             width: calc(100% - 40px);
         }
 
-        .scan-progress   {
-            margin-bottom: 15px; 
+        .scan-progress {
+            margin-bottom: 15px;
 
             &:last-child {
                 margin-bottom: 0;
@@ -228,7 +232,7 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
     }
 }
 
-.scan-progress  {
+.scan-progress {
     display: flex;
     align-items: center;
     width: 100%;
@@ -255,12 +259,14 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
     width: calc(100% - 80px);
     margin-left: 10px;
     text-align: left;
+
     p {
         font-size: 13px !important;
         color: #adb7be;
         text-decoration: none;
         line-height: 16px;
     }
+
     .progress {
         height: 5px;
         margin: 5px 0 0;
@@ -273,14 +279,15 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
 
 .scan-success-blk {
     border-left: 2px solid #118802 !important;
-    .scan-progress-rt  {
-        width: calc(100% - 40px);       
-    }   
+
+    .scan-progress-rt {
+        width: calc(100% - 40px);
+    }
 }
 
 .scan-main-blk {
     margin: 0 0 15px 0;
-    padding:  0 0 15px 0;
+    padding: 0 0 15px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.02);
 
     &:last-child {
@@ -294,8 +301,8 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
     width: 100%;
     display: block;
     text-align: left;
-    
-    
+
+
     h6 {
         font-size: 14px;
         color: #adb7be;
@@ -343,12 +350,22 @@ body.next-dark.loading-float .modal.loading-dialog .accordion .card {
 .mat-progress-bar {
     margin-top: 10px;
 
-    .mat-progress-bar-background, .mat-progress-bar-element {
+    .mat-progress-bar-background,
+    .mat-progress-bar-element {
         background: #4680ff;
     }
-    
+
     .mat-progress-bar-fill::after {
         background: #3263ce;
     }
 }
 
+.single-project {
+    .card-header {
+        .btn-link {
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
