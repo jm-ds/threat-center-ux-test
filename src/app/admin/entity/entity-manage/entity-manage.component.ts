@@ -10,6 +10,7 @@ import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
+import { User } from '@app/models/user';
 
 @Component({
     selector: 'app-entity-manage',
@@ -26,6 +27,9 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     selectedTreeNode: EntityModel = new EntityModel();
     recursionHelperArray = [];
     childDataList: Array<EntityModel> = new Array<EntityModel>();
+    organizationInfo: { orgId: string, name: string };
+    isOrgChangeNameLinkAppear: boolean = false;
+
     @ViewChild('tree', { static: true }) tree: TreeComponent;
 
     constructor(
@@ -90,6 +94,26 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
+    //Update Organization Name
+    saveOrgName() {
+        //Save Organization name
+        this.entityService.updateOrganizationName(this.organizationInfo)
+            .subscribe((data: any) => {
+                if (!!data && !!data.data && !!data.data.updateOrgName) {
+                    this.toastr.success("Organization updated successfully.");
+                    let user: User = this.authService.getFromSessionStorageBasedEnv('currentUser');
+                    if (!!user) {
+                        if (!!user.organization) {
+                            user.organization.name = this.organizationInfo.name;
+                            this.authService.setInSessionStorageBasedEnv('currentUser', user);
+                            this.authService.currentUserSubject.next(user);
+                        }
+                    }
+                }
+
+            });
+    }
+
     //add child entity button call
     addChildEntity() {
         if (this.selectedTreeNode && !!this.selectedTreeNode.entityId) {
@@ -127,18 +151,25 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //while select any tree node.
     private initSelectedEntity(data) {
-        
         this.childDataList = new Array<EntityModel>();
-
+        this.organizationInfo = { orgId: null, name: null };
+        this.selectedTreeNode = new EntityModel();
         if (!!data.tagData) {
             this.selectedTreeNode = Object.assign({}, data.tagData);
             this.selectedTreeNode.isChildEntity = data.isChildEntity;
             this.selectedTreeNode.isProjects = data.isProjects;
             this.selectedTreeNode.isChildEntity = data.children.length >= 1 ? true : false;
         } else {
-            this.selectedTreeNode = new EntityModel();
-        }
+            if (data.isOrg) {
+                this.organizationInfo = {
+                    orgId: data.id,
+                    name: data.name
+                };
+            } else {
+                this.selectedTreeNode = new EntityModel();
+            }
 
+        }
         //Init child table list.
         if (!!data.children && data.children.length >= 1) {
             data.children.forEach(d => {
@@ -169,7 +200,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                     isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                     classes: ['text-bold'],
-                    children: this.list_to_tree(this.recursionHelperArray)
+                    children: this.list_to_tree(this.recursionHelperArray),
+                    isOrg: false
                 }
             ];
         } else {
@@ -180,7 +212,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.entityTreeNodeList = [
                 {
                     id: this.authService.currentUser.orgId,
-                    name: !!this.authService.currentUser.organization ? this.authService.currentUser.organization.name : "Organization",
+                    name: this.getOrganizationInfo(),
                     isExpanded: true,
                     tagData: null,
                     isChildEntity: true,
@@ -195,12 +227,33 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                             isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
                             isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
                             classes: ['text-bold'],
-                            children: this.list_to_tree(this.recursionHelperArray)
+                            children: this.list_to_tree(this.recursionHelperArray),
+                            isOrg: false
+
                         }
-                    ]
+                    ],
+                    isOrg: true
                 }
             ];
         }
+    }
+
+    private getOrganizationInfo(): string {
+        let orgName = "";
+        if (!!this.authService.currentUser.organization) {
+            if (this.authService.currentUser.organization.name === this.authService.currentUser.organization.orgId) {
+                orgName = "PoC Company"
+                this.isOrgChangeNameLinkAppear = true;
+            } else {
+                this.isOrgChangeNameLinkAppear = false;
+                orgName = this.authService.currentUser.organization.name;
+            }
+
+        } else {
+            orgName = "PoC Company";
+            this.isOrgChangeNameLinkAppear = true;
+        }
+        return orgName
     }
 
     //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
@@ -312,7 +365,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             case 'ADD_CHILD': {
                 entityId = !entityId || entityId == '' ? this.authService.currentUser.orgId : entityId;
-                const pNode =  this.tree.treeModel.getNodeById(entityId);
+                const pNode = this.tree.treeModel.getNodeById(entityId);
                 pNode.data['children'].push({
                     id: eData.entityId,
                     name: eData.name,
@@ -342,7 +395,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     //Helper functions to remove children from tree...
-    removeNode(node: TreeNode) {
+    private removeNode(node: TreeNode) {
         let parentNode = node.realParent
             ? node.realParent
             : node.treeModel.virtualRoot;

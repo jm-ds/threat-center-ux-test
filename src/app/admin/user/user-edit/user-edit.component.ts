@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Message, Messages, Role, User} from "@app/models";
+import {Entity, EntityEdge, Message, Messages, Role, User} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "@app/admin/services/user.service";
 import {DualListComponent} from "angular-dual-listbox";
 import {RoleService} from "@app/admin/services/role.service";
-import {Entity, EntityEdge} from "@app/threat-center/shared/models/types";
 import {ApiService} from "@app/threat-center/shared/services";
 import {IOption} from "ng-select";
 
@@ -119,7 +118,7 @@ export class UserEditComponent implements OnInit {
 
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {
-                this.router.navigate(['/admin/user/show/' + this.user.username],
+                this.router.navigate(['/admin/user/show/' + this.user.email],
                     {state: {messages: [Message.success("User saved successfully.")]}});
             }, (error) => {
                 console.error('User Saving', error);

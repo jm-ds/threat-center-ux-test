@@ -1,16 +1,15 @@
-import { Component, OnInit,Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { debounceTime,map,filter,startWith } from 'rxjs/operators';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { FixResult, License } from '@app/threat-center/shared/models/types';
-import { SelectItem } from 'primeng/api';
-import { FilterUtils } from 'primeng/utils';
-import { Router } from '@angular/router';
-import { FixService } from '@app/threat-center/dashboard/project/services/fix.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import Swal from 'sweetalert2';
-import { MatPaginator } from '@angular/material';
+import {ApiService} from '@app/threat-center/shared/services/api.service';
+import {Router} from '@angular/router';
+import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MatPaginator} from '@angular/material';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { FixResult, License } from '@app/models';
 
 
 @Component({
@@ -32,7 +31,7 @@ export class LicenseDimensionComponent implements OnInit {
   obsLicense:Observable<License>;
   obsLicenseComponents:Observable<any>;
   licenseComponents : any;
-  fixResultObservable: Observable<FixResult>;
+  fixResultObservable: Observable<FixResult[]>;
   newVersion: string;
   defaultPageSize = 25;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -53,12 +52,13 @@ export class LicenseDimensionComponent implements OnInit {
   limitations:any[];
   conditions:any[];
 
-  constructor(private apiService:ApiService,
-    private router:Router,
-    private fixService: FixService,
-    private spinner: NgxSpinnerService
-
-    ) { }
+  constructor(
+      private apiService: ApiService,
+      private router: Router,
+      private fixService: FixService,
+      private modalService: NgbModal
+  ) {
+  }
 
   ngOnInit() {
     if(this.licenseId) {
@@ -111,17 +111,14 @@ export class LicenseDimensionComponent implements OnInit {
     this.router.navigate([decodeURIComponent(url)]);
   }
 
-  fixVersion(groupId: string, artifactId: string) {
-    this.spinner.show();
-    this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, groupId, artifactId, this.newVersion.split("||")[1]);
-    this.fixResultObservable.subscribe(res => {
-        this.spinner.hide();
-        if (res) {
-            Swal.fire('Good job!', 'Mvn dependency version updated!', 'success');
-        } else {
-            Swal.fire('Error!', 'Something went wrong, try later!', 'warning');
-        }
+  fixVersion(componentId: string, oldVersion: string) {
+    const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+      keyboard: false,
     });
+    modalRef.componentInstance.scanId = this.scanId;
+    modalRef.componentInstance.newVersion = this.newVersion;
+    modalRef.componentInstance.oldVersion = oldVersion;
+    modalRef.componentInstance.componentId = componentId;
   }
 
   // While any changes occurred in page

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
@@ -6,7 +6,6 @@ import { FilterUtils } from 'primeng/utils';
 import { interval, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/threat-center/shared/models/types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
@@ -18,6 +17,7 @@ import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-di
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
+import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
 
 @Component({
     selector: 'app-quickstart',
@@ -25,7 +25,7 @@ import { HostListener } from '@angular/core';
     styleUrls: ['./quickstart-wizard.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class QuickstartWizardComponent implements OnInit {
+export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     public license: any;
     obsGithubUser: Observable<GitHubUser>;
@@ -57,11 +57,16 @@ export class QuickstartWizardComponent implements OnInit {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService) {
+        this.scanHelperService.isEnabaleNewScanObservable$
+            .subscribe(x => {
+                this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
+            });
+    }
+    ngOnDestroy(): void {
+        this.scanHelperService.isRefreshObjectPage.next(false);
     }
 
-    public ghUserCols = [
-        { field: 'name', header: 'Name' }
-    ];
+    public ghUserCols = [{ field: 'name', header: 'Name' }];
 
     public demoForm = new FormGroup({
         files: this.filesControl
@@ -90,7 +95,7 @@ export class QuickstartWizardComponent implements OnInit {
             let repo = resourcePath[2];
             let branch = this.selectedRepos[0].node.scanBranch;
             if (!branch) {
-                branch = 'master';
+                branch = this.selectedRepos[0].node.defaultBranchRef.name;
             }
             scanRequest.login = owner;
             scanRequest.branch = branch;
@@ -119,7 +124,7 @@ export class QuickstartWizardComponent implements OnInit {
         scanRequest.entityId = this.entityId;
         this.taskService.scanRequest = scanRequest;
         console.log("SUBMITTING TASK..");
-        //open dialog box with message..
+        // open dialog box with message..
 
         // this.openFloatingModel();
         this.isDisableScanBtn = true;
@@ -250,7 +255,6 @@ export class QuickstartWizardComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.isDisableScanBtn = false;
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
             if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
@@ -279,7 +283,7 @@ export class QuickstartWizardComponent implements OnInit {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId,this.activeTab);
+        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
     }
 
 

@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-
-import { Scan, License, ScanAsset, User, Repository } from '@app/threat-center/shared/models/types';
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService } from '@app/security/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import Swal from "sweetalert2";
+import { ScanAsset, ScanAssetMatch } from '@app/models';
 
 
 @Component({
@@ -32,6 +32,18 @@ export class ScanAssetDetailComponent implements OnInit {
 
   projectId: string = "";
   breadcumDetail: any = {};
+  scanAssetId: string = "";
+  scanId: string = "";
+  attributionStatus: string = "";
+  attributionComment: string = "";
+  selectedMatches: ScanAssetMatch[] = [];
+
+  attributionStatuses: CodeNamePair[] = [
+                                              { code: "REVIEWED", name: "Reviewed" },
+                                              { code: "IGNORED", name: "Ignored" },
+                                              { code: "COMPLETE", name: "Complete" }
+                                         ];
+
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -45,18 +57,18 @@ export class ScanAssetDetailComponent implements OnInit {
     // we could use the scanId to load scan, which has the repository,
     // then use the scanAssetId to load scanAsset.
     // it's no ideal but will work for the demo.
-    let scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
-    let scanId = this.route.snapshot.paramMap.get('scanId');
+    this.scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
+    this.scanId = this.route.snapshot.paramMap.get('scanId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     // get the scan asset for this page
-    let obsScanAsset = this.apiService.getScanAsset(scanId, scanAssetId)
+    let obsScanAsset = this.apiService.getScanAsset(this.scanId, this.scanAssetId)
       .pipe(map(result => result.data.scanAsset));
 
     // https://github.com/threatrix/threat-center-ux/issues/4
     // Don't attempt to pull data for files that were not ACCEPTED status
 
     // lookup scan repository(it's attached to scan, not scanasset)
-    this.apiService.getScanRepository(scanId)
+    this.apiService.getScanRepository(this.scanId)
       .pipe(map(result => result.data.scan))
       .subscribe(result => {
         let scanRepository = result.scanRepository;
@@ -85,7 +97,7 @@ export class ScanAssetDetailComponent implements OnInit {
           });
         }
       });
-
+      this.attributionStatus = "COMPLETE";
       this.initBreadcum();
   }
 
@@ -145,4 +157,49 @@ export class ScanAssetDetailComponent implements OnInit {
   private initBreadcum() {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
+
+  
+  // send attribute asset request
+  attributeAsset(assetMatch) {
+    this.apiService.attributeAsset(this.scanId, this.scanAssetId, 
+      this.selectedMatches, this.attributionStatus, this.attributionComment)
+      .subscribe(data => {
+        if (data.data.attributeAsset) {
+          Swal.fire('License attribution', 'Attribution is successful', 'success');
+        } else {
+          Swal.fire('License attribution', 'Attribution is not required', 'warning');
+        }
+      }, (error) => {
+        Swal.fire('License attribution', 'Attribution error', 'error');
+    });
+
+  }
+
+  
+  //  selected matches change handler
+  onSelectedChange(selectedAssetMatchId, selectedPercentMatch, isChecked) {
+    if(isChecked) {
+      this.selectedMatches.push({
+        assetMatchId: selectedAssetMatchId,
+        percentMatch : selectedPercentMatch
+      });
+    } else {
+      let index = -1
+      for (let i=0; i<this.selectedMatches.length; i++) {
+        if (this.selectedMatches[i].assetMatchId === selectedAssetMatchId) {
+          index = i;
+        }
+        if (index!=-1) {
+          this.selectedMatches.splice(index,1);
+        }
+      }
+    }
+  }
+
 }
+
+class CodeNamePair {
+  code: String;
+  name: String;
+}
+

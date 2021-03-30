@@ -1,6 +1,9 @@
+import { Injectable } from '@angular/core';
 import { EntityModel } from '@app/admin/entity/entity.class';
 import { Permission, Role } from "@app/models/role";
-import { EntityConnection, PageInfo } from "@app/threat-center/shared/models/types";
+import { PageInfo } from './common';
+import { EntityConnection } from './entity';
+
 
 export class User {
     accessToken: string;
@@ -19,7 +22,7 @@ export class User {
 
     // lists returned by gql inner queries
     userRoles: Role[];
-    userEntities: EntityConnection;
+    userEntities: EntityConnection = new EntityConnection();
     userPermissions: Permission[];
 
     // lists as user class fields
@@ -35,6 +38,8 @@ export class User {
     coverLetter: string;
     phone: string;
     position: string;
+
+    avatarUrl: string;
 }
 
 export class OrganizationModel {
@@ -116,3 +121,36 @@ export class UserEdge {
     node: User;
     cursor: string;
 }
+
+
+@Injectable()
+export class Invite {
+    readonly orgId: string;
+    readonly username: string;
+    readonly inviteHash: string;
+    readonly inviteUrl: string;
+    readonly expiredDate: Date;
+}
+
+
+export interface InviteQuery {
+    invite: Invite;
+}
+
+@Injectable()
+export class InviteMailData {
+    readonly inviteUrl: string;
+    readonly to: string;
+    readonly subject: string;
+    readonly body: string;
+}
+
+export class InviteMailDataRequestInput {
+    readonly inviteMailData: InviteMailData;
+    constructor(inviteMailData: InviteMailData) {
+        this.inviteMailData = inviteMailData;
+        delete inviteMailData["__typename"];
+    }
+}        
+
+

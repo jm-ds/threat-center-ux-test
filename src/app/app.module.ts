@@ -22,7 +22,7 @@ import { ToggleFullScreenDirective } from './theme/shared/full-screen/toggle-ful
 
 /* Menu Items */
 import { NavigationItem } from './theme/layout/admin/navigation/navigation';
-import { NgbButtonsModule, NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbButtonsModule, NgbDropdownModule, NgbModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TcSharedModule } from './threat-center/shared/tc-shared.module';
 import { SharedModule } from './shared/shared.module';
 import { GraphQLModule } from './graphql.module';
@@ -31,6 +31,7 @@ import { BasicAuthInterceptor, ErrorInterceptor } from './security/helpers';
 import { CoreModule } from './core/core.module';
 import { ToastrModule } from 'ngx-toastr';
 import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.component";
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -47,8 +48,7 @@ import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.com
     NavSearchComponent,
     NavRightComponent,
     ConfigurationComponent,
-    ToggleFullScreenDirective,
-    UnauthorizedComponent
+    ToggleFullScreenDirective
   ],
   imports: [
     BrowserModule,
@@ -69,7 +69,8 @@ import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.com
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    NavigationItem
+    NavigationItem,
+    CookieService
   ],
   exports: [ SharedModule ],
   bootstrap: [AppComponent]

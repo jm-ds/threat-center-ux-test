@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Task } from '@app/models';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
-import { Task } from '../models/types';
 import { TaskService } from './task.service';
 
 @Component({

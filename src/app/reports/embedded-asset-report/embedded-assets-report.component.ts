@@ -1,9 +1,9 @@
 import {Component, HostListener, Input, OnInit, ViewChild} from '@angular/core';
-import {Entity} from "@app/threat-center/shared/models/types";
 import {ReportService} from "@app/reports/report.service";
 import {ScrollStateService} from "@app/shared/scroll-state.service";
 import {compareByName} from "@app/shared/compare-utils";
 import {NouiFormatter} from "ng2-nouislider";
+import { Entity } from '@app/models';
 
 
 export class FileSizeSliderFormatter implements NouiFormatter {

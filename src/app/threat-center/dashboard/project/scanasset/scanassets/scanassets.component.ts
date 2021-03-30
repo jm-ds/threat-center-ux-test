@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { Scan } from '@app/threat-center/shared/models/types';
+import { Scan } from '@app/models';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class ScanAssetsComponent implements OnInit {
   @Input() obsScan: Observable<Scan>;
   @Output() isAssetStory = new EventEmitter<boolean>();
 
-  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets'];
+  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets', 'Attribution'];
 
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -140,7 +140,7 @@ export class ScanAssetsComponent implements OnInit {
   getColumnFilterValue(key) {
     let value = this.columnsFilter.get(key);
     if (value === undefined) {
-      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets') {
+      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets' || key === 'Attribution') {
         return 'ALL';
       } else {
         return '';

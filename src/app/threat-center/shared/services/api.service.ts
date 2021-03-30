@@ -1,22 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import {
-  BitbucketUserQuery,
-  ComponentQuery,
-  EntityListQuery,
-  EntityQuery,
-  GitHubUserQuery,
-  GitLabUserQuery,
-  LicenseQuery,
-  ProjectQuery,
-  Scan,
-  ScanAssetQuery,
-  ScanQuery,
-  UserSelection,
-  VulnerabilityQuery
-} from '../models/types';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service'
+import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +31,7 @@ export class ApiService {
 
   getEntity(entityId: string) {
     let childProjects = `
-    childProjects(first:1000) {
+    childProjects(first:100) {
       edges {
         node {
           projectId
@@ -58,41 +44,10 @@ export class ApiService {
             tag
             version
             created
-            scanMetrics {
-              vulnerabilityMetrics {
-                critical
-                high
-                medium
-                low
-                info
-                avgCvss2
-                avgCvss3
-              }
-              licenseMetrics {
-                copyleftStrong
-                copyleftWeak
-                copyleftPartial
-                copyleftLimited
-                copyleft
-                custom
-                dual
-                permissive
-                total
-              }
-              componentMetrics {
-                notLatest
-                latest
-                vulnerabilities
-                riskyLicenses
-              }
-              assetMetrics {
-                embedded
-                analyzed
-                skipped
-              }
-            }
+            
+            
           }
-          %childProjects%          
+          %childProjects%
         }
       }
     }`;
@@ -101,97 +56,113 @@ export class ApiService {
       entity(entityId: "${entityId}") {
         entityId
         parentEntityId
+        parents {
+          entityId
+          name
+        }
         name
         entityType
         removed
+        entityMetricsSummaryGroup {
+          entityMetricsSummaries {
+            measureDate
+            vulnerabilityMetrics {
+                critical
+                high
+                medium
+                low
+                info
+            }
+            licenseMetrics {
+                copyleftStrong
+                copyleftWeak
+                copyleftPartial
+                copyleftLimited
+                copyleft
+                custom
+                dual
+                permissive
+            }
+            supplyChainMetrics {
+                risk
+                quality
+            }
+            assetMetrics {
+                embedded
+                openSource
+                unique
+            }
+          }
+        }
+        entityMetricsGroup {
+            projectCount
+            entityMetrics{
+                measureDate
+                vulnerabilityMetrics {
+                    severityMetrics
+                }
+                assetMetrics {
+                    assetCompositionMetrics
+                }
+                componentMetrics {
+                    vulnerabilityMetrics
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                licenseMetrics {
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                supplyChainMetrics {
+                    supplyChainMetrics
+                }
+            }
+        }
         projects {
           edges {
             node {
               projectId
               name
               created
-              latestScan {
-                scanId
-                projectId
-                branch
-                tag
-                version
-                created
-                scanMetrics {
-                  vulnerabilityMetrics {
-                    critical
-                    high
-                    medium
-                    low
-                    info
-                    avgCvss2
-                    avgCvss3
-                  }
-                  licenseMetrics {
-                    copyleftStrong
-                    copyleftWeak
-                    copyleftPartial
-                    copyleftLimited
-                    copyleft
-                    custom
-                    dual
-                    permissive
-                    total
-                  }
-                  componentMetrics {
-                    notLatest
-                    latest
-                    vulnerabilities
-                    riskyLicenses
-                  }
-                  assetMetrics {
-                    embedded
-                    analyzed
-                    skipped
-                  }
+              
+              projectMetricsSummary {
+                measureDateTime
+                vulnerabilityMetrics {
+					critical
+					high
+					medium
+					low
+					info
                 }
-              }
+                licenseMetrics {
+					copyleftStrong
+					copyleftWeak
+					copyleftPartial
+					copyleftLimited
+					copyleft
+					custom
+					dual
+					permissive
+                }
+                supplyChainMetrics {
+					risk
+					quality
+                }
+                assetMetrics {
+					embedded
+					openSource
+					unique
+                }
+			  }
+              
+              
               %childProjects%
             }
           }
         }
-        entityMetrics {
-          projectCount
-          vulnerabilityMetrics {
-            total
-            critical
-            high
-            medium
-            low
-            info
-            avgCvss2
-            avgCvss3
-          }
-          licenseMetrics {
-            copyleftStrong
-            copyleftWeak
-            copyleftPartial
-            copyleftLimited
-            copyleft
-            custom
-            dual
-            permissive
-            total
-          }
-          componentMetrics {
-            total
-            notLatest
-            latest
-            vulnerabilities
-            riskyLicenses
-          }
-          assetMetrics {
-            total
-            embedded
-            analyzed
-            skipped
-          }
-        }
+        
 
         childEntities {
           edges {
@@ -201,94 +172,40 @@ export class ApiService {
               name
               entityType
               removed
-              projects {
-                edges {
-                  node {
-                    projectId
-                    name
-                    created
-                    latestScan {
-                      scanId
-                      projectId
-                      branch
-                      tag
-                      version
-                      created
-                      scanMetrics {
-                        vulnerabilityMetrics {
-                          critical
-                          high
-                          medium
-                          low
-                          info
-                          avgCvss2
-                          avgCvss3
-                        }
-                        licenseMetrics {
-                          copyleftStrong
-                          copyleftWeak
-                          copyleftPartial
-                          copyleftLimited
-                          copyleft
-                          custom
-                          dual
-                          permissive
-                          total
-                        }
-                        componentMetrics {
-                          notLatest
-                          latest
-                          vulnerabilities
-                          riskyLicenses
-                        }
-                        assetMetrics {
-                          embedded
-                          analyzed
-                          skipped
-                        }
-                      }
-                    }
-                    %childEntityChildProjects%                    
+              
+              entityMetricsSummaryGroup {
+                entityMetricsSummaries {
+                  measureDate
+                  vulnerabilityMetrics {
+                      critical
+                      high
+                      medium
+                      low
+                      info
                   }
-                }
+                  licenseMetrics {
+                      copyleftStrong
+                      copyleftWeak
+                      copyleftPartial
+                      copyleftLimited
+                      copyleft
+                      custom
+                      dual
+                      permissive
+                  }
+                  supplyChainMetrics {
+                      risk
+                      quality
+                  }
+                  assetMetrics {
+                      embedded
+                      openSource
+                      unique
+                  }
+                }  
               }
-              entityMetrics {
-                projectCount
-                vulnerabilityMetrics {
-                  total
-                  critical
-                  high
-                  medium
-                  low
-                  info
-                  avgCvss2
-                  avgCvss3
-                }
-                licenseMetrics {
-                  copyleftStrong
-                  copyleftWeak
-                  copyleftPartial
-                  copyleftLimited
-                  copyleft
-                  custom
-                  dual
-                  permissive
-                  total
-                }
-                componentMetrics {
-                  total
-                  notLatest
-                  latest
-                  vulnerabilities
-                  riskyLicenses
-                }
-                assetMetrics {
-                  total
-                  embedded
-                  analyzed
-                  skipped
-                }
-              }
+              
+              
             }
           }
         }
@@ -298,7 +215,7 @@ export class ApiService {
     // max child project depth = 10
     for (let i = 0; i < 10; i++) {
       query = query.replace("%childProjects%", childProjects);
-      query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%","%childEntityChildProjects%"));
+      query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%", "%childEntityChildProjects%"));
     }
     query = query.replace("%childProjects%", "");
     query = query.replace("%childEntityChildProjects%", "");
@@ -395,43 +312,40 @@ export class ApiService {
                     version
                     created,
                     errorMsg,
-                    log,
-                    scanMetrics {
-                      vulnerabilityMetrics {
-                        critical,
-                        high,
-                        medium,
-                        low,
-                        info,
-                        avgCvss2,
-                        avgCvss3
-                      },
-                      licenseMetrics {
-                        copyleftStrong,
-                         copyleftWeak,
-                         copyleftPartial,
-                         copyleftLimited,
-                         copyleft,
-                         custom,
-                         dual,
-                         permissive,
-                         total
-                      },
-                      componentMetrics {
-                        notLatest,
-                        vulnerabilities,
-                        riskyLicenses
-                      },
-                      assetMetrics {
-                        embedded,
-                        analyzed,
-                        skipped
+                    log
+                    
+                    
+                    projectMetricsGroup {
+                      projectMetrics{
+                          measureDate
+                          vulnerabilityMetrics {
+                              severityMetrics
+                          }
+                          assetMetrics {
+                              assetCompositionMetrics
+                          }
+                          componentMetrics {
+                              vulnerabilityMetrics
+                              licenseCategoryMetrics
+                              licenseFamilyMetrics
+                              licenseNameMetrics
+                          }
+                          licenseMetrics {
+                              licenseCategoryMetrics
+                              licenseFamilyMetrics
+                              licenseNameMetrics
+                          }
+                          supplyChainMetrics {
+                              supplyChainMetrics
+                          }
                       }
                     }
+                   
+                    
                   }
                 }
               }
-              }
+            }
         }
       `, 'no-cache');
   }
@@ -760,7 +674,7 @@ export class ApiService {
               }  
             }    
           }
-        `);  
+        `);
   }
 
   getVulnerability(vulnerabilityId: string) {
@@ -853,6 +767,7 @@ export class ApiService {
                   status,
                   assetType,
                   parentScanAssetId,
+                  attributionStatus, 
                   embeddedAssets {
                     edges {
                       node {
@@ -887,6 +802,7 @@ export class ApiService {
                   percentMatch,
                   name,
                   assetSize,
+                  assetMatchId,
                   originAssetId,
                   earliestReleaseDate,
                   earliestReleaseVersion,
@@ -944,6 +860,39 @@ export class ApiService {
           }
         }
       `);
+  }
+
+  getEntityMetricsPeriod(orgId: string, entityId: string, period: Period) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+       query {
+          entityMetricsPeriod(orgId:"${orgId}" entityId:"${entityId}" period:${period})  {
+            projectCount
+            entityMetrics {
+                measureDate
+                vulnerabilityMetrics {
+                    severityMetrics
+                }
+                assetMetrics {
+                    assetCompositionMetrics
+                }
+                componentMetrics {
+                    vulnerabilityMetrics
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                licenseMetrics {
+                    licenseCategoryMetrics
+                    licenseFamilyMetrics
+                    licenseNameMetrics
+                }
+                supplyChainMetrics {
+                    supplyChainMetrics
+                }
+            }
+        }
+      }
+      `,'no-cache');
   }
 
   getGitHubUser() {
@@ -1054,32 +1003,32 @@ export class ApiService {
   getGitLabUser() {
     return this.apollo.watchQuery<GitLabUserQuery>({
       query: gql`
-                query {
-                  gitLabUser {
-                    id,
-                    avatarUrl,
-                    email,
-                    name,
-                    username,
-                    gitLabProjects {
-                      id,
-                      name,
-                      fullPath,
-                      description,
-                      httpUrlToRepo,
-                      sshUrlToRepo,
-                      path,
-                      webUrl,
-                      archived,
-                      createdAt,
-                      repository {
-                          rootRef,
-                          exists
-                      }
-                    }
-                  }
+          query {
+            gitLabUser {
+              id,
+              avatarUrl,
+              email,
+              name,
+              username,
+              gitLabProjects {
+                id,
+                name,
+                fullPath,
+                description,
+                httpUrlToRepo,
+                sshUrlToRepo,
+                path,
+                webUrl,
+                archived,
+                createdAt,
+                repository {
+                    rootRef,
+                    exists
                 }
-              `,
+              }
+            }
+          }
+        `,
     }).valueChanges;
   }
 
@@ -1088,31 +1037,50 @@ export class ApiService {
   getBitbucketUser() {
     return this.apollo.watchQuery<BitbucketUserQuery>({
       query: gql`
-                query {
-                  bitbucketUser {
-                    id,
-                    name,
-                    username,
-                    state,
-                    email,
-                    avatarUrl,
-                    webUrl,
-                    organization,
-                    bitBucketRepositories {
-                        name,
-                        fullName,
-                        url,
-                        sshUrl,
-                        owner,
-                        createdOn,
-                        description,
-                        language,
-                        mainBranch,
-                        branches
-                    }
-                  }
-                }
-              `,
+          query {
+            bitbucketUser {
+              id,
+              name,
+              username,
+              state,
+              email,
+              avatarUrl,
+              webUrl,
+              organization,
+              bitBucketRepositories {
+                  name,
+                  fullName,
+                  url,
+                  sshUrl,
+                  owner,
+                  createdOn,
+                  description,
+                  language,
+                  mainBranch,
+                  branches
+              }
+            }
+          }
+        `,
     }).valueChanges;
   }
+
+
+  // send attribute asset graphql mutation
+  attributeAsset(scanId: string, scanAssetId: string, assetMatches: ScanAssetMatch[], attributeStatus: string, attributeComment: string): any {
+    const assetMatchesInput = [];
+    for (let match of assetMatches) {
+      assetMatchesInput.push(new ScanAssetMatchRequest(match.assetMatchId, match.percentMatch));
+    }
+    let attributeAssetRequest = new AttributeAssetRequestInput(scanId, scanAssetId, assetMatchesInput, attributeStatus, attributeComment);
+    return this.apollo.mutate({
+      mutation: gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
+        attributeAsset(attributeAssetRequest: $attributeAssetRequest)
+      }`,
+      variables: {
+        attributeAssetRequest: attributeAssetRequest
+      }  
+    });    
+  }
+
 }

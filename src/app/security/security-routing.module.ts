@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {CreateAccountComponent} from '@app/security/create-account/create-account.component';
 import {AwaitingApprovalComponent} from "@app/security/awaiting-approval/awaiting-approval.component";
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: 'awaiting-approval',
         component: AwaitingApprovalComponent
+      },
+      {
+        path: 'unauthorized',
+        component: UnauthorizedComponent
       }
     ]
   }

@@ -4,7 +4,6 @@ import { AdminComponent } from './theme/layout/admin/admin.component';
 import {CoreChartModule} from './demo/pages/core-chart/core-chart.module';
 import { AuthComponent } from './theme/layout/auth/auth.component';
 import { AuthGuard } from './security/helpers';
-import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.component";
 
 const routes: Routes = [
   {
@@ -29,10 +28,6 @@ const routes: Routes = [
       {
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule)
-      },
-      {
-        path: 'unauthorized',
-        component: UnauthorizedComponent
       },
       {
         path: 'alerts',

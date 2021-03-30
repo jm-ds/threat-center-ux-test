@@ -38,6 +38,7 @@
               <th>Workspace Path</th>
               <th>Status</th>
               <th>Embedded Assets</th>
+              <th>Attribution</th>
             </tr>
             <tr>
               <th *ngFor="let col of columns">
@@ -47,7 +48,7 @@
                 <input *ngIf="col=='Workspace Path'" type="text" placeholder="{{col}}" name="search-name"
                        class="form-control" (input)="filterColumn(col, $event.target.value)"
                        [value]="getColumnFilterValue(col)"/>
-                <select *ngIf="col == 'Status'" class="form-control"
+                <select *ngIf="col == 'Status'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -57,7 +58,7 @@
                   <option value="IGNORED_TYPE_UNSUPPORTED">IGNORED_TYPE_UNSUPPORTED</option>
                   <option value="ACCEPTED">ACCEPTED</option>
                 </select>
-                <select *ngIf="col == 'File Size'" class="form-control"
+                <select *ngIf="col == 'File Size'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -66,7 +67,7 @@
                   <option value="1mb-10mb">1mb-10mb</option>
                   <option value="10mb+">10mb+</option>
                 </select>
-                <select *ngIf="col == 'Embedded Assets'" class="form-control"
+                <select *ngIf="col == 'Embedded Assets'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -76,13 +77,21 @@
                   <option value="51-70">51-70%</option>
                   <option value="71-100">71-100%</option>
                 </select>
+                <select *ngIf="col == 'Attribution'" class="form-control"
+                        [value]="getColumnFilterValue(col)"
+                        (change)="filterColumn(col, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="REVIEWED">REVIEWED</option>
+                  <option value="IGNORED">IGNORED</option>
+                  <option value="COMPLETE">COMPLETE</option>
+                </select>
               </th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset let-rowIndex="rowIndex">
             <tr *ngIf="story.length>0 && rowIndex==0" class="cursor-pointer">
-              <td (click)="goBack()" colspan="5"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
+              <td (click)="goBack()" colspan="6"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
             </tr>
             <tr class="cursor-pointer" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
@@ -98,6 +107,8 @@
               <td>{{scanAsset.node.status}}</td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.assetType != 'DIR'" >
               <td>
@@ -111,6 +122,8 @@
               <td>{{scanAsset.node.workspacePath}}</td>
               <td>{{scanAsset.node.status}}</td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
         </ng-template>
