@@ -122,7 +122,7 @@ export class ChartHelperService {
                 }
             },
             // colors: ["#ff5252", "#ffa21d"],
-            colors:["#11c15b", "#4680ff"],
+            colors: ["#11c15b", "#4680ff"],
             labels: [],
             legend: {
                 show: true,
@@ -289,6 +289,9 @@ export class ChartHelperService {
                 height: 24,
                 sparkline: {
                     enabled: true
+                },
+                animations: {
+                    enabled: false
                 }
             },
             colors: ['#F44336'],
