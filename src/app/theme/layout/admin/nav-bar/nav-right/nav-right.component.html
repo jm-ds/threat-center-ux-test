@@ -55,12 +55,12 @@
   <li>
     <div class="dropdown drp-user" ngbDropdown placement="auto">
       <a href="javascript:" ngbDropdownToggle data-toggle="dropdown">
-        <i class="icon fa fa-user"></i>
+        <img src="{{!!currentUser.avatarUrl?currentUser.avatarUrl:'assets/images/user/no-avatar.png'}}" class="img-radius" alt="User-Profile-Image" style="max-width: 30px; max-height: 30px; position: relative; left: -8px; top: -2px;">
       </a>
       <div class="dropdown-menu dropdown-menu-right profile-notification" ngbDropdownMenu>
         <div class="pro-head">
-          <img src="assets/images/user/no-avatar.png" class="img-radius" alt="User-Profile-Image">
-          <span>John Doe</span>
+          <img src="{{!!currentUser.avatarUrl?currentUser.avatarUrl:'assets/images/user/no-avatar.png'}}" class="img-radius" alt="User-Profile-Image">
+          <span>{{!!currentUser.fname?currentUser.fname:'' + ' '+ !!currentUser.lname?currentUser.lname:''}}</span>
           <a href="javascript:" class="dud-logout" title="Logout" (click)="logout()">
             <i class="feather icon-log-out"></i>
           </a>

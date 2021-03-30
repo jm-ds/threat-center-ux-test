@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { InviteService } from '@app/admin/services/invite.service';
 import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { User } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
 import { NgbDropdownConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,13 +22,17 @@ export class NavRightComponent implements OnInit {
 
   inviteUrl: string;
 
+  currentUser: User;
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
     public coreHelperService: CoreHelperService,
     private inviteService: InviteService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.currentUser = this.authenticationService.currentUser;
+  }
 
   logout() {
     this.coreHelperService.logoutUser();

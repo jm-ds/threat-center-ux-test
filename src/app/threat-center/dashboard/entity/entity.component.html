@@ -311,7 +311,7 @@
 
   <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
-      <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
+      <app-card [hidHeader]="false" cardClass="tab-card entity-table-card">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
 
@@ -335,7 +335,7 @@
                         </tr>
                       </ng-template>
                       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-                        <tr *ngIf="showAndHideRow(rowData)">
+                        <tr *ngIf="showAndHideRow(rowData)" style="height:50px">
                           <td>
                             <div class="tree-data-parent cursor-pointer"
                               (click)="onEntityTreeNameSelect(rowData,rowNode)">
@@ -404,7 +404,7 @@
                   <app-card [hidHeader]="true" cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
                       <perfect-scrollbar>
-                        <p-treeTable class="table  m-b-0" [value]="projects">
+                        <p-treeTable class="table table-hover m-b-0" [value]="projects">
                           <ng-template pTemplate="header">
                             <tr>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
@@ -428,13 +428,12 @@
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
-                            <tr [ttRow]="rowNode">
+                            <tr [ttRow]="rowNode" class="cursor-pointer" [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">
                               <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <a
                                   [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
                               </td>
-                              <!-- <td style="border-left:1px solid #4680ff; padding: 0.75rem;">{{entity.name}}</td> -->
                               <td style="padding: 0.75rem;">
                                 <span title="Critical"
                                   class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
@@ -608,22 +607,23 @@
                           </div>
                           <div class="chart-hdr-box"
                             *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
-                            <div class="count-blk vulnerabilities-col">
+                            <div class="count-blk vulnerabilities-col" style="flex:50%">
                               <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Vuln:</p>
+                                Vulnerability:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)}}</span>
                             </div>
-                            <div class="count-blk license-col">
+                            <div style="clear:both;"></div>
+                            <div class="count-blk license-col" style="flex:50%">
                               <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Licns:</p>
+                                Licese:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)}}</span>
                             </div>
-                            <div class="count-blk components-col">
+                            <div class="count-blk components-col" style="flex:50%">
                               <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
                                 Supply:</p>
-                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics)}}</span>
+                              <span>{{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk}}</span> / <span>{{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality}}</span>
                             </div>
-                            <div class="count-blk assets-col">
+                            <div class="count-blk assets-col" style="flex:50%">
                               <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
                                 Assets:</p>
                               <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics)}}</span>
