@@ -421,6 +421,10 @@ export type TaskQuery = {
   task_update:Task;
 }
 
+export type RunningTaskCountQuery = {
+  running_scan_tasks_count:number;
+}
+
 export type GitHubUserQuery = {
   gitHubUser: GitHubUser;
 }
