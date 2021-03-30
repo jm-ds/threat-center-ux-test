@@ -16,6 +16,7 @@ export class NextConfig {
     delaySeconds: 1500, //pause(delay) between scan requests while scaning project
     defaultItemPerPage: 25,
     stackedChartType: 'area',
-    sparkChartType: 'line'
+    sparkChartType: 'line',
+    inviteCookieExpirePeriodDays: 10 // The period in days after which invite-cookies become expired
   };
 }
