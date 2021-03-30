@@ -1,7 +1,7 @@
 import {Component, ElementRef, HostListener, Input, OnChanges, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {ScanAsset, ScanAssetQuery, SimmMatch} from "@app/threat-center/shared/models/types";
 import gql from "graphql-tag";
 import {SimmService} from "@app/threat-center/shared/simm/simm.service";
+import { ScanAsset, SimmMatch } from '@app/models';
 
 @Component({
     selector: 'app-simm',

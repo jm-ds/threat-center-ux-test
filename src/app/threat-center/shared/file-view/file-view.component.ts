@@ -2,7 +2,8 @@ import { Component, OnInit,Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 import { MarkdownModule } from 'ngx-markdown';
-import { ScanAsset } from '@app/threat-center/shared/models/types';
+import { ScanAsset } from '@app/models';
+
 
 export interface DiffContent {
   leftContent: string;
