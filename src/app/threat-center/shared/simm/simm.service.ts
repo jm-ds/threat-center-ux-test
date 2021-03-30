@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Apollo} from "apollo-angular";
-import {UserQuery} from "@app/models";
+import {SimmQuery, UserQuery} from "@app/models";
 import gql from "graphql-tag";
-import {SimmQuery} from "@app/threat-center/shared/models/types";
+
 
 @Injectable({
     providedIn: 'root'

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FixResult} from "@app/threat-center/shared/models/types";
+import { FixResult } from '@app/models';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

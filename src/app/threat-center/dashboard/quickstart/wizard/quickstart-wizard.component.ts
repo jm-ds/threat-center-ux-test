@@ -6,7 +6,6 @@ import { FilterUtils } from 'primeng/utils';
 import { interval, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/threat-center/shared/models/types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
@@ -18,6 +17,7 @@ import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-di
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
+import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
 
 @Component({
     selector: 'app-quickstart',

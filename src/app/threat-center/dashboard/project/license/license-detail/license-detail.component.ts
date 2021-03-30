@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime,map,filter,startWith } from 'rxjs/operators';
 import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-
-import { Scan,License } from '@app/threat-center/shared/models/types';
 import { ApiService,StateService } from '@app/threat-center/shared/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
