@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-ui-modal',
@@ -6,7 +6,7 @@ import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
   styleUrls: ['./ui-modal.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class UiModalComponent implements OnInit {
+export class UiModalComponent implements OnInit, OnDestroy {
   @Input() dialogClass: string;
   @Input() hideHeader = false;
   @Input() hideFooter = false;
@@ -19,6 +19,10 @@ export class UiModalComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+    document.querySelector('body').classList.remove('modal-open');
+  }
+  
   public show(): void {
     this.visible = true;
     setTimeout(() => this.visibleAnimate = true, 100);
