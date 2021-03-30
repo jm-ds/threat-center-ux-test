@@ -1,5 +1,4 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FixResult, Scan} from '@app/threat-center/shared/models/types';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -10,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { FixResult, Scan } from '@app/models';
 
 @Component({
     selector: 'app-components',

@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { Messages } from '@app/messages/messages';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -48,7 +49,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
                 else {
                     // todo: MOVE MESSAGE TO RESOURCE FILE
-                    this.coreHelperService.swalALertBox("You don't have permission to access / on this server.",dataObjToShow.message);
+                    this.coreHelperService.swalALertBox(Messages.status403,dataObjToShow.message);
                     this.router.navigate(['/login']);
                 }
             } else {
