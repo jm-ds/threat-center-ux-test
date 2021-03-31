@@ -48,36 +48,30 @@ export class ChartHelperService {
                 show: false
             },
             tooltip: {
-                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-                    let str = "";
-                    for (let i = 0; i < w.config.series.length; i++) {
-                        let data = 0;
-                        if (!!w.config.series[i])
-                            data = w.config.series[i];
-                        str += "<li class='" + 'red' + "'>" + w.config.labels[i] + " (" + data + ")</li>";
-                    }
-                    let orgData = 0;
-                    if (!!w.config.series[seriesIndex]) {
-                        orgData = w.config.series[seriesIndex];
-                    }
-                    return (
-                        '<div class=" arrow_box chart-overlay">' +
-                        "<span class='active-fig'>" +
-                        w.config.labels[seriesIndex] +
-                        ": " +
-                        orgData +
-                        "</span>" +
-                        "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-                        "</div>"
-                    );
-                }
+                enabled: true,
+                style: {
+                    fontSize: '16px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                },
+                marker: {
+                    show: true,
+                },
+                items: {
+                    display: 'flex',
+                },
+                fixed: {
+                    enabled: false,
+                    position: 'topRight',
+                    offsetX: 0,
+                    offsetY: 0,
+                },
             },
             chart: {
                 type: "donut",
                 sparkline: {
                     enabled: true
                 },
-                height: 200,
+                height: '220px',
                 events: {
                     click: function (event, chartContext, config) {
                         // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
