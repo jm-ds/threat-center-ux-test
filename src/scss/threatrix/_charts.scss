@@ -204,14 +204,15 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     .proj-t-card {
         .card-body {
             padding: 10px;
-            min-height: 180px;
+            min-height: 200px;
+            height: 200px;
 
-            app-apex-chart {
-                div:first-of-type {
-                    height: 125px !important;
-                    min-height: inherit !important;
-                }
-            }
+            // app-apex-chart {
+            //     div:first-of-type {
+            //         // height: 125px !important;
+            //         // min-height: inherit !important;
+            //     }
+            // }
         }
     }
 
