@@ -57,7 +57,6 @@ export class ComponentsComponent implements OnInit {
         this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    //https://github.com/threatrix/product/issues/410
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         if (!this.obsScan) {
