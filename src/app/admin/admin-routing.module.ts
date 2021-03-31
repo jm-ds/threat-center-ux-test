@@ -26,6 +26,10 @@ const routes: Routes = [
       {
         path: 'integration',
         loadChildren: () => import('./integration/integration.module').then(module => module.IntegrationModule)
+      },
+      {
+        path: 'invite',
+        loadChildren: () => import('./invite/invite.module').then(module => module.InviteModule)
       }
     ]
   }
