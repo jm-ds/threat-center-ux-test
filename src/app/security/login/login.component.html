@@ -24,24 +24,24 @@
             </div>
             <div id="auth01" class="row" style="margin-bottom:20px">
                 <div class="col-xl-6">
-                    <a href="{{apiUrl}}/github_login">
+                    <a (click)="redirectToExternalLogin('github_login')" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
                 <div class="col-xl-6">
-                    <a href="{{apiUrl}}/gitlab_login">
+                    <a (click)="redirectToExternalLogin('gitlab_login')" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
             </div>
             <div id="auth02" class="row mb-0">
                 <div class="col-xl-6">
-                    <a href="{{apiUrl}}/bitbucket_login">
+                    <a (click)="redirectToExternalLogin('bitbucket_login')" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-bitbucket"></i></div>
                     </a>
                 </div>
                 <div class="col-xl-6">
-                    <a href="{{apiUrl}}/google_login">
+                    <a (click)="redirectToExternalLogin('google_login')" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-google"></i></div>
                     </a>
                 </div>
