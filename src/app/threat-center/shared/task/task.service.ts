@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
+import { RunningTaskCountQuery, ScanRequest, TaskQuery } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { ScanRequest, TaskQuery } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -62,4 +60,14 @@ export class TaskService {
   `, fetchPolicy: 'no-cache'
     }).valueChanges;
   }
+
+  getRunningScanTasksCount(entityId: string) {
+    return this.apollo.watchQuery<RunningTaskCountQuery>({
+      query: gql`  query {
+        running_scan_tasks_count(entityId:"${entityId}")
+    }
+  `, fetchPolicy: 'no-cache'
+    }).valueChanges;
+  }
+
 }
