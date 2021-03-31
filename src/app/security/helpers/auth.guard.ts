@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
+import { NextConfig } from '@app/app-config';
 import * as jwt_decode from 'jwt-decode';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService, AuthorizationService } from '../services';
 
@@ -9,7 +11,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
-        private authorizationService: AuthorizationService
+        private authorizationService: AuthorizationService,
+        private cookieService: CookieService
     ) {
     }
 
@@ -66,6 +69,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 return this.checkPermissionsAndRedirect(route.data.auth);
             }
         }
+        if ('invite' in  route.queryParams) {
+            const invite = route.queryParams['invite'];
+            this.setInviteCookie(invite);
+        }
         // not logged in so redirect to login page with the return url
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;
@@ -74,6 +81,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         // return this.authorizationService.hasPermissions(childRoute.data.auth);
         return this.checkPermissionsAndRedirect(childRoute.data.auth);
+    }
+    // sets invite cookie
+    setInviteCookie(inviteValue: string) {
+        if (!this.cookieService.check('invite')) {
+            let expiredDate = new Date();
+            expiredDate.setDate(expiredDate.getDate() + NextConfig.config.inviteCookieExpirePeriodDays);
+            this.cookieService.set('invite', inviteValue, {expires: expiredDate, sameSite: 'Lax'});
+        }
     }
 }
 
