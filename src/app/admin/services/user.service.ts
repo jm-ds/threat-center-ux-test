@@ -25,6 +25,7 @@ export class UserService {
                         lname,
                         created,
                         permissions,
+                        avatarUrl,
                         userRoles {
                             roleId,
                             description,
@@ -53,6 +54,7 @@ export class UserService {
                     fname,
                     lname,
                     created,
+                    avatarUrl,
                     userRoles {
                         roleId,
                         description,
