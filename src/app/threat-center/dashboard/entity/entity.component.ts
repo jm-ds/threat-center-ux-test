@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, El
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { Project, Entity, User, ProjectEdge, EntityMetrics, Period } from '@app/threat-center/shared/models/types';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
@@ -11,10 +10,13 @@ import { ApexChartService } from '../../../theme/shared/components/chart/apex-ch
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { TaskService } from '@app/threat-center/shared/task/task.service';
+import { NextConfig } from "@app/app-config";
 import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 
 
 @Component({
@@ -43,6 +45,8 @@ export class EntityComponent implements OnInit, OnDestroy {
     { field: 'name', header: 'Name' },
     { field: 'created', header: 'Created' }
   ];
+  activeScanCount: number;
+  checkRunningScans: boolean = false;
 
   vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
   licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
@@ -114,6 +118,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     public apexEvent: ApexChartService,
     public authService: AuthenticationService,
     private coreHelperService: CoreHelperService,
+    private taskService: TaskService,
     private scanHelperService: ScanHelperService,
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
@@ -133,6 +138,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         value: 8
       }
     ];
+    this.activeScanCount = 0;
 
     this.requestObjectPageSubscriptions = this.scanHelperService.isRefreshObjectPageObservable$
       .subscribe(x => {
@@ -156,6 +162,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
     this.requestObjectPageSubscriptions.unsubscribe();
+    this.checkRunningScans = false;
   }
 
   //Initializing stacked chart according to donut chart selection
@@ -352,9 +359,11 @@ export class EntityComponent implements OnInit, OnDestroy {
     //this.loadVulnerabilities(entityId);
     this.getLastTabSelected();
     this.commonLineSparklineOptions = Object.assign(this.chartHelperService.sparkLineChartCommonConfiguration());
+    this.checkRunningScans = true;
+    this.getRunningScansCount(entityId);
   }
 
-  //Initialize SparkLine charts 
+  //Initialize SparkLine charts
   initSparkLineChart(data, str) {
     let dataToReturn = [];
     const vul = ['critical', 'high', 'medium', 'low', 'info'];
@@ -850,6 +859,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
           cData.data.entity['supplySericeData'] = this.initSparkLineChart(cData.data.entity, 'supplyChainMetrics');
           cData.data.entity['assetSericeData'] = this.initSparkLineChart(cData.data.entity, 'assetMetrics');
+
           d['id'] = childData[i].node.entityId;
           d['data'] = cData.data.entity;
           d['parentId'] = prId;
@@ -948,6 +958,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
+
   private initComponentDonutChart(componentData) {
     if (!!componentData) {
       if (!!componentData.licenseCategoryMetrics) {
@@ -1026,6 +1037,25 @@ export class EntityComponent implements OnInit, OnDestroy {
       }
     });
     return properties;
+  }
+
+  // Fetch active scan count
+  getRunningScansCount(entityId) {
+    if (!this.checkRunningScans) {
+      return;
+    }
+    this.taskService.getRunningScanTasksCount(entityId)
+        .pipe(map(countData => countData.data.running_scan_tasks_count))
+        .subscribe(count => {
+            this.activeScanCount = count;
+            setTimeout(() => {
+                this.getRunningScansCount(entityId);
+            }, NextConfig.config.delaySeconds);
+        }, err => {
+            setTimeout(() => {
+                this.getRunningScansCount(entityId);
+            }, NextConfig.config.delaySeconds);
+        });
   }
 
 }

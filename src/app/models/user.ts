@@ -1,6 +1,9 @@
+import { Injectable } from '@angular/core';
 import { EntityModel } from '@app/admin/entity/entity.class';
 import { Permission, Role } from "@app/models/role";
-import { EntityConnection, PageInfo } from "@app/threat-center/shared/models/types";
+import { PageInfo } from './common';
+import { EntityConnection } from './entity';
+
 
 export class User {
     accessToken: string;
@@ -35,6 +38,8 @@ export class User {
     coverLetter: string;
     phone: string;
     position: string;
+
+    avatarUrl: string;
     // api keys
     apiKeys: ApiKeyConnection;
 }
@@ -118,6 +123,39 @@ export class UserEdge {
     node: User;
     cursor: string;
 }
+
+
+@Injectable()
+export class Invite {
+    readonly orgId: string;
+    readonly username: string;
+    readonly inviteHash: string;
+    readonly inviteUrl: string;
+    readonly expiredDate: Date;
+}
+
+
+export interface InviteQuery {
+    invite: Invite;
+}
+
+@Injectable()
+export class InviteMailData {
+    readonly inviteUrl: string;
+    readonly to: string;
+    readonly subject: string;
+    readonly body: string;
+}
+
+export class InviteMailDataRequestInput {
+    readonly inviteMailData: InviteMailData;
+    constructor(inviteMailData: InviteMailData) {
+        this.inviteMailData = inviteMailData;
+        delete inviteMailData["__typename"];
+    }
+}
+
+
 
 export class ApiKey {
     orgId: string;

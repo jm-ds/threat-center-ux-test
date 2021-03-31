@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from "apollo-angular";
-import { ApiKey, ApiKeyQuery, ApiKeyRequestInput, Role, RoleRequestInput, User, UserQuery, UserRequestInput, UsersQuery } from "@app/models";
+import { Role, User, UserQuery, UserRequestInput, UsersQuery, ApiKey, ApiKeyQuery, ApiKeyRequestInput } from "@app/models";
 import gql from "graphql-tag";
-import { Entity } from "@app/threat-center/shared/models/types";
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
@@ -26,6 +25,7 @@ export class UserService {
                         lname,
                         created,
                         permissions,
+                        avatarUrl,
                         userRoles {
                             roleId,
                             description,
@@ -54,6 +54,7 @@ export class UserService {
                     fname,
                     lname,
                     created,
+                    avatarUrl,
                     userRoles {
                         roleId,
                         description,
@@ -194,7 +195,7 @@ export class UserService {
             mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
                 updateApiKey(apiKeyRequest: $apiKeyRequest) {
                     keyId
-                } 
+                }
             }`,
             variables: {
                 apiKeyRequest: apiKeyRequest
@@ -211,7 +212,7 @@ export class UserService {
             mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
                 removeApiKey(apiKeyRequest: $apiKeyRequest) {
                     keyId
-                } 
+                }
             }`,
             variables: {
                 apiKeyRequest: apiKeyRequest

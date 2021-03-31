@@ -364,6 +364,7 @@ export class User {
   permissions:string[];
   repositoryAccounts: RepositoryAccounts;
   roles:Role[];
+  avatarUrl: string;
 }
 
 
@@ -418,6 +419,10 @@ export class EntityEdge {
 export type TaskQuery = {
   task_submitScanRequest:Task;
   task_update:Task;
+}
+
+export type RunningTaskCountQuery = {
+  running_scan_tasks_count:number;
 }
 
 export type GitHubUserQuery = {
