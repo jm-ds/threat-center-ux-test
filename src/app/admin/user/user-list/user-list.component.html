@@ -35,7 +35,7 @@
                 <tr *ngFor="let user of users" (click)="goToUserShow(user.username)">
                     <td>
                         <div class="d-inline-block align-middle">
-                            <img src="assets/images/user/no-avatar.png" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                            <img src="{{!!user.avatarUrl?user.avatarUrl:'assets/images/user/no-avatar.png'}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                             <div class="d-inline-block">
                                 <h6 class="m-b-0">{{user.fname}} {{user.lname}}</h6>
                                 <p class="m-b-0">{{user.email || 'no email'}}</p>
