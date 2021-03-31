@@ -80,23 +80,6 @@ export class CoreHttpService {
     // Core error handle
     errorHandler = (error: HttpErrorResponse) => {
         this.spinner.hide();
-        const data: { status: number; message: string } = { status: error.status, message: '' };
-        if (error.status === 401) {
-            this.coreHelperService.swalALertBox("Unauthorized User!", data.status.toString());
-            return EMPTY;
-        }
-        if (typeof error.error === 'string') {
-            data.message = error.error;
-        } else if (!!error.error && !!error.error.reason && typeof error.error.reason === 'string') {
-            data.message = error.error.reason;
-        } else {
-            data.message = 'Something went wrong!';
-        }
-        if (!!error && !!error.status) {
-            this.coreHelperService.swalALertBox(data.message, data.status.toString());
-        } else {
-            this.coreHelperService.swalALertBox(data.message);
-        }
         return EMPTY;
     };
 }
