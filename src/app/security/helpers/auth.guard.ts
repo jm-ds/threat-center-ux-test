@@ -30,6 +30,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         // if logged in and has access rights to current route then return true
         if (this.authorizationService.hasPermissions(auth)) {
             console.log("has permissions...");
+            //If found any redirect return url from session in oauth case the nevigate user to that page
+            if (!!sessionStorage.getItem('ReturnUrl') && sessionStorage.getItem('ReturnUrl') !== '/'
+                && sessionStorage.getItem('ReturnUrl') !== '') {
+                const returnUrl = sessionStorage.getItem('ReturnUrl')
+                sessionStorage.removeItem('ReturnUrl');
+                this.router.navigate([returnUrl]);
+            }
             return true;
         }
         else {
