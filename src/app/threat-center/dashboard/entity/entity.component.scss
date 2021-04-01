@@ -220,10 +220,9 @@
     }
 }
 
-.entity-breadcrumb {
+.entity-breadcrumbs {
     display: flex;
     align-items: center;
-    margin-top: 10px;
 
     span {
         color: #adb7be !important;
@@ -232,7 +231,7 @@
     }
 
     a {
-        font-size: 12px;
+        font-size: 14px;
         color: #adb7be !important;
         margin-right: 10px;
 

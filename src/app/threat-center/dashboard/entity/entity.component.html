@@ -37,7 +37,7 @@
         </button>
       </a>
     </div>
-    <div class="col-12 entity-breadcrumb">
+    <div class="col-12 entity-breadcrumbs" *ngIf="entityNewBreadCum.length > 1">
       <div *ngFor="let bread of entityNewBreadCum;let i = index">
         <a *ngIf="i  != (entityNewBreadCum.length - 1)"
           [ngClass]="{'text-primary': i  != (entityNewBreadCum.length - 1)}"
