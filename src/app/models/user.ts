@@ -140,9 +140,9 @@ export interface InviteQuery {
 @Injectable()
 export class InviteMailData {
     readonly inviteUrl: string;
-    readonly to: string;
-    readonly subject: string;
-    readonly body: string;
+    to: string;
+    subject: string;
+    body: string;
 }
 
 export class InviteMailDataRequestInput {
