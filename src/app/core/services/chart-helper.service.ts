@@ -48,14 +48,30 @@ export class ChartHelperService {
                 show: false
             },
             tooltip: {
-                enabled: false,
+                enabled: true,
+                style: {
+                    fontSize: '16px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                },
+                marker: {
+                    show: true,
+                },
+                items: {
+                    display: 'flex',
+                },
+                fixed: {
+                    enabled: false,
+                    position: 'topRight',
+                    offsetX: 0,
+                    offsetY: 0,
+                },
             },
             chart: {
                 type: "donut",
                 sparkline: {
                     enabled: true
                 },
-                height: 200,
+                height: '220px',
                 events: {
                     click: function (event, chartContext, config) {
                         // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
@@ -122,7 +138,7 @@ export class ChartHelperService {
                 }
             },
             // colors: ["#ff5252", "#ffa21d"],
-            colors:["#11c15b", "#4680ff"],
+            colors: ["#11c15b", "#4680ff"],
             labels: [],
             legend: {
                 show: true,
@@ -289,6 +305,9 @@ export class ChartHelperService {
                 height: 24,
                 sparkline: {
                     enabled: true
+                },
+                animations: {
+                    enabled: false
                 }
             },
             colors: ['#F44336'],

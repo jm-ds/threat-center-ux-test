@@ -558,7 +558,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     if (this.activeTab === 'BUSINESSUNITS') {
       setTimeout(() => {
         this.sparkLinechartdelayFlag = true;
-      }, 500);
+      }, 5);
     } else {
       this.sparkLinechartdelayFlag = false;
     }

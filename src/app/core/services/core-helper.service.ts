@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/security/services/authentication.service';
 import { NextConfig } from '@app/app-config';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { UserPreferenceModel } from '../core.class';
-import { environment } from 'environments/environment';
-import { Messages } from '@app/messages/messages';
+
 
 @Injectable({
     providedIn: 'root'
@@ -35,39 +34,6 @@ export class CoreHelperService {
             showConfirmButton: true,
             showCancelButton: true
         })
-    }
-
-    //get messages according to status
-    public getMessageStatusWise(status) {
-        let msg = "";
-        switch (status) {
-            case 500: {
-                msg = Messages.status500;
-                break;
-            }
-            case 400: {
-                msg = Messages.status400;
-                break;
-            }
-            case 403: {
-                msg = Messages.status403;
-                break;
-            }
-            case 404: {
-                msg = Messages.status404;
-                break;
-            }
-            case 501: {
-                msg = Messages.status501;
-                break;
-            }
-            default: {
-                //statements;
-                msg = Messages.wrongMessage;
-                break;
-            }
-        }
-        return msg;
     }
 
     spinnerEdit(isSpeenerVisible) {
@@ -261,11 +227,6 @@ export class CoreHelperService {
         document.querySelector('body').classList.remove('next-dark');
     }
 
-    printErrorMessageToConsol(message: string) {
-        if (!environment.production && !environment.staging) {
-            console.log("ERROR:-", message);
-        }
-    }
 
     setBrowserBackButton(isBack) {
         this.isBrowserBackclick = isBack;
