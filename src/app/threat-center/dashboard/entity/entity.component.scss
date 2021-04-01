@@ -24,6 +24,7 @@
         position: relative;
         top: 0;
     }
+
     svg {
         width: 13px;
         height: 13px;
@@ -168,17 +169,17 @@
 .entity-chart-tabbing {
     padding: 0 9px;
 
-    &:before {
-        content: '';
-        width: 48px;
-        height: 25px;
-        background: url(assets\images\tab-arrow.png) no-repeat center;
-        position: absolute;
-        top: -24px;
-        left: 85px;
-        z-index: 1;
-        background-size: 100% 100%;
-    }
+    // &:before {
+    //     content: '';
+    //     width: 48px;
+    //     height: 25px;
+    //     background: url(assets\images\tab-arrow.png) no-repeat center;
+    //     position: absolute;
+    //     top: -24px;
+    //     left: 85px;
+    //     z-index: 1;
+    //     background-size: 100% 100%;
+    // }
 
     &.licenses-donut {
         &:before {
@@ -349,5 +350,23 @@
             //     }
             // }
         }
+    }
+}
+
+
+.entity-chart-blk-active {
+    position: relative;
+
+    &:before {
+        content: '';
+        width: 48px;
+        height: 25px;
+        background: url(assets\images\tab-arrow.png) no-repeat center;
+        position: absolute;
+        bottom: -1px;
+        left: 50%;
+        z-index: 11;
+        background-size: 100% 100%;
+        transform: translate(-50%, 0);
     }
 }
