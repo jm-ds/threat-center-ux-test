@@ -370,11 +370,12 @@ export class EntityComponent implements OnInit, OnDestroy {
     const lic = ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'];
     const supply = ['risk', 'quality'];
     const asset = ['embedded', 'openSource', 'unique'];
+    const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
     switch (str) {
       case 'vulnerabilityMetrics':
         _.each(vul, value => {
-          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
-            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.vulnerabilityMetrics[value] }) });
+          if (assData.length >= 1) {
+            dataToReturn.push({ name: value, data: assData.map(val => { return val.vulnerabilityMetrics[value] }) });
           } else {
             dataToReturn.push({ name: value, data: [] });
           }
@@ -382,8 +383,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
       case 'licenseMetrics':
         _.each(lic, value => {
-          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
-            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.licenseMetrics[value] }) });
+          if (assData.length >= 1) {
+            dataToReturn.push({ name: value, data: assData.map(val => { return val.licenseMetrics[value] }) });
           } else {
             dataToReturn.push({ name: value, data: [] });
           }
@@ -391,8 +392,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
       case 'supplyChainMetrics':
         _.each(supply, value => {
-          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
-            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.supplyChainMetrics[value] }) });
+          if (assData.length >= 1) {
+            dataToReturn.push({ name: value, data: assData.map(val => { return val.supplyChainMetrics[value] }) });
           } else {
             dataToReturn.push({ name: value, data: [] });
           }
@@ -400,8 +401,8 @@ export class EntityComponent implements OnInit, OnDestroy {
         break;
       case 'assetMetrics':
         _.each(asset, value => {
-          if (data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1) {
-            dataToReturn.push({ name: value, data: data.entityMetricsSummaryGroup.entityMetricsSummaries.map(val => { return val.assetMetrics[value] }) });
+          if (assData.length >= 1) {
+            dataToReturn.push({ name: value, data: assData.map(val => { return val.assetMetrics[value] }) });
           } else {
             dataToReturn.push({ name: value, data: [] });
           }
@@ -453,55 +454,57 @@ export class EntityComponent implements OnInit, OnDestroy {
 
 
     this.obsEntity.subscribe((entity: any) => {
-      if (!!entity.parents && entity.parents.length >= 1) {
-        for (var i = entity.parents.length - 1; i >= 0; i--) {
-          this.entityNewBreadCum.push({ id: entity.parents[i].entityId, name: entity.parents[i].name });
+      if(!!entity){
+        if (!!entity.parents && entity.parents.length >= 1) {
+          for (var i = entity.parents.length - 1; i >= 0; i--) {
+            this.entityNewBreadCum.push({ id: entity.parents[i].entityId, name: entity.parents[i].name });
+          }
+        }
+        this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
+        this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
+        this.buildProjectTree(entity);
+  
+        if (isPush) {
+          this.entityPageBreadCums.push({ id: entityId, name: entity.name });
+        }
+        console.log("ENTITY: ", entity);
+        if (entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1) {
+          // NOTES:
+          // Metrics are ordered by date DESC (most recent to least recent)
+          // Period defaults to week, so you'll get 7 days worth of data for stack chart
+          // The data is all stored in Maps. I suggest that we use the map key for the chart label and value for the series.
+          //    This data will change over time and this will allow the server side to drive the chart data without
+          //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
+          //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
+          //    on an updated demonstration.
+  
+          const entityMetrics = entity.entityMetricsGroup.entityMetrics;
+          this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
+  
+          //Vul donut chart
+          this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
+  
+          //License Donut charts
+          this.initLicenseDonut(entityMetrics[0].licenseMetrics);
+  
+          //Component donut charts
+          this.initComponentDonutChart(entityMetrics[0].componentMetrics);
+  
+          //Asset donut chart
+          this.initAssetDonut(entityMetrics[0].assetMetrics.assetCompositionMetrics);
+  
+          //Supply chain chart
+          this.initSupplyChainChart(entityMetrics[0].supplyChainMetrics.supplyChainMetrics);
+  
+          this.initStackedChartAccordingToDonut(this.selectedDonut);
+        }
+        if (!!entity) {
+          this.entityTreeLogic(entity);
+        } else {
+          this.isTreeProgressBar = false;
         }
       }
-      this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
-      this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
-      this.buildProjectTree(entity);
-
-      if (isPush) {
-        this.entityPageBreadCums.push({ id: entityId, name: entity.name });
-      }
-      console.log("ENTITY: ", entity);
-      if (entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1) {
-        // NOTES:
-        // Metrics are ordered by date DESC (most recent to least recent)
-        // Period defaults to week, so you'll get 7 days worth of data for stack chart
-        // The data is all stored in Maps. I suggest that we use the map key for the chart label and value for the series.
-        //    This data will change over time and this will allow the server side to drive the chart data without
-        //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
-        //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
-        //    on an updated demonstration.
-
-        const entityMetrics = entity.entityMetricsGroup.entityMetrics;
-        this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
-
-        //Vul donut chart
-        this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
-
-        //License Donut charts
-        this.initLicenseDonut(entityMetrics[0].licenseMetrics);
-
-        //Component donut charts
-        this.initComponentDonutChart(entityMetrics[0].componentMetrics);
-
-        //Asset donut chart
-        this.initAssetDonut(entityMetrics[0].assetMetrics.assetCompositionMetrics);
-
-        //Supply chain chart
-        this.initSupplyChainChart(entityMetrics[0].supplyChainMetrics.supplyChainMetrics);
-
-        this.initStackedChartAccordingToDonut(this.selectedDonut);
-      }
-      if (!!entity) {
-        this.entityTreeLogic(entity);
-      } else {
-        this.isTreeProgressBar = false;
-      }
-    });
+     });
   }
 
   buildProjectTree(entity: Entity) {
