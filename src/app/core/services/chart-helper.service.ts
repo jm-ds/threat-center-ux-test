@@ -315,10 +315,13 @@ export class ChartHelperService {
             series: [],
             tooltip: {
                 fixed: {
-                    enabled: true
+                    enabled: false,
+                    position: 'topRight',
+                    offsetX: -50,
+                    offsetY: -150,
                 },
                 x: {
-                    show: true
+                    show: false
                 },
                 y: {
                     title: {
@@ -327,8 +330,11 @@ export class ChartHelperService {
                         }
                     }
                 },
+                items: {
+                    display: 'flex',
+                },
                 marker: {
-                    show: false
+                    show: true
                 }
             }
         }
