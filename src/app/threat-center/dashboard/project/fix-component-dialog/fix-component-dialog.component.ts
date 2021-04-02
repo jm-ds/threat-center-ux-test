@@ -5,7 +5,6 @@ import {FixService} from "@app/threat-center/dashboard/project/services/fix.serv
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from "rxjs";
 import {FixResult, PatchedInfo} from "@app/threat-center/shared/models/types";
-import { FixResult } from '@app/models';
 
 
 @Component({

@@ -3,7 +3,6 @@ import {FixResult, PatchedInfo} from "@app/threat-center/shared/models/types";
 import {Observable} from "rxjs";
 import {environment} from "../../../../../environments/environment";
 import {Injectable} from "@angular/core";
-import { FixResult } from "@app/models";
 
 @Injectable({
     providedIn: 'root'
