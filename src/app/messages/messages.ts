@@ -4,5 +4,6 @@ export const Messages = {
     status403: 'You do not have sufficient rights to access the requested resource.',
     status404: 'The server has not found anything matching the URI given.',
     status501: 'The server does not support the facility required.',
-    wrongMessage: 'Something went wrong!'
+    wrongMessage: 'Something went wrong!',
+    tokenNotFound: 'JWT Token not found!'
 }
