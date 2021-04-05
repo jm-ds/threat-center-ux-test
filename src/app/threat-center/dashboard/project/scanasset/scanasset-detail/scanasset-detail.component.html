@@ -29,7 +29,7 @@
                 <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mr-4" (click)="attributionModal.show()">
                   <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
                 </button>
-        
+
                 <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
                 <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
               </div>
@@ -60,8 +60,12 @@
                   </a>
                 </td>
                 <td style="word-spacing: 6px;">
-                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
-                    Apache License 2.0<span title="Permissive" class="p-l-5 badge m-r-5 badge-light-success">PERMISSIVE</span>
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node); licensesModal.show()">
+                    <span *ngFor="let matchLicense of embeddedAsset.node.matchLicenses">
+                      {{matchLicense.licenseName}}
+                      <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
+                        {{matchLicense.licenseCategory.replace("_", " ")}}</span>
+                    </span>
                   </a>
                 </td>
               </tr>
@@ -71,7 +75,51 @@
       </div>
     </div>
 
-      <app-ui-modal #exampleModalCenter dialogClass="modal-dialog-centered">
+
+    <!-- Licenses Dialog -->
+    <app-ui-modal #licensesModal dialogClass="modal-dialog-centered popup-Width-fix">
+      <div class="app-modal-header">
+        <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="licensesModal.hide()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="app-modal-body">
+        <perfect-scrollbar [style.max-height]="'550px'">
+          <p-table #dt [value]="selectedEmbeddedAsset?.matchLicenses" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>License ID</th>
+                <th>License Name</th>
+                <th>License Catgory</th>
+                <th>Earliest Version/Date</th>
+                <th>Latest Version/Date</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-matchLicense >
+              <tr>
+                <td>{{matchLicense.licenseId}}</td>
+                <td>{{matchLicense.licenseName}}</td>
+                <td>
+                  <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
+                        {{matchLicense.licenseCategory.replace("_", " ")}}
+                  </span>
+                </td>
+                <td>{{matchLicense.earliestReleaseVersion}} / {{matchLicense.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                <td>{{matchLicense.latestReleaseVersion}} / {{matchLicense.latestReleaseDate | date :'MMMM d, y'}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="licensesModal.hide()">Close</button>
+      </div>
+    </app-ui-modal><!-- licensesModal -->
+
+
+    <!-- Asset Releases Dialog -->
+      <app-ui-modal #exampleModalCenter dialogClass="modal-dialog-centered popup-Width-fix">
         <div class="app-modal-header">
           <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
           <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="exampleModalCenter.hide()"><span aria-hidden="true">&times;</span></button>
@@ -86,21 +134,21 @@
 
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th>AssetId</th>
-                  <th>Earliest Version/Date</th>
-                  <th>Latest Version/Date</th>
+                  <th>Asset ID</th>
+                  <!--<th>Earliest Version/Date</th>
+                  <th>Latest Version/Date</th>-->
+                  <th>Release Version</th>
+                  <th>Release Date</th>
                 </tr>
               </ng-template>
 
               <ng-template pTemplate="body" let-release >
                 <tr>
                   <td>{{release.node.assetMatchId | slice:32}}</td>
-                  <td>
-                    {{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}
-                  </td>
-                  <td>
-                    {{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}
-                  </td>
+                  <!--<td>{{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                  <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>-->
+                  <td>{{release.node.earliestReleaseVersion}}</td>
+                  <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
                   <!--
                   <td style="border-left:1px solid gray">
                     license
@@ -149,9 +197,9 @@
       </div>
       <div class="app-modal-body">
         <label class="font-weight-bolder pt-2">Attribution Status</label>
-        <select name="attributionStatus" [(ngModel)]="attributionStatus" 
+        <select name="attributionStatus" [(ngModel)]="attributionStatus"
         class="form-control mt-2 ng-select" style="overflow-y: auto;" >
-          <option *ngFor="let item of attributionStatuses" [ngValue]="item.code">{{ item.name }}</option> 
+          <option *ngFor="let item of attributionStatuses" [ngValue]="item.code">{{ item.name }}</option>
         </select>
         <label class="font-weight-bolder pt-2 mt-4">Attribution Comment</label>
         <textarea class="form-control mt-2" name="attributionComment" [(ngModel)]="attributionComment"  placeholder="Attribution Comment"></textarea>
@@ -160,7 +208,7 @@
         <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" (click)="attributeAsset(selectedEmbeddedAsset);attributionModal.hide()">Attribute</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributionModal.hide()">Close</button>
       </div>
-    </app-ui-modal>    
+    </app-ui-modal>
 
   </div>
 
