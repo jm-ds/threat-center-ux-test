@@ -6,6 +6,7 @@ import { Scan } from '@app/models';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Messages } from "@app/messages/messages";
 
 @Component({
   selector: 'app-scanassets',
@@ -33,6 +34,7 @@ export class ScanAssetsComponent implements OnInit {
   timeOutDuration = 1000;
   parentScanAssetId = '';
   story = [];
+  messages = Messages;
 
   constructor(private apiService: ApiService,
     private route: ActivatedRoute,
