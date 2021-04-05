@@ -1,26 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import {
-  AttributeAssetRequestInput,
-  BitbucketUserQuery,
-  ComponentQuery,
-  EntityListQuery,
-  EntityQuery,
-  GitHubUserQuery,
-  GitLabUserQuery,
-  LicenseQuery,
-  ProjectQuery,
-  Scan,
-  ScanAssetMatch,
-  ScanAssetMatchRequest,
-  ScanAssetQuery,
-  ScanQuery,
-  UserSelection,
-  VulnerabilityQuery
-} from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service'
-import { Period } from '@app/threat-center/shared/models/types';
+import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -842,6 +824,15 @@ export class ApiService {
                           latestReleaseVersion,
                         }
                     }
+                  },
+                  matchLicenses {
+                    licenseId,
+                    licenseName,
+                    licenseCategory,
+                    earliestReleaseDate,
+                    latestReleaseDate,
+                    earliestReleaseVersion,
+                    latestReleaseVersion
                   },
                   releases{
                     edges {

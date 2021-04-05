@@ -28,90 +28,143 @@
 
         </div>
         <div class="col-md-8">
+            <ngb-tabset type="pills">
+                <ngb-tab >
+                    <ng-template ngbTabTitle>Roles&nbsp;&nbsp;
+                        <span class="badge badge-light">
+                          {{user.userRoles?.length}}
+                        </span>
+                      </ng-template>
+
+                    <ng-template ngbTabContent>
 
 
-            <!-- ROLES -->
-            <app-card [hidHeader]="true" cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Roles</h5>
-                <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
-                    <i class="feather icon-edit"></i>
-                </button>
-            </app-card>
-            <ng-template [ngIf]="user.userRoles">
-                <app-card *ngFor="let role of user.userRoles" [hidHeader]="true" blockClass="border-top pro-det-edit collapse show" cardClass="mb-0" >
-                    <div >
-                        <div class="form-group row">
-                            <label class="col-sm-3 font-weight-bolder">Role ID</label>
-                            <div class="col-sm-9">{{role.roleId}}</div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 font-weight-bolder">Description</label>
-                            <div class="col-sm-9">{{role.description}}</div>
-                        </div>
-                        <!-- role permissions -->
-                        <div class="form-group row mb-0">
-                            <div class="col-sm-12">
-                                <div class="font-weight-bolder mb-1">Permissions</div>
-                                <table class="table table-hover mb-0">
+                        <!-- ROLES -->
+                        <app-card [hidHeader]="true" cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between">
+                            <h5 class="mb-0">Roles</h5>
+                            <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
+                                <i class="feather icon-edit"></i>
+                            </button>
+                        </app-card>
+                        <ng-template [ngIf]="user.userRoles">
+                            <app-card *ngFor="let role of user.userRoles" [hidHeader]="true" blockClass="border-top pro-det-edit collapse show" cardClass="mb-0" >
+                                <div >
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 font-weight-bolder">Role ID</label>
+                                        <div class="col-sm-9">{{role.roleId}}</div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 font-weight-bolder">Description</label>
+                                        <div class="col-sm-9">{{role.description}}</div>
+                                    </div>
+                                    <!-- role permissions -->
+                                    <div class="form-group row mb-0">
+                                        <div class="col-sm-12">
+                                            <div class="font-weight-bolder mb-1">Permissions</div>
+                                            <table class="table table-hover table-responsive mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Title</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let permission of role.rolePermissions">
+                                                        <td>{{permission.name}}</td>
+                                                        <td>{{permission.title}}</td>
+                                                        <td>{{permission.description}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </app-card>
+                        </ng-template>
+                        <ng-template [ngIf]="!user.userRoles || user.userRoles.length == 0">
+                            <app-alert type="danger">The user has no roles assigned.</app-alert>
+                        </ng-template>
+
+
+
+                        <!-- PERMISSIONS -->
+                        <ng-template [ngIf]="user.userPermissions">
+                            <app-card [hidHeader]="true" cardClass="mb-0 mt-5" blockClass="d-flex align-items-center justify-content-between">
+                                <h5 class="mb-0">Permissions assigned to user directly</h5>
+                                <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
+                                    <i class="feather icon-edit"></i>
+                                </button>
+                            </app-card>
+                            <app-card [hidHeader]="true" blockClass="border-top pro-det-edit collapse show" >
+                                <!-- user permissions -->
+                                <div class="form-group row mb-0">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-responsive mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Title</th>
+                                                    <th>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let permission of user.userPermissions">
+                                                    <td>{{permission.name}}</td>
+                                                    <td>{{permission.title}}</td>
+                                                    <td>{{permission.description}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </app-card>
+                        </ng-template>
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab>
+                    <ng-template ngbTabTitle>API keys&nbsp;&nbsp;
+                        <span class="badge badge-light">
+                          {{user.apiKeys?.edges.length}}
+                        </span>
+                    </ng-template>
+
+                    <ng-template ngbTabContent>
+                        <app-card [hidHeader]="true" cardClass="user-profile-list">
+                            <div class="mb-2 mt-1 float-right">
+                                <div class="text-left">
+                                    <a routerLink="/admin/user/show/{{user.username}}/create/apikey/new" class="btn btn-outline-info">Add API key</a>
+                                </div>
+                            </div>
+                            <div class="dt-responsive table-responsive">
+                                <table datatable class="table row-border">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
                                             <th>Title</th>
+                                            <th>Expired</th>
                                             <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let permission of role.rolePermissions">
-                                            <td>{{permission.name}}</td>
-                                            <td>{{permission.title}}</td>
-                                            <td>{{permission.description}}</td>
+                                        <tr *ngFor="let edge of user.apiKeys?.edges" (click)="goToApiKeyShow(user.username, edge.node.keyId)">
+                                            <td>
+                                                {{edge.node.title}}
+                                            </td>
+                                            <td>
+                                                {{edge.node.expiredDate | date :'M/d/y h:mmaa' | lowercase}}
+                                            </td>
+                                            <td>
+                                                {{edge.node.description}}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </app-card>
-            </ng-template>
-            <ng-template [ngIf]="!user.userRoles || user.userRoles.length == 0">
-                <app-alert type="danger">The user has no roles assigned.</app-alert>
-            </ng-template>
-
-
-
-            <!-- PERMISSIONS -->
-            <ng-template [ngIf]="user.userPermissions">
-                <app-card [hidHeader]="true" cardClass="mb-0 mt-5" blockClass="d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Permissions assigned to user directly</h5>
-                    <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
-                        <i class="feather icon-edit"></i>
-                    </button>
-                </app-card>
-                <app-card [hidHeader]="true" blockClass="border-top pro-det-edit collapse show" >
-                    <!-- user permissions -->
-                    <div class="form-group row mb-0">
-                        <div class="col-sm-12">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let permission of user.userPermissions">
-                                        <td>{{permission.name}}</td>
-                                        <td>{{permission.title}}</td>
-                                        <td>{{permission.description}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </app-card>
-            </ng-template>
-
+                        </app-card>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
 
         </div>
     </div>

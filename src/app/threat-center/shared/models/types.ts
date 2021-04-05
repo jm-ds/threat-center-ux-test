@@ -309,6 +309,8 @@ export class Cwe {
   name:string;
 }
 
+
+// ScanAsset -------------------------------------------------------------------------------------------------
 export class ScanAsset {
   name:string;
   size:number;
@@ -321,7 +323,36 @@ export class ScanAsset {
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
-  embeddedAssets: any;
+  embeddedAssets: EmbeddedAssetConnection;
+}
+
+export class EmbeddedAssetConnection {
+  edges: EmbeddedAssetEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class EmbeddedAssetEdge {
+  node: EmbeddedAsset;
+  cursor: string;
+  constructor(node: EmbeddedAsset, cursor: string) {
+    this.node = node;
+    this.cursor = cursor;
+  }
+}
+
+export class EmbeddedAsset {
+  matchLicenses: ScanAssetMatchLicense[];
+}
+
+export class ScanAssetMatchLicense {
+  licenseId: string;
+  licenseName: string;
+  licenseCategory: string;
+  earliestReleaseDate: Date;
+  latestReleaseDate: Date;
+  earliestReleaseVersion: string;
+  latestReleaseVersion: string;
 }
 
 export class ScanAssetMatch {
@@ -364,6 +395,7 @@ export class User {
   permissions:string[];
   repositoryAccounts: RepositoryAccounts;
   roles:Role[];
+  avatarUrl: string;
 }
 
 
@@ -418,6 +450,10 @@ export class EntityEdge {
 export type TaskQuery = {
   task_submitScanRequest:Task;
   task_update:Task;
+}
+
+export type RunningTaskCountQuery = {
+  running_scan_tasks_count:number;
 }
 
 export type GitHubUserQuery = {

@@ -6,14 +6,14 @@
             </div>
             <div class="col">
                 <div class="position-relative d-inline-block">
-                    <img class="img-radius img-fluid wid-80" src="assets/images/user/no-avatar.png" alt="User image">
+                    <img class="img-radius img-fluid wid-80" src="{{!!user&&!!user.avatarUrl?user.avatarUrl:'assets/images/user/no-avatar.png'}}" alt="User image">
                 </div>
             </div>
             <div class="col text-right pb-3">
                 <div class="dropdown" ngbDropdown *ngIf="showMenu">
                     <a class="drp-icon dropdown-toggle" ngbDropdownToggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-more-horizontal"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                        <a class="dropdown-item" routerLink="/admin/user/edit/{{user.username}}">Edit</a>
+                        <a class="dropdown-item" routerLink="/admin/user/edit/{{user?.username}}">Edit</a>
                         <a class="dropdown-item disabled" href="javascript:">Delete</a>
                         <a class="dropdown-item disabled" href="javascript:">Suspend</a>
                     </div>
@@ -22,10 +22,10 @@
         </div>
     </div>
     <div class="text-center">
-        <h6 class="mb-2 mt-3">{{user.fname}} {{user.lname}}</h6>
+        <h6 class="mb-2 mt-3">{{user?.fname}} {{user?.lname}}</h6>
         <!--<p class="mb-2 text-muted">{{renderRoles(user.userRoles)}}</p>-->
-        <p class="mb-2 text-muted">{{renderEntities(user.userEntities)}}</p>
-        <p class="mb-2">Date created: {{user.created | date :'short'}}</p>
+        <p class="mb-2 text-muted">{{renderEntities(user?.userEntities)}}</p>
+        <p class="mb-2">Date created: {{user?.created | date :'short'}}</p>
         <p class="mb-0"><span class="badge badge-light-success">Active</span></p>
     </div>
     <!--<hr class="wid-80 b-wid-3 my-4">

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/security/services/authentication.service';
 import { NextConfig } from '@app/app-config';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { UserPreferenceModel } from '../core.class';
-import { environment } from 'environments/environment';
+
 
 @Injectable({
     providedIn: 'root'
@@ -34,39 +34,6 @@ export class CoreHelperService {
             showConfirmButton: true,
             showCancelButton: true
         })
-    }
-
-    //get messages according to status
-    public getMessageStatusWise(status) {
-        let msg = "";
-        switch (status) {
-            case 500: {
-                msg = "The server encountered an unexpected condition which prevented it from fulfilling the request.";
-                break;
-            }
-            case 400: {
-                msg = "The request had bad syntax or was inherently impossible to be satisfied.";
-                break;
-            }
-            case 403: {
-                msg = "The requested resource is forbidden.";
-                break;
-            }
-            case 404: {
-                msg = "The server has not found anything matching the URI given.";
-                break;
-            }
-            case 501: {
-                msg = "The server does not support the facility required.";
-                break;
-            }
-            default: {
-                //statements; 
-                msg = "Something went wrong!";
-                break;
-            }
-        }
-        return msg;
     }
 
     spinnerEdit(isSpeenerVisible) {
@@ -260,11 +227,6 @@ export class CoreHelperService {
         document.querySelector('body').classList.remove('next-dark');
     }
 
-    printErrorMessageToConsol(message: string) {
-        if (!environment.production && !environment.staging) {
-            console.log("ERROR:-", message);
-        }
-    }
 
     setBrowserBackButton(isBack) {
         this.isBrowserBackclick = isBack;
@@ -278,16 +240,16 @@ export class CoreHelperService {
         var i = 0;
         var j = 0;
         var result = "";
-    
+
         while (j < b.length) {
-          if (a[i] != b[j] || i == a.length)
-            result += b[j];
-          else
-            i++;
-          j++;
+            if (a[i] != b[j] || i == a.length)
+                result += b[j];
+            else
+                i++;
+            j++;
         }
         return result;
-      }
+    }
 }
 
 

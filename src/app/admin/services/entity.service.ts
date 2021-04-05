@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { EntityQuery } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
-import { EntityQuery } from '@app/threat-center/shared/models/types';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { EntityRequestInput, EntityUpdateRequestInput } from '../entity/entity.class';
+import { EntityRequestInput, EntityUpdateRequestInput, OrganizationUpdateRequestInput } from '../entity/entity.class';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,7 @@ export class EntityService {
             }
             entityMetricsSummaryGroup {
               entityMetricsSummaries {
+                measureDate
                 vulnerabilityMetrics {
                     critical
                     high
@@ -116,6 +117,18 @@ export class EntityService {
           removed
         }
       }`, { entity: entityRequest });
+  }
+
+  //Update Organization Name
+  updateOrganizationName(orgNameRequest: { orgId: string, name: string }) {
+    const orgRequest = OrganizationUpdateRequestInput.from(orgNameRequest);
+    return this.coreGraphQLService.coreGQLReqForMutation(
+      gql`mutation updateOrgName($orgNameRequest: OrgNameRequestInput) {
+        updateOrgName(orgNameRequest: $orgNameRequest) {
+            orgId,
+            name
+        }
+    }`, { orgNameRequest: orgRequest });
   }
 
   //delete entity server call

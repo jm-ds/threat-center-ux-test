@@ -15,10 +15,12 @@ import {TcSharedModule} from "@app/threat-center/shared/tc-shared.module";
 import {FormsModule} from "@angular/forms";
 import {SelectModule} from "ng-select";
 import {SharedModule} from "@app/shared/shared.module";
+import { ApiKeyShowComponent } from './apikey-show/apikey-show.component';
+import { ApiKeyEditComponent } from './apikey-edit/apikey-edit.component';
 
 
 @NgModule({
-  declarations: [UserListComponent, UserShowComponent, UserRolesComponent, UserCardComponent, UserEditComponent],
+  declarations: [UserListComponent, UserShowComponent, UserRolesComponent, UserCardComponent, UserEditComponent, ApiKeyShowComponent, ApiKeyEditComponent],
     imports: [
         CommonModule,
         UserRoutingModule,

@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbPanelChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { ScanHelperService } from "../services/scan.service";
 import * as $ from 'jquery'
 import { interval, Subscription } from "rxjs";
@@ -29,8 +29,8 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     startTimerToCloseModel: Date | any = null;
 
     constructor(
-            private scanHelperService: ScanHelperService,
-            public activeModal: NgbActiveModal,
+        private scanHelperService: ScanHelperService,
+        public activeModal: NgbActiveModal,
     ) {
 
         const source = interval(100);
@@ -106,6 +106,12 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
         this.recentlyScanCompleted = [];
         this.errorScanProject = [];
         this.activeModal.close();
+    }
+
+    public beforeChange($event: NgbPanelChangeEvent) {
+        if ($event.panelId === 'preventchange-2' && this.projectScanResults.length === 1) {
+            $event.preventDefault();
+        }
     }
 
 }
