@@ -10,6 +10,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
 import { LazyLoadEvent, Table } from "primeng";
+import { TxComponent } from '@app/models';
 
 @Component({
   selector: 'component-detail',

@@ -679,13 +679,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.selectedlicenseChartDropValue = "License Name";
   }
 
-  //template helper functions for organization chart
-  getObjectProperties(object) {
-    return Object.keys(object).filter(key => { return key !== '__typename' && !!object[key] && object[key] != 0 }).map(val => {
-      return { key: val, value: object[val] }
-    });
-  }
-
   private getLastTabSelected() {
     this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
   }
