@@ -438,7 +438,8 @@
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
-                            <tr [ttRow]="rowNode" class="cursor-pointer" [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">
+                            <tr [ttRow]="rowNode" class="cursor-pointer"
+                              [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">
                               <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                 <a
@@ -605,43 +606,100 @@
               <div class="row">
                 <div class="col-sm-12">
                   <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
-                    <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
-                      [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
-                      <ng-template let-node pTemplate="entity">
-                        <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
-                          tooltipClass="my-custom-class">{{node.name}}</div>
-                        <div class="node-content node-content-top">
-                          <div class="node-no-data"
-                            *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
-                            <p class="no-data-text">No metrics data yet</p>
+                    <perfect-scrollbar [style.max-height]="'600px'">
+                      <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
+                        [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
+                        <ng-template let-node pTemplate="entity">
+                          <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
+                            tooltipClass="my-custom-class">{{node.name}}</div>
+                          <div class="node-content node-content-top">
+                            <div class="node-no-data"
+                              *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
+                              <p class="no-data-text">No metrics data yet</p>
+                            </div>
+                            <div class="chart-hdr-box"
+                              *ngIf="!!node.data.entityMetricsSummaryGroup && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
+                              <!-- Vulnerabilities -->
+                              <div>
+                                <p>Vulnerabilities</p>
+                                <div class="Progress">
+                                  <span
+                                    *ngFor="let item of getObjectProperties(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)"
+                                    [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics,item.key,item.value).color,
+                                    'width':getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics,item.key,item.value).percentage}"
+                                    class="Progress-item">
+                                    <label class="chart-tooltip"
+                                      [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics,item.key,item.value).color}">
+                                      <span> {{item.key}}: {{item.value}}</span>
+                                      <em class="arw"
+                                        [ngStyle]="{'border-top-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics,item.key,item.value).color}"></em>
+                                    </label>
+                                  </span>
+                                </div>
+                              </div>
+                              <!-- Liceses -->
+                              <div>
+                                <p>Liceses</p>
+                                <span class="Progress">
+                                  <span
+                                    *ngFor="let item of getObjectProperties(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)"
+                                    [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics,item.key,item.value).color,
+                                    'width':getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics,item.key,item.value).percentage}"
+                                    class="Progress-item">
+                                    <label class="chart-tooltip"
+                                      [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics,item.key,item.value).color}">
+                                      <span> {{item.key}}: {{item.value}}</span>
+                                      <em class="arw"
+                                        [ngStyle]="{'border-top-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics,item.key,item.value).color}"></em>
+                                    </label>
+                                  </span>
+                                </span>
+                              </div>
+                              <!-- Supply chain risk -->
+                              <div>
+                                <p>Supply chain risk</p>
+                                <span class="Progress">
+                                  <span class="Progress-item"
+                                    [ngClass]="{'supply-chain-risk-green':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk > 0 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk <= 40,
+                                              'supply-chain-risk-yellow':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk > 40 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk <= 60,
+                                              'supply-chain-risk-orang':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk > 60 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk <= 80,
+                                              'supply-chain-risk-red':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk > 80 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk <= 100}"
+                                    [ngStyle]="{'width':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk + '%'}">
+                                    <label class="chart-tooltip"
+                                      [ngStyle]="{'background-color': getBackgroundcolorforSupplychain(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk,'Risk')}">
+                                      <span> Risk:
+                                        {{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk}}</span>
+                                      <em class="arw"
+                                        [ngStyle]="{'border-top-color': getBackgroundcolorforSupplychain(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk,'Risk')}"></em>
+                                    </label>
+                                  </span>
+                                </span>
+                              </div>
+                              <!-- Supply chain quality -->
+                              <div>
+                                <p>Supply chain quality</p>
+                                <span class="Progress">
+                                  <span class="Progress-item"
+                                    [ngClass]="{'supply-chain-quality-red':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality > 0 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality <= 40,
+                                              'supply-chain-quality-orang':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality > 40 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality <= 60,
+                                              'supply-chain-quality-yellow':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality > 60 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality <= 80,
+                                              'supply-chain-quality-green':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality > 80 && node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality <= 100}"
+                                    [ngStyle]="{'width':node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality + '%'}">
+                                    <label class="chart-tooltip"
+                                      [ngStyle]="{'background-color': getBackgroundcolorforSupplychain(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality,'Quality')}">
+                                      <span> Quality:
+                                        {{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality}}</span>
+                                      <em class="arw"
+                                        [ngStyle]="{'border-top-color': getBackgroundcolorforSupplychain(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality,'Quality')}"></em>
+                                    </label>
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div class="chart-hdr-box"
-                            *ngIf="!!node.data.entityMetricsSummaryGroup && node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1">
-                            <div class="count-blk vulnerabilities-col" style="flex:50%">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Vulnerability:</p>
-                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].vulnerabilityMetrics)}}</span>
-                            </div>
-                            <div style="clear:both;"></div>
-                            <div class="count-blk license-col" style="flex:50%">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Licese:</p>
-                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].licenseMetrics)}}</span>
-                            </div>
-                            <div class="count-blk components-col" style="flex:50%">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Supply:</p>
-                              <span>{{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.risk}}</span> / <span>{{node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].supplyChainMetrics.quality}}</span>
-                            </div>
-                            <div class="count-blk assets-col" style="flex:50%">
-                              <p *ngIf="!!node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries.length >= 1">
-                                Assets:</p>
-                              <span>{{getSum(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics)}}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </p-organizationChart>
+                        </ng-template>
+                      </p-organizationChart>
+                    </perfect-scrollbar>
                     <div class="tree-spinner" *ngIf="isTreeProgressBar">
                       <mat-progress-spinner style="margin:0 auto;" [mode]="'indeterminate'">
                       </mat-progress-spinner>

@@ -22,10 +22,7 @@ import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 @Component({
   selector: 'app-entity',
   templateUrl: './entity.component.html',
-  styleUrls: ['./entity.component.scss'],
-  host: {
-    '(document:click)': 'onClick($event)',
-  }
+  styleUrls: ['./entity.component.scss']
 })
 
 export class EntityComponent implements OnInit, OnDestroy {
@@ -454,7 +451,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
 
     this.obsEntity.subscribe((entity: any) => {
-      if(!!entity){
+      if (!!entity) {
         if (!!entity.parents && entity.parents.length >= 1) {
           for (var i = entity.parents.length - 1; i >= 0; i--) {
             this.entityNewBreadCum.push({ id: entity.parents[i].entityId, name: entity.parents[i].name });
@@ -463,7 +460,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
         this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
         this.buildProjectTree(entity);
-  
+
         if (isPush) {
           this.entityPageBreadCums.push({ id: entityId, name: entity.name });
         }
@@ -477,25 +474,25 @@ export class EntityComponent implements OnInit, OnDestroy {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-  
+
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
           this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
-  
+
           //Vul donut chart
           this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
-  
+
           //License Donut charts
           this.initLicenseDonut(entityMetrics[0].licenseMetrics);
-  
+
           //Component donut charts
           this.initComponentDonutChart(entityMetrics[0].componentMetrics);
-  
+
           //Asset donut chart
           this.initAssetDonut(entityMetrics[0].assetMetrics.assetCompositionMetrics);
-  
+
           //Supply chain chart
           this.initSupplyChainChart(entityMetrics[0].supplyChainMetrics.supplyChainMetrics);
-  
+
           this.initStackedChartAccordingToDonut(this.selectedDonut);
         }
         if (!!entity) {
@@ -504,7 +501,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           this.isTreeProgressBar = false;
         }
       }
-     });
+    });
   }
 
   buildProjectTree(entity: Entity) {
@@ -656,11 +653,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  //clicking on any where in the screen below method will fire
-  onClick(event) {
-    this.isShowComponentdropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowComponentdropdown;
-    this.isShowLicensedropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowLicensedropdown;
-  }
 
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
@@ -685,6 +677,13 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.lineChartActiveTab = "Week";
     this.selectedComponentChartDropvalue = "Vulnerabilities";
     this.selectedlicenseChartDropValue = "License Name";
+  }
+
+  //template helper functions for organization chart
+  getObjectProperties(object) {
+    return Object.keys(object).filter(key => { return key !== '__typename' && !!object[key] && object[key] != 0 }).map(val => {
+      return { key: val, value: object[val] }
+    });
   }
 
   private getLastTabSelected() {
@@ -1042,23 +1041,72 @@ export class EntityComponent implements OnInit, OnDestroy {
     return properties;
   }
 
+  //fire while getting percentage value and other value for org chart
+  getOrgChartValueByKey(object, key: string, value) {
+    return (key === '__typename') ? {
+      percentage: '0.00%',
+      color: ''
+    } : {
+      percentage: this.findThePercentageofWidth(this.getSum(object), value) + '%',
+      color: this.chartHelperService.getColorByLabel(key)
+    };
+  }
+
+  getBackgroundcolorforSupplychain(data, label) {
+    let color = ''
+    switch (label) {
+      case 'Risk':
+        if (data <= 40 && data > 0) {
+          color = 'rgb(17, 193, 91)';
+        } else if (data <= 60 && data > 40) {
+          color = 'rgb(230, 230, 0)';
+        } else if (data <= 80 && data > 60) {
+          color = 'rgb(255, 162, 29)';
+        } else {
+          color = 'rgb(255, 43, 43)';
+        }
+        break;
+      case 'Quality':
+        if (data <= 40 && data > 0) {
+          color = 'rgb(255, 43, 43)';
+        } else if (data <= 60 && data > 40) {
+          color = 'rgb(255, 162, 29)';
+        } else if (data <= 80 && data > 60) {
+          color = 'rgb(230, 230, 0)';
+        } else {
+          color = 'rgb(17, 193, 91)';
+        }
+        break;
+      default:
+        color = '#adb7be'
+        break;
+    }
+    return color;
+  }
+
+  //finding percentage of each
+  private findThePercentageofWidth(total: number, value: number = 0) {
+    const result = (value / total) * 100;
+    return Math.round(result * 10) / 10;
+  }
+
   // Fetch active scan count
   getRunningScansCount(entityId) {
     if (!this.checkRunningScans) {
       return;
     }
     this.taskService.getRunningScanTasksCount(entityId)
-        .pipe(map(countData => countData.data.running_scan_tasks_count))
-        .subscribe(count => {
-            this.activeScanCount = count;
-            setTimeout(() => {
-                this.getRunningScansCount(entityId);
-            }, NextConfig.config.delaySeconds);
-        }, err => {
-            setTimeout(() => {
-                this.getRunningScansCount(entityId);
-            }, NextConfig.config.delaySeconds);
-        });
+      .pipe(map(countData => countData.data.running_scan_tasks_count))
+      .subscribe(count => {
+        this.activeScanCount = count;
+        setTimeout(() => {
+          this.getRunningScansCount(entityId);
+        }, NextConfig.config.delaySeconds);
+      }, err => {
+        setTimeout(() => {
+          this.getRunningScansCount(entityId);
+        }, NextConfig.config.delaySeconds);
+      });
   }
 
 }

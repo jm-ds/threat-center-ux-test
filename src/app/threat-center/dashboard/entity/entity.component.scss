@@ -369,3 +369,102 @@
         transform: translate(-50%, 0);
     }
 }
+
+.Progress {
+    display: flex;
+    height: 8px;
+    overflow: hidden;
+    background-color: #adb7be;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+}
+
+.Progress-item {
+    outline: 2px solid transparent;
+}
+
+.supply-chain-risk-green {
+    background: linear-gradient(to right, rgb(17, 193, 91));
+}
+
+.supply-chain-risk-orang {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0), rgb(255, 162, 29))
+}
+
+.supply-chain-risk-yellow {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0));
+}
+
+.supply-chain-risk-red {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0), rgb(255, 162, 29), rgb(255, 43, 43))
+}
+
+
+.supply-chain-quality-green {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29),rgb(230, 230, 0),rgb(17, 193, 91))
+}
+
+.supply-chain-quality-orang {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29));
+}
+
+.supply-chain-quality-yellow {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29),rgb(230, 230, 0))
+}
+
+.supply-chain-quality-red {
+    background: linear-gradient(to right, rgb(255, 43, 43))
+}
+
+
+.Progress {
+    overflow: inherit;
+
+    .Progress-item {
+        position: relative;
+
+        &:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+
+        &:last-child {
+            border-radius: 0 6px 6px 0;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 3px 5px;
+            text-align: center;
+            z-index: 11;
+            background: #32404e;
+            min-width: 60px;
+            white-space: nowrap;
+            font-size: 12px;
+            display: none;
+            color: #fff;
+
+            .arw {
+                width: 0;
+                height: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                position: absolute;
+                border-top: 7px solid #32404e;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                bottom: -7px;
+            }
+        }
+
+        &:hover {
+            .chart-tooltip {
+                display: block;
+            }
+        }
+    }
+}

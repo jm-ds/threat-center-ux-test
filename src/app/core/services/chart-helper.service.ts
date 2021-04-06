@@ -340,36 +340,52 @@ export class ChartHelperService {
             case 'UNDEFINED':
             case 'PROPRIETARY':
             case 'COPYLEFT_STRONG':
-            case 'COPYLEF':
+            case 'copyleftStrong':
+            case 'COPYLEFT':
+            case 'copyleft':
                 color = "#FF0000";
                 break;
             case 'PROPRIETARY_FREE':
             case 'PUBLIC_DOMAIN':
             case 'PERMISSIVE':
+            case 'permissive':
             case 'COPYLEF':
                 color = "#11c15b";
                 break;
             case 'COPYLEFT_WEAK':
+            case 'copyleftWeak':
             case 'COPYLEFT_PARTIAL':
+            case 'copyleftPartial':
             case 'COPYLEFT_LIMITED':
+            case 'copyleftLimited':
                 color = "#ffa21d";
                 break;
             case 'CRITICAL':
+            case 'critical':
                 color = "#ff2b2b";
                 break;
             case 'HIGH':
+            case 'high':
                 color = "#ffa21d";
                 break;
             case 'MEDIUM':
+            case 'medium':
                 color = "#e6e600";
                 break;
             case 'LOW':
+            case 'low':
                 color = "#11c15b";
                 break;
             case 'INFO':
+            case 'info':
                 color = "#4680ff";
                 break;
+            case 'custom':
+                color = "#ff2b2b";
+            case 'dual':
+                color = "#ff5252"
             default:
+                color = '#696969'
                 break;
         }
 
