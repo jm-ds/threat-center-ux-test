@@ -321,7 +321,7 @@
 
   <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
-      <app-card [hidHeader]="false" cardClass="tab-card entity-table-card">
+      <app-card [hidHeader]="false" cardClass="tab-card entity-table-card entity-table-overflow-tooltip">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
 
