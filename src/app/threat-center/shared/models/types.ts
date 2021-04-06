@@ -309,6 +309,8 @@ export class Cwe {
   name:string;
 }
 
+
+// ScanAsset -------------------------------------------------------------------------------------------------
 export class ScanAsset {
   name:string;
   size:number;
@@ -321,7 +323,36 @@ export class ScanAsset {
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
-  embeddedAssets: any;
+  embeddedAssets: EmbeddedAssetConnection;
+}
+
+export class EmbeddedAssetConnection {
+  edges: EmbeddedAssetEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export class EmbeddedAssetEdge {
+  node: EmbeddedAsset;
+  cursor: string;
+  constructor(node: EmbeddedAsset, cursor: string) {
+    this.node = node;
+    this.cursor = cursor;
+  }
+}
+
+export class EmbeddedAsset {
+  matchLicenses: ScanAssetMatchLicense[];
+}
+
+export class ScanAssetMatchLicense {
+  licenseId: string;
+  licenseName: string;
+  licenseCategory: string;
+  earliestReleaseDate: Date;
+  latestReleaseDate: Date;
+  earliestReleaseVersion: string;
+  latestReleaseVersion: string;
 }
 
 export class ScanAssetMatch {
@@ -505,4 +536,36 @@ export class AttributeAssetRequestInput {
     this.attributeStatus = attributeStatus;
     this.attributeComment = attributeComment;
   }
+}
+
+export class CvssV3 {
+  cveId: string;
+  cvssV3BaseScore: string;
+  severity: string;
+}
+
+export class VulnerableRelease {
+  namespace: string;
+  name: string;
+  version: string;
+  type: string;
+  purl: string;
+  releaseDate: string;
+  vulnerable: boolean;
+  cvssV3: CvssV3;
+}
+
+export class VulnerableReleaseResponse {
+  nextPagingState: string;
+  repositoryType: string;
+  purlType: string;
+  group: string;
+  name: string;
+  size: number;
+  vulnerableReleases: VulnerableRelease[];
+}
+
+export interface VulnerableReleaseResponseMap {
+  "binaryVulnerableResponse": VulnerableReleaseResponse;
+  "sourceVulnerableResponse": VulnerableReleaseResponse;
 }

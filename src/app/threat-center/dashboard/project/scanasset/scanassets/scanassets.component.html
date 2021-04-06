@@ -71,6 +71,7 @@
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
+                  <option value="over0" [label]="messages.asset.filter.embedded_and_opensource"></option>
                   <option value="0-10">0-10%</option>
                   <option value="11-30">11-30%</option>
                   <option value="31-50">31-50%</option>

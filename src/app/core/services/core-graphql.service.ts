@@ -10,6 +10,8 @@ import { FetchResult } from 'apollo-link';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from '@app/security/services';
 import { Router } from '@angular/router';
+import { CoreErrorHelperService } from './core-error-helper.service';
+import { Messages } from '@app/messages/messages';
 
 @Injectable({
     providedIn: 'root'
@@ -19,12 +21,11 @@ export class CoreGraphQLService {
     constructor(private apollo: Apollo,
         private coreHelperService: CoreHelperService,
         private spinner: NgxSpinnerService,
-        private authenticationService: AuthenticationService,
-        private router: Router
+        private coreErrorHelperService: CoreErrorHelperService
     ) { }
 
 
-    // Core graphQL service    
+    // Core graphQL service
     coreGQLReq<T>(
 
         query: DocumentNode,
@@ -89,45 +90,21 @@ export class CoreGraphQLService {
         console.log("ERROR:");
         console.log(error);
         this.spinner.hide();
+        //Check if error is Object
         if (typeof error === "object") {
             let er = JSON.parse(JSON.stringify(error));
-            // todo: put error printing to console in single place
-            console.log(er.message);
             if (!!er.networkError) {
-                // todo: put error printing to console in single place
-                console.log(er.networkError);
-                if (er.networkError.status === 403) {
-                    const jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
-                    if (!!jwt) {
-                        if (this.authenticationService.isTokenExpired(jwt)) {
-                            this.authenticationService.logout();
-                            this.router.navigate(['/login']);
-                            // todo: SILENT REDIRECT
-                        } else {
-                            // todo: READ SERVER MESSAGE for alert called next line
-                            this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
-                        }
-                    }
-                    // todo: DEAD END
-                } else {
-                    this.coreHelperService.swalALertBox(this.coreHelperService.getMessageStatusWise(er.networkError.status), er.networkError.status);
-                    if (er.networkError.status === 401) {
-                        this.authenticationService.logout();
-                        this.router.navigate(['/login']);
-                        // todo: SILENT REDIRECT
-                    }
-                }
+                this.coreErrorHelperService.handleNetworkError(er.networkError, null);
             } else {
+                this.coreErrorHelperService.printErrorMessageToConsol(er.message);
                 this.coreHelperService.swalALertBox(er.message);
             }
-        } else if (typeof error === "string") {
-            // todo: put error printing to console in single place
-            console.log(error);
+        } else if (typeof error === "string") { //check if error is string
+            this.coreErrorHelperService.printErrorMessageToConsol(error);
             this.coreHelperService.swalALertBox(error);
         } else {
-            this.coreHelperService.swalALertBox("Something went wrong!");
+            this.coreHelperService.swalALertBox(Messages.wrongMessage);
         }
-        // Two way to return Observable<unknown>
         return EMPTY;
     }
 }

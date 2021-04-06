@@ -6,6 +6,7 @@ import { Scan } from '@app/models';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Messages } from "@app/messages/messages";
 
 @Component({
   selector: 'app-scanassets',
@@ -33,6 +34,7 @@ export class ScanAssetsComponent implements OnInit {
   timeOutDuration = 1000;
   parentScanAssetId = '';
   story = [];
+  messages = Messages;
 
   constructor(private apiService: ApiService,
     private route: ActivatedRoute,
@@ -44,11 +46,19 @@ export class ScanAssetsComponent implements OnInit {
     this.isAssetStory.emit(false);
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
-    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
-      .pipe(map(result => result.data.scan));
-    this.initData();
-
+    this.checkScanDataExists();
     this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets");
+  }
+
+  //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
+  checkScanDataExists() {
+    if (!this.obsScan) {
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+        .pipe(map(result => result.data.scan));
+      this.initData();
+    } else {
+      this.initData();
+    }
   }
 
   sort(scanAssets: any) {

@@ -33,6 +33,7 @@ export class EntityService {
             }
             entityMetricsSummaryGroup {
               entityMetricsSummaries {
+                measureDate
                 vulnerabilityMetrics {
                     critical
                     high

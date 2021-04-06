@@ -17,9 +17,13 @@ export class UserUtils {
     }
 
     renderEntities(entities: EntityConnection) {
-        return entities.edges.map(entity => {
-            return entity.node.name;
-        }).sort().join(", ");
+        if (entities) {
+            return entities.edges.map(entity => {
+                return entity.node.name;
+            }).sort().join(", ");
+        } else {
+            return undefined;
+        }
     }
 
 
@@ -49,4 +53,10 @@ export class UserUtils {
         }
         return el;
     }
+
+    goToApiKeyShow(username, apiId) {
+        this.router.navigateByUrl('admin/user/show/' + username+'/show/apikey/' + apiId);
+    }
+
+
 }
