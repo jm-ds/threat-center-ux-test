@@ -5,5 +5,11 @@ export const Messages = {
     status404: 'The server has not found anything matching the URI given.',
     status501: 'The server does not support the facility required.',
     wrongMessage: 'Something went wrong!',
-    tokenNotFound: 'JWT Token not found!'
-}
+    tokenNotFound: 'JWT Token not found!',
+
+    asset: {
+        filter: {
+            embedded_and_opensource:  "Embedded and open source assets"
+        }
+    }
+};
