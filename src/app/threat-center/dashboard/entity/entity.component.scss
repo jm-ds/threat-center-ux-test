@@ -371,12 +371,14 @@
 }
 
 .Progress {
+
     display: flex;
     height: 8px;
     overflow: hidden;
     background-color: #adb7be;
     border-radius: 6px;
     outline: 1px solid transparent;
+    filter: saturate(70%) !important;
 }
 
 .Progress-item {
@@ -431,9 +433,17 @@
             border-radius: 0 6px 6px 0;
         }
 
+        &:nth-child(1) {
+            border-radius: 6px 0 0 6px;
+        }
+
+        &:nth-child-last(1) {
+            border-radius: 0 6px 6px 0;
+        }
+
         .chart-tooltip {
             position: absolute;
-            top: -35px;
+            top: -30px;
             left: 50%;
             transform: translateX(-50%);
             border-radius: 2px;
@@ -447,6 +457,7 @@
             font-size: 12px;
             display: none;
             color: #fff;
+            box-shadow: 0 -1px 0px 0px rgba(0, 0, 0, 1) inset;
 
             .arw {
                 width: 0;
@@ -457,7 +468,7 @@
                 border-top: 7px solid #32404e;
                 border-left: 7px solid transparent;
                 border-right: 7px solid transparent;
-                bottom: -7px;
+                bottom: -6px;
             }
         }
 
