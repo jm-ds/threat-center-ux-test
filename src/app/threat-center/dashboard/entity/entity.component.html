@@ -704,6 +704,29 @@
                                   </span>
                                 </div>
                               </div>
+
+                              <!-- Asset -->
+                              <div>
+                                <p>Assets</p>
+                                <div class="Progress">
+                                  <ng-container
+                                    *ngFor="let item of node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics | keyvalue">
+                                    <span *ngIf="item.key !== '__typename' && !!item.value && item.value != 0"
+                                      [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics,item.key,item.value).color,
+                                    'width':getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics,item.key,item.value).percentage}"
+                                      class="Progress-item">
+                                      <label class="chart-tooltip"
+                                        [ngStyle]="{'background-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics,item.key,item.value).color}">
+                                        <span> 
+                                          {{item.key}}: {{item.value}}</span>
+                                        <em class="arw"
+                                          [ngStyle]="{'border-top-color': getOrgChartValueByKey(node?.data?.entityMetricsSummaryGroup?.entityMetricsSummaries[0].assetMetrics,item.key,item.value).color}"></em>
+                                      </label>
+                                    </span>
+                                  </ng-container>
+                                </div>
+                              </div>
+
                             </div>
                           </div>
                         </ng-template>

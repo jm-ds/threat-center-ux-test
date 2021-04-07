@@ -1036,6 +1036,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   //fire while getting percentage value and other value for org chart
   getOrgChartValueByKey(object, key: string, value) {
+    console.log(key);
     return (key === '__typename') ? {
       percentage: '0.00%',
       color: ''

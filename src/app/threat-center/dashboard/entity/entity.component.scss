@@ -433,13 +433,13 @@
             border-radius: 0 6px 6px 0;
         }
 
-        &:nth-child(1) {
-            border-radius: 6px 0 0 6px;
-        }
+        // &:nth-child(1) {
+        //     border-radius: 6px 0 0 6px;
+        // }
 
-        &:nth-child-last(1) {
-            border-radius: 0 6px 6px 0;
-        }
+        // &:nth-child-last(1) {
+        //     border-radius: 0 6px 6px 0;
+        // }
 
         .chart-tooltip {
             position: absolute;

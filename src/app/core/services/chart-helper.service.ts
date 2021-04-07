@@ -382,8 +382,19 @@ export class ChartHelperService {
                 break;
             case 'custom':
                 color = "#ff2b2b";
+                break;
             case 'dual':
-                color = "#ff5252"
+                color = "#ff5252";
+                break;
+            case 'embedded':
+                color = "#11c15b";
+                break;
+            case 'openSource':
+                color = "#4680ff";
+                break;
+            case 'unique':
+                color = "#ffa21d";
+                break;
             default:
                 color = '#696969'
                 break;
