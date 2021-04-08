@@ -315,7 +315,10 @@ export class ChartHelperService {
             series: [],
             tooltip: {
                 fixed: {
-                    enabled: false
+                    enabled: false,
+                    position: 'topRight',
+                    offsetX: -50,
+                    offsetY: -150,
                 },
                 x: {
                     show: false
@@ -323,12 +326,15 @@ export class ChartHelperService {
                 y: {
                     title: {
                         formatter: function (seriesName) {
-                            return "";
+                            return seriesName;
                         }
                     }
                 },
+                items: {
+                    display: 'flex',
+                },
                 marker: {
-                    show: false
+                    show: true
                 }
             }
         }
