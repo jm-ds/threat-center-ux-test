@@ -51,4 +51,8 @@ export class NavRightComponent implements OnInit {
   );
   }
 
+  gotoProfile(){
+    //Navigate to user detail page
+  }
+
 }

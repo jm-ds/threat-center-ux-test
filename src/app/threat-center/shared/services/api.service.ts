@@ -900,7 +900,7 @@ export class ApiService {
         query {
           gitHubUser {
             id,
-            isSiteAdmin,
+            isSiteAdmin
             avatarUrl,
             email,
             location,
