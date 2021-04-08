@@ -528,5 +528,11 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     }
 }
 
+.entity-table-overflow-tooltip{
+    .ng-trigger-collapsedCard {
+        overflow: inherit !important;
+    }
+}
+
 /////////////////////////================Entity Page style End================//////////////
 
