@@ -12,10 +12,10 @@ import { UserUtils } from '../user-utils';
 export class ApiKeyEditComponent extends UserUtils implements OnInit {
 
     messages: Messages;
-    private keyId: string;
-    private username: string;
-    private apiKey: ApiKey;
-    private user: User;
+    keyId: string;
+    username: string;
+    apiKey: ApiKey;
+    user: User;
 
     constructor(
         private userService: UserService,
