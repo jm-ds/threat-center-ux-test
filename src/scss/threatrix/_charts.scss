@@ -347,6 +347,8 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     text-overflow: ellipsis;
                     display: inline-block;
                     max-width: 250px;
+                    font-weight: 500;
+                    font-size: 14px;
                 }
 
                 .ui-organizationchart-node-content {
@@ -357,11 +359,13 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     padding: 5px;
                     color: #adb7be;
                     font-size: 12px;
-                    height: 61px;
+                    height: 100%;
 
                     p {
                         color: #adb7be;
                         font-size: 12px;
+                        text-align: left;
+                        margin-bottom: 6px;
                     }
                 }
 
@@ -378,9 +382,14 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                 }
 
                 .chart-hdr-box {
-                    display: flex;
+                    // display: flex;
                     align-items: center;
                     justify-content: center;
+                    width: 250px;
+                    padding: 0px 8px 0px 8px;
+                    div {
+                        margin: 2px 0 6px 0;
+                    }
 
                     .count-blk {
                         border-radius: 2px;
@@ -414,10 +423,6 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                             margin: 0 5px 0 0;
                         }
 
-                        span {
-                            color: 12px;
-                            font-weight: 700;
-                        }
 
                     }
                 }
@@ -525,6 +530,12 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
         stroke: #6078ea !important;
         height: 50px;
         width: 50px;
+    }
+}
+
+.entity-table-overflow-tooltip{
+    .ng-trigger-collapsedCard {
+        overflow: inherit !important;
     }
 }
 
