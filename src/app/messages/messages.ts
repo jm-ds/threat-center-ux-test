@@ -7,6 +7,7 @@ export const Messages = {
     status502: 'Backend server is restarting at the moment. Please wait several seconds and repeat your request/action.',
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
+    graphQlCommonErrorMessage:'An unexpected error occurred while trying to fetch the requested data.',
 
     asset: {
         filter: {
