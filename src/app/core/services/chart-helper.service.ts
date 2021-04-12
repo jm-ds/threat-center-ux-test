@@ -50,7 +50,7 @@ export class ChartHelperService {
             tooltip: {
                 enabled: true,
                 style: {
-                    fontSize: '16px',
+                    fontSize: '20px',
                     fontFamily: 'Helvetica, Arial, sans-serif',
                 },
                 marker: {
