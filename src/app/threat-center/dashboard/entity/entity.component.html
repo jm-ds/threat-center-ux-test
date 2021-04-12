@@ -610,8 +610,7 @@
                       <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
                         [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
                         <ng-template let-node pTemplate="entity">
-                          <div class="node-header node-header-top p-corner-top" ngbTooltip="{{node.name}}"
-                            tooltipClass="my-custom-class">{{node.name}}</div>
+                          <div class="node-header node-header-top p-corner-top" [ngClass]="{'node-header-lg': !!node.name && node.name.length > 24}"><span>{{node.name}}</span></div>
                           <div class="node-content node-content-top">
                             <div class="node-no-data"
                               *ngIf="!node.data || !node.data.entityMetricsSummaryGroup || node.data.entityMetricsSummaryGroup.entityMetricsSummaries.length == 0">
