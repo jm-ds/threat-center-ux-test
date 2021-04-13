@@ -255,6 +255,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(event) {
+        this.selectedItem = '';
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
             if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
