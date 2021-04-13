@@ -6,6 +6,7 @@ export const Messages = {
     status501: 'The server does not support the facility required.',
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
+    graphQlCommonErrorMessage:'An unexpected error occurred while trying to fetch the requested data.',
 
     asset: {
         filter: {
