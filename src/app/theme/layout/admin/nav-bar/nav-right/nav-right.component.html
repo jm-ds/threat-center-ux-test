@@ -59,14 +59,14 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right profile-notification" ngbDropdownMenu>
         <div class="pro-head">
-          <img src="{{!!currentUser.avatarUrl?currentUser.avatarUrl:'assets/images/user/no-avatar.png'}}" (click)="gotoProfile()" class="img-radius" alt="User-Profile-Image">
-          <span (click)="gotoProfile()">{{!!currentUser.fname?currentUser.fname:'' + ' '+ !!currentUser.lname?currentUser.lname:''}}</span>
+          <img src="{{!!currentUser.avatarUrl?currentUser.avatarUrl:'assets/images/user/no-avatar.png'}}" (click)="gotoProfile()" class="img-radius cursor-pointer" alt="User-Profile-Image">
+          <span (click)="gotoProfile()" class="cursor-pointer">{{!!currentUser.fname?currentUser.fname:'' + ' '+ !!currentUser.lname?currentUser.lname:''}}</span>
           <a href="javascript:" class="dud-logout" title="Logout" (click)="logout()">
             <i class="feather icon-log-out"></i>
           </a>
         </div>
         <ul class="pro-body">
-          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-user" (click)="gotoProfile()"></i> Profile</a></li>
+          <li><a href="javascript:" class="dropdown-item" (click)="gotoProfile()"><i class="feather icon-user"></i> Profile</a></li>
           <li><a href="javascript:" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
           <li><a href="javascript:" class="dropdown-item" (click)="inviteUser(inviteUrlDialog)"><i class="feather icon-users"></i> Invite user</a></li>
           <li><a href="javascript:" class="dropdown-item" (click)="logout()"><i
