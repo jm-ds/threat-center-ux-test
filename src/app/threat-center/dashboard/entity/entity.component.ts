@@ -643,7 +643,7 @@ export class EntityComponent implements OnInit, OnDestroy {
         {
           data: entity,
           expanded: true,
-          name: entity.name + "Organization Tree Organization Tree  Organization",
+          name: entity.name,
           styleClass: 'p-person',
           type: "entity",
           children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
