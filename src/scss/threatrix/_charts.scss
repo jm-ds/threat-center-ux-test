@@ -352,9 +352,15 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     width: 100%;
                     border-bottom: 1px solid #4a4c4f;
                     margin-bottom: 10px;
-                    max-height: 50px;
-                    height: 50px;
-                    position: relative;
+                    max-height: 36px;
+                    height: 36px;
+                    transition: all 0.3s ease-in-out;
+                    line-height: 18px;
+                    position: absolute;
+                    // top: 15px;
+                    top: 5px;
+                    background: #242e38;
+                    z-index: 11;
 
                     span {
                         display: block;
@@ -362,36 +368,36 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     }
 
                     &.node-header-lg {
+                        align-items: flex-start;
                         span {
-                            transform: translateY(10px);
                             display: block;
                             transition: all 0.3s ease-in-out;
                         }
-    
+
                         &:after {
                             content: '';
                             width: 100%;
                             height: 16px;
-                            background-image: linear-gradient(rgba(36,46,56,0.5), rgba(36,46, 56, 1));
+                            background-image: linear-gradient(rgba(36, 46, 56, 0.5), rgba(36, 46, 56, 1));
                             position: absolute;
                             bottom: 0;
                             left: 0;
                         }
-    
+
                         &:hover {
                             overflow: inherit;
+                            max-height: inherit;
+                            height: auto;
+
                             &:after {
                                 height: 16px;
-                                background-image: linear-gradient(rgba(255,255,255,0.07), rgba(255,255,255,0.01));
+                                background-image: linear-gradient(rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01));
                                 bottom: -16px;
-                            }
-                            span {
-                                transform: translateY(-4px);
                             }
                         }
                     }
 
-                    
+
                 }
 
                 .ui-organizationchart-node-content {
@@ -399,11 +405,11 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     background: #242e38;
                     // min-width: 220px;
                     border-radius: 2px;
-                    padding: 5px;
+                    padding: 50px 5px 5px 5px;
                     color: #adb7be;
                     font-size: 12px;
                     height: 100%;
-                    border:1px solid #4a4c4f;
+                    border: 1px solid #4a4c4f;
 
                     p {
                         color: #adb7be;
@@ -577,11 +583,10 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     }
 }
 
-.entity-table-overflow-tooltip{
+.entity-table-overflow-tooltip {
     .ng-trigger-collapsedCard {
         overflow: inherit !important;
     }
 }
 
 /////////////////////////================Entity Page style End================//////////////
-
