@@ -346,7 +346,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    max-width: 250px;
+                    max-width: 260px;
                     font-weight: 500;
                     font-size: 14px;
                     width: 100%;
@@ -354,11 +354,12 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     margin-bottom: 10px;
                     max-height: 36px;
                     height: 36px;
-                    transition: all 0.3s ease-in-out;
+                    transition: height 0.3s ease-in-out;
                     line-height: 18px;
                     position: absolute;
                     // top: 15px;
                     top: 5px;
+                    left: 0;
                     background: #242e38;
                     z-index: 11;
 
@@ -369,6 +370,7 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
                     &.node-header-lg {
                         align-items: flex-start;
+                        
                         span {
                             display: block;
                             transition: all 0.3s ease-in-out;
@@ -386,8 +388,9 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
                         &:hover {
                             overflow: inherit;
-                            max-height: inherit;
+                            max-height: 500px;
                             height: auto;
+                            transition: height 1s ease-in-out;
 
                             &:after {
                                 height: 16px;
