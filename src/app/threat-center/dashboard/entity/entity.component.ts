@@ -648,7 +648,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
         {
           data: entity,
           expanded: true,
-          name: entity.name + "Organization tree model Organization tree modelOrganization",
+          name: entity.name,
           styleClass: 'p-person',
           type: "entity",
           children: this.list_to_tree(this.recursivehelperArrayForIrgTree, true)
@@ -658,12 +658,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+  //get actual height of child content
   getContentHeight(content) {
-    if (!!content && !!content.offsetHeight && content.offsetHeight != 0) {
-      return (Number(content.offsetHeight) + 18) + "px";
-    } else {
-      return '36px';
-    }
+    return !!content.offsetHeight && content.offsetHeight > 0 ? (Number(content.offsetHeight) + 20) + 'px' : '38px'
   }
 
   private initCharts() {
