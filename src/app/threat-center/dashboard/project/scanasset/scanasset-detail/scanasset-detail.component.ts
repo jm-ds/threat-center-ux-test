@@ -187,8 +187,8 @@ export class ScanAssetDetailComponent implements OnInit {
       text: "You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.",
       type: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#4680ff',
+      cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
     }).then((result) => {
