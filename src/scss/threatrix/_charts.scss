@@ -590,4 +590,8 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     }
 }
 
-/////////////////////////================Entity Page style End================//////////////
+//Added tooltip border 1px to donut chart tooltip
+.entity-chart-blk .apexcharts-tooltip-series-group  {
+    border: 1px solid #adb7be;
+    box-shadow: 0 -1px 0px 0px black inset;
+}
