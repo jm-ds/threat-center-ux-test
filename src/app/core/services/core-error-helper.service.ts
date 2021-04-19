@@ -18,10 +18,10 @@ export class CoreErrorHelperService {
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || !errObj.status || errObj.status === 0) {
-            this.coreHelperService.swalALertBox(Messages.wrongMessage, 'Error!');
+            this.coreHelperService.swalALertBox(Messages.wrongMessage, Messages.commonErrorHeaderText);
         } else {
             //getting server error if any other wise show default message according to status of server
-            const dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: this.getDefaultErrorMessageFromServerIf(errObj) };
+            const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
 
             switch (errObj.status) {
                 case 401:
@@ -37,11 +37,11 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+                            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
-                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: 'Error!' });
+                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: Messages.commonErrorHeaderText });
                     }
                     break;
                 default:
@@ -49,7 +49,7 @@ export class CoreErrorHelperService {
                     if (errObj.status === 500) {
                         console.log("REQUEST PAYLOAD", requestPayload);
                     }
-                    this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+                    this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     break;
             }
             this.printErrorMessageToConsol(dataObjToShow.message)
@@ -117,7 +117,7 @@ export class CoreErrorHelperService {
 
     //Helper function which will redirect user to login page with notifying user.
     private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }) {
-        this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+        this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
         this.authenticationService.logout();
         this.router.navigate(['/login']);
     }
