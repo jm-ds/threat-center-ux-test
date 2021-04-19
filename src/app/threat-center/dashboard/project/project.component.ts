@@ -16,6 +16,7 @@ import { HostListener } from '@angular/core';
 import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
 import * as _ from 'lodash';
 import { Project } from '@app/models';
+import { NextConfig } from '@app/app-config';
 
 @Component({
   selector: 'project-dashboard',
@@ -82,8 +83,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   componentCount = 0;
   licensesCount = 0;
   copyrightCount = 9;
-  assetCount = 0;
+  assetCount: any = 0;
   sourceCodeAssetcount = 0;
+  assetCountTooltip = '';
 
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -169,6 +171,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics');
       //Init Asset chart
       this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics');
+      const assetCountData = this.getAssetcountString();
+      this.assetCount = assetCountData.orgText;
+      this.assetCountTooltip = assetCountData.tooltipText;
 
       _.each(this.projectMetrics, data => {
         this.xaxis.categories.push(data.measureDate);
@@ -520,6 +525,23 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
+  getAssetcountString() {
+    if (!!this.assetChart && this.assetChart.series.length >= 1) {
+      let orgtext = "";
+      let tooltipText = "";
+      //below line need to do because order have to be same as in the assets columns in the scan row...
+      const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
+      _.each(data, ser => {
+        orgtext += ser.data[0] + '/';
+        tooltipText += " "+ser.data[0] + ' ' + ser['name'] + ','
+      });
+      return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
+    } else {
+      return { orgText: '0', tooltipText: '' };
+    }
+  }
+
   //load all metrics data after selecting scan in table.
   private apicallTogetCounts(scanId: string) {
     this.gettingDataforAllMetrics(scanId)
@@ -532,11 +554,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res1 = this.projectDashboardService.getScanVulnerabilities(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities")));
-    const res2 = this.projectDashboardService.getScanComponents(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")));
-    const res3 = this.projectDashboardService.getScanLicenses(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")));
-    const res4 = this.projectDashboardService.getScanAssets(scanId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")));
-    return forkJoin([res1, res2, res3, res4]);
+    const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+    return forkJoin([res]);
   }
 
   //Helper function which will help to populate metrics count data
@@ -544,7 +563,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!data[0]) {
       this.vulnerabilityCount = data[0].data.scan.vulnerabilities['totalCount'];
       this.componentCount = data[0].data.scan.components['totalCount'];
-      this.assetCount = data[0].data.scan.scanAssetsTree['totalCount'];
+      // this.assetCount = data[0].data.scan.scanAssetsTree['totalCount'];
       this.licensesCount = data[0].data.scan.licenses['totalCount'];
     }
   }
