@@ -84,7 +84,8 @@
                           <p-table #orgrepos [columns]="ghUserCols" [value]="orgEdge.node.repositories.edges"
                             [paginator]="false" [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
                             tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                            [filterDelay]="0" [globalFilterFields]="['node.name']">
+                            [filterDelay]="0" [globalFilterFields]="['node.name']" (onRowSelect)="onRowSelect($event)"
+                            (onRowUnselect)="onRowUnselect($event)">
 
                             <ng-template pTemplate="header">
                               <tr>
