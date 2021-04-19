@@ -50,11 +50,11 @@ export class ChartHelperService {
             tooltip: {
                 enabled: true,
                 style: {
-                    fontSize: '20px',
+                    fontSize: '18px',
                     fontFamily: 'Helvetica, Arial, sans-serif',
                 },
                 marker: {
-                    show: true,
+                    show: false,
                 },
                 items: {
                     display: 'flex',
