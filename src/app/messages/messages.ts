@@ -8,7 +8,7 @@ export const Messages = {
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
     graphQlCommonErrorMessage:'An unexpected error occurred while trying to fetch the requested data.',
-
+    commonErrorHeaderText:'Error!',
     asset: {
         filter: {
             embedded_and_opensource: "Embedded and open source assets"
