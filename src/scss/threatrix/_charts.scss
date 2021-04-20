@@ -59,7 +59,7 @@
     font-size: 14px;
     color: #000;
     text-align: center;
-    width: 250px;
+    min-width: 130px;
     white-space: initial;
 
     .active-fig {
@@ -81,16 +81,17 @@
         list-style: none;
         margin: 0;
         padding: 10px;
+        flex-direction: column;
 
         li {
-            width: 50%;
+            //width: 50%;
             position: relative;
-            padding: 0 15px 0 20px;
+            padding: 0 0 0 15px;
             font-size: 14px;
             color: #000;
             margin: 5px 0;
             text-align: left;
-            word-break: break-all;
+            //word-break: break-all;
 
             &:after {
                 content: '';
@@ -339,16 +340,65 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
                 .node-header {
                     color: rgba(255, 255, 255, 0.8);
-                    // background: #2e3944;
                     padding: 5px;
-                    border-radius: 2px;
-                    white-space: nowrap;
+                    border-radius: 0;
                     overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: inline-block;
-                    max-width: 250px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    max-width: 260px;
                     font-weight: 500;
                     font-size: 14px;
+                    width: 100%;
+                    border-bottom: 1px solid #4a4c4f;
+                    margin-bottom: 10px;
+                    max-height: 38px;
+                    height: 38px;
+                    transition: all 0.3s ease-in-out;
+                    line-height: 18px;
+                    position: absolute;
+                    // top: 15px;
+                    top: 3px;
+                    left: 0;
+                    background: #242e38;
+                    z-index: 11;
+
+                    span {
+                        display: block;
+                        width: 100%;
+                    }
+
+                    &.node-header-lg {
+                        align-items: flex-start;
+                        span {
+                            display: block;
+                        }
+
+                        &:after {
+                            content: '';
+                            width: 100%;
+                            height: 16px;
+                            background-image: linear-gradient(rgba(36, 46, 56, 0.5), rgba(36, 46, 56, 1));
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                        }
+
+                        &:hover {
+                            overflow: inherit;
+                            max-height: 500px;
+                            height: auto;
+                            transition: all 0.3s ease-in-out;
+
+                            &:after {
+                                height: 16px;
+                                background-image: linear-gradient(rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01));
+                                bottom: -16px;
+                            }
+                        }
+                    }
+
+
                 }
 
                 .ui-organizationchart-node-content {
@@ -356,11 +406,11 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
                     background: #242e38;
                     // min-width: 220px;
                     border-radius: 2px;
-                    padding: 5px;
+                    padding: 50px 5px 5px 5px;
                     color: #adb7be;
                     font-size: 12px;
                     height: 100%;
-                    border:1px solid #4a4c4f;
+                    border: 1px solid #4a4c4f;
 
                     p {
                         color: #adb7be;
@@ -534,11 +584,14 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     }
 }
 
-.entity-table-overflow-tooltip{
+.entity-table-overflow-tooltip {
     .ng-trigger-collapsedCard {
         overflow: inherit !important;
     }
 }
 
-/////////////////////////================Entity Page style End================//////////////
-
+//Added tooltip border 1px to donut chart tooltip
+.entity-chart-blk .apexcharts-tooltip-series-group  {
+    border: 1px solid #adb7be;
+    box-shadow: 0 -1px 0px 0px black inset;
+}
