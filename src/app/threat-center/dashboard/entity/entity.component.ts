@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
   styleUrls: ['./entity.component.scss']
 })
 
-export class EntityComponent implements OnInit, OnDestroy {
+export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   public chartDB: any;
   public dailyVisitorStatus: string;
   public dailyVisitorAxis: any;
@@ -120,6 +120,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
     private modalService: NgbModal,
+    private cdRef: ChangeDetectorRef
   ) {
     this.chartDB = ChartDB;
     this.dailyVisitorStatus = '1y';
@@ -150,6 +151,10 @@ export class EntityComponent implements OnInit, OnDestroy {
         }
       });
     this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnInit() {
@@ -653,6 +658,10 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
+  //get actual height of child content
+  getContentHeight(content) {
+    return !!content.offsetHeight && content.offsetHeight > 0 ? (Number(content.offsetHeight) + 20) + 'px' : '38px'
+  }
 
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
@@ -1036,7 +1045,6 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   //fire while getting percentage value and other value for org chart
   getOrgChartValueByKey(object, key: string, value) {
-    console.log(key);
     return (key === '__typename') ? {
       percentage: '0.00%',
       color: ''

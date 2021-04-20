@@ -41,14 +41,21 @@ export class NavRightComponent implements OnInit {
   inviteUser(inviteUrlDialog) {
     this.inviteService.createInvite().subscribe(
       data => {
-          let inviteHash = data.data.createInvite.inviteHash;
-          const link = '/admin/invite/show/'+ inviteHash;
-                this.router.navigate([link]);
+        let inviteHash = data.data.createInvite.inviteHash;
+        const link = '/admin/invite/show/' + inviteHash;
+        this.router.navigate([link]);
       },
       error => {
-          console.error("NavRightComponent", error);
+        console.error("NavRightComponent", error);
       }
-  );
+    );
+  }
+
+  gotoProfile() {
+    //Navigate to user detail page
+    if (!!this.authenticationService.currentUser && !!this.authenticationService.currentUser['username']) {
+      this.router.navigate(['/admin/user/show/' + this.authenticationService.currentUser['username']]);
+    }
   }
 
 }

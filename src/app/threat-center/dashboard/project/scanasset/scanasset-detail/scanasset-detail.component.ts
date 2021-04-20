@@ -39,19 +39,19 @@ export class ScanAssetDetailComponent implements OnInit {
   selectedMatches: ScanAssetMatch[] = [];
 
   attributionStatuses: CodeNamePair[] = [
-                                              { code: "REVIEWED", name: "Reviewed" },
-                                              { code: "IGNORED", name: "Ignored" },
-                                              { code: "COMPLETE", name: "Complete" }
-                                         ];
-
+    { code: "REVIEWED", name: "Reviewed" },
+    { code: "IGNORED", name: "Ignored" },
+    { code: "COMPLETE", name: "Complete" }
+  ];
+  isDisableAttributeLicensebtn: boolean = false;
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
     private repositoryService: RepositoryService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
-    private router:Router,
-    private coreHelperService:CoreHelperService) { }
+    private router: Router,
+    private coreHelperService: CoreHelperService) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -85,7 +85,7 @@ export class ScanAssetDetailComponent implements OnInit {
             // let user = this.authService.getFromStorageBasedEnv("currentUser");
             let user = this.authService.getFromSessionStorageBasedEnv("currentUser");
             const accessToken = user.repositoryAccounts.githubAccount.accessToken;
-            console.log("ACCESS TOKEN:",accessToken);
+            console.log("ACCESS TOKEN:", accessToken);
 
             if (accessToken) {
               console.log("Getting file");
@@ -97,8 +97,8 @@ export class ScanAssetDetailComponent implements OnInit {
           });
         }
       });
-      this.attributionStatus = "COMPLETE";
-      this.initBreadcum();
+    this.attributionStatus = "COMPLETE";
+    this.initBreadcum();
   }
 
   releaseSelected() {
@@ -146,7 +146,7 @@ export class ScanAssetDetailComponent implements OnInit {
   }
 
   //go to License details page
-  gotoLicense(liId){
+  gotoLicense(liId) {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const scanId = this.route.snapshot.paramMap.get('scanId');
     const url = "dashboard/entity/" + entityId + '/project/' + this.projectId + '/scan/' + scanId + "/license/" + liId;
@@ -158,39 +158,61 @@ export class ScanAssetDetailComponent implements OnInit {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
 
-  
+
   // send attribute asset request
-  attributeAsset(assetMatch) {
-    this.apiService.attributeAsset(this.scanId, this.scanAssetId, 
+  attributeAsset(assetMatch, modelContent) {
+    this.isDisableAttributeLicensebtn = true;
+    this.apiService.attributeAsset(this.scanId, this.scanAssetId,
       this.selectedMatches, this.attributionStatus, this.attributionComment)
       .subscribe(data => {
+        this.isDisableAttributeLicensebtn = false;
+        Swal.close();
+        modelContent.hide();
         if (data.data.attributeAsset) {
           Swal.fire('License attribution', 'Attribution is successful', 'success');
         } else {
           Swal.fire('License attribution', 'Attribution is not required', 'warning');
         }
       }, (error) => {
+        this.isDisableAttributeLicensebtn = false;
+        Swal.close();
+        modelContent.hide();
         Swal.fire('License attribution', 'Attribution error', 'error');
-    });
-
+      });
   }
 
-  
+  attributeProcessExecutionModel(modelContent) {
+    Swal.fire({
+      title: 'Do you want to close dialog?',
+      text: "You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.",
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#4680ff',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        modelContent.hide();
+      }
+    });
+  }
+
   //  selected matches change handler
   onSelectedChange(selectedAssetMatchId, selectedPercentMatch, isChecked) {
-    if(isChecked) {
+    if (isChecked) {
       this.selectedMatches.push({
         assetMatchId: selectedAssetMatchId,
-        percentMatch : selectedPercentMatch
+        percentMatch: selectedPercentMatch
       });
     } else {
       let index = -1
-      for (let i=0; i<this.selectedMatches.length; i++) {
+      for (let i = 0; i < this.selectedMatches.length; i++) {
         if (this.selectedMatches[i].assetMatchId === selectedAssetMatchId) {
           index = i;
         }
-        if (index!=-1) {
-          this.selectedMatches.splice(index,1);
+        if (index != -1) {
+          this.selectedMatches.splice(index, 1);
         }
       }
     }
