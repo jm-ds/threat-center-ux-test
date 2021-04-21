@@ -22,6 +22,7 @@ export class LocalService {
     }
     // Clear the local storage
     clearToken() {
+        this.storageService.secureSessionStorage.clear();
         return this.storageService.secureStorage.clear();
     }
 }
