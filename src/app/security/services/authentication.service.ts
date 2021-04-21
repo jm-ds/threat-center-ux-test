@@ -91,6 +91,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("currentUser");
     sessionStorage.removeItem("ProjectBreadcum");
     sessionStorage.removeItem("UserPreference");
+    sessionStorage.removeItem("REPO_SCAN");
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
   }

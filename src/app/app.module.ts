@@ -22,7 +22,7 @@ import { ToggleFullScreenDirective } from './theme/shared/full-screen/toggle-ful
 
 /* Menu Items */
 import { NavigationItem } from './theme/layout/admin/navigation/navigation';
-import { NgbButtonsModule, NgbDropdownModule, NgbModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopoverModule, NgbProgressbarModule,NgbButtonsModule, NgbDropdownModule, NgbModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TcSharedModule } from './threat-center/shared/tc-shared.module';
 import { SharedModule } from './shared/shared.module';
 import { GraphQLModule } from './graphql.module';
@@ -32,6 +32,9 @@ import { CoreModule } from './core/core.module';
 import { ToastrModule } from 'ngx-toastr';
 import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.component";
 import { CookieService } from 'ngx-cookie-service';
+import { LoadingDialogComponent } from './threat-center/dashboard/project-scan-dialog/loading-dialog.component';
+import { PreScanLoadingDialogComponent } from './threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
+import { MatProgressBarModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -48,8 +51,10 @@ import { CookieService } from 'ngx-cookie-service';
     NavSearchComponent,
     NavRightComponent,
     ConfigurationComponent,
-    ToggleFullScreenDirective
+    ToggleFullScreenDirective,
+    LoadingDialogComponent, PreScanLoadingDialogComponent
   ],
+  entryComponents:[LoadingDialogComponent, PreScanLoadingDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -64,7 +69,10 @@ import { CookieService } from 'ngx-cookie-service';
     GraphQLModule,
     HttpClientModule,
     CoreModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    MatProgressBarModule,
+    NgbModule,
+    NgbPopoverModule, NgbProgressbarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

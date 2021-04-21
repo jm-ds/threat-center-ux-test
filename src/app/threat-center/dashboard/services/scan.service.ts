@@ -3,9 +3,10 @@ import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { map } from 'rxjs/operators';
+import { PreScanLoadingDialogComponent } from "../pre-scan-dialog/pre-scan-dialog.component";
 
 @Injectable({
     providedIn: 'root'
@@ -89,6 +90,9 @@ export class ScanHelperService {
                         this.refreshObjectPageIfFirstScan();
                     }
 
+                    //remove scan from storage
+                    this.updateStorage(null);
+
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(false);
                 } else if (tUpdate.status === 'ERROR') {
@@ -101,13 +105,15 @@ export class ScanHelperService {
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     this.coreHelperService.swalALertBox(tUpdate.statusMessage);
 
+                    //remove scan from storage
+                    this.updateStorage(null);
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(false);
                 } else {
                     setTimeout(() => {
                         this.getTaskUpdate(task);
                     }, NextConfig.config.delaySeconds);
-
+                    this.updateStorage(tUpdate.status);
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(true);
                 }
@@ -148,6 +154,18 @@ export class ScanHelperService {
         this.router.navigate([url], { state: { from: "DIALOG" } });
     }
 
+    public openScanModel(preScanProjectData): NgbModalRef {
+        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
+            {
+                backdrop: 'static',
+                keyboard: false,
+                windowClass: 'pre-scan-loading-dialog',
+                backdropClass: 'pre-scan-loading-dialog-backdrop'
+            });
+        modalRef.componentInstance.preScanProjectData = preScanProjectData;
+        return modalRef;
+    }
+
     //helper function.
     private highlightNewScanIfInSamePage = (tUpdate) => {
         const projectId = tUpdate.resourceId;
@@ -169,4 +187,16 @@ export class ScanHelperService {
         this.isRefreshObjectPage.next(true);
     }
 
+    //store current scan to storage. and remove if scan complete or get wny error...
+    private updateStorage(status) {
+        if (!!sessionStorage.getItem('REPO_SCAN')) {
+            if (!!status) {
+                let item = JSON.parse(sessionStorage.getItem('REPO_SCAN'));
+                item['status'] = status;
+                sessionStorage.setItem('REPO_SCAN', JSON.stringify(item));
+            } else {
+                sessionStorage.removeItem('REPO_SCAN');
+            }
+        }
+    }
 }
