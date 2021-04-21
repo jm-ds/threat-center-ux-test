@@ -4,13 +4,14 @@ export const Messages = {
     status403: 'You do not have sufficient rights to access the requested resource.',
     status404: 'The server has not found anything matching the URI given.',
     status501: 'The server does not support the facility required.',
+    status502: 'Backend server is restarting at the moment. Please wait several seconds and repeat your request/action.',
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
     graphQlCommonErrorMessage:'An unexpected error occurred while trying to fetch the requested data.',
     commonErrorHeaderText:'Error!',
     asset: {
         filter: {
-            embedded_and_opensource:  "Embedded and open source assets"
+            embedded_and_opensource: "Embedded and open source assets"
         }
     }
 };

@@ -48,6 +48,8 @@ export class CoreErrorHelperService {
                     //Rest Of all status code perform over here..
                     if (errObj.status === 500) {
                         console.log("REQUEST PAYLOAD", requestPayload);
+                    } else if (errObj.status === 502) {
+                        dataObjToShow.message = Messages.status502;
                     }
                     this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     break;
