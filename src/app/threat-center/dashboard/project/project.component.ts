@@ -15,7 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
 import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
 import * as _ from 'lodash';
-import { Project } from '@app/models';
+import { Entity, Project } from '@app/models';
 import { NextConfig } from '@app/app-config';
 
 @Component({
@@ -154,7 +154,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   initProjectData() {
     this.stateService.obsProject = this.obsProject;
     this.obsProject.subscribe((project: any) => {
-      this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
+
+      this.initProjectBradcum(project);
+
       //Taking sacn list to show in scan tab
       this.scanList = project.scans.edges;
       this.projectDetails = project;
@@ -534,7 +536,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
       _.each(data, ser => {
         orgtext += ser.data[0] + '/';
-        tooltipText += " "+ser.data[0] + ' ' + ser['name'] + ','
+        tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
       });
       return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
     } else {
@@ -647,6 +649,20 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       )
     });
+  }
+
+  private initProjectBradcum(project) {
+    //if project breadcum data has not been saved to storage then store it to storage
+    if (!this.coreHelperService.getProjectBreadcum()) {
+      this.projectDashboardService.getEntity(project.entityId)
+        .pipe(map(res => res.data.entity))
+        .subscribe((entity: Entity) => {
+          this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
+          this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
+        });
+    } else {
+      this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
+    }
   }
 
   //Below method will fire when click on browser back button.
