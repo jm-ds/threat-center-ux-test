@@ -171,7 +171,7 @@ export class ScanAssetDetailComponent implements OnInit {
         if (data.data.attributeAsset) {
           Swal.fire('License attribution', 'Attribution is successful', 'success');
         } else {
-          Swal.fire('License attribution', 'Attribution is not required', 'warning');
+          Swal.fire('License attribution', 'Attribution is not required', 'info');
         }
       }, (error) => {
         this.isDisableAttributeLicensebtn = false;
