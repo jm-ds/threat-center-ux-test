@@ -110,7 +110,7 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses</h6>
               <div class="chart-options">
-                <select class="form-control form-control-sm" id="license" (change)="changeLincesChartDropdown()"
+                <select class="form-control form-control-sm custom-select" id="license" (change)="changeLincesChartDropdown()"
                   [(ngModel)]="selectedlicenseChartDropValue" name="license">
                   <option *ngFor="let item of licenseChartDropValues">{{item.name}}</option>
                 </select>
@@ -168,7 +168,7 @@
             <div style="margin-bottom:10px" class="chart-lbl">
               <h6><i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components</h6>
               <div class="chart-options">
-                <select class="form-control form-control-sm" id="component" (change)="changeComponentChartDropdown()"
+                <select class="form-control form-control-sm custom-select" id="component" (change)="changeComponentChartDropdown()"
                   [(ngModel)]="selectedComponentChartDropvalue" name="component">
                   <option *ngFor="let item of componentChartDropValues">{{item.name}}</option>
                 </select>
