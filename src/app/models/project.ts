@@ -11,6 +11,7 @@ export class Project {
     childProjects: ProjectConnection;
     errorMsg: string;
     log: string;
+    tags: string;
 }
 
 export class ProjectConnection {

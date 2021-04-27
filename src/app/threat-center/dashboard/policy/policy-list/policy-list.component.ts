@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Messages, PolicyConnection} from "@app/models";
+import {Messages, Policy, PolicyConnection, PolicyEdge} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
+import { TreeNode } from 'primeng/api';
+import { type } from 'jquery';
 
 @Component({
     selector: 'app-policy-list',
@@ -10,12 +12,14 @@ import {PolicyService} from "@app/threat-center/dashboard/services/policy.servic
 })
 export class PolicyListComponent implements OnInit {
 
-    policies: PolicyConnection;
+    policies: TreeNode[];
     messages: Messages;
     onlyActive: Boolean;
     entityId: string;
     projectId: string;
     conditionTypes: any;
+
+
 
     constructor(
         private policyService: PolicyService,
@@ -36,7 +40,7 @@ export class PolicyListComponent implements OnInit {
     fetchList() {
         this.policyService.getPolicyList(this.entityId, this.projectId, this.onlyActive).subscribe(
             data => {
-                this.policies = data.data.policies;
+                this.buildPolicyTree(data.data.policies);
             },
             error => {
                 console.error("PolicyListComponent", error);
@@ -53,4 +57,51 @@ export class PolicyListComponent implements OnInit {
         this.fetchList();
     }
 
+    buildPolicyTree(policies: PolicyConnection) {
+        let edges = policies.edges;
+        let types = []
+        for (const edge of edges) {
+            if (types.indexOf(edge.node.conditionType)===-1) {
+                types.push(edge.node.conditionType);
+            }
+        }
+        let nodes: TreeNode[] = []
+        for (const tp of types) {
+            const pol = new Policy();
+            pol.name = this.getTypeTitle(tp);
+            let node: TreeNode = {
+                label: this.getTypeTitle(tp),
+                data: pol,
+                expandedIcon: "fa fa-folder-open",
+                collapsedIcon: "fa fa-folder",
+                expanded: true,
+                children: [
+                ]
+            };
+            nodes.push(node);
+            for (const edge of edges) {
+                if (edge.node.conditionType===tp) {
+                    let chNode: TreeNode = {
+                        label: edge.node.name,
+                        data: edge.node,
+                        expandedIcon: "fa fa-folder-open",
+                        collapsedIcon: "fa fa-folder",
+                        children: []
+                    };
+                    node.children.push(chNode);
+                }
+            }
+        }
+        this.policies = nodes;
+      }
+    
+      getTypeTitle(typeCode: string) {
+          if (typeCode === "SECURITY") {
+              return "Security policies";
+          } else if (typeCode === "LEGAL") {
+            return "Legal policies";
+          } else if (typeCode === "SUPPLY_CHAIN") {
+            return "Supply chain policies";
+          }  
+      }
 }

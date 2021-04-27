@@ -22,16 +22,14 @@ export class Policy {
     conditionType: string;
     overridePolicyId: string;
     overridePolicyTitle: string;
+    stateChangedBy: string;
+    conditions: PolicyConditionGroup;
     rootGroup: PolicyConditionGroup;
     actions: PolicyAction[];
 }
 
 @Injectable()
 export class PolicyConditionGroup {
-    readonly orgId: string;
-    readonly policyId: string;
-    readonly groupId: string;
-    parentGroupId: string;
     groupOperator: string;
     groups: PolicyConditionGroup[];
     conditions: PolicyCondition[];
@@ -42,42 +40,21 @@ export class PolicyConditionGroup {
 }
 
 export class PolicyCondition {
-    readonly orgId: string;
-    readonly policyId: string;
-    readonly groupId: string;
-    readonly conditionId: string;
     conditionType: string;
+    conditionName: string;
+    operator: string;
 
-    // security related condition data
-    securitySeverityOperator: string;
-    securitySeverityValue: string;
-    securityCVSS3ScoreOperator: string;
-    securityCVSS3ScoreValue: string;
+    conditionDataType: string;
+    strValue: string;
+    intValue: number;
+    doubleValue: number;
+    decimalValue: number;
+    severityValue: string;
+    arrayValue: string[];
 
-    // legal related condition data
-    legalLicenseFamilyOperator: string;
-    legalLicenseFamilyValue: string;
-    legalLicenseNameOperator: string;
-    legalLicenseNameValue: string;
-    legalLicenseTypeOperator: string;
-    legalLicenseTypeValue: string;
-    legalFoundIn: string;
+    threshold: number;
 
-    // component related condition data
-    componentGroupId: string;
-    componentArtifactId: string;
-    componentVersion: string;
-    componentLibraryAgeOperator: string;
-    componentLibraryAgeValue: number;
-    componentVersBehindOperator: string;
-    componentVersBehindValue: number;
-
-    // code quality related condition data
-    codeQualityEmbAssetsOperator: string;
-    codeQualityEmbAssetsValue: number;
-
-    // workflow related condition data
-    workflowReleasePhase: any;
+    logicalOperator: string;
 }
 
 export class PolicyAction {
@@ -112,7 +89,7 @@ export class PolicyRequestInput {
         delete policy['entity'];
         delete policy['project'];
         delete policy["__typename"];
-        let gr=[policy.rootGroup];
+        let gr=[policy.conditions];
         while (gr.length>0 && gr[0]) {
             let group = gr.shift();
             delete group["__typename"];

@@ -20,6 +20,7 @@ export class PolicyService {
             filter = '('+filter+')';
         }
         
+        
         return this.apollo.watchQuery<PoliciesQuery>({
             query: gql(`query {
                 policies ${filter} {
@@ -47,40 +48,6 @@ export class PolicyService {
         const projectIdParam = (!!projectId) ? `projectId: "${projectId}"` : '';
         const policyIdParam = (!!policyId) ? `policyId: "${policyId}"` : '';
         const params=this.collectString(entityIdParam, projectIdParam, policyIdParam);
-        let groupsQuery = `groups {
-            policyId
-            groupId
-            parentGroupId
-            groupOperator
-            conditions {
-                policyId
-                groupId
-                conditionId
-                conditionType
-                securitySeverityOperator
-                securitySeverityValue
-                securityCVSS3ScoreOperator
-                securityCVSS3ScoreValue
-                legalLicenseFamilyOperator
-                legalLicenseFamilyValue
-                legalLicenseNameOperator
-                legalLicenseNameValue
-                legalLicenseTypeOperator
-                legalLicenseTypeValue
-                legalFoundIn
-                componentGroupId
-                componentArtifactId
-                componentVersion
-                componentLibraryAgeOperator
-                componentLibraryAgeValue
-                componentVersBehindOperator
-                componentVersBehindValue
-                codeQualityEmbAssetsOperator
-                codeQualityEmbAssetsValue
-                workflowReleasePhase
-            }
-            %groups%
-        }`;
         let query = `query {
             policy(${params}) {
                 orgId
@@ -104,55 +71,36 @@ export class PolicyService {
                 dateLastStateChange
                 overridePolicyId
                 overridePolicyTitle
-                rootGroup {
-                    policyId
-                    groupId
-                    parentGroupId
+                conditions {
                     groupOperator
-                    conditions {
-                        policyId
-                        groupId
-                        conditionId
+                    groups {
+                      groupOperator
+                      conditions {
+                        conditionName
                         conditionType
-                        securitySeverityOperator
-                        securitySeverityValue
-                        securityCVSS3ScoreOperator
-                        securityCVSS3ScoreValue
-                        legalLicenseFamilyOperator
-                        legalLicenseFamilyValue
-                        legalLicenseNameOperator
-                        legalLicenseNameValue
-                        legalLicenseTypeOperator
-                        legalLicenseTypeValue
-                        legalFoundIn
-                        componentGroupId
-                        componentArtifactId
-                        componentVersion
-                        componentLibraryAgeOperator
-                        componentLibraryAgeValue
-                        componentVersBehindOperator
-                        componentVersBehindValue
-                        codeQualityEmbAssetsOperator
-                        codeQualityEmbAssetsValue
-                        workflowReleasePhase
+                        conditionDataType
+                        decimalValue
+                        doubleValue
+                        intValue
+                        operator
+                        severityValue
+                        strValue
+                        threshold
+                        logicalOperator
+                      }
                     }
-                    %groups%
                 }
                 actions {
                     actionType, actionName
                 }
             }
         }`;
-        // max group depth - 10
-        for (let i = 0; i < 10; i++) {
-            query = query.replace("%groups%", groupsQuery);
-        }
-        query = query.replace("%groups%", "");
         return this.apollo.watchQuery<PolicyQuery>({
             query: gql(query),
             fetchPolicy: 'no-cache'
         }).valueChanges;
     }
+
 
     savePolicy(policy: Policy): any {
         const policyRequest = new PolicyRequestInput(policy);
@@ -163,6 +111,7 @@ export class PolicyService {
                     orgId,
                     entityId,
                     projectId,
+                    active,
                     policyId
                 }
             }`,
@@ -240,9 +189,9 @@ export class PolicyService {
         return {
             "SECURITY": "Security",
             "LEGAL": "Legal",
-            "COMPONENT": "Component" ,
+            "SUPPLY_CHAIN": "Supply Chain" /*,
             "CODE_QUALITY": "Code quality",
-            "WORKFLOW": "Workflow"
+            "RELEASE_STAGE": "Release Stage"*/
         };
     }
 

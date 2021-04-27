@@ -16,6 +16,7 @@ export class PolicyShowComponent implements OnInit {
     entityId: string;
     projectId: string
     conditionTypes: any;
+    activeTabIdString: string = "policyGeneralInfo";
 
 
     public actionCols = ['ActionType','ActionName'];
@@ -39,7 +40,7 @@ export class PolicyShowComponent implements OnInit {
             data => {
                 this.policy = data.data.policy;
                 if (this.policy) {
-                    this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
+                    this.prepareConditionsAfterFetch(data.data.policy.conditions, this.policy);
                 } else {
                     this.policy = undefined;
                     console.error("PolicyShowComponent", "Policy not found");
@@ -52,22 +53,26 @@ export class PolicyShowComponent implements OnInit {
         );
     }
 
-    prepareConditionsAfterFetch(group: PolicyConditionGroup) {
+    prepareConditionsAfterFetch(group: PolicyConditionGroup, policy: Policy) {
         if (!group) {
             return;
         }
         if (group.conditions) {
             for (const condition of group.conditions) {
-                if (condition.conditionType==='WORKFLOW') {
-                    if (condition.workflowReleasePhase && !(condition.workflowReleasePhase instanceof Array)) {
-                        condition.workflowReleasePhase=condition.workflowReleasePhase.split(",");
-                    }
+                if (condition.conditionType==='RELEASE_STAGE') {
+                    condition.arrayValue = !!condition.strValue ? condition.strValue.split(","): [];
                 }
+            }
+            if (group.groups && group.groups.length>0) {
+                for (const condition of group.groups[0].conditions) {
+                    condition.conditionType = policy.conditionType;
+                }
+    
             }
         }
         if (group.groups) {
             for (const grp of group.groups) {
-                this.prepareConditionsAfterFetch(grp);
+                this.prepareConditionsAfterFetch(grp, policy);
             }
         }
     }
@@ -75,6 +80,7 @@ export class PolicyShowComponent implements OnInit {
 
     removePolicy() {
         if (confirm("Are you sure you want to delete the policy?")) {
+            this.preparePolicyBeforeRemove(this.policy.conditions);
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -92,6 +98,25 @@ export class PolicyShowComponent implements OnInit {
                 });
         }
     }
+
+    preparePolicyBeforeRemove(group: PolicyConditionGroup) {
+        if (!group) {
+            return;
+        }
+        if (group.conditions) {
+            for (const condition of group.conditions) {
+                if (condition.conditionType==='RELEASE_STAGE') {
+                    condition.arrayValue = undefined;
+                }
+            }
+        }
+        if (group.groups) {
+            for (const grp of group.groups) {
+                this.preparePolicyBeforeRemove(grp);
+            }
+        }
+    }
+    
 
     // enable/disable policy
     enablePolicy() {
@@ -120,4 +145,7 @@ export class PolicyShowComponent implements OnInit {
         }
     }
 
+    gotoTab(tabId: string) {
+        this.activeTabIdString = tabId;
+    }
 }

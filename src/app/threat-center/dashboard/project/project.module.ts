@@ -18,6 +18,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FixComponentResultDialogComponent } from './fix-component-result-dialog/fix-component-result-dialog.component';
 import { FixComponentDialogComponent } from './fix-component-dialog/fix-component-dialog.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { FixComponentDialogComponent } from './fix-component-dialog/fix-componen
     MarkdownModule,
     NgxSpinnerModule,
     MatPaginatorModule,
-    NgbModule
+    NgbModule,
+    MatChipsModule
   ],
   declarations: [
     ProjectComponent,

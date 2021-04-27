@@ -17,6 +17,9 @@
           <i class="fas fa-feather-alt" style="margin-right:5px"></i>Policies
         </button>
       </a>
+      <button class="btn btn-outline-info ml-2" (click)="openProjectTagDialog(projectTags)">
+        <i class="feather icon-tag" style="margin-right:5px"></i>Project Tags
+      </button>
     </div>
   </div>
   <div class="row" style="padding:20px 0px 20px 0px">
@@ -344,8 +347,8 @@
                     </td>
                     <td style="text-align: center">
                       <span *ngIf="!!scan.node?.errorMsg;else successMsg">
-                        <button class="badge-light-danger error-btn" title="Show log and error messages" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
-                          <i class=" icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
+                        <button class="btn badge-light-danger error-btn" title="Show log and error messages" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                          <i class=" feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
                         </button>
                       </span>
                       <ng-template #successMsg><span>
@@ -589,4 +592,30 @@
       <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
     </div>
   </ng-template>
+  <ng-template #projectTags let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Project Tags</h4>
+    </div>
+    <div class="modal-body">
+      <mat-chip-list #tagList>
+        <mat-chip *ngFor="let tag of project.tags?.split(',')"
+                 removable="true">
+          {{tag}}
+          <button type="button" class="btn btn-icon float-right" title="Remove Tag" (click)="removeProjectTag(project, tag)"
+          style="color: #c9d0d5; padding: unset;">
+            <i class="feather icon-x" style="font-weight: 800;"></i>
+          </button>
+        </mat-chip>
+        <input placeholder="Project Tags..." class = "next-dark form-control"
+               [matChipInputFor]="tagList"
+               (matChipInputTokenEnd)="addProjectTag(project, $event)">
+      </mat-chip-list>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close('click'); setProjectTags(project);">Save Project Tags</button>
+      <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+    </div>
+  </ng-template>
+
 </div>
