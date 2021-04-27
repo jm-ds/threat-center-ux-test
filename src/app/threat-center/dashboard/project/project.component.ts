@@ -534,7 +534,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
       _.each(data, ser => {
         orgtext += ser.data[0] + '/';
-        tooltipText += " "+ser.data[0] + ' ' + ser['name'] + ','
+        tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
       });
       return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
     } else {
@@ -602,7 +602,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
           this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
           this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
-          window.scroll(this.scrollX, this.scrollY);
+          // window.scroll(this.scrollX, this.scrollY);
+          const ele = document.getElementById("chart-bl");
+          ele.scrollIntoView({ block: 'end' });
           return false;
         } else {
           this.coreHelperService.settingUserPreference("Project", "", null);
@@ -610,7 +612,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     } else {
-      this.coreHelperService.settingUserPreference("Project", "", null);
+      // this.coreHelperService.settingUserPreference("Project", "", null);
       return true;
     }
   }
