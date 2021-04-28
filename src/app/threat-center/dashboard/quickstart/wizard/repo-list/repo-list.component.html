@@ -1,0 +1,23 @@
+<p-table #dt [columns]="tabColumns" [value]="values" [paginator]="ispaginator" [rows]="rows" selectionMode="single"
+    [(selection)]="selectedRepos" tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+    [filterDelay]="filterDelay" [globalFilterFields]="globalFilterFields" (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:70%">Repository</th>
+            <th>Language</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
+            <td style="width:70%">
+                <div style="float:left">{{repo.node['name']}}</div>
+            </td>
+            <td>
+                <div *ngIf="repo.node.primaryLanguage">
+                    {{repo.node.primaryLanguage['name']}}
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

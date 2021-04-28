@@ -12,110 +12,35 @@
             <div class="container">
               <div class="row">
                 <div class="col-xl-8 col-md-12">
-                  <div class="step-header active">
-                    <div class="step-header-stepnum active">1</div>
-                    <div style="float:left;padding-top:3px">Select Repositories</div>
-                  </div>
-                  <div class="row ">
+                  <ng-container *ngTemplateOutlet="headertem"></ng-container>
+                  <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
-
-                        <div class="repository-usr">
-                          <div class="repo-usr-img">
-                            <img width="30" src="{{user.avatarUrl}}">
-                          </div>
-                          <div class="repo-usr-lbl">
-                            {{user.login}}
-                          </div>
-                          <div class="repo-filter">
-                            <input type="text" pInputText size="50" placeholder="Filter"
-                              (input)="dt.filterGlobal($event.target.value, 'contains')" class="form-control">
-                          </div>
-                        </div>
-
+                        <ng-container *ngTemplateOutlet="repoHeader;context:{img: user.avatarUrl, user: user.login,repoRef:repoList }">
+                        </ng-container>
                         <perfect-scrollbar [style.max-height]="'385px'">
-                          <p-table #dt [columns]="ghUserCols" [value]="user.repositories.edges" [paginator]="false"
-                            [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                            [filterDelay]="0" [globalFilterFields]="['node.name']" (onRowSelect)="onRowSelect($event)"
-                            (onRowUnselect)="onRowUnselect($event)">
-                            <ng-template pTemplate="header">
-                              <tr>
-                                <th style="width:70%">Repository</th>
-                                <th>Language</th>
-                              </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
-                              <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
-                                <td style="width:70%">
-                                  <div style="width:18px;float:left;">
-                                    <!-- <i *ngIf='repo.node.private' class="fas fa-lock"></i>
-                                    <i *ngIf='!repo.node.private' class="fas fa-unlock"></i> -->
-                                  </div>
-                                  <div style="float:left">{{repo.node['name']}}</div>
-                                </td>
-                                <td>
-                                  <div *ngIf="repo.node.primaryLanguage">
-                                    {{repo.node.primaryLanguage['name']}}
-                                  </div>
-                                </td>
-                              </tr>
-                            </ng-template>
-                          </p-table>
+                          <repo-list [tabColumns]="ghUserCols" [values]="user.repositories.edges" [ispaginator]="false" [rows]="50"
+                            [filterDelay]="0" [globalFilterFields]="['node.name']"
+                            (rowSelect)="onRowSelect($event);orgRepoList.deSelection()" (rowUnSelect)="onRowUnselect($event)" #repoList>
+                          </repo-list>
                         </perfect-scrollbar>
                       </app-card>
                     </div>
-
                     <div class="col-xl-6 col-lg-6 col-md-12" *ngFor="let orgEdge of user.organizations.edges">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
-                        <div class="repository-usr">
-                          <div class="repo-usr-img">
-                            <img width="30" src="{{orgEdge.node.avatarUrl}}">
-                          </div>
-                          <div class="repo-usr-lbl">
-                            {{orgEdge.node.name}}
-                          </div>
-                          <div class="repo-filter">
-                            <input type="text" pInputText size="50" placeholder="Filter"
-                              (input)="orgrepos.filterGlobal($event.target.value, 'contains')" class="form-control">
-                          </div>
-                        </div>
+                        <ng-container
+                          *ngTemplateOutlet="repoHeader;context:{img: orgEdge.node.avatarUrl, user: orgEdge.node.name,repoRef:orgRepoList }">
+                        </ng-container>
                         <perfect-scrollbar [style.max-height]="'385px'">
-                          <p-table #orgrepos [columns]="ghUserCols" [value]="orgEdge.node.repositories.edges"
-                            [paginator]="false" [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                            [filterDelay]="0" [globalFilterFields]="['node.name']" (onRowSelect)="onRowSelect($event)"
-                            (onRowUnselect)="onRowUnselect($event)">
-
-                            <ng-template pTemplate="header">
-                              <tr>
-                                <th style="width:70%">Repository</th>
-                                <th>Language</th>
-                              </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-orgrepo>
-                              <tr [pSelectableRow]="orgrepo">
-                                <td style="width:70%">
-                                  <div style="width:18px;float:left;">
-                                    <i *ngIf='orgrepo.node.private' class="fas fa-lock"></i>
-                                    <i *ngIf='!orgrepo.node.private' class="fas fa-unlock"></i>
-                                  </div>
-                                  <div style="float:left">{{orgrepo.node.name}}</div>
-                                </td>
-                                <td>
-                                  <div *ngIf="orgrepo.node.primaryLanguage">
-                                    {{orgrepo.node.primaryLanguage?.name}}
-                                  </div>
-                                </td>
-                              </tr>
-                            </ng-template>
-                          </p-table>
+                          <repo-list [tabColumns]="ghUserCols" [values]="orgEdge.node.repositories.edges" [ispaginator]="false"
+                            [rows]="50" [filterDelay]="0" [globalFilterFields]="['node.name']"
+                            (rowSelect)="onRowSelect($event);repoList.deSelection()" (rowUnSelect)="onRowUnselect($event)" #orgRepoList>
+                          </repo-list>
                         </perfect-scrollbar>
                       </app-card>
                     </div>
                   </div>
                 </div>
-
 
                 <div class="col-xl-4 col-lg-6 col-md-12">
                   <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header">
@@ -190,11 +115,8 @@
             <div class="container">
               <div class="row">
                 <div class="col-xl-8 col-md-12">
-                  <div class="step-header active">
-                    <div class="step-header-stepnum active">1</div>
-                    <div style="float:left;padding-top:3px">Select Repositories</div>
-                  </div>
-                  <div class="row ">
+                  <ng-container *ngTemplateOutlet="headertem"></ng-container>
+                  <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
                         <perfect-scrollbar [style.max-height]="'475px'">
@@ -202,7 +124,6 @@
                             [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
                             tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
                             [filterDelay]="0" [globalFilterFields]="['name']">
-
                             <ng-template pTemplate="caption">
                               <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
                                 <img width="30" src="{{user.avatarUrl}}">
@@ -291,10 +212,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-xl-8 col-md-12">
-                  <div class="step-header active">
-                    <div class="step-header-stepnum active">1</div>
-                    <div style="float:left;padding-top:3px">Select Repositories</div>
-                  </div>
+                  <ng-container *ngTemplateOutlet="headertem"></ng-container>
                   <div class="row ">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
@@ -430,6 +348,27 @@
     <button class="btn btn-outline-primary" type="button">Get BitBucket Repositories</button>
   </ng-template>
 
+  <ng-template ngbTabContent #headertem>
+    <div class="step-header active">
+      <div class="step-header-stepnum active">1</div>
+      <div style="float:left;padding-top:3px">Select Repositories</div>
+    </div>
+  </ng-template>
+
+  <ng-template #repoHeader let-img="img" let-user="user" let-repoRef="repoRef" let-badge="badge">
+    <div class="repository-usr">
+      <div class="repo-usr-img">
+        <img width="30" src="{{img}}">
+      </div>
+      <div class="repo-usr-lbl">
+        {{user}}
+      </div>
+      <div class="repo-filter">
+        <input type="text" pInputText size="50" placeholder="Filter"
+          (input)="repoRef['dataTableRef'].filterGlobal($event.target.value, 'contains')" class="form-control">
+      </div>
+    </div>
+  </ng-template>
 
   <ngx-spinner [fullScreen]="true" color="#4680ff" type="pacman" size="large"></ngx-spinner>
 </app-card>

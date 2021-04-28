@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
@@ -13,12 +13,11 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
 import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
 import { ReloadService } from '../../services/reload.service';
+import { RepositoryListComponent } from './repo-list/repo-list.component';
 
 @Component({
     selector: 'app-quickstart',
@@ -47,6 +46,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
+    @ViewChild('orgRepoList', { static: false }) orgRepoList: RepositoryListComponent;
+    @ViewChild('repoList', { static: false }) repoList: RepositoryListComponent;
+
     constructor(
         private apiService: ApiService,
         private location: Location,
@@ -58,7 +60,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
-        private reloadService:ReloadService) {
+        private reloadService: ReloadService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -222,6 +224,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(event) {
+        this.selectedRepos[0] = event.data;
         this.selectedItem = '';
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
