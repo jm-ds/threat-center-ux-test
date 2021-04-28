@@ -604,7 +604,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
           this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
           this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
-          window.scroll(this.scrollX, this.scrollY);
+          // window.scroll(this.scrollX, this.scrollY);
+          const ele = document.getElementById("chart-bl");
+          ele.scrollIntoView({ block: 'end' });
           return false;
         } else {
           this.coreHelperService.settingUserPreference("Project", "", null);
@@ -612,7 +614,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     } else {
-      this.coreHelperService.settingUserPreference("Project", "", null);
+      // this.coreHelperService.settingUserPreference("Project", "", null);
       return true;
     }
   }

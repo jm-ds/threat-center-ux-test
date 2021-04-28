@@ -589,7 +589,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
         return true;
       }
     } else {
-      this.coreHelperService.settingUserPreference("Entity", "", null);
+      // this.coreHelperService.settingUserPreference("Entity", "", null);
       return true;
     }
   }

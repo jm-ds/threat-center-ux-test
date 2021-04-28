@@ -269,7 +269,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
                 return true;
             }
         } else {
-            this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+            // this.coreHelperService.settingUserPreference("ThreatScan", "", null);
             return true;
         }
     }
