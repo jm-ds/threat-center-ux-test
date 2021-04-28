@@ -106,7 +106,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
 
   sparkLinechartdelayFlag: boolean = true;
-
+  cardClasses: string = 'tab-card entity-table-card entity-table-overflow-tooltip';
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -564,7 +564,13 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       setTimeout(() => {
         this.sparkLinechartdelayFlag = true;
       }, 5);
+      this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
     } else {
+      if (this.activeTab === 'ORGANIZATION') {
+        this.cardClasses = 'tab-card org-tree-selected-card entity-table-overflow-tooltip'
+      } else {
+        this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
+      }
       this.sparkLinechartdelayFlag = false;
     }
   }
@@ -690,6 +696,11 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private getLastTabSelected() {
     this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
+    if (this.activeTab === 'ORGANIZATION') {
+      this.cardClasses = 'tab-card org-tree-selected-card entity-table-overflow-tooltip'
+    } else {
+      this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
+    }
   }
 
   //Helper function to initialize Component stacked chart configuration (dropdown)

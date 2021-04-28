@@ -321,7 +321,7 @@
 
   <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">
-      <app-card [hidHeader]="false" cardClass="tab-card entity-table-card entity-table-overflow-tooltip">
+      <app-card [hidHeader]="false" [cardClass]="cardClasses">
         <ngb-tabset type="pills" [activeId]="activeTab" (tabChange)="onTabChange($event)">
 
 
@@ -605,7 +605,7 @@
             <ng-template ngbTabContent>
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card [hidHeader]="true" cardClass="table-card" blockClass="px-0 py-0">
+                  <app-card [hidHeader]="true" cardClass="org-chart table-card" blockClass="px-0 py-0">
                     <perfect-scrollbar [style.max-height]="'600px'">
                       <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
                         [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
