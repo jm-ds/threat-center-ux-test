@@ -13,12 +13,14 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatProgressBarModule } from '@angular/material';
 import { RepositoryListComponent } from './wizard/repo-list/repo-list.component';
+import { ReadyScanRepositorylistComponent } from './wizard/ready-scan-repo/ready-scan-repo.component';
 
 
 @NgModule({
   declarations: [
     QuickstartWizardComponent,
-    RepositoryListComponent
+    RepositoryListComponent,
+    ReadyScanRepositorylistComponent
   ],
   imports: [
     CommonModule,

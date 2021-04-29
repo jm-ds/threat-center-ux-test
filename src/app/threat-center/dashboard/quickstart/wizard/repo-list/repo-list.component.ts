@@ -15,6 +15,7 @@ export class RepositoryListComponent implements OnInit {
     @Input() selectionMode: string = 'single';
     @Input() filterDelay = 0;
     @Input() globalFilterFields = new Array();
+    @Input() isLanguage:boolean = true;
 
     @Output() rowSelect: EventEmitter<any> = new EventEmitter();
     @Output() rowUnSelect: EventEmitter<any> = new EventEmitter();

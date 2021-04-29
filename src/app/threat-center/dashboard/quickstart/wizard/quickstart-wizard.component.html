@@ -16,12 +16,14 @@
                   <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
-                        <ng-container *ngTemplateOutlet="repoHeader;context:{img: user.avatarUrl, user: user.login,repoRef:repoList }">
+                        <ng-container
+                          *ngTemplateOutlet="repoHeader;context:{img: user.avatarUrl, user: user.login,repoRef:repoList }">
                         </ng-container>
                         <perfect-scrollbar [style.max-height]="'385px'">
-                          <repo-list [tabColumns]="ghUserCols" [values]="user.repositories.edges" [ispaginator]="false" [rows]="50"
-                            [filterDelay]="0" [globalFilterFields]="['node.name']"
-                            (rowSelect)="onRowSelect($event);orgRepoList.deSelection()" (rowUnSelect)="onRowUnselect($event)" #repoList>
+                          <repo-list [tabColumns]="ghUserCols" [values]="user.repositories.edges" [ispaginator]="false"
+                            [rows]="50" [filterDelay]="0" [globalFilterFields]="['node.name']" [isLanguage]="true"
+                            (rowSelect)="onRowSelect($event);orgRepoList.deSelection()"
+                            (rowUnSelect)="onRowUnselect($event)" #repoList>
                           </repo-list>
                         </perfect-scrollbar>
                       </app-card>
@@ -32,9 +34,10 @@
                           *ngTemplateOutlet="repoHeader;context:{img: orgEdge.node.avatarUrl, user: orgEdge.node.name,repoRef:orgRepoList }">
                         </ng-container>
                         <perfect-scrollbar [style.max-height]="'385px'">
-                          <repo-list [tabColumns]="ghUserCols" [values]="orgEdge.node.repositories.edges" [ispaginator]="false"
-                            [rows]="50" [filterDelay]="0" [globalFilterFields]="['node.name']"
-                            (rowSelect)="onRowSelect($event);repoList.deSelection()" (rowUnSelect)="onRowUnselect($event)" #orgRepoList>
+                          <repo-list [tabColumns]="ghUserCols" [values]="orgEdge.node.repositories.edges"
+                            [ispaginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['node.name']"
+                            [isLanguage]="true" (rowSelect)="onRowSelect($event);repoList.deSelection()"
+                            (rowUnSelect)="onRowUnselect($event)" #orgRepoList>
                           </repo-list>
                         </perfect-scrollbar>
                       </app-card>
@@ -43,46 +46,13 @@
                 </div>
 
                 <div class="col-xl-4 col-lg-6 col-md-12">
-                  <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header">
-                    <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header-stepnum">2</div>
-                    <div style="float:left;padding-top:3px">Repositories Ready To Scan</div>
-                  </div>
+                  <ng-container *ngTemplateOutlet="scanReadyheadertemplate"></ng-container>
                   <app-card [hidHeader]="true" [options]="false" cardClass="nested-card selected-repo-card">
                     <div class="col-xl-12">
                       <perfect-scrollbar [style.max-height]="'425px'">
-                        <p-table [columns]="ghUserCols" [value]="selectedRepos" [paginator]="false" [rows]="50"
-                          tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
-                          <ng-template pTemplate="header">
-                            <tr>
-                              <th style="width:60%">Repository</th>
-                              <th>Branch</th>
-                            </tr>
-                          </ng-template>
-                          <ng-template pTemplate="body" let-selectedRepo>
-                            <tr>
-                              <td>
-                                <div style="width:18px;float:left;">
-                                  <i *ngIf='selectedRepo?.node.private' class="fas fa-lock"></i>
-                                  <i *ngIf='!selectedRepo?.node.private' class="fas fa-unlock"></i>
-                                </div>
-                                <div style="float:left">{{selectedRepo?.node.name}}</div>
-                              </td>
-                              <td>
-                                <div *ngIf="selectedRepo?.node.refs.edges.length == 1">
-                                  {{selectedRepo?.node.defaultBranchRef?.name}}
-                                </div>
-                                <div *ngIf="selectedRepo?.node.refs.edges.length > 1">
-                                  <select [(ngModel)]="selectedItem" (ngModelChange)="changeBranch($event)"
-                                    class="form-control" style="height:25px;padding:2px">
-                                    <option *ngFor="let branch of selectedRepo.node.refs.edges"
-                                      [selected]="branch.node.name == selectedRepo.node.defaultBranchRef?.name"
-                                      value='{{branch.node.name}}'>{{branch.node.name}}</option>
-                                  </select>
-                                </div>
-                              </td>
-                            </tr>
-                          </ng-template>
-                        </p-table>
+                        <ready-scan-repo [tabColumns]="ghUserCols" [values]="selectedRepos" [ispaginator]="false" [rows]="50"
+                          (branchChange)="changeBranch($event)" #readyScanRepo>
+                        </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
                         <button
@@ -103,7 +73,6 @@
       </ng-template>
     </ngb-tab>
 
-
     <!--GitLab-->
     <ngb-tab class="mb-3" id="Gitlab">
       <ng-template ngbTabTitle>
@@ -119,37 +88,14 @@
                   <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
+                        <ng-container
+                          *ngTemplateOutlet="repoHeader;context:{img: user.avatarUrl, user: user.username,repoRef:gitLabRepoList }">
+                        </ng-container>
                         <perfect-scrollbar [style.max-height]="'475px'">
-                          <p-table #dt [columns]="ghUserCols" [value]="user.gitLabProjects" [paginator]="false"
-                            [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                            [filterDelay]="0" [globalFilterFields]="['name']">
-                            <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
-                                <img width="30" src="{{user.avatarUrl}}">
-                              </div>
-                              <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
-                                {{user.username}}
-                              </div>
-                              <div style="text-align: right;float:right;margin-bottom:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                  (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                  style="width:160px;display:inline" class="form-control">
-                              </div>
-                            </ng-template>
-                            <ng-template pTemplate="header">
-                              <tr>
-                                <th>Repository</th>
-                              </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
-                              <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
-                                <td>
-                                  <div style="float:left">{{repo['name']}}</div>
-                                </td>
-                              </tr>
-                            </ng-template>
-                          </p-table>
+                          <repo-list [tabColumns]="ghUserCols" [values]="user.gitLabProjects" [ispaginator]="false"
+                            [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']" [isLanguage]="false"
+                            (rowSelect)="onRowSelect($event);" (rowUnSelect)="onRowUnselect($event)" #gitLabRepoList>
+                          </repo-list>
                         </perfect-scrollbar>
                       </app-card>
                     </div>
@@ -157,37 +103,21 @@
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 col-md-12">
-                  <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header">
-                    <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header-stepnum">2</div>
-                    <div style="float:left;padding-top:3px">Repositories Ready To Scan</div>
-                  </div>
+                  <ng-container *ngTemplateOutlet="scanReadyheadertemplate"></ng-container>
                   <app-card [hidHeader]="true" [options]="false" cardClass="nested-card selected-repo-card">
                     <div class="col-xl-12">
                       <perfect-scrollbar [style.max-height]="'425px'">
-                        <p-table [columns]="ghUserCols" [value]="selectedRepos" [paginator]="false" [rows]="50"
-                          tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
-                          <ng-template pTemplate="header">
-                            <tr>
-                              <th style="width:60%">Repository</th>
-                              <th>Branch</th>
-                            </tr>
-                          </ng-template>
-                          <ng-template pTemplate="body" let-selectedRepo>
-                            <tr>
-                              <td>
-                                <div style="float:left">{{selectedRepo.name}}</div>
-                              </td>
-                              <td>
-                                {{selectedRepo.repository.rootRef}}
-                              </td>
-                            </tr>
-                          </ng-template>
-                        </p-table>
+                        <ready-scan-repo [tabColumns]="ghUserCols" [values]="selectedRepos" [ispaginator]="false" [rows]="50"
+                          (branchChange)="changeBranch($event)" #readyScanRepo>
+                        </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button [ngClass]="{'disabled' : selectedRepos.length===0}" class="btn btn-primary"
-                          ngbtooltip="Run Scan" type="button" (click)="submitScan('gitlab')"><i
-                            class="fas fa-power-off"></i> Execute Threat Scan
+                        <button
+                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
+                          class="btn btn-primary" ngbtooltip="Run Scan"
+                          [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
+                          type="button" (click)="submitScan('gitlab')"><i class="fas fa-power-off">
+                          </i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -199,7 +129,6 @@
         </div>
       </ng-template>
     </ngb-tab>
-
 
     <!--Bitbucket-->
     <ngb-tab class="mb-3" id="Bitbucket">
@@ -216,54 +145,22 @@
                   <div class="row ">
                     <div class="col-xl-6 col-lg-6 col-md-12">
                       <app-card [hidHeader]="true" [options]="false" cardClass="nested-card repo-card">
+                        <ng-container
+                          *ngTemplateOutlet="repoHeader;context:{img: user.avatarUrl, user: user.username,repoRef:bitbucketRepoList }">
+                        </ng-container>
                         <perfect-scrollbar [style.max-height]="'475px'">
-                          <p-table #dt [columns]="ghUserCols" [value]="user.bitBucketRepositories" [paginator]="false"
-                            [rows]="50" selectionMode="single" [(selection)]="selectedRepos[0]"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
-                            [filterDelay]="0" [globalFilterFields]="['name']">
-
-                            <ng-template pTemplate="caption">
-                              <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
-                                <img width="30" src="{{user.avatarUrl}}">
-                              </div>
-                              <div style="text-align: left;float:left;font-size:15px;padding-top:12px">
-                                {{user.username}}
-                              </div>
-                              <div style="text-align: right;float:right;margin-bottom:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                  (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                  style="width:160px;display:inline" class="form-control">
-                              </div>
-                            </ng-template>
-                            <ng-template pTemplate="header">
-                              <tr>
-                                <th style="width:70%">Repository</th>
-                                <th>Language</th>
-                              </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
-                              <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
-                                <td style="width:70%">
-                                  <div style="float:left">{{repo['name']}}</div>
-                                </td>
-                                <td>
-                                  <div *ngIf="repo.language">
-                                    {{repo.language}}
-                                  </div>
-                                </td>
-                              </tr>
-                            </ng-template>
-                          </p-table>
+                          <repo-list [tabColumns]="ghUserCols" [values]="user.bitBucketRepositories"
+                            [ispaginator]="false" [rows]="50" [filterDelay]="0" [globalFilterFields]="['name']"
+                            [isLanguage]="true" (rowSelect)="onRowSelect($event);" (rowUnSelect)="onRowUnselect($event)"
+                            #bitbucketRepoList>
+                          </repo-list>
                         </perfect-scrollbar>
                       </app-card>
                     </div>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 col-md-12">
-                  <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header">
-                    <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header-stepnum">2</div>
-                    <div style="float:left;padding-top:3px">Repositories Ready To Scan</div>
-                  </div>
+                  <ng-container *ngTemplateOutlet="scanReadyheadertemplate"></ng-container>
                   <app-card [hidHeader]="true" [options]="false" cardClass="nested-card selected-repo-card">
                     <div class="col-xl-12">
                       <perfect-scrollbar [style.max-height]="'425px'">
@@ -298,10 +195,12 @@
                         </p-table>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button [ngClass]="{'disabled' : selectedRepos.length===0}" class="btn btn-primary"
-                          ngbtooltip="Run Scan" type="button" (click)="submitScan('bitbucket')"
-                          [disabled]="!selectedRepos || selectedRepos.length === 0"><i class="fas fa-power-off"></i>
-                          Execute Threat Scan
+                        <button
+                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
+                          class="btn btn-primary" ngbtooltip="Run Scan"
+                          [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
+                          type="button" (click)="submitScan('bitbucket')"><i class="fas fa-power-off">
+                          </i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -352,6 +251,13 @@
     <div class="step-header active">
       <div class="step-header-stepnum active">1</div>
       <div style="float:left;padding-top:3px">Select Repositories</div>
+    </div>
+  </ng-template>
+
+  <ng-template ngbTabContent #scanReadyheadertemplate>
+    <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header">
+      <div [ngClass]="{'active' : selectedRepos.length>0}" class="step-header-stepnum">2</div>
+      <div style="float:left;padding-top:3px">Repositories Ready To Scan</div>
     </div>
   </ng-template>
 

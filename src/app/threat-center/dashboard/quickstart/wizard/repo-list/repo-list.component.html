@@ -5,18 +5,24 @@
     <ng-template pTemplate="header">
         <tr>
             <th style="width:70%">Repository</th>
-            <th>Language</th>
+            <th *ngIf="isLanguage">Language</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
         <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
             <td style="width:70%">
-                <div style="float:left">{{repo.node['name']}}</div>
+                <div *ngIf="!!repo.node;else reponame" style="float:left">{{repo.node['name']}}</div>
+                <ng-template #reponame>
+                    <div style="float:left">{{repo['name']}}</div>
+                </ng-template>
             </td>
-            <td>
-                <div *ngIf="repo.node.primaryLanguage">
+            <td *ngIf="isLanguage">
+                <div *ngIf="!!repo.node && !!repo.node.primaryLanguage;else repoLang">
                     {{repo.node.primaryLanguage['name']}}
                 </div>
+                <ng-template #repoLang>
+                    <div style="float:left">{{repo?.language}}</div>
+                </ng-template>
             </td>
         </tr>
     </ng-template>
