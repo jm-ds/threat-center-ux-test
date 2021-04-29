@@ -53,6 +53,7 @@ export class PolicyCondition {
     arrayValue: string[];
 
     threshold: number;
+    autoAdjustThreshold: boolean;
 
     logicalOperator: string;
 }

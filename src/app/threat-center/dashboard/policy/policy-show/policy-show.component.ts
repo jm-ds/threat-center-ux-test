@@ -80,7 +80,7 @@ export class PolicyShowComponent implements OnInit {
 
     removePolicy() {
         if (confirm("Are you sure you want to delete the policy?")) {
-            this.preparePolicyBeforeRemove(this.policy.conditions);
+            this.preparePolicyBeforeSend(this.policy.conditions);
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -89,17 +89,23 @@ export class PolicyShowComponent implements OnInit {
                     this.router.navigate([link],
                         {state: {messages: [Message.success("Policy removed successfully.")]}});
                 }, (error) => {
-                    console.error('Policy Removing', error);
                     const link = '/dashboard/policy/show/'+ this.policy.policyId+
                         ((!!this.entityId)? ('/'+this.entityId):'')+
                         ((!!this.projectId)? ('/'+this.projectId):'');
-                    this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy.")]}});
+                let msg = '';
+                if (error.message) {
+                    const msgs = error.message.split(":");
+                    if (msgs.length>0) {
+                        msg = msgs[msgs.length-1];
+                    }
+                }
+                this.router.navigate([link],
+                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy. "+msg)]}});
                 });
         }
     }
 
-    preparePolicyBeforeRemove(group: PolicyConditionGroup) {
+    preparePolicyBeforeSend(group: PolicyConditionGroup) {
         if (!group) {
             return;
         }
@@ -112,7 +118,7 @@ export class PolicyShowComponent implements OnInit {
         }
         if (group.groups) {
             for (const grp of group.groups) {
-                this.preparePolicyBeforeRemove(grp);
+                this.preparePolicyBeforeSend(grp);
             }
         }
     }
@@ -127,6 +133,7 @@ export class PolicyShowComponent implements OnInit {
         if (confirm(confirmText)) {
             let policy = Object.assign({}, this.policy);
             policy.active=!policy.active;
+            this.preparePolicyBeforeSend(this.policy.conditions);
             this.policyService.enablePolicy(policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -139,8 +146,15 @@ export class PolicyShowComponent implements OnInit {
                     const link = '/dashboard/policy/show/'+ this.policy.policyId+
                         ((!!this.entityId)? ('/'+this.entityId):'')+
                         ((!!this.projectId)? ('/'+this.projectId):'');
+                    let msg = '';
+                    if (error.message) {
+                        const msgs = error.message.split(":");
+                        if (msgs.length>0) {
+                            msg = msgs[msgs.length-1];
+                        }
+                    }
                     this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state.")]}});
+                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state. "+msg)]}});
                 });
         }
     }

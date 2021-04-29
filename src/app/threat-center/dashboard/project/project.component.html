@@ -598,7 +598,7 @@
     </div>
     <div class="modal-body">
       <mat-chip-list #tagList>
-        <mat-chip *ngFor="let tag of project.tags?.split(',')"
+        <mat-chip *ngFor="let tag of project.tags"
                  removable="true">
           {{tag}}
           <button type="button" class="btn btn-icon float-right" title="Remove Tag" (click)="removeProjectTag(project, tag)"

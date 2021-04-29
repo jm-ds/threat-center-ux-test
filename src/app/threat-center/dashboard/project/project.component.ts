@@ -663,40 +663,36 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollY = window.pageYOffset || document.documentElement.scrollTop;
     this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
   }
+
+  // open project tags popup
   openProjectTagDialog(content: any) {
-    // open project tags popup
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 
+  // remove project tag handler
   removeProjectTag(project: Project, tag: string) {
     if (!!project.tags) {
-        let tags = project.tags.split(",");
-        let ind = tags.indexOf(tag);
+        let ind = project.tags.indexOf(tag);
         if (ind>-1) {
-            tags.splice(ind,1);
-            if (tags.length>0) {
-              project.tags = tags.join(",");
-            } else {
-              project.tags = undefined;
-            }
+            project.tags.splice(ind,1);
         }
     }
   }
 
+  // add project tag handler
   addProjectTag(project: Project, event: any) {
       if (!project.tags || project.tags.length === 0) {
         project.tags = event.value;
       } else {
-          let tags = project.tags.split(",");
-          if (tags.indexOf(event.value)===-1) {
-            project.tags += ','+event.value;
+          if (project.tags.indexOf(event.value)===-1) {
+            project.tags.push(event.value);
           }
       }
       event.input.value="";
   }
 
+  // save project tags
   setProjectTags(project: Project) {
-    //this.project
     this.projectDashboardService.setProjectTags(project.projectId, project.tags).subscribe(() => {
   }, (error) => {
       console.error('Error', error);

@@ -121,9 +121,15 @@ export class PolicyEditComponent implements OnInit {
                 this.router.navigate([link],
                     {state: {messages: [Message.success("Policy saved successfully.")]}});
             }, (error) => {
-                console.error('Policy Saving', error);
+                let msg = '';
+                if (error.message) {
+                    const msgs = error.message.split(":");
+                    if (msgs.length>0) {
+                        msg = msgs[msgs.length-1];
+                    }
+                }
                 this.messages = 
-                    [Message.error("Unexpected error occurred while trying to save policy.")];
+                    [Message.error("Unexpected error occurred while trying to save policy. "+msg)];
             });
     }
 
@@ -137,14 +143,15 @@ export class PolicyEditComponent implements OnInit {
         /*if (!this.policy.title) {
             resMessages.push(Message.error("Policy title field is required."));
         }*/
-        resMessages = resMessages.concat(this.validateConditionsExists(this.policy.conditions));
+        resMessages = resMessages.concat(this.validateConditionsExists());
         if (!this.policy.actions || this.policy.actions.length === 0) {
             resMessages.push(Message.error("Policy actions must be filled."));
         }
         return resMessages;
     }
 
-    validateConditionsExists(group: PolicyConditionGroup): Message[] {
+    // validate conditions
+    validateConditionsExists(): Message[] {
         if (this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length === 0) {
             return [Message.error("Main condition group must contain conditions.")];
         }

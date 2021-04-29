@@ -57,8 +57,12 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+
+    // fields metaada
     fillConditionNames() {
         this.categories = new ConditionCategories();
+
+        // main types
 
         this.conditionNames = new  Map<String, Map<String,ConditionMetadata>>();
         let conditions = new Map<string, ConditionMetadata>();
@@ -68,6 +72,7 @@ export class ConditionBuilderComponent implements OnInit {
                         { code: "LE", name: "<=" }],
             values: [
                 { code: "INFO", name: "Info" },
+                { code: "LOW", name: "Low" },
                 { code: "MEDIUM", name: "Medium" },
                 { code: "HIGH", name: "High" },
                 { code: "CRITICAL", name: "Critical" }
@@ -121,18 +126,62 @@ export class ConditionBuilderComponent implements OnInit {
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
         conditions.set("LICENSE_CATEGORY", { code: "LICENSE_CATEGORY", title: "License Category", dataType: "STR", 
-            operators: [{ code: "EQ", name: "=" },
-                        { code: "LIKE", name: "LIKE" }],
-            values: [], inputType: "STR"});
+            operators: [{ code: "EQ", name: "=" }],
+            values: [
+                { code: "UNDEFINED", name: "Undefined" },
+                { code: "PROPRIETARY_FREE", name: "Proprietary Free" },
+                { code: "PUBLIC_DOMAIN", name: "Public Domain" },
+                { code: "PROPRIETARY", name: "Proprietary" },
+                { code: "PERMISSIVE", name: "Permissive" },
+                { code: "COPYLEFT_WEAK", name: "Copyleft Weak" },
+                { code: "COPYLEFT_STRONG", name: "Copyleft Strong" },
+                { code: "COPYLEFT_PARTIAL", name: "Copyleft Partial" },
+                { code: "COPYLEFT_LIMITED", name: "Copyleft Limited" },
+                { code: "COPYLEFT", name: "Copyleft" }                
+            ], inputType: "CMB"});
         conditions.set("LICENSE_FOUND_IN", { code: "LICENSE_FOUND_IN", title: "Found in", dataType: "STR", 
             operators: [{ code: "EQ", name: "=" }],
             values: [{ code: "COMPONENT", name: "Component" },
                     { code: "IP", name: "IP" }], inputType: "CMB"});
         conditions.set("LICENSE_ATTRIBUTE", { code: "LICENSE_ATTRIBUTE", title: "License Attribute", dataType: "STR", 
-            operators: [{ code: "EQ", name: "=" },
-                        { code: "LIKE", name: "LIKE" }],
+            operators: [{ code: "EQ", name: "=" }],
             values: [
-                
+                { code: "COMMERCIAL_USE", name: "Commercial Use" },
+                { code: "MODIFY", name: "Modify" },
+                { code: "DISTRIBUTE", name: "Distribute" },
+                { code: "SUBLICENSE", name: "Sublicense" },
+                { code: "ADD_WARRANTY", name: "Add Warranty" },
+                { code: "PATENT_USE", name: "Patent Use" },
+                { code: "PRIVATE_USE", name: "Private Use" },
+                { code: "STATICALLY_LINK", name: "Statically Link" },
+                { code: "CONTACT_AUTHOR", name: "Contact Author" },
+                { code: "PAYMENT_OBLIGATION", name: "Payment Obligation" },
+                { code: "LICENSE_CHANGE", name: "License Change" },
+                { code: "PROVIDE_CREDIT", name: "Provide Credit" },
+                { code: "INCLUDE_A_COPY_OF_NOTICE", name: "Include a Copy of Notice" },
+                { code: "INCLUDE_LICENSE_TEXT_IN_CODE", name: "Include License Text in Code" },
+                { code: "STATE_CHANGES", name: "State Changes" },
+                { code: "INSTALL_INSTRUCTIONS", name: "Install Instructions" },
+                { code: "SAME_LICENSE", name: "Same License" },
+                { code: "INCLUDE_LICENSE_TEXT_IN_DOCUMENTATION", name: "Include License Text in Documentation" },
+                { code: "INCLUDE_LIST_OF_CONDITIONS", name: "Include List of Conditions" },
+                { code: "INCLUDE_DISCLAIMER_OF_WARRANTY", name: "Include Disclaimer of Warranty" },
+                { code: "SOURCE_CODE_REDISTRIBUTION", name: "Source Code Redistribution" },
+                { code: "INCLUDE_CREDIT_NOTICE_IN_ADVERTISEMENTS", name: "Include Credit Notice in Advertisements" },
+                { code: "INDEMNIFY_CLAUSE", name: "Indemnify Clause" },
+                { code: "NOTICE_OF_USAGE", name: "Notice of Usage" },
+                { code: "DISTRIBUTION_THROUGH_NETWORK_USE", name: "Distribution Through Network Use" },
+                { code: "NAME_MODIFICATION", name: "Name Modification" },
+                { code: "TRADEMARK_USE", name: "Trademark Use" },
+                { code: "LIABILITY", name: "Liability" },
+                { code: "SUBLICENSING", name: "Sublicensing" },
+                { code: "DAMAGE_COMPENSATION", name: "Damage Compensation" },
+                { code: "WARRANTY_STATEMENT", name: "Warranty Statement" },
+                { code: "MODIFICATIONS", name: "Modifications" },
+                { code: "REDISTRIBUTION", name: "Redistribution" },
+                { code: "PATENT_CLAUSE", name: "Patent Clause" },
+                { code: "PATENT_GRANT", name: "Patent Grant" },
+                { code: "PATENT_RIGHTS", name: "Patent Rights" }
             ], inputType: "CMB"});
         let legalType = new ConditionTypeMetadata("LEGAL", "Legal");
         legalType.conditionMetadatas = conditions;
@@ -155,8 +204,7 @@ export class ConditionBuilderComponent implements OnInit {
         this.categories.mainConditions.set(supplyChainType.code, supplyChainType);
 
 
-        ////
-
+        //// subordiname types
 
         conditions = new Map<string, ConditionMetadata>();
         conditions.set("COMPONENT_GROUP_ID", { code: "COMPONENT_GROUP_ID", title: "Component group ID", dataType: "STR", 
@@ -217,6 +265,8 @@ export class ConditionBuilderComponent implements OnInit {
         this.fillQualificatorsData();
     }
 
+
+    // meta conditions
     fillQualificatorsData() {
         let threshold = { code: "THRESHOLD", title: "Threshold", dataType: "INT", 
             operators: [{ code: "GE", name: ">=" }],
@@ -237,21 +287,14 @@ export class ConditionBuilderComponent implements OnInit {
         condType = new ConditionTypeMetadata("SCOPE", "Scope");
         condType.conditionMetadatas.set("SCOPE", scope);
         this.categories.subordinateConditions.set(condType.code, condType);
-/*
-        this.categories.subordinateConditions.forEach((value: ConditionTypeMetadata, key: string) => {
-            if (key !== "PROJECT_TAG" && key !== "RELEASE_STAGE") {
-                value.conditionMetadatas.set(threshold.code, threshold);
-            }
-            if (key !== "PROJECT_TAG" && key !== "RELEASE_STAGE" && key !== "COMPONENT") {
-                value.conditionMetadatas.set(scope.code, scope);
-            }    
-        });              */      
     }
 
+    // returns condition names
     getConditionTypeNames(map: any): ConditionMetadata[] {
         return Array.from(map.values());
     }
 
+    // returns condition operators
     getOperators (categoryName:string, conditionType: string, conditionName: string) : CodeNamePair[]  {
         let operators = undefined;
         if (!!conditionType && !!conditionName) {
@@ -271,6 +314,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+    // remove condition
     removeCondition(group: PolicyConditionGroup, condition: PolicyCondition) {
         const index = group.conditions.indexOf(condition);
         if (index > -1) {
@@ -281,6 +325,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+    // add condition
     addCondition(group: PolicyConditionGroup) {
         if (group.groupOperator) {
             let newCondition = new PolicyCondition();
@@ -305,24 +350,8 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
-    setConditionType(conditionType: string) {
-        this.setGroupConditionType(this.group, conditionType);
-    }
-
-    setGroupConditionType(group: PolicyConditionGroup, conditionType: string) {
-        if (group.conditions) {
-            group.conditions = group.conditions.filter(item => item.conditionType === conditionType);
-        }
-        if (group.groups) {
-            for (const grp of group.groups) {
-                this.setGroupConditionType(grp,conditionType);
-            }
-            group.groups = group.groups.filter(item => item.conditions.length>0);
-        }
-    }
-
+    // change value handler
     onChangeValue(newValue: any, condition: PolicyCondition) {
-        console.log(newValue+" "+condition);
         condition.decimalValue = undefined;
         condition.doubleValue = undefined;
         condition.intValue = undefined;
@@ -342,9 +371,9 @@ export class ConditionBuilderComponent implements OnInit {
         } else  {
             condition.strValue = newValue;
         }    
-        console.log(condition.severityValue);
     }
 
+    // return condition metadata for condition
     getConditionMetadata(conditionType: string, conditionName: string): ConditionMetadata {
         let condType = this.categories.mainConditions.get(conditionType) || this.categories.subordinateConditions.get(conditionType);
         if (!condType) {
@@ -353,6 +382,7 @@ export class ConditionBuilderComponent implements OnInit {
         return condType.conditionMetadatas.get(conditionName);
     } 
 
+    // return condition value
     getConditionValue(condition: PolicyCondition) {
         if (condition.conditionDataType === "DCM") {
             if (this.getConditionMetadata(condition.conditionType, condition.conditionName).inputType === 'CMB') {
@@ -377,6 +407,7 @@ export class ConditionBuilderComponent implements OnInit {
         }    
     }
 
+    // change main condition name handler
     onChangeName(newName:any, condition: PolicyCondition) {
         condition.conditionName=newName;
         let conditionTypeMetadata = this.categories.mainConditions.get(condition.conditionType) || this.categories.subordinateConditions.get(condition.conditionType);
@@ -391,13 +422,14 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+
+    // change subordinate condition name handler
     onChangeSubordinateName(newName:any, condition: PolicyCondition) {
         condition.conditionName=newName;
         let conditionInfo = this.subordinateConditionListItems.find((item)=> !item.isType&&item.code===newName);
         if (!!conditionInfo) {
             condition.conditionType = conditionInfo.conditionType;
         }
-        console.log(newName);
         let conditionTypeMetadata = this.categories.mainConditions.get(condition.conditionType) || this.categories.subordinateConditions.get(condition.conditionType);
         if (!!conditionTypeMetadata) {
             let conditionMetadata = conditionTypeMetadata.conditionMetadatas.get(newName);
@@ -407,6 +439,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+    // return subordibate condition names
     getSubordinateConditionTypeNames(): SubordinateConditionListItem[] {
         let result : SubordinateConditionListItem[] = [];
         this.categories.subordinateConditions.forEach((value: ConditionTypeMetadata, key: string) => {
@@ -428,6 +461,7 @@ export class ConditionBuilderComponent implements OnInit {
         return result;
     }
 
+    // remove project tag from valucondition value
     removeProjectTag(condition, tag) {
         if (!!condition.strValue) {
             let tags = condition.strValue.split(",");
@@ -443,6 +477,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+    // add project tag to condition value
     addProjectTag(condition, event) {
         if (!condition.strValue || condition.strValue.length === 0) {
             condition.strValue = event.value;
@@ -455,6 +490,7 @@ export class ConditionBuilderComponent implements OnInit {
         event.input.value="";
     }
 
+    // if this is a last main condition
     isLastMainCondition(condition: PolicyCondition) {
         return this.policy.conditions.groups[0] && this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length>0 && 
             this.policy.conditions.groups[0].conditions[0] === condition;

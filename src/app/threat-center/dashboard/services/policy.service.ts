@@ -86,6 +86,7 @@ export class PolicyService {
                         severityValue
                         strValue
                         threshold
+                        autoAdjustThreshold
                         logicalOperator
                       }
                     }

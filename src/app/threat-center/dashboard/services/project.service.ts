@@ -468,7 +468,7 @@ export class ProjectDashboardService {
   }
 
   // set project tags
-  setProjectTags(projectId: string, tags: string): any {
+  setProjectTags(projectId: string, tags: string[]): any {
     return this.coreGraphQLService.coreGQLReqForMutation(
        gql` mutation { setProjectTags(projectId: "${projectId}", tags: "${tags}") {
           projectId

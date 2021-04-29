@@ -351,7 +351,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       entityId = this.authService.currentUser.defaultEntityId;
     }
     console.log(entityId);
-    console.log("Loading Entity");
+    console.log("Loading Entity ");
     let isPush = true;
     if (!!sessionStorage.getItem('EntityBreadCums')) {
       isPush = false;

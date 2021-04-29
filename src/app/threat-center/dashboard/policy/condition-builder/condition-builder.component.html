@@ -16,7 +16,7 @@
             </select>
           </div>
 
-          <div class="col-sm-7">
+          <div class="col-sm-7 row">
             <select  *ngIf="condition.conditionType && condition.conditionName && categories.mainConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName).inputType==='CMB'" 
               [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"
             [disabled]="readonly" class="form-control form-control-sm ng-select custom-select col-sm-12" style="overflow-y: auto;" >
@@ -27,14 +27,19 @@
             [disabled]="readonly" class="form-control col-sm-12" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
 
             <input *ngIf="condition.conditionType && condition.conditionName && categories.mainConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName).inputType==='NUM'"
-            [disabled]="readonly" class="form-control col-sm-12" type="number" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
+            [disabled]="readonly" class="form-control" [ngClass] = "condition.conditionName === 'THRESHOLD'?'col-sm-9': 'col-sm-12'" type="number" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
+
 
             <select  *ngIf="condition.conditionType && condition.conditionName && categories.mainConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName).inputType==='CMM'" 
               [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"
             [disabled]="readonly" multiple class="form-control form-control-sm ng-select custom-select col-sm-12" style="overflow-y: auto;" >
               <option *ngFor="let item of categories.mainConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName).values" [ngValue]="item.code">{{ item.name }}</option> 
             </select> 
-
+            <div class="col-sm-3 mt-2 float-right" *ngIf="condition.conditionName === 'THRESHOLD'">
+              <label for="autoAdjustThreshold" class="font-weight-bolder float-right">Auto adjust</label>
+              <input [disabled]="readonly" name="autoAdjustThreshold" id="autoAdjustThreshold" type="checkbox" class="ml-1 mt-1 mr-1 float-right" [(ngModel)]="condition.autoAdjustThreshold"/>
+            </div>
+ 
           </div>
 
           <div class="col-sm-1">
@@ -93,7 +98,7 @@
                 </select>
               </div>
     
-              <div class="col-sm-7">
+              <div class="col-sm-7 row">
                 <select  *ngIf="condition.conditionType && condition.conditionName && categories.subordinateConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName)?.inputType==='CMB'" 
                   [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"
                 [disabled]="readonly" class="form-control form-control-sm ng-select custom-select col-sm-12" style="overflow-y: auto;" >
@@ -104,8 +109,8 @@
                 [disabled]="readonly" class="form-control col-sm-12" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
     
                 <input *ngIf="condition.conditionType && condition.conditionName && categories.subordinateConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName)?.inputType==='NUM'"
-                [disabled]="readonly" class="form-control col-sm-12" type="number" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
-    
+                [disabled]="readonly" class="form-control" [ngClass] = "condition.conditionName === 'THRESHOLD'?'col-sm-9': 'col-sm-12'" type="number" [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"/>
+                
                 <select  *ngIf="condition.conditionType && condition.conditionName && categories.subordinateConditions.get(condition.conditionType).conditionMetadatas.get(condition.conditionName)?.inputType==='CMM'" 
                   [ngModel]="getConditionValue(condition)" (ngModelChange)="onChangeValue($event, condition)"
                   [disabled]="readonly" multiple class="form-control form-control-sm ng-select custom-select col-sm-12" style="overflow-y: auto;" >
@@ -124,8 +129,10 @@
                          [matChipInputFor]="tagList"
                          (matChipInputTokenEnd)="addProjectTag(condition, $event)">
                 </mat-chip-list>                
-
-    
+                <div class="col-sm-3 mt-2 float-right" *ngIf="condition.conditionName === 'THRESHOLD'">
+                  <label for="autoAdjustThreshold" class="font-weight-bolder float-right">Auto adjust</label>
+                  <input [disabled]="readonly" name="autoAdjustThreshold" id="autoAdjustThreshold" type="checkbox" class="ml-1 mt-1 mr-1 float-right" [(ngModel)]="condition.autoAdjustThreshold"/>
+                </div>
               </div>
     
               <div class="col-sm-1">
