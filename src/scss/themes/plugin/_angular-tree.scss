@@ -77,6 +77,16 @@ tree-root tree-node .toggle-children-wrapper.toggle-children-wrapper-collapsed::
     left: 5px;
 }
 
+
+tree-root tree-node .tree-node-leaf .toggle-children-placeholder {
+    display: none;
+    height: 0px;
+    width: 0px;
+    position: relative;
+    top: 1px;
+    padding-right: 3px;
+}
+
 tree-root tree-node .toggle-children-wrapper .toggle-children {
     display: none;
 }

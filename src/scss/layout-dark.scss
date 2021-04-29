@@ -1849,3 +1849,42 @@
     }
   }
 }
+
+
+body.next-dark .ng-select > div {
+  background: #2a3641 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.95rem center/8px 10px;
+
+  &:focus {
+    background: #28333e url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.95rem center/8px 10px
+  }
+
+  &:hover {
+    background: #8a8f94 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.95rem center/8px 10px;
+    
+    ::-webkit-input-placeholder { /* Edge */
+      color: #fff;
+    }
+    
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: #fff;
+    }
+    
+    ::placeholder {
+      color: #fff;
+    }
+  }
+}
+
+body.next-dark .ng-select .options ul {
+  background: #8a8f94;
+  padding: 0;
+  
+  li {
+    color: #fff;
+    padding: 2px 5px;
+
+    &.selected {
+      background: #28333e;
+    }
+  }
+}

@@ -27,7 +27,7 @@
             <ng-template pTemplate="caption">
               <div style="text-align: right">
                 <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mr-4"
-                  (click)="attributionModal.show()" [disabled]="isDisableAttributeLicensebtn">
+                  (click)="openAttributionModel(attributionModal)" [disabled]="isDisableAttributeLicensebtn">
                   <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
                 </button>
 
