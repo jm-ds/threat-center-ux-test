@@ -253,6 +253,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
                     }
                 }
             } else {
+                debugger;
                 // for git lab..
                 if (!!selectRepo.repository && !!selectRepo.repository.rootRef) {
                     this.selectedItem = selectRepo.repository.rootRef;

@@ -9,20 +9,31 @@
     <ng-template pTemplate="body" let-selectedRepo>
         <tr>
             <td>
+                <!-- git hub -->
                 <div *ngIf="!!selectedRepo.node;else repoName" style="float:left">{{selectedRepo?.node?.name}}</div>
+
+                <!-- git lab and bitbucket -->
                 <ng-template #repoName>
                     <div style="float:left">{{selectedRepo.name}}</div>
                 </ng-template>
             </td>
             <td>
+                <!-- github -->
                 <div *ngIf="!!selectedRepo.node && selectedRepo?.node.refs.edges.length == 1;else branchName">
                     {{selectedRepo?.node.defaultBranchRef?.name}}
                 </div>
 
+                <!-- git lab and bitbucket-->
                 <ng-template #branchName>
-                    <span *ngIf="!!selectedRepo.repository && !!selectedRepo.repository?.rootRef">{{selectedRepo.repository.rootRef}}</span>
+                    <!-- gitlab -->
+                    <span
+                        *ngIf="!!selectedRepo.repository && !!selectedRepo.repository.rootRef">{{selectedRepo.repository.rootRef}}</span>
+                    <!-- bitbucket -->
+                    <span
+                        *ngIf="(!!selectedRepo?.branches && selectedRepo?.branches.length == 1) || !!selectedRepo.mainBranch">{{selectedRepo.mainBranch}}</span>
                 </ng-template>
 
+                <!-- github -->
                 <div *ngIf="!!selectedRepo?.node && selectedRepo?.node.refs.edges.length > 1">
                     <select [(ngModel)]="selectedItem" (ngModelChange)="changeBranch($event)" class="form-control"
                         style="height:25px;padding:2px">
@@ -31,6 +42,17 @@
                             value='{{branch.node.name}}'>{{branch.node.name}}</option>
                     </select>
                 </div>
+
+                <!-- bitbucket -->
+                <div *ngIf="!!selectedRepo?.branches && selectedRepo?.branches.length > 1">
+                    <select [ngModel]="selectedItem" (ngModelChange)="changeBranch($event)"
+                        class="form-control custom-select" style="height:25px;padding:2px">
+                        <option *ngFor="let branch of selectedRepo.branches"
+                            [selected]="branch == selectedRepo.mainBranch" value='{{branch}}'>{{branch}}
+                        </option>
+                    </select>
+                </div>
+
             </td>
         </tr>
     </ng-template>
