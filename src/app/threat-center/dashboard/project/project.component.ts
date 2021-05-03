@@ -532,8 +532,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!this.assetChart && this.assetChart.series.length >= 1) {
       let orgtext = "";
       let tooltipText = "";
-      //below line need to do because order have to be same as in the assets columns in the scan row...
-      const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
+      const data = this.getSequenceWiseAssets();
       _.each(data, ser => {
         orgtext += ser.data[0] + '/';
         tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
@@ -542,6 +541,24 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       return { orgText: '0', tooltipText: '' };
     }
+  }
+
+  //need to get assets sequence wise
+  private getSequenceWiseAssets() {
+    const embededItem = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'embedded' });
+    const openSource = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'opensource' });
+    const unique = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'unique' });
+    const data = [];
+    if (!!embededItem) {
+      data.push(embededItem);
+    }
+    if (!!openSource) {
+      data.push(openSource);
+    }
+    if (!!unique) {
+      data.push(unique);
+    }
+    return data;
   }
 
   //load all metrics data after selecting scan in table.
