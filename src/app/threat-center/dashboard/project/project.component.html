@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-          <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
+            <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
       </h3>
     </div>
     <div class="col-6" style="text-align: right;">
@@ -21,18 +21,23 @@
   </div>
 
   <div class="row chart-block-p">
-    <ng-container
-      *ngTemplateOutlet="chartBlock;context:{chartHeader: 'Vulnerabilities', chartArray: vulnerabilityChart.series,chartId:'projectVulnerabilityChart',chartConfig:vulnerabilityChart }">
-    </ng-container>
-    <ng-container
-      *ngTemplateOutlet="chartBlock;context:{chartHeader: 'Licenses', chartArray: licenseChart.series,chartId:'projectLicenseChart',chartConfig:licenseChart }">
-    </ng-container>
-    <ng-container
-      *ngTemplateOutlet="chartBlock;context:{chartHeader: 'Components', chartArray: componentChart.series,chartId:'projectComponentChart',chartConfig:componentChart }">
-    </ng-container>
-    <ng-container
-      *ngTemplateOutlet="chartBlock;context:{chartHeader: 'Asset Composition', chartArray: assetChart.series,chartId:'projectAssetChart',chartConfig:assetChart }">
-    </ng-container>
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Vulnerabilities'" [chartArray]='vulnerabilityChart.series'
+        [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart"></project-chart>
+    </div>
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Licenses'" [chartArray]='licenseChart.series' [chartId]="'projectLicenseChart'"
+        [chartconfig]="licenseChart"></project-chart>
+    </div>
+
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
+        [chartId]="'projectComponentChart'" [chartconfig]="componentChart"></project-chart>
+    </div>
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Asset Composition'" [chartArray]='a ssetChart.series' [chartId]="'projectAssetChart'"
+        [chartconfig]="assetChart"></project-chart>
+    </div>
   </div>
 
   <div class="row">
@@ -377,33 +382,6 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
-    </div>
-  </ng-template>
-  <ng-template #chartBlock let-chartHeader="chartHeader" let-chartArray="chartArray" let-chartId="chartId"
-    let-chartConfig="chartConfig">
-    <div class="col-lg-3 col-md-3">
-      <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <div style="margin-bottom:-15px;margin-top:-10px;">
-          <div class="chart-lbl-indi">
-            <div style="margin-bottom:10px" class="chart-lbl">
-              <i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>{{chartHeader}}
-            </div>
-            <div style="display: flex;text-align: right;">
-              <ul *ngIf="!!chartArray && chartArray.length >= 1">
-                <li *ngFor="let item of chartArray" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                  (mouseleave)="item.hover=false">
-                  {{getAdditionData(item.data)}}
-                  <div *ngIf="item.hover" class="lgnd-tltp">
-                    {{item.name}}
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <app-apex-chart [chartID]="chartId" [className]="'chart-class'" [chartConfig]="chartConfig">
-        </app-apex-chart>
-      </app-card>
     </div>
   </ng-template>
 </div>

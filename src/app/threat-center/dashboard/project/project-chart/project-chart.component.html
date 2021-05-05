@@ -1,0 +1,22 @@
+<app-card [hidHeader]="true" cardClass="proj-t-card">
+    <div style="margin-bottom:-15px;margin-top:-10px;">
+        <div class="chart-lbl-indi">
+            <div style="margin-bottom:10px" class="chart-lbl">
+                <i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>{{chartLabel}}
+            </div>
+            <div style="display: flex;text-align: right;">
+                <ul *ngIf="!!chartArray && chartArray.length >= 1">
+                    <li *ngFor="let item of chartArray" class="{{item.colorClass}}" (mouseover)="item.hover=true"
+                        (mouseleave)="item.hover=false">
+                        {{getAdditionData(item.data)}}
+                        <div *ngIf="item.hover" class="lgnd-tltp">
+                            {{item.name}}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <app-apex-chart [chartID]="chartId" [className]="'chart-class'" [chartConfig]="chartconfig">
+    </app-apex-chart>
+</app-card>
