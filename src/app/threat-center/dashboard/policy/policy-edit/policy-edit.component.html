@@ -146,11 +146,11 @@
                       <td pEditableColumn>
                         <p-cellEditor style="width: 100%">
                             <ng-template pTemplate="input">
-                                <p-dropdown name="actionType" [options]="actionTypes" [(ngModel)]="action.actionType" (onChange)="onActionTypeChange(action,$event)"
+                                <p-dropdown name="actionType" [options]="actionTypes" [(ngModel)]="action.actionType" (onChange)="onActionTypeChange(action,$event)" 
                                 [style]="{'width':'100%','min-width': '4em' , 'margin-top': '6px'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{action.actionType}}
+                                {{!!action.actionType?actionTypeMap[action.actionType]:''}}
                             </ng-template>
                         </p-cellEditor>
                       </td>  
@@ -161,7 +161,7 @@
                                 [style]="{'width':'100%','min-width': '4em', 'margin-top': '6px'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{action.actionName}}
+                                {{!!action.actionName?actionNameMap[action.actionType][action.actionName]:''}}
                             </ng-template>
                         </p-cellEditor>
                       </td> 

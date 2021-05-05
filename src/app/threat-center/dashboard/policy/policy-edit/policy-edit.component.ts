@@ -27,13 +27,17 @@ export class PolicyEditComponent implements OnInit {
     activeTabIdString: string = "policyGeneralInfo";
 
 
-    public actionTypes = [{label: 'ALERT', value: 'ALERT'},{label: 'ISSUE', value: 'ISSUE'},{label: 'RELEASE', value: 'RELEASE'}];
+    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Issue', value: 'ISSUE'},{label: 'Gate Release', value: 'RELEASE'},
+       {label: 'Attribute Source', value: 'ATTRIBUTION'}, {label: 'Upgrade library version', value: 'UPGRADE_VERSION'}];
     public actionNames = {
-        'ALERT': [{label: 'SLACK', value: 'SLACK'},{label: 'EMAIL', value: 'EMAIL'},{label: 'DASHBOARD', value:'DASHBOARD'}],
-        'ISSUE' : [{label: 'JIRA', value: 'JIRA'},{label: 'GITHUB', value:'GITHUB'}],
-        'RELEASE': [{label: 'NO', value:'NO'},{label: 'DEV', value:'DEV'},{label: 'STAGE', value:'STAGE'},{label: 'PROD', value:'PROD'}]
+        'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'},{label: 'Dashboard', value:'DASHBOARD'}],
+        'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
+        'RELEASE': [{label: 'No', value:'NO'},{label: 'Release', value:'PROD'}],
+        'ATTRIBUTION': [{label: 'Attribute Source', value:'ATTRIBUTION'}],
+        'UPGRADE_VERSION': [{label: 'Latest Secured Version', value:'LAST_VERSION'},{label: 'Next Secured Version', value:'NEXT_VERSION'}]
     };
-
+    public actionTypeMap={};
+    public actionNameMap={};
 
     public actionCols = ['ActionType','ActionName'];
 
@@ -92,6 +96,20 @@ export class PolicyEditComponent implements OnInit {
                 })
             }
             this.conditionType = { "code": this.policy.conditionType, "name": this.policyService.getConditionTypes()[this.policy.conditionType]};
+        }
+        this.fillActionMaps();
+    }
+    
+    fillActionMaps() {
+        this.actionTypes.forEach(obj => {
+            this.actionTypeMap[obj.value] = obj.label;
+        });
+        for (const tp in this.actionNames) {
+            this.actionNameMap[tp] = {};
+            this.actionNames[tp].forEach(obj => {
+                this.actionNameMap[tp][obj.value] = obj.label;
+            });
+    
         }
     }
 

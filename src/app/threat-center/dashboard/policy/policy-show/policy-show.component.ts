@@ -20,6 +20,18 @@ export class PolicyShowComponent implements OnInit {
 
 
     public actionCols = ['ActionType','ActionName'];
+    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Issue', value: 'ISSUE'},{label: 'Gate Release', value: 'RELEASE'},
+       {label: 'Attribute Source', value: 'ATTRIBUTION'}, {label: 'Upgrade library version', value: 'UPGRADE_VERSION'}];
+    public actionNames = {
+        'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'},{label: 'Dashboard', value:'DASHBOARD'}],
+        'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
+        'RELEASE': [{label: 'No', value:'NO'},{label: 'Release', value:'PROD'}],
+        'ATTRIBUTION': [{label: 'Attribute Source', value:'ATTRIBUTION'}],
+        'UPGRADE_VERSION': [{label: 'Latest Secured Version', value:'LAST_VERSION'},{label: 'Next Secured Version', value:'NEXT_VERSION'}]
+    };
+    public actionTypeMap={};
+    public actionNameMap={};
+
 
 
     constructor(
@@ -51,6 +63,20 @@ export class PolicyShowComponent implements OnInit {
                 console.error("PolicyShowComponent", error);
             }
         );
+        this.fillActionMaps();
+    }
+
+    fillActionMaps() {
+        this.actionTypes.forEach(obj => {
+            this.actionTypeMap[obj.value] = obj.label;
+        });
+        for (const tp in this.actionNames) {
+            this.actionNameMap[tp] = {};
+            this.actionNames[tp].forEach(obj => {
+                this.actionNameMap[tp][obj.value] = obj.label;
+            });
+    
+        }
     }
 
     prepareConditionsAfterFetch(group: PolicyConditionGroup, policy: Policy) {
