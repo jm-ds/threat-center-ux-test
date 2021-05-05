@@ -480,16 +480,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  getAdditionData(data) {
-    if (!!data && data.length >= 1) {
-      return !!data[0] ? data[0] : 0;
-      // return data[0];
-      // return data.reduce((prev, next) => prev + (+next), 0);
-    } else {
-      return 0;
-    }
-  }
-
   //While any changes occurred in page
   changePage(pageInfo) {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
@@ -529,21 +519,19 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getAssetcountString() {
-    // if (!!this.assetChart && this.assetChart.series.length >= 1) {
-    //   let orgtext = "";
-    //   let tooltipText = "";
-    //   //below line need to do because order have to be same as in the assets columns in the scan row...
-    //   const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
-    //   _.each(data, ser => {
-    //     orgtext += ser.data[0] + '/';
-    //     tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
-    //   });
-    //   return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
-    // } else {
-    //   return { orgText: '0', tooltipText: '' };
-    // }
-
-    return { orgText: '0', tooltipText: '' };
+    if (!!this.assetChart && this.assetChart.series.length >= 1) {
+      let orgtext = "";
+      let tooltipText = "";
+      //below line need to do because order have to be same as in the assets columns in the scan row...
+      const data = [this.assetChart.series[2], this.assetChart.series[0], this.assetChart.series[1]];
+      _.each(data, ser => {
+        orgtext += ser.data[0] + '/';
+        tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
+      });
+      return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
+    } else {
+      return { orgText: '0', tooltipText: '' };
+    }
   }
 
   //load all metrics data after selecting scan in table.
