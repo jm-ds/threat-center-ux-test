@@ -15,7 +15,7 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
 
     keepSorted = true;
     source: Array<any>;
-    confirmed: Array<any>;
+    confirmed: Array<any> = [];
     key: string;
     display: any;
     filter = false;
@@ -40,7 +40,7 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
             data => {
                 this.user = data.data.user;
                 this.confirmed = this.user.userRoles;
-                this.getRoleLists();
+                this.getRoleList();
             },
             error => {
                 console.error("UserRolesComponent", error);
@@ -51,7 +51,7 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
         this.display = this.roleDisplay;
     }
 
-    private getRoleLists() {
+    private getRoleList() {
         this.roleService.getRoleList().subscribe(
             data => {
                 this.roles = data.data.roles;
