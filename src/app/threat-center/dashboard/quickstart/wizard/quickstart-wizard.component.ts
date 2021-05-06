@@ -18,6 +18,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
 import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
+import { ReloadService } from '../../services/reload.service';
 
 @Component({
     selector: 'app-quickstart',
@@ -56,7 +57,8 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         public authService: AuthenticationService,
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private reloadService:ReloadService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -122,53 +124,18 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         console.log("RPEO: ", scanRequest.repository);
         console.log("OWDER: ", scanRequest.login);
         scanRequest.entityId = this.entityId;
+        scanRequest.status = null;
         this.taskService.scanRequest = scanRequest;
+
+        //storing current scan to storage
+        sessionStorage.setItem("REPO_SCAN", JSON.stringify(this.taskService.scanRequest));
+
         console.log("SUBMITTING TASK..");
         // open dialog box with message..
 
-        // this.openFloatingModel();
         this.isDisableScanBtn = true;
-        const preScanProjectData = {
-            uniqId: this.coreHelperService.uuidv4(),
-            message: scanRequest.repository + ' scan started.',
-            projectName: scanRequest.repository,
-            entityId: this.entityId
-        };
-
-        if (this.scanHelperService.projectScanResults.length == 0 && this.scanHelperService.recentlyScanCompleted.length == 0 && this.scanHelperService.errorScanProject.length == 0) {
-            this.openScanModel(preScanProjectData);
-        }
-
-        this.scanHelperService.submitingScanForProject(preScanProjectData);
-
-
-        // Create new ScanRequest and set it in the TaskService
-        // then forward to dashboard where we can display the task component.
-
-        // this.router.navigate(['dashboard/quickstart/dashboard']);
-    }
-
-    openScanModel(preScanProjectData) {
-        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
-            {
-                backdrop: 'static',
-                keyboard: false,
-                windowClass: 'pre-scan-loading-dialog',
-                backdropClass: 'pre-scan-loading-dialog-backdrop'
-            });
-        modalRef.componentInstance.preScanProjectData = preScanProjectData;
-        modalRef.result.then((result) => {
-            this.openFloatingModel();
-        }, (reason) => { });
-    }
-
-    private openFloatingModel() {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'loading-dialog',
-            backdropClass: 'loading-dialog-backdrop'
-        });
+        //Starting Scaning process....
+        this.reloadService.submitingRepoforScanStart(scanRequest,' scan started.')
     }
 
     loadGitHubUser() {
@@ -302,7 +269,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
                 return true;
             }
         } else {
-            this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+            // this.coreHelperService.settingUserPreference("ThreatScan", "", null);
             return true;
         }
     }

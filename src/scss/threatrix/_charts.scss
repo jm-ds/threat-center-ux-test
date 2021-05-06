@@ -591,7 +591,51 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 }
 
 //Added tooltip border 1px to donut chart tooltip
-.entity-chart-blk .apexcharts-tooltip-series-group  {
+.entity-chart-blk .apexcharts-tooltip-series-group {
     border: 1px solid #adb7be;
     box-shadow: 0 -1px 0px 0px black inset;
+}
+
+@media screen and (min-width: 1280px) and (max-width: 1366px) {
+    .org-chart {
+        perfect-scrollbar {
+            max-height: 550px !important;
+        }
+
+        .table-card {
+            margin-bottom: 0;
+        }
+    }
+
+    .org-tree-selected-card {
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    .org-tree-selected-card {
+        height: auto;
+    }
+
+}
+
+@media screen and (min-width: 1800px) and (max-width: 3200px) {
+    .org-chart {
+        perfect-scrollbar {
+            max-height: 3000px !important;
+        }
+
+        .pcoded-content {
+            padding-bottom: 30px;
+        }
+    }
+
+    .org-tree-selected-card {
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    .org-tree-selected-card {
+        height: auto;
+    }
+
 }

@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Messages } from "@app/messages/messages";
 import { AuthenticationService } from "@app/security/services";
 import { environment } from "environments/environment";
+import Swal from "sweetalert2";
 import { CoreHelperService } from "./core-helper.service";
 
 @Injectable({
@@ -26,7 +27,7 @@ export class CoreErrorHelperService {
             switch (errObj.status) {
                 case 401:
                     //Redirect user with notifying
-                    this.redirectUserToLoginPage(dataObjToShow);
+                    this.redirectUserToLoginPage(dataObjToShow, errObj.status);
                     break;
                 case 403:
                     console.log("REQUEST PAYLOAD", requestPayload);
@@ -48,6 +49,8 @@ export class CoreErrorHelperService {
                     //Rest Of all status code perform over here..
                     if (errObj.status === 500) {
                         console.log("REQUEST PAYLOAD", requestPayload);
+                    } else if (errObj.status === 502) {
+                        dataObjToShow.message = Messages.status502;
                     }
                     this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     break;
@@ -116,8 +119,12 @@ export class CoreErrorHelperService {
     }
 
     //Helper function which will redirect user to login page with notifying user.
-    private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }) {
-        this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+    private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
+        if (actualStatus === 401) {
+            Swal.fire('Authentication required', dataObjToShow.message, 'warning');
+        } else {
+            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+        }
         this.authenticationService.logout();
         this.router.navigate(['/login']);
     }

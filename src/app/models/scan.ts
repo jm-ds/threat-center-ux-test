@@ -8,6 +8,7 @@ export class ScanRequest {
     entityId: string;
     repoType: string;
     projectId: string;
+    status?:string;
 }
 
 export class Task {

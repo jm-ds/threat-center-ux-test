@@ -158,6 +158,14 @@ export class ScanAssetDetailComponent implements OnInit {
     this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
   }
 
+  //open Attribution process model
+  openAttributionModel(content) {
+    if (!!this.selectedMatches && this.selectedMatches.length >= 1) {
+      content.show();
+    } else {
+      Swal.fire('', 'To attribute asset you have to select at least one of third-party assets which will be used for attribution', 'info');
+    }
+  }
 
   // send attribute asset request
   attributeAsset(assetMatch, modelContent) {
@@ -171,7 +179,7 @@ export class ScanAssetDetailComponent implements OnInit {
         if (data.data.attributeAsset) {
           Swal.fire('License attribution', 'Attribution is successful', 'success');
         } else {
-          Swal.fire('License attribution', 'Attribution is not required', 'warning');
+          Swal.fire('License attribution', 'Attribution is not required', 'info');
         }
       }, (error) => {
         this.isDisableAttributeLicensebtn = false;

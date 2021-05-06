@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { NextConfig } from '@app/app-config';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { ProjectQuery, Scan, ScanQuery } from '@app/models';
+import { Entity, ProjectQuery, Scan, ScanQuery } from '@app/models';
 import gql from 'graphql-tag';
 import { EMPTY, forkJoin, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
@@ -15,6 +15,17 @@ import { mergeMap } from 'rxjs/operators';
 
 export class ProjectDashboardService {
   constructor(private coreGraphQLService: CoreGraphQLService) {
+  }
+
+  //Get enity Name
+  getEntity(entityId) {
+    return this.coreGraphQLService.coreGQLReqWithQuery<any>(gql`
+    query {
+      entity(entityId: "${entityId}") {
+        entityId
+        name
+       }
+    }`, `no-cache`);
   }
 
   //Get Project Data
