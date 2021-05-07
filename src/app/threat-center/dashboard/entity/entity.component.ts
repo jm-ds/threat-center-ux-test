@@ -377,7 +377,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
     _.each(labels[str], value => {
       if (assData.length >= 1) {
-        dataToReturn.push({ name: value, data: assData.map(val => { return val[str].value }) });
+        dataToReturn.push({ name: value, data: assData.map(val => { const v = val[str]; return v[value]; }) });
       } else {
         dataToReturn.push({ name: value, data: [] });
       }
