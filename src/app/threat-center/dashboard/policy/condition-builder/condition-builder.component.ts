@@ -341,6 +341,9 @@ export class ConditionBuilderComponent implements OnInit {
             newCondition.conditionName = conditionMetadata.code;
             newCondition.operator = conditionMetadata.operators[0].code;
             newCondition.conditionDataType = conditionMetadata.dataType
+            if (conditionMetadata.dataType == 'STR' && conditionMetadata.inputType == 'CMB') {
+                newCondition.strValue = conditionMetadata.values[0].code;
+            }
             if (!group.conditions) {
                 group.conditions=[];
             } else if (group.conditions.length > 0) {
@@ -418,6 +421,10 @@ export class ConditionBuilderComponent implements OnInit {
                 if (!!conditionMetadata.operators && conditionMetadata.operators.length>0) {
                     condition.operator = conditionMetadata.operators[0].code;
                 }
+                if (conditionMetadata.dataType == 'STR' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.strValue = conditionMetadata.values[0].code;
+                }
+    
             }
         }
     }

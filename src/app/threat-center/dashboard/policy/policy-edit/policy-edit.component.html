@@ -188,7 +188,7 @@
       </ngb-tabset>    
     </div>   
     <div class="actions mt-4">
-      <button type="button" class="btn btn-success" (click)="savePolicy()" >
+      <button type="button" class="btn btn-success" [disabled] = "saveDisabled" (click)="savePolicy()" >
           <i class="feather icon-save"></i>
           Save
       </button>

@@ -38,6 +38,7 @@ export class PolicyEditComponent implements OnInit {
     };
     public actionTypeMap={};
     public actionNameMap={};
+    public saveDisabled: boolean = false;
 
     public actionCols = ['ActionType','ActionName'];
 
@@ -52,6 +53,7 @@ export class PolicyEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.saveDisabled = false;
         this.policy = null;
         this.conditionTypeItems = this.policyService.getConditionTypeItems();
         const policyId = this.route.snapshot.paramMap.get('policyId');
@@ -125,9 +127,12 @@ export class PolicyEditComponent implements OnInit {
     }    
 
     savePolicy() {
+        this.saveDisabled = true;
+
         let messages: Message[] = this.validatePolicy();
         if (messages.length>0) {
             this.messages = messages;
+            this.saveDisabled = false;
             return;
         }
         this.prepareConditionsBeforeSave(this.policy.conditions);
@@ -136,10 +141,12 @@ export class PolicyEditComponent implements OnInit {
                 const link = '/dashboard/policy/show/'+ data.data.createPolicy.policyId+
                     ((!!this.entityId)? ('/'+this.entityId):'')+
                     ((!!this.projectId)? ('/'+this.projectId):'');
+                this.saveDisabled = false;
                 this.router.navigate([link],
                     {state: {messages: [Message.success("Policy saved successfully.")]}});
             }, (error) => {
                 let msg = '';
+                this.saveDisabled = false;
                 if (error.message) {
                     const msgs = error.message.split(":");
                     if (msgs.length>0) {
