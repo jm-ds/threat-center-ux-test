@@ -707,7 +707,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   // add project tag handler
   addProjectTag(project: Project, event: any) {
       if (!project.tags || project.tags.length === 0) {
-        project.tags = event.value;
+        project.tags = [event.value];
       } else {
           if (project.tags.indexOf(event.value)===-1) {
             project.tags.push(event.value);
