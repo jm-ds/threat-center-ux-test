@@ -14,9 +14,10 @@ export class EntityChartcomponent implements OnInit, AfterViewInit {
     @Input() chartId: string = '';
     @Input() chartConfig: string = '';
     @Input() dropdownValues = new Array();
-    @Input() nameSelection: string = "";
-    @Input() selecteddropdownValue: string = "";
+    @Input() nameSelection: string = '';
+    @Input() selecteddropdownValue: string = '';
     @Input() supplyChainChart: any = null;
+    @Input() iconClass:string = '';
     
     selectedValue: string = '';
     constructor() { }

@@ -89,7 +89,8 @@
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Vulnerability'}"
       (click)="initStackedChartAccordingToDonut('Vulnerability')">
       <entity-donut-chart [chartlabel]="'Vulnerabilities'" [chartId]="'vulnerabilityChart'"
-        [chartConfig]="vulnerabilityDonutChart" (changeDropdownValue)="onChangedropdown($event)">
+        [chartConfig]="vulnerabilityDonutChart" [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'"
+        (changeDropdownValue)="onChangedropdown($event)">
       </entity-donut-chart>
     </div>
 
@@ -98,13 +99,13 @@
       (click)="initStackedChartAccordingToDonut('Licenses')">
       <span *ngIf="selectedlicenseChartDropValue == 'License Name'">
         <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseChart'" [chartConfig]="licenseDonutChart"
-          (changeDropdownValue)="onChangedropdown($event)" [nameSelection]="'License'"
+          (changeDropdownValue)="onChangedropdown($event)" [nameSelection]="'License'" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"
           [dropdownValues]="licenseChartDropValues" [selecteddropdownValue]="selectedlicenseChartDropValue">
         </entity-donut-chart>
       </span>
       <span *ngIf="selectedlicenseChartDropValue == 'License Category'">
         <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseCat'" [chartConfig]="licenseCategoryChart"
-          (changeDropdownValue)="onChangedropdown($event)" [nameSelection]="'License'"
+          (changeDropdownValue)="onChangedropdown($event)" [nameSelection]="'License'" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"
           [dropdownValues]="licenseChartDropValues" [selecteddropdownValue]="selectedlicenseChartDropValue">
         </entity-donut-chart>
       </span>
@@ -113,7 +114,7 @@
     <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'SupplyChain'}"
       (click)="initStackedChartAccordingToDonut('SupplyChain')">
-      <entity-donut-chart [chartlabel]="'Supply chain risk & quality'" [supplyChainChart]="supplyChainChart">
+      <entity-donut-chart [chartlabel]="'Supply chain risk & quality'" [supplyChainChart]="supplyChainChart" [iconClass]="'fas fa-link text-c-red f-15 m-r-5'">
       </entity-donut-chart>
     </div>
 
@@ -124,19 +125,19 @@
       <span *ngIf="selectedComponentChartDropvalue == 'Vulnerabilities'">
         <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentChart'"
           [chartConfig]="componentVulnerabilityRiskChart" (changeDropdownValue)="onChangedropdown($event)"
-          [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
+          [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
           [selecteddropdownValue]="selectedComponentChartDropvalue">
         </entity-donut-chart>
       </span>
       <span *ngIf="selectedComponentChartDropvalue == 'License Category'">
-        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'"
+        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
           [chartConfig]="componentLicenseCategory" (changeDropdownValue)="onChangedropdown($event)"
           [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
           [selecteddropdownValue]="selectedComponentChartDropvalue">
         </entity-donut-chart>
       </span>
       <span *ngIf="selectedComponentChartDropvalue == 'License Name'">
-        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'"
+        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
           [chartConfig]="componentLicense" (changeDropdownValue)="onChangedropdown($event)"
           [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
           [selecteddropdownValue]="selectedComponentChartDropvalue">
@@ -148,7 +149,7 @@
     <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Assets'}"
       (click)="initStackedChartAccordingToDonut('Assets')">
-      <entity-donut-chart [chartlabel]="'Assets'" [chartId]="'assetChart'" [chartConfig]="assetDonutChart"
+      <entity-donut-chart [chartlabel]="'Assets'" [chartId]="'assetChart'" [chartConfig]="assetDonutChart" [iconClass]="'fas fa-code text-c-red f-15 m-r-5'"
         (changeDropdownValue)="onChangedropdown($event)">
       </entity-donut-chart>
     </div>
@@ -549,5 +550,5 @@
       </div>
     </div>
   </ng-template>
-  
+
 </div>
