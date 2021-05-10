@@ -368,52 +368,20 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   //Initialize SparkLine charts
   initSparkLineChart(data, str) {
     let dataToReturn = [];
-    const vul = ['critical', 'high', 'medium', 'low', 'info'];
-    const lic = ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'];
-    const supply = ['risk', 'quality'];
-    const asset = ['embedded', 'openSource', 'unique'];
-    const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
-    switch (str) {
-      case 'vulnerabilityMetrics':
-        _.each(vul, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.vulnerabilityMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'licenseMetrics':
-        _.each(lic, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.licenseMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'supplyChainMetrics':
-        _.each(supply, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.supplyChainMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'assetMetrics':
-        _.each(asset, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.assetMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      default:
-        break;
+    const labels = {
+      vulnerabilityMetrics: ['critical', 'high', 'medium', 'low', 'info'],
+      licenseMetrics: ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'],
+      supplyChainMetrics: ['risk', 'quality'],
+      assetMetrics: ['embedded', 'openSource', 'unique']
     }
-
+    const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
+    _.each(labels[str], value => {
+      if (assData.length >= 1) {
+        dataToReturn.push({ name: value, data: assData.map(val => { const v = val[str]; return v[value]; }) });
+      } else {
+        dataToReturn.push({ name: value, data: [] });
+      }
+    });
     return dataToReturn;
   }
 

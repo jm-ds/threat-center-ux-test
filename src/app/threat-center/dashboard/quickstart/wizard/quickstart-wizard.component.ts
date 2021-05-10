@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
@@ -13,12 +13,12 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
 import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
 import { ReloadService } from '../../services/reload.service';
+import { RepositoryListComponent } from './repo-list/repo-list.component';
+import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 
 @Component({
     selector: 'app-quickstart',
@@ -47,6 +47,13 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
+    @ViewChild('orgRepoList', { static: false }) orgRepoList: RepositoryListComponent;
+    @ViewChild('repoList', { static: false }) repoList: RepositoryListComponent;
+    @ViewChild('gitLabRepoList', { static: false }) gitLabRepoList: RepositoryListComponent;
+    @ViewChild('bitbucketRepoList', { static: false }) bitbucketRepoList: RepositoryListComponent;
+    @ViewChild('readyScanRepo', { static: false }) readyScanRepo: ReadyScanRepositorylistComponent;
+
+
     constructor(
         private apiService: ApiService,
         private location: Location,
@@ -58,7 +65,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
-        private reloadService:ReloadService) {
+        private reloadService: ReloadService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -135,7 +142,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
         this.isDisableScanBtn = true;
         //Starting Scaning process....
-        this.reloadService.submitingRepoforScanStart(scanRequest,' scan started.')
+        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.')
     }
 
     loadGitHubUser() {
@@ -222,26 +229,54 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(event) {
+        this.selectedRepos[0] = event.data;
         this.selectedItem = '';
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
-            if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
-                this.selectedItem = selectRepo.node.defaultBranchRef.name;
+
+            if (!!selectRepo.node) {
+                // for git hub
+                if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
+                    this.selectedItem = selectRepo.node.defaultBranchRef.name;
+                } else {
+                    if (!!selectRepo.node.refs && selectRepo.node.refs.edges.length >= 1) {
+                        const masterData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'master' });
+                        if (!!masterData) {
+                            this.selectedItem = masterData.node.name;
+                        } else {
+                            const mainData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'main' });
+                            if (!!mainData) {
+                                this.selectedItem = mainData.node.name;
+                            }
+                        }
+
+                    }
+                }
             } else {
-                if (!!selectRepo.node.refs && selectRepo.node.refs.edges.length >= 1) {
-                    const masterData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'master' });
-                    if (!!masterData) {
-                        this.selectedItem = masterData.node.name;
-                    } else {
-                        const mainData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'main' });
-                        if (!!mainData) {
-                            this.selectedItem = mainData.node.name;
+                debugger;
+                // for git lab..
+                if (!!selectRepo.repository && !!selectRepo.repository.rootRef) {
+                    this.selectedItem = selectRepo.repository.rootRef;
+                }
+                //for bit bucket..
+                if (!!selectRepo.mainBranch) {
+                    this.selectedItem = selectRepo.mainBranch;
+                } else {
+                    if (!!selectRepo.branches && selectRepo.branches.length >= 1) {
+                        const masterData = selectRepo.branches.find(f => { return f === 'master' });
+                        if (!!masterData) {
+                            this.selectedItem = masterData;
+                        } else {
+                            const mainData = selectRepo.branches.find(f => { return f == 'main' });
+                            if (!!mainData) {
+                                this.selectedItem = mainData;
+                            }
                         }
                     }
-
                 }
             }
         }
+        this.readyScanRepo.selectedItem = this.selectedItem;
     }
 
     onRowUnselect(event) {
@@ -252,6 +287,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
         this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
+        this.selectedItem = '';
+        this.selectedRepos = [];
+        this.readyScanRepo.selectedItem = this.selectedItem;
     }
 
 

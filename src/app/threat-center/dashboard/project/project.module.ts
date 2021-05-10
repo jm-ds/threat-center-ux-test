@@ -18,6 +18,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FixComponentResultDialogComponent } from './fix-component-result-dialog/fix-component-result-dialog.component';
 import { FixComponentDialogComponent } from './fix-component-dialog/fix-component-dialog.component';
+import { ProjectChartComponent } from './project-chart/project-chart.component';
 import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
@@ -54,7 +55,8 @@ import {MatChipsModule} from '@angular/material/chips';
     ScanAssetsComponent,
     ScanAssetDetailComponent,
     FixComponentResultDialogComponent,
-    FixComponentDialogComponent
+    FixComponentDialogComponent,
+    ProjectChartComponent
   ],
   entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent]
 })
