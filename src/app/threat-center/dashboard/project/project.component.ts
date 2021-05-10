@@ -480,16 +480,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  getAdditionData(data) {
-    if (!!data && data.length >= 1) {
-      return !!data[0] ? data[0] : 0;
-      // return data[0];
-      // return data.reduce((prev, next) => prev + (+next), 0);
-    } else {
-      return 0;
-    }
-  }
-
   //While any changes occurred in page
   changePage(pageInfo) {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
