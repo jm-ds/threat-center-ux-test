@@ -233,62 +233,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
   }
 
-  // //fired when changing License chart dropdown from donut chart
-  // changeLincesChartDropdown() {
-  //   // this.isShowStackedChart = false;
-  //   let activeTabVar: string = "";
-  //   // check active tab as well..
-  //   switch (this.lineChartActiveTab) {
-  //     case 'Month':
-  //       activeTabVar = 'monthSeriesOverTime';
-  //       break;
-  //     case 'Week':
-  //       activeTabVar = 'weekSeriesOverTime';
-  //       break;
-  //     case 'Quarter':
-  //       activeTabVar = 'quarterSeriesOverTime'
-  //       break;
-  //     case 'Year':
-  //       activeTabVar = 'yearSeriesOverTime';
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   if (this.selectedDonut === 'Licenses') {
-  //     this.weekSeriesOverTime['series'] = [];
-  //     this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
-  //   }
-  // }
-
-  // //fired when changing component chart dropdown from donut chart
-  // changeComponentChartDropdown() {
-  //   // this.isShowStackedChart = false;
-  //   let activeTabVar: string = "";
-  //   // check active tab as well..
-  //   switch (this.lineChartActiveTab) {
-  //     case 'Month':
-  //       activeTabVar = 'monthSeriesOverTime';
-  //       break;
-  //     case 'Week':
-  //       activeTabVar = 'weekSeriesOverTime';
-  //       break;
-  //     case 'Quarter':
-  //       activeTabVar = 'quarterSeriesOverTime'
-  //       break;
-  //     case 'Year':
-  //       activeTabVar = 'yearSeriesOverTime';
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   if (this.selectedDonut === 'Components') {
-  //     this.weekSeriesOverTime['series'] = [];
-  //     this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
-  //   }
-  // }
-
   onChangedropdown(event) {
-    debugger;
     if (event['dropdown'] === "License") {
       this.selectedlicenseChartDropValue = event.selectedValue;
     } else {

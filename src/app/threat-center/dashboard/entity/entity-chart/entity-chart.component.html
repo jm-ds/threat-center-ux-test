@@ -12,5 +12,16 @@
             </div>
         </div>
     </div>
-    <app-apex-chart [chartID]="chartId" [chartConfig]="chartConfig"></app-apex-chart>
+    <ng-container *ngIf="!supplyChainChart;else suppluChainchartBlock">
+        <app-apex-chart [chartID]="chartId" [chartConfig]="chartConfig"></app-apex-chart>
+    </ng-container>
+
+    <!-- supply chanin chart -->
+    <ng-template #suppluChainchartBlock>
+        <apx-chart [series]="supplyChainChart.series" [fill]="supplyChainChart.fill" [chart]="supplyChainChart.chart"
+            [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
+            [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
+            [responsive]="supplyChainChart.responsive"></apx-chart>
+    </ng-template>
+
 </app-card>

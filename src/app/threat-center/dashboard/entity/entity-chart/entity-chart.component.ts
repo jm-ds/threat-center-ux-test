@@ -16,6 +16,8 @@ export class EntityChartcomponent implements OnInit, AfterViewInit {
     @Input() dropdownValues = new Array();
     @Input() nameSelection: string = "";
     @Input() selecteddropdownValue: string = "";
+    @Input() supplyChainChart: any = null;
+    
     selectedValue: string = '';
     constructor() { }
     ngAfterViewInit(): void {
