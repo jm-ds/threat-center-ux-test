@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-          <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
+            <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
       </h3>
     </div>
     <div class="col-6" style="text-align: right;">
@@ -19,381 +19,189 @@
       </a>
     </div>
   </div>
-  <div class="row" style="padding:20px 0px 20px 0px" id="chart-bl">
-<!--
-    <div class="col-lg-2 col-xs-12 chart-lbl-blk">
-      <div class="chart-lbl-indi">
-        <label>Vulnerabilities</label>
-        <ul *ngIf="!!vulnerabilityChart.series && vulnerabilityChart.series.length >= 1">
-          <li *ngFor="let item of vulnerabilityChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-            (mouseleave)="item.hover=false">
-            {{getAdditionData(item.data)}}
-            <div *ngIf="item.hover" class="lgnd-tltp">
-              {{item.name}}
-            </div>
-          </li>
-        </ul>
-      </div>
 
-      <div class="chart-lbl-indi">
-        <label>Licenses</label>
-        <ul *ngIf="!!licenseChart.series && licenseChart.series.length >= 1">
-          <li *ngFor="let item of licenseChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-            (mouseleave)="item.hover=false">
-            {{getAdditionData(item.data)}}
-            <div *ngIf="item.hover" class="lgnd-tltp">
-              {{item.name}}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="chart-lbl-indi">
-        <label>Components</label>
-        <ul *ngIf="!!componentChart.series && componentChart.series.length >= 1">
-          <li *ngFor="let item of componentChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-            (mouseleave)="item.hover=false">
-            {{getAdditionData(item.data)}}
-            <div *ngIf="item.hover" class="lgnd-tltp">
-              {{item.name}}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="chart-lbl-indi">
-        <label>Assets</label>
-        <ul *ngIf="!!assetChart.series && assetChart.series.length >= 1">
-          <li *ngFor="let item of assetChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-            (mouseleave)="item.hover=false">
-            {{getAdditionData(item.data)}}
-            <div *ngIf="item.hover" class="lgnd-tltp">
-              {{item.name}}
-            </div>
-          </li>
-        </ul>
-      </div>
+  <div class="row chart-block-p">
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Vulnerabilities'" [chartArray]='vulnerabilityChart.series'
+        [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart"></project-chart>
+    </div>
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Licenses'" [chartArray]='licenseChart.series' [chartId]="'projectLicenseChart'"
+        [chartconfig]="licenseChart"></project-chart>
+    </div>
 
-      <div class="chart-lbl-indi">
-        <label>Source Code Leaks</label>
-        <ul *ngIf="!!sourceCodeLeakChart.series && sourceCodeLeakChart.series.length >= 1">
-          <li *ngFor="let item of sourceCodeLeakChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-            (mouseleave)="item.hover=false">
-            {{getAdditionData(item.data)}}
-            <div *ngIf="item.hover" class="lgnd-tltp">
-              {{item.name}}
-            </div>
-          </li>
-        </ul>
-      </div>
-
-    </div>-->
-
-
-
-        <div class="col-lg-3 col-md-3">
-          <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <!--<div>
-            <div style="margin-bottom:20px;float:left"><i class="fas fa-bug text-c-red f-15 p-r-5"></i>Vulnerabilities</div>
-            <div class="toolbar btn-group" style="float:right">
-              <button id="one_month" (click)="this.dailyVisitorEvent('1m')" class="btn btn-sm btn-outline-primary" [ngClass]="{'active': this.dailyVisitorStatus === '1m'}">1M</button>
-              <button id="six_months" (click)="this.dailyVisitorEvent('6m')" class="btn btn-sm btn-outline-primary" [ngClass]="{'active': this.dailyVisitorStatus === '6m'}">6M</button>
-              <button id="one_year" (click)="this.dailyVisitorEvent('1y')" class="btn btn-sm btn-outline-primary" [ngClass]="{'active': this.dailyVisitorStatus === '1y'}">1Y</button>
-              <button id="ytd" (click)="this.dailyVisitorEvent('ytd')" class="btn btn-sm btn-outline-primary" [ngClass]="{'active': this.dailyVisitorStatus === 'ytd'}">YTD</button>
-              <button id="all" (click)="this.dailyVisitorEvent('all')" class="btn btn-sm btn-outline-primary" [ngClass]="{'active': this.dailyVisitorStatus === 'all'}">ALL</button>
-            </div>
-          </div>
-          <div  style="clear:both"></div>
-          -->
-            <div style="margin-bottom:-15px;margin-top:-10px;">
-
-              <div class="chart-lbl-indi">
-
-                <div style="margin-bottom:10px" class="chart-lbl">
-                  <i class="fas fa-exclamation-triangle text-c-red f-15 m-r-5"></i>Vulnerabilities
-                </div>
-
-                  <div style="display: flex;">
-                    <div style="text-align: right;">
-                      <ul *ngIf="!!vulnerabilityChart.series && vulnerabilityChart.series.length >= 1">
-                        <li *ngFor="let item of vulnerabilityChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                            (mouseleave)="item.hover=false">
-                          {{getAdditionData(item.data)}}
-                          <div *ngIf="item.hover" class="lgnd-tltp">
-                            {{item.name}}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-
-
-
-                </div>
-              </div>
-            </div>
-
-
-            <app-apex-chart chartID="projectVulnerabilityChart" [className]="'chart-class'" [chartConfig]="this.vulnerabilityChart">
-            </app-apex-chart>
-          </app-card>
-        </div>
-
-        <div class="col-lg-3 col-md-3">
-          <app-card [hidHeader]="true" cardClass="proj-t-card">
-
-            <div style="margin-bottom:-15px;margin-top:-10px;">
-
-              <div class="chart-lbl-indi">
-
-                <div style="margin-bottom:10px" class="chart-lbl">
-                  <i class="fas fa-balance-scale text-c-red f-15 m-r-5"></i>Licenses
-                </div>
-
-                <div style="display: flex;">
-                  <div style="text-align: right;">
-                    <ul *ngIf="!!licenseChart.series && licenseChart.series.length >= 1">
-                      <li *ngFor="let item of licenseChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                          (mouseleave)="item.hover=false">
-                        {{getAdditionData(item.data)}}
-                        <div *ngIf="item.hover" class="lgnd-tltp">
-                          {{item.name}}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <app-apex-chart chartID="projectLicenseChart" [className]="'chart-class'" [chartConfig]="this.licenseChart"></app-apex-chart>
-          </app-card>
-        </div>
-
-
-        <div class="col-lg-3 col-md-3">
-
-          <app-card [hidHeader]="true" cardClass="proj-t-card">
-
-            <div style="margin-bottom:-15px;margin-top:-10px;">
-              <div class="chart-lbl-indi">
-
-                <div style="margin-bottom:10px"class="chart-lbl">
-                  <i class="fas fa-cubes text-c-red f-15 m-r-5"></i>Components
-                </div>
-
-                <div style="display: flex;">
-                  <div style="text-align: right;">
-                    <ul *ngIf="!!componentChart.series && componentChart.series.length >= 1">
-                      <li *ngFor="let item of componentChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                          (mouseleave)="item.hover=false">
-                        {{getAdditionData(item.data)}}
-                        <div *ngIf="item.hover" class="lgnd-tltp">
-                          {{item.name}}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <app-apex-chart chartID="projectComponentChart" [className]="'chart-class'" [chartConfig]="this.componentChart"></app-apex-chart>
-          </app-card>
-        </div>
-
-        <div class="col-lg-3 col-md-3">
-
-          <app-card [hidHeader]="true" cardClass="proj-t-card">
-            <div style="margin-bottom:-15px;margin-top:-10px;">
-              <div class="chart-lbl-indi">
-
-                <div style="margin-bottom:10px" class="chart-lbl">
-                  <i class="fas fa-code text-c-red f-15 m-r-5"></i>Asset Composition
-                </div>
-
-                <div style="display: flex;text-align: right;">
-                  <div>
-                    <ul *ngIf="!!assetChart.series && assetChart.series.length >= 1">
-                      <li *ngFor="let item of assetChart.series" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                          (mouseleave)="item.hover=false">
-                        {{getAdditionData(item.data)}}
-                        <div *ngIf="item.hover" class="lgnd-tltp">
-                          {{item.name}}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-
-            <app-apex-chart chartID="projectAssetChart" [className]="'chart-class'" [chartConfig]="this.assetChart"></app-apex-chart>
-          </app-card>
-        </div>
-
-
-
-
-
-
-
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
+        [chartId]="'projectComponentChart'" [chartconfig]="componentChart"></project-chart>
+    </div>
+    <div class="col-lg-3 col-md-3">
+      <project-chart [chartLabel]="'Asset Composition'" [chartArray]='assetChart.series' [chartId]="'projectAssetChart'"
+        [chartconfig]="assetChart"></project-chart>
+    </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
-      <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
+        <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
-        <!-- SCANS TAB -->
-        <ngb-tab id="scan">
-          <ng-template ngbTabTitle>Scans&nbsp;
-            <span class="badge badge-light">
-              {{projectDetails.scans?.totalCount}}
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
-            <div style="float:left;clear: both;">
-              <ng-template pTemplate="caption">
-                <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
-                  header
-                </div>
-                <div style="text-align: right;float:right;margin-bottom:10px;clear: both;">
-                  <input type="text" pInputText size="50" placeholder="Filter"
-                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:160px;display:inline"
-                    class="form-control">
-                </div>
-              </ng-template>
-            </div>
-
-            <perfect-scrollbar [style.max-height]="'650px'">
-              <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
-                tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
-                [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
-                (onRowSelect)="onRowSelect($event)">
-
+          <!-- SCANS TAB -->
+          <ngb-tab id="scan">
+            <ng-template ngbTabTitle>Scans&nbsp;
+              <span class="badge badge-light">
+                {{projectDetails.scans?.totalCount}}
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div style="float:left;clear: both;">
                 <ng-template pTemplate="caption">
-                  <div style="text-align: right">
-                    <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                    <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter"
-                      (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+                  <div style="text-align: left;float:left;width:50px;height:50px;margin-right:10px">
+                    header
+                  </div>
+                  <div style="text-align: right;float:right;margin-bottom:10px;clear: both;">
+                    <input type="text" pInputText size="50" placeholder="Filter"
+                      (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:160px;display:inline"
+                      class="form-control">
                   </div>
                 </ng-template>
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th>Version</th>
-                    <th>Branch</th>
-                    <th>Tag</th>
-                    <th>Created</th>
-                    <th>Vulnerabilities</th>
-                    <th>Licenses</th>
-                    <th>Supply Chain</th>
-                    <th title="Asset Composition">ASSETS</th>
-                    <th>Status</th>
-                    <!--<th>Policy Violations</th>-->
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-scan let-columns="columns">
-                  <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
-                    <td>{{scan.node?.version}}</td>
-                    <td>{{scan.node?.branch}}</td>
-                    <td>{{scan.node?.tag}}</td>
-                    <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
-                    <td>
-                      <span title="Critical"
-                        class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.critical}}</span>
-                      <span title="High"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.high}}</span>
-                      <span title="Medium"
-                        class="badge m-r-5 badge-light-success">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.medium}}</span>
-                      <span title="Low"
-                        class="badge m-r-5 badge-light-info">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.low}}</span>
-                      <span title="Info"
-                        class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.info}}</span>
-                    </td>
-                    <td>
-                      <span title="Copyleft Strong"
-                        class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
-                      <span title="Copyleft Weak"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
-                      <span title="Copyleft Partial"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
-                      <span title="Copyleft Limited"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
-                      <span title="Copyleft"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleft}}</span>
-                      <span title="Dual"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.dual}}</span>
-                      <span title="Custom"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.custom}}</span>
-                      <span title="Permissive"
-                        class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.licenseMetrics?.permissive}}</span>
-                    </td>
-                    <td>
-                      <span title="supply-chain"
-                        class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.risk}}</span>
-                      <span title="Risky Licenses"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.quality}}</span>
-                    </td>
-                    <td>
-                      <span title="Embedded"
-                        class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.assetMetrics?.embedded}}</span>
-                      <span title="Open Source"
-                        class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.assetMetrics?.openSource}}</span>
-                      <span title="Unique"
-                        class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.assetMetrics?.unique}}</span>
-                    </td>
-                    <td style="text-align: center">
-                      <span *ngIf="!!scan.node?.errorMsg;else successMsg">
-                        <button class="badge-light-danger error-btn" title="Show log and error messages" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
-                          <i class=" icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
-                        </button>
-                      </span>
-                      <ng-template #successMsg><span>
-                        <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log" class="btn badge-light-success error-btn" title="Show log" (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
-                          <i class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
-                        </button>
-                        <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log" class="feather icon-check badge-light-success" style="font-size: 14px; font-weight: 800;"></i>
-                      </span></ng-template>
-                    </td>
+              </div>
+              <perfect-scrollbar [style.max-height]="'650px'">
+                <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
+                  tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
+                  [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
+                  (onRowSelect)="onRowSelect($event)">
 
-                    <!--<th>Policy Violations</th -->
-                  </tr>
-                </ng-template>
-              </p-table>
+                  <ng-template pTemplate="caption">
+                    <div style="text-align: right">
+                      <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                      <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th>Version</th>
+                      <th>Branch</th>
+                      <th>Tag</th>
+                      <th>Created</th>
+                      <th>Vulnerabilities</th>
+                      <th>Licenses</th>
+                      <th>Supply Chain</th>
+                      <th title="Asset Composition">ASSETS</th>
+                      <th>Status</th>
+                      <!--<th>Policy Violations</th>-->
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-scan let-columns="columns">
+                    <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
+                      [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
+                      <td>{{scan.node?.version}}</td>
+                      <td>{{scan.node?.branch}}</td>
+                      <td>{{scan.node?.tag}}</td>
+                      <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
+                      <td>
+                        <span title="Critical"
+                          class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.critical}}</span>
+                        <span title="High"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.high}}</span>
+                        <span title="Medium"
+                          class="badge m-r-5 badge-light-success">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.medium}}</span>
+                        <span title="Low"
+                          class="badge m-r-5 badge-light-info">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.low}}</span>
+                        <span title="Info"
+                          class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.info}}</span>
+                      </td>
+                      <td>
+                        <span title="Copyleft Strong"
+                          class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
+                        <span title="Copyleft Weak"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
+                        <span title="Copyleft Partial"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
+                        <span title="Copyleft Limited"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
+                        <span title="Copyleft"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleft}}</span>
+                        <span title="Dual"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.dual}}</span>
+                        <span title="Custom"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.custom}}</span>
+                        <span title="Permissive"
+                          class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.licenseMetrics?.permissive}}</span>
+                      </td>
+                      <td>
+                        <span title="supply-chain"
+                          class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.risk}}</span>
+                        <span title="Risky Licenses"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.quality}}</span>
+                      </td>
+                      <td>
+                        <span title="Embedded"
+                          class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.assetMetrics?.embedded}}</span>
+                        <span title="Open Source"
+                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.assetMetrics?.openSource}}</span>
+                        <span title="Unique"
+                          class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.assetMetrics?.unique}}</span>
+                      </td>
+                      <td style="text-align: center">
+                        <span *ngIf="!!scan.node?.errorMsg;else successMsg">
+                          <button class="badge-light-danger error-btn" title="Show log and error messages"
+                            (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                            <i class=" icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
+                          </button>
+                        </span>
+                        <ng-template #successMsg><span>
+                            <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
+                              class="btn badge-light-success error-btn" title="Show log"
+                              (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                              <i class="feather icon-check badge-light-success"
+                                style="font-size: 14px; font-weight: 800;"></i>
+                            </button>
+                            <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log"
+                              class="feather icon-check badge-light-success"
+                              style="font-size: 14px; font-weight: 800;"></i>
+                          </span></ng-template>
+                      </td>
 
-            </perfect-scrollbar>
-            <div class="col-sm-12">
-              <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount"
-                [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
-              </mat-paginator>
-            </div>
-          </ng-template>
-        </ngb-tab>
+                      <!--<th>Policy Violations</th -->
+                    </tr>
+                  </ng-template>
+                </p-table>
 
-        <!-- VULNERABILITIES TAB -->
-        <ngb-tab id="vulnerabilities">
-          <ng-template ngbTabTitle>Vulnerabilities&nbsp;
-            <span class="badge badge-light">
-              {{vulnerabilityCount}}
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
-            <app-vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
-            </app-vulnerabilities>
-          </ng-template>
-        </ngb-tab>
+              </perfect-scrollbar>
+              <div class="col-sm-12">
+                <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount"
+                  [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+                </mat-paginator>
+              </div>
+            </ng-template>
+          </ngb-tab>
 
-        <!-- COMPONENTS TAB -->
-        <ngb-tab id="components">
-          <ng-template ngbTabTitle>Components&nbsp;
-            <span class="badge badge-light">
-              {{componentCount}}
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
+          <!-- VULNERABILITIES TAB -->
+          <ngb-tab id="vulnerabilities">
+            <ng-template ngbTabTitle>Vulnerabilities&nbsp;
+              <span class="badge badge-light">
+                {{vulnerabilityCount}}
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <app-vulnerabilities [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
+              </app-vulnerabilities>
+            </ng-template>
+          </ngb-tab>
 
-            <app-components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData"></app-components>
-            <!--
+          <!-- COMPONENTS TAB -->
+          <ngb-tab id="components">
+            <ng-template ngbTabTitle>Components&nbsp;
+              <span class="badge badge-light">
+                {{componentCount}}
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+
+              <app-components [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="componentScanData">
+              </app-components>
+              <!--
               NEED COMPONENT AGE METRIC!!
               vulns in component,
               ip license risks
@@ -414,140 +222,125 @@
               -->
 
 
-          </ng-template>
-        </ngb-tab>
-        <!--
-          <ngb-tab id="fancy">
-            <ng-template ngbTabTitle><span class="badge m-r-5 badge-light">6</span>Fancy</ng-template>
-            <ng-template ngbTabContent>My Content</ng-template>
+            </ng-template>
           </ngb-tab>
-          -->
 
-        <!-- LICENSES TAB -->
-        <ngb-tab id="licenses">
-          <ng-template ngbTabTitle>Licenses&nbsp;
-            <span class="badge badge-light">
-              {{licensesCount}}
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
-            <app-licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"></app-licenses>
-          </ng-template>
-        </ngb-tab>
+          <!-- LICENSES TAB -->
+          <ngb-tab id="licenses">
+            <ng-template ngbTabTitle>Licenses&nbsp;
+              <span class="badge badge-light">
+                {{licensesCount}}
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <app-licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData">
+              </app-licenses>
+            </ng-template>
+          </ngb-tab>
 
-        <!-- COPYRIGHTS TAB -->
-        <ngb-tab id="copyrights">
-          <ng-template ngbTabTitle>Copyrights&nbsp;
-            <span class="badge badge-light">
-              9
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
-            <div class="row m-t-20">
-              <div class="col-sm-12">
+          <!-- COPYRIGHTS TAB -->
+          <ngb-tab id="copyrights">
+            <ng-template ngbTabTitle>Copyrights&nbsp;
+              <span class="badge badge-light">
+                9
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="row m-t-20">
+                <div class="col-sm-12">
 
-                <div class="table-responsive">
-                  <perfect-scrollbar>
-                    <table class="table table-hover m-b-0">
-                      <thead>
-                        <tr>
-                          <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">TEXT</th>
-                          <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">
-                            START YEAR</th>
-                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">END YEAR</th>
-                          <th style="border-bottom:1px solid #4680ff;font-weight:bold">COUNT</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                  <div class="table-responsive">
+                    <perfect-scrollbar>
+                      <table class="table table-hover m-b-0">
+                        <thead>
+                          <tr>
+                            <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">TEXT</th>
+                            <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">
+                              START YEAR</th>
+                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">END YEAR</th>
+                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">COUNT</th>
+                          </tr>
+                        </thead>
+                        <tbody>
 
-                        <tr>
-                          <td>Copyright 2009, Broadcom Corporation</td>
-                          <td style="border-left:1px solid #4680ff">2009</td>
-                          <td>present</td>
-                          <td>15</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright 2006, 2007, Michael Buesch &lt;mb@bu3sch.de&gt;</td>
-                          <td style="border-left:1px solid #4680ff">2006</td>
-                          <td>present</td>
-                          <td>5</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright 2010, Bernhard Loos &lt;bernhardloos@googlemail.com&gt;</td>
-                          <td style="border-left:1px solid #4680ff">2010</td>
-                          <td>present</td>
-                          <td>1</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright 2011, Hauke Mehrtens &lt;hauke@hauke-m.de&gt;</td>
-                          <td style="border-left:1px solid #4680ff">2011</td>
-                          <td>present</td>
-                          <td>1</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright (c) 2015, Intel Corporation.</td>
-                          <td style="border-left:1px solid #4680ff">2015</td>
-                          <td>present</td>
-                          <td>112</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright (c) 2016 Christoph Hellwig.</td>
-                          <td style="border-left:1px solid #4680ff">2015</td>
-                          <td>present</td>
-                          <td>43</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright (C) 2016 Jens Axboe</td>
-                          <td style="border-left:1px solid #4680ff">2016</td>
-                          <td>present</td>
-                          <td>15</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright (c) 2015, Hannes Reinecke</td>
-                          <td style="border-left:1px solid #4680ff">2015</td>
-                          <td>present</td>
-                          <td>37</td>
-                        </tr>
-                        <tr>
-                          <td>Copyright (c) 2016, Damien Le Moal</td>
-                          <td style="border-left:1px solid #4680ff">2016</td>
-                          <td>present</td>
-                          <td>2</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </perfect-scrollbar>
+                          <tr>
+                            <td>Copyright 2009, Broadcom Corporation</td>
+                            <td style="border-left:1px solid #4680ff">2009</td>
+                            <td>present</td>
+                            <td>15</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright 2006, 2007, Michael Buesch &lt;mb@bu3sch.de&gt;</td>
+                            <td style="border-left:1px solid #4680ff">2006</td>
+                            <td>present</td>
+                            <td>5</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright 2010, Bernhard Loos &lt;bernhardloos@googlemail.com&gt;</td>
+                            <td style="border-left:1px solid #4680ff">2010</td>
+                            <td>present</td>
+                            <td>1</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright 2011, Hauke Mehrtens &lt;hauke@hauke-m.de&gt;</td>
+                            <td style="border-left:1px solid #4680ff">2011</td>
+                            <td>present</td>
+                            <td>1</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright (c) 2015, Intel Corporation.</td>
+                            <td style="border-left:1px solid #4680ff">2015</td>
+                            <td>present</td>
+                            <td>112</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright (c) 2016 Christoph Hellwig.</td>
+                            <td style="border-left:1px solid #4680ff">2015</td>
+                            <td>present</td>
+                            <td>43</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright (C) 2016 Jens Axboe</td>
+                            <td style="border-left:1px solid #4680ff">2016</td>
+                            <td>present</td>
+                            <td>15</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright (c) 2015, Hannes Reinecke</td>
+                            <td style="border-left:1px solid #4680ff">2015</td>
+                            <td>present</td>
+                            <td>37</td>
+                          </tr>
+                          <tr>
+                            <td>Copyright (c) 2016, Damien Le Moal</td>
+                            <td style="border-left:1px solid #4680ff">2016</td>
+                            <td>present</td>
+                            <td>2</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </perfect-scrollbar>
+                  </div>
+
                 </div>
-
               </div>
-            </div>
-          </ng-template>
-        </ngb-tab>
+            </ng-template>
+          </ngb-tab>
 
-        <!-- ASSETS TAB -->
-        <ngb-tab id="assets">
-          <ng-template ngbTabTitle>Assets&nbsp;
-            <span class="badge badge-light" ngbTooltip="{{assetCountTooltip}}">
-              {{assetCount}}
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent>
-            <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData" (isAssetStory)="getStory($event)"></app-scanassets>
-            <p></p>
-          </ng-template>
-        </ngb-tab>
-
-        <!-- SOURCE CODE ASSETS
-        <ngb-tab id="leakedassets">
-          <ng-template ngbTabTitle>Leaked Assets&nbsp;
-            <span class="badge badge-light">
-              0
-            </span>
-          </ng-template>
-          <ng-template ngbTabContent></ng-template>
-        </ngb-tab>-->
-
-      </ngb-tabset>
+          <!-- ASSETS TAB -->
+          <ngb-tab id="assets">
+            <ng-template ngbTabTitle>Assets&nbsp;
+              <span class="badge badge-light" ngbTooltip="{{assetCountTooltip}}">
+                {{assetCount}}
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
+                (isAssetStory)="getStory($event)"></app-scanassets>
+              <p></p>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
       </app-card>
     </div>
   </div>
@@ -563,12 +356,13 @@
             ERRORS
           </ng-template>
           <ng-template ngbTabContent>
-            <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+            <perfect-scrollbar [style.max-height]="'500px'"
+              [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <div style="display: inline-block; margin-top: 10px;">
                 <pre style="text-align: left">{{errorMsg}}</pre>
-              </div>  
-            </perfect-scrollbar>  
-          </ng-template>  
+              </div>
+            </perfect-scrollbar>
+          </ng-template>
         </ngb-tab>
         <!-- LOGS TAB -->
         <ngb-tab id="scanLogs" *ngIf="!!log">
@@ -576,14 +370,15 @@
             LOG
           </ng-template>
           <ng-template ngbTabContent>
-            <perfect-scrollbar [style.max-height]="'500px'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+            <perfect-scrollbar [style.max-height]="'500px'"
+              [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <div style="display: inline-block; margin-top: 10px;">
                 <pre style="text-align: left">{{log}}</pre>
-              </div>  
-            </perfect-scrollbar>  
-          </ng-template>  
+              </div>
+            </perfect-scrollbar>
+          </ng-template>
         </ngb-tab>
-      </ngb-tabset>    
+      </ngb-tabset>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>

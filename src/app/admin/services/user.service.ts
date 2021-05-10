@@ -41,7 +41,7 @@ export class UserService {
                       }
                     }
                 }
-            }`);
+            }`,'no-cache');
     }
 
     getUser(username: string) {

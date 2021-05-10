@@ -8,7 +8,7 @@ import { ApexChartService } from './apex-chart.service';
   styleUrls: ['./apex-chart.component.scss']
 })
 export class ApexChartComponent implements OnInit {
-  @Input() chartID: string;
+  @Input() chartID: string = "";
   @Input() chartConfig: any;
   @Input() xAxis: any;
   @Input() newData: any;
