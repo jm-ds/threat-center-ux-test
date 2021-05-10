@@ -344,6 +344,12 @@ export class ConditionBuilderComponent implements OnInit {
             if (conditionMetadata.dataType == 'STR' && conditionMetadata.inputType == 'CMB') {
                 newCondition.strValue = conditionMetadata.values[0].code;
             }
+            if (conditionMetadata.dataType == 'DCM' && conditionMetadata.inputType == 'CMB') {
+                newCondition.decimalValue = parseInt(conditionMetadata.values[0].code);
+            }
+            if (conditionMetadata.dataType == 'SVR' && conditionMetadata.inputType == 'CMB') {
+                newCondition.severityValue = conditionMetadata.values[0].code;
+            }
             if (!group.conditions) {
                 group.conditions=[];
             } else if (group.conditions.length > 0) {
@@ -352,6 +358,35 @@ export class ConditionBuilderComponent implements OnInit {
             group.conditions.push(newCondition);
         }
     }
+
+    // move condition down
+    moveDown(group: PolicyConditionGroup, condition: PolicyCondition) {
+        const index = group.conditions.indexOf(condition);
+        if (index > -1 && index < (group.conditions.length-1)) {
+            let elem = group.conditions[index];
+            if (index+1 === group.conditions.length-1) {
+                group.conditions[index+1].logicalOperator = elem.logicalOperator;
+                elem.logicalOperator = undefined;
+            }
+            group.conditions.splice(index, 1, group.conditions[index+1]);
+            group.conditions.splice(index+1, 1, elem);
+        }
+    }
+
+    // move condition up
+    moveUp(group: PolicyConditionGroup, condition: PolicyCondition) {
+        const index = group.conditions.indexOf(condition);
+        if (index > 0 && index < (group.conditions.length)) {
+            let elem = group.conditions[index];
+            if (index === group.conditions.length-1) {
+                elem.logicalOperator = group.conditions[index-1].logicalOperator;
+                group.conditions[index-1].logicalOperator = undefined;
+            }
+            group.conditions.splice(index, 1, group.conditions[index-1]);
+            group.conditions.splice(index-1, 1, elem);
+        }
+    }
+
 
     // change value handler
     onChangeValue(newValue: any, condition: PolicyCondition) {
@@ -423,6 +458,12 @@ export class ConditionBuilderComponent implements OnInit {
                 }
                 if (conditionMetadata.dataType == 'STR' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
                     condition.strValue = conditionMetadata.values[0].code;
+                }
+                if (conditionMetadata.dataType == 'SVR' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.severityValue = conditionMetadata.values[0].code;
+                }
+                if (conditionMetadata.dataType == 'DCM' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.decimalValue = parseInt(conditionMetadata.values[0].code);
                 }
     
             }
@@ -502,6 +543,24 @@ export class ConditionBuilderComponent implements OnInit {
         return this.policy.conditions.groups[0] && this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length>0 && 
             this.policy.conditions.groups[0].conditions[0] === condition;
     }
+
+    // if this is a last condition
+    isLastCondition(group: PolicyConditionGroup, condition: PolicyCondition) {
+        if (!group.conditions) {
+            return false;
+        }
+        const index = group.conditions.indexOf(condition);
+        return index === group.conditions.length-1;
+    }    
+
+    // if this is a first condition
+    isFirstCondition(group: PolicyConditionGroup, condition: PolicyCondition) {
+        if (!group.conditions) {
+            return false;
+        }
+        const index = group.conditions.indexOf(condition);
+        return index === 0;
+    }    
 }
 
 class CodeNamePair {

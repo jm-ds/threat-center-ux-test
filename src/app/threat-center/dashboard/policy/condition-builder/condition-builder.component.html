@@ -43,9 +43,17 @@
           </div>
 
           <div class="col-sm-1">
-            <button *ngIf="!readonly && ! isLastMainCondition(condition)" type="button" class="btn btn-icon float-right" title="Remove condition" (click)="this.removeCondition(parentGroup.groups[0], condition)" 
-            style="color: #c9d0d5;">
+            <button *ngIf="!readonly" [disabled]="isFirstCondition(parentGroup.groups[0], condition)" type="button" class="btn btn-icon float-right" title="Remove condition" (click)="this.removeCondition(parentGroup.groups[0], condition)" 
+            style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
               <i class="feather icon-x" style="font-size: 12px; font-weight: 800;"></i>
+            </button>
+            <button *ngIf="!readonly" [disabled]="isLastCondition(parentGroup.groups[0], condition)" type="button" class="btn btn-icon float-right" title="Move down" (click)="this.moveDown(parentGroup.groups[0], condition)" 
+            style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
+              <i class="feather icon-chevron-down" style="font-size: 12px; font-weight: 800;"></i>
+            </button>
+            <button *ngIf="!readonly" [disabled]="isFirstCondition(parentGroup.groups[0], condition)" type="button" class="btn btn-icon float-right" title="Move up" (click)="this.moveUp(parentGroup.groups[0], condition)" 
+            style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
+              <i class="feather icon-chevron-up" style="font-size: 12px; font-weight: 800;"></i>
             </button>
           </div>  
         </div>  
@@ -137,10 +145,18 @@
     
               <div class="col-sm-1">
                 <button *ngIf="!readonly" type="button" class="btn btn-icon float-right" title="Remove condition" (click)="this.removeCondition(parentGroup.groups[1], condition)" 
-                style="color: #c9d0d5;">
+                style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
                   <i class="feather icon-x" style="font-size: 12px; font-weight: 800;"></i>
                 </button>
-                </div>  
+                <button *ngIf="!readonly" [disabled]="isLastCondition(parentGroup.groups[1], condition)" type="button" class="btn btn-icon float-right" title="Move down" (click)="this.moveDown(parentGroup.groups[1], condition)" 
+                style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
+                  <i class="feather icon-chevron-down" style="font-size: 12px; font-weight: 800;"></i>
+                </button>
+                <button *ngIf="!readonly" [disabled]="isFirstCondition(parentGroup.groups[1], condition)" type="button" class="btn btn-icon float-right" title="Move up" (click)="this.moveUp(parentGroup.groups[1], condition)" 
+                style="color: #c9d0d5; padding-left: 8px; padding-right: 8px;">
+                  <i class="feather icon-chevron-up" style="font-size: 12px; font-weight: 800;"></i>
+                </button>
+              </div>  
             </div>  
             <div class="row ml-4">
               <div class="col-sm-1">
