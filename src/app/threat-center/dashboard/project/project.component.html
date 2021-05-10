@@ -23,20 +23,20 @@
   <div class="row chart-block-p">
     <div class="col-lg-3 col-md-3">
       <project-chart [chartLabel]="'Vulnerabilities'" [chartArray]='vulnerabilityChart.series'
-        [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart"></project-chart>
+        [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart" [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'"></project-chart>
     </div>
     <div class="col-lg-3 col-md-3">
       <project-chart [chartLabel]="'Licenses'" [chartArray]='licenseChart.series' [chartId]="'projectLicenseChart'"
-        [chartconfig]="licenseChart"></project-chart>
+        [chartconfig]="licenseChart" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"></project-chart>
     </div>
 
     <div class="col-lg-3 col-md-3">
       <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
-        [chartId]="'projectComponentChart'" [chartconfig]="componentChart"></project-chart>
+        [chartId]="'projectComponentChart'" [chartconfig]="componentChart" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"></project-chart>
     </div>
     <div class="col-lg-3 col-md-3">
       <project-chart [chartLabel]="'Asset Composition'" [chartArray]='assetChart.series' [chartId]="'projectAssetChart'"
-        [chartconfig]="assetChart"></project-chart>
+        [chartconfig]="assetChart" [iconClass]="'fas fa-code text-c-red f-15 m-r-5'"></project-chart>
     </div>
   </div>
 
