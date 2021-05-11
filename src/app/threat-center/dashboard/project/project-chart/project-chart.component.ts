@@ -12,6 +12,7 @@ export class ProjectChartComponent implements OnInit {
     @Input() chartArray = new Array();
     @Input() chartId: string = '';
     @Input() chartconfig: any;
+    @Input() iconClass:string = '';
 
     constructor() { }
     ngOnInit(): void {

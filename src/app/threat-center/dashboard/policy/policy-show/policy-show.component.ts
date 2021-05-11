@@ -16,9 +16,22 @@ export class PolicyShowComponent implements OnInit {
     entityId: string;
     projectId: string
     conditionTypes: any;
+    activeTabIdString: string = "policyGeneralInfo";
 
 
     public actionCols = ['ActionType','ActionName'];
+    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Issue', value: 'ISSUE'},{label: 'Gate Release', value: 'RELEASE'},
+       {label: 'Attribute Source', value: 'ATTRIBUTION'}, {label: 'Upgrade library version', value: 'UPGRADE_VERSION'}];
+    public actionNames = {
+        'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'},{label: 'Dashboard', value:'DASHBOARD'}],
+        'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
+        'RELEASE': [{label: 'No', value:'NO'},{label: 'Release', value:'PROD'}],
+        'ATTRIBUTION': [{label: 'Attribute Source', value:'ATTRIBUTION'}],
+        'UPGRADE_VERSION': [{label: 'Latest Secured Version', value:'LAST_VERSION'},{label: 'Next Secured Version', value:'NEXT_VERSION'}]
+    };
+    public actionTypeMap={};
+    public actionNameMap={};
+
 
 
     constructor(
@@ -39,7 +52,7 @@ export class PolicyShowComponent implements OnInit {
             data => {
                 this.policy = data.data.policy;
                 if (this.policy) {
-                    this.prepareConditionsAfterFetch(data.data.policy.rootGroup);
+                    this.prepareConditionsAfterFetch(data.data.policy.conditions, this.policy);
                 } else {
                     this.policy = undefined;
                     console.error("PolicyShowComponent", "Policy not found");
@@ -50,24 +63,42 @@ export class PolicyShowComponent implements OnInit {
                 console.error("PolicyShowComponent", error);
             }
         );
+        this.fillActionMaps();
     }
 
-    prepareConditionsAfterFetch(group: PolicyConditionGroup) {
+    fillActionMaps() {
+        this.actionTypes.forEach(obj => {
+            this.actionTypeMap[obj.value] = obj.label;
+        });
+        for (const tp in this.actionNames) {
+            this.actionNameMap[tp] = {};
+            this.actionNames[tp].forEach(obj => {
+                this.actionNameMap[tp][obj.value] = obj.label;
+            });
+    
+        }
+    }
+
+    prepareConditionsAfterFetch(group: PolicyConditionGroup, policy: Policy) {
         if (!group) {
             return;
         }
         if (group.conditions) {
             for (const condition of group.conditions) {
-                if (condition.conditionType==='WORKFLOW') {
-                    if (condition.workflowReleasePhase && !(condition.workflowReleasePhase instanceof Array)) {
-                        condition.workflowReleasePhase=condition.workflowReleasePhase.split(",");
-                    }
+                if (condition.conditionType==='RELEASE_STAGE') {
+                    condition.arrayValue = !!condition.strValue ? condition.strValue.split(","): [];
                 }
+            }
+            if (group.groups && group.groups.length>0) {
+                for (const condition of group.groups[0].conditions) {
+                    condition.conditionType = policy.conditionType;
+                }
+    
             }
         }
         if (group.groups) {
             for (const grp of group.groups) {
-                this.prepareConditionsAfterFetch(grp);
+                this.prepareConditionsAfterFetch(grp, policy);
             }
         }
     }
@@ -75,6 +106,7 @@ export class PolicyShowComponent implements OnInit {
 
     removePolicy() {
         if (confirm("Are you sure you want to delete the policy?")) {
+            this.preparePolicyBeforeSend(this.policy.conditions);
             this.policyService.removePolicy(this.policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -83,15 +115,40 @@ export class PolicyShowComponent implements OnInit {
                     this.router.navigate([link],
                         {state: {messages: [Message.success("Policy removed successfully.")]}});
                 }, (error) => {
-                    console.error('Policy Removing', error);
                     const link = '/dashboard/policy/show/'+ this.policy.policyId+
                         ((!!this.entityId)? ('/'+this.entityId):'')+
                         ((!!this.projectId)? ('/'+this.projectId):'');
-                    this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy.")]}});
+                let msg = '';
+                if (error.message) {
+                    const msgs = error.message.split(":");
+                    if (msgs.length>0) {
+                        msg = msgs[msgs.length-1];
+                    }
+                }
+                this.router.navigate([link],
+                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy. "+msg)]}});
                 });
         }
     }
+
+    preparePolicyBeforeSend(group: PolicyConditionGroup) {
+        if (!group) {
+            return;
+        }
+        if (group.conditions) {
+            for (const condition of group.conditions) {
+                if (condition.conditionType==='RELEASE_STAGE') {
+                    condition.arrayValue = undefined;
+                }
+            }
+        }
+        if (group.groups) {
+            for (const grp of group.groups) {
+                this.preparePolicyBeforeSend(grp);
+            }
+        }
+    }
+    
 
     // enable/disable policy
     enablePolicy() {
@@ -102,6 +159,7 @@ export class PolicyShowComponent implements OnInit {
         if (confirm(confirmText)) {
             let policy = Object.assign({}, this.policy);
             policy.active=!policy.active;
+            this.preparePolicyBeforeSend(this.policy.conditions);
             this.policyService.enablePolicy(policy)
                 .subscribe(({data}) => {
                     const link = '/dashboard/policy/list'+
@@ -114,10 +172,20 @@ export class PolicyShowComponent implements OnInit {
                     const link = '/dashboard/policy/show/'+ this.policy.policyId+
                         ((!!this.entityId)? ('/'+this.entityId):'')+
                         ((!!this.projectId)? ('/'+this.projectId):'');
+                    let msg = '';
+                    if (error.message) {
+                        const msgs = error.message.split(":");
+                        if (msgs.length>0) {
+                            msg = msgs[msgs.length-1];
+                        }
+                    }
                     this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state.")]}});
+                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state. "+msg)]}});
                 });
         }
     }
 
+    gotoTab(tabId: string) {
+        this.activeTabIdString = tabId;
+    }
 }

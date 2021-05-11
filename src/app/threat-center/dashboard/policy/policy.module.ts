@@ -16,6 +16,8 @@ import {CardModule} from "@app/theme/shared/components";
 import {TableModule} from 'primeng/table';
 import { PolicyEditComponent } from './policy-edit/policy-edit.component';
 import {DropdownModule} from 'primeng/dropdown';
+import {MatChipsModule} from '@angular/material/chips';
+import { TreeTableModule } from 'primeng/treetable';
 
 
 
@@ -35,7 +37,9 @@ import {DropdownModule} from 'primeng/dropdown';
         NgbTabsetModule,
         ThemeSharedModule,
         TableModule,
-        DropdownModule
+        DropdownModule,
+        MatChipsModule,
+        TreeTableModule
     ]
 })
 export class PolicyModule { }
