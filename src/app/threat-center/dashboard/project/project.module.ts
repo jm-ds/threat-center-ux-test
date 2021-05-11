@@ -19,6 +19,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { FixComponentResultDialogComponent } from './fix-component-result-dialog/fix-component-result-dialog.component';
 import { FixComponentDialogComponent } from './fix-component-dialog/fix-component-dialog.component';
 import { ProjectChartComponent } from './project-chart/project-chart.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { ProjectChartComponent } from './project-chart/project-chart.component';
     MarkdownModule,
     NgxSpinnerModule,
     MatPaginatorModule,
-    NgbModule
+    NgbModule,
+    MatChipsModule
   ],
   declarations: [
     ProjectComponent,
