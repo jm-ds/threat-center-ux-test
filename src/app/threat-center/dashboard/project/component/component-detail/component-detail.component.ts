@@ -35,7 +35,7 @@ export class ComponentDetailComponent implements OnInit {
   sourceLoading: boolean;
   sourceReleases: VulnerableRelease[] = [];
   sourceRepositoryType: string;
-  sourcePurlType: string;
+  sourcePurlType: string = "";
   sourceGroup: string;
   sourceName: string;
   sourceNextPagingState: string;

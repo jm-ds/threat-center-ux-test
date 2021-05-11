@@ -298,6 +298,7 @@ export class PolicyEditComponent implements OnInit {
                     mainGroup.groupOperator = "AND";
                     this.policy.conditions.groups[0] = mainGroup;
                 }
+                this.conditionType = { "code": this.policy.conditionType, "name": this.policyService.getConditionTypes()[this.policy.conditionType]};
             }
         }
     }
