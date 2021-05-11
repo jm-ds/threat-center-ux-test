@@ -37,6 +37,7 @@ export class ApiService {
           projectId
           name
           created
+          tags
           latestScan {
             scanId
             projectId
@@ -126,7 +127,7 @@ export class ApiService {
               projectId
               name
               created
-              
+              tags
               projectMetricsSummary {
                 measureDateTime
                 vulnerabilityMetrics {
