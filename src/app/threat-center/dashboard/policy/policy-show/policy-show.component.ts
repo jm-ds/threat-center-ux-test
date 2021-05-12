@@ -17,6 +17,7 @@ export class PolicyShowComponent implements OnInit {
     projectId: string
     conditionTypes: any;
     activeTabIdString: string = "policyGeneralInfo";
+    conditionTypeTitle: string;
 
 
     public actionCols = ['ActionType','ActionName'];
@@ -53,8 +54,10 @@ export class PolicyShowComponent implements OnInit {
                 this.policy = data.data.policy;
                 if (this.policy) {
                     this.prepareConditionsAfterFetch(data.data.policy.conditions, this.policy);
+                    this.conditionTypeTitle = this.policyService.getConditionTypes()[this.policy.conditionType];
                 } else {
                     this.policy = undefined;
+                    this.conditionTypeTitle = undefined;
                     console.error("PolicyShowComponent", "Policy not found");
                 }
             },

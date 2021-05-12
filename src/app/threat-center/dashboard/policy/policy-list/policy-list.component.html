@@ -25,7 +25,6 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th>Name</th>
-            <th>Title</th>
             <th>Type</th>
             <th>Active</th>
             <th>Description</th>
@@ -37,12 +36,15 @@
             <td style="padding: 0.75rem;">
               <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
               {{rowData.name}}</td>
-            <td style="padding: 0.75rem;">{{rowData.title}}</td>
             <td style="padding: 0.75rem;">{{conditionTypes[rowData.conditionType]}}</td>
             <td style="padding: 0.75rem;">
                 <ng-template [ngIf]="rowData.active == true">
                   <span title="Info" class=" badge m-r-5 badge-light-success" >Active</span>
                 </ng-template>
+                <ng-template [ngIf]="rowData.active != true && !!rowData.policyId">
+                  <span title="Info" class=" badge m-r-5 badge-light-danger" >Disabled</span>
+                </ng-template>
+            </td>    
             <td style="padding: 0.75rem;">{{rowData.description}}</td>
         </tr>
       </ng-template>

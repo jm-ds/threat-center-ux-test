@@ -35,7 +35,7 @@ export class ComponentDetailComponent implements OnInit {
   sourceLoading: boolean;
   sourceReleases: VulnerableRelease[] = [];
   sourceRepositoryType: string;
-  sourcePurlType: string;
+  sourcePurlType: string = "";
   sourceGroup: string;
   sourceName: string;
   sourceNextPagingState: string;
@@ -77,20 +77,24 @@ export class ComponentDetailComponent implements OnInit {
     this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
 
       this.binaryLoading = true;
-      this.binaryReleases = data.binaryVulnerableResponse.vulnerableReleases;
-      this.binaryRepositoryType = data.binaryVulnerableResponse.repositoryType;
-      this.binaryPurlType = data.binaryVulnerableResponse.purlType;
-      this.binaryGroup = data.binaryVulnerableResponse.group;
-      this.binaryName = data.binaryVulnerableResponse.name;
-      this.binaryNextPagingState = data.binaryVulnerableResponse.nextPagingState;
+      if (data.binaryVulnerableResponse !== undefined) {
+        this.binaryReleases = data.binaryVulnerableResponse.vulnerableReleases;
+        this.binaryRepositoryType = data.binaryVulnerableResponse.repositoryType;
+        this.binaryPurlType = data.binaryVulnerableResponse.purlType;
+        this.binaryGroup = data.binaryVulnerableResponse.group;
+        this.binaryName = data.binaryVulnerableResponse.name;
+        this.binaryNextPagingState = data.binaryVulnerableResponse.nextPagingState;
+      }
 
-      this.sourceLoading = true;
-      this.sourceReleases = data.sourceVulnerableResponse.vulnerableReleases;
-      this.sourceRepositoryType = data.sourceVulnerableResponse.repositoryType;
-      this.sourcePurlType = data.sourceVulnerableResponse.purlType;
-      this.sourceGroup = data.sourceVulnerableResponse.group;
-      this.sourceName = data.sourceVulnerableResponse.name;
-      this.sourceNextPagingState = data.sourceVulnerableResponse.nextPagingState;
+      if (data.sourceVulnerableResponse !== undefined) {
+        this.sourceLoading = true;
+        this.sourceReleases = data.sourceVulnerableResponse.vulnerableReleases;
+        this.sourceRepositoryType = data.sourceVulnerableResponse.repositoryType;
+        this.sourcePurlType = data.sourceVulnerableResponse.purlType;
+        this.sourceGroup = data.sourceVulnerableResponse.group;
+        this.sourceName = data.sourceVulnerableResponse.name;
+        this.sourceNextPagingState = data.sourceVulnerableResponse.nextPagingState;
+      }
 
       console.log('>>>>> binaryReleases length = ' + this.binaryReleases.length);
       console.log('>>>>> sourceReleases length = ' + this.sourceReleases.length);
