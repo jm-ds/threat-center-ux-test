@@ -447,7 +447,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-
+          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+            entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
+          }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
           this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
 
