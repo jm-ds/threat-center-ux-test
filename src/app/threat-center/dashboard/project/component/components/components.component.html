@@ -78,7 +78,7 @@
               </td>
               <td>
                 <div *ngFor="let vulnerabilityEdge of component.node.vulnerabilities.edges">
-                    <span>{{component.node.vulnerabilities.edges[0]?.node.vulnId}}:{{component.node.vulnerabilities.edges[0]?.node.severity}}</span>
+                    <span>{{vulnerabilityEdge.node.vulnId}}</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'CRITICAL'"  title="Critical" class="badge m-l-5 badge-light-danger">CRITICAL</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'HIGH'"  title="Critical" class="badge m-l-5 badge-light-danger">HIGH</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'MEDIUM'"  title="Critical" class="badge m-l-5 badge-light-warning">MEDIUM</span>

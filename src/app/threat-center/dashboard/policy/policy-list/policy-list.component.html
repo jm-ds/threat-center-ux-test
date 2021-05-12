@@ -3,8 +3,8 @@
 <app-messages [messages]="messages"></app-messages>
 
 <!--<perfect-scrollbar [style.max-height]="'500px'">-->
-    <p-table #dt [value]="policies?.edges" [paginator]="false" [rows]="50"
-             tableStyleClass="table table-bordered table-hover dataTable no-footer row-border table-row-link wp-100"
+    <p-treeTable #dt [value]="policies" [paginator]="false" class="table table-hover m-b-0"
+             tableStyleClass="table table-bordered table-hover no-footer row-border table-row-link wp-100"
              selectionMode="single" [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['node.name', 'node.title']">
 
       <ng-template pTemplate="caption">
@@ -25,24 +25,28 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th>Name</th>
-            <th>Title</th>
             <th>Type</th>
             <th>Active</th>
             <th>Description</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-policy let-columns="columns">
-        <tr [routerLink]="['/dashboard/policy/show',policy.node.policyId, policy.node.entityId==='00000000-0000-0000-0000-000000000000'? '': policy.node.entityId, 
-          policy.node.projectId==='00000000-0000-0000-0000-000000000000'? '': policy.node.projectId]">
-            <td>{{policy.node.name}}</td>
-            <td>{{policy.node.title}}</td>
-            <td>{{conditionTypes[policy.node.conditionType]}}</td>
-            <td>
-                <ng-template [ngIf]="policy.node.active == true">
-                  <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
+      <ng-template pTemplate="body" let-policy let-columns="columns" let-rowNode let-rowData="rowData">
+        <tr [ttRow]="rowNode" [routerLink]="rowData.policyId ? ['/dashboard/policy/show',rowData.policyId, rowData.entityId==='00000000-0000-0000-0000-000000000000'? '': rowData.entityId, 
+        rowData.projectId==='00000000-0000-0000-0000-000000000000'? '': rowData.projectId] : []">
+            <td style="padding: 0.75rem;">
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.name}}</td>
+            <td style="padding: 0.75rem;">{{conditionTypes[rowData.conditionType]}}</td>
+            <td style="padding: 0.75rem;">
+                <ng-template [ngIf]="rowData.active == true">
+                  <span title="Info" class=" badge m-r-5 badge-light-success" >Active</span>
                 </ng-template>
-            <td>{{policy.node.description}}</td>
+                <ng-template [ngIf]="rowData.active != true && !!rowData.policyId">
+                  <span title="Info" class=" badge m-r-5 badge-light-danger" >Disabled</span>
+                </ng-template>
+            </td>    
+            <td style="padding: 0.75rem;">{{rowData.description}}</td>
         </tr>
       </ng-template>
-    </p-table>
+    </p-treeTable>
 <!--</perfect-scrollbar>-->

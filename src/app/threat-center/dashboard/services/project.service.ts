@@ -36,6 +36,7 @@ export class ProjectDashboardService {
                   projectId,
                   entityId,
                   name,
+                  tags,
                   projectMetricsGroup {
                     projectMetrics{
                         measureDate
@@ -476,6 +477,16 @@ export class ProjectDashboardService {
       }
     `);
   }
+
+  // set project tags
+  setProjectTags(projectId: string, tags: string[]): any {
+    return this.coreGraphQLService.coreGQLReqForMutation(
+       gql` mutation { setProjectTags(projectId: "${projectId}", tags: "${tags}") {
+          projectId
+      }}`
+    );
+  }
+
 }
 
 
