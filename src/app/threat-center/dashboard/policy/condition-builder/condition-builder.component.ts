@@ -448,6 +448,12 @@ export class ConditionBuilderComponent implements OnInit {
     // change main condition name handler
     onChangeName(newName:any, condition: PolicyCondition) {
         condition.conditionName=newName;
+        condition.decimalValue = undefined;
+        condition.doubleValue = undefined;
+        condition.intValue = undefined;
+        condition.severityValue = undefined;
+        condition.strValue = undefined;
+        condition.arrayValue = undefined;
         let conditionTypeMetadata = this.categories.mainConditions.get(condition.conditionType) || this.categories.subordinateConditions.get(condition.conditionType);
         if (!!conditionTypeMetadata) {
             let conditionMetadata = conditionTypeMetadata.conditionMetadatas.get(newName);
@@ -474,6 +480,12 @@ export class ConditionBuilderComponent implements OnInit {
     // change subordinate condition name handler
     onChangeSubordinateName(newName:any, condition: PolicyCondition) {
         condition.conditionName=newName;
+        condition.decimalValue = undefined;
+        condition.doubleValue = undefined;
+        condition.intValue = undefined;
+        condition.severityValue = undefined;
+        condition.strValue = undefined;
+        condition.arrayValue = undefined;
         let conditionInfo = this.subordinateConditionListItems.find((item)=> !item.isType&&item.code===newName);
         if (!!conditionInfo) {
             condition.conditionType = conditionInfo.conditionType;
@@ -483,6 +495,18 @@ export class ConditionBuilderComponent implements OnInit {
             let conditionMetadata = conditionTypeMetadata.conditionMetadatas.get(newName);
             if (!!conditionMetadata) {
                 condition.conditionDataType = conditionMetadata.dataType;
+                if (!!conditionMetadata.operators && conditionMetadata.operators.length>0) {
+                    condition.operator = conditionMetadata.operators[0].code;
+                }
+                if (conditionMetadata.dataType == 'STR' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.strValue = conditionMetadata.values[0].code;
+                }
+                if (conditionMetadata.dataType == 'SVR' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.severityValue = conditionMetadata.values[0].code;
+                }
+                if (conditionMetadata.dataType == 'DCM' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
+                    condition.decimalValue = parseInt(conditionMetadata.values[0].code);
+                }
             }
         }
     }
