@@ -3,12 +3,12 @@
     <span style="font-size:15px">
         <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
         <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
-        <a class="cursor-pointer" *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail.SelectedComponent.name}}</a> 
-        <span *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
+        <a class="cursor-pointer" *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail?.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail.SelectedComponent.name}}</a> 
+        <span *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
         <span style="color: #ffffff;">{{licenseName}}</span>
       </span>
   </div>
 
 </div>
-<license-dimension [licenseId]="licenseId" [scanId]="scanId" [projectId]="projectId" [entityId]="entityId" [isFromComponent]="breadcumDetail.IsFromComponent" (getLicenseName)="getLicenseName($event)"></license-dimension>
+<license-dimension [licenseId]="licenseId" [scanId]="scanId" [projectId]="projectId" [entityId]="entityId" [isFromComponent]="breadcumDetail?.IsFromComponent" (getLicenseName)="getLicenseName($event)"></license-dimension>
 <ngx-spinner [fullScreen]="true" color="#4680ff" type="pacman" size="large"></ngx-spinner>
