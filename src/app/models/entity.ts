@@ -15,6 +15,7 @@ export class Entity {
     vulnerabilities: Vulnerability[];
     licenses: License[];
     childEntities: Entity[];
+    entitySettings: EntitySettings;
 }
 
 export class EntityConnection {
@@ -39,4 +40,23 @@ export type EntityQuery = {
 
 export type EntityListQuery = {
     entities: EntityConnection;
+}
+
+export class JiraCredentials {
+    projectUrl: string;
+    projectKey: string;
+    email: string;
+    apiToken: string;
+}
+
+export class EntitySettings {
+    orgId: string;
+    entityId: string;
+    alertEmailAdressess: string[];
+    alertSlackUrls: string[];
+    jiraCredentials: JiraCredentials;
+}
+
+export type EntitySettingsQuery = {
+    entitySettings: EntitySettings;
 }
