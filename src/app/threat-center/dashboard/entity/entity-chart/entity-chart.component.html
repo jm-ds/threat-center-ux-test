@@ -4,7 +4,7 @@
             <div style="margin-bottom:10px" class="chart-lbl">
                 <h6><i class="{{iconClass}}"></i>{{chartlabel}}</h6>
                 <div class="chart-options" *ngIf="nameSelection === 'License' || nameSelection === 'Component'">
-                    <select class="form-control form-control-sm custom-select" (change)="onChangedropdownValue()"
+                    <select class="form-control form-control-sm custom-select" (click)="click()" (change)="onChangedropdownValue()"
                         [(ngModel)]="selectedValue" name="{{nameSelection}}">
                         <option *ngFor="let item of dropdownValues">{{item.name}}</option>
                     </select>

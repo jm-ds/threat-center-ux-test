@@ -268,6 +268,10 @@
         -webkit-appearance: none;
         background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right center/8px 10px;
 
+        @media screen and (min-width:1550px) {
+            max-width: 115px;
+        }
+
         &:focus {
             background-position: right center;
         }

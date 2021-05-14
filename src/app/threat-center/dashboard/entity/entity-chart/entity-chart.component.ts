@@ -10,6 +10,7 @@ import { Component, Input, OnInit, Output, EventEmitter, AfterViewInit } from "@
 export class EntityChartcomponent implements OnInit, AfterViewInit {
 
     @Output() changeDropdownValue = new EventEmitter();
+    @Output() dropdownClick = new EventEmitter();
     @Input() chartlabel: string = '';
     @Input() chartId: string = '';
     @Input() chartConfig: string = '';
@@ -17,8 +18,8 @@ export class EntityChartcomponent implements OnInit, AfterViewInit {
     @Input() nameSelection: string = '';
     @Input() selecteddropdownValue: string = '';
     @Input() supplyChainChart: any = null;
-    @Input() iconClass:string = '';
-    
+    @Input() iconClass: string = '';
+
     selectedValue: string = '';
     constructor() { }
     ngAfterViewInit(): void {
@@ -30,5 +31,9 @@ export class EntityChartcomponent implements OnInit, AfterViewInit {
 
     onChangedropdownValue() {
         this.changeDropdownValue.emit({ dropdown: this.nameSelection, selectedValue: this.selectedValue });
+    }
+
+    click() {
+        this.dropdownClick.emit(true);
     }
 }
