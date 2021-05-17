@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service'
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
 
 @Injectable({
@@ -529,6 +529,13 @@ export class ApiService {
               description
               usedBy,
               lastInheritedRiskScore,
+              copyrights {
+                text,
+                startYear,
+                endYear,
+                owners,
+                toPresent
+              }
               licenses {
                 edges {
                   node {
