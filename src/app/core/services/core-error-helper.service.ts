@@ -142,12 +142,7 @@ export class CoreErrorHelperService {
         if (typeof errObj.error === 'string') {
             const isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
             if (isHTML(errObj.error)) {
-                if (Number(errObj.status) === 200) {
-                    // parse html content...
-                } else {
-                    errorMessage = this.getMessageStatusWise(Number(errObj.status));
-                }
-
+                errorMessage = this.getMessageStatusWise(Number(errObj.status));
             } else {
                 errorMessage = errObj.error;
             }
