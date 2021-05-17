@@ -812,7 +812,8 @@ export class ApiService {
                   matchRepository{
                     repositoryOwner,
                     repositoryName,
-                    repositoryId
+                    repositoryId,
+                    repositoryCode
                   },
                   matchGroups {
                     edges {
