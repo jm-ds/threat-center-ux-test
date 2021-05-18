@@ -106,6 +106,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   isAssetStory: boolean = false;
   @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
   projectMetrics = [];
+  filterBranchName = '';
+  timeOut;
+  timeOutDuration = 1000;
 
   ngOnInit() {
     this.obsProject = this.route.data
@@ -123,7 +126,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      this.obsProject = this.apiService.getProject(this.filterBranchName, this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
@@ -139,7 +142,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    const obsProject = this.apiService.getProject(this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    const obsProject = this.apiService.getProject(this.filterBranchName, this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
     obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -480,7 +483,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  //While any changes occurred in page
+  // While any changes occurred in page
   changePage(pageInfo) {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       //page size changed...
@@ -507,9 +510,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  //Loading project data after paggination for scan tab.
+  // Loading project data after pagination for scan tab.
   loadProjectData(first, last, endCursor = undefined, startCursor = undefined) {
-    let projects = this.apiService.getProject(this.projectId, first, last, endCursor, startCursor)
+    let projects = this.apiService.getProject(this.filterBranchName, this.projectId, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.project));
     projects.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -724,4 +727,19 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   });
   }
 
+  filterColumn(value: string) {
+    if (value.length === 0) {
+      this.filterBranchName = '';
+    } else {
+      this.filterBranchName = value;
+    }
+    clearTimeout(this.timeOut);
+    this.timeOut = setTimeout(() => {
+      this.getProjectScanData();
+    }, this.timeOutDuration);
+  }
+
+  getColumnFilterValue() {
+    return this.filterBranchName;
+  }
 }

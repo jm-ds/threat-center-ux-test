@@ -285,68 +285,93 @@ export class ApiService {
       `, 'no-cache');
   }
 
-  getProject(projectId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getProject(filter: string, projectId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const filterArg = 'filterBranchName: \"' + filter + '\",';
     const firstArg = (!!first) ? `first: ${first}` : '';
-    const lastArg = (!!last) ? `last: ${last}` : '';
+    const lastArg = (!!last) ? `, last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ProjectQuery>(gql`
         query {
-            project(projectId:"${projectId}") {
-              projectId,
-              entityId,
-              name,
-              scans(${firstArg}${lastArg}${afterArg}${beforeArg}) {
-                pageInfo {
-                  hasNextPage
-                  hasPreviousPage
-                  startCursor
-                  endCursor
-                }
-                totalCount
-                edges {
-                  node {
-                    scanId,
-                    projectId,
-                    branch,
-                    tag,
-                    version
-                    created,
-                    errorMsg,
-                    log
-                    
-                    
-                    projectMetricsGroup {
-                      projectMetrics{
-                          measureDate
-                          vulnerabilityMetrics {
-                              severityMetrics
-                          }
-                          assetMetrics {
-                              assetCompositionMetrics
-                          }
-                          componentMetrics {
-                              vulnerabilityMetrics
-                              licenseCategoryMetrics
-                              licenseFamilyMetrics
-                              licenseNameMetrics
-                          }
-                          licenseMetrics {
-                              licenseCategoryMetrics
-                              licenseFamilyMetrics
-                              licenseNameMetrics
-                          }
-                          supplyChainMetrics {
-                              supplyChainMetrics
-                          }
-                      }
+          project(projectId: "${projectId}") {
+            projectId
+            entityId
+            name
+            scans(${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+              totalCount
+              edges {
+                node {
+                  scanId
+                  projectId
+                  branch
+                  tag
+                  version
+                  created
+                  errorMsg
+                  log,
+                  scanMetricsSummary {
+                    vulnerabilityMetrics {
+                      critical,
+                      high,
+                      medium,
+                      low,
+                      info,
+                    },
+                    licenseMetrics {
+                      copyleftStrong,
+                       copyleftWeak,
+                       copyleftPartial,
+                       copyleftLimited,
+                       copyleft,
+                       custom,
+                       dual,
+                       permissive,
+                    },
+                    supplyChainMetrics {
+                      risk
+                      quality
                     }
-                   
-                    
+                    assetMetrics {
+                      embedded,
+                      openSource,
+                      unique
+                    }
                   }
                 }
               }
             }
+            projectMetricsGroup {
+              projectMetrics{
+                  measureDate
+                  vulnerabilityMetrics {
+                      severityMetrics
+                  }
+                  assetMetrics {
+                      assetCompositionMetrics
+                  }
+                  componentMetrics {
+                      vulnerabilityMetrics
+                      licenseCategoryMetrics
+                      licenseFamilyMetrics
+                      licenseNameMetrics
+                  }
+                  licenseMetrics {
+                      licenseCategoryMetrics
+                      licenseFamilyMetrics
+                      licenseNameMetrics
+                  }
+                  supplyChainMetrics {
+                      supplyChainMetrics
+                  }
+              }
+            }
+          }
         }
       `, 'no-cache');
   }
