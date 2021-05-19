@@ -46,7 +46,9 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.coreHelperService.settingProjectBreadcum("","","",false);
+    if (!!this.coreHelperService.getProjectBreadcum()) {
+      this.coreHelperService.settingProjectBreadcum("","","",false);
+    }
   }
 
   //onTabChange($event: NgbTabChangeEvent) {
@@ -75,14 +77,18 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   gotoComponent() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId + "/component/" + this.breadcumDetail.SelectedComponent['id'];
-    this.coreHelperService.settingProjectBreadcum("License", "", "", false);
+    if (!!this.coreHelperService.getProjectBreadcum()) {
+      this.coreHelperService.settingProjectBreadcum("License", "", "", false);
+    }
     this.router.navigate([url]);
   }
 
   //Getting license name after emiting
   getLicenseName(name){
     this.licenseName = name;
-    this.coreHelperService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);
+    if (!!this.coreHelperService.getProjectBreadcum()) {
+      this.coreHelperService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);
+    }
   }
 
   //Initialize breadcum details
