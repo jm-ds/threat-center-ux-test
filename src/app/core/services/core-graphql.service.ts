@@ -104,7 +104,7 @@ export class CoreGraphQLService {
                             msg += ", ";
                         msg += element.message;
                     });
-                    this.coreHelperService.swalALertBox(msg);   
+                    this.coreHelperService.swalALertBox(msg);
                 } else {
                     this.coreHelperService.swalALertBox(Messages.graphQlCommonErrorMessage);   
                 }
