@@ -57,6 +57,16 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
+    getConditionItemLists(isType: boolean, conditionType: string) {
+        if(!this.subordinateConditionListItems || this.subordinateConditionListItems.length == 0){
+            return [];
+        }
+        if (!!conditionType) {
+            return this.subordinateConditionListItems.filter(item => { return item.isType === isType && item.conditionType == conditionType });
+        } else {
+            return this.subordinateConditionListItems.filter(item => { return item.isType === isType });
+        }
+    }
 
     // fields metaada
     fillConditionNames() {
