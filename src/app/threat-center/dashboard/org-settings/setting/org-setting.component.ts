@@ -1,28 +1,38 @@
 import { ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { OrgService } from '@app/admin/services/org.service';
+import { EntitySettings } from '@app/models';
 import * as $ from 'jquery'
 
 @Component({
     selector: 'app-org-setting',
     templateUrl: './org-setting.component.html',
     styleUrls: ['./org-setting.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    providers: [EntitySettings]
 })
 export class OrganizationSettingComponent implements OnInit, AfterViewInit {
 
     tabDetails: any = [];
     activeTabId: string = "Configuration";
     activeLink: string = "Threat Agent Configuration";
+    activeIntegrationTabId: string = undefined;
+    public orgSettings: EntitySettings = new EntitySettings();
 
     panelIntegration = [
         {
-            tabName: "JIRA Integration",
-            tabId: "jira",
+            tabName: "Emails",
+            tabId: "email",
             isActive: true
         },
         {
             tabName: "SLACK Integration",
             tabId: "slack",
+            isActive: false
+        },
+        {
+            tabName: "JIRA Integration",
+            tabId: "jira",
             isActive: false
         }
     ];
@@ -48,6 +58,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     ];
 
     constructor(
+        private orgService: OrgService
     ) {
     }
 
@@ -61,6 +72,15 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.orgService.getOrgSettings().subscribe(
+            data => {
+                this.orgSettings = data.data.orgSettings;
+            },
+            error => {
+                this.orgSettings = undefined;
+                console.error("OrganizationSettingComponent", error);
+            }
+        );
     }
 
     beforeChange(event) {
@@ -69,14 +89,18 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
             switch (event.panelId) {
                 case "Configuration": {
                     this.activeLink = "Threat Agent Configuration";
+                    this.activeIntegrationTabId = undefined;
                     break;
                 }
                 case "Saml": {
                     this.activeLink = "Saml";
+                    this.activeIntegrationTabId = undefined;
                     break;
                 }
                 case "Integration": {
-                    this.activeLink = !!this.panelIntegration.find(f => f.isActive) ? this.panelIntegration.find(f => f.isActive).tabName : '';
+                    const tabInfo = !!this.panelIntegration.find(f => f.isActive) ? this.panelIntegration.find(f => f.isActive): undefined;
+                    this.activeIntegrationTabId = tabInfo.tabId;
+                    this.activeLink = !!tabInfo ? tabInfo.tabName : '';
                     break;
                 }
             }
@@ -93,6 +117,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
                 }
             });
             this.activeLink = item.tabName;
+            this.activeIntegrationTabId = item.tabId;
         }
     }
 }

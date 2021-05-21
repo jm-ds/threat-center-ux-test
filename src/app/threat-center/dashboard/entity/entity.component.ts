@@ -80,7 +80,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "Vulnerabilities", isActive: true },
-    // { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: false }
   ];
@@ -89,7 +88,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   licenseChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
-    // { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
   ];
   selectedlicenseChartDropValue = "License Name";
   commonLineSparklineOptions: any = {};
@@ -235,38 +233,13 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
   }
 
-  //fired when changing License chart dropdown from donut chart
-  changeLincesChartDropdown() {
-    // this.isShowStackedChart = false;
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
+  onChangedropdown(event) {
+    if (event['dropdown'] === "License") {
+      this.selectedlicenseChartDropValue = event.selectedValue;
+    } else {
+      this.selectedComponentChartDropvalue = event.selectedValue;
     }
-    if (this.selectedDonut === 'Licenses') {
-      this.weekSeriesOverTime['series'] = [];
-      this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
-    }
-  }
-
-  //fired when changing component chart dropdown from donut chart
-  changeComponentChartDropdown() {
-    // this.isShowStackedChart = false;
     let activeTabVar: string = "";
-    // check active tab as well..
     switch (this.lineChartActiveTab) {
       case 'Month':
         activeTabVar = 'monthSeriesOverTime';
@@ -286,6 +259,10 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.selectedDonut === 'Components') {
       this.weekSeriesOverTime['series'] = [];
       this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
+    }
+    if (this.selectedDonut === 'Licenses') {
+      this.weekSeriesOverTime['series'] = [];
+      this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
     }
   }
 
@@ -447,7 +424,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-
+          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+            entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
+          }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
           this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
 

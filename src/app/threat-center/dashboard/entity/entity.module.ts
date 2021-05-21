@@ -11,6 +11,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EntityChartcomponent } from './entity-chart/entity-chart.component';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule
   ],
   declarations: [
-    EntityComponent
+    EntityComponent,
+    EntityChartcomponent
   ]
 })
 export class EntityModule { }

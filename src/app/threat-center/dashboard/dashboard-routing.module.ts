@@ -34,7 +34,7 @@ const routes: Routes = [
         loadChildren: () => import('./org-settings/org-settings.module').then(module => module.OrganizationSettingModule)
       },
       {
-        path: 'entity-setting',
+        path: 'entity-setting/:entityId',
         loadChildren: () => import('./entity-settings/entity-settings.module').then(module => module.EntitySettingModule)
       },
       {

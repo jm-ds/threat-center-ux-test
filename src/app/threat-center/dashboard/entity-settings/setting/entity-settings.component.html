@@ -50,6 +50,12 @@
                         <h4 class="tab-heading">User Management</h4>
                         <p> {{activeLink}}</p>
                     </div>
+                    <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Integrations'}">
+                        <h4 class="tab-heading">Integrations</h4>
+                        <alert-emails *ngIf="activeIntegrationTabId === 'email'" style="width: 100%" [entitySettings]="entitySettings" [entityId] = "entityId"></alert-emails>  
+                        <slack-urls *ngIf="activeIntegrationTabId === 'slack'" style="width: 100%" [entitySettings]="entitySettings" [entityId] = "entityId"></slack-urls>  
+                        <jira-credentials *ngIf="activeIntegrationTabId === 'jira'" style="width: 100%" [entitySettings]="entitySettings" [entityId] = "entityId"></jira-credentials>  
+                    </div>
                 </div>
             </div>
         </div>

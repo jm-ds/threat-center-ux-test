@@ -3,8 +3,8 @@
     <span style="font-size:15px">
         <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail?.SelectedEntity?.name}}</a> /
         <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
-        <a class="cursor-pointer" *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail?.SelectedComponent?.name}}</a> 
-        <span *ngIf="breadcumDetail.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
+        <a class="cursor-pointer" *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail?.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail.SelectedComponent.name}}</a> 
+        <span *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
         <span style="color: #ffffff;">{{licenseName}}</span>
       </span>
   </div>
