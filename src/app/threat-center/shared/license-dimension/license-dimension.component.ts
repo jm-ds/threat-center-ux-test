@@ -62,8 +62,12 @@ export class LicenseDimensionComponent implements OnInit {
 
   ngOnInit() {
     if(this.licenseId) {
-      this.loadLicense();
-      this.loadLicenseComponents(this.defaultPageSize);
+      if(this.isFromComponent || !!this.scanId){
+        this.loadLicenseAndLicenseComponent(this.defaultPageSize);
+      }else{
+        this.loadLicense();
+        this.loadLicenseComponents(this.defaultPageSize);
+      }
     }
   }
 
@@ -72,7 +76,24 @@ export class LicenseDimensionComponent implements OnInit {
     if(this.licenseId) {
       this.loadLicense();
       this.loadLicenseComponents(this.defaultPageSize);
+
     }
+  }
+
+
+  loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined){
+    this.obsLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId,this.scanId, first, last, endCursor, startCursor)
+    .pipe(map(result => result.data.license));
+    this.obsLicense.subscribe(license => {
+      this.getLicenseName.emit(license.name);
+      this.permissions = this.licenseAttributeFilter(license, 'PERMISSION');
+      this.limitations = this.licenseAttributeFilter(license, 'LIMITATION');
+      this.conditions = this.licenseAttributeFilter(license, 'CONDITION');
+      if (!!this.isFromComponent || !this.scanId) {
+        return;
+      }
+      this.licenseComponents = license.components;
+    });
   }
 
   // load license data
