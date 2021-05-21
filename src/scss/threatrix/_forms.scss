@@ -46,9 +46,22 @@ body.next-dark {
             background: #2a3641;
             border: 1px solid #6c757d;
             height: 35px;
+            border-radius: 2px;
+            padding: 0 1.95rem 0 0.95rem;
+
+            &.ui-state-focus {
+                box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+            }
 
             .ui-dropdown-trigger-icon {
                 margin-top: -.4em;
+                background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat center;
+                width: 7px;
+                height: 14px;
+
+                &:before {
+                    display: none;
+                }
             }
 
             &:hover {
@@ -72,6 +85,25 @@ body.next-dark {
             border-color: #6c757d;
             box-shadow: none;
         }
+
+        .ui-dropdown-panel .ui-dropdown-items-wrapper {
+            background: #6c757d;
+        }
+
+        .ui-dropdown-panel .ui-dropdown-list {
+            padding: 0;
+        }
+
+        .ui-dropdown-panel .ui-dropdown-item {
+            font-size: 14px;
+            color: #fff;
+            padding: 0 15px;
+            line-height: 22px;
+
+            &:hover {
+                background: #0094fc;
+            }
+        }
     }
 
     select.form-control {
@@ -91,6 +123,10 @@ body.next-dark {
         transition: none !important;
 
         option {
+            background: #8a8f94;
+            color: #fff;
+        }
+        optgroup{
             background: #8a8f94;
             color: #fff;
         }

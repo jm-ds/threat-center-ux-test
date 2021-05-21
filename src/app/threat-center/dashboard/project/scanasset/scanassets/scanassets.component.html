@@ -78,7 +78,7 @@
                   <option value="51-70">51-70%</option>
                   <option value="71-100">71-100%</option>
                 </select>
-                <select *ngIf="col == 'Attribution'" class="form-control"
+                <select *ngIf="col == 'Attribution'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
