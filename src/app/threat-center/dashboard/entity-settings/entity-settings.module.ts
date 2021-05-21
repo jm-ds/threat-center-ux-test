@@ -12,6 +12,7 @@ import { EntitySettingRoutingModule } from './entity-settings-routing.module';
 import { EntitySettingsComponent } from './setting/entity-settings.component';
 import { DashboardModule } from '../dashboard.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { IntegrationModule } from '../integration/integration.module';
 
 @NgModule({
     declarations: [EntitySettingsComponent],
@@ -27,7 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         NgbTabsetModule,
         EntitySettingRoutingModule,
         DashboardModule,
-        NgbModule
+        NgbModule,
+        IntegrationModule
     ]
 })
 
