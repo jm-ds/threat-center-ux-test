@@ -1,7 +1,7 @@
 <div class="row" style="margin-bottom:20px">
   <div class="col-md-12" *ngIf="!!breadcumDetail">
     <span style="font-size:15px">
-        <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
+        <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail?.SelectedEntity?.name}}</a> /
         <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
         <a class="cursor-pointer" *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail?.SelectedComponent" (click)="gotoComponent()">{{breadcumDetail.SelectedComponent.name}}</a> 
         <span *ngIf="breadcumDetail?.IsFromComponent && !!breadcumDetail.SelectedComponent"> / </span>
