@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {Entity, EntityEdge, Message, Messages, Role, User} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "@app/admin/services/user.service";
@@ -34,6 +34,7 @@ export class UserEditComponent implements OnInit {
         private apiService: ApiService,
         protected router: Router,
         private route: ActivatedRoute,
+        private el: ElementRef
     ) {
         this.messages = Messages.fromRouter(this.router);
     }
@@ -89,6 +90,12 @@ export class UserEditComponent implements OnInit {
         this.display = this.roleDisplay;
     }
 
+    save(form) {
+        if (form.form.invalid) {
+            form.form.markAllAsTouched();
+            this.scrollToFirstInvalidControl();
+        }
+    }
 
     private roleDisplay(item: any) {
         return item.roleId + ' - ' + item.description;
@@ -114,7 +121,7 @@ export class UserEditComponent implements OnInit {
 
     private saveUser() {
         this.user.userRoles = this.selectedRoles;
-        this.user.userEntities.edges = this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity=> new EntityEdge(entity, ""));
+        this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity=> new EntityEdge(entity, "")) : [];
 
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {
@@ -127,4 +134,10 @@ export class UserEditComponent implements OnInit {
             });
     }
 
+    private scrollToFirstInvalidControl() {
+        const firstInvalidControl: HTMLElement = this.el.nativeElement.querySelector(
+          "form .ng-invalid"
+        );
+        firstInvalidControl.focus(); //without smooth behavior
+      }
 }
