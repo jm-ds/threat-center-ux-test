@@ -1,3 +1,5 @@
+import { JiraCredentials } from "@app/models";
+
 export class TreeViewNodeModel {
     id: string;
     name: string;
@@ -78,4 +80,32 @@ export class OrganizationUpdateRequestInput {
     static from(org) {
         return new OrganizationUpdateRequestInput(org.orgId, org.name);
     }
+}
+
+
+export class EntitySettingsRequestInput {
+    readonly entityId: string;
+    readonly alertEmailAdressess: string[];
+    readonly alertSlackUrls: string[];
+    readonly jiraCredentials: JiraCredentials;
+
+    constructor(entityId: string, alertEmailAdressess: string[], alertSlackUrls: string[], jiraCredentials: JiraCredentials) {
+        this.entityId = entityId;
+        this.alertEmailAdressess = alertEmailAdressess;
+        this.alertSlackUrls = alertSlackUrls;
+        this.jiraCredentials = jiraCredentials;
+    }
+
+    static forEmails (entityId: string, alertEmailAdressess: string[]) {
+        return new EntitySettingsRequestInput(entityId, alertEmailAdressess, undefined, undefined);
+    }
+
+    static forSlackUrl (entityId: string, alertSlackUrls: string[]) {
+        return new EntitySettingsRequestInput(entityId, undefined, alertSlackUrls, undefined);
+    }
+
+    static forJira (entityId: string, jiraCredentials: JiraCredentials) {
+        return new EntitySettingsRequestInput(entityId, undefined, undefined, jiraCredentials);
+    }
+
 }

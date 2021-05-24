@@ -70,7 +70,9 @@ export class ComponentDetailComponent implements OnInit {
       .pipe(map(result => result.data.component));
 
     this.obsComponent.subscribe((res: any) => {
-      this.coreHelperService.settingProjectBreadcum("Component",res.name,res.componentId,false);
+      if (!!this.coreHelperService.getProjectBreadcum()) {
+        this.coreHelperService.settingProjectBreadcum("Component", res.name, res.componentId, false);
+      }
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
 
@@ -128,7 +130,9 @@ export class ComponentDetailComponent implements OnInit {
 
   //goto details pages
   gotoOtherDetailsPage(id, pageName: string) {
-    this.coreHelperService.settingProjectBreadcum("","","",true);
+    if(!!this.coreHelperService.getProjectBreadcum()){
+      this.coreHelperService.settingProjectBreadcum("","","",true);
+    }
     const entityId = this.route.snapshot.paramMap.get('entityId'),
       projectId = this.route.snapshot.paramMap.get('projectId'),
       scanId = this.route.snapshot.paramMap.get('scanId');

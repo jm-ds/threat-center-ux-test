@@ -6,6 +6,8 @@ import { SharedModule } from '@app/shared/shared.module';
 import {TableModule} from 'primeng/table';
 import { PolicyModule } from './policy/policy.module';
 import { VerticalTabComponent } from './vertical-tab/vertical-tab.component';
+import { IntegrationModule } from './integration/integration.module';
+
 
 
 @NgModule({
@@ -15,7 +17,8 @@ import { VerticalTabComponent } from './vertical-tab/vertical-tab.component';
     ThemeSharedModule,
     SharedModule,
     TableModule,
-    PolicyModule
+    PolicyModule,
+    IntegrationModule
   ],
   declarations: [VerticalTabComponent],
   exports:[VerticalTabComponent]

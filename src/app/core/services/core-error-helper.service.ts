@@ -76,6 +76,26 @@ export class CoreErrorHelperService {
                 msg = Messages.status500;
                 break;
             }
+            case 501: {
+                msg = Messages.status501;
+                break;
+            }
+            case 502: {
+                msg = Messages.status502;
+                break;
+            }
+            case 503: {
+                msg = Messages.status503;
+                break;
+            }
+            case 504: {
+                msg = Messages.status504;
+                break;
+            }
+            case 505: {
+                msg = Messages.status505;
+                break;
+            }
             case 400: {
                 msg = Messages.status400;
                 break;
@@ -87,6 +107,21 @@ export class CoreErrorHelperService {
             case 404: {
                 msg = Messages.status404;
                 break;
+            }
+            case 405: {
+                msg = Messages.status405;
+            }
+            case 406: {
+                msg = Messages.status406;
+            }
+            case 407: {
+                msg = Messages.status407;
+            }
+            case 408: {
+                msg = Messages.status408;
+            }
+            case 415: {
+                msg = Messages.status415;
             }
             case 501: {
                 msg = Messages.status501;
@@ -105,7 +140,12 @@ export class CoreErrorHelperService {
         let errorMessage: string = '';
         //getting error message from server if any available otherwise get default message according to status code
         if (typeof errObj.error === 'string') {
-            errorMessage = errObj.error
+            const isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
+            if (isHTML(errObj.error)) {
+                errorMessage = this.getMessageStatusWise(Number(errObj.status));
+            } else {
+                errorMessage = errObj.error;
+            }
         } else if (!!errObj.error && !!errObj.error.reason && typeof errObj.error.reason === 'string') {
             errorMessage = errObj.error.reason;
         } else if (!!errObj.error && !!errObj.error.errorMessage && typeof errObj.error.errorMessage === 'string') {
