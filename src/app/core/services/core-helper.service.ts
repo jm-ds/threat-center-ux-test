@@ -26,6 +26,14 @@ export class CoreHelperService {
         });
     }
 
+    alertBoxHtml(text: string, title: string = "Error!", type: string = "error") {
+        return Swal.fire({
+            type: "error",
+            title: title,
+            html: text
+        });
+    }
+
     swalAlertConfrm(title: string, text: string) {
         return Swal.fire({
             title: title,

@@ -101,10 +101,10 @@ export class CoreGraphQLService {
                     let msg = "";
                     er.graphQLErrors.forEach(function(element, index) {
                         if(index > 0)
-                            msg += ", ";
+                            msg += "<br/>";
                         msg += element.message;
                     });
-                    this.coreHelperService.swalALertBox(msg);
+                    this.coreHelperService.alertBoxHtml(msg);
                 } else {
                     this.coreHelperService.swalALertBox(Messages.graphQlCommonErrorMessage);   
                 }
