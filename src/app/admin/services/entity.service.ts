@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { EntityQuery } from '@app/models';
+import { EntityQuery, EntitySettingsQuery, JiraCredentials } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { EntityRequestInput, EntityUpdateRequestInput, OrganizationUpdateRequestInput } from '../entity/entity.class';
+import { EntityRequestInput, EntitySettingsRequestInput, EntityUpdateRequestInput, OrganizationUpdateRequestInput } from '../entity/entity.class';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +143,71 @@ export class EntityService {
           removed
         }
       }`);
+  }
+
+  //get entity settings
+  getEntitySettings(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
+    return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
+      gql`
+        query {
+          entity(entityId: "${entityId}") {
+            entityId
+            entitySettings {
+              entityId
+              alertEmailAdressess
+              alertSlackUrls
+              jiraCredentials {
+                projectUrl
+                projectKey
+                email
+                apiToken
+              }
+            }
+          }
+        }
+      `, "no-cache");
+  }
+
+  // set entity alert emails
+  setEntityEmails(entityId: string, alertEmailAdressess: string[]) {
+    const entitySettingsRequest = EntitySettingsRequestInput.forEmails(entityId, alertEmailAdressess);
+    return this.coreGraphQLService.coreGQLReqForMutation(
+      gql`mutation setEntityEmails($entitySettingsRequest: EntitySettingsRequestInput){
+        setEntityEmails(entitySetting: $entitySettingsRequest){
+          entityId
+          alertEmailAdressess
+        }
+      }`, { entitySettingsRequest: entitySettingsRequest });
+  }
+
+  //set entity slack urls
+  setEntitySlackUrls(entityId: string, alertSlackUrls: string[]) {
+    const entitySettingsRequest = EntitySettingsRequestInput.forSlackUrl(entityId, alertSlackUrls);
+    return this.coreGraphQLService.coreGQLReqForMutation(
+      gql`mutation setEntitySlackUrls($entitySettingsRequest: EntitySettingsRequestInput){
+        setEntitySlackUrls(entitySetting: $entitySettingsRequest){
+          entityId
+          alertSlackUrls
+        }
+      }`, { entitySettingsRequest: entitySettingsRequest });
+  }
+
+  //set entity jira settings
+  setEntityJiraCredentials(entityId: string, jiraCredentials: JiraCredentials) {
+    const entitySettingsRequest = EntitySettingsRequestInput.forJira(entityId, jiraCredentials);
+    delete entitySettingsRequest.jiraCredentials["__typename"];
+    return this.coreGraphQLService.coreGQLReqForMutation(
+      gql`mutation setEntityJiraCredentials($entitySettingsRequest: EntitySettingsRequestInput){
+        setEntityJiraCredentials(entitySetting: $entitySettingsRequest){
+          entityId
+          jiraCredentials {
+            projectUrl
+            projectKey
+            email
+            apiToken
+          }
+        }
+      }`, { entitySettingsRequest: entitySettingsRequest });
   }
 
 }

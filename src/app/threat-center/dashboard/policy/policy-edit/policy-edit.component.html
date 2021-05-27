@@ -120,13 +120,13 @@
               <div style="padding-bottom: 60px">
                 <p-table #dt [value]="policy.actions" [filterDelay]="0" [globalFilterFields]="['actionName']"  dataKey="actionName" tableStyleClass="table table-bordered">
 
-                  <ng-template pTemplate="caption">
+                  <!-- <ng-template pTemplate="caption">
                     <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
                       <button type="button" class="btn btn-icon" title="Add action" (click)="this.addAction()" style="color: #c9d0d5;">
                         <i class="feather icon-plus" style="font-size: 20px; font-weight: 800;"></i>
                       </button>
                     </div>
-                  </ng-template>
+                  </ng-template> -->
                   <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                       <col style="width:40%;text-align: center">
@@ -143,8 +143,8 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-action>
                     <tr>
-                      <td pEditableColumn>
-                        <p-cellEditor style="width: 100%">
+                      <td pEditableColumn class="active">
+                        <p-cellEditor class="dopdown-view" style="width: 100%">
                             <ng-template pTemplate="input">
                                 <p-dropdown name="actionType" [options]="actionTypes" [(ngModel)]="action.actionType" (onChange)="onActionTypeChange(action,$event)" 
                                 [style]="{'width':'100%','min-width': '4em' , 'margin-top': '6px'}"></p-dropdown>
@@ -154,8 +154,8 @@
                             </ng-template>
                         </p-cellEditor>
                       </td>  
-                      <td pEditableColumn>
-                        <p-cellEditor style="width: 100%">
+                      <td pEditableColumn class="active">
+                        <p-cellEditor class="dopdown-view" style="width: 100%">
                             <ng-template pTemplate="input">
                                 <p-dropdown name="actionName" [options]="actionNames[action.actionType]" [(ngModel)]="action.actionName" 
                                 [style]="{'width':'100%','min-width': '4em', 'margin-top': '6px'}"></p-dropdown>
@@ -171,6 +171,16 @@
                           <i class="feather icon-x" style="font-size: 10px; font-weight: 800;"></i>
                         </button>
                       </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="footer">
+                    <tr>
+                      <th colspan="3">
+                        <button type="button" class="btn btn-outline-secondary" title="Add Action"
+                          (click)="this.addAction()" style="color: #c9d0d5;">
+                          <i class="feather icon-plus" style="font-size: 14px; font-weight: 800;"></i> ADD ACTION
+                        </button>
+                      </th>
                     </tr>
                   </ng-template>
                 </p-table>

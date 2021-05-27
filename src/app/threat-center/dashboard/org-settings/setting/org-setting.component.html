@@ -18,7 +18,7 @@
                         <ul class="settings-submenu">
                             <li *ngFor="let item of panel.panelList" (click)="onClickTab(panel.panelList,item)">
                                 <a class="cursor-pointer" [ngClass]="{'active': item.isActive}">
-                                    {{item.tabName}}
+                                    {{item.tabName}} 
                                 </a>
                             </li>
                         </ul>
@@ -38,7 +38,9 @@
                 </div>
                 <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Integration'}">
                     <h4 class="tab-heading">Integrations</h4>
-                    <p> {{activeLink}}</p>
+                    <alert-emails *ngIf="activeIntegrationTabId === 'email'" style="width: 100%" [entitySettings]="orgSettings"></alert-emails>  
+                    <slack-urls *ngIf="activeIntegrationTabId === 'slack'" style="width: 100%" [entitySettings]="orgSettings"></slack-urls>  
+                    <jira-credentials *ngIf="activeIntegrationTabId === 'jira'" style="width: 100%" [entitySettings]="orgSettings"></jira-credentials>  
                 </div>
             </div>
         </div>
