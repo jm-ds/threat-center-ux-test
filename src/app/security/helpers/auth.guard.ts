@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
 import { NextConfig } from '@app/app-config';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import * as jwt_decode from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';
@@ -12,7 +13,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         private router: Router,
         private authenticationService: AuthenticationService,
         private authorizationService: AuthorizationService,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private corehelperService: CoreHelperService
     ) {
     }
 
@@ -42,7 +44,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         else {
             // otherwise redirect to "unauthorized" page
             console.log("!!! HAS NO PERMISSIONS !!!");
-            this.router.navigateByUrl('/unauthorized');
+            this.corehelperService.isUnAuthorize(true);
             return false;
         }
     }
@@ -69,7 +71,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 return this.checkPermissionsAndRedirect(route.data.auth);
             }
         }
-        if ('invite' in  route.queryParams) {
+        if ('invite' in route.queryParams) {
             const invite = route.queryParams['invite'];
             this.setInviteCookie(invite);
         }
@@ -87,7 +89,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if (!this.cookieService.check('invite')) {
             let expiredDate = new Date();
             expiredDate.setDate(expiredDate.getDate() + NextConfig.config.inviteCookieExpirePeriodDays);
-            this.cookieService.set('invite', inviteValue, {expires: expiredDate, sameSite: 'Lax'});
+            this.cookieService.set('invite', inviteValue, { expires: expiredDate, sameSite: 'Lax' });
         }
     }
 }

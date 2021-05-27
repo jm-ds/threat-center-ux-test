@@ -13,9 +13,18 @@ import { UserPreferenceModel } from '../core.class';
 
 export class CoreHelperService {
     private subject = new Subject();
+    private unAuthorizeSubject = new Subject<any>();
     isBrowserBackclick: boolean = false;
     constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
+
+    isUnAuthorize(val: boolean = false) {
+        this.unAuthorizeSubject.next(val)
+    }
+
+    getUnAuthorizeVal(){
+        return this.unAuthorizeSubject.asObservable();
+    }
 
     // Core alert message
     swalALertBox(text: string, title: string = "Error!", type: string = "error") {

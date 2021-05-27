@@ -14,7 +14,7 @@ export class UnauthorizedComponent implements OnInit {
   }
 
   goBack(){
-    this.location.back()
+    window.location.reload();
   }
 
 }
