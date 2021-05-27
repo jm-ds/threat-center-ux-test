@@ -50,7 +50,7 @@ export class CreateAccountComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                    this.router.navigateByUrl('/awaiting-approval');
                 },
                 error => {
                     console.error('CREATE ACCOUNT ERROR', error);
