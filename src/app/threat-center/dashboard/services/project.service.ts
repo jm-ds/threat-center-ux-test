@@ -269,6 +269,7 @@ export class ProjectDashboardService {
                       assetType,
                       parentScanAssetId,
                       attributionStatus, 
+                      matchType,
                       embeddedAssets {
                         edges {
                           node {
