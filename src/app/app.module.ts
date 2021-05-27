@@ -52,7 +52,8 @@ import { MatProgressBarModule } from '@angular/material';
     NavRightComponent,
     ConfigurationComponent,
     ToggleFullScreenDirective,
-    LoadingDialogComponent, PreScanLoadingDialogComponent
+    LoadingDialogComponent, PreScanLoadingDialogComponent,
+    UnauthorizedComponent
   ],
   entryComponents:[LoadingDialogComponent, PreScanLoadingDialogComponent],
   imports: [

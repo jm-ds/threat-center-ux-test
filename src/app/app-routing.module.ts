@@ -4,6 +4,7 @@ import { AdminComponent } from './theme/layout/admin/admin.component';
 import {CoreChartModule} from './demo/pages/core-chart/core-chart.module';
 import { AuthComponent } from './theme/layout/auth/auth.component';
 import { AuthGuard } from './security/helpers';
+import { UnauthorizedComponent } from './security/unauthorized/unauthorized.component';
 
 const routes: Routes = [
   {
@@ -113,6 +114,10 @@ const routes: Routes = [
       {
         path: 'sample-page',
         loadChildren: () => import('./demo/pages/sample-page/sample-page.module').then(module => module.SamplePageModule)
+      },
+      {
+        path: 'unauthorized',
+        component: UnauthorizedComponent
       }
     ]
   },
