@@ -10,8 +10,17 @@ export class FixResult {
 
 export class TxComponent {
     componentId;
+    copyrights: Copyright[];
 }
 
-export type ComponentQuery = {
+export class Copyright {
+    text: string;
+    startYear: number;
+    endYear: number;
+    owners: string[];
+    toPresent: boolean;
+}
+
+export interface ComponentQuery {
     component: TxComponent;
 }
