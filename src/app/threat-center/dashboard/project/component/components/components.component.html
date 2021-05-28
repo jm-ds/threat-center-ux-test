@@ -110,7 +110,7 @@
 
                 <div *ngIf="component.node.vulnerabilities.edges.length>0">
                   <div style="margin-left: 5px;">
-                    <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
+                    <button *ngIf="!component.node.componentLocation || component.node.componentLocation==='DEPENDENCY_FILE'" class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
                   </div>
                   <app-ui-modal #selectVersionDialog dialogClass="modal-dialog-centered" (click)="$event.stopPropagation();">
                     <div class="app-modal-header">
