@@ -182,6 +182,9 @@ export class ProjectDashboardService {
                       version,
                       isInternal,
                       lastInheritedRiskScore,
+                      componentType, 
+                      componentLocation,
+                      componentDiscoveryMethod,
                       licenses {
                         edges {
                           node {
@@ -358,6 +361,9 @@ export class ProjectDashboardService {
                   version,
                   isInternal,
                   lastInheritedRiskScore,
+                  componentType, 
+                  componentLocation,
+                  componentDiscoveryMethod,
                   licenses {
                     edges {
                       node {

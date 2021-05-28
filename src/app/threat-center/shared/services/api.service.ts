@@ -45,9 +45,37 @@ export class ApiService {
             tag
             version
             created
-            
-            
           }
+          projectMetricsSummary {
+            measureDateTime
+            vulnerabilityMetrics {
+              critical
+              high
+              medium
+              low
+              info
+            }
+            licenseMetrics {
+              copyleftStrong
+              copyleftWeak
+              copyleftPartial
+              copyleftLimited
+              copyleft
+              custom
+              dual
+              permissive
+            }
+            supplyChainMetrics {
+              risk
+              quality
+            }
+            assetMetrics {
+              embedded
+              openSource
+              unique
+            }
+          }
+
           %childProjects%
         }
       }
@@ -131,32 +159,32 @@ export class ApiService {
               projectMetricsSummary {
                 measureDateTime
                 vulnerabilityMetrics {
-					critical
-					high
-					medium
-					low
-					info
+                  critical
+                  high
+                  medium
+                  low
+                  info
                 }
                 licenseMetrics {
-					copyleftStrong
-					copyleftWeak
-					copyleftPartial
-					copyleftLimited
-					copyleft
-					custom
-					dual
-					permissive
+                  copyleftStrong
+                  copyleftWeak
+                  copyleftPartial
+                  copyleftLimited
+                  copyleft
+                  custom
+                  dual
+                  permissive
                 }
                 supplyChainMetrics {
-					risk
-					quality
+                  risk
+                  quality
                 }
                 assetMetrics {
-					embedded
-					openSource
-					unique
+                  embedded
+                  openSource
+                  unique
                 }
-			  }
+			        }
               
               
               %childProjects%
@@ -428,6 +456,9 @@ export class ApiService {
                     version,
                     isInternal,
                     lastInheritedRiskScore,
+                    componentType, 
+                    componentLocation,
+                    componentDiscoveryMethod,
                     licenses {
                       edges {
                         node {
@@ -647,6 +678,9 @@ export class ApiService {
                     version,
                     isInternal,
                     lastInheritedRiskScore,
+                    componentType, 
+                    componentLocation,
+                    componentDiscoveryMethod,
                     licenses {
                       edges {
                         node {

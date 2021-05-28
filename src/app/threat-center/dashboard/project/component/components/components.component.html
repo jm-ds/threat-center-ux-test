@@ -44,6 +44,14 @@
                   <option value="TRUE">True</option>
                   <option value="FALSE">False</option>
                 </select>
+                <select *ngIf="col.header == 'Location'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
+                  <option value="DRIVE">DRIVE</option>
+                  <option value="STATIC_REF">STATIC REF</option>
+                </select>
 <!--                <input *ngIf="col.header =='Source'" type="text" placeholder="{{col.header}}" name="search-name"-->
 <!--                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>-->
                 <select *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select"
@@ -52,6 +60,20 @@
                   <option value="ALL" selected>- All -</option>
                   <option value="TRUE">True</option>
                   <option value="FALSE">False</option>
+                </select>
+                <select *ngIf="col.header == 'Type'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="LIBRARY">LIBRARY</option>
+                  <option value="ASSET">ASSET</option>
+                </select>
+                <select *ngIf="col.header == 'Discovery'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="DECLARED">DECLARED</option>
+                  <option value="DISCOVERED">DISCOVERED</option>
                 </select>
               </th>
             </tr>
@@ -63,7 +85,7 @@
               <td>{{component.node.group}}</td>
               <td>{{component.node.version}}</td>
               <td>{{component.node.isInternal}}</td>
-              <td>File System/POM</td>
+              <td>{{!!component.node.componentLocation?component.node.componentLocation.replaceAll('_',' '):''}}</td>
               <td>
                 <ng-container *ngIf="component.node.licenses.edges.length > 0">
                   <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
@@ -144,6 +166,8 @@
 
                 </div>
               </td>
+              <td>{{!!component.node.componentType?component.node.componentType.replaceAll('_',' '):''}}</td>
+              <td>{{!!component.node.componentDiscoveryMethod?component.node.componentDiscoveryMethod.replaceAll('_',' '):''}}</td>
             </tr>
         </ng-template>
         </p-table>
