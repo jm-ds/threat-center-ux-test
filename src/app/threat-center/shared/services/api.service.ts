@@ -285,7 +285,7 @@ export class ApiService {
       `, 'no-cache');
   }
 
-  getProject(filter: string, projectId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getProject(projectId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
     const filterArg = 'filterBranchName: \"' + filter + '\",';
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `, last: ${last}` : '';

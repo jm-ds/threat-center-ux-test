@@ -126,7 +126,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.filterBranchName, this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
@@ -142,7 +142,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    const obsProject = this.apiService.getProject(this.filterBranchName, this.projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
     obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -512,7 +512,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Loading project data after pagination for scan tab.
   loadProjectData(first, last, endCursor = undefined, startCursor = undefined) {
-    let projects = this.apiService.getProject(this.filterBranchName, this.projectId, first, last, endCursor, startCursor)
+    let projects = this.apiService.getProject(this.projectId, this.filterBranchName, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.project));
     projects.subscribe(project => {
       this.scanList = project.scans.edges;

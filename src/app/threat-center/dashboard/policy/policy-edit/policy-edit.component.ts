@@ -93,7 +93,7 @@ export class PolicyEditComponent implements OnInit {
                 })
             }
             if (!!this.projectId) {
-                this.apiService.getProject("", this.projectId, 1).subscribe(data=>{
+                this.apiService.getProject(this.projectId, "",  1).subscribe(data=>{
                     this.policy.project=data.data.project;
                 })
             }
