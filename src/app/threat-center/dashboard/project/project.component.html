@@ -84,7 +84,7 @@
                   <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th>Version</th>
-                      <th>Branch</th>
+                      <th>Branch name</th>
                       <th>Tag</th>
                       <th>Created</th>
                       <th>Vulnerabilities</th>
@@ -93,6 +93,23 @@
                       <th title="Asset Composition">ASSETS</th>
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th>
+                        <input type="text" placeholder="Branch name" name="search-name"
+                               class="form-control"
+                               (input)="filterColumn($event.target.value)"
+                               [value]="getColumnFilterValue()"
+                        />
+                      </th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
