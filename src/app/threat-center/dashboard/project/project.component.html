@@ -84,7 +84,7 @@
                   <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th>Version</th>
-                      <th>Branch</th>
+                      <th>Branch name</th>
                       <th>Tag</th>
                       <th>Created</th>
                       <th>Vulnerabilities</th>
@@ -93,6 +93,23 @@
                       <th title="Asset Composition">ASSETS</th>
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th>
+                        <input type="text" placeholder="Branch name" name="search-name"
+                               class="form-control"
+                               (input)="filterColumn($event.target.value)"
+                               [value]="getColumnFilterValue()"
+                        />
+                      </th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
@@ -238,95 +255,6 @@
             <ng-template ngbTabContent>
               <app-licenses [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData">
               </app-licenses>
-            </ng-template>
-          </ngb-tab>
-
-          <!-- COPYRIGHTS TAB -->
-          <ngb-tab id="copyrights">
-            <ng-template ngbTabTitle>Copyrights&nbsp;
-              <span class="badge badge-light">
-                9
-              </span>
-            </ng-template>
-            <ng-template ngbTabContent>
-              <div class="row m-t-20">
-                <div class="col-sm-12">
-
-                  <div class="table-responsive">
-                    <perfect-scrollbar>
-                      <table class="table table-hover m-b-0">
-                        <thead>
-                          <tr>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold" width="250px">TEXT</th>
-                            <th style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold">
-                              START YEAR</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">END YEAR</th>
-                            <th style="border-bottom:1px solid #4680ff;font-weight:bold">COUNT</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                          <tr>
-                            <td>Copyright 2009, Broadcom Corporation</td>
-                            <td style="border-left:1px solid #4680ff">2009</td>
-                            <td>present</td>
-                            <td>15</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright 2006, 2007, Michael Buesch &lt;mb@bu3sch.de&gt;</td>
-                            <td style="border-left:1px solid #4680ff">2006</td>
-                            <td>present</td>
-                            <td>5</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright 2010, Bernhard Loos &lt;bernhardloos@googlemail.com&gt;</td>
-                            <td style="border-left:1px solid #4680ff">2010</td>
-                            <td>present</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright 2011, Hauke Mehrtens &lt;hauke@hauke-m.de&gt;</td>
-                            <td style="border-left:1px solid #4680ff">2011</td>
-                            <td>present</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright (c) 2015, Intel Corporation.</td>
-                            <td style="border-left:1px solid #4680ff">2015</td>
-                            <td>present</td>
-                            <td>112</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright (c) 2016 Christoph Hellwig.</td>
-                            <td style="border-left:1px solid #4680ff">2015</td>
-                            <td>present</td>
-                            <td>43</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright (C) 2016 Jens Axboe</td>
-                            <td style="border-left:1px solid #4680ff">2016</td>
-                            <td>present</td>
-                            <td>15</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright (c) 2015, Hannes Reinecke</td>
-                            <td style="border-left:1px solid #4680ff">2015</td>
-                            <td>present</td>
-                            <td>37</td>
-                          </tr>
-                          <tr>
-                            <td>Copyright (c) 2016, Damien Le Moal</td>
-                            <td style="border-left:1px solid #4680ff">2016</td>
-                            <td>present</td>
-                            <td>2</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </perfect-scrollbar>
-                  </div>
-
-                </div>
-              </div>
             </ng-template>
           </ngb-tab>
 

@@ -1078,6 +1078,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!this.checkRunningScans) {
       return;
     }
+    // todo: replace it with socket [task: https://github.com/threatrix/product/issues/464]
     this.taskService.getRunningScanTasksCount(entityId)
       .pipe(map(countData => countData.data.running_scan_tasks_count))
       .subscribe(count => {
