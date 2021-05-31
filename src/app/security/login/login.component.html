@@ -10,10 +10,12 @@
     </div>
     <div class="col-6 col-lg-6 col-xl-4 white-col">
         <div>
-
+            <!-- Registration via username/password -->
+            <div class="caption-blue-underline mt-50">Don't have an account?</div>
+            <a routerLink="/create-account" class="btn btn-primary btn-block">Sign Up!</a>
 
             <!-- OAuth login -->
-            <div class="caption-blue-underline">
+            <div class="caption-blue-underline  mt-50">
                 OAuth Authentication
                 <a href="javascript:" [placement]="'top'" [popoverTitle]="'OAuth Authentication'" ngbPopover="Login or sign up with your GitHub, GitLab, BitBucket or Google account.">
                     <i class="far fa-question-circle" ></i>
@@ -47,12 +49,6 @@
                 </div>
             </div>
             <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
-
-
-            <!-- Registration via username/password -->
-            <div class="caption-blue-underline mt-50">Don't have an account?</div>
-            <a routerLink="/create-account" class="btn btn-primary btn-block">Sign Up!</a>
-
 
             <!-- Basic Authentication -->
             <div class="caption-blue-underline mt-50">Basic Authentication</div>

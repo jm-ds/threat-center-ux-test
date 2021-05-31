@@ -25,31 +25,31 @@
 
                 <!-- Company name -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !companyName.valid }">
-                    <input class="form-control" name="companyName" [(ngModel)]="model.companyName" #companyName="ngModel" required placeholder="Company name">
+                    <input class="form-control fontAwesome" name="companyName" [(ngModel)]="model.companyName" #companyName="ngModel" required placeholder="Company name *">
                     <div class="text-danger" *ngIf="f.submitted && !companyName.valid">Company name is required</div>
                 </div>
 
                 <!-- Full name -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fullName.valid }">
-                    <input class="form-control" name="fullName" [(ngModel)]="model.fullName" #fullName="ngModel" required placeholder="Full name">
+                    <input class="form-control" name="fullName" [(ngModel)]="model.fullName" #fullName="ngModel" required placeholder="Full name *">
                     <div class="text-danger" *ngIf="f.submitted && !fullName.valid">Full name is required</div>
                 </div>
 
                 <!-- Position -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !position.valid }">
-                    <input class="form-control" name="position" [(ngModel)]="model.position" #position="ngModel" required placeholder="Position">
+                    <input class="form-control" name="position" [(ngModel)]="model.position" #position="ngModel" required placeholder="Position *">
                     <div class="text-danger" *ngIf="f.submitted && !position.valid">Position is required</div>
                 </div>
 
                 <!-- Phone number -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
-                    <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required placeholder="Phone number">
+                    <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required placeholder="Phone number *">
                     <div class="text-danger" *ngIf="f.submitted && !phone.valid">Phone number is required</div>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
-                    <input class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required placeholder="Email" [email]="true">
+                    <input class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required placeholder="Email *" [email]="true">
                     <div class="text-danger" *ngIf="f.submitted && !email.valid">Valid email is required</div>
                 </div>
 
@@ -64,7 +64,7 @@
                         [pattern]="'(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}'"
                 -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-                    <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required placeholder="Password"
+                    <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required placeholder="Password *"
                            [pattern]="'(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z0-9$@$!%*?&].{7,}'">
                     <!--<div class="text-danger" *ngIf="f.submitted && !password.valid">Password is required</div>-->
                     <div class="text-danger" *ngIf="f.submitted && password.errors && password.errors.required">Password is required</div>
@@ -83,7 +83,7 @@
                 <!-- Cover letter -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
                     <textarea class="form-control" name="coverLetter" [(ngModel)]="model.coverLetter" #coverLetter="ngModel" rows="4"
-                              placeholder="Cover letter. Please tell us a little bit about your interest in Threatrix."></textarea>
+                              placeholder="Please tell us a little bit about your interest in Threatrix."></textarea>
                     <div class="text-danger" *ngIf="f.submitted && !coverLetter.valid">Please tell us a little bit about your interest in Threatrix.</div>
                 </div>
 
