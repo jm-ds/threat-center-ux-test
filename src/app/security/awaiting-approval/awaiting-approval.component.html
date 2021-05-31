@@ -53,7 +53,7 @@
                 <!-- cover letter -->
                 <div class="form-group" *ngIf="user.coverLetter == null || user.coverLetter == ''" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
                     <textarea class="form-control" name="coverLetter" [(ngModel)]="model.coverLetter" #coverLetter="ngModel" rows="4"
-                              placeholder="Cover letter. Please tell us a little bit about your interest in Threatrix."></textarea>
+                              placeholder="Please tell us a little bit about your interest in Threatrix."></textarea>
                     <div class="text-danger" *ngIf="f.submitted && !coverLetter.valid">Please tell us a little bit about your interest in Threatrix.</div>
                 </div>
 
