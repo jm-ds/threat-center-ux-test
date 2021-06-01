@@ -165,21 +165,21 @@
                       </td>
                       <td style="text-align: center">
                         <span *ngIf="!!scan.node?.errorMsg;else successMsg">
-                          <button class="badge-light-danger error-btn" title="Show log and error messages"
+                          <button class="btn badge-light-danger error-btn" title="Show log and error messages"  
                             (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
-                            <i class=" icon-x badge-light-danger" style="font-size: 14px; font-weight: 800;"></i>
+                            <i class="feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                           </button>
                         </span>
                         <ng-template #successMsg><span>
                             <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
-                              class="btn badge-light-success error-btn" title="Show log"
+                              class="btn badge-light-success error-btn" title="Show log" 
                               (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
                               <i class="feather icon-check badge-light-success"
-                                style="font-size: 14px; font-weight: 800;"></i>
+                                style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                             </button>
                             <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log"
                               class="feather icon-check badge-light-success"
-                              style="font-size: 14px; font-weight: 800;"></i>
+                              style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                           </span></ng-template>
                       </td>
 
