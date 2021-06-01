@@ -19,7 +19,7 @@ export class CoreErrorHelperService {
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || !errObj.status || errObj.status === 0) {
-            this.coreHelperService.swalALertBox(Messages.wrongMessage, Messages.commonErrorHeaderText);
+            this.coreHelperService.swalALertBox(Messages.wrongMessage, Messages.commonErrorHeaderText,'error');
         } else {
             //getting server error if any other wise show default message according to status of server
             const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
@@ -38,7 +38,7 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+                            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
@@ -52,7 +52,7 @@ export class CoreErrorHelperService {
                     } else if (errObj.status === 502) {
                         dataObjToShow.message = Messages.status502;
                     }
-                    this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+                    this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
                     break;
             }
             this.printErrorMessageToConsol(dataObjToShow.message)
@@ -161,9 +161,9 @@ export class CoreErrorHelperService {
     //Helper function which will redirect user to login page with notifying user.
     private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
         if (actualStatus === 401) {
-            Swal.fire('Authentication required', dataObjToShow.message, 'warning');
+            this.coreHelperService.swalALertBox(dataObjToShow.message,'Authentication required','warning')
         } else {
-            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
         }
         this.authenticationService.logout();
         this.router.navigate(['/login']);
