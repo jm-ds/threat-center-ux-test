@@ -32,7 +32,7 @@ const routes: Routes = [
             {
                 path: 'edit/:username',
                 component: UserEditComponent,
-                data: {auth: ["USER EDIT"]}
+                data: {auth: ["USER_EDIT"]}
             },
             {
                 path: 'create',
