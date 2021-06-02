@@ -47,12 +47,14 @@ export class CoreErrorHelperService {
                     break;
                 default:
                     //Rest Of all status code perform over here..
-                    if (errObj.status === 500) {
-                        console.log("REQUEST PAYLOAD", requestPayload);
-                    } else if (errObj.status === 502) {
-                        dataObjToShow.message = Messages.status502;
+                    if (errObj.status === 502) {
+                        Swal.fire('Server is restarting.', Messages.status502, 'info');
+                    } else {
+                        if (errObj.status === 500) {
+                            console.log("REQUEST PAYLOAD", requestPayload);
+                        }
+                        this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     }
-                    this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     break;
             }
             this.printErrorMessageToConsol(dataObjToShow.message)
