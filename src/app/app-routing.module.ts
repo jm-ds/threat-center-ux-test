@@ -4,6 +4,7 @@ import { AdminComponent } from './theme/layout/admin/admin.component';
 import {CoreChartModule} from './demo/pages/core-chart/core-chart.module';
 import { AuthComponent } from './theme/layout/auth/auth.component';
 import { AuthGuard } from './security/helpers';
+import { UnauthorizedComponent } from './security/unauthorized/unauthorized.component';
 
 const routes: Routes = [
   {
