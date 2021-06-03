@@ -554,7 +554,7 @@ export class ApiService {
               description
               usedBy,
               lastInheritedRiskScore,
-              copyrights {
+              copyrightList {
                 text,
                 startYear,
                 endYear,
