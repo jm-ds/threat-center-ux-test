@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { NextConfig } from '@app/app-config';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { Messages } from '@app/messages/messages';
 import { Entity, ProjectQuery, Scan, ScanQuery } from '@app/models';
 import gql from 'graphql-tag';
 import { EMPTY, forkJoin, Observable } from 'rxjs';
@@ -528,7 +529,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
-            this.coreHelperService.alertBox("Project data not found!");
+            this.coreHelperService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
             return EMPTY;
           }
         })
