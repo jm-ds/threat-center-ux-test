@@ -19,7 +19,7 @@ export class CoreErrorHelperService {
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || !errObj.status || errObj.status === 0) {
-            this.coreHelperService.swalALertBox(Messages.wrongMessage, Messages.commonErrorHeaderText);
+            this.coreHelperService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText);
         } else {
             //getting server error if any other wise show default message according to status of server
             const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
@@ -38,7 +38,7 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+                            this.coreHelperService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
@@ -53,7 +53,7 @@ export class CoreErrorHelperService {
                         if (errObj.status === 500) {
                             console.log("REQUEST PAYLOAD", requestPayload);
                         }
-                        this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+                        this.coreHelperService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
                     }
                     break;
             }
@@ -165,7 +165,7 @@ export class CoreErrorHelperService {
         if (actualStatus === 401) {
             Swal.fire('Authentication required', dataObjToShow.message, 'warning');
         } else {
-            this.coreHelperService.swalALertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
+            this.coreHelperService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText);
         }
         this.authenticationService.logout();
         this.router.navigate(['/login']);

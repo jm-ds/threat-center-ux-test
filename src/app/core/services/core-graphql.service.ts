@@ -97,13 +97,13 @@ export class CoreGraphQLService {
                 this.coreErrorHelperService.handleNetworkError(er.networkError, null);
             } else {
                 this.coreErrorHelperService.printErrorMessageToConsol(er.message);
-                this.coreHelperService.swalALertBox(Messages.graphQlCommonErrorMessage);
+                this.coreHelperService.alertBox(Messages.graphQlCommonErrorMessage);
             }
         } else if (typeof error === "string") { //check if error is string
             this.coreErrorHelperService.printErrorMessageToConsol(error);
-            this.coreHelperService.swalALertBox(error || Messages.graphQlCommonErrorMessage);
+            this.coreHelperService.alertBox(error || Messages.graphQlCommonErrorMessage);
         } else {
-            this.coreHelperService.swalALertBox(Messages.wrongMessage);
+            this.coreHelperService.alertBox(Messages.wrongMessage);
         }
         return EMPTY;
     }
