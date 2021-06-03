@@ -35,7 +35,7 @@ export class CoreHelperService {
         });
     }
 
-    swalAlertConfrm(title: string, text: string) {
+    alertConfirm(title: string, text: string) {
         return Swal.fire({
             title: title,
             text: text,

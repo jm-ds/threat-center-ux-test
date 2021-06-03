@@ -134,7 +134,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //delete entity data with server call
     deleteEntity(data) {
-        this.coreHelperService.swalAlertConfrm("Are you sure?", "Once deleted, you will not be able to recover this entity!")
+        this.coreHelperService.alertConfirm("Are you sure?", "Once deleted, you will not be able to recover this entity!")
             .then((willDelete) => {
                 if (willDelete.value) {
                     //delete...
