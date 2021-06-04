@@ -323,7 +323,7 @@
               <div class="row m-t-20">
                 <div class="col-sm-12">
 
-                  <div class="table-responsive" *ngIf="component.copyrights">
+                  <div class="table-responsive" *ngIf="component.copyrightList && component.copyrightList.length > 0">
                     <perfect-scrollbar>
                       <table class="table table-hover m-b-0">
                         <thead>
@@ -338,7 +338,7 @@
                         </thead>
                         <tbody>
 
-                        <tr *ngFor="let copyright of component.copyrights">
+                        <tr *ngFor="let copyright of component.copyrightList">
                           <td>{{copyright.text}}</td>
                           <td style="border-left:1px solid #4680ff">{{copyright.startYear}}</td>
                           <td>{{copyright.endYear !=0 ? copyright.endYear: "-"}}</td>
@@ -349,6 +349,9 @@
                         </tbody>
                       </table>
                     </perfect-scrollbar>
+                  </div>
+                  <div *ngIf="!component.copyrightList || component.copyrightList.length == 0" style="text-align: center; margin-top: 20px; font-size: 20px;">
+                    No copyrights found for {{component.name}} version {{component.version}}.
                   </div>
 
                 </div>
