@@ -16,7 +16,7 @@
 
     <perfect-scrollbar [style.max-height]="'650px'">
       <p-table #dt [columns]="columns" [value]="licensesDetails.licenses?.edges" [paginator]="false" [rows]="50"
-        tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer" [autoLayout]="true"
+        tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
         [filterDelay]="0" [globalFilterFields]="['name']">
 
         <ng-template pTemplate="caption">
