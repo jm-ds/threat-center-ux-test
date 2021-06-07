@@ -529,7 +529,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
-            this.coreHelperService.swalALertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
+            this.coreHelperService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
             return EMPTY;
           }
         })

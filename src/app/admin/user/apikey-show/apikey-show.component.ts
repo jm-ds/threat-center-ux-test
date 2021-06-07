@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import { UserService } from '@app/admin/services/user.service';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 import {ApiKey, Message, Messages, User} from "@app/models";
 import Swal from 'sweetalert2';
 import { UserUtils } from '../user-utils';
@@ -22,6 +23,7 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
         private userService: UserService,
         protected router: Router,
         private route: ActivatedRoute,
+        private coreHelperService:CoreHelperService
     ) {
         super(router);
         this.messages = Messages.fromRouter(this.router);
@@ -80,6 +82,6 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
         dummy.select();
         document.execCommand("copy");
         document.body.removeChild(dummy);
-        Swal.fire('API key!', 'API key copied to clipboard!', 'success');
+        this.coreHelperService.alertBox('API key copied to clipboard!','API key!','success');
     }
 }
