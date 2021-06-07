@@ -11,6 +11,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
 import { LazyLoadEvent, Table } from "primeng";
 import { TxComponent } from '@app/models';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 
 @Component({
   selector: 'component-detail',
@@ -57,7 +58,8 @@ export class ComponentDetailComponent implements OnInit {
     private router: Router,
     private coreHelperService: CoreHelperService,
     private vulnerableCodeMappingService: VulnerableCodeMappingService,
-    private changeDetector: ChangeDetectorRef) { }
+    private changeDetector: ChangeDetectorRef,
+    private projectBreadcumsService:ProjectBreadcumsService) { }
 
   ngOnInit() {
     console.log("Loading ComponentDetailComponent");
@@ -70,8 +72,8 @@ export class ComponentDetailComponent implements OnInit {
       .pipe(map(result => result.data.component));
 
     this.obsComponent.subscribe((res: any) => {
-      if (!!this.coreHelperService.getProjectBreadcum()) {
-        this.coreHelperService.settingProjectBreadcum("Component", res.name, res.componentId, false);
+      if (!!this.projectBreadcumsService.getProjectBreadcum()) {
+        this.projectBreadcumsService.settingProjectBreadcum("Component", res.name, res.componentId, false);
       }
       this.vulnerabilityDetails = res["vulnerabilities"];
     });
@@ -130,8 +132,8 @@ export class ComponentDetailComponent implements OnInit {
 
   //goto details pages
   gotoOtherDetailsPage(id, pageName: string) {
-    if(!!this.coreHelperService.getProjectBreadcum()){
-      this.coreHelperService.settingProjectBreadcum("","","",true);
+    if(!!this.projectBreadcumsService.getProjectBreadcum()){
+      this.projectBreadcumsService.settingProjectBreadcum("","","",true);
     }
     const entityId = this.route.snapshot.paramMap.get('entityId'),
       projectId = this.route.snapshot.paramMap.get('projectId'),
@@ -189,7 +191,7 @@ export class ComponentDetailComponent implements OnInit {
 
   //Initialize breadcum details
   private initBreadcum() {
-    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+    this.breadcumDetail = this.projectBreadcumsService.getProjectBreadcum();
   }
 
   loadBinaryReleasesLazy(event: LazyLoadEvent) {

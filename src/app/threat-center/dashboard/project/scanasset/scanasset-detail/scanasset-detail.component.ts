@@ -9,6 +9,7 @@ import { AuthenticationService } from '@app/security/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import Swal from "sweetalert2";
 import { ScanAsset, ScanAssetMatch } from '@app/models';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 
 
 @Component({
@@ -51,7 +52,8 @@ export class ScanAssetDetailComponent implements OnInit {
     private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
-    private coreHelperService: CoreHelperService) { }
+    private coreHelperService: CoreHelperService,
+    private projectBreadcumsService:ProjectBreadcumsService) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -155,7 +157,7 @@ export class ScanAssetDetailComponent implements OnInit {
 
   //Initialize breadcum details
   private initBreadcum() {
-    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+    this.breadcumDetail = this.projectBreadcumsService.getProjectBreadcum();
   }
 
   //open Attribution process model

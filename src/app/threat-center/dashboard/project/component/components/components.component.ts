@@ -10,6 +10,7 @@ import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import { FixResult, Scan } from '@app/models';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 @Component({
     selector: 'app-components',
@@ -47,20 +48,21 @@ export class ComponentsComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private userPreferenceService:UserPreferenceService) {
     }
 
     ngOnInit() {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
-        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components");
+        this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         } else {
@@ -84,22 +86,22 @@ export class ComponentsComponent implements OnInit {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Components", value: pageInfo.pageSize });
+            this.userPreferenceService.settingUserPreference("Project", null, null, { componentName: "Components", value: pageInfo.pageSize });
             // API Call
-            this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined, undefined, undefined);
+            this.loadComponentData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined, undefined, undefined);
             this.paginator.firstPage();
         } else {
             // Next and Previous changed
             if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
                 // call with after...
                 if (!!this.componentDetails.components.pageInfo && this.componentDetails.components.pageInfo['hasNextPage']) {
-                    this.loadComponentData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined,
+                    this.loadComponentData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")), undefined,
                         this.componentDetails.components.pageInfo['endCursor'], undefined);
                 }
             } else {
                 // call with before..
                 if (!!this.componentDetails.components.pageInfo && this.componentDetails.components.pageInfo['hasPreviousPage']) {
-                    this.loadComponentData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")),
+                    this.loadComponentData(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")),
                         undefined, this.componentDetails.components.pageInfo['startCursor']);
                 }
             }
@@ -135,7 +137,7 @@ export class ComponentsComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         }, this.timeOutDuration);

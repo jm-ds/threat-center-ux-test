@@ -17,6 +17,8 @@ import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component
 import * as _ from 'lodash';
 import { Entity, Project } from '@app/models';
 import { NextConfig } from '@app/app-config';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 
 @Component({
   selector: 'project-dashboard',
@@ -35,7 +37,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private coreHelperService: CoreHelperService,
     private scanHelperService: ScanHelperService,
     private router: Router,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private userPreferenceService:UserPreferenceService,
+    private projectBreadcumsService:ProjectBreadcumsService) {
     this.chartDB = ChartDB;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -126,14 +130,14 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
     }
     this.subscribeProjectData();
     this.getLastTabSelected();
-    this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan");
+    this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan");
   }
 
   subscribeProjectData() {
@@ -142,7 +146,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getProjectScanData() {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
     obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -188,7 +192,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Project", $event.activeId, $event.nextId);
+    this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId);
   }
 
   rowUnselect($event: any) {
@@ -489,9 +493,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Scan", value: pageInfo.pageSize });
+      this.userPreferenceService.settingUserPreference("Project", null, null, { componentName: "Scan", value: pageInfo.pageSize });
       //API Call
-      this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
+      this.loadProjectData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, undefined, undefined);
       this.paginator.firstPage();
     }
     else {
@@ -499,12 +503,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         //call with after...
         if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasNextPage']) {
-          this.loadProjectData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
+          this.loadProjectData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['endCursor'], undefined);
         }
       } else {
         //call with before..
         if (!!this.projectDetails.scans.pageInfo && this.projectDetails.scans.pageInfo['hasPreviousPage']) {
-          this.loadProjectData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['startCursor']);
+          this.loadProjectData(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")), undefined, this.projectDetails.scans.pageInfo['startCursor']);
         }
       }
     }
@@ -566,7 +570,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //chain of obsevables (helper function for api calls)
   private gettingDataforAllMetrics(scanId: string) {
-    const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+    const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
     return forkJoin([res]);
   }
 
@@ -588,7 +592,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getLastTabSelected() {
-    this.stateService.project_tabs_selectedTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Project") ? this.coreHelperService.getLastTabSelectedNameByModule("Project") : this.stateService.project_tabs_selectedTab;
+    this.stateService.project_tabs_selectedTab = !!this.userPreferenceService.getLastTabSelectedNameByModule("Project") ? this.userPreferenceService.getLastTabSelectedNameByModule("Project") : this.stateService.project_tabs_selectedTab;
   }
 
   openLogs(content, errorMsg: string, log: string) {
@@ -611,15 +615,15 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         this.child.goBack();
         return false;
       } else {
-        if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project")) {
-          this.stateService.project_tabs_selectedTab = this.coreHelperService.getPreviousTabSelectedByModule("Project", true);
-          this.coreHelperService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
+        if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Project")) {
+          this.stateService.project_tabs_selectedTab = this.userPreferenceService.getPreviousTabSelectedByModule("Project", true);
+          this.userPreferenceService.settingUserPreference("Project", null, this.stateService.project_tabs_selectedTab);
           // window.scroll(this.scrollX, this.scrollY);
           const ele = document.getElementById("chart-bl");
           ele.scrollIntoView({ block: 'end' });
           return false;
         } else {
-          this.coreHelperService.settingUserPreference("Project", "", null);
+          this.userPreferenceService.settingUserPreference("Project", "", null);
           return true;
         }
       }
@@ -665,15 +669,15 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initProjectBradcum(project) {
     //if project breadcum data has not been saved to storage then store it to storage
-    if (!this.coreHelperService.getProjectBreadcum()) {
+    if (!this.projectBreadcumsService.getProjectBreadcum()) {
       this.projectDashboardService.getEntity(project.entityId)
         .pipe(map(res => res.data.entity))
         .subscribe((entity: Entity) => {
-          this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
-          this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
+          this.projectBreadcumsService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
+          this.projectBreadcumsService.settingProjectBreadcum("Project", project.name, project.projectId, false);
         });
     } else {
-      this.coreHelperService.settingProjectBreadcum("Project", project.name, project.projectId, false);
+      this.projectBreadcumsService.settingProjectBreadcum("Project", project.name, project.projectId, false);
     }
   }
 
@@ -681,7 +685,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Project") || this.isAssetStory) {
+    if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Project") || this.isAssetStory) {
       history.pushState(null, null, window.location.href);
     }
   }
