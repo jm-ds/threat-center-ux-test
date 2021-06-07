@@ -41,6 +41,16 @@ body.next-dark {
         }
     }
 
+    textarea.form-control {
+        //background: #586580;
+        border: 1px solid #7a8085 !important;
+        &:focus {
+            //box-shadow: 0 1px 20px 0 rgba(255, 255, 255, 0.16);
+            //box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+            box-shadow: 0 0 0.4rem 0.15rem rgba(20, 177, 255, 0.5);
+        }
+    }
+
     .table {
         .ui-dropdown, .ui-dropdown.active {
             background: #2a3641;
