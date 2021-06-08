@@ -81,7 +81,7 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning")
+                        this.coreHelperService.alertBox("Scan is completed with errors", "Warning", "warning")
                             .then(() => {
                                 this.highlightNewScanIfInSamePage(tUpdate);
                                 this.refreshObjectPageIfFirstScan();
@@ -104,7 +104,7 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.coreHelperService.swalALertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
+                    this.coreHelperService.alertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
 
                     //remove scan from storage
                     this.updateStorage(null);

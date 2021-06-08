@@ -165,7 +165,7 @@ export class ScanAssetDetailComponent implements OnInit {
     if (!!this.selectedMatches && this.selectedMatches.length >= 1) {
       content.show();
     } else {
-      Swal.fire('', 'To attribute asset you have to select at least one of third-party assets which will be used for attribution', 'info');
+      this.coreHelperService.alertBox('To attribute asset you have to select at least one of third-party assets which will be used for attribution','','info');
     }
   }
 
@@ -179,33 +179,26 @@ export class ScanAssetDetailComponent implements OnInit {
         Swal.close();
         modelContent.hide();
         if (data.data.attributeAsset) {
-          Swal.fire('License attribution', 'Attribution is successful', 'success');
+          this.coreHelperService.alertBox('Attribution is successful','License attribution','success');
         } else {
-          Swal.fire('License attribution', 'Attribution is not required', 'info');
+          this.coreHelperService.alertBox('Attribution is not required','License attribution','info');
         }
       }, (error) => {
         this.isDisableAttributeLicensebtn = false;
         Swal.close();
         modelContent.hide();
-        Swal.fire('License attribution', 'Attribution error', 'error');
+        this.coreHelperService.alertBox('Attribution error','License attribution','error');
       });
   }
 
   attributeProcessExecutionModel(modelContent) {
-    Swal.fire({
-      title: 'Do you want to close dialog?',
-      text: "You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.",
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#4680ff',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No'
-    }).then((result) => {
-      if (result.value) {
-        modelContent.hide();
-      }
-    });
+    this.coreHelperService.alertConfirm('Do you want to close dialog?', 'You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.',
+      'question', true, true, '#4680ff', '#6c757d', 'Yes', 'No')
+      .then((result) => {
+        if (result.value) {
+          modelContent.hide();
+        }
+      });
   }
 
   //  selected matches change handler

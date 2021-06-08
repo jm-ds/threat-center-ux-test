@@ -120,7 +120,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
         } else {
             if (!this.authService.currentUser || !this.authService.currentUser.orgId) {
-                Swal.fire('Not Found', 'Organization not found!', 'error');
+                this.coreHelperService.alertBox('Organization not found!','Not Found','error');
             } else {
                 this.manageChildEntity("ADD", { parentEntityId: null });
             }
@@ -134,7 +134,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //delete entity data with server call
     deleteEntity(data) {
-        this.coreHelperService.swalAlertConfrm("Are you sure?", "Once deleted, you will not be able to recover this entity!")
+        this.coreHelperService.alertConfirm("Are you sure?", "Once deleted, you will not be able to recover this entity!"
+        ,'warning',true,true,'#4680ff', '#6c757d','Yes', 'No')
             .then((willDelete) => {
                 if (willDelete.value) {
                     //delete...

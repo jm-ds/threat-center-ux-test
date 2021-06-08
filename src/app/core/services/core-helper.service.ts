@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/security/services/authentication.service';
 import { Subject } from 'rxjs';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertType } from 'sweetalert2';
+
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +25,7 @@ export class CoreHelperService {
     }
 
     // Core alert message
-    swalALertBox(text: string, title: string = "Error!", type) {
+    alertBox(text: string, title: string = "Error!", type) {
         return Swal.fire({
             type: type,
             title: title,
@@ -32,14 +33,26 @@ export class CoreHelperService {
         });
     }
 
-    swalAlertConfrm(title: string, text: string) {
+    alertConfirm(title: string, text: string,
+        typ: SweetAlertType = 'warning',
+        isshowConfirmButton:boolean = false,
+        isshowCancelButton:boolean = false,
+        confirmButtonColor:string,
+        cancelButtonColor:string,
+        confirmButtonText:string,
+        cancelButtonText:string
+        ) {
         return Swal.fire({
             title: title,
             text: text,
-            type: 'warning',
-            showConfirmButton: true,
-            showCancelButton: true
-        })
+            type: typ,
+            showConfirmButton: isshowConfirmButton,
+            showCancelButton: isshowCancelButton,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: cancelButtonColor,
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText
+        });
     }
 
     spinnerEdit(isSpeenerVisible) {

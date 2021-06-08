@@ -70,7 +70,7 @@
               </div>
               <perfect-scrollbar [style.max-height]="'650px'">
                 <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
-                  tableStyleClass="table table-bordered table-hover dataTable no-footer" selectionMode="single"
+                  tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
                   (onRowSelect)="onRowSelect($event)">
 

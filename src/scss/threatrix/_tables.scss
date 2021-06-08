@@ -38,6 +38,10 @@ table {
     }
 }
 
+table.dataTable.table-width {
+    width: calc(100% - 2px);
+}
+
 .user-profile-list table {
     margin: 0;
     width: 100%;
