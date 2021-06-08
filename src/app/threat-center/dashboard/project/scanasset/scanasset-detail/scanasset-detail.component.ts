@@ -10,6 +10,7 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 import Swal from "sweetalert2";
 import { ScanAsset, ScanAssetMatch } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { AlertService } from '@app/core/services/alert.service';
 
 
 @Component({
@@ -53,7 +54,8 @@ export class ScanAssetDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
-    private projectBreadcumsService:ProjectBreadcumsService) { }
+    private projectBreadcumsService:ProjectBreadcumsService,
+    private alertService:AlertService) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -165,7 +167,7 @@ export class ScanAssetDetailComponent implements OnInit {
     if (!!this.selectedMatches && this.selectedMatches.length >= 1) {
       content.show();
     } else {
-      this.coreHelperService.alertBox('To attribute asset you have to select at least one of third-party assets which will be used for attribution','','info');
+      this.alertService.alertBox('To attribute asset you have to select at least one of third-party assets which will be used for attribution','','info');
     }
   }
 
@@ -179,20 +181,20 @@ export class ScanAssetDetailComponent implements OnInit {
         Swal.close();
         modelContent.hide();
         if (data.data.attributeAsset) {
-          this.coreHelperService.alertBox('Attribution is successful','License attribution','success');
+          this.alertService.alertBox('Attribution is successful','License attribution','success');
         } else {
-          this.coreHelperService.alertBox('Attribution is not required','License attribution','info');
+          this.alertService.alertBox('Attribution is not required','License attribution','info');
         }
       }, (error) => {
         this.isDisableAttributeLicensebtn = false;
         Swal.close();
         modelContent.hide();
-        this.coreHelperService.alertBox('Attribution error','License attribution','error');
+        this.alertService.alertBox('Attribution error','License attribution','error');
       });
   }
 
   attributeProcessExecutionModel(modelContent) {
-    this.coreHelperService.alertConfirm('Do you want to close dialog?', 'You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.',
+    this.alertService.alertConfirm('Do you want to close dialog?', 'You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.',
       'question', true, true, '#4680ff', '#6c757d', 'Yes', 'No')
       .then((result) => {
         if (result.value) {

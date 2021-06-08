@@ -24,37 +24,6 @@ export class CoreHelperService {
         return this.unAuthorizeSubject.asObservable();
     }
 
-    // Core alert message
-    alertBox(text: string, title: string = "Error!", type) {
-        return Swal.fire({
-            type: type,
-            title: title,
-            text: text
-        });
-    }
-
-    alertConfirm(title: string, text: string,
-        typ: SweetAlertType = 'warning',
-        isshowConfirmButton:boolean = false,
-        isshowCancelButton:boolean = false,
-        confirmButtonColor:string,
-        cancelButtonColor:string,
-        confirmButtonText:string,
-        cancelButtonText:string
-        ) {
-        return Swal.fire({
-            title: title,
-            text: text,
-            type: typ,
-            showConfirmButton: isshowConfirmButton,
-            showCancelButton: isshowCancelButton,
-            confirmButtonColor: confirmButtonColor,
-            cancelButtonColor: cancelButtonColor,
-            confirmButtonText: confirmButtonText,
-            cancelButtonText: cancelButtonText
-        });
-    }
-
     spinnerEdit(isSpeenerVisible) {
         this.subject.next(isSpeenerVisible);
     }

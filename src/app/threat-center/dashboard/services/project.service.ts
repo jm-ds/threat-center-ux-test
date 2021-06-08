@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { NextConfig } from '@app/app-config';
+import { AlertService } from '@app/core/services/alert.service';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
@@ -519,7 +520,8 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
     private coreHelperService: CoreHelperService,
-    private userPreferenceService:UserPreferenceService) { }
+    private userPreferenceService:UserPreferenceService,
+    private alertService:AlertService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -532,7 +534,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
-            this.coreHelperService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
+            this.alertService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
             return EMPTY;
           }
         })

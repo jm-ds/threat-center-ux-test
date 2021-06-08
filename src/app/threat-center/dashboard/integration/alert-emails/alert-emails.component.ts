@@ -1,6 +1,7 @@
 import { Component, Injectable, Input, OnInit } from '@angular/core';
 import { EntityService } from '@app/admin/services/entity.service';
 import { OrgService } from '@app/admin/services/org.service';
+import { AlertService } from '@app/core/services/alert.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { EntitySettings } from '@app/models/entity';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +28,8 @@ export class AlertEmailsComponent implements OnInit {
     private modalService: NgbModal,
     private orgService: OrgService,
     private entityService: EntityService,
-    private coreHelperService:CoreHelperService
+    private coreHelperService:CoreHelperService,
+    private alertService:AlertService
   ) {
   }
 
@@ -81,7 +83,7 @@ export class AlertEmailsComponent implements OnInit {
        (error) => {
         console.error('Alert email saving error', error);
         Swal.close();
-        this.coreHelperService.alertBox('Error while saving emails','Saving alert emails','error');
+        this.alertService.alertBox('Error while saving emails','Saving alert emails','error');
        }
       );
     } else {
@@ -90,7 +92,7 @@ export class AlertEmailsComponent implements OnInit {
        (error) => {
         console.error('Alert email saving error', error);
         Swal.close();
-        this.coreHelperService.alertBox('Error while saving emails','Saving alert emails','error');
+        this.alertService.alertBox('Error while saving emails','Saving alert emails','error');
        }
       );
     }

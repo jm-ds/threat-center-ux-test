@@ -12,6 +12,7 @@ import { AuthenticationService } from '@app/security/services';
 import { Router } from '@angular/router';
 import { CoreErrorHelperService } from './core-error-helper.service';
 import { Messages } from '@app/messages/messages';
+import { AlertService } from './alert.service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class CoreGraphQLService {
     constructor(private apollo: Apollo,
         private coreHelperService: CoreHelperService,
         private spinner: NgxSpinnerService,
-        private coreErrorHelperService: CoreErrorHelperService
+        private coreErrorHelperService: CoreErrorHelperService,
+        private alertService:AlertService
     ) { }
 
 
@@ -97,13 +99,13 @@ export class CoreGraphQLService {
                 this.coreErrorHelperService.handleNetworkError(er.networkError, null);
             } else {
                 this.coreErrorHelperService.printErrorMessageToConsol(er.message);
-                this.coreHelperService.alertBox(Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
+                this.alertService.alertBox(Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
             }
         } else if (typeof error === "string") { //check if error is string
             this.coreErrorHelperService.printErrorMessageToConsol(error);
-            this.coreHelperService.alertBox(error || Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
+            this.alertService.alertBox(error || Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
         } else {
-            this.coreHelperService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText, 'error');
+            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText, 'error');
         }
         return EMPTY;
     }
