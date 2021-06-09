@@ -97,7 +97,18 @@ export class CoreGraphQLService {
                 this.coreErrorHelperService.handleNetworkError(er.networkError, null);
             } else {
                 this.coreErrorHelperService.printErrorMessageToConsol(er.message);
-                this.coreHelperService.alertBox(Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
+
+                if(Array.isArray(er.graphQLErrors)) {
+                    let msg = "";
+                    er.graphQLErrors.forEach(function(element, index) {
+                        if(index > 0)
+                            msg += "<br/>";
+                        msg += element.message;
+                    });
+                    this.coreHelperService.alertBoxHtml(msg);
+                } else {
+                    this.coreHelperService.swalALertBox(Messages.graphQlCommonErrorMessage);   
+                }
             }
         } else if (typeof error === "string") { //check if error is string
             this.coreErrorHelperService.printErrorMessageToConsol(error);

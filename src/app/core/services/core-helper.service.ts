@@ -35,15 +35,15 @@ export class CoreHelperService {
         });
     }
 
-    alertConfirm(title: string, text: string,
-        typ: SweetAlertType = 'warning',
-        isshowConfirmButton:boolean = false,
-        isshowCancelButton:boolean = false,
-        confirmButtonColor:string,
-        cancelButtonColor:string,
-        confirmButtonText:string,
-        cancelButtonText:string
-        ) {
+    alertBoxHtml(text: string, title: string = "Error!", type: string = "error") {
+        return Swal.fire({
+            type: "error",
+            title: title,
+            html: text
+        });
+    }
+
+    swalAlertConfrm(title: string, text: string) {
         return Swal.fire({
             title: title,
             text: text,
