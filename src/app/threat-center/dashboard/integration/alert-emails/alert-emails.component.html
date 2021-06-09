@@ -1,0 +1,59 @@
+<div style="width: 100%;">
+  <div>
+      <p-table #dt [columns]="columns" [value]="entitySettings.alertEmailAdressess" [paginator]="false" [rows]="50"
+               tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+
+        <ng-template pTemplate="caption">
+          <button type="button" class="btn btn-outline-info float-right" title="Add email" (click)="openAddEmailDialog(emailDialog)" 
+          style="color: #c9d0d5; padding: 6px; margin: 2px auto;">
+            <span>Add E-mail</span>
+          </button>
+          <p class = "float-left" style="margin-top:8px;">E-mails</p>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+            <col style="width:80%;text-align: center">
+            <col style="width:30px;text-align: center">
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>E-mail</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-email>
+          <tr>
+            <td style="padding: 10px;">
+              <a routerLink="" (click)="openEditEmailDialog(emailDialog, email)">{{email}}</a>  
+            </td>  
+            <td>
+              <button type="button" class="btn btn-icon" title="Remove email" (click)="this.removeEmail(email)" 
+              style="color: #c9d0d5; padding: 2px; margin: 0 auto;">
+                <i class="feather icon-x" style="font-size: 10px; font-weight: 800;"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </div>  
+    
+  <ng-template #emailDialog let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Alert E-mail</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label>E-mail:</label>
+          <input type="email" name="editEmail" class = "form-control" [(ngModel)] = "editEmail" required email/>
+        </div>  
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" [disabled] = "!validateEmail()" (click)="modal.close('click'); setEmail();">Save</button>
+      <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+    </div>
+  </ng-template>
+
+</div>

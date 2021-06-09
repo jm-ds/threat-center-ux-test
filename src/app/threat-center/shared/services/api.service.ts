@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service'
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
 
 @Injectable({
@@ -285,68 +285,93 @@ export class ApiService {
       `, 'no-cache');
   }
 
-  getProject(projectId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getProject(projectId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    const filterArg = 'filterBranchName: \"' + filter + '\",';
     const firstArg = (!!first) ? `first: ${first}` : '';
-    const lastArg = (!!last) ? `last: ${last}` : '';
+    const lastArg = (!!last) ? `, last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ProjectQuery>(gql`
         query {
-            project(projectId:"${projectId}") {
-              projectId,
-              entityId,
-              name,
-              scans(${firstArg}${lastArg}${afterArg}${beforeArg}) {
-                pageInfo {
-                  hasNextPage
-                  hasPreviousPage
-                  startCursor
-                  endCursor
-                }
-                totalCount
-                edges {
-                  node {
-                    scanId,
-                    projectId,
-                    branch,
-                    tag,
-                    version
-                    created,
-                    errorMsg,
-                    log
-                    
-                    
-                    projectMetricsGroup {
-                      projectMetrics{
-                          measureDate
-                          vulnerabilityMetrics {
-                              severityMetrics
-                          }
-                          assetMetrics {
-                              assetCompositionMetrics
-                          }
-                          componentMetrics {
-                              vulnerabilityMetrics
-                              licenseCategoryMetrics
-                              licenseFamilyMetrics
-                              licenseNameMetrics
-                          }
-                          licenseMetrics {
-                              licenseCategoryMetrics
-                              licenseFamilyMetrics
-                              licenseNameMetrics
-                          }
-                          supplyChainMetrics {
-                              supplyChainMetrics
-                          }
-                      }
+          project(projectId: "${projectId}") {
+            projectId
+            entityId
+            name
+            scans(${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+              totalCount
+              edges {
+                node {
+                  scanId
+                  projectId
+                  branch
+                  tag
+                  version
+                  created
+                  errorMsg
+                  log,
+                  scanMetricsSummary {
+                    vulnerabilityMetrics {
+                      critical,
+                      high,
+                      medium,
+                      low,
+                      info,
+                    },
+                    licenseMetrics {
+                      copyleftStrong,
+                       copyleftWeak,
+                       copyleftPartial,
+                       copyleftLimited,
+                       copyleft,
+                       custom,
+                       dual,
+                       permissive,
+                    },
+                    supplyChainMetrics {
+                      risk
+                      quality
                     }
-                   
-                    
+                    assetMetrics {
+                      embedded,
+                      openSource,
+                      unique
+                    }
                   }
                 }
               }
             }
+            projectMetricsGroup {
+              projectMetrics{
+                  measureDate
+                  vulnerabilityMetrics {
+                      severityMetrics
+                  }
+                  assetMetrics {
+                      assetCompositionMetrics
+                  }
+                  componentMetrics {
+                      vulnerabilityMetrics
+                      licenseCategoryMetrics
+                      licenseFamilyMetrics
+                      licenseNameMetrics
+                  }
+                  licenseMetrics {
+                      licenseCategoryMetrics
+                      licenseFamilyMetrics
+                      licenseNameMetrics
+                  }
+                  supplyChainMetrics {
+                      supplyChainMetrics
+                  }
+              }
+            }
+          }
         }
       `, 'no-cache');
   }
@@ -529,6 +554,13 @@ export class ApiService {
               description
               usedBy,
               lastInheritedRiskScore,
+              copyrightList {
+                text,
+                startYear,
+                endYear,
+                owners,
+                toPresent
+              }
               licenses {
                 edges {
                   node {
@@ -678,6 +710,80 @@ export class ApiService {
         `);
   }
 
+  getLicenseAndLicenseComponent(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined){
+    const firstArg = (!!first) ? `, first: ${first}` : '';
+    const lastArg = (!!last) ? `, last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+          query {
+             license(licenseId:"${licenseId}") {
+                 licenseId,
+                 name,
+                 spdxId
+                 body,
+                 category,
+                 style,
+                 type,
+                 publicationYear,
+                 description,
+                 isOsiApproved,
+                 isFsfLibre,
+                 isDeprecated,
+                 attributes {
+                   name,
+                   type,
+                   description
+                 }
+
+                 components(scanId:"${scanId}"${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                  pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
+                  }
+                  totalCount
+                  edges {
+                    node {
+                      componentId,
+                      name,
+                      group,
+                      version,
+                      isInternal,
+                      lastInheritedRiskScore,
+                      licenses {
+                        edges {
+                          node {
+                            licenseId,
+                            name,
+                            category
+                          }
+                        }
+                      }
+                      resolvedLicense {
+                        licenseId,
+                        name
+                      }
+                      vulnerabilities {
+                        edges {
+                          node {
+                            vulnerabilityId,
+                            vulnId,
+                            severity,
+                            patchedVersions
+                          }
+                        }
+                      }
+                    }    
+                  }
+                } 
+            }
+         }
+      `);
+  }
+
   getVulnerability(vulnerabilityId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
         query {
@@ -769,6 +875,7 @@ export class ApiService {
                   assetType,
                   parentScanAssetId,
                   attributionStatus, 
+                  matchType,
                   embeddedAssets {
                     edges {
                       node {
@@ -812,7 +919,8 @@ export class ApiService {
                   matchRepository{
                     repositoryOwner,
                     repositoryName,
-                    repositoryId
+                    repositoryId,
+                    repositoryCode
                   },
                   matchGroups {
                     edges {

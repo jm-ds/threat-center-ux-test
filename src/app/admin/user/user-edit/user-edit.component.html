@@ -12,23 +12,37 @@
 
 
 <ng-template [ngIf]="user !== undefined">
-    <form>
+    <form #userForm="ngForm" (ngSubmit)="userForm.form.valid && userForm.form.dirty && saveUser()">
         <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control {{newUser ? '' : 'readonly'}}" [disabled]="!newUser" placeholder="Email..." required [(ngModel)]="user.email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control {{newUser ? '' : 'readonly'}}" [disabled]="!newUser"
+            #emailAddress="ngModel" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" placeholder="Email..." required [(ngModel)]="user.email">
+            <div class="invalid-form"
+                *ngIf="userForm.submitted || (emailAddress.errors && (emailAddress.dirty || emailAddress.touched))">
+                <span *ngIf="emailAddress.errors && emailAddress.errors?.required">Email is required.</span>
+                <span *ngIf="emailAddress.errors && emailAddress.errors?.pattern">Enter a valid email address.</span>
+            </div>
         </div>
         <div class="form-group">
-            <label>First name</label>
-            <input type="text" name="fname" class="form-control" placeholder="First name..." required [(ngModel)]="user.fname">
+            <label for="fname">First name</label>
+            <input type="text" id="fname" name="fname" class="form-control" placeholder="First name..." #fName="ngModel" required [(ngModel)]="user.fname">
+            <div class="invalid-form"
+                *ngIf="userForm.submitted || (fName.errors && (fName.dirty || fName.touched))">
+                <span *ngIf="fName.errors && fName.errors?.required">First name is required.</span>
+            </div>
         </div>
         <div class="form-group">
-            <label>Last name</label>
-            <input type="text" name="lname" class="form-control" placeholder="Last name..." required [(ngModel)]="user.lname">
+            <label for="lname">Last name</label>
+            <input type="text" id="lname" name="lname" class="form-control" placeholder="Last name..." required #lName="ngModel" [(ngModel)]="user.lname">
+            <div class="invalid-form"
+                *ngIf="userForm.submitted || (lName.errors && (lName.dirty || lName.touched))">
+                <span *ngIf="lName.errors && lName.errors?.required">Last name is required.</span>
+            </div>
         </div>
 
         <div class="form-group">
-            <label>Entities</label>
-            <ng-select name="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'"></ng-select>
+            <label for="entities">Entities</label>
+            <ng-select name="entities" id="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'"></ng-select>
         </div>
 
         <!-- [(destination)]="selectedRoles" -->
@@ -38,7 +52,7 @@
 
 
         <div class="actions mt-5 mb-5">
-            <button type="button" class="btn btn-success" (click)="saveUser()">
+            <button type="submit" class="btn btn-success" (click)="save(userForm)">
                 <i class="feather icon-save"></i>
                 Save
             </button>

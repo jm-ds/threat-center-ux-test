@@ -24,7 +24,7 @@ export class ScanAssetsComponent implements OnInit {
   @Input() obsScan: Observable<Scan>;
   @Output() isAssetStory = new EventEmitter<boolean>();
 
-  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets', 'Attribution'];
+  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
 
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -150,7 +150,7 @@ export class ScanAssetsComponent implements OnInit {
   getColumnFilterValue(key) {
     let value = this.columnsFilter.get(key);
     if (value === undefined) {
-      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets' || key === 'Attribution') {
+      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets' || key === 'Attribution' || key === 'Match Type') {
         return 'ALL';
       } else {
         return '';

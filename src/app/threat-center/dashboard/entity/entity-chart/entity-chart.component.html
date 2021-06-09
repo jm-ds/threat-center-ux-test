@@ -1,0 +1,27 @@
+<app-card [hidHeader]="true" cardClass="proj-t-card">
+    <div>
+        <div class="chart-lbl-indi">
+            <div style="margin-bottom:10px" class="chart-lbl">
+                <h6><i class="{{iconClass}}"></i>{{chartlabel}}</h6>
+                <div class="chart-options" *ngIf="nameSelection === 'License' || nameSelection === 'Component'">
+                    <select class="form-control form-control-sm custom-select" (click)="click()" (change)="onChangedropdownValue()"
+                        [(ngModel)]="selectedValue" name="{{nameSelection}}">
+                        <option *ngFor="let item of dropdownValues">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="!supplyChainChart;else suppluChainchartBlock">
+        <app-apex-chart [chartID]="chartId" [chartConfig]="chartConfig"></app-apex-chart>
+    </ng-container>
+
+    <!-- supply chanin chart -->
+    <ng-template #suppluChainchartBlock>
+        <apx-chart [series]="supplyChainChart.series" [fill]="supplyChainChart.fill" [chart]="supplyChainChart.chart"
+            [plotOptions]="supplyChainChart.plotOptions" [labels]="supplyChainChart.labels"
+            [legend]="supplyChainChart.legend" [colors]="supplyChainChart.colors"
+            [responsive]="supplyChainChart.responsive"></apx-chart>
+    </ng-template>
+
+</app-card>

@@ -2,6 +2,7 @@ import { Injectable, TemplateRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
+import { Messages } from "@app/messages/messages";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { BehaviorSubject, Subscription } from "rxjs";
@@ -80,7 +81,7 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning")
+                        this.coreHelperService.alertBox("Scan is completed with errors", "Warning", "warning")
                             .then(() => {
                                 this.highlightNewScanIfInSamePage(tUpdate);
                                 this.refreshObjectPageIfFirstScan();
@@ -103,7 +104,7 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.coreHelperService.swalALertBox(tUpdate.statusMessage);
+                    this.coreHelperService.alertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
 
                     //remove scan from storage
                     this.updateStorage(null);

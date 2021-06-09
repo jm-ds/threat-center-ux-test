@@ -12,7 +12,7 @@
 
       <perfect-scrollbar [style.max-height]="'650px'">
         <p-table *ngIf="scanAssetDetails" #dt [columns]="columns" [value]="sort(scanAssetDetails.scanAssetsTree.edges)" [paginator]="false" [rows]="50"
-                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
 
           <ng-template pTemplate="caption">
@@ -39,6 +39,7 @@
               <th>Status</th>
               <th>Embedded Assets</th>
               <th>Attribution</th>
+              <th>Match Type</th>
             </tr>
             <tr>
               <th *ngFor="let col of columns">
@@ -78,7 +79,7 @@
                   <option value="51-70">51-70%</option>
                   <option value="71-100">71-100%</option>
                 </select>
-                <select *ngIf="col == 'Attribution'" class="form-control"
+                <select *ngIf="col == 'Attribution'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value)">
                   <option value="ALL" selected>- All -</option>
@@ -86,13 +87,23 @@
                   <option value="IGNORED">IGNORED</option>
                   <option value="COMPLETE">COMPLETE</option>
                 </select>
+                <select *ngIf="col == 'Match Type'" class="form-control"
+                        [value]="getColumnFilterValue(col)"
+                        (change)="filterColumn(col, $event.target.value)">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="UNIQUE_PROPRIETARY">UNIQUE PROPRIETARY</option>
+                  <option value="PROPRIETARY">PROPRIETARY</option>
+                  <option value="EMBEDDED_OPEN_SOURCE">EMBEDDED OPEN SOURCE</option>
+                  <option value="OPEN_SOURCE">OPEN SOURCE</option>
+                  <option value="OPEN_COMPONENT">OPEN COMPONENT</option>
+                </select>
               </th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-scanAsset let-rowIndex="rowIndex">
             <tr *ngIf="story.length>0 && rowIndex==0" class="cursor-pointer">
-              <td (click)="goBack()" colspan="6"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
+              <td (click)="goBack()" colspan="7"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
             </tr>
             <tr class="cursor-pointer" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
@@ -110,6 +121,8 @@
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?scanAsset.node.matchType.replaceAll('_',' '):''}}</td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.assetType != 'DIR'" >
               <td>
@@ -125,6 +138,8 @@
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
+              <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?scanAsset.node.matchType.replaceAll('_',' '):''}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
         </ng-template>

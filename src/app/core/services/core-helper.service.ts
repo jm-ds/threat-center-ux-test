@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/security/services/authentication.service';
 import { NextConfig } from '@app/app-config';
 import { Subject } from 'rxjs';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertType } from 'sweetalert2';
 import { UserPreferenceModel } from '../core.class';
 
 
@@ -13,14 +13,23 @@ import { UserPreferenceModel } from '../core.class';
 
 export class CoreHelperService {
     private subject = new Subject();
+    private unAuthorizeSubject = new Subject<any>();
     isBrowserBackclick: boolean = false;
     constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
 
+    isUnAuthorize(val: boolean = false) {
+        this.unAuthorizeSubject.next(val)
+    }
+
+    getUnAuthorizeVal(){
+        return this.unAuthorizeSubject.asObservable();
+    }
+
     // Core alert message
-    swalALertBox(text: string, title: string = "Error!", type: string = "error") {
+    alertBox(text: string, title: string = "Error!", type) {
         return Swal.fire({
-            type: "error",
+            type: type,
             title: title,
             text: text
         });
@@ -38,10 +47,14 @@ export class CoreHelperService {
         return Swal.fire({
             title: title,
             text: text,
-            type: 'warning',
-            showConfirmButton: true,
-            showCancelButton: true
-        })
+            type: typ,
+            showConfirmButton: isshowConfirmButton,
+            showCancelButton: isshowCancelButton,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: cancelButtonColor,
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText
+        });
     }
 
     spinnerEdit(isSpeenerVisible) {

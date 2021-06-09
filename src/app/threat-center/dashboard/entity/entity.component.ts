@@ -80,7 +80,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "Vulnerabilities", isActive: true },
-    // { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: false }
   ];
@@ -89,7 +88,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   licenseChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
-    // { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
   ];
   selectedlicenseChartDropValue = "License Name";
   commonLineSparklineOptions: any = {};
@@ -107,6 +105,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   sparkLinechartdelayFlag: boolean = true;
   cardClasses: string = 'tab-card entity-table-card entity-table-overflow-tooltip';
+  isDropdownClick: boolean = false;
+
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -169,120 +169,97 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   //Initializing stacked chart according to donut chart selection
   initStackedChartAccordingToDonut(value: string) {
-    // let properties = [];
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
-    this[activeTabVar].series = [];
-    if (this.isShowStackedChart) {
+    if (!this.isDropdownClick) {
+      console.log("indide");
       this.selectedDonut = value;
-      this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
-      switch (this.selectedDonut) {
-        case 'Vulnerability':
-          this[activeTabVar].colors = [];
-          const vulproperties = this.getProperties('vulnerabilityMetrics', 'severityMetrics');
-          for (var index in vulproperties) {
-            const obj = { name: vulproperties[index], data: this.getStackChartLogicalData(vulproperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-            this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulproperties[index]));
-          }
+      // let properties = [];
+      let activeTabVar: string = "";
+      // check active tab as well..
+      switch (this.lineChartActiveTab) {
+        case 'Month':
+          activeTabVar = 'monthSeriesOverTime';
           break;
-        case 'Assets':
-          this[activeTabVar].series = [];
-          const assetproperties = this.getProperties('assetMetrics', 'assetCompositionMetrics');
-          for (var index in assetproperties) {
-            const obj = { name: assetproperties[index], data: this.getStackChartLogicalData(assetproperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-          }
-          this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
+        case 'Week':
+          activeTabVar = 'weekSeriesOverTime';
           break;
-        case 'SupplyChain':
-          this[activeTabVar].series = [];
-          let dateLists = [];
-          const supplyProperties = this.getProperties('supplyChainMetrics', 'supplyChainMetrics');
-          for (var index in supplyProperties) {
-            const obj = { name: supplyProperties[index], data: this.getStackChartLogicalData(supplyProperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-          }
-          this.areaChartCommonOption.xaxis['categories'] = dateLists;
+        case 'Quarter':
+          activeTabVar = 'quarterSeriesOverTime'
           break;
-        case 'Licenses':
-          this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
+        case 'Year':
+          activeTabVar = 'yearSeriesOverTime';
           break;
-        case 'Components':
-          this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
-          break;
-
         default:
           break;
       }
+      this[activeTabVar].series = [];
+      if (this.isShowStackedChart) {
+        this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
+        switch (this.selectedDonut) {
+          case 'Vulnerability':
+            this[activeTabVar].colors = [];
+            const vulproperties = this.getProperties('vulnerabilityMetrics', 'severityMetrics');
+            for (var index in vulproperties) {
+              const obj = { name: vulproperties[index], data: this.getStackChartLogicalData(vulproperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+              this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulproperties[index]));
+            }
+            break;
+          case 'Assets':
+            this[activeTabVar].series = [];
+            const assetproperties = this.getProperties('assetMetrics', 'assetCompositionMetrics');
+            for (var index in assetproperties) {
+              const obj = { name: assetproperties[index], data: this.getStackChartLogicalData(assetproperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+            }
+            this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
+            break;
+          case 'SupplyChain':
+            this[activeTabVar].series = [];
+            let dateLists = [];
+            const supplyProperties = this.getProperties('supplyChainMetrics', 'supplyChainMetrics');
+            for (var index in supplyProperties) {
+              const obj = { name: supplyProperties[index], data: this.getStackChartLogicalData(supplyProperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+            }
+            this.areaChartCommonOption.xaxis['categories'] = dateLists;
+            break;
+          case 'Licenses':
+            this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
+            break;
+          case 'Components':
+            this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
+            break;
+
+          default:
+            break;
+        }
+      }
+      this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
+    } else {
+      this.selectedDonut = this.selectedDonut;
+      this.isDropdownClick = false;
     }
-    this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
   }
 
-  //fired when changing License chart dropdown from donut chart
-  changeLincesChartDropdown() {
-    // this.isShowStackedChart = false;
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
+  //ondrop down click
+  dropdownClick(ev: boolean) {
+    this.isDropdownClick = ev;
+  }
+
+  //on change licesne dropdown
+  onChangeLicensedropdown(event) {
+    this.selectedlicenseChartDropValue = event.selectedValue;
+    const activeTabVar = this.getActiveTabVar();
     if (this.selectedDonut === 'Licenses') {
       this.weekSeriesOverTime['series'] = [];
       this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
     }
   }
 
-  //fired when changing component chart dropdown from donut chart
-  changeComponentChartDropdown() {
-    // this.isShowStackedChart = false;
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
+  //on change component dropdown
+  onChangeComponentdropdown(event) {
+    this.selectedComponentChartDropvalue = event.selectedValue;
+    const activeTabVar = this.getActiveTabVar();
     if (this.selectedDonut === 'Components') {
       this.weekSeriesOverTime['series'] = [];
       this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
@@ -447,7 +424,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-
+          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+            entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
+          }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
           this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
 
@@ -711,6 +690,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   //Helper function to initialize License stacked chart configuration (dropdown)
   private licenseStackedChartConfig(nameOfChart, activeTabVar) {
+    console.log("in liocense chart");
     this[activeTabVar].series = [];
     switch (nameOfChart) {
       case 'License Name':
@@ -1071,11 +1051,34 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     return Math.round(result * 10) / 10;
   }
 
+  //get Active tab name
+  private getActiveTabVar() {
+    let activeTabVar: string = "";
+    switch (this.lineChartActiveTab) {
+      case 'Month':
+        activeTabVar = 'monthSeriesOverTime';
+        break;
+      case 'Week':
+        activeTabVar = 'weekSeriesOverTime';
+        break;
+      case 'Quarter':
+        activeTabVar = 'quarterSeriesOverTime'
+        break;
+      case 'Year':
+        activeTabVar = 'yearSeriesOverTime';
+        break;
+      default:
+        break;
+    }
+    return activeTabVar;
+  }
+
   // Fetch active scan count
   getRunningScansCount(entityId) {
     if (!this.checkRunningScans) {
       return;
     }
+    // todo: replace it with socket [task: https://github.com/threatrix/product/issues/464]
     this.taskService.getRunningScanTasksCount(entityId)
       .pipe(map(countData => countData.data.running_scan_tasks_count))
       .subscribe(count => {

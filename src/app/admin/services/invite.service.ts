@@ -8,6 +8,7 @@ import { mergeMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { isUndefined } from 'util';
 import { Invite, InviteMailData, InviteMailDataRequestInput, InviteQuery } from '@app/models';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +19,15 @@ export class InviteService {
   constructor(
     private coreGraphQLService: CoreGraphQLService,
     private authService: AuthenticationService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private coreHelperService:CoreHelperService
     ) {}
 
 
   // creates invite  
   createInvite(): any {
     if (!this.authService.currentUser || !this.authService.currentUser.orgId) {
-      Swal.fire('Not Found', 'Organization not found!', 'error');
+      this.coreHelperService.alertBox('Organization not found!','Not Found','error');
       return undefined;
     } else {
       return this.apollo.mutate<InviteQuery>({
