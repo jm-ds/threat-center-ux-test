@@ -219,6 +219,13 @@ export class ScanAssetDetailComponent implements OnInit {
     }
   }
 
+  // Open repository source in (target="_blank")
+  openInNewTab(repositoryCode, repositoryOwner, repositoryName) {
+    if(repositoryCode == 'GITHUB') {
+      window.open("//github.com/" + repositoryOwner + "/" + repositoryName, '_blank');
+    }
+  }
+
 }
 
 class CodeNamePair {
