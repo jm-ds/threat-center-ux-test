@@ -107,7 +107,7 @@ export class CoreGraphQLService {
                     });
                     this.coreHelperService.alertBoxHtml(msg);
                 } else {
-                    this.coreHelperService.swalALertBox(Messages.graphQlCommonErrorMessage);   
+                    this.coreHelperService.alertBox(Messages.graphQlCommonErrorMessage,Messages.commonErrorHeaderText,'error');
                 }
             }
         } else if (typeof error === "string") { //check if error is string

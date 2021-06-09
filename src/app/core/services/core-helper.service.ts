@@ -22,7 +22,7 @@ export class CoreHelperService {
         this.unAuthorizeSubject.next(val)
     }
 
-    getUnAuthorizeVal(){
+    getUnAuthorizeVal() {
         return this.unAuthorizeSubject.asObservable();
     }
 
@@ -43,7 +43,15 @@ export class CoreHelperService {
         });
     }
 
-    swalAlertConfrm(title: string, text: string) {
+    alertConfirm(title: string, text: string,
+        typ: SweetAlertType = 'warning',
+        isshowConfirmButton: boolean = false,
+        isshowCancelButton: boolean = false,
+        confirmButtonColor: string,
+        cancelButtonColor: string,
+        confirmButtonText: string,
+        cancelButtonText: string
+    ) {
         return Swal.fire({
             title: title,
             text: text,
