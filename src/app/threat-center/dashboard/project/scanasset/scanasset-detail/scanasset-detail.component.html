@@ -44,7 +44,7 @@
                 <th>Size</th>
                 <th>Versions</th>
                 <th>License(s)</th>
-                <th></th>
+                <th>SIMM</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
@@ -54,7 +54,7 @@
                 <td class="align-middle">{{embeddedAsset.node.name}}</td>
                 <td class="align-middle">
                   <a (click)="openInNewTab(embeddedAsset.node.matchRepository.repositoryCode, embeddedAsset.node.matchRepository.repositoryOwner, embeddedAsset.node.matchRepository.repositoryName)">
-                    {{embeddedAsset.node.matchRepository.repositoryCode}}:{{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}
+                    {{embeddedAsset.node.matchRepository.repositoryCode | lowercase}} : {{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}
                   </a>
                 </td>
                 <td class="align-middle">{{embeddedAsset.node.percentMatch | number:'1.1-2'}}%</td>
@@ -76,7 +76,7 @@
                 </td>
                 <td class="align-middle">
                   <button class="btn btn-outline-info" (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()">
-                    <i class="fas fa-clone"></i>
+                    <i class="fad fa-clone"></i>
                   </button>
                 </td>
               </tr>
