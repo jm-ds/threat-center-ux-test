@@ -26,7 +26,7 @@ export class LicensesComponent implements OnInit {
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
-
+    isDisablePaggination:boolean = false;
     constructor(private apiService: ApiService,
         private router: Router,
         private route: ActivatedRoute,
@@ -53,6 +53,7 @@ export class LicensesComponent implements OnInit {
 
     // While any changes occurred in page
     changePage(pageInfo) {
+        this.isDisablePaggination = true;
         if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
@@ -86,6 +87,7 @@ export class LicensesComponent implements OnInit {
 
         licenses.subscribe(license => {
             this.licensesDetails = license;
+            this.isDisablePaggination = false;
         });
 
     }

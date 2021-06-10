@@ -400,3 +400,10 @@ select-dropdown .selected.highlighted {
     font-family: $theme-font-family;
   }
 }
+
+.center-table-progressbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}

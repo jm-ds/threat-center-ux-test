@@ -26,6 +26,7 @@ import { NextConfig } from '@app/app-config';
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
+  isDisablePaggination:boolean = false;
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -485,6 +486,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // While any changes occurred in page
   changePage(pageInfo) {
+    this.isDisablePaggination = true;
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       //page size changed...
       this.defaultPageSize = pageInfo.pageSize;
@@ -517,6 +519,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     projects.subscribe(project => {
       this.scanList = project.scans.edges;
       this.projectDetails = project;
+      this.isDisablePaggination = false;
     });
   }
 
