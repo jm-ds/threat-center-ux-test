@@ -38,4 +38,13 @@ export class AlertService {
             cancelButtonText: cancelButtonText
         });
     }
+
+    alertBoxHtml(text: string, title: string = "Error!", type: string = "error") {
+        return Swal.fire({
+            type: "error",
+            title: title,
+            html: text
+        });
+    }
+
 }
