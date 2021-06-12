@@ -20,11 +20,11 @@ export class CoreHelperService {
         this.unAuthorizeSubject.next(val)
     }
 
-    getUnAuthorizeVal(){
+    getUnAuthorizeVal() {
         return this.unAuthorizeSubject.asObservable();
     }
 
-    spinnerEdit(isSpeenerVisible) {
+     spinnerEdit(isSpeenerVisible) {
         this.subject.next(isSpeenerVisible);
     }
 

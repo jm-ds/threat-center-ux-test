@@ -99,7 +99,18 @@ export class CoreGraphQLService {
                 this.coreErrorHelperService.handleNetworkError(er.networkError, null);
             } else {
                 this.coreErrorHelperService.printErrorMessageToConsol(er.message);
-                this.alertService.alertBox(Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
+
+                if(Array.isArray(er.graphQLErrors)) {
+                    let msg = "";
+                    er.graphQLErrors.forEach(function(element, index) {
+                        if(index > 0)
+                            msg += "<br/>";
+                        msg += element.message;
+                    });
+                    this.alertService.alertBoxHtml(msg);
+                } else {
+                    this.alertService.alertBox(Messages.graphQlCommonErrorMessage,Messages.commonErrorHeaderText,'error');
+                }
             }
         } else if (typeof error === "string") { //check if error is string
             this.coreErrorHelperService.printErrorMessageToConsol(error);
