@@ -10,6 +10,7 @@ import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import { FixResult, Scan } from '@app/models';
+import { id } from '@swimlane/ngx-datatable';
 
 @Component({
     selector: 'app-components',
@@ -129,7 +130,7 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value) {
+    filterColumn(column, value,idElement:string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -139,7 +140,7 @@ export class ComponentsComponent implements OnInit {
         this.timeOut = setTimeout(() => {
             this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
-            this.initData();
+            this.initData(idElement);
         }, this.timeOutDuration);
     }
 
@@ -165,9 +166,14 @@ export class ComponentsComponent implements OnInit {
     }
 
     // initializing data
-    private initData() {
+    private initData(idElement:string = '') {
         this.obsScan.subscribe(component => {
             this.componentDetails = component;
+            if(!!idElement){
+                setTimeout(() => {
+                    document.getElementById(idElement).focus();
+                }, 0);
+            }
         });
     }
 
