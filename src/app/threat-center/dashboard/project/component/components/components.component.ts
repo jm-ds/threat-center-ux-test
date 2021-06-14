@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -42,6 +42,7 @@ export class ComponentsComponent implements OnInit {
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
+    isDisablePaggination:boolean = false;
 
     constructor(
         private apiService: ApiService,
@@ -82,6 +83,7 @@ export class ComponentsComponent implements OnInit {
 
     // While any changes occurred in page
     changePage(pageInfo) {
+        this.isDisablePaggination = true;
         if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
@@ -114,6 +116,7 @@ export class ComponentsComponent implements OnInit {
             .pipe(map(result => result.data.scan));
         component.subscribe(component => {
             this.componentDetails = component;
+            this.isDisablePaggination = false;
         });
     }
 

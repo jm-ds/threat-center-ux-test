@@ -35,7 +35,7 @@ export class ScanAssetsComponent implements OnInit {
   parentScanAssetId = '';
   story = [];
   messages = Messages;
-
+  isDisablePaggination:boolean = false;
   constructor(private apiService: ApiService,
     private route: ActivatedRoute,
     private router: Router,
@@ -70,6 +70,7 @@ export class ScanAssetsComponent implements OnInit {
 
   // While any changes occurred in page
   changePage(pageInfo) {
+    this.isDisablePaggination = true;
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
@@ -103,6 +104,7 @@ export class ScanAssetsComponent implements OnInit {
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
+      this.isDisablePaggination = false;
     });
   }
 

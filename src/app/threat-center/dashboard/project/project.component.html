@@ -68,7 +68,11 @@
                   </div>
                 </ng-template>
               </div>
-              <perfect-scrollbar [style.max-height]="'650px'">
+              <div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+                <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+              </div>
+              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'650px'">
                 <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                   tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
@@ -190,7 +194,7 @@
 
               </perfect-scrollbar>
               <div class="col-sm-12">
-                <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="projectDetails.scans?.totalCount"
+                <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="projectDetails.scans?.totalCount"
                   [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
                 </mat-paginator>
               </div>
