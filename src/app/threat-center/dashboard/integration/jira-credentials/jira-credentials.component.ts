@@ -1,6 +1,7 @@
 import { Component, Injectable, Input, OnInit } from '@angular/core';
 import { EntityService } from '@app/admin/services/entity.service';
 import { OrgService } from '@app/admin/services/org.service';
+import { AlertService } from '@app/core/services/alert.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { EntitySettings, JiraCredentials } from '@app/models/entity';
 import Swal from 'sweetalert2';
@@ -21,7 +22,8 @@ export class JiraCredentialsComponent implements OnInit {
   constructor(
     private orgService: OrgService,
     private entityService: EntityService,
-    private coreHelperService:CoreHelperService
+    private coreHelperService:CoreHelperService,
+    private alertService:AlertService
   ) {
   }
 
@@ -42,24 +44,24 @@ export class JiraCredentialsComponent implements OnInit {
       this.orgService.setOrgJiraCredentials(this.entitySettings.entityId, this.entitySettings.jiraCredentials)
       .subscribe(({data}) => {
         Swal.close();
-        this.coreHelperService.alertBox('Successfully saved','JIRA credentials','success');
+        this.alertService.alertBox('Successfully saved','JIRA credentials','success');
       }, 
        (error) => {
         console.error('Slack jira credential saving error', error);
         Swal.close();
-        this.coreHelperService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
+        this.alertService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
        }
       );
     } else {
       this.entityService.setEntityJiraCredentials(this.entitySettings.entityId, this.entitySettings.jiraCredentials)
       .subscribe(({data}) => {
         Swal.close();
-        this.coreHelperService.alertBox('Successfully saved','JIRA credentials','success');
+        this.alertService.alertBox('Successfully saved','JIRA credentials','success');
       }, 
        (error) => {
         console.error('Slack jira credential saving error', error);
         Swal.close();
-        this.coreHelperService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
+        this.alertService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
        }
       );
     }

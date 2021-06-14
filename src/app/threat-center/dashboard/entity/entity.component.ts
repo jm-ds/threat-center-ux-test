@@ -17,6 +17,8 @@ import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 
 @Component({
@@ -120,7 +122,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
     private modalService: NgbModal,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private projectBreadcumsService:ProjectBreadcumsService,
+    private userPreferenceService:UserPreferenceService
   ) {
     this.chartDB = ChartDB;
     this.dailyVisitorStatus = '1y';
@@ -408,7 +412,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           }
         }
         this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
-        this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
+        this.projectBreadcumsService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
         this.buildProjectTree(entity);
 
         if (isPush) {
@@ -506,7 +510,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.activeTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Entity", $event.activeId, this.activeTab);
+    this.userPreferenceService.settingUserPreference("Entity", $event.activeId, this.activeTab);
     if (this.activeTab === 'BUSINESSUNITS') {
       setTimeout(() => {
         this.sparkLinechartdelayFlag = true;
@@ -527,12 +531,12 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     //Need to check here is browser back button clicked or not if clicked then do below things..
     if (this.coreHelperService.getBrowserBackButton()) {
       this.coreHelperService.setBrowserBackButton(false);
-      if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
-        this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("Entity", true);
-        this.coreHelperService.settingUserPreference("Entity", null, this.activeTab);
+      if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Entity")) {
+        this.activeTab = this.userPreferenceService.getPreviousTabSelectedByModule("Entity", true);
+        this.userPreferenceService.settingUserPreference("Entity", null, this.activeTab);
         return false;
       } else {
-        this.coreHelperService.settingUserPreference("Entity", "", null);
+        this.userPreferenceService.settingUserPreference("Entity", "", null);
         return true;
       }
     } else {
@@ -545,7 +549,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
+    if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Entity")) {
       history.pushState(null, null, window.location.href);
     }
   }
@@ -642,7 +646,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private getLastTabSelected() {
-    this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
+    this.activeTab = !!this.userPreferenceService.getLastTabSelectedNameByModule("Entity") ? this.userPreferenceService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
     if (this.activeTab === 'ORGANIZATION') {
       this.cardClasses = 'tab-card org-tree-selected-card entity-table-overflow-tooltip'
     } else {
