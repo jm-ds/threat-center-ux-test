@@ -33,10 +33,10 @@ export class ComponentsComponent implements OnInit {
         { field: 'version', header: 'Version' },
         { field: 'isInternal', header: 'Internal' },
         { field: 'location', header: 'Location' },
-        { field: 'license.name', header: 'Licenses' },
-        { field: 'vulnerabilities', header: 'Vulnerabilities' },
         { field: 'componentType', header: 'Type' },
-        { field: 'discoveryMethod', header: 'Discovery' }
+        { field: 'discoveryMethod', header: 'Discovery' },
+        { field: 'license.name', header: 'Licenses' },
+        { field: 'vulnerabilities', header: 'Vulnerabilities' }
     ];
 
     columnsFilter = new Map();
