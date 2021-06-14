@@ -32,9 +32,11 @@ export class ComponentsComponent implements OnInit {
         { field: 'group', header: 'Group' },
         { field: 'version', header: 'Version' },
         { field: 'isInternal', header: 'Internal' },
-        { field: 'disc', header: 'Source' },
+        { field: 'location', header: 'Location' },
         { field: 'license.name', header: 'Licenses' },
         { field: 'vulnerabilities', header: 'Vulnerabilities' },
+        { field: 'componentType', header: 'Type' },
+        { field: 'discoveryMethod', header: 'Discovery' }
     ];
 
     columnsFilter = new Map();
@@ -147,7 +149,7 @@ export class ComponentsComponent implements OnInit {
     getColumnFilterValue(key) {
         let value = this.columnsFilter.get(key);
         if (value === undefined) {
-            if (key === 'Internal' || key === 'Vulnerabilities') {
+            if (key === 'Internal' || key === 'Vulnerabilities' || key === 'Location' || key === 'Type' || key === 'Discovery') {
                 return 'ALL';
             } else {
                 return '';

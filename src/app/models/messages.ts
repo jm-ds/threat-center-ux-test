@@ -59,7 +59,7 @@ export class Messages extends Array<Message> {
 
     static fromRouter(router: Router) {
         const navigation = router.getCurrentNavigation();
-        const state = navigation.extras.state as {messages: Messages};
+        const state = !!navigation ? navigation.extras.state as {messages: Messages} : undefined;
         if (state !== undefined) {
             return  state.messages;
         }
