@@ -142,9 +142,12 @@ export class ComponentsComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            const scnObj = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
-            this.initData(idElement);
+            scnObj.subscribe(component => {
+                this.componentDetails = component;
+                this.coreHelperService.setFocusOnElement(idElement);
+            });
         }, this.timeOutDuration);
     }
 
@@ -170,10 +173,9 @@ export class ComponentsComponent implements OnInit {
     }
 
     // initializing data
-    private initData(idElement:string = '') {
+    private initData() {
         this.obsScan.subscribe(component => {
             this.componentDetails = component;
-            this.coreHelperService.setFocusOnElement(idElement);
         });
     }
 
