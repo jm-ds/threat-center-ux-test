@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { NextConfig } from '@app/app-config';
+import { AlertService } from '@app/core/services/alert.service';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { Messages } from '@app/messages/messages';
 import { Entity, ProjectQuery, Scan, ScanQuery } from '@app/models';
 import gql from 'graphql-tag';
@@ -505,13 +507,14 @@ export class ProjectDashboardService {
 export class GetProjectData implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService: CoreHelperService) { }
+    private coreHelperService: CoreHelperService,
+    private userPreferenceService:UserPreferenceService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
     let projectId = route.paramMap.get('projectId');
-    return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")));
+    return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")));
   }
 }
 
@@ -522,20 +525,22 @@ export class GetProjectData implements Resolve<Observable<any>> {
 export class ProjectDashboardResolver implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService: CoreHelperService) { }
+    private coreHelperService: CoreHelperService,
+    private userPreferenceService:UserPreferenceService,
+    private alertService:AlertService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
     let projectId = route.paramMap.get('projectId');
-    return this.projectDashboardService.getProject(projectId, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(
         mergeMap((data: any) => {
           if (!!data.data.project && !!data.data.project.scans.edges[0]) {
-            const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+            const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
-            this.coreHelperService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
+            this.alertService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
             return EMPTY;
           }
         })

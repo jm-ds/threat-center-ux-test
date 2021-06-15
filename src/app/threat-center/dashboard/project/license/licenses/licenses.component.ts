@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { Scan } from '@app/models';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
@@ -26,23 +27,24 @@ export class LicensesComponent implements OnInit {
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
-
+    isDisablePaggination:boolean = false;
     constructor(private apiService: ApiService,
         private router: Router,
         private route: ActivatedRoute,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private userPreferenceService:UserPreferenceService) {
     }
 
     ngOnInit() {
         console.log("Loading LicensesComponent for scanId: ", this.scanId);
         this.checkScanDataExists();
-        this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+        this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
 
             this.initData();
@@ -53,26 +55,27 @@ export class LicensesComponent implements OnInit {
 
     // While any changes occurred in page
     changePage(pageInfo) {
+        this.isDisablePaggination = true;
         if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
             // page size changed...
             this.defaultPageSize = pageInfo.pageSize;
             //Setting item per page into session..
-            this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Licenses", value: pageInfo.pageSize });
+            this.userPreferenceService.settingUserPreference("Project", null, null, { componentName: "Licenses", value: pageInfo.pageSize });
             // API Call
-            this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined, undefined, undefined);
+            this.loadLicensesData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined, undefined, undefined);
             this.paginator.firstPage();
         } else {
             // Next and Previous changed
             if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
                 // call with after...
                 if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasNextPage) {
-                    this.loadLicensesData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined,
+                    this.loadLicensesData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined,
                         this.licensesDetails.licenses.pageInfo.endCursor, undefined);
                 }
             } else {
                 // call with before..
                 if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasPreviousPage) {
-                    this.loadLicensesData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")),
+                    this.loadLicensesData(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")),
                         undefined, this.licensesDetails.licenses.pageInfo.startCursor);
                 }
             }
@@ -86,6 +89,7 @@ export class LicensesComponent implements OnInit {
 
         licenses.subscribe(license => {
             this.licensesDetails = license;
+            this.isDisablePaggination = false;
         });
 
     }
@@ -106,7 +110,7 @@ export class LicensesComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
+            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
             this.initData(idElement);
         }, this.timeOutDuration);

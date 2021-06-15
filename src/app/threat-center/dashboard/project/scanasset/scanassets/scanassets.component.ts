@@ -7,6 +7,7 @@ import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 @Component({
   selector: 'app-scanassets',
@@ -35,11 +36,12 @@ export class ScanAssetsComponent implements OnInit {
   parentScanAssetId = '';
   story = [];
   messages = Messages;
-
+  isDisablePaggination:boolean = false;
   constructor(private apiService: ApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private coreHelperService: CoreHelperService) { }
+    private coreHelperService: CoreHelperService,
+    private userPreferenceService:UserPreferenceService) { }
 
   ngOnInit() {
     this.story = [];
@@ -47,13 +49,13 @@ export class ScanAssetsComponent implements OnInit {
     console.log("scanId:", this.scanId);
     console.log("Loading ScanAssetsComponent");
     this.checkScanDataExists();
-    this.defaultPageSize = this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets");
+    this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets");
   }
 
   //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
   checkScanDataExists() {
     if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
     } else {
@@ -70,13 +72,14 @@ export class ScanAssetsComponent implements OnInit {
 
   // While any changes occurred in page
   changePage(pageInfo) {
+    this.isDisablePaggination = true;
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
       // page size changed...
       this.defaultPageSize = pageInfo.pageSize;
       //Setting item per page into session..
-      this.coreHelperService.settingUserPreference("Project", null, null, { componentName: "Assets", value: pageInfo.pageSize });
+      this.userPreferenceService.settingUserPreference("Project", null, null, { componentName: "Assets", value: pageInfo.pageSize });
       // API Call
-      this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
+      this.loadScanAssetData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
       this.paginator.firstPage();
     }
     else {
@@ -84,13 +87,13 @@ export class ScanAssetsComponent implements OnInit {
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         // call with after...
         if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasNextPage) {
-          this.loadScanAssetData(Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined,
+          this.loadScanAssetData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined,
             this.scanAssetDetails.scanAssetsTree.pageInfo.endCursor, undefined);
         }
       } else {
         // call with before..
         if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.scanAssetsTree.pageInfo.hasPreviousPage) {
-          this.loadScanAssetData(undefined, Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+          this.loadScanAssetData(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
             undefined, this.scanAssetDetails.scanAssetsTree.pageInfo.startCursor);
         }
       }
@@ -103,6 +106,7 @@ export class ScanAssetsComponent implements OnInit {
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
+      this.isDisablePaggination = false;
     });
   }
 
@@ -128,7 +132,7 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   reload() {
-    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
       .pipe(map(result => result.data.scan));
     this.initData();
   }
@@ -141,7 +145,7 @@ export class ScanAssetsComponent implements OnInit {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData(idElement);
     }, this.timeOutDuration);

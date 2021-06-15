@@ -20,7 +20,7 @@ import { FixComponentResultDialogComponent } from './fix-component-result-dialog
 import { FixComponentDialogComponent } from './fix-component-dialog/fix-component-dialog.component';
 import { ProjectChartComponent } from './project-chart/project-chart.component';
 import {MatChipsModule} from '@angular/material/chips';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +41,8 @@ import {MatChipsModule} from '@angular/material/chips';
     NgxSpinnerModule,
     MatPaginatorModule,
     NgbModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     ProjectComponent,

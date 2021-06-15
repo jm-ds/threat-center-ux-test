@@ -452,7 +452,7 @@ export class ApiService {
             }
         }
       }
-  `);
+  `,'no-cache');
   }
 
   getScanComponents(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
@@ -527,7 +527,7 @@ export class ApiService {
               }
             }
           }
-      `);
+      `,'no-cache');
   }
 
   getScanLicenses(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
@@ -565,7 +565,7 @@ export class ApiService {
               }
             }
           }
-      `);
+      `,'no-cache');
   }
 
   getComponent(componentId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {

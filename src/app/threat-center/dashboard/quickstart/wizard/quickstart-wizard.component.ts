@@ -19,6 +19,7 @@ import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app
 import { ReloadService } from '../../services/reload.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 @Component({
     selector: 'app-quickstart',
@@ -65,7 +66,8 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
-        private reloadService: ReloadService) {
+        private reloadService: ReloadService,
+        private userPreferenceService:UserPreferenceService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -286,7 +288,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
+        this.userPreferenceService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
         this.selectedItem = '';
         this.selectedRepos = [];
         this.readyScanRepo.selectedItem = this.selectedItem;
@@ -298,12 +300,12 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         //Need to check here is browser back button clicked or not if clicked then do below things..
         if (this.coreHelperService.getBrowserBackButton()) {
             this.coreHelperService.setBrowserBackButton(false);
-            if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
-                this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan", true);
-                this.coreHelperService.settingUserPreference("ThreatScan", null, this.activeTab);
+            if (!!this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan")) {
+                this.activeTab = this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan", true);
+                this.userPreferenceService.settingUserPreference("ThreatScan", null, this.activeTab);
                 return false;
             } else {
-                this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+                this.userPreferenceService.settingUserPreference("ThreatScan", "", null);
                 return true;
             }
         } else {
@@ -316,7 +318,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     @HostListener('window:popstate', ['$event'])
     onPopState(event) {
         this.coreHelperService.setBrowserBackButton(true);
-        if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+        if (!!this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan")) {
             history.pushState(null, null, window.location.href);
         }
     }
@@ -328,6 +330,6 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     private getLastTabSelected() {
-        this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") ? this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") : this.activeTab;
+        this.activeTab = !!this.userPreferenceService.getLastTabSelectedNameByModule("ThreatScan") ? this.userPreferenceService.getLastTabSelectedNameByModule("ThreatScan") : this.activeTab;
     }
 }
