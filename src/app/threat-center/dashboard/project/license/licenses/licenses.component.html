@@ -34,14 +34,14 @@
           </tr>
           <tr>
             <th *ngFor="let col of columns">
-              <input *ngIf="col =='Name'" type="text" placeholder="{{col}}" name="search-name"
-                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
-              <input *ngIf="col =='SPDX'" type="text" placeholder="{{col}}" name="search-name"
-                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
-              <input *ngIf="col =='Threat Category'" type="text" placeholder="{{col}}" name="search-name"
-                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
-              <input *ngIf="col =='Style'" type="text" placeholder="{{col}}" name="search-name"
-                     class="form-control" (input)="filterColumn(col, $event.target.value)" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='Name'" id="nameSearch" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value,'nameSearch')" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='SPDX'" id="spdxSearch" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value,'spdxSearch')" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='Threat Category'" id="threatCategorySearch" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value,'threatCategorySearch')" [value]="getColumnFilterValue(col)"/>
+              <input *ngIf="col =='Style'" id="styleSearch" type="text" placeholder="{{col}}" name="search-name"
+                     class="form-control" (input)="filterColumn(col, $event.target.value,'styleSearch')" [value]="getColumnFilterValue(col)"/>
             </th>
           </tr>
         </ng-template>

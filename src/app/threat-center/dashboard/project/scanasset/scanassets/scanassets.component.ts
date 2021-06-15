@@ -133,7 +133,7 @@ export class ScanAssetsComponent implements OnInit {
     this.initData();
   }
 
-  filterColumn(column, value) {
+  filterColumn(column, value,idElement:string = '') {
     if (value.length === 0 || value === 'ALL') {
       this.columnsFilter.delete(column);
     } else {
@@ -143,7 +143,7 @@ export class ScanAssetsComponent implements OnInit {
     this.timeOut = setTimeout(() => {
       this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
-      this.initData();
+      this.initData(idElement);
     }, this.timeOutDuration);
   }
 
@@ -185,9 +185,10 @@ export class ScanAssetsComponent implements OnInit {
   }
 
   // initializing data
-  private initData() {
+  private initData(idElement:string = '') {
     this.obsScan.subscribe(asset => {
       this.scanAssetDetails = asset;
+      this.coreHelperService.setFocusOnElement(idElement);
     });
   }
 

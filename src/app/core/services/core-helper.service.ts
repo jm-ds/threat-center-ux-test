@@ -279,6 +279,14 @@ export class CoreHelperService {
         }
         return result;
     }
+
+    setFocusOnElement(elementId: string) {
+        if (!!elementId && elementId !== '') {
+            setTimeout(() => {
+                document.getElementById(elementId).focus();
+            }, 0);
+        }
+    }
 }
 
 

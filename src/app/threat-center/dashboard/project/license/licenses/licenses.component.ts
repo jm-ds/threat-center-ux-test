@@ -98,7 +98,7 @@ export class LicensesComponent implements OnInit {
         this.router.navigate([decodeURIComponent(url)]);
     }
 
-    filterColumn(column, value) {
+    filterColumn(column, value,idElement:string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -108,7 +108,7 @@ export class LicensesComponent implements OnInit {
         this.timeOut = setTimeout(() => {
             this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.coreHelperService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
-            this.initData();
+            this.initData(idElement);
         }, this.timeOutDuration);
     }
 
@@ -130,9 +130,10 @@ export class LicensesComponent implements OnInit {
     }
 
     // initializing data
-    private initData() {
+    private initData(idElement:string = '') {
         this.obsScan.subscribe(licenses => {
             this.licensesDetails = licenses;
+            this.coreHelperService.setFocusOnElement(idElement);
         });
     }
 

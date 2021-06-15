@@ -10,7 +10,6 @@ import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import { FixResult, Scan } from '@app/models';
-import { id } from '@swimlane/ngx-datatable';
 
 @Component({
     selector: 'app-components',
@@ -169,11 +168,7 @@ export class ComponentsComponent implements OnInit {
     private initData(idElement:string = '') {
         this.obsScan.subscribe(component => {
             this.componentDetails = component;
-            if(!!idElement){
-                setTimeout(() => {
-                    document.getElementById(idElement).focus();
-                }, 0);
-            }
+            this.coreHelperService.setFocusOnElement(idElement);
         });
     }
 
