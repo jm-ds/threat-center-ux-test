@@ -101,9 +101,9 @@
                     <tr>
                       <th></th>
                       <th>
-                        <input type="text" placeholder="Branch name" name="search-name"
+                        <input type="text" placeholder="Branch name" id="branchName" name="search-name"
                                class="form-control"
-                               (input)="filterColumn($event.target.value)"
+                               (input)="filterColumn($event.target.value,'branchName')"
                                [value]="getColumnFilterValue()"
                         />
                       </th>
