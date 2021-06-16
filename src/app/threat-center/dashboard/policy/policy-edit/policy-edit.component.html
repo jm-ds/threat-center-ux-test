@@ -116,17 +116,11 @@
             </span>
           </ng-template>
           <ng-template ngbTabContent>
-            <app-card blockClass="d-flex align-items-center justify-content-between" cardTitle="Actions">
+            <app-card blockClass="align-items-center justify-content-between" cardTitle="Actions">
+              
               <div style="padding-bottom: 60px">
-                <p-table #dt [value]="policy.actions" [filterDelay]="0" [globalFilterFields]="['actionName']"  dataKey="actionName" tableStyleClass="table table-bordered">
+                <!-- <p-table #dt [value]="policy.actions" [filterDelay]="0" [globalFilterFields]="['actionName']"  dataKey="actionName" tableStyleClass="table table-bordered">
 
-                  <!-- <ng-template pTemplate="caption">
-                    <div style="text-align: right;float:right;margin-bottom:10px; margin-right: 4px;">
-                      <button type="button" class="btn btn-icon" title="Add action" (click)="this.addAction()" style="color: #c9d0d5;">
-                        <i class="feather icon-plus" style="font-size: 20px; font-weight: 800;"></i>
-                      </button>
-                    </div>
-                  </ng-template> -->
                   <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                       <col style="width:40%;text-align: center">
@@ -183,7 +177,49 @@
                       </th>
                     </tr>
                   </ng-template>
-                </p-table>
+                </p-table> -->
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width:40%">Type</th>
+                      <th style="width:40%">Name</th>
+                      <th style="width:30px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let action of policy.actions;let index = index;">
+                      <td>
+                        <select name="{{index}}actionType" class="form-control custom-select" (change)="onActionTypeChange(action,$event,index)" 
+                          [(ngModel)]="policy.actions[index].actionType">
+                          <option *ngFor="let type of actionTypes" [ngValue]="type.value">
+                            {{type.label}}</option>
+                        </select>
+                      </td>
+                      <td><select name="{{index}}actionName" class="form-control custom-select" [(ngModel)]="policy.actions[index].actionName">
+                          <option *ngFor="let type of actionNames[action.actionType]" [value]="type.value">
+                            {{type.label}}</option>
+                        </select>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-icon" title="Remove action" (click)="this.removeAction(action)"
+                          style="color: #c9d0d5; padding: 2px; margin: 0 auto;">
+                          <i class="feather icon-x" style="font-size: 10px; font-weight: 800;"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th colspan="3">
+                        <button type="button" class="btn btn-outline-secondary" title="Add Action" (click)="this.addAction()"
+                          style="color: #c9d0d5;">
+                          <i class="feather icon-plus" style="font-size: 14px; font-weight: 800;"></i> ADD ACTION
+                        </button>
+                      </th>
+                    </tr>
+                  </tfoot>
+                </table>
                 <div class="actions mt-4">
                   <button  (click)="gotoTab('policyConditions')" class="btn btn-outline-secondary float-left mr-2">
                     <i class="feather icon-chevrons-left" style="font-size: medium;"></i>

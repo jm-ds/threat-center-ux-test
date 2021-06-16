@@ -271,11 +271,13 @@ export class PolicyEditComponent implements OnInit {
         this.policy.actions.push(action)
     }
 
-    onActionTypeChange(action: PolicyAction, event: any) {
+    onActionTypeChange(action: PolicyAction, event: any,index) {
         if (!action.actionType) {
-            action.actionName=undefined;    
+            // action.actionName=undefined;    
+            this.policy.actions[index].actionName = undefined;
         } else {
-            action.actionName=this.actionNames[action.actionType][0].value;
+            // action.actionName=this.actionNames[action.actionType][0].value;
+            this.policy.actions[index].actionName = this.actionNames[action.actionType][0].value;
         }
     }
 
