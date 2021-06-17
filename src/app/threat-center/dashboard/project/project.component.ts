@@ -145,7 +145,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
-  public getProjectScanData() {
+  public getProjectScanData(idElement:string = '') {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
@@ -155,6 +155,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stateService.obsProject = obsProject;
       this.stateService.selectedScan = project.scans.edges[0];
       this.highlitedScanId = project.scans.edges[0].node.scanId;
+      this.coreHelperService.setFocusOnElement(idElement);
     });
   }
 
@@ -734,7 +735,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   });
   }
 
-  filterColumn(value: string) {
+  filterColumn(value: string,idElement:string = '') {
     if (value.length === 0) {
       this.filterBranchName = '';
     } else {
@@ -742,7 +743,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      this.getProjectScanData();
+      this.getProjectScanData(idElement);
     }, this.timeOutDuration);
   }
 
