@@ -21,7 +21,7 @@
       <div class="col-md-12">
 <!--        <perfect-scrollbar [style.max-height]="'250px'">-->
           <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
-                   tableStyleClass="table table-striped table-bordered  dataTable no-footer"
+                   tableStyleClass="table table-striped table-bordered  dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
             <ng-template pTemplate="caption">
