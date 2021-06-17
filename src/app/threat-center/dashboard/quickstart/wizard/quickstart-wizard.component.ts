@@ -161,7 +161,15 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         console.log("Loading gitlab user");
         this.loadingScan = true;
         this.obsGitlabUser = this.apiService.getGitLabUser()
-            .pipe(map(result => result.data.gitLabUser));
+            .pipe(map(result => {
+                let user  = result.data.gitLabUser;
+                let avatar  = user.avatarUrl;
+                if (!avatar.startsWith("http")) {
+                    avatar = "https://gitlab.com" + avatar;
+                    user.avatarUrl = avatar;
+                }
+                return user;
+            }));
         this.obsGitlabUser.subscribe(d => this.loadingScan = false);
     }
 

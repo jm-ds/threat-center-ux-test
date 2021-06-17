@@ -134,7 +134,7 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value) {
+    filterColumn(column, value,idElement:string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -142,9 +142,12 @@ export class ComponentsComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            const scnObj = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
-            this.initData();
+            scnObj.subscribe(component => {
+                this.componentDetails = component;
+                this.coreHelperService.setFocusOnElement(idElement);
+            });
         }, this.timeOutDuration);
     }
 
