@@ -28,7 +28,7 @@
             <ng-template ngbTabContent>
               <perfect-scrollbar [style.max-height]="'650px'">
                 <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
-                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                          [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
 
                   <ng-template pTemplate="caption">
@@ -163,7 +163,7 @@
                                    [scrollable]="true" [rows]="25" [style]="{width:'100%'}" scrollHeight="300px"
                                    [loading]="binaryLoading" [virtualScroll]="true" [virtualRowHeight]="34"
                                    [lazy]="true" (onLazyLoad)="loadBinaryReleasesLazy($event)"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
                             <!--
                             <ng-template pTemplate="caption">
                               <div style="text-align:right;margin-bottom:10px;margin-right:10px">
@@ -255,7 +255,7 @@
                                    [scrollable]="true" [rows]="25" [style]="{width:'100%'}" scrollHeight="300px"
                                    [loading]="sourceLoading" [virtualScroll]="true" [virtualRowHeight]="34"
                                    [lazy]="true" (onLazyLoad)="loadSourceReleasesLazy($event)"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer p-table table-width">
                             <!--
                             <ng-template pTemplate="caption">
                               <div style="text-align:right;margin-bottom:10px;margin-right:10px">

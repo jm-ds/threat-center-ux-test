@@ -1,5 +1,5 @@
 <p-table #dt [columns]="tabColumns" [value]="values" [paginator]="ispaginator" [rows]="rows" selectionMode="single"
-    [(selection)]="selectedRepos" tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+    [(selection)]="selectedRepos" tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
     [filterDelay]="filterDelay" [globalFilterFields]="globalFilterFields" (onRowSelect)="onRowSelect($event)"
     (onRowUnselect)="onRowUnselect($event)">
     <ng-template pTemplate="header">
