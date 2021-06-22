@@ -22,7 +22,7 @@
     </div>
     <div class="app-modal-footer">
         <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal" (click)="$event.stopPropagation();closeBtn()">Close</button>
-        <button type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix</button>
+        <button *ngIf="newVersion" type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix</button>
     </div>
 </div>
 

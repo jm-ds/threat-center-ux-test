@@ -118,6 +118,7 @@
                   <div style="margin-left: 5px;">
                     <button *ngIf="!component.node.componentLocation || component.node.componentLocation==='DEPENDENCY_FILE'" class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
                   </div>
+
                   <app-ui-modal #selectVersionDialog dialogClass="modal-dialog-centered" (click)="$event.stopPropagation();">
                     <div class="app-modal-header">
                       <h5 class="modal-title">Fix component version</h5>
