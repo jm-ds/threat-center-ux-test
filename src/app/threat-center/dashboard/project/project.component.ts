@@ -19,6 +19,7 @@ import { Entity, Project } from '@app/models';
 import { NextConfig } from '@app/app-config';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { ChartHelperService } from '@app/core/services/chart-helper.service';
 
 @Component({
   selector: 'project-dashboard',
@@ -40,7 +41,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private modalService: NgbModal,
     private userPreferenceService:UserPreferenceService,
-    private projectBreadcumsService:ProjectBreadcumsService) {
+    private projectBreadcumsService:ProjectBreadcumsService,
+    private chartHelperService:ChartHelperService) {
     this.chartDB = ChartDB;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -171,8 +173,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectDetails = project;
       this.stateService.selectedScan = project.scans.edges[0];
       let categories = [];
-      this.projectMetrics = project.projectMetricsGroup.projectMetrics;
-
+      if(!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1){
+        this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function(a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) })
+      }
       //Initializa all chart data.....
       //Init Vul Chart
       this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics');
@@ -267,7 +270,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     legend: this.legend,
     dataLabels: this.dataLabels,
     stroke: this.stroke,
-    colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
+    colors: ['#ffcccb','#ff2b2b', '#FFA500', '#ffff00', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
     noData: {
@@ -363,7 +366,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     legend: this.legend,
     dataLabels: this.dataLabels,
     stroke: this.stroke,
-    colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396'],//,'#11c15b'
+    colors: ['#ffcccb','#ff2b2b', '#FFA500', '#ffff00', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
     noData: {
@@ -453,42 +456,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  public sourceCodeLeakChart = {
-    chart: this.chart,
-    plotOptions: this.plotOptions,
-    legend: this.legend,
-    dataLabels: this.dataLabels,
-    stroke: this.stroke,
-    colors: ['#4680ff', '#f8f8ff', '#00e396'],
-    series: [],
-    xaxis: this.xaxis,
-    tooltip: {
-      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        let str = "";
-        for (let i = 0; i < w.config.series.length; i++) {
-          let data = 0;
-          if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
-        }
-        let orgData = 0;
-        if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data[dataPointIndex];
-        }
-        return (
-          '<div class=" arrow_box chart-overlay">' +
-          "<span class='active-fig'>" +
-          w.config.series[seriesIndex].name +
-          ": " +
-          orgData +
-          "</span>" +
-          "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-          "</div>"
-        );
-      }
-    }
-  };
-
   // While any changes occurred in page
   changePage(pageInfo) {
     this.isDisablePaggination = true;
@@ -527,7 +494,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isDisablePaggination = false;
     });
   }
-
 
   getAssetcountString() {
     if (!!this.assetChart && this.assetChart.series.length >= 1) {
@@ -665,7 +631,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
           data: this.projectMetrics.map(val => { const propData = val[propFirstPara]; const propSData = propData[propSecondPara]; return propSData[key]; }),
           name: _.upperFirst(_.camelCase(key)),
           hover: false,
-          colorClass: this.colorsClass[index]
+          colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) :  this.colorsClass[index]
         }
       )
     });

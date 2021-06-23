@@ -109,15 +109,15 @@
             }
 
             &.red:after {
-                background: rgb(255, 43, 43);
+                background: #ff2b2b;
             }
 
             &.orange:after {
-                background: rgb(255, 82, 82);
+                background: #FFA500;
             }
 
             &.yellow:after {
-                background: rgb(255, 162, 29);
+                background: #ffff00;
             }
 
             &.lgt-blue:after {
@@ -133,7 +133,7 @@
             }
 
             &.pink::after {
-                background: rgb(199, 21, 133);
+                background: #ffcccb;
             }
 
             &.white::after {
@@ -638,4 +638,16 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
         height: auto;
     }
 
+}
+
+.badge-pink {
+    background: rgba(255,192,203,0.2);
+    border-color: rgba(255,192,203,0.2);
+    color: #ffcccb;
+}
+
+.badge-yellow {
+    background: rgba(240, 255, 0, 0.2);
+    border-color: rgba(240, 255, 0, 0.2);
+    color: #ffff00;
 }
