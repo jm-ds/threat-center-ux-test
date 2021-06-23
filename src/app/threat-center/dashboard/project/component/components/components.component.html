@@ -118,6 +118,7 @@
                   <div style="margin-left: 5px;">
                     <button *ngIf="!component.node.componentLocation || component.node.componentLocation==='DEPENDENCY_FILE'" class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
                   </div>
+
                   <app-ui-modal #selectVersionDialog dialogClass="modal-dialog-centered" (click)="$event.stopPropagation();">
                     <div class="app-modal-header">
                       <h5 class="modal-title">Fix component version</h5>
@@ -135,8 +136,8 @@
                       </div>
                       <div class="form-group">
                         <div class="radio radio-primary d-inline">
-                          <input [(ngModel)]="newVersion" type="radio" value="2.9.10.4" name="{{component.node.componentId}}-next" id="next">
-                          <label for="next" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">2.9.10.4</span>(lowest risk of breaking build)</label><!--{{vulnerability.patchedVersions}}-->
+                          <input [(ngModel)]="newVersion" type="radio" value="2.11.0" name="{{component.node.componentId}}-next" id="next">
+                          <label for="next" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">2.11.0</span>(lowest risk of breaking build)</label><!--{{vulnerability.patchedVersions}}-->
                         </div>
                       </div>
                     </div>
