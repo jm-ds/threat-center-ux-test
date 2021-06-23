@@ -21,7 +21,8 @@ export class ProjectChartComponent implements OnInit {
 
     getAdditionData(data) {
         if (!!data && data.length >= 1) {
-            return !!data[0] ? data[0] : 0;
+            const i = data.length - 1;
+            return !!data[i] ? data[i] : 0;
             // return data[0];
             // return data.reduce((prev, next) => prev + (+next), 0);
         } else {

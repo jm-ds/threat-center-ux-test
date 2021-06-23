@@ -29,6 +29,7 @@ import { ChartHelperService } from '@app/core/services/chart-helper.service';
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
+  vulLabelSeq =  ["CRITICAL","HIGH",  "MEDIUM", "LOW"]
   isDisablePaggination:boolean = false;
   constructor(
     private apiService: ApiService,
@@ -174,21 +175,20 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stateService.selectedScan = project.scans.edges[0];
       let categories = [];
       if(!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1){
-        this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function(a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) })
+        this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function(a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
       }
       //Initializa all chart data.....
       //Init Vul Chart
-      this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics');
+      this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics',this.vulLabelSeq);
       //Init component chart
-      this.initCharts('componentChart', 'componentMetrics', 'vulnerabilityMetrics');
+      this.initCharts('componentChart', 'componentMetrics', 'vulnerabilityMetrics',this.vulLabelSeq);
       //Init License chart
-      this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics');
+      this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics',null);
       //Init Asset chart
-      this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics');
+      this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics',null);
       const assetCountData = this.getAssetcountString();
       this.assetCount = assetCountData.orgText;
       this.assetCountTooltip = assetCountData.tooltipText;
-
       _.each(this.projectMetrics, data => {
         this.xaxis.categories.push(data.measureDate);
       });
@@ -270,7 +270,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     legend: this.legend,
     dataLabels: this.dataLabels,
     stroke: this.stroke,
-    colors: ['#ffcccb','#ff2b2b', '#FFA500', '#ffff00', '#00e396'],//,'#11c15b'
+    colors: ['#ff2b2b','#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
     noData: {
@@ -366,7 +366,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     legend: this.legend,
     dataLabels: this.dataLabels,
     stroke: this.stroke,
-    colors: ['#ffcccb','#ff2b2b', '#FFA500', '#ffff00', '#00e396'],//,'#11c15b'
+    colors: ['#ff2b2b','#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
     series: [],
     xaxis: this.xaxis,
     noData: {
@@ -622,8 +622,13 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //Initialize chart dynamically
-  private initCharts(chartVarName: string, propFirstPara: string, propSecondPara: string) {
-    const properties = this.getProperties(propFirstPara, propSecondPara);
+  private initCharts(chartVarName: string, propFirstPara: string, propSecondPara: string,proper = null) {
+    let properties = [];
+    if (!!proper) {
+      properties = proper;
+    } else {
+      properties = this.getProperties(propFirstPara, propSecondPara);
+    }
     this[chartVarName].series = [];
     properties.forEach((key, index) => {
       this[chartVarName].series.push(

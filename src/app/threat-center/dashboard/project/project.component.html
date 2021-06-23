@@ -125,11 +125,11 @@
                       <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
                       <td>
                         <span title="Critical"
-                          class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.critical}}</span>
+                          class="badge m-r-5 badge-red">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.critical}}</span>
                         <span title="High"
                           class="badge m-r-5 badge-pink">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.high}}</span>
                         <span title="Medium"
-                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.medium}}</span>
+                          class="badge m-r-5 badge-orange">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.medium}}</span>
                         <span title="Low"
                           class="badge m-r-5 badge-yellow">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.low}}</span>
                         <span title="Info"
