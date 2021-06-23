@@ -250,11 +250,14 @@
                         </div>
                       </div>
                       <div style="width:60%;float:right;">
-                        <perfect-scrollbar [style.max-height]="'400px'">
+                        <perfect-scrollbar [style.max-height]="'400px'"
+                        #perfectScroll
+                        (psYReachEnd)="loadSourceReleasesLazy($event)">
                           <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases"
-                                   [scrollable]="true" [rows]="25" [style]="{width:'100%'}" scrollHeight="300px"
-                                   [loading]="sourceLoading" [virtualScroll]="true" [virtualRowHeight]="34"
-                                   [lazy]="true" (onLazyLoad)="loadSourceReleasesLazy($event)"
+                                   [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="300px"
+                                   [virtualScroll]="false" [virtualRowHeight]="34"
+                                   [lazy]="false"
+                                   [loading]="sourceLoading"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
                             <!--
                             <ng-template pTemplate="caption">
