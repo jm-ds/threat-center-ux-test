@@ -113,11 +113,11 @@
             }
 
             &.orange:after {
-                background: #FFA500;
+                background: #ff701d;
             }
 
             &.yellow:after {
-                background: #ffff00;
+                background: #ffa21d;
             }
 
             &.lgt-blue:after {
@@ -133,7 +133,7 @@
             }
 
             &.pink::after {
-                background: #ffcccb;
+                background: #ff5252;
             }
 
             &.white::after {
@@ -640,14 +640,25 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 
 }
 
+.badge-red {
+    background: rgba(255,43,43,0.2);
+    border-color: rgba(255,43,43,0.2);
+    color: #ff2b2b;
+}
+.badge-orange {
+    background: rgba(255,112,29,0.2);
+    border-color: rgba(255,112,29,0.2);
+    color: #ff701d;
+}
+
 .badge-pink {
-    background: rgba(255,192,203,0.2);
-    border-color: rgba(255,192,203,0.2);
-    color: #ffcccb;
+    background: rgba(255,82,82,0.2);
+    border-color: rgba(255,82,82,0.2);
+    color: #ff5252;
 }
 
 .badge-yellow {
-    background: rgba(240, 255, 0, 0.2);
-    border-color: rgba(240, 255, 0, 0.2);
-    color: #ffff00;
+    background: rgba(255,162,29,0.2);
+    border-color: rgba(255,162,29,0.2);
+    color: #ffa21d;
 }
