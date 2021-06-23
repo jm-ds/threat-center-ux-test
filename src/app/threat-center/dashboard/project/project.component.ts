@@ -633,7 +633,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     properties.forEach((key, index) => {
       this[chartVarName].series.push(
         {
-          data: this.projectMetrics.map(val => { const propData = val[propFirstPara]; const propSData = propData[propSecondPara]; return propSData[key]; }),
+          data: this.projectMetrics.map(val => { 
+            const propData = val[propFirstPara]; 
+            const propSData = propData[propSecondPara];
+            return !!propSData[key] ? propSData[key] : 0; }),
           name: _.upperFirst(_.camelCase(key)),
           hover: false,
           colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) :  this.colorsClass[index]
