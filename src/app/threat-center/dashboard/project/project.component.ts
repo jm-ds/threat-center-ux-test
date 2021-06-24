@@ -119,6 +119,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   timeOutDuration = 1000;
 
   ngOnInit() {
+    this.initProjectsChartConfig();
     this.obsProject = this.route.data
       .pipe(map(res => res.project.data.project));
     this.initProjectData();
@@ -139,13 +140,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.stateService.obsProject = this.obsProject;
     }
-    this.subscribeProjectData();
     this.getLastTabSelected();
     this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan");
-  }
-
-  subscribeProjectData() {
-    //this.obsProject.subscribe(project => {this.selectedScan = project.scans[0];});
   }
 
   public getProjectScanData(idElement:string = '') {
@@ -198,6 +194,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId);
+    if($event.nextId === 'scan'){
+      this.initProjectsChartConfig();
+      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      .pipe(map(result => result.data.project));
+      this.initProjectData();
+    }
   }
 
   rowUnselect($event: any) {
@@ -209,252 +211,274 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
   }
 
-  chart = {
-    height: 160,
-    parentHeightOffset: 0,
-    stacked: true,
-    type: 'bar',
-    foreColor: '#adb7be',
-    animations: {
+  chart;
+
+  plotOptions;
+
+  legend ;
+
+  dataLabels;
+
+  stroke ;
+
+  xaxis ;
+
+
+  public vulnerabilityChart ;
+
+  public licenseChart;
+
+  public componentChart ;
+
+  public assetChart;
+
+  public initProjectsChartConfig() {
+    this.chart = {
+      height: 160,
+      parentHeightOffset: 0,
+      stacked: true,
+      type: 'bar',
+      foreColor: '#adb7be',
+      animations: {
+        enabled: false
+      },
+      toolbar: {
+        show: false,
+      }
+    };
+
+    this.plotOptions = {
+      bar: {
+        horizontal: false,
+        columnWidth: '65%',
+        distributed: false
+      },
+    };
+
+    this.legend = {
+      show: false,
+      position: 'top',
+      horizontalAlign: 'center',
+      offsetX: 0,
+      offsetY: 0,
+      fontSize: '0px',
+      //width: 500,
+      itemMargin: {
+        horizontal: 0,
+        vertical: 0
+      },
+    };
+
+    this.dataLabels = {
       enabled: false
-    },
-    toolbar: {
-      show: false,
-    }
-  };
+    };
 
-  plotOptions = {
-    bar: {
-      horizontal: false,
-      columnWidth: '65%',
-      distributed: false
-    },
-  };
+    this.stroke = {
+      show: true,
+      width: 1,
+      colors: ['#fff']
+    };
 
-  legend = {
-    show: false,
-    position: 'top',
-    horizontalAlign: 'center',
-    offsetX: 0,
-    offsetY: 0,
-    fontSize: '0px',
-    //width: 500,
-    itemMargin: {
-      horizontal: 0,
-      vertical: 0
-    },
-  };
+    this.xaxis = {
+      categories: [],
+      labels: {
+        show: false,
+        rotate: -45,
+      },
+    };
 
-  dataLabels = {
-    enabled: false
-  };
-
-  stroke = {
-    show: true,
-    width: 1,
-    colors: ['#fff']
-  };
-
-  xaxis = {
-    categories: [],
-    labels: {
-      show: false,
-      rotate: -45,
-    },
-  };
-
-
-  public vulnerabilityChart = {
-    chart: this.chart,
-    plotOptions: this.plotOptions,
-    legend: this.legend,
-    dataLabels: this.dataLabels,
-    stroke: this.stroke,
-    colors: ['#ff2b2b','#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
-    series: [],
-    xaxis: this.xaxis,
-    noData: {
-      text: "There's no data",
-      align: 'center',
-      verticalAlign: 'middle',
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-        color: undefined,
-        fontSize: '14px',
-        fontFamily: undefined
-      }
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        let str = "";
-        for (let i = 0; i < w.config.series.length; i++) {
-          let data = 0;
-          if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+    this.vulnerabilityChart = {
+      chart: this.chart,
+      plotOptions: this.plotOptions,
+      legend: this.legend,
+      dataLabels: this.dataLabels,
+      stroke: this.stroke,
+      colors: ['#ff2b2b', '#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
+      series: [],
+      xaxis: this.xaxis,
+      noData: {
+        text: "There's no data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '14px',
+          fontFamily: undefined
         }
-        let orgData = 0;
-        if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data[dataPointIndex];
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let str = "";
+          for (let i = 0; i < w.config.series.length; i++) {
+            let data = 0;
+            if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
+              data = w.config.series[i].data[dataPointIndex];
+            str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+          }
+          let orgData = 0;
+          if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
+            orgData = w.config.series[seriesIndex].data[dataPointIndex];
+          }
+          return (
+            '<div class=" arrow_box chart-overlay">' +
+            "<span class='active-fig'>" +
+            w.config.series[seriesIndex].name +
+            ": " +
+            orgData +
+            "</span>" +
+            "<ul class='chart-all-lgnd'>" + str + "</ul>" +
+            "</div>"
+          );
         }
-        return (
-          '<div class=" arrow_box chart-overlay">' +
-          "<span class='active-fig'>" +
-          w.config.series[seriesIndex].name +
-          ": " +
-          orgData +
-          "</span>" +
-          "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-          "</div>"
-        );
       }
-    }
-  };
+    };
 
-  public licenseChart = {
-    chart: this.chart,
-    plotOptions: this.plotOptions,
-    legend: this.legend,
-    dataLabels: this.dataLabels,
-    stroke: this.stroke,
-    colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'],
-    series: [],
-    xaxis: this.xaxis,
-    noData: {
-      text: "There's no data",
-      align: 'center',
-      verticalAlign: 'middle',
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-        color: undefined,
-        fontSize: '14px',
-        fontFamily: undefined
-      }
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        let str = "";
-        for (let i = 0; i < w.config.series.length; i++) {
-          let data = 0;
-          if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+    this.licenseChart = {
+      chart: this.chart,
+      plotOptions: this.plotOptions,
+      legend: this.legend,
+      dataLabels: this.dataLabels,
+      stroke: this.stroke,
+      colors: ['#ff2b2b', '#ff5252', '#ffa21d', '#00acc1', '#00e396', '#c71585', '#f8f8ff', '#4680ff'],
+      series: [],
+      xaxis: this.xaxis,
+      noData: {
+        text: "There's no data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '14px',
+          fontFamily: undefined
         }
-        let orgData = 0;
-        if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data[dataPointIndex];
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let str = "";
+          for (let i = 0; i < w.config.series.length; i++) {
+            let data = 0;
+            if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
+              data = w.config.series[i].data[dataPointIndex];
+            str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+          }
+          let orgData = 0;
+          if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
+            orgData = w.config.series[seriesIndex].data[dataPointIndex];
+          }
+          return (
+            '<div class=" arrow_box chart-overlay">' +
+            "<span class='active-fig'>" +
+            w.config.series[seriesIndex].name +
+            ": " +
+            orgData +
+            "</span>" +
+            "<ul class='chart-all-lgnd'>" + str + "</ul>" +
+            "</div>"
+          );
         }
-        return (
-          '<div class=" arrow_box chart-overlay">' +
-          "<span class='active-fig'>" +
-          w.config.series[seriesIndex].name +
-          ": " +
-          orgData +
-          "</span>" +
-          "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-          "</div>"
-        );
       }
-    }
-  };
+    };
 
-  public componentChart = {
-    chart: this.chart,
-    plotOptions: this.plotOptions,
-    legend: this.legend,
-    dataLabels: this.dataLabels,
-    stroke: this.stroke,
-    colors: ['#ff2b2b','#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
-    series: [],
-    xaxis: this.xaxis,
-    noData: {
-      text: "There's no data",
-      align: 'center',
-      verticalAlign: 'middle',
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-        color: undefined,
-        fontSize: '14px',
-        fontFamily: undefined
-      }
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        let str = "";
-        for (let i = 0; i < w.config.series.length; i++) {
-          let data = 0;
-          if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+    this.componentChart = {
+      chart: this.chart,
+      plotOptions: this.plotOptions,
+      legend: this.legend,
+      dataLabels: this.dataLabels,
+      stroke: this.stroke,
+      colors: ['#ff2b2b', '#ff5252', '#ff701d', '#ffa21d', '#00e396'],//,'#11c15b'
+      series: [],
+      xaxis: this.xaxis,
+      noData: {
+        text: "There's no data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '14px',
+          fontFamily: undefined
         }
-        let orgData = 0;
-        if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data[dataPointIndex];
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let str = "";
+          for (let i = 0; i < w.config.series.length; i++) {
+            let data = 0;
+            if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
+              data = w.config.series[i].data[dataPointIndex];
+            str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+          }
+          let orgData = 0;
+          if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
+            orgData = w.config.series[seriesIndex].data[dataPointIndex];
+          }
+          return (
+            '<div class=" arrow_box chart-overlay">' +
+            "<span class='active-fig'>" +
+            w.config.series[seriesIndex].name +
+            ": " +
+            orgData +
+            "</span>" +
+            "<ul class='chart-all-lgnd'>" + str + "</ul>" +
+            "</div>"
+          );
         }
-        return (
-          '<div class=" arrow_box chart-overlay">' +
-          "<span class='active-fig'>" +
-          w.config.series[seriesIndex].name +
-          ": " +
-          orgData +
-          "</span>" +
-          "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-          "</div>"
-        );
       }
-    }
-  };
+    };
 
-  public assetChart = {
-    chart: this.chart,
-    plotOptions: this.plotOptions,
-    legend: this.legend,
-    dataLabels: this.dataLabels,
-    stroke: this.stroke,
-    colors: ['#11c15b', '#00acc1', '#ffa21d'],
-    series: [],
-    xaxis: this.xaxis,
-    noData: {
-      text: "There's no data",
-      align: 'center',
-      verticalAlign: 'middle',
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-        color: undefined,
-        fontSize: '14px',
-        fontFamily: undefined
-      }
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        let str = "";
-        for (let i = 0; i < w.config.series.length; i++) {
-          let data = 0;
-          if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
-            data = w.config.series[i].data[dataPointIndex];
-          str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+    this.assetChart = {
+      chart: this.chart,
+      plotOptions: this.plotOptions,
+      legend: this.legend,
+      dataLabels: this.dataLabels,
+      stroke: this.stroke,
+      colors: ['#11c15b', '#00acc1', '#ffa21d'],
+      series: [],
+      xaxis: this.xaxis,
+      noData: {
+        text: "There's no data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '14px',
+          fontFamily: undefined
         }
-        let orgData = 0;
-        if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
-          orgData = w.config.series[seriesIndex].data[dataPointIndex];
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let str = "";
+          for (let i = 0; i < w.config.series.length; i++) {
+            let data = 0;
+            if (!!w.config.series[i].data && w.config.series[i].data.length >= 1)
+              data = w.config.series[i].data[dataPointIndex];
+            str += "<li class='" + w.config.series[i].colorClass + "'>" + w.config.series[i].name + " (" + data + ")</li>";
+          }
+          let orgData = 0;
+          if (!!w.config.series[seriesIndex].data && w.config.series[seriesIndex].data.length >= 1) {
+            orgData = w.config.series[seriesIndex].data[dataPointIndex];
+          }
+          return (
+            '<div class=" arrow_box chart-overlay">' +
+            "<span class='active-fig'>" +
+            w.config.series[seriesIndex].name +
+            ": " +
+            orgData +
+            "</span>" +
+            "<ul class='chart-all-lgnd'>" + str + "</ul>" +
+            "</div>"
+          );
         }
-        return (
-          '<div class=" arrow_box chart-overlay">' +
-          "<span class='active-fig'>" +
-          w.config.series[seriesIndex].name +
-          ": " +
-          orgData +
-          "</span>" +
-          "<ul class='chart-all-lgnd'>" + str + "</ul>" +
-          "</div>"
-        );
       }
-    }
-  };
+    };
+  }
 
   // While any changes occurred in page
   changePage(pageInfo) {
