@@ -27,24 +27,7 @@ export class ReloadService {
             projectName: scanRequest.repository,
             entityId: scanRequest.entityId
         };
-        this.openScanModel(preScanProjectData);
-        this.scanHelperService.submitingScanForProject(preScanProjectData);
+        this.scanHelperService.submitingCheckAlreadyScanned(preScanProjectData, LoadingDialogComponent);
     }
 
-    //open pre scan model
-    private openScanModel(preScanProjectData) {
-        this.scanHelperService.openScanModel(preScanProjectData).result.then((result) => {
-            this.openFloatingModel();
-        }, (reason) => { });
-    }
-
-    //floating model for scan...
-    private openFloatingModel() {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'loading-dialog',
-            backdropClass: 'loading-dialog-backdrop'
-        });
-    }
 }
