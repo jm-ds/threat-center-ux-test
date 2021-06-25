@@ -158,21 +158,12 @@
                         </div>
                       </div>
                       <div style="width:60%;float:right;">
-                        <perfect-scrollbar [style.max-height]="'426px'">
+                        <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollBinaryRelese (psYReachEnd)="loadBinaryReleasesLazy($event)">
                           <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
-                                   [scrollable]="true" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
-                                   [loading]="binaryLoading" [virtualScroll]="true" [virtualRowHeight]="34"
-                                   [lazy]="true" (onLazyLoad)="loadBinaryReleasesLazy($event)"
+                                   [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
+                                   [virtualScroll]="false" [virtualRowHeight]="34"
+                                   [lazy]="false"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
-                            <!--
-                            <ng-template pTemplate="caption">
-                              <div style="text-align:right;margin-bottom:10px;margin-right:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                       (input)="dtBinary.filterGlobal($event.target.value, 'contains')"
-                                       style="width:160px;display:inline" class="form-control">
-                              </div>
-                            </ng-template>
-                            -->
                             <ng-template pTemplate="colgroup">
                               <colgroup>
                                 <col style="width:63%">
@@ -250,24 +241,10 @@
                         </div>
                       </div>
                       <div style="width:60%;float:right;">
-                        <perfect-scrollbar [style.max-height]="'400px'"
-                        #perfectScroll
-                        (psYReachEnd)="loadSourceReleasesLazy($event)">
-                          <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases"
-                                   [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="300px"
-                                   [virtualScroll]="false" [virtualRowHeight]="34"
-                                   [lazy]="false"
-                                   [loading]="sourceLoading"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
-                            <!--
-                            <ng-template pTemplate="caption">
-                              <div style="text-align:right;margin-bottom:10px;margin-right:10px">
-                                <input type="text" pInputText size="50" placeholder="Filter"
-                                       (input)="dtSource.filterGlobal($event.target.value, 'contains')"
-                                       style="width:160px;display:inline" class="form-control">
-                              </div>
-                            </ng-template>
-                            -->
+                        <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollSourceRelese (psYReachEnd)="loadSourceReleasesLazy($event)">
+                          <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases" [scrollable]="false" [rows]="25"
+                            [style]="{width:'100%'}" scrollHeight="300px" [virtualScroll]="false" [virtualRowHeight]="34" [lazy]="false"
+                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
                             <ng-template pTemplate="colgroup" let-columns>
                               <colgroup>
                                 <col style="width:63%">
@@ -282,22 +259,24 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-sourceRelease>
                               <tr *ngIf="sourceRelease.cvssV3 != null; else noCvssS" [placement]="'top'" style="height:34px"
-                                  ngbTooltip="{{sourceRelease.cvssV3.cveId}} : {{sourceRelease.cvssV3.cvssV3BaseScore}} : {{sourceRelease.cvssV3.severity}}">
+                                ngbTooltip="{{sourceRelease.cvssV3.cveId}} : {{sourceRelease.cvssV3.cvssV3BaseScore}} : {{sourceRelease.cvssV3.severity}}">
                                 <td style="width:63%">
-                                  <span [ngClass]="[sourceRelease.cvssV3.severity == 'CRITICAL' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'HIGH' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'MEDIUM' ? 'badge m-r-5 badge-light-warning': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'LOW' ? 'badge m-r-5 badge-light-primary': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'INFO' ? 'badge m-r-5 badge-light-success': 'badge m-r-5']">
+                                  <span
+                                    [ngClass]="[sourceRelease.cvssV3.severity == 'CRITICAL' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'HIGH' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'MEDIUM' ? 'badge m-r-5 badge-light-warning': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'LOW' ? 'badge m-r-5 badge-light-primary': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'INFO' ? 'badge m-r-5 badge-light-success': 'badge m-r-5']">
                                     {{sourceRelease.version}}
                                   </span>
                                 </td>
                                 <td style="width:37%">
-                                  <span [ngClass]="[sourceRelease.cvssV3.severity == 'CRITICAL' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'HIGH' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'MEDIUM' ? 'badge m-r-5 badge-light-warning': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'LOW' ? 'badge m-r-5 badge-light-primary': 'badge m-r-5',
-                                              sourceRelease.cvssV3.severity === 'INFO' ? 'badge m-r-5 badge-light-success': 'badge m-r-5']">
+                                  <span
+                                    [ngClass]="[sourceRelease.cvssV3.severity == 'CRITICAL' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'HIGH' ? 'badge m-r-5 badge-light-danger': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'MEDIUM' ? 'badge m-r-5 badge-light-warning': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'LOW' ? 'badge m-r-5 badge-light-primary': 'badge m-r-5',
+                                                                      sourceRelease.cvssV3.severity === 'INFO' ? 'badge m-r-5 badge-light-success': 'badge m-r-5']">
                                     {{sourceRelease.releaseDate}}
                                   </span>
                                 </td>
