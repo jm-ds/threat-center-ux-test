@@ -8,21 +8,21 @@
         <p>Choose version:</p>
         <div class="form-group">
             <div class="radio radio-primary d-inline">
-                <input [(ngModel)]="newVersion" type="radio" value="2.12.1" name="{{componentId}}-latest" id="latest">
-                <label for="latest" class="cr">Update to latest secure version <span class="badge m-r-5 badge-light-success">2.12.1</span></label><!--{{vulnerability.patchedVersions}}-->
+                <input [(ngModel)]="newVersion" type="radio" name="radio-p-fill" id="versionRedio1" value="2.12.1">
+                <label for="versionRedio1" class="cr">Update to latest secure version <span class="badge m-r-5 badge-light-success">2.12.1</span></label><!--{{vulnerability.patchedVersions}}-->
             </div>
 
         </div>
         <div class="form-group">
             <div class="radio radio-primary d-inline">
-                <input [(ngModel)]="newVersion" type="radio" value="2.11.0" name="{{componentId}}-next" id="next">
-                <label for="next" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">2.11.0</span>(lowest risk of breaking build)</label><!--{{vulnerability.patchedVersions}}-->
+                <input [(ngModel)]="newVersion" type="radio" name="radio-p-fill" id="versionRedio2" value="2.11.0">
+                <label for="versionRedio2" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">2.11.0</span>(lowest risk of breaking build)</label><!--{{vulnerability.patchedVersions}}-->
             </div>
         </div>
     </div>
     <div class="app-modal-footer">
         <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal" (click)="$event.stopPropagation();closeBtn()">Close</button>
-        <button *ngIf="newVersion" type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix</button>
+        <button type="button" class="btn btn-primary  m-r-5" [disabled]="!newVersion || newVersion === ''"(click)="$event.stopPropagation();closeBtn(); fixVersion()">Fix</button>
     </div>
 </div>
 
