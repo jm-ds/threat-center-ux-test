@@ -71,12 +71,12 @@ export class TaskService {
     }).valueChanges;
   }
 
+
   // fetch if same project is already scanned
-  checkAlreadyScannedProject() {
+  checkAlreadyScannedProject(errorHandler) {
     return this.coreGraphQLService.coreGQLReq<CheckAlreadyScannedQuery>(
       gql`query {
         checkAlreadyScannedProject(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",repoType:"${this.scanRequest.repoType}")
-      }`, 'no-cache');
+      }`, 'no-cache', {}, errorHandler);
   }
-
 }
