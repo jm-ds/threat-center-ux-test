@@ -109,6 +109,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   cardClasses: string = 'tab-card entity-table-card entity-table-overflow-tooltip';
   isDropdownClick: boolean = false;
 
+  // running scan task count subscription
+  runningTaskCountSubscription: Subscription = undefined;
+
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -169,6 +172,10 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     sessionStorage.removeItem('EntityBreadCums');
     this.requestObjectPageSubscriptions.unsubscribe();
     this.checkRunningScans = false;
+    if (!!this.runningTaskCountSubscription) {
+      // unsubscribe subscription
+      this.runningTaskCountSubscription.unsubscribe();
+    }
   }
 
   //Initializing stacked chart according to donut chart selection
@@ -1082,19 +1089,24 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!this.checkRunningScans) {
       return;
     }
-    // todo: replace it with socket [task: https://github.com/threatrix/product/issues/464]
-    this.taskService.getRunningScanTasksCount(entityId)
-      .pipe(map(countData => countData.data.running_scan_tasks_count))
+    // subscribe to running scan task count
+    this.runningTaskCountSubscription = this.taskService.subscribeRunningScanTaskCount(entityId)
+      .pipe(map(countData => {
+        if (!!countData.data.subscribeRunningScanTaskCount.errors) {
+          countData.data.subscribeRunningScanTaskCount.errors
+            .forEach(err=>console.error("Running task count subscription error: "+err.message));
+        }
+        if (!!countData.data.subscribeRunningScanTaskCount.value) {
+          return countData.data.subscribeRunningScanTaskCount.value;
+        } else {
+          return 0;
+        }
+      }))
       .subscribe(count => {
         this.activeScanCount = count;
-        setTimeout(() => {
-          this.getRunningScansCount(entityId);
-        }, NextConfig.config.delaySeconds);
-      }, err => {
-        setTimeout(() => {
-          this.getRunningScansCount(entityId);
-        }, NextConfig.config.delaySeconds);
-      });
+     }, err => {
+        console.error("error subscription "+err);
+     });
   }
 
 }
