@@ -409,6 +409,32 @@ export class ChartHelperService {
         return color;
     }
 
+    getProjectPageColorCodeByLabel(label: string) {
+        let color = null;
+        switch (label) {
+            case 'CRITICAL':
+            case 'critical':
+                color = "red";
+                break;
+            case 'HIGH':
+            case 'high':
+                color = "pink";
+                break;
+            case 'MEDIUM':
+            case 'medium':
+                color = "orange";
+                break;
+            case 'LOW':
+            case 'low':
+                color = "yellow";
+                break;
+            default:
+                color = null
+                break;
+        }
+        return color;
+    }
+
     private getPloatoptions() {
         return {
             pie: {
