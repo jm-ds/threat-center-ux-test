@@ -89,7 +89,7 @@ export class TaskService {
   checkAlreadyScannedProject(errorHandler) {
     return this.coreGraphQLService.coreGQLReq<CheckAlreadyScannedQuery>(
       gql`query {
-        checkAlreadyScannedProject(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",repoType:"${this.scanRequest.repoType}")
+        checkAlreadyScannedProject(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",repoType:"${this.scanRequest.repoType}", entityId: "${this.scanRequest.entityId}")
       }`, 'no-cache', {}, errorHandler);
   }
 }
