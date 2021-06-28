@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { RunningTaskCountQuery, ScanRequest, TaskQuery } from '../models/types';
+import { RunningTaskCountSubscription, RunningTaskCountQuery, ScanRequest, TaskQuery, SubscriptionResult } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
@@ -69,5 +69,18 @@ export class TaskService {
   `, fetchPolicy: 'no-cache'
     }).valueChanges;
   }
+
+
+  // subscribe to running scan task count
+  subscribeRunningScanTaskCount(entityId: string) {
+    return this.apollo.subscribe<RunningTaskCountSubscription>({
+      query: gql`subscription{
+        subscribeRunningScanTaskCount(entityId:"${entityId}") {value, errors{
+          message
+        }}
+      }`
+    });
+  }
+
 
 }

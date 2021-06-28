@@ -456,6 +456,7 @@ export type RunningTaskCountQuery = {
   running_scan_tasks_count:number;
 }
 
+
 export type GitHubUserQuery = {
   gitHubUser: GitHubUser;
 }
@@ -568,4 +569,41 @@ export class VulnerableReleaseResponse {
 export interface VulnerableReleaseResponseMap {
   "binaryVulnerableResponse": VulnerableReleaseResponse;
   "sourceVulnerableResponse": VulnerableReleaseResponse;
+}
+
+// graphql error location
+export type SourceLocation = {
+  line: number;
+  column: number;
+  sourceName: string;
+}
+
+// graphql error type
+export enum ErrorType {
+  InvalidSyntax = "InvalidSyntax",
+  ValidationError = "ValidationError",
+  DataFetchingException = "DataFetchingException",
+  OperationNotSupported = "OperationNotSupported",
+  ExecutionAborted = "ExecutionAborted"
+}
+
+// graphql error
+export type GraphQLError = {
+  message: string;
+  locations: SourceLocation[];
+  errorType: ErrorType[];
+  path: string[];
+  extensions: object;
+}
+
+
+// generic subscription result
+export type SubscriptionResult<T> = {
+  value : T;
+  errors: GraphQLError[];
+}
+
+// running task count result
+export type RunningTaskCountSubscription = {
+  subscribeRunningScanTaskCount:SubscriptionResult<number>;
 }
