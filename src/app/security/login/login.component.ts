@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
     });
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.errorMessage = this.route.snapshot.queryParams['error'];
   }
 
   // convenience getter for easy access to form fields
