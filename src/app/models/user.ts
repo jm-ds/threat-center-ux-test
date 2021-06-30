@@ -40,6 +40,8 @@ export class User {
     position: string;
 
     avatarUrl: string;
+    // api keys
+    apiKeys: ApiKeyConnection;
 }
 
 export class OrganizationModel {
@@ -151,6 +153,58 @@ export class InviteMailDataRequestInput {
         this.inviteMailData = inviteMailData;
         delete inviteMailData["__typename"];
     }
-}        
+}
+
+
+
+export class ApiKey {
+    orgId: string;
+    username: string;
+    keyId: string;
+    apiKey: string;
+    title: string;
+    description: string;
+    createdDate: Date;
+    expiredDate: Date;
+}
+
+export class ApiKeyConnection {
+    edges: ApiKeyEdge[];
+    pageInfo: PageInfo;
+    totalCount: number;
+}
+
+export class ApiKeyEdge {
+    node: ApiKey;
+    cursor: string;
+}
+
+export interface ApiKeyQuery {
+    apiKey: ApiKey;
+}
+
+export class ApiKeyRequestInput {
+    readonly orgId: string;
+    readonly username: string;
+    readonly keyId: string;
+    readonly apiKey: string;
+    readonly title: string;
+    readonly description: string;
+
+    constructor(orgId: string, username: string, keyId: string, apiKey: string, title: string, description: string) {
+        this.orgId = orgId;
+        this.username = username;
+        this.keyId = keyId;
+        this.apiKey = apiKey;
+        this.title = title;
+        this.title = title;
+        this.description = description;
+    }
+
+    static from(apiKey: ApiKey) {
+        return new ApiKeyRequestInput(apiKey.orgId, apiKey.username, apiKey.keyId, apiKey.apiKey, apiKey.title, apiKey.description);
+    }
+}
+
 
 

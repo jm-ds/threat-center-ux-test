@@ -11,6 +11,7 @@ import { ChildEntityManageComponent } from './child-entity/child-manage.componen
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import { User } from '@app/models/user';
+import { AlertService } from '@app/core/services/alert.service';
 
 @Component({
     selector: 'app-entity-manage',
@@ -38,7 +39,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         private entityService: EntityService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private alertService:AlertService
     ) {
     }
 
@@ -120,7 +122,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
         } else {
             if (!this.authService.currentUser || !this.authService.currentUser.orgId) {
-                Swal.fire('Not Found', 'Organization not found!', 'error');
+                this.alertService.alertBox('Organization not found!','Not Found','error');
             } else {
                 this.manageChildEntity("ADD", { parentEntityId: null });
             }
@@ -134,7 +136,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //delete entity data with server call
     deleteEntity(data) {
-        this.coreHelperService.swalAlertConfrm("Are you sure?", "Once deleted, you will not be able to recover this entity!")
+        this.alertService.alertConfirm("Are you sure?", "Once deleted, you will not be able to recover this entity!"
+        ,'warning',true,true,'#4680ff', '#6c757d','Yes', 'No')
             .then((willDelete) => {
                 if (willDelete.value) {
                     //delete...

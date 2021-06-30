@@ -9,10 +9,13 @@
           </div>
         </ng-template>
       </div>
-
-      <perfect-scrollbar [style.max-height]="'650px'">
+      <div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+        <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+      </div>
+      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'650px'">
         <p-table #dt [columns]="columns" [value]="componentDetails.components?.edges" [paginator]="false" [rows]="50"
-                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
 
           <ng-template pTemplate="caption">
@@ -30,29 +33,52 @@
             </tr>
             <tr>
               <th *ngFor="let col of columns">
-                <input *ngIf="col.header =='Name'" type="text" placeholder="{{col.header}}" name="search-name"
-                       class="form-control" (input)="filterColumn(col.header, $event.target.value)"
+                <input *ngIf="col.header =='Name'" id="nameSearch" type="text" placeholder="{{col.header}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col.header, $event.target.value,'nameSearch')"
                        [value]="getColumnFilterValue(col.header)"/>
-                <input *ngIf="col.header =='Group'" type="text" placeholder="{{col.header}}" name="search-name"
-                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
+                <input *ngIf="col.header =='Group'" id="groupSearch" type="text" placeholder="{{col.header}}" name="search-name"
+                       class="form-control" (input)="filterColumn(col.header, $event.target.value,'groupSearch')" [value]="getColumnFilterValue(col.header)"/>
                 <input *ngIf="col.header =='Version'" type="text" placeholder="{{col.header}}" name="search-name"
-                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>
-                <select *ngIf="col.header == 'Internal'" class="form-control custom-select"
+                       class="form-control" id="versionSearch" (input)="filterColumn(col.header, $event.target.value,'versionSearch')" [value]="getColumnFilterValue(col.header)"/>
+                <select id="internalSearch" *ngIf="col.header == 'Internal'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value)">
+                        (change)="filterColumn(col.header, $event.target.value,'internalSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="TRUE">True</option>
                   <option value="FALSE">False</option>
+                </select>
+                <select id="locationSearch" *ngIf="col.header == 'Location'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value,'locationSearch')">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
+                  <option value="DRIVE">DRIVE</option>
+                  <option value="STATIC_REF">STATIC REF</option>
+                </select>
+                <select id="typeSearch" *ngIf="col.header == 'Type'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value,'typeSearch')">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="LIBRARY">LIBRARY</option>
+                  <option value="ASSET">ASSET</option>
+                </select>
+                <select id="discoverySearch" *ngIf="col.header == 'Discovery'" class="form-control custom-select"
+                        [value]="getColumnFilterValue(col.header)"
+                        (change)="filterColumn(col.header, $event.target.value,'discoverySearch')">
+                  <option value="ALL" selected>- All -</option>
+                  <option value="DECLARED">DECLARED</option>
+                  <option value="DISCOVERED">DISCOVERED</option>
                 </select>
 <!--                <input *ngIf="col.header =='Source'" type="text" placeholder="{{col.header}}" name="search-name"-->
 <!--                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>-->
-                <select *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select"
+                <select id="vulSearch" *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value)">
+                        (change)="filterColumn(col.header, $event.target.value,'vulSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="TRUE">True</option>
                   <option value="FALSE">False</option>
                 </select>
+
               </th>
             </tr>
           </ng-template>
@@ -63,7 +89,9 @@
               <td>{{component.node.group}}</td>
               <td>{{component.node.version}}</td>
               <td>{{component.node.isInternal}}</td>
-              <td>File System/POM</td>
+              <td>{{!!component.node.componentLocation?component.node.componentLocation.replaceAll('_',' '):''}}</td>
+              <td>{{!!component.node.componentType?component.node.componentType.replaceAll('_',' '):''}}</td>
+              <td>{{!!component.node.componentDiscoveryMethod?component.node.componentDiscoveryMethod.replaceAll('_',' '):''}}</td>
               <td>
                 <ng-container *ngIf="component.node.licenses.edges.length > 0">
                   <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
@@ -78,7 +106,7 @@
               </td>
               <td>
                 <div *ngFor="let vulnerabilityEdge of component.node.vulnerabilities.edges">
-                    <span>{{component.node.vulnerabilities.edges[0]?.node.vulnId}}:{{component.node.vulnerabilities.edges[0]?.node.severity}}</span>
+                    <span>{{vulnerabilityEdge.node.vulnId}}</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'CRITICAL'"  title="Critical" class="badge m-l-5 badge-light-danger">CRITICAL</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'HIGH'"  title="Critical" class="badge m-l-5 badge-light-danger">HIGH</span>
                     <span *ngIf="vulnerabilityEdge.node.severity === 'MEDIUM'"  title="Critical" class="badge m-l-5 badge-light-warning">MEDIUM</span>
@@ -88,7 +116,7 @@
 
                 <div *ngIf="component.node.vulnerabilities.edges.length>0">
                   <div style="margin-left: 5px;">
-                    <button class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Check patched version</button>
+                    <button *ngIf="!component.node.componentLocation || component.node.componentLocation==='DEPENDENCY_FILE'" class="btn btn-outline-primary " data-toggle="modal" type="button" (click)="$event.stopPropagation();fixVersion(component.node.componentId,component.node.version)">Fix</button>
                   </div>
                 </div>
               </td>
@@ -98,7 +126,7 @@
       </perfect-scrollbar>
 
       <div class="col-sm-12">
-        <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="componentDetails.components?.totalCount" [pageSize]="defaultPageSize"
+        <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="componentDetails.components?.totalCount" [pageSize]="defaultPageSize"
           [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
         </mat-paginator>
       </div>

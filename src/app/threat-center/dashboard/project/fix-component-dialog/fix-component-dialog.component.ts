@@ -40,11 +40,14 @@ export class FixComponentDialogComponent implements OnInit {
         this.spinner.show();
         this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, this.componentId, this.oldVersion, this.newVersion);
         this.fixResultObservable.subscribe(results => {
-            this.spinner.hide();
             const modalRef = this.modalService.open(FixComponentResultDialogComponent, {
                 keyboard: false,
             });
             modalRef.componentInstance.fixResults = results;
+        }, error => {
+            console.error("error: " + error);
+        }, () => {
+            this.spinner.hide();
         });
     }
 

@@ -1,10 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { debounceTime,map,filter,startWith } from 'rxjs/operators';
-import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
 import { ApiService,StateService } from '@app/threat-center/shared/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 
 
 @Component({
@@ -25,7 +23,8 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
     public stateService:StateService,
     private route: ActivatedRoute,
     private router:Router,
-    private coreHelperService:CoreHelperService) { }
+    private coreHelperService:CoreHelperService,
+    private projectBreadcumsService:ProjectBreadcumsService) { }
 
   licenseId:string;
 
@@ -46,7 +45,9 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.coreHelperService.settingProjectBreadcum("","","",false);
+    if (!!this.projectBreadcumsService.getProjectBreadcum()) {
+      this.projectBreadcumsService.settingProjectBreadcum("","","",false);
+    }
   }
 
   //onTabChange($event: NgbTabChangeEvent) {
@@ -75,19 +76,23 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   gotoComponent() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
     const url = "dashboard/entity/" + entityId + "/project/" + this.projectId + "/component/" + this.breadcumDetail.SelectedComponent['id'];
-    this.coreHelperService.settingProjectBreadcum("License", "", "", false);
+    if (!!this.projectBreadcumsService.getProjectBreadcum()) {
+      this.projectBreadcumsService.settingProjectBreadcum("License", "", "", false);
+    }
     this.router.navigate([url]);
   }
 
   //Getting license name after emiting
   getLicenseName(name){
     this.licenseName = name;
-    this.coreHelperService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);
+    if (!!this.projectBreadcumsService.getProjectBreadcum()) {
+      this.projectBreadcumsService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);
+    }
   }
 
   //Initialize breadcum details
   private initBreadcum() {
-    this.breadcumDetail = this.coreHelperService.getProjectBreadcum();
+    this.breadcumDetail = this.projectBreadcumsService.getProjectBreadcum();
   }
 
 

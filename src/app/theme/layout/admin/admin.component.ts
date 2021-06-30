@@ -1,6 +1,8 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NextConfig } from '../../../app-config';
 import { Location } from '@angular/common';
+import { ReloadService } from '@app/threat-center/dashboard/services/reload.service';
+import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Component({
   selector: 'app-admin',
@@ -12,8 +14,13 @@ export class AdminComponent implements OnInit {
   public navCollapsed: boolean;
   public navCollapsedMob: boolean;
   public windowWidth: number;
-
-  constructor(private zone: NgZone, private location: Location) {
+  isUnAuthorize:boolean = false;
+  constructor(private zone: NgZone, private location: Location, private reloadService: ReloadService,
+    private coreHelperService:CoreHelperService) {
+      this.coreHelperService.getUnAuthorizeVal()
+      .subscribe(val => {
+        this.isUnAuthorize = val;
+      })
     this.nextConfig = NextConfig.config;
     let currentURL = this.location.path();
     const baseHerf = this.location['_baseHref'];

@@ -1,11 +1,14 @@
 import { Injectable, TemplateRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
+import { AlertService } from "@app/core/services/alert.service";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
+import { Messages } from "@app/messages/messages";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { map } from 'rxjs/operators';
+import { PreScanLoadingDialogComponent } from "../pre-scan-dialog/pre-scan-dialog.component";
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +39,8 @@ export class ScanHelperService {
         private taskService: TaskService,
         private router: Router,
         private coreHelperService: CoreHelperService,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private alertService:AlertService) {
     }
 
     //Scan submit and get task token to do further for scan.
@@ -79,7 +83,7 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.coreHelperService.swalALertBox("Scan is completed with errors", "Warning", "warning")
+                        this.alertService.alertBox("Scan is completed with errors", "Warning", "warning")
                             .then(() => {
                                 this.highlightNewScanIfInSamePage(tUpdate);
                                 this.refreshObjectPageIfFirstScan();
@@ -88,6 +92,9 @@ export class ScanHelperService {
                         this.highlightNewScanIfInSamePage(tUpdate);
                         this.refreshObjectPageIfFirstScan();
                     }
+
+                    //remove scan from storage
+                    this.updateStorage(null);
 
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(false);
@@ -99,15 +106,17 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.coreHelperService.swalALertBox(tUpdate.statusMessage);
+                    this.alertService.alertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
 
+                    //remove scan from storage
+                    this.updateStorage(null);
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(false);
                 } else {
                     setTimeout(() => {
                         this.getTaskUpdate(task);
                     }, NextConfig.config.delaySeconds);
-
+                    this.updateStorage(tUpdate.status);
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(true);
                 }
@@ -148,6 +157,18 @@ export class ScanHelperService {
         this.router.navigate([url], { state: { from: "DIALOG" } });
     }
 
+    public openScanModel(preScanProjectData): NgbModalRef {
+        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
+            {
+                backdrop: 'static',
+                keyboard: false,
+                windowClass: 'pre-scan-loading-dialog',
+                backdropClass: 'pre-scan-loading-dialog-backdrop'
+            });
+        modalRef.componentInstance.preScanProjectData = preScanProjectData;
+        return modalRef;
+    }
+
     //helper function.
     private highlightNewScanIfInSamePage = (tUpdate) => {
         const projectId = tUpdate.resourceId;
@@ -169,4 +190,16 @@ export class ScanHelperService {
         this.isRefreshObjectPage.next(true);
     }
 
+    //store current scan to storage. and remove if scan complete or get wny error...
+    private updateStorage(status) {
+        if (!!sessionStorage.getItem('REPO_SCAN')) {
+            if (!!status) {
+                let item = JSON.parse(sessionStorage.getItem('REPO_SCAN'));
+                item['status'] = status;
+                sessionStorage.setItem('REPO_SCAN', JSON.stringify(item));
+            } else {
+                sessionStorage.removeItem('REPO_SCAN');
+            }
+        }
+    }
 }

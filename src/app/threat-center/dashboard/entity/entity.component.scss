@@ -259,11 +259,22 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        max-width: 70px;
-        border: none;
-        height: 20px;
-        padding: 0;
+        max-width: 75px;
+        border: 1px solid #6c757d;
+        height: 23px;
+        padding: 0 10px 0 0;
         background: none;
+        appearance: none;
+        -webkit-appearance: none;
+        background: #2a3641 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%238796a3' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat 95% center/8px 10px;
+        padding: 0 12px 0 5px;
+        @media screen and (min-width:1550px) {
+            max-width: 115px;
+        }
+
+        &:focus {
+            background-position: right center;
+        }
     }
 
     .chart-opt-selected {
@@ -367,5 +378,115 @@
         z-index: 11;
         background-size: 100% 100%;
         transform: translate(-50%, 0);
+    }
+}
+
+.Progress {
+
+    display: flex;
+    height: 8px;
+    overflow: hidden;
+    background-color: #adb7be;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    filter: saturate(70%) !important;
+}
+
+.Progress-item {
+    outline: 2px solid transparent;
+}
+
+.supply-chain-risk-green {
+    background: linear-gradient(to right, rgb(17, 193, 91));
+}
+
+.supply-chain-risk-orang {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0), rgb(255, 162, 29))
+}
+
+.supply-chain-risk-yellow {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0));
+}
+
+.supply-chain-risk-red {
+    background: linear-gradient(to right, rgb(17, 193, 91), rgb(230, 230, 0), rgb(255, 162, 29), rgb(255, 43, 43))
+}
+
+
+.supply-chain-quality-green {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29),rgb(230, 230, 0),rgb(17, 193, 91))
+}
+
+.supply-chain-quality-orang {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29));
+}
+
+.supply-chain-quality-yellow {
+    background: linear-gradient(to right, rgb(255, 43, 43),rgb(255, 162, 29),rgb(230, 230, 0))
+}
+
+.supply-chain-quality-red {
+    background: linear-gradient(to right, rgb(255, 43, 43))
+}
+
+
+.Progress {
+    overflow: inherit;
+
+    .Progress-item {
+        position: relative;
+
+        &:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+
+        &:last-child {
+            border-radius: 0 6px 6px 0;
+        }
+
+        // &:nth-child(1) {
+        //     border-radius: 6px 0 0 6px;
+        // }
+
+        // &:nth-child-last(1) {
+        //     border-radius: 0 6px 6px 0;
+        // }
+
+        .chart-tooltip {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            border: 1px solid #adb7be;
+            padding: 3px 5px;
+            text-align: center;
+            z-index: 11;
+            background: #32404e;
+            min-width: 60px;
+            white-space: nowrap;
+            font-size: 12px;
+            display: none;
+            color: #fff;
+            box-shadow: 0 -1px 0px 0px rgba(0, 0, 0, 1) inset;
+
+            .arw {
+                width: 0;
+                height: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                position: absolute;
+                border-top: 7px solid #32404e;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                bottom: -6px;
+            }
+        }
+
+        &:hover {
+            .chart-tooltip {
+                display: block;
+            }
+        }
     }
 }

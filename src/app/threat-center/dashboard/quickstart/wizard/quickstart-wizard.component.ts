@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
@@ -13,11 +13,13 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { PreScanLoadingDialogComponent } from '../../pre-scan-dialog/pre-scan-dialog.component';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 import { HostListener } from '@angular/core';
 import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
+import { ReloadService } from '../../services/reload.service';
+import { RepositoryListComponent } from './repo-list/repo-list.component';
+import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 @Component({
     selector: 'app-quickstart',
@@ -46,6 +48,13 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
+    @ViewChild('orgRepoList', { static: false }) orgRepoList: RepositoryListComponent;
+    @ViewChild('repoList', { static: false }) repoList: RepositoryListComponent;
+    @ViewChild('gitLabRepoList', { static: false }) gitLabRepoList: RepositoryListComponent;
+    @ViewChild('bitbucketRepoList', { static: false }) bitbucketRepoList: RepositoryListComponent;
+    @ViewChild('readyScanRepo', { static: false }) readyScanRepo: ReadyScanRepositorylistComponent;
+
+
     constructor(
         private apiService: ApiService,
         private location: Location,
@@ -56,7 +65,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         public authService: AuthenticationService,
         private scanHelperService: ScanHelperService,
         private modalService: NgbModal,
-        private coreHelperService: CoreHelperService) {
+        private coreHelperService: CoreHelperService,
+        private reloadService: ReloadService,
+        private userPreferenceService:UserPreferenceService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -122,53 +133,18 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         console.log("RPEO: ", scanRequest.repository);
         console.log("OWDER: ", scanRequest.login);
         scanRequest.entityId = this.entityId;
+        scanRequest.status = null;
         this.taskService.scanRequest = scanRequest;
+
+        //storing current scan to storage
+        sessionStorage.setItem("REPO_SCAN", JSON.stringify(this.taskService.scanRequest));
+
         console.log("SUBMITTING TASK..");
         // open dialog box with message..
 
-        // this.openFloatingModel();
         this.isDisableScanBtn = true;
-        const preScanProjectData = {
-            uniqId: this.coreHelperService.uuidv4(),
-            message: scanRequest.repository + ' scan started.',
-            projectName: scanRequest.repository,
-            entityId: this.entityId
-        };
-
-        if (this.scanHelperService.projectScanResults.length == 0 && this.scanHelperService.recentlyScanCompleted.length == 0 && this.scanHelperService.errorScanProject.length == 0) {
-            this.openScanModel(preScanProjectData);
-        }
-
-        this.scanHelperService.submitingScanForProject(preScanProjectData);
-
-
-        // Create new ScanRequest and set it in the TaskService
-        // then forward to dashboard where we can display the task component.
-
-        // this.router.navigate(['dashboard/quickstart/dashboard']);
-    }
-
-    openScanModel(preScanProjectData) {
-        const modalRef = this.modalService.open(PreScanLoadingDialogComponent,
-            {
-                backdrop: 'static',
-                keyboard: false,
-                windowClass: 'pre-scan-loading-dialog',
-                backdropClass: 'pre-scan-loading-dialog-backdrop'
-            });
-        modalRef.componentInstance.preScanProjectData = preScanProjectData;
-        modalRef.result.then((result) => {
-            this.openFloatingModel();
-        }, (reason) => { });
-    }
-
-    private openFloatingModel() {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'loading-dialog',
-            backdropClass: 'loading-dialog-backdrop'
-        });
+        //Starting Scaning process....
+        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.')
     }
 
     loadGitHubUser() {
@@ -185,7 +161,15 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         console.log("Loading gitlab user");
         this.loadingScan = true;
         this.obsGitlabUser = this.apiService.getGitLabUser()
-            .pipe(map(result => result.data.gitLabUser));
+            .pipe(map(result => {
+                let user  = result.data.gitLabUser;
+                let avatar  = user.avatarUrl;
+                if (!avatar.startsWith("http")) {
+                    avatar = "https://gitlab.com" + avatar;
+                    user.avatarUrl = avatar;
+                }
+                return user;
+            }));
         this.obsGitlabUser.subscribe(d => this.loadingScan = false);
     }
 
@@ -255,25 +239,54 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(event) {
+        this.selectedRepos[0] = event.data;
+        this.selectedItem = '';
         const selectRepo = this.selectedRepos[0];
         if (!!selectRepo) {
-            if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
-                this.selectedItem = selectRepo.node.defaultBranchRef.name;
+
+            if (!!selectRepo.node) {
+                // for git hub
+                if (!!selectRepo.node.defaultBranchRef && !!selectRepo.node.defaultBranchRef.name) {
+                    this.selectedItem = selectRepo.node.defaultBranchRef.name;
+                } else {
+                    if (!!selectRepo.node.refs && selectRepo.node.refs.edges.length >= 1) {
+                        const masterData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'master' });
+                        if (!!masterData) {
+                            this.selectedItem = masterData.node.name;
+                        } else {
+                            const mainData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'main' });
+                            if (!!mainData) {
+                                this.selectedItem = mainData.node.name;
+                            }
+                        }
+
+                    }
+                }
             } else {
-                if (!!selectRepo.node.refs && selectRepo.node.refs.edges.length >= 1) {
-                    const masterData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'master' });
-                    if (!!masterData) {
-                        this.selectedItem = masterData.node.name;
-                    } else {
-                        const mainData = selectRepo.node.refs.edges.find(f => { return f.node.name == 'main' });
-                        if (!!mainData) {
-                            this.selectedItem = mainData.node.name;
+                debugger;
+                // for git lab..
+                if (!!selectRepo.repository && !!selectRepo.repository.rootRef) {
+                    this.selectedItem = selectRepo.repository.rootRef;
+                }
+                //for bit bucket..
+                if (!!selectRepo.mainBranch) {
+                    this.selectedItem = selectRepo.mainBranch;
+                } else {
+                    if (!!selectRepo.branches && selectRepo.branches.length >= 1) {
+                        const masterData = selectRepo.branches.find(f => { return f === 'master' });
+                        if (!!masterData) {
+                            this.selectedItem = masterData;
+                        } else {
+                            const mainData = selectRepo.branches.find(f => { return f == 'main' });
+                            if (!!mainData) {
+                                this.selectedItem = mainData;
+                            }
                         }
                     }
-
                 }
             }
         }
+        this.readyScanRepo.selectedItem = this.selectedItem;
     }
 
     onRowUnselect(event) {
@@ -283,7 +296,10 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     onTabChange($event: NgbTabChangeEvent) {
         this.lastTabChangesInfo = $event;
         this.activeTab = $event.nextId;
-        this.coreHelperService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
+        this.userPreferenceService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
+        this.selectedItem = '';
+        this.selectedRepos = [];
+        this.readyScanRepo.selectedItem = this.selectedItem;
     }
 
 
@@ -292,16 +308,16 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         //Need to check here is browser back button clicked or not if clicked then do below things..
         if (this.coreHelperService.getBrowserBackButton()) {
             this.coreHelperService.setBrowserBackButton(false);
-            if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
-                this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan", true);
-                this.coreHelperService.settingUserPreference("ThreatScan", null, this.activeTab);
+            if (!!this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan")) {
+                this.activeTab = this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan", true);
+                this.userPreferenceService.settingUserPreference("ThreatScan", null, this.activeTab);
                 return false;
             } else {
-                this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+                this.userPreferenceService.settingUserPreference("ThreatScan", "", null);
                 return true;
             }
         } else {
-            this.coreHelperService.settingUserPreference("ThreatScan", "", null);
+            // this.coreHelperService.settingUserPreference("ThreatScan", "", null);
             return true;
         }
     }
@@ -310,7 +326,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     @HostListener('window:popstate', ['$event'])
     onPopState(event) {
         this.coreHelperService.setBrowserBackButton(true);
-        if (!!this.coreHelperService.getPreviousTabSelectedByModule("ThreatScan")) {
+        if (!!this.userPreferenceService.getPreviousTabSelectedByModule("ThreatScan")) {
             history.pushState(null, null, window.location.href);
         }
     }
@@ -322,6 +338,6 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     private getLastTabSelected() {
-        this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") ? this.coreHelperService.getLastTabSelectedNameByModule("ThreatScan") : this.activeTab;
+        this.activeTab = !!this.userPreferenceService.getLastTabSelectedNameByModule("ThreatScan") ? this.userPreferenceService.getLastTabSelectedNameByModule("ThreatScan") : this.activeTab;
     }
 }

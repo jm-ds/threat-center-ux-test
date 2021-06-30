@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from "apollo-angular";
-import { Role, User, UserQuery, UserRequestInput, UsersQuery } from "@app/models";
+import { Role, User, UserQuery, UserRequestInput, UsersQuery, ApiKey, ApiKeyQuery, ApiKeyRequestInput } from "@app/models";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
@@ -41,7 +41,7 @@ export class UserService {
                       }
                     }
                 }
-            }`);
+            }`,'no-cache');
     }
 
     getUser(username: string) {
@@ -76,9 +76,21 @@ export class UserService {
                         name,
                         title,
                         description
+                    },
+                    apiKeys {
+                        edges {
+                            node {
+                                apiKey,
+                                keyId,
+                                title,
+                                description,
+                                createdDate,
+                                expiredDate
+                            }
+                        }
                     }
                 }
-            }`);
+            }`, 'no-cache');
     }
 
     saveRoles(username: string, roles: Role[]) {
@@ -137,6 +149,73 @@ export class UserService {
             }`,
             variables: {
                 user: userRequest
+            }
+        });
+    }
+
+
+    // fetch API key
+    getApiKey(username: string, keyId: string) {
+        return this.coreGraphQLService.coreGQLReq<ApiKeyQuery>(
+            gql`query {
+                apiKey(username: "${username}", keyId: "${keyId}") {
+                    apiKey,
+                    username,
+                    keyId,
+                    title,
+                    description,
+                    createdDate,
+                    expiredDate
+                }
+            }`, 'no-cache');
+    }
+
+
+    // post "generate API key" command
+    generateApiKey(apiKey: ApiKey) {
+        const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+
+        return this.apollo.mutate({
+            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+                generateApiKey(apiKeyRequest: $apiKeyRequest) {
+                    keyId
+                }
+            }`,
+            variables: {
+                apiKeyRequest: apiKeyRequest
+            }
+        });
+    }
+
+
+    // post "update API key" command
+    updateApiKey(apiKey: ApiKey) {
+        const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+        return this.apollo.mutate({
+            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+                updateApiKey(apiKeyRequest: $apiKeyRequest) {
+                    keyId
+                }
+            }`,
+            variables: {
+                apiKeyRequest: apiKeyRequest
+            }
+        });
+    }
+
+
+    // post "remove API key" command
+    removeApiKey(apiKey: ApiKey) {
+        const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+
+        return this.apollo.mutate({
+            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+                removeApiKey(apiKeyRequest: $apiKeyRequest) {
+                    keyId
+                }
+            }`,
+            variables: {
+                apiKeyRequest: apiKeyRequest
             }
         });
     }

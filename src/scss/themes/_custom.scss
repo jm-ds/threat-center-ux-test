@@ -145,6 +145,14 @@ a {
   height:800px;
 }
 
+.org-tree-selected-card {
+  height: auto;
+}
+
+perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
+  z-index: 111;
+}
+
 .row {
   margin-left: -8px;
   margin-right: -8px;
@@ -391,4 +399,11 @@ select-dropdown .selected.highlighted {
   td, th{
     font-family: $theme-font-family;
   }
+}
+
+.center-table-progressbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
 }

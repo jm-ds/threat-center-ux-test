@@ -7,22 +7,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbPopoverModule, NgbProgressbarModule, NgbTabsetModule, NgbDropdownModule, NgbButtonsModule, NgbTooltipModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { QuickstartWizardComponent } from './wizard/quickstart-wizard.component';
-import { TaskComponent } from '@app/threat-center/shared/task/task.component';
-
 import { TcSharedModule } from '@app/threat-center/shared/tc-shared.module';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { NgxSpinnerModule } from "ngx-spinner";
-import { LoadingDialogComponent } from '../project-scan-dialog/loading-dialog.component';
-import { PreScanLoadingDialogComponent } from '../pre-scan-dialog/pre-scan-dialog.component';
 import { MatProgressBarModule } from '@angular/material';
+import { RepositoryListComponent } from './wizard/repo-list/repo-list.component';
+import { ReadyScanRepositorylistComponent } from './wizard/ready-scan-repo/ready-scan-repo.component';
 
 
 @NgModule({
   declarations: [
     QuickstartWizardComponent,
-    LoadingDialogComponent,
-    PreScanLoadingDialogComponent
+    RepositoryListComponent,
+    ReadyScanRepositorylistComponent
   ],
   imports: [
     CommonModule,
@@ -44,6 +42,6 @@ import { MatProgressBarModule } from '@angular/material';
     MatProgressBarModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [LoadingDialogComponent, PreScanLoadingDialogComponent]
+  entryComponents: []
 })
 export class QuickstartModule { }

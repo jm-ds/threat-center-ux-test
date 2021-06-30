@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
@@ -17,18 +17,17 @@ import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
+import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { UserPreferenceService } from '@app/core/services/user-preference.service';
 
 
 @Component({
   selector: 'app-entity',
   templateUrl: './entity.component.html',
-  styleUrls: ['./entity.component.scss'],
-  host: {
-    '(document:click)': 'onClick($event)',
-  }
+  styleUrls: ['./entity.component.scss']
 })
 
-export class EntityComponent implements OnInit, OnDestroy {
+export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   public chartDB: any;
   public dailyVisitorStatus: string;
   public dailyVisitorAxis: any;
@@ -83,7 +82,6 @@ export class EntityComponent implements OnInit, OnDestroy {
   isShowComponentdropdown: boolean = false;
   componentChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "Vulnerabilities", isActive: true },
-    // { id: this.coreHelperService.uuidv4(), name: "License Risk", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: false }
   ];
@@ -92,7 +90,6 @@ export class EntityComponent implements OnInit, OnDestroy {
   licenseChartDropValues = [
     { id: this.coreHelperService.uuidv4(), name: "License Name", isActive: true },
     { id: this.coreHelperService.uuidv4(), name: "License Category", isActive: false },
-    // { id: this.coreHelperService.uuidv4(), name: "Risk", isActive: false },
   ];
   selectedlicenseChartDropValue = "License Name";
   commonLineSparklineOptions: any = {};
@@ -109,6 +106,11 @@ export class EntityComponent implements OnInit, OnDestroy {
   areaChartCommonOption: any = Object.assign(this.chartHelperService.getAreaChartCommonConfiguration());
 
   sparkLinechartdelayFlag: boolean = true;
+  cardClasses: string = 'tab-card entity-table-card entity-table-overflow-tooltip';
+  isDropdownClick: boolean = false;
+
+  // running scan task count subscription
+  runningTaskCountSubscription: Subscription = undefined;
 
   constructor(
     private router: Router,
@@ -123,6 +125,9 @@ export class EntityComponent implements OnInit, OnDestroy {
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
     private modalService: NgbModal,
+    private cdRef: ChangeDetectorRef,
+    private projectBreadcumsService:ProjectBreadcumsService,
+    private userPreferenceService:UserPreferenceService
   ) {
     this.chartDB = ChartDB;
     this.dailyVisitorStatus = '1y';
@@ -155,6 +160,10 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
   }
 
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
+  }
+
   ngOnInit() {
     this.loadEntityPage();
   }
@@ -163,124 +172,105 @@ export class EntityComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('EntityBreadCums');
     this.requestObjectPageSubscriptions.unsubscribe();
     this.checkRunningScans = false;
+    if (!!this.runningTaskCountSubscription) {
+      // unsubscribe subscription
+      this.runningTaskCountSubscription.unsubscribe();
+    }
   }
 
   //Initializing stacked chart according to donut chart selection
   initStackedChartAccordingToDonut(value: string) {
-    // let properties = [];
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
-    this[activeTabVar].series = [];
-    if (this.isShowStackedChart) {
+    if (!this.isDropdownClick) {
+      console.log("indide");
       this.selectedDonut = value;
-      this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
-      switch (this.selectedDonut) {
-        case 'Vulnerability':
-          this[activeTabVar].colors = [];
-          const vulproperties = this.getProperties('vulnerabilityMetrics', 'severityMetrics');
-          for (var index in vulproperties) {
-            const obj = { name: vulproperties[index], data: this.getStackChartLogicalData(vulproperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-            this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulproperties[index]));
-          }
+      // let properties = [];
+      let activeTabVar: string = "";
+      // check active tab as well..
+      switch (this.lineChartActiveTab) {
+        case 'Month':
+          activeTabVar = 'monthSeriesOverTime';
           break;
-        case 'Assets':
-          this[activeTabVar].series = [];
-          const assetproperties = this.getProperties('assetMetrics', 'assetCompositionMetrics');
-          for (var index in assetproperties) {
-            const obj = { name: assetproperties[index], data: this.getStackChartLogicalData(assetproperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-          }
-          this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
+        case 'Week':
+          activeTabVar = 'weekSeriesOverTime';
           break;
-        case 'SupplyChain':
-          this[activeTabVar].series = [];
-          let dateLists = [];
-          const supplyProperties = this.getProperties('supplyChainMetrics', 'supplyChainMetrics');
-          for (var index in supplyProperties) {
-            const obj = { name: supplyProperties[index], data: this.getStackChartLogicalData(supplyProperties[index], this.selectedDonut) }
-            this[activeTabVar].series.push(obj);
-          }
-          this.areaChartCommonOption.xaxis['categories'] = dateLists;
+        case 'Quarter':
+          activeTabVar = 'quarterSeriesOverTime'
           break;
-        case 'Licenses':
-          this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
+        case 'Year':
+          activeTabVar = 'yearSeriesOverTime';
           break;
-        case 'Components':
-          this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
-          break;
-
         default:
           break;
       }
+      this[activeTabVar].series = [];
+      if (this.isShowStackedChart) {
+        this.stackedChartCommonOptions = Object.assign(this.chartHelperService.getStackedChartCommonConfiguration());
+        switch (this.selectedDonut) {
+          case 'Vulnerability':
+            this[activeTabVar].colors = [];
+            const vulproperties = this.getProperties('vulnerabilityMetrics', 'severityMetrics');
+            for (var index in vulproperties) {
+              const obj = { name: vulproperties[index], data: this.getStackChartLogicalData(vulproperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+              this[activeTabVar].colors.push(this.chartHelperService.getColorByLabel(vulproperties[index]));
+            }
+            break;
+          case 'Assets':
+            this[activeTabVar].series = [];
+            const assetproperties = this.getProperties('assetMetrics', 'assetCompositionMetrics');
+            for (var index in assetproperties) {
+              const obj = { name: assetproperties[index], data: this.getStackChartLogicalData(assetproperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+            }
+            this[activeTabVar].colors = ['#11c15b', '#4680ff', '#ffa21d'];
+            break;
+          case 'SupplyChain':
+            this[activeTabVar].series = [];
+            let dateLists = [];
+            const supplyProperties = this.getProperties('supplyChainMetrics', 'supplyChainMetrics');
+            for (var index in supplyProperties) {
+              const obj = { name: supplyProperties[index], data: this.getStackChartLogicalData(supplyProperties[index], this.selectedDonut) }
+              this[activeTabVar].series.push(obj);
+            }
+            this.areaChartCommonOption.xaxis['categories'] = dateLists;
+            break;
+          case 'Licenses':
+            this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
+            break;
+          case 'Components':
+            this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
+            break;
+
+          default:
+            break;
+        }
+      }
+      this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
+    } else {
+      this.selectedDonut = this.selectedDonut;
+      this.isDropdownClick = false;
     }
-    this.isShowStackedChart = !this.isShowStackedChart ? true : this.isShowStackedChart;
   }
 
-  //fired when changing License chart dropdown from donut chart
-  changeLincesChartDropdown() {
-    // this.isShowStackedChart = false;
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
+  //ondrop down click
+  dropdownClick(ev: boolean) {
+    this.isDropdownClick = ev;
+  }
+
+  //on change licesne dropdown
+  onChangeLicensedropdown(event) {
+    this.selectedlicenseChartDropValue = event.selectedValue;
+    const activeTabVar = this.getActiveTabVar();
     if (this.selectedDonut === 'Licenses') {
       this.weekSeriesOverTime['series'] = [];
       this.licenseStackedChartConfig(this.selectedlicenseChartDropValue, activeTabVar);
     }
   }
 
-  //fired when changing component chart dropdown from donut chart
-  changeComponentChartDropdown() {
-    // this.isShowStackedChart = false;
-    let activeTabVar: string = "";
-    // check active tab as well..
-    switch (this.lineChartActiveTab) {
-      case 'Month':
-        activeTabVar = 'monthSeriesOverTime';
-        break;
-      case 'Week':
-        activeTabVar = 'weekSeriesOverTime';
-        break;
-      case 'Quarter':
-        activeTabVar = 'quarterSeriesOverTime'
-        break;
-      case 'Year':
-        activeTabVar = 'yearSeriesOverTime';
-        break;
-      default:
-        break;
-    }
+  //on change component dropdown
+  onChangeComponentdropdown(event) {
+    this.selectedComponentChartDropvalue = event.selectedValue;
+    const activeTabVar = this.getActiveTabVar();
     if (this.selectedDonut === 'Components') {
       this.weekSeriesOverTime['series'] = [];
       this.componentStackedChartConfig(this.selectedComponentChartDropvalue, activeTabVar);
@@ -349,7 +339,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       entityId = this.authService.currentUser.defaultEntityId;
     }
     console.log(entityId);
-    console.log("Loading Entity");
+    console.log("Loading Entity ");
     let isPush = true;
     if (!!sessionStorage.getItem('EntityBreadCums')) {
       isPush = false;
@@ -366,52 +356,20 @@ export class EntityComponent implements OnInit, OnDestroy {
   //Initialize SparkLine charts
   initSparkLineChart(data, str) {
     let dataToReturn = [];
-    const vul = ['critical', 'high', 'medium', 'low', 'info'];
-    const lic = ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'];
-    const supply = ['risk', 'quality'];
-    const asset = ['embedded', 'openSource', 'unique'];
-    const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
-    switch (str) {
-      case 'vulnerabilityMetrics':
-        _.each(vul, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.vulnerabilityMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'licenseMetrics':
-        _.each(lic, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.licenseMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'supplyChainMetrics':
-        _.each(supply, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.supplyChainMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      case 'assetMetrics':
-        _.each(asset, value => {
-          if (assData.length >= 1) {
-            dataToReturn.push({ name: value, data: assData.map(val => { return val.assetMetrics[value] }) });
-          } else {
-            dataToReturn.push({ name: value, data: [] });
-          }
-        });
-        break;
-      default:
-        break;
+    const labels = {
+      vulnerabilityMetrics: ['critical', 'high', 'medium', 'low', 'info'],
+      licenseMetrics: ['copyleftStrong', 'copyleftWeak', 'copyleftPartial', 'copyleftLimited', 'copyleft', 'custom', 'dual', 'permissive'],
+      supplyChainMetrics: ['risk', 'quality'],
+      assetMetrics: ['embedded', 'openSource', 'unique']
     }
-
+    const assData = data.entityMetricsSummaryGroup.entityMetricsSummaries.length >= 1 ? data.entityMetricsSummaryGroup.entityMetricsSummaries.sort((a, b) => { return Number(new Date(a['measureDate'])) - Number(new Date(b.measureDate)) }) : [];
+    _.each(labels[str], value => {
+      if (assData.length >= 1) {
+        dataToReturn.push({ name: value, data: assData.map(val => { const v = val[str]; return v[value]; }) });
+      } else {
+        dataToReturn.push({ name: value, data: [] });
+      }
+    });
     return dataToReturn;
   }
 
@@ -454,16 +412,16 @@ export class EntityComponent implements OnInit, OnDestroy {
 
 
     this.obsEntity.subscribe((entity: any) => {
-      if(!!entity){
+      if (!!entity) {
         if (!!entity.parents && entity.parents.length >= 1) {
           for (var i = entity.parents.length - 1; i >= 0; i--) {
             this.entityNewBreadCum.push({ id: entity.parents[i].entityId, name: entity.parents[i].name });
           }
         }
         this.entityNewBreadCum.push({ id: entity.entityId, name: entity.name });
-        this.coreHelperService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
+        this.projectBreadcumsService.settingProjectBreadcum("Entity", entity.name, entity.entityId, false);
         this.buildProjectTree(entity);
-  
+
         if (isPush) {
           this.entityPageBreadCums.push({ id: entityId, name: entity.name });
         }
@@ -477,25 +435,27 @@ export class EntityComponent implements OnInit, OnDestroy {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-  
+          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+            entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
+          }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
           this.entityMetricList = entity.entityMetricsGroup.entityMetrics;
-  
+
           //Vul donut chart
           this.initVulDonutChartData(entityMetrics[0].vulnerabilityMetrics.severityMetrics);
-  
+
           //License Donut charts
           this.initLicenseDonut(entityMetrics[0].licenseMetrics);
-  
+
           //Component donut charts
           this.initComponentDonutChart(entityMetrics[0].componentMetrics);
-  
+
           //Asset donut chart
           this.initAssetDonut(entityMetrics[0].assetMetrics.assetCompositionMetrics);
-  
+
           //Supply chain chart
           this.initSupplyChainChart(entityMetrics[0].supplyChainMetrics.supplyChainMetrics);
-  
+
           this.initStackedChartAccordingToDonut(this.selectedDonut);
         }
         if (!!entity) {
@@ -504,7 +464,7 @@ export class EntityComponent implements OnInit, OnDestroy {
           this.isTreeProgressBar = false;
         }
       }
-     });
+    });
   }
 
   buildProjectTree(entity: Entity) {
@@ -557,12 +517,18 @@ export class EntityComponent implements OnInit, OnDestroy {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.activeTab = $event.nextId;
-    this.coreHelperService.settingUserPreference("Entity", $event.activeId, this.activeTab);
+    this.userPreferenceService.settingUserPreference("Entity", $event.activeId, this.activeTab);
     if (this.activeTab === 'BUSINESSUNITS') {
       setTimeout(() => {
         this.sparkLinechartdelayFlag = true;
       }, 5);
+      this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
     } else {
+      if (this.activeTab === 'ORGANIZATION') {
+        this.cardClasses = 'tab-card org-tree-selected-card entity-table-overflow-tooltip'
+      } else {
+        this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
+      }
       this.sparkLinechartdelayFlag = false;
     }
   }
@@ -572,16 +538,16 @@ export class EntityComponent implements OnInit, OnDestroy {
     //Need to check here is browser back button clicked or not if clicked then do below things..
     if (this.coreHelperService.getBrowserBackButton()) {
       this.coreHelperService.setBrowserBackButton(false);
-      if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
-        this.activeTab = this.coreHelperService.getPreviousTabSelectedByModule("Entity", true);
-        this.coreHelperService.settingUserPreference("Entity", null, this.activeTab);
+      if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Entity")) {
+        this.activeTab = this.userPreferenceService.getPreviousTabSelectedByModule("Entity", true);
+        this.userPreferenceService.settingUserPreference("Entity", null, this.activeTab);
         return false;
       } else {
-        this.coreHelperService.settingUserPreference("Entity", "", null);
+        this.userPreferenceService.settingUserPreference("Entity", "", null);
         return true;
       }
     } else {
-      this.coreHelperService.settingUserPreference("Entity", "", null);
+      // this.coreHelperService.settingUserPreference("Entity", "", null);
       return true;
     }
   }
@@ -590,7 +556,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     this.coreHelperService.setBrowserBackButton(true);
-    if (!!this.coreHelperService.getPreviousTabSelectedByModule("Entity")) {
+    if (!!this.userPreferenceService.getPreviousTabSelectedByModule("Entity")) {
       history.pushState(null, null, window.location.href);
     }
   }
@@ -656,10 +622,9 @@ export class EntityComponent implements OnInit, OnDestroy {
     }
   }
 
-  //clicking on any where in the screen below method will fire
-  onClick(event) {
-    this.isShowComponentdropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowComponentdropdown;
-    this.isShowLicensedropdown = (!!event.target.className && event.target.className !== 'chart-opt-selected' && event.target.parentNode.className !== 'chart-opt-selected') ? false : this.isShowLicensedropdown;
+  //get actual height of child content
+  getContentHeight(content) {
+    return !!content.offsetHeight && content.offsetHeight > 0 ? (Number(content.offsetHeight) + 20) + 'px' : '38px'
   }
 
   private initCharts() {
@@ -688,7 +653,12 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   private getLastTabSelected() {
-    this.activeTab = !!this.coreHelperService.getLastTabSelectedNameByModule("Entity") ? this.coreHelperService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
+    this.activeTab = !!this.userPreferenceService.getLastTabSelectedNameByModule("Entity") ? this.userPreferenceService.getLastTabSelectedNameByModule("Entity") : this.activeTab;
+    if (this.activeTab === 'ORGANIZATION') {
+      this.cardClasses = 'tab-card org-tree-selected-card entity-table-overflow-tooltip'
+    } else {
+      this.cardClasses = 'tab-card entity-table-card entity-table-overflow-tooltip'
+    }
   }
 
   //Helper function to initialize Component stacked chart configuration (dropdown)
@@ -731,6 +701,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   //Helper function to initialize License stacked chart configuration (dropdown)
   private licenseStackedChartConfig(nameOfChart, activeTabVar) {
+    console.log("in liocense chart");
     this[activeTabVar].series = [];
     switch (nameOfChart) {
       case 'License Name':
@@ -1042,23 +1013,100 @@ export class EntityComponent implements OnInit, OnDestroy {
     return properties;
   }
 
+  //fire while getting percentage value and other value for org chart
+  getOrgChartValueByKey(object, key: string, value) {
+    return (key === '__typename') ? {
+      percentage: '0.00%',
+      color: ''
+    } : {
+      percentage: this.findThePercentageofWidth(this.getSum(object), value) + '%',
+      color: this.chartHelperService.getColorByLabel(key)
+    };
+  }
+
+  getBackgroundcolorforSupplychain(data, label) {
+    let color = ''
+    switch (label) {
+      case 'Risk':
+        if (data <= 40 && data > 0) {
+          color = 'rgb(17, 193, 91)';
+        } else if (data <= 60 && data > 40) {
+          color = 'rgb(230, 230, 0)';
+        } else if (data <= 80 && data > 60) {
+          color = 'rgb(255, 162, 29)';
+        } else {
+          color = 'rgb(255, 43, 43)';
+        }
+        break;
+      case 'Quality':
+        if (data <= 40 && data > 0) {
+          color = 'rgb(255, 43, 43)';
+        } else if (data <= 60 && data > 40) {
+          color = 'rgb(255, 162, 29)';
+        } else if (data <= 80 && data > 60) {
+          color = 'rgb(230, 230, 0)';
+        } else {
+          color = 'rgb(17, 193, 91)';
+        }
+        break;
+      default:
+        color = '#adb7be'
+        break;
+    }
+    return color;
+  }
+
+  //finding percentage of each
+  private findThePercentageofWidth(total: number, value: number = 0) {
+    const result = (value / total) * 100;
+    return Math.round(result * 10) / 10;
+  }
+
+  //get Active tab name
+  private getActiveTabVar() {
+    let activeTabVar: string = "";
+    switch (this.lineChartActiveTab) {
+      case 'Month':
+        activeTabVar = 'monthSeriesOverTime';
+        break;
+      case 'Week':
+        activeTabVar = 'weekSeriesOverTime';
+        break;
+      case 'Quarter':
+        activeTabVar = 'quarterSeriesOverTime'
+        break;
+      case 'Year':
+        activeTabVar = 'yearSeriesOverTime';
+        break;
+      default:
+        break;
+    }
+    return activeTabVar;
+  }
+
   // Fetch active scan count
   getRunningScansCount(entityId) {
     if (!this.checkRunningScans) {
       return;
     }
-    this.taskService.getRunningScanTasksCount(entityId)
-        .pipe(map(countData => countData.data.running_scan_tasks_count))
-        .subscribe(count => {
-            this.activeScanCount = count;
-            setTimeout(() => {
-                this.getRunningScansCount(entityId);
-            }, NextConfig.config.delaySeconds);
-        }, err => {
-            setTimeout(() => {
-                this.getRunningScansCount(entityId);
-            }, NextConfig.config.delaySeconds);
-        });
+    // subscribe to running scan task count
+    this.runningTaskCountSubscription = this.taskService.subscribeRunningScanTaskCount(entityId)
+      .pipe(map(countData => {
+        if (!!countData.data.subscribeRunningScanTaskCount.errors) {
+          countData.data.subscribeRunningScanTaskCount.errors
+            .forEach(err=>console.error("Running task count subscription error: "+err.message));
+        }
+        if (!!countData.data.subscribeRunningScanTaskCount.value) {
+          return countData.data.subscribeRunningScanTaskCount.value;
+        } else {
+          return 0;
+        }
+      }))
+      .subscribe(count => {
+        this.activeScanCount = count;
+     }, err => {
+        console.error("error subscription "+err);
+     });
   }
 
 }

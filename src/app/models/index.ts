@@ -12,4 +12,5 @@ export * from './scan';
 export * from './scan-asset';
 export * from './simm';
 export * from './vulnerability';
+export * from './org';
 

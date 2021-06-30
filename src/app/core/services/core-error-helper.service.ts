@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Messages } from "@app/messages/messages";
 import { AuthenticationService } from "@app/security/services";
 import { environment } from "environments/environment";
+import { AlertService } from "./alert.service";
 import { CoreHelperService } from "./core-helper.service";
 
 @Injectable({
@@ -13,20 +14,21 @@ import { CoreHelperService } from "./core-helper.service";
 export class CoreErrorHelperService {
     constructor(private coreHelperService: CoreHelperService,
         private authenticationService: AuthenticationService,
-        private router: Router) { }
+        private router: Router,
+        private alertService:AlertService) { }
 
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || !errObj.status || errObj.status === 0) {
-            this.coreHelperService.swalALertBox(Messages.wrongMessage, 'Error!');
+            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText,'error');
         } else {
             //getting server error if any other wise show default message according to status of server
-            const dataObjToShow: { status: number | string; message: string } = { status: errObj.status, message: this.getDefaultErrorMessageFromServerIf(errObj) };
+            const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
 
             switch (errObj.status) {
                 case 401:
                     //Redirect user with notifying
-                    this.redirectUserToLoginPage(dataObjToShow);
+                    this.redirectUserToLoginPage(dataObjToShow, errObj.status);
                     break;
                 case 403:
                     console.log("REQUEST PAYLOAD", requestPayload);
@@ -37,19 +39,23 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+                            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
-                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: 'Error!' });
+                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: Messages.commonErrorHeaderText });
                     }
                     break;
                 default:
                     //Rest Of all status code perform over here..
-                    if (errObj.status === 500) {
-                        console.log("REQUEST PAYLOAD", requestPayload);
+                    if (errObj.status === 502) {
+                        this.alertService.alertBox(Messages.status502, 'Server is restarting','error');
+                    } else {
+                        if (errObj.status === 500) {
+                            console.log("REQUEST PAYLOAD", requestPayload);
+                        }
+                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
                     }
-                    this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
                     break;
             }
             this.printErrorMessageToConsol(dataObjToShow.message)
@@ -73,6 +79,26 @@ export class CoreErrorHelperService {
                 msg = Messages.status500;
                 break;
             }
+            case 501: {
+                msg = Messages.status501;
+                break;
+            }
+            case 502: {
+                msg = Messages.status502;
+                break;
+            }
+            case 503: {
+                msg = Messages.status503;
+                break;
+            }
+            case 504: {
+                msg = Messages.status504;
+                break;
+            }
+            case 505: {
+                msg = Messages.status505;
+                break;
+            }
             case 400: {
                 msg = Messages.status400;
                 break;
@@ -84,6 +110,21 @@ export class CoreErrorHelperService {
             case 404: {
                 msg = Messages.status404;
                 break;
+            }
+            case 405: {
+                msg = Messages.status405;
+            }
+            case 406: {
+                msg = Messages.status406;
+            }
+            case 407: {
+                msg = Messages.status407;
+            }
+            case 408: {
+                msg = Messages.status408;
+            }
+            case 415: {
+                msg = Messages.status415;
             }
             case 501: {
                 msg = Messages.status501;
@@ -102,7 +143,12 @@ export class CoreErrorHelperService {
         let errorMessage: string = '';
         //getting error message from server if any available otherwise get default message according to status code
         if (typeof errObj.error === 'string') {
-            errorMessage = errObj.error
+            const isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
+            if (isHTML(errObj.error)) {
+                errorMessage = this.getMessageStatusWise(Number(errObj.status));
+            } else {
+                errorMessage = errObj.error;
+            }
         } else if (!!errObj.error && !!errObj.error.reason && typeof errObj.error.reason === 'string') {
             errorMessage = errObj.error.reason;
         } else if (!!errObj.error && !!errObj.error.errorMessage && typeof errObj.error.errorMessage === 'string') {
@@ -116,8 +162,12 @@ export class CoreErrorHelperService {
     }
 
     //Helper function which will redirect user to login page with notifying user.
-    private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }) {
-        this.coreHelperService.swalALertBox(dataObjToShow.message, dataObjToShow.status.toString());
+    private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
+        if (actualStatus === 401) {
+            this.alertService.alertBox(dataObjToShow.message,'Authentication required','warning')
+        } else {
+            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
+        }
         this.authenticationService.logout();
         this.router.navigate(['/login']);
     }
