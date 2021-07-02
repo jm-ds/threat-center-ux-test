@@ -13,6 +13,7 @@ import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardModule } from '../dashboard.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IntegrationModule } from '../integration/integration.module';
+import { UserModule } from '@app/admin/user/user.module';
 
 @NgModule({
     declarations: [OrganizationSettingComponent],
@@ -29,7 +30,8 @@ import { IntegrationModule } from '../integration/integration.module';
         OrganizationSettingRoutingModule,
         DashboardModule,
         NgbModule,
-        IntegrationModule
+        IntegrationModule,
+        UserModule
     ]
 })
 

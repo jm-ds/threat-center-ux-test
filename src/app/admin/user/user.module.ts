@@ -33,6 +33,7 @@ import { ApiKeyEditComponent } from './apikey-edit/apikey-edit.component';
         FormsModule,
         SelectModule,
         SharedModule
-    ]
+    ],
+    exports: [ApiKeyShowComponent, ApiKeyEditComponent]
 })
 export class UserModule { }
