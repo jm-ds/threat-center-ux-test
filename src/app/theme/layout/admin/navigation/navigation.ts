@@ -67,80 +67,80 @@ const NavigationItems = [
         url: '/dashboard/licenses',
         icon: 'fas fa-balance-scale',
       },*/
-      {
-        id: 'reports',
-        title: 'Reports',
-        type: 'collapse',
-        icon: 'fas fa-chart-pie',
-        children: [
-            // <i class="fas fa-flag-checkered"></i>
-          {
-            id: 'executive-report',
-            title: 'Executive',
-            icon: 'fas fa-flag-checkered',
-            type: 'item',
-            url: '/reports/executive',
-          },
-          {
-            id: 'vulnerability-report',
-            title: 'Vulnerabilities',
-            // icon: 'fas fa-fire-alt',
-            icon: 'fas fa-exclamation-triangle',
-            type: 'item',
-            url: '/reports/vulnerability',
-          },
-          {
-            id: 'license-report',
-            title: 'Licenses',
-            icon: 'fas fa-balance-scale',
-            type: 'item',
-            url: '/reports/license',
-          },
-          {
-            id: 'component-report',
-            title: 'Components',
-            icon: 'fas fa-cubes',
-            type: 'item',
-            url: '/reports/component',
-          },
-          {
-            id: 'embedded-report',
-            title: 'Embedded Assets',
-            icon: 'fas fa-code',
-            type: 'item',
-            url: '/reports/embedded',
-          },
-          {
-            id: 'software-leaks-report',
-            title: 'Software leaks',
-            icon: 'fas fa-file-export',
-            type: 'item',
-            url: '/reports/leaks',
-          },
-        ]
-      },
-      {
-        id: "alerts",
-        title: "Alerts",
-        type: "collapse",
-        icon: "fas fa-bell",
-        children: [
-          {
-            id: 'alerts-alerts',
-            title: 'Alerts',
-            icon: 'fas fa-bell',
-            type: 'item',
-            url: '/alerts/list'
-          },
-          {
-            id: 'alerts-settings',
-            title: 'Alerts settings',
-            icon: 'fas fa-cog',
-            type: 'item',
-            url: '/alerts/settings'
-          }
-        ]
-      },
+      // {
+      //   id: 'reports',
+      //   title: 'Reports',
+      //   type: 'collapse',
+      //   icon: 'fas fa-chart-pie',
+      //   children: [
+      //       // <i class="fas fa-flag-checkered"></i>
+      //     {
+      //       id: 'executive-report',
+      //       title: 'Executive',
+      //       icon: 'fas fa-flag-checkered',
+      //       type: 'item',
+      //       url: '/reports/executive',
+      //     },
+      //     {
+      //       id: 'vulnerability-report',
+      //       title: 'Vulnerabilities',
+      //       // icon: 'fas fa-fire-alt',
+      //       icon: 'fas fa-exclamation-triangle',
+      //       type: 'item',
+      //       url: '/reports/vulnerability',
+      //     },
+      //     {
+      //       id: 'license-report',
+      //       title: 'Licenses',
+      //       icon: 'fas fa-balance-scale',
+      //       type: 'item',
+      //       url: '/reports/license',
+      //     },
+      //     {
+      //       id: 'component-report',
+      //       title: 'Components',
+      //       icon: 'fas fa-cubes',
+      //       type: 'item',
+      //       url: '/reports/component',
+      //     },
+      //     {
+      //       id: 'embedded-report',
+      //       title: 'Embedded Assets',
+      //       icon: 'fas fa-code',
+      //       type: 'item',
+      //       url: '/reports/embedded',
+      //     },
+      //     {
+      //       id: 'software-leaks-report',
+      //       title: 'Software leaks',
+      //       icon: 'fas fa-file-export',
+      //       type: 'item',
+      //       url: '/reports/leaks',
+      //     },
+      //   ]
+      // },
+      // {
+      //   id: "alerts",
+      //   title: "Alerts",
+      //   type: "collapse",
+      //   icon: "fas fa-bell",
+      //   children: [
+      //     {
+      //       id: 'alerts-alerts',
+      //       title: 'Alerts',
+      //       icon: 'fas fa-bell',
+      //       type: 'item',
+      //       url: '/alerts/list'
+      //     },
+      //     {
+      //       id: 'alerts-settings',
+      //       title: 'Alerts settings',
+      //       icon: 'fas fa-cog',
+      //       type: 'item',
+      //       url: '/alerts/settings'
+      //     }
+      //   ]
+      // },
       {
         id: 'admin',
         title: 'Admin',
@@ -181,13 +181,13 @@ const NavigationItems = [
           },
         ]
       },
-      {
-        id: 'orgSetting',
-        title: 'Organization Settings',
-        type: 'item',
-        url: '/dashboard/org-setting',
-        icon: 'fas fa-cogs',
-      },
+      // {
+      //   id: 'orgSetting',
+      //   title: 'Organization Settings',
+      //   type: 'item',
+      //   url: '/dashboard/org-setting',
+      //   icon: 'fas fa-cogs',
+      // },
       /*
       {
         id: 'page-layouts',
