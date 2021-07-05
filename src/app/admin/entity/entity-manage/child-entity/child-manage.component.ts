@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EntityModel } from '../../entity.class';
 
 @Component({
     selector: 'app-child-manage',
-    templateUrl: './child-manage.component.html',
-    styleUrls: ['./child-manage.component.scss']
+    templateUrl: './child-manage.component.html'
 })
 
 export class ChildEntityManageComponent implements OnInit {
@@ -18,9 +17,7 @@ export class ChildEntityManageComponent implements OnInit {
             this.entityData.entityType = "";
     }
 
-
     saveRecord() {
         this.activeModal.close(this.entityData);
     }
-
 }

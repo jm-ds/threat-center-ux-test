@@ -6,7 +6,6 @@ import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { ChartDB } from '../../../fack-db/chart-data';
 import { MatPaginator } from '@angular/material';
 import { ProjectDashboardService } from '../services/project.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -44,7 +43,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private userPreferenceService:UserPreferenceService,
     private projectBreadcumsService:ProjectBreadcumsService,
     private chartHelperService:ChartHelperService) {
-    this.chartDB = ChartDB;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.scanHelperService.isHighlightNewScanObservable$

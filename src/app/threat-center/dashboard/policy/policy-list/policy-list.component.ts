@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Messages, Policy, PolicyConnection, PolicyEdge} from "@app/models";
+import {Messages, Policy, PolicyConnection} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
 import { TreeNode } from 'primeng/api';

@@ -8,7 +8,6 @@ import {AlertsSettingsComponent} from "@app/alerts/alerts-settings/alerts-settin
 const routes: Routes = [
     {
         path: '',
-        // component: AlertsComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {auth: "REPORT_VIEW"},
@@ -18,8 +17,6 @@ const routes: Routes = [
                 component: AlertsComponent
             },
             {
-                // canActivate: [AuthGuard],
-                // data: {auth: "REPORT_VIEW"},
                 path: 'settings',
                 component: AlertsSettingsComponent
             }
