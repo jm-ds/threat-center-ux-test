@@ -38,6 +38,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/scan',
         icon: 'fas fa-fingerprint',
+        permissions: ["SCAN_VIEW"],
       },
       {
         id: 'entity',
@@ -45,6 +46,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/entity',
         icon: 'far fa-building',
+        permissions: ["ENTITY_VIEW"],
       },
       {
         id: 'policy',
@@ -52,6 +54,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/policy',
         icon: 'fas fa-feather-alt',
+        permissions: ["POLICY_CREATE"],
       },
       /*{
         id: 'vulnerability-db',
@@ -80,6 +83,7 @@ const NavigationItems = [
             icon: 'fas fa-flag-checkered',
             type: 'item',
             url: '/reports/executive',
+            permissions: ["REPORT_VIEW"],
           },
           {
             id: 'vulnerability-report',
@@ -88,6 +92,7 @@ const NavigationItems = [
             icon: 'fas fa-exclamation-triangle',
             type: 'item',
             url: '/reports/vulnerability',
+            permissions: ["REPORT_VIEW"],
           },
           {
             id: 'license-report',
@@ -95,6 +100,7 @@ const NavigationItems = [
             icon: 'fas fa-balance-scale',
             type: 'item',
             url: '/reports/license',
+            permissions: ["REPORT_VIEW"],
           },
           {
             id: 'component-report',
@@ -102,6 +108,7 @@ const NavigationItems = [
             icon: 'fas fa-cubes',
             type: 'item',
             url: '/reports/component',
+            permissions: ["REPORT_VIEW"],
           },
           {
             id: 'embedded-report',
@@ -109,6 +116,7 @@ const NavigationItems = [
             icon: 'fas fa-code',
             type: 'item',
             url: '/reports/embedded',
+            permissions: ["REPORT_VIEW"],
           },
           {
             id: 'software-leaks-report',
@@ -116,6 +124,7 @@ const NavigationItems = [
             icon: 'fas fa-file-export',
             type: 'item',
             url: '/reports/leaks',
+            permissions: ["REPORT_VIEW"],
           },
         ]
       },
@@ -130,14 +139,16 @@ const NavigationItems = [
             title: 'Alerts',
             icon: 'fas fa-bell',
             type: 'item',
-            url: '/alerts/list'
+            url: '/alerts/list',
+            permissions: ["AUTHENTICATED"],
           },
           {
             id: 'alerts-settings',
             title: 'Alerts settings',
             icon: 'fas fa-cog',
             type: 'item',
-            url: '/alerts/settings'
+            url: '/alerts/settings',
+            permissions: ["AUTHENTICATED"],
           }
         ]
       },
@@ -153,6 +164,7 @@ const NavigationItems = [
             icon: 'fas fa-users',
             type: 'item',
             url: '/admin/user',
+            permissions: ["USER_VIEW"],
             target: false,
           },
           {
@@ -161,6 +173,7 @@ const NavigationItems = [
             icon: 'fas fa-user-lock',
             type: 'item',
             url: '/admin/role',
+            permissions: ["ROLE_VIEW"],
             target: false,
           },
           {
@@ -169,14 +182,16 @@ const NavigationItems = [
             icon: 'far fa-building',
             type: 'item',
             url: '/admin/entity',
+            permissions: ["ENTITY_EDIT"],
             target: false,
           },
           {
-            id: 'business-units',
+            id: 'integrations',
             title: 'Integrations',
             icon: 'fas fa-retweet',
             type: 'item',
             url: '/admin/integration',
+            permissions: ["INTEGRATION_VIEW"],
             target: false,
           },
         ]
@@ -187,6 +202,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/org-setting',
         icon: 'fas fa-cogs',
+        permissions: ["ORG_ADMIN"],
       },
       /*
       {

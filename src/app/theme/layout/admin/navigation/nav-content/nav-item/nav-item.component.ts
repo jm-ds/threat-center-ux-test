@@ -2,6 +2,7 @@ import {Component, Input, NgZone, OnInit} from '@angular/core';
 import {NavigationItem} from '../../navigation';
 import {NextConfig} from '../../../../../../app-config';
 import {Location} from '@angular/common';
+import {AuthorizationService} from '@app/security/services';
 
 @Component({
   selector: 'app-nav-item',
@@ -13,7 +14,7 @@ export class NavItemComponent implements OnInit {
   public nextConfig: any;
   public themeLayout: string;
 
-  constructor(private location: Location) {
+  constructor(private location: Location, private authorizationService: AuthorizationService) {
     this.nextConfig = NextConfig.config;
     this.themeLayout = this.nextConfig['layout'];
   }
@@ -76,6 +77,22 @@ export class NavItemComponent implements OnInit {
         }
       }, 500);
     }
+  }
+
+  checkPermissions(item) {
+    if(item && item.type) {
+      if(item.type == 'group' || item.type == 'collapse') {
+        for(var child of item.children) {
+          if(this.checkPermissions(child)) {
+            return true;
+          }
+        }
+        return false;
+      } else {
+        return this.authorizationService.hasPermissions(item.permissions);
+      }
+    }
+    return true;
   }
 
 }

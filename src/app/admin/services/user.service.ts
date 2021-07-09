@@ -95,9 +95,8 @@ export class UserService {
 
     saveRoles(username: string, roles: Role[]) {
         const roleIdList = roles.map(role => role.roleId);
-        return this.apollo.mutate({
-            mutation: gql`
-            mutation setRolesToUser($username: String, $roles: [String]) {
+        return this.coreGraphQLService.coreGQLReqForMutation(
+            gql`mutation setRolesToUser($username: String, $roles: [String]) {
                 setRolesToUser(username: $username, roles: $roles) {
                     orgId,
                     username,
@@ -112,11 +111,11 @@ export class UserService {
                     permissions
                 }
             }`,
-            variables: {
+            {
                 username: username,
                 roles: roleIdList
             }
-        });
+        );
     }
 
     saveUser(user: User, newUser = true) {
@@ -130,8 +129,8 @@ export class UserService {
 
         const userRequest = UserRequestInput.from(user);
 
-        return this.apollo.mutate({
-            mutation: gql`
+        return this.coreGraphQLService.coreGQLReqForMutation(
+            gql`
             mutation ${mutationName}($user: UserRequestInput) {
                 ${mutationName}(user: $user) {
                     orgId,
@@ -147,10 +146,10 @@ export class UserService {
                     permissions
                 }
             }`,
-            variables: {
+            {
                 user: userRequest
             }
-        });
+        );
     }
 
 
