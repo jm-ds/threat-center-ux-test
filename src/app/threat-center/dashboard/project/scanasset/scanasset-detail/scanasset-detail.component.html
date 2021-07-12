@@ -96,7 +96,7 @@
       <div class="app-modal-body">
         <perfect-scrollbar [style.max-height]="'550px'">
           <p-table #dt [value]="selectedEmbeddedAsset?.matchLicenses" [paginator]="false" [rows]="50"
-                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
             <ng-template pTemplate="header" let-columns>
               <tr>
@@ -140,7 +140,7 @@
 
           <perfect-scrollbar [style.max-height]="'550px'">
             <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.matchGroups.edges" [paginator]="false" [rows]="50"
-                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                      [autoLayout]="false" [filterDelay]="0" [globalFilterFields]="['name']">
 
               <ng-template pTemplate="header" let-columns>
