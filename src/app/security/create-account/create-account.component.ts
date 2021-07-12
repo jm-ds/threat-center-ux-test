@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
@@ -22,7 +18,6 @@ export class CreateAccountComponent implements OnInit {
     errorMessage: string;
 
     constructor(
-        private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService

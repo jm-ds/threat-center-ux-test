@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartDB } from '../../../fack-db/chart-data';
 import {ApexChartService} from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
-
-import {SourceDimensionComponent} from '../../shared/source-dimension/source-dimension.component';
-import {LicenseDimensionComponent} from '../../shared/license-dimension/license-dimension.component';
 
 
 @Component({

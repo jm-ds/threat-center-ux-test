@@ -1,7 +1,5 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
 import { Policy, PolicyCondition, PolicyConditionGroup } from '@app/models';
-import { NavItemComponent } from '@app/theme/layout/admin/navigation/nav-content/nav-item/nav-item.component';
-import {MatChipInputEvent} from '@angular/material/chips';
 
 @Injectable({
     providedIn: 'root'
