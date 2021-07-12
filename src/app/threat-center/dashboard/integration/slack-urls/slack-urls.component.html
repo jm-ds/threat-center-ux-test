@@ -1,7 +1,7 @@
 <div style="width: 100%;">
   <div>
       <p-table #dt [columns]="columns" [value]="entitySettings.alertSlackUrls" [paginator]="false" [rows]="50"
-               tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+               tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
 
         <ng-template pTemplate="caption">
           <button type="button" class="btn btn-outline-info float-right" title="Add Slack URL" (click)="openAddUrlDialog(urlDialog)"
