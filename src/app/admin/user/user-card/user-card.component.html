@@ -24,6 +24,8 @@
     <div class="text-center">
         <h6 class="mb-2 mt-3">{{user?.fname}} {{user?.lname}}</h6>
         <!--<p class="mb-2 text-muted">{{renderRoles(user.userRoles)}}</p>-->
+        <p class="mb-2">{{organizationDetails?.name}}</p>
+        <p class="mb-2">{{organizationDetails?.orgId}}</p>
         <p class="mb-2 text-muted">{{renderEntities(user?.userEntities)}}</p>
         <p class="mb-2">Date created: {{user?.created | date :'short'}}</p>
         <p class="mb-0"><span class="badge badge-light-success">Active</span></p>

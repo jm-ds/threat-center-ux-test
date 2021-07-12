@@ -29,7 +29,7 @@ import { ChartHelperService } from '@app/core/services/chart-helper.service';
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
-  vulLabelSeq =  ["CRITICAL","HIGH",  "MEDIUM", "LOW"]
+  vulLabelSeq =  ["CRITICAL","HIGH",  "MEDIUM", "LOW"];
   isDisablePaggination:boolean = false;
   constructor(
     private apiService: ApiService,
@@ -194,11 +194,17 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
     this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId);
-    if($event.nextId === 'scan'){
+    if ($event.nextId === 'scan') {
       this.initProjectsChartConfig();
       this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
-      .pipe(map(result => result.data.project));
+        .pipe(map(result => result.data.project));
       this.initProjectData();
+
+      this.obsProject.subscribe(data => {
+        if (!!data.scans && data.scans.edges.length >= 1 && !!data.scans.edges[0]) {
+          this.apicallTogetCounts(data.scans.edges[0].node.scanId);
+        }
+      });
     }
   }
 
@@ -557,6 +563,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gettingDataforAllMetrics(scanId)
       .subscribe(data => {
         if (!!data && data.length >= 1) {
+          this.populateScanComponents(data);
           this.populateDataForTotalCountsOfMetrics(data);
         }
       });
