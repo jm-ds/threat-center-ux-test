@@ -60,7 +60,7 @@
                           [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
                           class="btn btn-primary" ngbtooltip="Run Scan"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('github')"><i class="fas fa-power-off">
+                          type="button" (click)="submitScan('github')"><i style="color:greenyellow" class="fas fa-power-off">
                           </i> Execute Threat Scan
                         </button>
                       </div>
@@ -118,7 +118,7 @@
                           [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
                           class="btn btn-primary" ngbtooltip="Run Scan"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('gitlab')"><i class="fas fa-power-off">
+                          type="button" (click)="submitScan('gitlab')"><i style="color:greenyellow" class="fas fa-power-off">
                           </i> Execute Threat Scan
                         </button>
                       </div>
@@ -177,8 +177,7 @@
                           [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
                           class="btn btn-primary" ngbtooltip="Run Scan"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('bitbucket')"><i class="fas fa-power-off">
-                          </i> Execute Threat Scan
+                          type="button" (click)="submitScan('bitbucket')"><i style="color:greenyellow" class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
