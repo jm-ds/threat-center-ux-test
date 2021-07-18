@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import { OrgService } from '@app/admin/services/org.service';
 import { UserService } from '@app/admin/services/user.service';
-import {ApiKey, ApiKeyRequestInput, Message, Messages, User} from "@app/models";
+import {ApiKey, Message, Messages, User} from "@app/models";
 import { UserUtils } from '../user-utils';
 
 @Component({
@@ -16,11 +17,13 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
     username: string;
     apiKey: ApiKey;
     user: User;
+    isUserKey: boolean = true;
 
     constructor(
         private userService: UserService,
         protected router: Router,
         private route: ActivatedRoute,
+        private orgService: OrgService
     ) {
         super(router);
         this.messages = Messages.fromRouter(this.router);
@@ -29,19 +32,28 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
     ngOnInit() {
         this.keyId = this.route.snapshot.paramMap.get('keyid');
         this.username = this.route.snapshot.paramMap.get('username');
-        let userData = this.userService.getUser(this.username).subscribe(
-            data => {
-                this.user = data.data.user;
-            },
-            error => {
-                console.error("ApiKeyEditComponent", error);
-            }
-        );
+        this.isUserKey = !!this.username
+        if (this.isUserKey) {
+            let userData = this.userService.getUser(this.username).subscribe(
+                data => {
+                    this.user = data.data.user;
+                },
+                error => {
+                    console.error("ApiKeyEditComponent", error);
+                }
+            );
+        }
         if (this.keyId === 'new') {
             this.apiKey = new ApiKey();
             this.apiKey.username = this.username;
         } else {
-            this.userService.getApiKey(this.username, this.keyId).subscribe(
+            let getApiKeyObservable=undefined;
+            if (this.isUserKey) { //user key
+                getApiKeyObservable = this.userService.getApiKey(this.username, this.keyId);
+            } else { // org key
+                getApiKeyObservable = this.orgService.getOrgApiKey(this.keyId);
+            }
+            getApiKeyObservable.subscribe(
                 data => {
                     this.apiKey = data.data.apiKey;
                     if (!this.apiKey) {
@@ -64,21 +76,38 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
             return;
         }
         if (this.keyId === 'new') {
-            this.userService.generateApiKey(this.apiKey).subscribe((data:any) => {
+            let generateApiKeyObservable=undefined;
+            let successLink = undefined;
+            if (this.isUserKey) {  // user key
+                generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);    
+                successLink = '/admin/show/'+this.username+'/show/apikey/'
+            } else { // org key
+                generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);    
+                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/'
+            }
+            generateApiKeyObservable.subscribe((data:any) => {
                 if (!!data && !!data.data) {
-                    const link = '/admin/show/'+this.username+'/show/apikey/'+data.data.generateApiKey.keyId;
+                    const link = successLink+data.data.generateApiKey.keyId;
                     this.router.navigate([link],
                         {state: {messages: [Message.success("API key generated successfully.")]}});
                 }
             }, (error) => {
                 console.error('API key generating', error);
-                this.messages = 
-                    [Message.error("Unexpected error occurred while trying to generate API key.")];
+                this.messages = [Message.error("Unexpected error occurred while trying to generate API key.")];
             });
         } else {
-            this.userService.updateApiKey(this.apiKey).subscribe((data:any) => {
+            let updateApiKeyObservable=undefined;
+            let successLink = undefined;
+            if (this.isUserKey) {  // user key
+                updateApiKeyObservable = this.userService.updateApiKey(this.apiKey);
+                successLink = '/admin/show/'+this.username+'/show/apikey/';
+            } else { // org key
+                updateApiKeyObservable = this.orgService.updateOrgApiKey(this.apiKey);
+                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/'
+            }
+            updateApiKeyObservable.subscribe((data:any) => {
                 if (!!data && !!data.data) {
-                    const link = '/admin/show/'+this.username+'/show/apikey/'+data.data.updateApiKey.keyId;
+                    const link = successLink+data.data.updateApiKey.keyId;
                     this.router.navigate([link],
                         {state: {messages: [Message.success("API key saved successfully.")]}});
                 }
@@ -98,5 +127,10 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
             resMessages.push(Message.error("API key title field is required."));
         }
         return resMessages;
+    }
+
+    // navigate to organization settings
+    goToOrgSettings() {
+        this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');        
     }
 }

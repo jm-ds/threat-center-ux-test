@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
-import { JiraCredentials, OrgSettingsQuery } from "@app/models";
+import { ApiKey, ApiKeyConnectionQuery, ApiKeyQuery, ApiKeyRequestInput, JiraCredentials, OrgSettingsQuery } from "@app/models";
+import { Apollo } from "apollo-angular";
 import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";
 import { Observable } from "rxjs";
@@ -11,7 +12,7 @@ import { EntitySettingsRequestInput } from "../entity/entity.class";
 })
 export class OrgService {
 
-  constructor(private coreGraphQLService: CoreGraphQLService) {
+  constructor(private coreGraphQLService: CoreGraphQLService, private apollo: Apollo) {
   }
 
   //get org settings
@@ -71,6 +72,93 @@ export class OrgService {
           }
         }
       }`, { entitySettingsRequest: entitySettingsRequest });
+  }
+
+
+  //get org api keys
+  getOrgApiKeys(): Observable<ApolloQueryResult<ApiKeyConnectionQuery>> {
+    return this.coreGraphQLService.coreGQLReqWithQuery<ApiKeyConnectionQuery>(
+      gql`
+        query {
+          orgApiKeys(first: 10000) {
+            edges {
+              node {
+                apiKey,
+                keyId,
+                title,
+                description,
+                createdDate,
+                expiredDate
+              }
+            }
+          }
+        }
+      `, "no-cache");
+  }
+
+  // fetch org API key
+  getOrgApiKey(keyId: string) {
+    return this.coreGraphQLService.coreGQLReq<ApiKeyQuery>(
+        gql`query {
+          apiKey: orgApiKey(keyId: "${keyId}") {
+                apiKey,
+                username,
+                keyId,
+                title,
+                description,
+                createdDate,
+                expiredDate
+            }
+        }`, 'no-cache');
+  }
+
+  // post "generate org API key" command
+  generateOrgApiKey(apiKey: ApiKey) {
+    const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+
+    return this.apollo.mutate({
+        mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+          generateApiKey: generateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+                keyId
+            }
+        }`,
+        variables: {
+            apiKeyRequest: apiKeyRequest
+        }
+    });
+  }
+
+
+  // post "update org API key" command
+  updateOrgApiKey(apiKey: ApiKey) {
+    const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+    return this.apollo.mutate({
+        mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+          updateApiKey: updateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+                keyId
+            }
+        }`,
+        variables: {
+            apiKeyRequest: apiKeyRequest
+        }
+    });
+  }
+
+
+  // post "remove org API key" command
+  removeOrgApiKey(apiKey: ApiKey) {
+      const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+
+      return this.apollo.mutate({
+          mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+            removeApiKey: removeOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+                  keyId
+              }
+          }`,
+          variables: {
+              apiKeyRequest: apiKeyRequest
+          }
+      });
   }
 
 }
