@@ -68,7 +68,14 @@ export class UserService {
                       edges{
                         node{
                           entityId,
-                          name
+                          parentEntityId,
+                          name,
+                          parents {
+                            entityId
+                            name
+                          },
+                          entityType,
+                          removed
                         }
                       }
                     },

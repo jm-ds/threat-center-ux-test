@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
 import { NextConfig } from '@app/app-config';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import * as jwt_decode from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService, AuthorizationService } from '../services';

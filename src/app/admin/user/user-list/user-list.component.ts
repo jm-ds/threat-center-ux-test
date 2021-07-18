@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {UserService} from "@app/admin/services/user.service";
-import {User, Role} from "@app/models";
+import {User} from "@app/models";
 
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {UserUtils} from "@app/admin/user/user-utils";
 
 @Component({
@@ -23,7 +23,6 @@ export class UserListComponent extends UserUtils implements OnInit {
     }
 
     ngOnInit() {
-        // this.users = this.userService.getUserList().pipe(map(result => result.data.users));
         this.userService.getUserList().subscribe(
             data => {
                 this.users = data.data.users.edges.map((e)=>e.node);

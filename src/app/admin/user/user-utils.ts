@@ -1,6 +1,5 @@
 import {EntityConnection, Role} from "@app/models";
 import {Router} from "@angular/router";
-// import {element} from "protractor";
 
 export class UserUtils {
 

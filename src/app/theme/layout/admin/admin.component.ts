@@ -1,7 +1,6 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NextConfig } from '../../../app-config';
 import { Location } from '@angular/common';
-import { ReloadService } from '@app/threat-center/dashboard/services/reload.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class AdminComponent implements OnInit {
   public navCollapsedMob: boolean;
   public windowWidth: number;
   isUnAuthorize:boolean = false;
-  constructor(private zone: NgZone, private location: Location, private reloadService: ReloadService,
+  constructor(private location: Location,
     private coreHelperService:CoreHelperService) {
       this.coreHelperService.getUnAuthorizeVal()
       .subscribe(val => {

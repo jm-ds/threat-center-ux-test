@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
 import * as _ from 'lodash';
-import Swal from 'sweetalert2';
 import { User } from '@app/models/user';
 import { AlertService } from '@app/core/services/alert.service';
 

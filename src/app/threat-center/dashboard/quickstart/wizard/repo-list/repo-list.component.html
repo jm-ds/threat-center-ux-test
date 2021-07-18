@@ -1,5 +1,5 @@
 <p-table #dt [columns]="tabColumns" [value]="values" [paginator]="ispaginator" [rows]="rows" selectionMode="single"
-    [(selection)]="selectedRepos" tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+    [(selection)]="selectedRepos" tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
     [filterDelay]="filterDelay" [globalFilterFields]="globalFilterFields" (onRowSelect)="onRowSelect($event)"
     (onRowUnselect)="onRowUnselect($event)">
     <ng-template pTemplate="header">
@@ -9,7 +9,8 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
-        <tr [pSelectableRow]="repo" [pSelectableRowIndex]="rowIndex">
+        <tr *ngIf="repo?.node?.primaryLanguage?.name === 'Java' || repo?.language === 'Java'" [pSelectableRow]="repo"
+            [pSelectableRowIndex]="rowIndex">
             <td style="width:70%">
                 <div *ngIf="!!repo.node;else reponame" style="float:left">{{repo.node['name']}}</div>
                 <ng-template #reponame>
@@ -21,7 +22,9 @@
                     {{repo.node.primaryLanguage['name']}}
                 </div>
                 <ng-template #repoLang>
-                    <div style="float:left">{{repo?.language}}</div>
+                    <div style="float:left">
+                        {{repo?.language}}
+                    </div>
                 </ng-template>
             </td>
         </tr>

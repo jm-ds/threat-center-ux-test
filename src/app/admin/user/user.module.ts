@@ -6,7 +6,6 @@ import { UserListComponent } from './user-list/user-list.component';
 import {AlertModule, CardModule} from "@app/theme/shared/components";
 import {NgbDropdownModule, NgbTabsetModule} from "@ng-bootstrap/ng-bootstrap";
 import { UserShowComponent } from './user-show/user-show.component';
-import {Role} from "@app/models";
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import {AngularDualListBoxModule} from "angular-dual-listbox";
 import { UserCardComponent } from './user-card/user-card.component';

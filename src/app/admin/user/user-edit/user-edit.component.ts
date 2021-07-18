@@ -77,11 +77,6 @@ export class UserEditComponent implements OnInit {
 
         this.apiService.getEntityList().subscribe(data => {
             this.entities = data.data.entities.edges.map((e)=>e.node);
-            // let entity = this.entities[0];
-            // let opt = {value: entity.entityId, label: entity.name};
-            /*this.entitySelectItems = this.entities.map(entity => {
-                return {value: entity.entityId, label: entity.name} as IOption;
-            });*/
             this.entitySelectItems = this.getSelectItemsFromEntities(this.entities);
         }, error => {
             console.error("UserEditComponent", error);

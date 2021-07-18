@@ -2,7 +2,6 @@ import { Component, Injectable, Input, OnInit } from '@angular/core';
 import { EntityService } from '@app/admin/services/entity.service';
 import { OrgService } from '@app/admin/services/org.service';
 import { AlertService } from '@app/core/services/alert.service';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { EntitySettings, JiraCredentials } from '@app/models/entity';
 import Swal from 'sweetalert2';
 
@@ -22,7 +21,6 @@ export class JiraCredentialsComponent implements OnInit {
   constructor(
     private orgService: OrgService,
     private entityService: EntityService,
-    private coreHelperService:CoreHelperService,
     private alertService:AlertService
   ) {
   }
