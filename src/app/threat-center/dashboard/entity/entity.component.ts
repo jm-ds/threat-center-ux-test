@@ -1,17 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy, HostListener, OnDestroy, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { Component, OnInit, HostListener, OnDestroy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, map, filter, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService } from '@app/security/services';
-import { ChartDB } from '../../../fack-db/chart-data';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { TaskService } from '@app/threat-center/shared/task/task.service';
-import { NextConfig } from "@app/app-config";
 import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { EntityService } from '@app/admin/services/entity.service';
@@ -124,12 +122,10 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private scanHelperService: ScanHelperService,
     private entityService: EntityService,
     private chartHelperService: ChartHelperService,
-    private modalService: NgbModal,
     private cdRef: ChangeDetectorRef,
     private projectBreadcumsService:ProjectBreadcumsService,
     private userPreferenceService:UserPreferenceService
   ) {
-    this.chartDB = ChartDB;
     this.dailyVisitorStatus = '1y';
     this.deviceProgressBar = [
       {

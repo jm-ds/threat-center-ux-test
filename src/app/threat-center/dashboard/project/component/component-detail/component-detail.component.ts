@@ -12,6 +12,7 @@ import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/proj
 import { LazyLoadEvent, Table } from "primeng";
 import { TxComponent } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'component-detail',
@@ -48,6 +49,9 @@ export class ComponentDetailComponent implements OnInit {
   defaultPageSize = 25;
   pageIndex = 0;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild('perfectScrollSourceRelese',{static:false}) perfectScrollSourceRelese: PerfectScrollbarComponent;
+  @ViewChild('perfectScrollBinaryRelese',{static:false}) perfectScrollBinaryRelese: PerfectScrollbarComponent;
+
   vulnerabilityDetails: any = {};
 
   breadcumDetail: any = {};
@@ -195,36 +199,30 @@ export class ComponentDetailComponent implements OnInit {
   }
 
   loadBinaryReleasesLazy(event: LazyLoadEvent) {
-    this.binaryLoading = true;
     if (this.binaryNextPagingState != null) {
-      setTimeout(() => {
-        this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
-            this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
-            .subscribe((data: VulnerableReleaseResponse) => {
-              this.binaryReleases.push(...data.vulnerableReleases);
-              this.binaryReleases = [...this.binaryReleases];
-              this.binaryNextPagingState = data.nextPagingState;
-            });
-        this.changeDetector.detectChanges();
-      }, 2000);
+      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+        this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
+        .subscribe((data: VulnerableReleaseResponse) => {
+          this.binaryReleases.push(...data.vulnerableReleases);
+          this.binaryReleases = [...this.binaryReleases];
+          this.binaryNextPagingState = data.nextPagingState;
+          this.perfectScrollBinaryRelese.directiveRef.update();
+          this.changeDetector.detectChanges();
+        });
     }
-    this.binaryLoading = false;
   }
 
   loadSourceReleasesLazy(event: LazyLoadEvent) {
-    this.sourceLoading = true;
     if (this.sourceNextPagingState != null) {
-      setTimeout(() => {
-        this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
-            this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
-            .subscribe((data: VulnerableReleaseResponse) => {
-              this.sourceReleases.push(...data.vulnerableReleases);
-              this.sourceReleases = [...this.sourceReleases];
-              this.sourceNextPagingState = data.nextPagingState;
-            });
-        this.changeDetector.detectChanges();
-      }, 2000);
+      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+        this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
+        .subscribe((data: VulnerableReleaseResponse) => {
+          this.sourceReleases.push(...data.vulnerableReleases);
+          this.sourceReleases = [...this.sourceReleases];
+          this.sourceNextPagingState = data.nextPagingState;
+          this.perfectScrollSourceRelese.directiveRef.update();
+          this.changeDetector.detectChanges();
+        });
     }
-    this.sourceLoading = false;
   }
 }

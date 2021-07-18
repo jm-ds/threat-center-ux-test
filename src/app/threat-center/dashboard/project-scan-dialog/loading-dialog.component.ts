@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { NgbActiveModal, NgbModal, NgbPanelChangeEvent } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { NgbActiveModal, NgbPanelChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { ScanHelperService } from "../services/scan.service";
 import * as $ from 'jquery'
 import { interval, Subscription } from "rxjs";
