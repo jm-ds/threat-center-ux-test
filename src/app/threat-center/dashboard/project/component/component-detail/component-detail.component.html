@@ -28,7 +28,7 @@
             <ng-template ngbTabContent>
               <perfect-scrollbar [style.max-height]="'650px'">
                 <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
-                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer"
+                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                          [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
 
                   <ng-template pTemplate="caption">
@@ -163,7 +163,7 @@
                                    [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
                                    [virtualScroll]="false" [virtualRowHeight]="34"
                                    [lazy]="false"
-                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+                                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
                             <ng-template pTemplate="colgroup">
                               <colgroup>
                                 <col style="width:63%">
@@ -244,7 +244,7 @@
                         <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollSourceRelese (psYReachEnd)="loadSourceReleasesLazy($event)">
                           <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases" [scrollable]="false" [rows]="25"
                             [style]="{width:'100%'}" scrollHeight="300px" [virtualScroll]="false" [virtualRowHeight]="34" [lazy]="false"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
+                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
                             <ng-template pTemplate="colgroup" let-columns>
                               <colgroup>
                                 <col style="width:63%">

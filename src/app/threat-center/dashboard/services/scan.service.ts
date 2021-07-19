@@ -1,13 +1,17 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable, TemplateRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
 import { AlertService } from "@app/core/services/alert.service";
+import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { Messages } from "@app/messages/messages";
 import { TaskService } from "@app/threat-center/shared/task/task.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import * as moment from "moment";
 import { BehaviorSubject, Subscription } from "rxjs";
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import Swal from "sweetalert2";
 import { PreScanLoadingDialogComponent } from "../pre-scan-dialog/pre-scan-dialog.component";
 
 @Injectable({
@@ -40,7 +44,8 @@ export class ScanHelperService {
         private router: Router,
         private coreHelperService: CoreHelperService,
         private modalService: NgbModal,
-        private alertService:AlertService) {
+        private alertService:AlertService,
+        private coreGraphQLService: CoreGraphQLService) {
     }
 
     //Scan submit and get task token to do further for scan.
@@ -167,6 +172,67 @@ export class ScanHelperService {
             });
         modalRef.componentInstance.preScanProjectData = preScanProjectData;
         return modalRef;
+    }
+
+
+    //Check if lastest commit for branch was scanned already and run scan.
+    public submitingCheckAlreadyScanned(preScanProjectData, LoadingDialogComponent) {
+        this.taskService.checkAlreadyScannedProject(this.checkScannedErrorHandler.bind(this))
+            .pipe(map(check => check.data.checkAlreadyScannedProject),
+            catchError(error=> {
+                console.log(error);
+                return error;}
+            )
+            )
+            .subscribe(check => {
+                if (check) {
+                    Swal.close();
+                    const lastDt = moment(check).format('MM/DD/YYYY h:mm a');
+                    this.alertService.alertConfirm('Project was scanned already at '+lastDt,'Do you want to scan anyway?', 'question', 
+                        true, true, '#4680ff', '#6c757d', 'Yes', 'No')
+                            .then((result) => {
+                                if (result.value) {
+                                    // run scan
+                                    this.runScan(preScanProjectData, LoadingDialogComponent);
+                                } else {
+                                    // cancel scan
+                                    this.updateStorage(null);
+                                    this.updateEnabaleNewScan(false);
+                                }
+                            });
+                } else {
+                    // run scan
+                    this.runScan(preScanProjectData, LoadingDialogComponent);
+                }
+            });
+    }
+
+
+    public checkScannedErrorHandler(error: HttpErrorResponse | any) {
+        // cancel scan
+        this.updateStorage(null);
+        this.updateEnabaleNewScan(false);
+        // default error handler
+        return this.coreGraphQLService.errorHandler(error);
+    }
+
+
+    // run scan
+    private runScan(preScanProjectData, LoadingDialogComponent) {
+        this.openScanModel(preScanProjectData).result.then((result) => {
+            this.openFloatingModel(LoadingDialogComponent);
+        }, (reason) => { });
+        this.submitingScanForProject(preScanProjectData);
+    }
+
+    //floating model for scan...
+    private openFloatingModel(LoadingDialogComponent) {
+        const modalRef = this.modalService.open(LoadingDialogComponent, {
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'loading-dialog',
+            backdropClass: 'loading-dialog-backdrop'
+        });
     }
 
     //helper function.

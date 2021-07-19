@@ -12,6 +12,7 @@ import {User} from "@app/models";
 export class UserCardComponent extends UserUtils implements OnInit {
 
     @Input() user: User;
+    @Input() organizationDetails:{orgId:string,name:string,tenantId:string,created:string};
     @Input() showMenu: boolean;
 
     constructor(

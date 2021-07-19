@@ -25,7 +25,7 @@ export class ScanAssetsComponent implements OnInit {
   @Input() obsScan: Observable<Scan>;
   @Output() isAssetStory = new EventEmitter<boolean>();
 
-  columns = ['Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
+  columns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
 
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -181,6 +181,15 @@ export class ScanAssetsComponent implements OnInit {
       this.isAssetStory.emit(false);
     }
     this.reload();
+  }
+
+  getName(name: string) {
+    if (name.includes('/') || name.includes("\\")) {
+      const orgname = name.replace('\\', '/');
+      return orgname.substring(orgname.lastIndexOf('/') + 1);
+    } else {
+      return name;
+    }
   }
 
   private makeFilterMapForService() {

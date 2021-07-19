@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from "@app/security/services";
-import { Router } from "@angular/router";
 import { User } from "@app/models";
 import { environment } from "../../../environments/environment";
 import { first, map } from "rxjs/operators";
@@ -27,7 +26,6 @@ export class AwaitingApprovalComponent implements OnInit {
     messageError: string;
 
     constructor(private authenticationService: AuthenticationService,
-        private router: Router,
         private http: HttpClient,
         public coreHelperService: CoreHelperService) {
     }

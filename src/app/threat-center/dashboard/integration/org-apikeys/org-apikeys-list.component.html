@@ -1,0 +1,34 @@
+<div style="width: 100%;">
+    <p style="margin-top:8px; font-weight: bold;">API keys</p>
+    <div>
+      <div class="mb-2 mt-1 float-right">
+        <div class="text-left">
+            <a routerLink="create/apikey/new" class="btn btn-outline-info">Add API key</a>
+        </div>
+    </div>
+    <div class="dt-responsive table-responsive">
+        <table datatable class="table row-border" *ngIf="!!apiKeys?.edges && apiKeys?.edges.length > 0">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Expired</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let edge of apiKeys?.edges" (click)="goToApiKeyShow(edge.node.keyId)">
+                    <td>
+                        {{edge.node.title}}
+                    </td>
+                    <td>
+                        {{edge.node.expiredDate | date :'M/d/y h:mmaa' | lowercase}}
+                    </td>
+                    <td>
+                        {{edge.node.description}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>  
+</div>

@@ -10,7 +10,7 @@ export class FixResult {
 
 export class TxComponent {
     componentId;
-    copyrights: Copyright[];
+    copyrightList: Copyright[];
 }
 
 export class Copyright {

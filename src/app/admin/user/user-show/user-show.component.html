@@ -16,7 +16,7 @@
         <div class="col-md-4">
 
             <!-- User card -->
-            <app-user-card [user]="user" [showMenu]="true"></app-user-card>
+            <app-user-card [user]="user" [organizationDetails]="organizationDetails" [showMenu]="true"></app-user-card>
 
 
             <div class="actions mt-2 text-center">
@@ -29,6 +29,52 @@
         </div>
         <div class="col-md-8">
             <ngb-tabset type="pills">
+                <ngb-tab >
+                    <ng-template ngbTabTitle>Entities&nbsp;&nbsp;
+                        <span class="badge badge-light">
+                            {{user?.userEntities?.edges.length}}
+                        </span>
+                      </ng-template>
+
+                    <ng-template ngbTabContent>
+
+
+                        <!-- Entities -->
+                        <app-card [hidHeader]="true" cardClass="mb-0" blockClass="">
+                            <h5 class="mb-4">Organization</h5>
+                            <div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 font-weight-bolder">Org Name</label>
+                                    <div class="col-sm-9">{{organizationDetails?.name}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 font-weight-bolder">Org ID</label>
+                                    <div class="col-sm-9">{{organizationDetails?.orgId}}</div>
+                                </div>
+                            </div>
+                            <h5 class="mb-4" *ngIf="!!user?.userEntities?.edges && user.userEntities.edges.length >= 1">Entities</h5>
+                            <div class="form-group row mb-0">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-responsive mb-0" *ngIf="!!user?.userEntities?.edges && user.userEntities.edges.length >= 1">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let entity of user?.userEntities?.edges">
+                                                <td>{{entity.node.name}}</td>
+                                                <td>{{entity.node.entityId}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </app-card>
+                    </ng-template>
+                </ngb-tab>
+
                 <ngb-tab >
                     <ng-template ngbTabTitle>Roles&nbsp;&nbsp;
                         <span class="badge badge-light">
@@ -164,6 +210,7 @@
                         </app-card>
                     </ng-template>
                 </ngb-tab>
+
             </ngb-tabset>
 
         </div>

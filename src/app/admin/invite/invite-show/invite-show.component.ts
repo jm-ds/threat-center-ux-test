@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Invite, InviteMailData, Message, Messages, } from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import { InviteService } from '@app/admin/services/invite.service';
-import Swal from 'sweetalert2';
 
 @Component({
     selector: 'invite-view',
