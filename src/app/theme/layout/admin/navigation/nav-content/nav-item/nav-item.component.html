@@ -1,4 +1,4 @@
-<ng-container *ngIf="!item.hidden">
+<ng-container *ngIf="!item.hidden && checkPermissions(item)">
   <li [ngClass]="item.classes" *ngIf="item.url && !item.external" [routerLinkActive]="['active']">
     <a class="nav-link" [target]="item.target ? '_blank' : '_self'" [routerLink]="[item.url]" (click)="closeOtherMenu($event)">
       <ng-container *ngTemplateOutlet="itemIcon"></ng-container>

@@ -2,6 +2,7 @@ import {Component, Input, NgZone, OnInit} from '@angular/core';
 import {NavigationItem} from '../../navigation';
 import {Location} from '@angular/common';
 import {NextConfig} from '../../../../../../app-config';
+import {AuthorizationService} from '@app/security/services';
 
 @Component({
   selector: 'app-nav-group',
@@ -14,7 +15,7 @@ export class NavGroupComponent implements OnInit {
   @Input() activeId: any;
   public nextConfig: any;
 
-  constructor(private zone: NgZone, private location: Location) {
+  constructor(private zone: NgZone, private location: Location, private authorizationService: AuthorizationService) {
     this.nextConfig = NextConfig.config;
   }
 
@@ -47,6 +48,22 @@ export class NavGroupComponent implements OnInit {
         last_parent.classList.add('active');
       }
     }
+  }
+
+  checkPermissions(item) {
+    if(item && item.type) {
+      if(item.type == 'group' || item.type == 'collapse') {
+        for(var child of item.children) {
+          if(this.checkPermissions(child)) {
+            return true;
+          }
+        }
+        return false;
+      } else {
+        return this.authorizationService.hasPermissions(item.permissions);
+      }
+    }
+    return true;
   }
 
 }

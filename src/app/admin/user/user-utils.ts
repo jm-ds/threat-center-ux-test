@@ -32,7 +32,7 @@ export class UserUtils {
         if (td !== null && td.className.indexOf("skip-row-link") >= 0) {
             return false;
         }
-        this.router.navigateByUrl('admin/user/show/' + username);
+        this.router.navigateByUrl('admin/user/show/' + encodeURIComponent(username));
     }
 
     goToUserList() {
@@ -40,7 +40,7 @@ export class UserUtils {
     }
 
     goToAssignRoles(username) {
-        this.router.navigateByUrl('admin/user/roles/' + username);
+        this.router.navigateByUrl('admin/user/roles/' + encodeURIComponent(username));
     }
 
     private findAncestor(el, sel) {
@@ -54,7 +54,7 @@ export class UserUtils {
     }
 
     goToApiKeyShow(username, apiId) {
-        this.router.navigateByUrl('admin/user/show/' + username+'/show/apikey/' + apiId);
+        this.router.navigateByUrl('admin/user/show/' + encodeURIComponent(username)+'/show/apikey/' + apiId);
     }
 
 
