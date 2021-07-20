@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { RunningTaskCountSubscription, RunningTaskCountQuery, ScanRequest, TaskQuery, SubscriptionResult } from '../models/types';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
+import { CheckAlreadyScannedQuery } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -83,4 +84,12 @@ export class TaskService {
   }
 
 
+
+  // fetch if same project is already scanned
+  checkAlreadyScannedProject(errorHandler) {
+    return this.coreGraphQLService.coreGQLReq<CheckAlreadyScannedQuery>(
+      gql`query {
+        checkAlreadyScannedProject(login:"${this.scanRequest.login}",repository:"${this.scanRequest.repository}",branch:"${this.scanRequest.branch}",repoType:"${this.scanRequest.repoType}", entityId: "${this.scanRequest.entityId}")
+      }`, 'no-cache', {}, errorHandler);
+  }
 }

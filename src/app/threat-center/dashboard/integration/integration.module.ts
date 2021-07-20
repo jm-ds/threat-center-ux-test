@@ -15,11 +15,12 @@ import { TreeTableModule } from 'primeng/treetable';
 import { AlertEmailsComponent } from './alert-emails/alert-emails.component';
 import { SlackUrlsComponent } from './slack-urls/slack-urls.component';
 import { JiraCredentialsComponent } from './jira-credentials/jira-credentials.component';
-
+import { OrgApiKeysComponent } from './org-apikeys/org-apikeys-list.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
-  declarations: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent],
+  declarations: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -33,8 +34,9 @@ import { JiraCredentialsComponent } from './jira-credentials/jira-credentials.co
         TableModule,
         DropdownModule,
         MatChipsModule,
-        TreeTableModule
+        TreeTableModule,
+        RouterModule
     ],
-    exports: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent]
+    exports: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent]
 })
 export class IntegrationModule { }

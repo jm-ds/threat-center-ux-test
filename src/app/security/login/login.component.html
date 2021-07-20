@@ -22,7 +22,7 @@
                 </a>
             </div>
             <div>
-                {{errorMessage}}
+                <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
             </div>
             <div id="auth01" class="row" style="margin-bottom:20px">
                 <div class="col-xl-6">

@@ -8,7 +8,7 @@
 <app-card [hidHeader]="true" cardClass="tab-card">
     <div class="row">
         <div class="col-3">
-            <ngb-accordion [closeOthers]="true" [activeIds]="activeTabId" class="settings-tabs"
+            <ngb-accordion [closeOthers]="true" [activeIds]="activePanelId" class="settings-tabs"
                 (panelChange)="beforeChange($event)">
                 <ngb-panel id="{{panel.panelId}}" *ngFor="let panel of accordianDetails">
                     <ng-template ngbPanelTitle>
@@ -28,19 +28,20 @@
         </div>
         <div class="col-9">
             <div class="tab-dtls">
-                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Configuration'}">
+                <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'configuration'}">
                     <h4 class="tab-heading">Configuration</h4>
                     {{activeLink}}
                 </div>
-                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Saml'}">
+                <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'saml'}">
                     <h4 class="tab-heading">SAML Integration</h4>
                     {{activeLink}}
                 </div>
-                <div class="tab-cnt" [ngClass]="{'active': activeTabId === 'Integration'}">
+                <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'integration'}">
                     <h4 class="tab-heading">Integrations</h4>
                     <alert-emails *ngIf="activeIntegrationTabId === 'email'" style="width: 100%" [entitySettings]="orgSettings"></alert-emails>  
                     <slack-urls *ngIf="activeIntegrationTabId === 'slack'" style="width: 100%" [entitySettings]="orgSettings"></slack-urls>  
                     <jira-credentials *ngIf="activeIntegrationTabId === 'jira'" style="width: 100%" [entitySettings]="orgSettings"></jira-credentials>  
+                    <org-apikeys *ngIf="activeIntegrationTabId === 'org-apikeys'" style="width: 100%" [entitySettings]="orgSettings"></org-apikeys>  
                 </div>
             </div>
         </div>

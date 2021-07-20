@@ -1,7 +1,7 @@
 <div style="width: 100%;">
   <div>
-      <p-table #dt [columns]="columns" [value]="entitySettings.alertEmailAdressess" [paginator]="false" [rows]="50"
-               tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
+      <p-table #dt [columns]="columns" [value]="entitySettings?.alertEmailAdressess" [paginator]="false" [rows]="50"
+               tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer">
 
         <ng-template pTemplate="caption">
           <button type="button" class="btn btn-outline-info float-right" title="Add email" (click)="openAddEmailDialog(emailDialog)" 

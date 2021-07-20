@@ -145,7 +145,7 @@ export class AuthenticationService {
     if (environment.production && !environment.staging) {
       user = this.localService.getSessionStorage(key);
     } else {
-      if (sessionStorage.getItem(key)) {
+      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) != "undefined") {
         user = JSON.parse(sessionStorage.getItem(key));
       }
     }

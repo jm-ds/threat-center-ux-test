@@ -32,7 +32,8 @@ export class CoreGraphQLService {
 
         query: DocumentNode,
         fetchPolicy?: WatchQueryFetchPolicy,
-        variable: OperationVariables = {}
+        variable: OperationVariables = {},
+        errorHandler: any = undefined
     ):
         Observable<ApolloQueryResult<T>> {
         return this.apollo.watchQuery<T>({
@@ -45,8 +46,9 @@ export class CoreGraphQLService {
                 map((result) => {
                     return <ApolloQueryResult<T>>result;
                 }),
-                catchError(this.errorHandler));
+                catchError(!!errorHandler? errorHandler: this.errorHandler));
     }
+
 
     coreGQLReqWithQuery<T>(
         query: DocumentNode,
@@ -87,7 +89,7 @@ export class CoreGraphQLService {
         todo: https://github.com/threatrix/product/issues/400
             there are some todos in the method belo to point issues related to #400 task
      */
-    private errorHandler = (error: HttpErrorResponse | any) => {
+    public errorHandler = (error: HttpErrorResponse | any) => {
         console.log("CoreGraphQLService.errorHandler:");
         console.log("ERROR:");
         console.log(error);

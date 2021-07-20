@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {NavigationItem} from '../../navigation';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {NextConfig} from '../../../../../../app-config';
+import {AuthorizationService} from '@app/security/services';
 
 @Component({
   selector: 'app-nav-collapse',
@@ -25,7 +26,7 @@ export class NavCollapseComponent implements OnInit {
   public nextConfig: any;
   public themeLayout: string;
 
-  constructor() {
+  constructor(private authorizationService: AuthorizationService) {
     this.visible = false;
     this.nextConfig = NextConfig.config;
     this.themeLayout = this.nextConfig.layout;
@@ -64,6 +65,22 @@ export class NavCollapseComponent implements OnInit {
       } while (preParent.classList.contains('pcoded-submenu'));
     }
     parent.classList.toggle('pcoded-trigger');
+  }
+
+  checkPermissions(item) {
+    if(item && item.type) {
+      if(item.type == 'group' || item.type == 'collapse') {
+        for(var child of item.children) {
+          if(this.checkPermissions(child)) {
+            return true;
+          }
+        }
+        return false;
+      } else {
+        return this.authorizationService.hasPermissions(item.permissions);
+      }
+    }
+    return true;
   }
 
 }

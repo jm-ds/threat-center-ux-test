@@ -1,4 +1,4 @@
-<ng-container *ngIf="!item.hidden">
+<ng-container *ngIf="!item.hidden && checkPermissions(item)">
   <li *ngIf="themeLayout === 'horizontal'" (mouseenter)="navCollapse($event)" class="nav-item pcoded-hasmenu" [routerLinkActive]="['active']">
     <a [routerLinkActive]="['active']" href="javascript:" class="nav-link">
       <ng-container *ngTemplateOutlet="itemContent"></ng-container>
