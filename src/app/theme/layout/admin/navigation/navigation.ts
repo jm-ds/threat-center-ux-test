@@ -177,15 +177,15 @@ const NavigationItems = [
             permissions: ["ENTITY_EDIT"],
             target: false,
           },
-          {
-            id: 'integrations',
-            title: 'Integrations',
-            icon: 'fas fa-retweet',
-            type: 'item',
-            url: '/admin/integration',
-            permissions: ["INTEGRATION_VIEW"],
-            target: false,
-          },
+          // {
+          //   id: 'integrations',
+          //   title: 'Integrations',
+          //   icon: 'fas fa-retweet',
+          //   type: 'item',
+          //   url: '/admin/integration',
+          //   permissions: ["INTEGRATION_VIEW"],
+          //   target: false,
+          // },
         ]
       },
 
