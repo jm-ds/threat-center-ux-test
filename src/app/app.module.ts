@@ -35,6 +35,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoadingDialogComponent } from './threat-center/dashboard/project-scan-dialog/loading-dialog.component';
 import { PreScanLoadingDialogComponent } from './threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
 import { MatProgressBarModule } from '@angular/material';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { MatProgressBarModule } from '@angular/material';
     ToastrModule.forRoot(),
     MatProgressBarModule,
     NgbModule,
-    NgbPopoverModule, NgbProgressbarModule
+    NgbPopoverModule, NgbProgressbarModule,
+    NgxSpinnerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
