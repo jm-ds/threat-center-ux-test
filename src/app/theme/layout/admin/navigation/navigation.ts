@@ -38,6 +38,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/scan',
         icon: 'fas fa-fingerprint',
+        permissions: ["SCAN_VIEW"],
       },
       {
         id: 'entity',
@@ -45,6 +46,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/entity',
         icon: 'far fa-building',
+        permissions: ["ENTITY_VIEW"],
       },
       {
         id: 'policy',
@@ -52,6 +54,7 @@ const NavigationItems = [
         type: 'item',
         url: '/dashboard/policy',
         icon: 'fas fa-feather-alt',
+        permissions: ["POLICY_CREATE"],
       },
       /*{
         id: 'vulnerability-db',
@@ -153,6 +156,7 @@ const NavigationItems = [
             icon: 'fas fa-users',
             type: 'item',
             url: '/admin/user',
+            permissions: ["USER_VIEW"],
             target: false,
           },
           {
@@ -161,6 +165,7 @@ const NavigationItems = [
             icon: 'fas fa-user-lock',
             type: 'item',
             url: '/admin/role',
+            permissions: ["ROLE_VIEW"],
             target: false,
           },
           {
@@ -169,18 +174,21 @@ const NavigationItems = [
             icon: 'far fa-building',
             type: 'item',
             url: '/admin/entity',
+            permissions: ["ENTITY_EDIT"],
             target: false,
           },
-          {
-            id: 'business-units',
-            title: 'Integrations',
-            icon: 'fas fa-retweet',
-            type: 'item',
-            url: '/admin/integration',
-            target: false,
-          },
+          // {
+          //   id: 'integrations',
+          //   title: 'Integrations',
+          //   icon: 'fas fa-retweet',
+          //   type: 'item',
+          //   url: '/admin/integration',
+          //   permissions: ["INTEGRATION_VIEW"],
+          //   target: false,
+          // },
         ]
       },
+
       // {
       //   id: 'orgSetting',
       //   title: 'Organization Settings',
@@ -188,6 +196,7 @@ const NavigationItems = [
       //   url: '/dashboard/org-setting',
       //   icon: 'fas fa-cogs',
       // }
+
     ]
   }
 ];

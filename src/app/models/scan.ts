@@ -137,3 +137,8 @@ export type BitbucketUserQuery = {
 export type ScanQuery = {
     scan: Scan;
 }
+
+// check if already scanned
+export type CheckAlreadyScannedQuery = {
+    checkAlreadyScannedProject: Date
+}

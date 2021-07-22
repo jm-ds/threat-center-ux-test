@@ -7,6 +7,7 @@ import {WebSocketLink} from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { AuthenticationService } from './security/services';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const uri = environment.apiUrl+'/graphql'; // <-- add the URL of the GraphQL server here
 const subscriptionUri = environment.wsUrl+'/subscriptions'; // graphql subscription endpoint
@@ -23,15 +24,19 @@ export function createApollo(httpLink: HttpLink, authenticationService: Authenti
   if (!!jwt) {
     auth = "Bearer "+jwt;
   }
-  const wsLink = new WebSocketLink({
-    uri: subscriptionUri,
-    options: {
+  // websocket client
+  const wsClient = new SubscriptionClient(subscriptionUri,
+    {
       reconnect: true,
       connectionParams: {
         authorization: auth,
       }
     }
-  });
+  );
+  // websocket link
+  const wsLink = new WebSocketLink(wsClient);
+  // set websocket client into authentication service
+  authenticationService.setWebSocketClient(wsClient);
   
   // using the ability to split links, you can send data to each link
   // depending on what kind of operation is being sent

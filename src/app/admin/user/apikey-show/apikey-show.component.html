@@ -1,11 +1,15 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb" *ngIf="!!user">
       <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
       <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(user?.username)">User</a></li>
-<li class="breadcrumb-item active text-muted" aria-current="page">API key</li>
-  </ol>
-</nav>
+      <li class="breadcrumb-item active text-muted" aria-current="page">API key</li>
+    </ol>
+    <ol class="breadcrumb" *ngIf="!user">
+      <li class="breadcrumb-item"><a href="javascript:" (click)="goToOrgSettings()">Organization settings</a></li>
+      <li class="breadcrumb-item active text-muted" aria-current="page">API key</li>
+    </ol>
+  </nav>
   <h1>API key</h1>
 </div>
 
@@ -15,13 +19,13 @@
 
 <ng-template [ngIf]="apiKey !== undefined">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" *ngIf="!!user">
 
       <!-- User card -->
       <app-user-card [user]="user" [showMenu]="true"></app-user-card>
 
     </div>
-    <div class="col-md-8">
+    <div [ngClass]="isUserKey ? 'col-md-8' : 'col-md-12'">
       <app-card cardTitle="API key data">
         <div class="pt-4" style="width: 100%;">
           <div class="form-group " style="padding-left: 0px">
@@ -53,7 +57,11 @@
           </div>
         </div>
         <div class="actions mt-5">
-          <a routerLink="/admin/user/show/{{username}}/create/apikey/{{keyId}}" class="btn btn-outline-info">
+          <a *ngIf="!!user" routerLink="/admin/user/show/{{username}}/create/apikey/{{keyId}}" class="btn btn-outline-info">
+            <i class="feather icon-edit"></i>
+            Edit
+          </a>
+          <a *ngIf="!user" routerLink="/dashboard/org-setting/integration/org-apikeys/create/apikey/{{keyId}}" class="btn btn-outline-info">
             <i class="feather icon-edit"></i>
             Edit
           </a>
@@ -61,9 +69,13 @@
             <i class="feather icon-trash"></i>
             Delete
           </a>
-          <a routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+          <a *ngIf="!!user" routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
             <i class="feather  icon-user"></i>
             Back to user
+          </a>
+          <a *ngIf="!user" routerLink="/dashboard/org-setting/integration/org-apikeys" class="btn btn-outline-secondary">
+            <i class="fas fa-bars"></i>
+            Back to settings
           </a>
         </div>
       </app-card>
@@ -75,8 +87,13 @@
 <ng-template [ngIf]="apiKey === undefined">
   <app-alert type="warning">API key is not found.</app-alert>
 
-  <a routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+  <a *ngIf="!!user" routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
       <i class="feather icon-user"></i>
       Back to user
   </a>
+  <a *ngIf="!user" routerLink="/dashboard/org-setting/integration/org-apikeys" class="btn btn-outline-secondary">
+    <i class="fas fa-bars"></i>
+    Back to settings
+  </a>
+
 </ng-template>

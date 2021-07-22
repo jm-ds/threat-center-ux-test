@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class AuthenticationService {
 
   public currentUserSubject: BehaviorSubject<User>;
+  private websocketClient = null;
 
   constructor(private http: HttpClient, private localService: LocalService,
     private modalService: NgbModal) {
@@ -94,6 +95,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("REPO_SCAN");
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
+    this.closeWebSocket();
   }
 
   public isTokenExpired(token?: string): boolean {
@@ -145,10 +147,25 @@ export class AuthenticationService {
     if (environment.production && !environment.staging) {
       user = this.localService.getSessionStorage(key);
     } else {
-      if (sessionStorage.getItem(key)) {
+      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) != "undefined") {
         user = JSON.parse(sessionStorage.getItem(key));
       }
     }
     return user;
   }
+
+  // set websocket client
+  setWebSocketClient(wsClient) {
+    this.websocketClient = wsClient;
+  }
+
+  // close websocket
+  closeWebSocket() {
+    if (!!this.websocketClient) {
+      this.websocketClient.unsubscribeAll();
+      this.websocketClient.close(true);
+      this.websocketClient = null;
+    }
+ }
+
 }

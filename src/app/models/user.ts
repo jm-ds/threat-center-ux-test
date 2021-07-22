@@ -183,6 +183,10 @@ export interface ApiKeyQuery {
     apiKey: ApiKey;
 }
 
+export interface ApiKeyConnectionQuery {
+    orgApiKeys: ApiKeyConnection;
+}
+
 export class ApiKeyRequestInput {
     readonly orgId: string;
     readonly username: string;
