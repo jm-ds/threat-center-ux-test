@@ -22,13 +22,6 @@
         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
         [filterDelay]="0" [globalFilterFields]="['name']">
 
-        <ng-template pTemplate="caption">
-          <div style="text-align: right">
-            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter"
-              (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
-          </div>
-        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th *ngFor="let col of columns">
