@@ -77,6 +77,15 @@
                   tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
                   (onRowSelect)="onRowSelect($event)">
+                  
+                  <ng-template pTemplate="caption">
+                    <div style="text-align: right">
+                      <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                        <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
+                               (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
+                               [value]="getColumnFilterValue()"/>
+                    </div>
+                  </ng-template>
 
                   <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -90,23 +99,6 @@
                       <th title="Asset Composition">ASSETS</th>
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
-                    </tr>
-                    <tr>
-                      <th></th>
-                      <th>
-                        <input type="text" placeholder="Branch name" id="branchName" name="search-name"
-                               class="form-control"
-                               (input)="filterColumn($event.target.value,'branchName')"
-                               [value]="getColumnFilterValue()"
-                        />
-                      </th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
