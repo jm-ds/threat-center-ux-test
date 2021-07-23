@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create-account',
@@ -16,12 +17,14 @@ export class CreateAccountComponent implements OnInit {
     error = '';
     model: any = {};
     errorMessage: string;
+    apiUrl: string;
 
     constructor(
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService
     ) {
+        this.apiUrl = environment.apiUrl;
     }
 
     ngOnInit() {
@@ -52,5 +55,12 @@ export class CreateAccountComponent implements OnInit {
                     this.error = error;
                     this.loading = false;
                 });
+    }
+
+    redirectToExternalLogin(urlText: string) {
+        if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
+          sessionStorage.setItem('ReturnUrl', this.returnUrl);
+        }
+        window.location.href = this.apiUrl + '/' + urlText;
     }
 }
