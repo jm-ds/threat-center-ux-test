@@ -68,8 +68,14 @@
                 class="badge m-r-5 badge-light-success">PERMISSIVE</span>
             </td>
             <td>{{license.node.style}}</td>
-            <td>{{license.node.isOsiApproved}}</td>
-            <td>{{license.node.isFsfLibre}}</td>
+            <td>
+              <span *ngIf="license.node.isOsiApproved === true;else notApproved" class="badge m-r-5 badge-light-success">YES</span>
+              <ng-template #notApproved><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
+            </td>
+            <td>
+              <span *ngIf="license.node.isFsfLibre === true;else notFsfLib" class="badge m-r-5 badge-light-success">YES</span>
+              <ng-template #notFsfLib><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
+            </td>
           </tr>
         </ng-template>
       </p-table>
