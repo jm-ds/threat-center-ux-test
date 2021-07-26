@@ -82,7 +82,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMsg: string;
   log: string;
 
-  columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
+  columns = ['ID', 'Commit', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
 
   vulnerabilityCount = 0;
@@ -752,5 +752,13 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getColumnFilterValue() {
     return this.filterBranchName;
+  }
+
+  copyToClipboard(value: string, message: string) {
+    if (value != null && value.length > 0) {
+      navigator.clipboard.writeText(value).then(r => {
+
+      });
+    }
   }
 }
