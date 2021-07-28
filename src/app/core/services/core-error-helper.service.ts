@@ -5,15 +5,13 @@ import { Messages } from "@app/messages/messages";
 import { AuthenticationService } from "@app/security/services";
 import { environment } from "environments/environment";
 import { AlertService } from "./alert.service";
-import { CoreHelperService } from "./core-helper.service";
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class CoreErrorHelperService {
-    constructor(private coreHelperService: CoreHelperService,
-        private authenticationService: AuthenticationService,
+    constructor(private authenticationService: AuthenticationService,
         private router: Router,
         private alertService: AlertService) { }
 
