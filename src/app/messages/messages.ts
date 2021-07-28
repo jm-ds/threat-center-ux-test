@@ -13,6 +13,7 @@ export const Messages = {
     status503: 'The server is currently unavailable (overloaded or down)',
     status504: 'The server was acting as a gateway or proxy and did not receive a timely response from the upstream server',
     status505: 'The server does not support the HTTP protocol version used in the request',
+    status0:'Backend server is restarting. Please wait few moments and try to refresh the page.',
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
     graphQlCommonErrorMessage: 'An unexpected error occurred while trying to fetch the requested data.',

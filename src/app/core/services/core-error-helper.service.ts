@@ -15,12 +15,12 @@ export class CoreErrorHelperService {
     constructor(private coreHelperService: CoreHelperService,
         private authenticationService: AuthenticationService,
         private router: Router,
-        private alertService:AlertService) { }
+        private alertService: AlertService) { }
 
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
-        if (!errObj || !errObj.status || errObj.status === 0) {
-            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText,'error');
+        if (!errObj || errObj.status === null || errObj.status === undefined) {
+            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText, 'error');
         } else {
             //getting server error if any other wise show default message according to status of server
             const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
@@ -39,7 +39,7 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
+                            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
                         }
                     } else {
                         //If No JWT Then Redirect user with notifying
@@ -49,12 +49,12 @@ export class CoreErrorHelperService {
                 default:
                     //Rest Of all status code perform over here..
                     if (errObj.status === 502) {
-                        this.alertService.alertBox(Messages.status502, 'Server is restarting','error');
+                        this.alertService.alertBox(Messages.status502, 'Server is restarting', 'error');
                     } else {
                         if (errObj.status === 500) {
                             console.log("REQUEST PAYLOAD", requestPayload);
                         }
-                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
+                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
                     }
                     break;
             }
@@ -75,6 +75,10 @@ export class CoreErrorHelperService {
     private getMessageStatusWise(status) {
         let msg = "";
         switch (status) {
+            case 0: {
+                msg = Messages.status0;
+                break;
+            }
             case 500: {
                 msg = Messages.status500;
                 break;
@@ -164,9 +168,9 @@ export class CoreErrorHelperService {
     //Helper function which will redirect user to login page with notifying user.
     private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
         if (actualStatus === 401) {
-            this.alertService.alertBox(dataObjToShow.message,'Authentication required','warning')
+            this.alertService.alertBox(dataObjToShow.message, 'Authentication required', 'warning')
         } else {
-            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText,'error');
+            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
         }
         this.authenticationService.logout();
         this.router.navigate(['/login']);
