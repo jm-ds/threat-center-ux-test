@@ -80,7 +80,8 @@
 
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th>Version</th>
+                      <th>ID</th>
+                      <th>Commit</th>
                       <th>Branch name</th>
                       <th>Tag</th>
                       <th>Created</th>
@@ -95,7 +96,8 @@
                   <ng-template pTemplate="body" let-scan let-columns="columns">
                     <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
                       [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
-                      <td>{{scan.node?.version}}</td>
+                      <td (click)="copyToClipboard(scan.node?.scanId, 'ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
+                      <td (click)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">{{scan.node?.versionHash}}</td>
                       <td>{{scan.node?.branch}}</td>
                       <td>{{scan.node?.tag}}</td>
                       <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
