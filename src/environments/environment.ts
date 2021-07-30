@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   staging: false,
-  apiUrl: 'https://stage.threatrix.io',
+  apiUrl: 'https://localhost:8080',
   wsUrl: 'ws://localhost:8080'
 };
 
