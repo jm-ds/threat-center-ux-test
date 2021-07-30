@@ -46,6 +46,12 @@
   <div class="row">
     <div class="col-md-12">
       <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
+        <div style="float: right; text-align: right">
+          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
+                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
+                   [value]="getColumnFilterValue()"/>
+        </div>
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
           <!-- SCANS TAB -->
@@ -90,23 +96,6 @@
                       <th title="Asset Composition">ASSETS</th>
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
-                    </tr>
-                    <tr>
-                      <th></th>
-                      <th>
-                        <input type="text" placeholder="Branch name" id="branchName" name="search-name"
-                               class="form-control"
-                               (input)="filterColumn($event.target.value,'branchName')"
-                               [value]="getColumnFilterValue()"
-                        />
-                      </th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
