@@ -45,13 +45,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
-        <div style="float: right; text-align: right">
-          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
-                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
-                   [value]="getColumnFilterValue()"/>
-        </div>
+      <app-card [hidHeader]="true" cardClass="tab-card">
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
           <!-- SCANS TAB -->
@@ -78,7 +72,7 @@
                 <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
                 </mat-progress-spinner>
               </div>
-              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'650px'">
+              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
                 <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                   tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
