@@ -46,6 +46,14 @@
   <div class="row">
     <div class="col-md-12">
       <app-card [hidHeader]="true" cardClass="tab-card">
+
+        <div style="float: right; text-align: right" *ngIf="stateService.project_tabs_selectedTab === 'scan'">
+          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
+                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
+                   [value]="getColumnFilterValue()"/>
+        </div>
+        
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
           <!-- SCANS TAB -->
