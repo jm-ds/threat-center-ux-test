@@ -45,7 +45,15 @@
 
   <div class="row">
     <div class="col-md-12">
-      <app-card [hidHeader]="true" cardClass="tab-card entity-table-card">
+      <app-card [hidHeader]="true" cardClass="tab-card">
+
+        <div style="float: right; text-align: right" *ngIf="stateService.project_tabs_selectedTab === 'scan'">
+          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
+                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
+                   [value]="getColumnFilterValue()"/>
+        </div>
+        
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
           <!-- SCANS TAB -->
@@ -72,7 +80,7 @@
                 <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
                 </mat-progress-spinner>
               </div>
-              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'650px'">
+              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
                 <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                   tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
@@ -80,7 +88,8 @@
 
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th>Version</th>
+                      <th>ID</th>
+                      <th>Commit</th>
                       <th>Branch name</th>
                       <th>Tag</th>
                       <th>Created</th>
@@ -91,28 +100,12 @@
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
                     </tr>
-                    <tr>
-                      <th></th>
-                      <th>
-                        <input type="text" placeholder="Branch name" id="branchName" name="search-name"
-                               class="form-control"
-                               (input)="filterColumn($event.target.value,'branchName')"
-                               [value]="getColumnFilterValue()"
-                        />
-                      </th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
                     <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
                       [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
-                      <td>{{scan.node?.version}}</td>
+                      <td (click)="copyToClipboard(scan.node?.scanId, 'ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
+                      <td (click)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">{{scan.node?.versionHash}}</td>
                       <td>{{scan.node?.branch}}</td>
                       <td>{{scan.node?.tag}}</td>
                       <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>

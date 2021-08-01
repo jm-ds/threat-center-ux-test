@@ -19,6 +19,7 @@ import { NextConfig } from '@app/app-config';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import {ClipboardDialogComponent} from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
 
 @Component({
   selector: 'project-dashboard',
@@ -82,7 +83,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMsg: string;
   log: string;
 
-  columns = ['Version', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
+  columns = ['ID', 'Commit', 'Branch', 'Tag', 'Created', 'Vulnerabilities', 'Licenses', 'Components', 'Embedded'];
   tabDataCount = undefined;
 
   vulnerabilityCount = 0;
@@ -752,5 +753,16 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getColumnFilterValue() {
     return this.filterBranchName;
+  }
+
+  copyToClipboard(value: string, message: string) {
+    if (value != null && value.length > 0) {
+      navigator.clipboard.writeText(value).then(r => {
+        const modalRef = this.modalService.open(ClipboardDialogComponent, {
+          keyboard: false,
+        });
+        modalRef.componentInstance.message = message;
+      });
+    }
   }
 }
