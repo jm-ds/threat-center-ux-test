@@ -116,6 +116,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   filterBranchName = '';
   timeOut;
   timeOutDuration = 1000;
+  projectTagInputValue = "";
 
   ngOnInit() {
     this.initProjectsChartConfig();
@@ -720,23 +721,38 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // add project tag handler
-  addProjectTag(project: Project, event: any) {
-      if (!project.tags || project.tags.length === 0) {
-        project.tags = [event.value];
-      } else {
-          if (project.tags.indexOf(event.value)===-1) {
-            project.tags.push(event.value);
-          }
-      }
+  addProjectTagHandler(project: Project, event: any) {
+      this.addProjectTag(project, event.value);
       event.input.value="";
   }
 
+  // add project tag
+  addProjectTag(project: Project, tag: string) {
+    if (!tag) {
+      return;
+    }
+    let tags=tag.split(",").map(item=>item.trim()).filter(item=>item.length>0);
+    if (!project.tags || project.tags.length === 0) {
+      project.tags = tags;
+    } else {
+        tags.forEach(tag=>{
+          if (project.tags.indexOf(tag)===-1) {
+            project.tags.push(tag);
+          }
+        });
+    }
+  }
+  
   // save project tags
   setProjectTags(project: Project) {
-    this.projectDashboardService.setProjectTags(project.projectId, project.tags).subscribe(() => {
-  }, (error) => {
+    if (!!this.projectTagInputValue) {
+      this.addProjectTag(project, this.projectTagInputValue);
+      this.projectTagInputValue = "";
+    }
+    project.tags = project.tags.filter(item=> item.trim().length>0);
+    this.projectDashboardService.setProjectTags(project.projectId, project.tags).subscribe(() => {}, (error) => {
       console.error('Error', error);
-  });
+    });
   }
 
   filterColumn(value: string,idElement:string = '') {
