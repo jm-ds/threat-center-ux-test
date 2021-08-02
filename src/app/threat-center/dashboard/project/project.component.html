@@ -322,7 +322,9 @@
         <input placeholder="Project Tags..." class = "next-dark form-control place-holder"
                [matChipInputFor]="tagList"
                (matChipInputTokenEnd)="addProjectTag(project, $event)">
+        
       </mat-chip-list>
+      <div class="hint-block">hit "enter" to add tag then "Save Project Tags" to save your changes</div>
 
     </div>
     <div class="modal-footer">
