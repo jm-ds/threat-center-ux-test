@@ -320,8 +320,8 @@
           </button>
         </mat-chip>
         <input placeholder="Project Tags..." class = "next-dark form-control place-holder"
-               [matChipInputFor]="tagList"
-               (matChipInputTokenEnd)="addProjectTag(project, $event)">
+               [matChipInputFor]="tagList" [(ngModel)]="projectTagInputValue"
+               (matChipInputTokenEnd)="addProjectTagHandler(project, $event)">
       </mat-chip-list>
 
     </div>

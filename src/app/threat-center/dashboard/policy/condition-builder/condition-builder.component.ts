@@ -328,7 +328,7 @@ export class ConditionBuilderComponent implements OnInit {
         if (index > -1) {
             group.conditions.splice(index, 1);
         }
-        if (index==group.conditions.length) {
+        if (index==group.conditions.length && group.conditions.length > 0) {
             group.conditions[group.conditions.length-1].logicalOperator = undefined;
         }
     }
@@ -557,17 +557,30 @@ export class ConditionBuilderComponent implements OnInit {
         }
     }
 
-    // add project tag to condition value
-    addProjectTag(condition, event) {
-        if (!condition.strValue || condition.strValue.length === 0) {
-            condition.strValue = event.value;
-        } else {
-            let tags = condition.strValue.split(",");
-            if (tags.indexOf(event.value)===-1) {
-                condition.strValue += ','+event.value;
-            }
-        }
+
+    // add project tag handler
+    addProjectTagHandler(condition: any, event: any) {
+        this.addProjectTag(condition, event.value);
         event.input.value="";
+    }
+
+    // add project tag
+    addProjectTag(condition: any, tag: string) {
+        if (!tag) {
+            return;
+        }
+        let tags=tag.split(",").map(item=>item.trim()).filter(item=>item.length>0);
+        if (!condition.strValue || condition.strValue.length === 0) {
+            condition.strValue = tags.join(",");
+        } else {
+            let conditionTags = condition.strValue.split(",");
+            tags.forEach(tag=>{
+                if (conditionTags.indexOf(tag)===-1) {
+                    conditionTags.push(tag);
+                }
+            });
+            condition.strValue = conditionTags.join(",");
+        }
     }
 
     // if this is a last main condition
