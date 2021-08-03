@@ -44,17 +44,17 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     ];
 
     accordianDetails = [
-        {
-            panelId: "configuration",
-            panelName: "Threat Agent Configuration",
-            panelList: [],
-            panelIcon:"fas fa-cog"
-        },
-        {
-            panelId: "saml",
-            panelName: "SAML Integration",
-            panelList: []
-        },
+        // {
+        //     panelId: "configuration",
+        //     panelName: "Threat Agent Configuration",
+        //     panelList: [],
+        //     panelIcon:"fas fa-cog"
+        // },
+        // {
+        //     panelId: "saml",
+        //     panelName: "SAML Integration",
+        //     panelList: []
+        // },
         {
             panelId: "integration",
             panelName: "Integration",
@@ -80,7 +80,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        let panelId = this.route.snapshot.paramMap.get('activePanelId');
+        let panelId = this.route.snapshot.paramMap.get('activePanelId') || "integration";
         if (!!panelId) {
             this.activePanelId = panelId;
         }
@@ -88,7 +88,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
         if (!!tabId) {
             this.activeIntegrationTabId = tabId;
         } else {
-            this.activeIntegrationTabId = undefined;
+            this.activeIntegrationTabId = 'email';
         }
         let panel = this.getPanel(this.activePanelId);
         if (!!panel && !!panel.panelList) {
