@@ -16,7 +16,12 @@ import { AlertService } from '@app/core/services/alert.service';
 @Component({
   selector: 'scanasset-detail',
   templateUrl: './scanasset-detail.component.html',
-  styleUrls: [],
+  styles: [
+    `.text-primary:hover{
+      text-decoration: underline;
+      cursor: pointer;
+    }`
+  ],
 })
 export class ScanAssetDetailComponent implements OnInit {
 

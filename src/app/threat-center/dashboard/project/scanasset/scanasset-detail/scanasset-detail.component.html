@@ -64,12 +64,15 @@
                     {{embeddedAsset.node.earliestReleaseVersion}} - {{embeddedAsset.node.latestReleaseVersion}}
                   </a>
                 </td>
-                <td class="align-middle" style="word-spacing: 6px;">
+                <td class="align-middle">
                   <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node); licensesModal.show()">
-                    <span *ngFor="let matchLicense of embeddedAsset.node.matchLicenses">
-                      {{matchLicense.licenseName}}
-                      <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
-                        {{matchLicense.licenseCategory.replace("_", " ")}}</span>
+                    <span style="word-spacing: 6px;" *ngIf="embeddedAsset?.node?.matchLicenses.length === 1">
+                      {{embeddedAsset?.node?.matchLicenses[0].licenseName}}
+                      <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{embeddedAsset?.node?.matchLicenses[0].licenseCategory}}">
+                        {{embeddedAsset?.node?.matchLicenses[0].licenseCategory.replace("_", " ")}}</span>
+                    </span>
+                    <span class="text-primary" *ngIf="embeddedAsset?.node?.matchLicenses?.length >= 2">
+                      Multiple Licenses ({{embeddedAsset?.node?.matchLicenses?.length}})
                     </span>
                   </a>
                 </td>
