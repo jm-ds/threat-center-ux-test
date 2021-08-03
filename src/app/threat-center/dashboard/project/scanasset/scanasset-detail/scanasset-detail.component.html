@@ -51,6 +51,7 @@
                   (change)="onSelectedChange(embeddedAsset.node.assetMatchId, embeddedAsset.node.percentMatch, $event.target.checked)"></td>
                 <td class="align-middle">{{embeddedAsset.node.name}}</td>
                 <td class="align-middle">
+                  <i class="btn-outline-info fab fa-github fa-2x align-middle m-r-5"></i>
                   <a (click)="openInNewTab(embeddedAsset.node.matchRepository.repositoryCode, embeddedAsset.node.matchRepository.repositoryOwner, embeddedAsset.node.matchRepository.repositoryName)">
                     {{embeddedAsset.node.matchRepository.repositoryCode | lowercase}} : {{embeddedAsset.node.matchRepository.repositoryOwner}}/{{embeddedAsset.node.matchRepository.repositoryName}}
                   </a>
