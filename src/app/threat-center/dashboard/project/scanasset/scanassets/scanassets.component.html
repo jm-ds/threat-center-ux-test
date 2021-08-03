@@ -115,7 +115,7 @@
               <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.status}}</td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{getSummationOfEmbeded(scanAsset.node.embeddedAssets.edges) | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
@@ -132,7 +132,7 @@
               <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.status}}</td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssets.edges[0]?.node.percentMatch | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{getSummationOfEmbeded(scanAsset.node.embeddedAssets.edges) | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>

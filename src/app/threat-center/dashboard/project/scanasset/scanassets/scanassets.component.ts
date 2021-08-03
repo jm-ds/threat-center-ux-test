@@ -192,6 +192,10 @@ export class ScanAssetsComponent implements OnInit {
     }
   }
 
+  getSummationOfEmbeded(array:any[]){
+    return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
+  }
+
   private makeFilterMapForService() {
     let filterString = '';
     this.columnsFilter.forEach((val, key) => {

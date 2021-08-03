@@ -186,6 +186,15 @@ const NavigationItems = [
             permissions: ["INTEGRATION_VIEW"],
             target: false,
           },
+          {
+            id: 'orgSetting',
+            title: 'Organization Settings',
+            icon: 'fas fa-cogs',
+            type: 'item',
+            url: '/dashboard/org-setting',
+            permissions: ["ORG_VIEW"],
+            target: false,
+          }
         ]
       },
 
