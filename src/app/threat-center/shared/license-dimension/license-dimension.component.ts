@@ -5,11 +5,10 @@ import {map} from 'rxjs/operators';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Router} from '@angular/router';
 import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
-import {NgxSpinnerService} from 'ngx-spinner';
 import {MatPaginator} from '@angular/material';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import { FixResult, License } from '@app/models';
+import {License} from '@app/models';
 
 
 @Component({
@@ -19,7 +18,7 @@ import { FixResult, License } from '@app/models';
 })
 export class LicenseDimensionComponent implements OnInit {
 
-  public licenseCols = ['Name','Threat'];
+  public licenseCols = ['Name', 'Threat'];
 
   @Input() licenseId:string;
   @Input() licenses:License[];
@@ -28,10 +27,9 @@ export class LicenseDimensionComponent implements OnInit {
   @Input() entityId: string;
   @Input() isFromComponent: boolean;
   @Output() getLicenseName: EventEmitter<any> = new EventEmitter();
-  obsLicense:Observable<License>;
-  obsLicenseComponents:Observable<any>;
-  licenseComponents : any;
-  fixResultObservable: Observable<FixResult[]>;
+  obsLicense: Observable<License>;
+  obsLicenseComponents: Observable<any>;
+  licenseComponents: any;
   newVersion: string;
   defaultPageSize = 25;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
