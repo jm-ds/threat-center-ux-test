@@ -56,6 +56,7 @@ export class PolicyCondition {
     autoAdjustThreshold: boolean;
 
     logicalOperator: string;
+    strInputValue: string;
 }
 
 export class PolicyAction {
@@ -97,6 +98,7 @@ export class PolicyRequestInput {
             if (group.conditions) {
                 group.conditions.forEach(element => {
                     delete element["__typename"];
+                    delete element["strInputValue"];
                 });
             }
             if (group.groups) {

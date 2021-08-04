@@ -12,12 +12,48 @@
 
         <div>
 
+            <!-- OAuth login -->
+            <div class="caption-blue-underline mt-50">
+                Create account with OAuth Authentication
+                <a href="javascript:" [placement]="'top'" [popoverTitle]="'OAuth Authentication'" ngbPopover="Login or sign up with your GitHub, GitLab, BitBucket or Google account.">
+                    <i class="far fa-question-circle" ></i>
+                </a>
+            </div>
+            <div>
+                <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
+            </div>
+            <div id="auth01" class="row" style="margin-bottom:20px">
+                <div class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('github_login')" class="cursor-pointer">
+                        <div class="auth-button"><i class="fab fa-github"></i></div>
+                    </a>
+                </div>
+                <div title="Gitlab disabled during Beta" class="col-xl-6">
+                    <a  (click)="redirectToExternalLogin('gitlab_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-gitlab"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div id="auth02" class="row mb-0">
+                <div title="Bitbucket disabled during Beta" class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('bitbucket_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
+                    </a>
+                </div>
+                <div title="Google disabled during Beta" class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('google_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
+
             <div>
                 {{errorMessage}}
             </div>
 
-            <div class="caption-blue-underline">
-                Create account
+            <div class="caption-blue-underline mt-50">
+                Create standard account
             </div>
 
 

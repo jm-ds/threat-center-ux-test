@@ -21,6 +21,7 @@ import { FixComponentDialogComponent } from './fix-component-dialog/fix-componen
 import { ProjectChartComponent } from './project-chart/project-chart.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ClipboardDialogComponent } from './clipboard-dialog/clipboard-dialog.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -57,8 +58,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ScanAssetDetailComponent,
     FixComponentResultDialogComponent,
     FixComponentDialogComponent,
-    ProjectChartComponent
+    ProjectChartComponent,
+    ClipboardDialogComponent
   ],
-  entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent]
+  entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent, ClipboardDialogComponent]
 })
 export class ProjectModule { }

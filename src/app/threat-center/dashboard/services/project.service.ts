@@ -80,6 +80,7 @@ export class ProjectDashboardService {
                         branch,
                         tag,
                         version
+                        versionHash
                         created,
                         errorMsg,
                         log,

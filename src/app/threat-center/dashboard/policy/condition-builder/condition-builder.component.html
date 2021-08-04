@@ -134,8 +134,8 @@
                     </button>
                   </mat-chip>
                   <input placeholder="Tags..." class = "next-dark form-control"
-                         [matChipInputFor]="tagList"
-                         (matChipInputTokenEnd)="addProjectTag(condition, $event)">
+                         [matChipInputFor]="tagList" [(ngModel)]="condition.strInputValue"
+                         (matChipInputTokenEnd)="addProjectTagHandler(condition, $event)">
                 </mat-chip-list>                
                 <div class="col-sm-3 mt-2 float-right" *ngIf="condition.conditionName === 'THRESHOLD'">
                   <label for="autoAdjustThreshold" class="font-weight-bolder float-right">Auto adjust</label>

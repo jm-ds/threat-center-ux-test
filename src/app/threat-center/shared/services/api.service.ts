@@ -340,6 +340,7 @@ export class ApiService {
                   branch
                   tag
                   version
+                  versionHash
                   created
                   errorMsg
                   log,
