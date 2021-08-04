@@ -28,14 +28,14 @@
         </div>
         <div class="col-9">
             <div class="tab-dtls">
-                <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'configuration'}">
+                <!-- <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'configuration'}">
                     <h4 class="tab-heading">Configuration</h4>
                     {{activeLink}}
-                </div>
-                <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'saml'}">
+                </div> -->
+                <!-- <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'saml'}">
                     <h4 class="tab-heading">SAML Integration</h4>
                     {{activeLink}}
-                </div>
+                </div> -->
                 <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'integration'}">
                     <h4 class="tab-heading">Integrations</h4>
                     <alert-emails *ngIf="activeIntegrationTabId === 'email'" style="width: 100%" [entitySettings]="orgSettings"></alert-emails>  
