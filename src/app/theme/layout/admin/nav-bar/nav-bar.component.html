@@ -4,7 +4,7 @@
 <ng-template #mainHeader>
   <div class="m-header">
     <a href="javascript:" class="mobile-menu" id="mobile-collapse" (click)="navCollapse()"><span></span></a>
-    <a [routerLink]="['/dashboard/legal']" class="b-brand">
+    <a [routerLink]="['/dashboard/entity']" class="b-brand">
       <img id="main-logo" src="assets/images/website_logo_white-letters-transparent_background.png" alt="" class="logo" *ngIf="this.nextConfig.navBrandColor !== 'brand-default' || this.nextConfig.headerBackColor !== 'header-default'">
       <img src="assets/images/logo-dark.png" alt="" class="logo" *ngIf="this.nextConfig.navBrandColor === 'brand-default' && this.nextConfig.headerBackColor === 'header-default'">
       <img src="assets/images/logo-icon.png" alt="" class="logo-thumb">

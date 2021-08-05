@@ -85,7 +85,7 @@
   <!--DONUT CHART DATA -->
   <div class="row entity-chart-row"
     *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+    <div class="col-lg-3 col-md-3 cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Vulnerability'}"
       (click)="initStackedChartAccordingToDonut('Vulnerability')">
       <entity-donut-chart [chartlabel]="'Vulnerabilities'" [chartId]="'vulnerabilityChart'"
@@ -93,7 +93,7 @@
       </entity-donut-chart>
     </div>
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+    <div class="col-lg-3 col-md-3 cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Licenses'}"
       (click)="initStackedChartAccordingToDonut('Licenses')">
       <span *ngIf="selectedlicenseChartDropValue == 'License Name'">
@@ -110,15 +110,15 @@
       </span>
     </div>
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
+    <!-- <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'SupplyChain'}"
       (click)="initStackedChartAccordingToDonut('SupplyChain')">
       <entity-donut-chart [chartlabel]="'Supply chain risk & quality'" [supplyChainChart]="supplyChainChart" [iconClass]="'fas fa-link text-c-red f-15 m-r-5'">
       </entity-donut-chart>
-    </div>
+    </div> -->
 
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+    <div class="col-lg-3 col-md-3 cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Components'}"
       (click)="initStackedChartAccordingToDonut('Components')">
       <span *ngIf="selectedComponentChartDropvalue == 'Vulnerabilities'">
@@ -145,7 +145,7 @@
 
     </div>
 
-    <div class="col-lg-3 col-md-3 entity-chart-blk cursor-pointer"
+    <div class="col-lg-3 col-md-3 cursor-pointer"
       [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Assets'}"
       (click)="initStackedChartAccordingToDonut('Assets')">
       <entity-donut-chart [chartlabel]="'Assets'" [chartId]="'assetChart'" [chartConfig]="assetDonutChart" [iconClass]="'fas fa-code text-c-red f-15 m-r-5'">
@@ -302,9 +302,9 @@
                               <th class="text-left"
                                 style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
                                 License Risk</th>
-                              <th class="text-left"
+                              <!-- <th class="text-left"
                                 style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
-                                Supply Chain Risk</th>
+                                Supply Chain Risk</th> -->
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
                                 width="15%">Asset Composition</th>
                               <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
@@ -349,12 +349,12 @@
                                 <span title="Permissive"
                                   class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.licenseMetrics?.permissive}}</span>
                               </td>
-                              <td style="padding: 0.75rem;">
+                              <!-- <td style="padding: 0.75rem;">
                                 <span title="Risk Score"
                                   class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.supplyChainMetrics.risk}}</span>
                                 <span title="Quality Score"
                                   class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.supplyChainMetrics.quality}}</span>
-                              </td>
+                              </td> -->
                               <td style="padding: 0.75rem;">
                                 <span title="Open Source"
                                   class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
