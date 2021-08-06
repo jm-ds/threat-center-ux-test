@@ -31,12 +31,12 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/ngx-toastr/toastr.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-pro/css/all.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/crypto-js/crypto-js.js",
-              "node_modules/@fortawesome/fontawesome-pro/js/all.min.js"
+              "node_modules/crypto-js/crypto-js.js"
             ]
           },
           "configurations": {
