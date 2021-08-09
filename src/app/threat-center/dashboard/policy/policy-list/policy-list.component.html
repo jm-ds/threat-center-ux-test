@@ -2,26 +2,33 @@
 
 <app-messages [messages]="messages"></app-messages>
 
+<div class="row mb-1">
+  <div class="col-sm-6">
+    <div class="text-left">
+      <a routerLink="/dashboard/policy/create/{{entityId}}/{{projectId}}" class="btn btn-outline-info">Add Policy</a>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div style="width: fit-content;" class="float-right form-filter">
+      <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+      <input type="text" class="form-control" pInputText size="50" placeholder="Policy filter"
+        (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+    </div>
+    <div class="custom-control custom-checkbox form-check d-inline-block mr-4 float-right pt-2">
+      <input type="checkbox" class="custom-control-input" ([ngModel])="onlyActive" (change)="onlyActiveChange()"
+        id="onlyActive" checked>
+      <label class="custom-control-label" for="onlyActive">Only active</label>
+    </div>
+  </div>
+</div>
+
 <!--<perfect-scrollbar [style.max-height]="'500px'">-->
+  <div *ngIf="!!policies && policies.length >= 1">
     <p-treeTable #dt [value]="policies" [paginator]="false" class="table table-hover m-b-0"
              tableStyleClass="table table-bordered table-hover no-footer row-border table-row-link wp-100"
              selectionMode="single" [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['node.name', 'node.title']">
 
-      <ng-template pTemplate="caption">
-        <div class="mb-1">
-            <div style="width: fit-content;" class="float-right form-filter">
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" class="form-control" pInputText size="50" placeholder="Policy filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
-            </div>
-            <div class="custom-control custom-checkbox form-check d-inline-block mr-4 float-right pt-2">
-                <input type="checkbox" class="custom-control-input" ([ngModel])="onlyActive" (change)="onlyActiveChange()" id="onlyActive" checked>
-                <label class="custom-control-label" for="onlyActive">Only active</label>
-              </div>
-            <div class="text-left">
-                <a routerLink="/dashboard/policy/create/{{entityId}}/{{projectId}}" class="btn btn-outline-info">Add Policy</a>
-            </div>
-        </div>
-      </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th>Name</th>
@@ -49,4 +56,9 @@
         </tr>
       </ng-template>
     </p-treeTable>
+  </div>
+
+  <div *ngIf="!policies || policies.length == 0" class="no-policy-text mt-5">
+    No policies created yet.
+  </div>
 <!--</perfect-scrollbar>-->
