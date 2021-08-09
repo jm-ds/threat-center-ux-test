@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import { SaveFilterStateService } from '@app/core/services/save-filter-state.service';
 
 @Component({
   selector: 'app-scanassets',
@@ -19,7 +20,8 @@ import { UserPreferenceService } from '@app/core/services/user-preference.servic
     }`
   ]
 })
-export class ScanAssetsComponent implements OnInit {
+
+export class ScanAssetsComponent implements OnInit,OnDestroy {
 
   @Input() scanId;
   @Input() obsScan: Observable<Scan>;
@@ -41,9 +43,15 @@ export class ScanAssetsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
-    private userPreferenceService: UserPreferenceService) { }
+    private userPreferenceService: UserPreferenceService,
+    private saveFilterStateService:SaveFilterStateService) { }
+
+  ngOnDestroy(): void {
+    this.saveFilterStateService.saveFilter(this.columnsFilter);
+  }
 
   ngOnInit() {
+    this.columnsFilter = this.saveFilterStateService.getFilter();
     this.story = [];
     this.isAssetStory.emit(false);
     console.log("scanId:", this.scanId);
@@ -54,13 +62,13 @@ export class ScanAssetsComponent implements OnInit {
 
   //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
   checkScanDataExists() {
-    if (!this.obsScan) {
+    // if (!this.obsScan) {
       this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
-    } else {
-      this.initData();
-    }
+    // } else {
+    //   this.initData();
+    // }
   }
 
   sort(scanAssets: any) {
@@ -190,6 +198,10 @@ export class ScanAssetsComponent implements OnInit {
     } else {
       return name;
     }
+  }
+
+  getSummationOfEmbeded(array:any[]){
+    return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
   }
 
   private makeFilterMapForService() {

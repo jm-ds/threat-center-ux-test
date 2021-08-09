@@ -129,13 +129,13 @@ export class PolicyEditComponent implements OnInit {
     savePolicy() {
         this.saveDisabled = true;
 
+        this.prepareConditionsBeforeSave(this.policy.conditions);
         let messages: Message[] = this.validatePolicy();
         if (messages.length>0) {
             this.messages = messages;
             this.saveDisabled = false;
             return;
         }
-        this.prepareConditionsBeforeSave(this.policy.conditions);
         this.policyService.savePolicy(this.policy)
             .subscribe(data => {
                 const link = '/dashboard/policy/show/'+ data.data.createPolicy.policyId+
@@ -232,6 +232,24 @@ export class PolicyEditComponent implements OnInit {
             for (const condition of group.conditions) {
                 if (condition.conditionType==='RELEASE_STAGE') {
                     condition.arrayValue = undefined;
+                }
+                if (condition.conditionType === 'PROJECT_TAG') {
+
+                    if (!!condition.strInputValue) {
+                        let tags=condition.strInputValue.split(",").map(item=>item.trim()).filter(item=>item.length>0);
+                        if (!condition.strValue || condition.strValue.length === 0) {
+                            condition.strValue = tags.join(",");
+                        } else {
+                            let conditionTags = condition.strValue.split(",");
+                            tags.forEach(tag=>{
+                                if (conditionTags.indexOf(tag)===-1) {
+                                    conditionTags.push(tag);
+                                }
+                            });
+                            condition.strValue = conditionTags.join(",");
+                        }
+                        condition.strInputValue = "";
+                    }
                 }
             }
         }

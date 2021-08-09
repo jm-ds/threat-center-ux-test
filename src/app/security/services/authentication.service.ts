@@ -93,6 +93,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("ProjectBreadcum");
     sessionStorage.removeItem("UserPreference");
     sessionStorage.removeItem("REPO_SCAN");
+    sessionStorage.removeItem("AssetFilter");
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
     this.closeWebSocket();

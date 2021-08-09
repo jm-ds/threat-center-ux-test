@@ -1,16 +1,15 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
-import {NgxSpinnerService} from "ngx-spinner";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import { FixResult, Scan } from '@app/models';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import {Scan} from '@app/models';
+import {UserPreferenceService} from '@app/core/services/user-preference.service';
 
 @Component({
     selector: 'app-components',
@@ -21,7 +20,6 @@ export class ComponentsComponent implements OnInit {
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
-    fixResultObservable: Observable<FixResult[]>;
     newVersion: string;
 
     defaultPageSize = 25;
@@ -178,33 +176,4 @@ export class ComponentsComponent implements OnInit {
             this.componentDetails = component;
         });
     }
-
-    public releaseCols = ['Name', 'Version'];
-    public releases = [
-        { version: '2.12.1', date: 'Jan 09, 2021' },
-        { version: '2.12.0', date: 'Nov 29, 2020' },
-        { version: '2.12.0-rc2', date: 'Nov 15, 2020' },
-        { version: '2.12.0-rc1', date: 'Oct 12, 2020' },
-        { version: '2.11.4', date: 'Dec 12, 2020' },
-        { version: '2.11.3', date: 'Oct 02, 2020' },
-        { version: '2.11.2', date: 'Aug 02, 2020' },
-        { version: '2.11.1', date: 'Jun 25, 2020' },
-        { version: '2.11.0', date: 'Apr 26, 2020' },
-        { version: '2.11.0.rc1', date: 'Mar 24, 2020' },
-        { version: '2.10.5.1', date: 'Dec 02, 2020' },
-        { version: '2.10.5', date: 'Jul 21, 2020' },
-        { version: '2.10.4', date: 'May 03, 2020' },
-        { version: '2.10.3', date: 'Mar 03, 2020' },
-        { version: '2.10.2', date: 'Jan 05, 2020' },
-        { version: '2.10.1', date: 'Nov 09, 2019' },
-        { version: '2.10.0', date: 'Sep 26, 2019' },
-        { version: '2.10.0.pr3', date: 'Sep 17, 2019' },
-        { version: '2.10.0.pr2', date: 'Aug 31, 2019' },
-        { version: '2.10.0.pr1', date: 'Jul 19, 2019' },
-        { version: '2.9.10.8', date: 'Jan 06, 2021' },
-        { version: '2.9.10.7', date: 'Dec 02, 2020' },
-        { version: '2.9.10.6', date: 'Aug 25, 2020' },
-        { version: '2.9.10.5', date: 'Jun 22, 2020' },
-        { version: '2.9.10.4', date: 'Apr 11, 2020' },
-    ];
 }

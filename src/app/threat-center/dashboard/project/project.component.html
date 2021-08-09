@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <h3>
         <span style="font-size:15px"><a [routerLink]="['/dashboard/entity',project.entityId]">
-            <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> / </span> {{project.name}}
+            <i class="fas fa-level-up-alt" style="margin-right:5px"></i>Parent BU</a> / </span> {{project.name}}
       </h3>
     </div>
     <div class="col-6" style="text-align: right;">
@@ -320,9 +320,10 @@
           </button>
         </mat-chip>
         <input placeholder="Project Tags..." class = "next-dark form-control place-holder"
-               [matChipInputFor]="tagList"
-               (matChipInputTokenEnd)="addProjectTag(project, $event)">
+               [matChipInputFor]="tagList" [(ngModel)]="projectTagInputValue"
+               (matChipInputTokenEnd)="addProjectTagHandler(project, $event)">
       </mat-chip-list>
+      <div class="hint-block">hit "enter" to add tag then "Save Project Tags" to save your changes</div>
 
     </div>
     <div class="modal-footer">
