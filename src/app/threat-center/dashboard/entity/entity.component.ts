@@ -337,6 +337,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     console.log(entityId);
     console.log("Loading Entity ");
     let isPush = true;
+    // todo: ref: EntityBreadCums - Really? Do we really need to know that Entity Bread have a pleasure time?
     if (!!sessionStorage.getItem('EntityBreadCums')) {
       isPush = false;
       this.entityPageBreadCums = JSON.parse(sessionStorage.getItem('EntityBreadCums'));

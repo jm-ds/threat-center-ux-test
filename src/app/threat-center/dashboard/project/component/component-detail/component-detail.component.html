@@ -1,4 +1,4 @@
-  <div *ngIf='obsComponent | async as component;'>
+  <div *ngIf='obsScanComponent | async as scanComponent;'>
 
     <div class="row" style="margin-bottom:20px">
       <div class="col-md-12" *ngIf="!!breadcumDetail">
@@ -83,7 +83,7 @@
             <ng-template ngbTabContent>
 
               <div style="display: flex;">
-                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of component.licenses.edges">
+                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
                   <div class="card-body" (click)="gotoOtherDetailsPage(license.node.licenseId,'license')">
                     <h6 class="card-title">{{license.node.name}}</h6>
                       <div class="card p-2 m-3">
@@ -115,6 +115,18 @@
                             <label for="publicationYear" class="col-sm-12 col-form-label">Publication Year</label>
                             <div class="col-xl-12">
                               <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.node.publicationYear}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="publicationYear" class="col-sm-12 col-form-label">License discovery</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="licenseDiscovery" readonly placeholder="{{messages.license.discovery[license.node.licenseDiscovery]}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="publicationYear" class="col-sm-12 col-form-label">License origin</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="licenseOrigin" readonly placeholder="{{messages.license.origin[license.node.licenseOrigin]}}">
                             </div>
                           </div>
 
