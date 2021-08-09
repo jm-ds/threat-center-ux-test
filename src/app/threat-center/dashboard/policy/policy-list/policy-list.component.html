@@ -10,11 +10,11 @@
   </div>
 
   <div class="col-sm-6">
-    <div style="width: fit-content;" class="float-right form-filter">
+    <!-- <div style="width: fit-content;" class="float-right form-filter">
       <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
       <input type="text" class="form-control" pInputText size="50" placeholder="Policy filter"
         (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
-    </div>
+    </div> -->
     <div class="custom-control custom-checkbox form-check d-inline-block mr-4 float-right pt-2">
       <input type="checkbox" class="custom-control-input" ([ngModel])="onlyActive" (change)="onlyActiveChange()"
         id="onlyActive" checked>
