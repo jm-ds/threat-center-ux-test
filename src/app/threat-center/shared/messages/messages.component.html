@@ -1,1 +1,1 @@
-<app-alert type="{{message.alertClass}}" *ngFor="let message of messages">{{message.message}}</app-alert>
+<app-alert type="{{message.alertClass}}" [dismiss]="isDismiss" *ngFor="let message of messages">{{message.message}}</app-alert>
