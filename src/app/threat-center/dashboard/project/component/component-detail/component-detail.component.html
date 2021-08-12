@@ -26,53 +26,56 @@
           <!-- VULNERABILITIES TAB -->
           <ngb-tab title="Vulnerabilities" id="vulnerabilities">
             <ng-template ngbTabContent>
-                <app-card cardClass="mb-0" [hidHeader]="true" blockClass="d-flex align-items-center justify-content-between">
+                <app-card cardClass="mb-0" [hidHeader]="true" blockClass="align-items-center justify-content-between">
                   <div class="row">
-                  <perfect-scrollbar [style.max-height]="'650px'">
-                    <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
-                            tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
-                            [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
-
-                      <ng-template pTemplate="caption">
-                        <!-- <div style="display: flex;text-align: left">
-                          <div style="flex: 50%;font-weight:bold">
-
-                          </div>
-                          <div style="flex: 50%;text-align: right">
-                            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                            <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
-                          </div>
-                        </div> -->
-                      </ng-template>
-                      <ng-template pTemplate="header" let-columns>
-                        <tr>
-                          <th *ngFor="let col of columns" >
-                            {{col}}
-                          </th>
-                        </tr>
-                      </ng-template>
-
-                      <ng-template pTemplate="body" let-vulnerability>
-                        <tr (click)="gotoOtherDetailsPage(vulnerability?.node.vulnerabilityId,'vulnerability')" class="cursor-pointer">
-                          <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.node.source}}</span> {{vulnerability?.node.vulnId}}</td>
-                          <td><span *ngIf="vulnerability?.node.cwe"> CWE-{{vulnerability?.node.cwe?.cweId}} : {{vulnerability?.node.cwe?.name}}</span></td>
-                          <td>{{vulnerability?.node.severity}}</td>
-                          <td>{{vulnerability?.node.cvssV2BaseScore}}</td>
-                          <td>{{vulnerability?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
-                        </tr>
-                      </ng-template>
-                    </p-table>
-                  </perfect-scrollbar>
+                    <perfect-scrollbar [style.max-height]="'650px'">
+                      <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
+                        tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                        [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
+                  
+                        <ng-template pTemplate="caption">
+                          <!-- <div style="display: flex;text-align: left">
+                                            <div style="flex: 50%;font-weight:bold">
+                  
+                                            </div>
+                                            <div style="flex: 50%;text-align: right">
+                                              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                                              <input type="text" class="form-control" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto;display:inline">
+                                            </div>
+                                          </div> -->
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                          <tr>
+                            <th *ngFor="let col of columns">
+                              {{col}}
+                            </th>
+                          </tr>
+                        </ng-template>
+                  
+                        <ng-template pTemplate="body" let-vulnerability>
+                          <tr (click)="gotoOtherDetailsPage(vulnerability?.node.vulnerabilityId,'vulnerability')" class="cursor-pointer">
+                            <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.node.source}}</span>
+                              {{vulnerability?.node.vulnId}}</td>
+                            <td><span *ngIf="vulnerability?.node.cwe"> CWE-{{vulnerability?.node.cwe?.cweId}} :
+                                {{vulnerability?.node.cwe?.name}}</span></td>
+                            <td>{{vulnerability?.node.severity}}</td>
+                            <td>{{vulnerability?.node.cvssV2BaseScore}}</td>
+                            <td>{{vulnerability?.node.cvssV3BaseScore | number : '1.1-1'}}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </perfect-scrollbar>
+                  
+                  
+                    <div class="col-sm-12" *ngIf="vulnerabilityDetails.edges.length >= 1">
+                      <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount"
+                        [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+                      </mat-paginator>
+                    </div>
+                  </div>
 
                   <div class="row text-center" *ngIf="vulnerabilityDetails.edges.length == 0" style="margin-top: 20px;">
                     <h5 class="col-12">{{component.name}} have no vulnerabilities yet.</h5>
-                  </div>
-
-                  <div class="col-sm-12" *ngIf="vulnerabilityDetails.edges.length >= 1">
-                    <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount" [pageSize]="defaultPageSize"
-                      [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
-                    </mat-paginator>
-                  </div>
                   </div>
                 </app-card>
             </ng-template>
