@@ -26,7 +26,7 @@ export class JiraCredentialsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.entitySettings) {
+    if (!this.entitySettings || !this.entitySettings.entityId) {
       this.entitySettings = new EntitySettings();
       this.entitySettings.entityId = this.entityId;
     }
