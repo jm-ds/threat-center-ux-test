@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Apollo} from "apollo-angular";
 import {CoreGraphQLService} from "@app/core/services/core-graphql.service";
-import {ComponentQuery} from "@app/models";
+import {ScanComponentQuery} from "@app/models";
 import gql from "graphql-tag";
 
 @Injectable({
@@ -17,7 +17,7 @@ export class ScanComponentService {
         const afterArg = (after) ? `, after: "${after}"` : '';
         const beforeArg = (before) ? `, before: "${before}"` : '';
 
-        return this.coreGraphQLService.coreGQLReq<ComponentQuery>(gql`
+        return this.coreGraphQLService.coreGQLReq<ScanComponentQuery>(gql`
         query {
             scanComponent(scanId: "${scanId}", componentId: "${componentId}") {
                 componentId

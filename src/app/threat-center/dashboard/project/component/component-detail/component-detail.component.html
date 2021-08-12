@@ -16,7 +16,7 @@
       <div class="col-md-6">
         <h3><span style="font-size:15px">{{component.group}}</span> | {{component.name}}</h3>
         Version: <span title="Info" class="badge m-r-5 badge-light-primary">{{component.version}}</span>
-        Released: <span title="Info" class="badge m-r-5 badge-light-primary">Oct 10, 2017</span>
+        Released: <span title="Info" class="badge m-r-5 badge-light-primary">{{scanComponent.releaseDate | date:'MMM dd, yyyy'}}</span>
       </div>
     </div>
     <div class="row">
