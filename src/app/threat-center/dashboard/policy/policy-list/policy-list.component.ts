@@ -12,7 +12,7 @@ import { type } from 'jquery';
 })
 export class PolicyListComponent implements OnInit {
 
-    policies: TreeNode[];
+    policies: TreeNode[] = [];
     messages: Messages;
     onlyActive: Boolean;
     entityId: string;
