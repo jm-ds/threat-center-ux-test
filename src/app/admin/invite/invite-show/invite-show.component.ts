@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Invite, InviteMailData, Message, Messages, } from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import { InviteService } from '@app/admin/services/invite.service';
+import { AlertService } from '@app/core/services/alert.service';
 
 @Component({
     selector: 'invite-view',
@@ -19,7 +20,8 @@ export class InviteShowComponent implements OnInit {
     constructor(
         protected router: Router,
         private route: ActivatedRoute,
-        private inviteService: InviteService
+        private inviteService: InviteService,
+        private alertService:AlertService
     ) {
         route.params.subscribe(val => {
             this.ngOnInit();
@@ -88,11 +90,11 @@ export class InviteShowComponent implements OnInit {
         this.inviteService.sendInviteMail(this.inviteMailData).subscribe(data => {
             const res = data.data.sendInviteMail;
             if (res) {
-                this.messages = [Message.success("Invitation mail sent.")];
+                this.alertService.alertBox('Invitation mail sent','Invite sending','success');
             }
         }, (error) => {
             console.error('Invite Mail', error);
-            this.messages = [Message.error("Unexpected error occurred while trying to send invite email.")];
+            this.alertService.alertBox('Unexpected error occurred while trying to send invite email','Invite sending','error');
         });
     }
 
