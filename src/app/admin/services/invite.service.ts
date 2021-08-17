@@ -1,35 +1,32 @@
-import { Injectable } from '@angular/core';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { AuthenticationService } from '@app/security/services';
+import {Injectable} from '@angular/core';
+import {CoreGraphQLService} from '@app/core/services/core-graphql.service';
+import {AuthenticationService} from '@app/security/services';
 import gql from 'graphql-tag';
 import {Apollo} from "apollo-angular";
-import { EMPTY, forkJoin, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import Swal from 'sweetalert2';
-import { isUndefined } from 'util';
-import { Invite, InviteMailData, InviteMailDataRequestInput, InviteQuery } from '@app/models';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { AlertService } from '@app/core/services/alert.service';
+import {InviteMailData, InviteMailDataRequestInput, InviteQuery, User, UserQuery} from '@app/models';
+import {CoreHelperService} from '@app/core/services/core-helper.service';
+import {AlertService} from '@app/core/services/alert.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 
 
 export class InviteService {
-  constructor(
-    private coreGraphQLService: CoreGraphQLService,
-    private authService: AuthenticationService,
-    private apollo: Apollo,
-    private coreHelperService:CoreHelperService,
-    private alertService:AlertService
-    ) {}
+    constructor(
+        private coreGraphQLService: CoreGraphQLService,
+        private authService: AuthenticationService,
+        private apollo: Apollo,
+        private coreHelperService: CoreHelperService,
+        private alertService: AlertService
+    ) {
+    }
 
 
-  // creates invite  
+  // creates invite
   createInvite(): any {
     if (!this.authService.currentUser || !this.authService.currentUser.orgId) {
-      this.alertService.alertBox('Organization not found!','Not Found','error');
+      this.alertService.alertBox('Organization not found!', 'Not Found', 'error');
       return undefined;
     } else {
       return this.apollo.mutate<InviteQuery>({
@@ -43,7 +40,7 @@ export class InviteService {
             }
         }`
       });
-    }    
+    }
   }
 
   // fetch invite
@@ -87,5 +84,55 @@ export class InviteService {
       }
     });
   }
+
+    getUserByInvite(inviteHash: string): any {
+        return this.apollo.watchQuery<UserQuery>({
+            query: gql(`query {
+        getUserByInvite(inviteHash: "${inviteHash}") {
+          orgId,
+          username,
+          email,
+          fname,
+          lname,
+          position,
+          phone,
+          created,
+        }
+      }`), fetchPolicy: 'no-cache'
+        }).valueChanges;
+    }
+
+    updateInvitedUser(user: User, inviteHash: string): any {
+        const userRequest = new InvitedUserRequestInput(user);
+
+        return this.apollo.mutate({
+            mutation: gql`mutation updateInvitedUser($user: InvitedUserRequestInput, $inviteHash: String) {
+                updateInvitedUser(user: $user, inviteHash: $inviteHash)
+            }`, variables: {user: userRequest, inviteHash: inviteHash}
+        });
+    }
+
+}
+
+export class InvitedUserRequestInput {
+    username: string;
+    password: string;
+    fname: string;
+    lname: string;
+    email: string;
+    orgId: string;
+    phone: string;
+    position: string;
+
+    constructor(user: User) {
+        this.username = user.username;
+        this.password = user.password;
+        this.email = user.email;
+        this.phone = user.phone;
+        this.fname = user.fname;
+        this.lname = user.lname;
+        this.orgId = user.orgId;
+        this.position = user.position;
+    }
 
 }

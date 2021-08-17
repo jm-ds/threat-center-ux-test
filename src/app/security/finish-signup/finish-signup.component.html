@@ -1,0 +1,165 @@
+<div class="row entry-page">
+    <div class="col-6 col-lg-6 col-xl-8 graph-background-col">
+        <div class="graph-background"></div>
+        <div class="threatrix-title">
+            <div><img class="logo" src="/assets/images/website_logo_white-letters-transparent_background-large.png">
+            </div>
+            <div class="app-title">ThreatCenter</div>
+            <div class="app-tagline">Advanced Threat Intelligence</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-6 col-xl-4 white-col">
+        <div *ngIf="dataLoading">
+            Loading...
+            <div>
+                <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
+            </div>
+        </div>
+        <div *ngIf="!dataLoading">
+
+            <!-- OAuth login -->
+            <div class="caption-blue-underline mt-50">
+                Create account with OAuth Authentication
+                <a href="javascript:" [placement]="'auto'" [popoverTitle]="'OAuth Authentication'"
+                   ngbPopover="Login or sign up with your GitHub, GitLab, BitBucket or Google account.">
+                    <i class="far fa-question-circle"></i>
+                </a>
+            </div>
+            <div>
+                <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
+            </div>
+            <div id="auth01" class="row" style="margin-bottom:20px">
+                <div class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('github_login')" class="cursor-pointer">
+                        <div class="auth-button"><i class="fab fa-github"></i></div>
+                    </a>
+                </div>
+                <div title="Gitlab disabled during Beta" class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('gitlab_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-gitlab"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div id="auth02" class="row mb-0">
+                <div title="Bitbucket disabled during Beta" class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('bitbucket_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
+                    </a>
+                </div>
+                <div title="Google disabled during Beta" class="col-xl-6">
+                    <a (click)="redirectToExternalLogin('google_login')" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
+
+            <div>
+                {{errorMessage}}
+            </div>
+
+            <div class="caption-blue-underline mt-50">
+                Create standard account
+            </div>
+
+
+            <form name="form" class="auth-form" (ngSubmit)="f.form.valid && finishCreateAccount()" #f="ngForm" novalidate>
+                <!-- Email -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                    <div class="input-group">
+                        <input class="form-control disabled" name="email" [(ngModel)]="user.email" #email="ngModel"
+                               placeholder="Email *" [email]="true" readonly >
+
+                    </div>
+                    <div class="text-danger" *ngIf="f.submitted && !email.valid">Valid email is required</div>
+                </div>
+
+                <!-- Full name -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fullName.valid }">
+                    <div class="input-group">
+                        <input class="form-control" name="fullName" [(ngModel)]="user.fname+' '+user.lname" #fullName="ngModel"
+                               required placeholder="Full name *">
+                        <div class="input-group-append">
+                            <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
+                                                                                            aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="text-danger" *ngIf="f.submitted && !fullName.valid">Full name is required</div>
+                </div>
+
+                <!-- Position -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !position.valid }">
+                    <div class="input-group">
+                        <input class="form-control" name="position" [(ngModel)]="user.position" #position="ngModel"
+                               required placeholder="Position *">
+                        <div class="input-group-append">
+                            <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
+                                                                                            aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="text-danger" *ngIf="f.submitted && !position.valid">Position is required</div>
+                </div>
+
+                <!-- Phone number -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
+                    <div class="input-group">
+                        <input class="form-control" name="phone" [(ngModel)]="user.phone" #phone="ngModel" required
+                               placeholder="Phone number *">
+                        <div class="input-group-append">
+                            <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
+                                                                                            aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="text-danger" *ngIf="f.submitted && !phone.valid">Phone number is required</div>
+                </div>
+
+                <!--
+                    Password:
+                        At least 8 characters in length
+                        Lowercase letters
+                        Uppercase letters
+                        Numbers
+                        Special characters
+
+                        [pattern]="'(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}'"
+                -->
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" [(ngModel)]="user.password"
+                               #password="ngModel" required placeholder="Password *"
+                               [pattern]="'(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z0-9$@$!%*?&].{7,}'">
+                        <div class="input-group-append">
+                            <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
+                                                                                            aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <!--<div class="text-danger" *ngIf="f.submitted && !password.valid">Password is required</div>-->
+                    <div class="text-danger" *ngIf="f.submitted && password.errors && password.errors.required">Password
+                        is required
+                    </div>
+                    <div class="text-danger" *ngIf="f.submitted && password.errors && password.errors.pattern">
+                        Password have to meet the following requirements:
+                        <ul>
+                            <li>At least 8 characters in length <br>(one of following: @$!%*?&)</li>
+                            <li>Contains Lowercase letters</li>
+                            <li>Contains Uppercase letters</li>
+                            <li>Contains Numbers</li>
+                            <li>Contains Special characters</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- submit -->
+                <button [disabled]="updateAccountLoading" class="btn btn-primary btn-block">Update</button>
+
+                <div class="hint-block">By clicking "Sign up" button you agree to our <a href="#">Terms of Service</a>
+                </div>
+
+                <div class="text-center mt-3"><a href="javascript:" (click)="this.router.navigate(['/login'])">Back to
+                    login page</a></div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
