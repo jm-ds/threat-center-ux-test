@@ -19,7 +19,7 @@ import { NextConfig } from '@app/app-config';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
-import {ClipboardDialogComponent} from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
+import { ClipboardDialogComponent } from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
 
 @Component({
   selector: 'project-dashboard',
@@ -29,8 +29,8 @@ import {ClipboardDialogComponent} from "@app/threat-center/dashboard/project/cli
 export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
-  vulLabelSeq =  ["CRITICAL","HIGH",  "MEDIUM", "LOW"];
-  isDisablePaggination:boolean = false;
+  vulLabelSeq = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
+  isDisablePaggination: boolean = false;
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -41,9 +41,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private scanHelperService: ScanHelperService,
     private router: Router,
     private modalService: NgbModal,
-    private userPreferenceService:UserPreferenceService,
-    private projectBreadcumsService:ProjectBreadcumsService,
-    private chartHelperService:ChartHelperService) {
+    private userPreferenceService: UserPreferenceService,
+    private projectBreadcumsService: ProjectBreadcumsService,
+    private chartHelperService: ChartHelperService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.scanHelperService.isHighlightNewScanObservable$
@@ -144,7 +144,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan");
   }
 
-  public getProjectScanData(idElement:string = '') {
+  public getProjectScanData(idElement: string = '') {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
@@ -170,18 +170,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectDetails = project;
       this.stateService.selectedScan = project.scans.edges[0];
       let categories = [];
-      if(!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1){
-        this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function(a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
+      if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
+        this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
       }
       //Initializa all chart data.....
       //Init Vul Chart
-      this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics',this.vulLabelSeq);
+      this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics', this.vulLabelSeq);
       //Init component chart
-      this.initCharts('componentChart', 'componentMetrics', 'vulnerabilityMetrics',this.vulLabelSeq);
+      this.initCharts('componentChart', 'componentMetrics', 'vulnerabilityMetrics', this.vulLabelSeq);
       //Init License chart
-      this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics',null);
+      this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics', null);
       //Init Asset chart
-      this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics',null);
+      this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics', null);
       const assetCountData = this.getAssetcountString();
       this.assetCount = assetCountData.orgText;
       this.assetCountTooltip = assetCountData.tooltipText;
@@ -221,20 +221,20 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   plotOptions;
 
-  legend ;
+  legend;
 
   dataLabels;
 
-  stroke ;
+  stroke;
 
-  xaxis ;
+  xaxis;
 
 
-  public vulnerabilityChart ;
+  public vulnerabilityChart;
 
   public licenseChart;
 
-  public componentChart ;
+  public componentChart;
 
   public assetChart;
 
@@ -653,7 +653,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //Initialize chart dynamically
-  private initCharts(chartVarName: string, propFirstPara: string, propSecondPara: string,proper = null) {
+  private initCharts(chartVarName: string, propFirstPara: string, propSecondPara: string, proper = null) {
     let properties = [];
     if (!!proper) {
       properties = proper;
@@ -664,13 +664,14 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     properties.forEach((key, index) => {
       this[chartVarName].series.push(
         {
-          data: this.projectMetrics.map(val => { 
-            const propData = val[propFirstPara]; 
+          data: this.projectMetrics.map(val => {
+            const propData = val[propFirstPara];
             const propSData = propData[propSecondPara];
-            return !!propSData[key] ? propSData[key] : 0; }),
+            return !!propSData[key] ? propSData[key] : 0;
+          }),
           name: _.upperFirst(_.camelCase(key)),
           hover: false,
-          colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) :  this.colorsClass[index]
+          colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) : this.colorsClass[index]
         }
       )
     });
@@ -713,17 +714,17 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   // remove project tag handler
   removeProjectTag(project: Project, tag: string) {
     if (!!project.tags) {
-        let ind = project.tags.indexOf(tag);
-        if (ind>-1) {
-            project.tags.splice(ind,1);
-        }
+      let ind = project.tags.indexOf(tag);
+      if (ind > -1) {
+        project.tags.splice(ind, 1);
+      }
     }
   }
 
   // add project tag handler
   addProjectTagHandler(project: Project, event: any) {
-      this.addProjectTag(project, event.value);
-      event.input.value="";
+    this.addProjectTag(project, event.value);
+    event.input.value = "";
   }
 
   // add project tag
@@ -731,31 +732,31 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!tag) {
       return;
     }
-    let tags=tag.split(",").map(item=>item.trim()).filter(item=>item.length>0);
+    let tags = tag.split(",").map(item => item.trim()).filter(item => item.length > 0);
     if (!project.tags || project.tags.length === 0) {
       project.tags = tags;
     } else {
-        tags.forEach(tag=>{
-          if (project.tags.indexOf(tag)===-1) {
-            project.tags.push(tag);
-          }
-        });
+      tags.forEach(tag => {
+        if (project.tags.indexOf(tag) === -1) {
+          project.tags.push(tag);
+        }
+      });
     }
   }
-  
+
   // save project tags
   setProjectTags(project: Project) {
     if (!!this.projectTagInputValue) {
       this.addProjectTag(project, this.projectTagInputValue);
       this.projectTagInputValue = "";
     }
-    project.tags = project.tags.filter(item=> item.trim().length>0);
-    this.projectDashboardService.setProjectTags(project.projectId, project.tags).subscribe(() => {}, (error) => {
+    project.tags = project.tags.filter(item => item.trim().length > 0);
+    this.projectDashboardService.setProjectTags(project.projectId, project.tags).subscribe(() => { }, (error) => {
       console.error('Error', error);
     });
   }
 
-  filterColumn(value: string,idElement:string = '') {
+  filterColumn(value: string, idElement: string = '') {
     if (value.length === 0) {
       this.filterBranchName = '';
     } else {
@@ -776,6 +777,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       navigator.clipboard.writeText(value).then(r => {
         const modalRef = this.modalService.open(ClipboardDialogComponent, {
           keyboard: false,
+          centered: true,
+          windowClass: 'clip-board-copy'
         });
         modalRef.componentInstance.message = message;
       });

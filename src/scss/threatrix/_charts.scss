@@ -662,3 +662,18 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     border-color: rgba(255,162,29,0.2);
     color: #ffa21d;
 }
+
+.clip-board-copy > div {
+    max-width: 300px !important;
+    
+}
+.clip-board-copy {
+    background: rgba(0,0,0,0.7);
+}
+.clip-board-copy .modal-body p {
+    opacity: 0.9;
+    font-size: 16px;
+}
+.clip-board-copy .modal-body {
+    text-align: center;
+}

@@ -49,7 +49,7 @@
 
         <div style="float: right; text-align: right" *ngIf="stateService.project_tabs_selectedTab === 'scan'">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" size="50" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
+            <input type="text" size="45" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
                    (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
                    [value]="getColumnFilterValue()"/>
         </div>
@@ -95,8 +95,8 @@
                       <th>Created</th>
                       <th>Vulnerabilities</th>
                       <th>Licenses</th>
-                      <th>Supply Chain</th>
-                      <th title="Asset Composition">ASSETS</th>
+                      <!-- <th>Supply Chain</th> -->
+                      <th title="Asset Composition">ASSETS COMPOSITION</th>
                       <th>Status</th>
                       <!--<th>Policy Violations</th>-->
                     </tr>
@@ -104,7 +104,7 @@
                   <ng-template pTemplate="body" let-scan let-columns="columns">
                     <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
                       [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
-                      <td (click)="copyToClipboard(scan.node?.scanId, 'ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
+                      <td (click)="copyToClipboard(scan.node?.scanId, 'Scan ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
                       <td (click)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">{{scan.node?.versionHash}}</td>
                       <td>{{scan.node?.branch}}</td>
                       <td>{{scan.node?.tag}}</td>
@@ -139,12 +139,12 @@
                         <span title="Permissive"
                           class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.licenseMetrics?.permissive}}</span>
                       </td>
-                      <td>
+                      <!-- <td>
                         <span title="supply-chain"
                           class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.risk}}</span>
                         <span title="Risky Licenses"
                           class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.quality}}</span>
-                      </td>
+                      </td> -->
                       <td>
                         <span title="Embedded"
                           class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.assetMetrics?.embedded}}</span>

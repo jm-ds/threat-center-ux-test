@@ -346,6 +346,7 @@ export class ScanAsset {
   matchRepository:Repository;
   matches:ScanAssetMatch[];
   embeddedAssets: EmbeddedAssetConnection;
+  embeddedAssetPercent:number;
 }
 
 export class EmbeddedAssetConnection {

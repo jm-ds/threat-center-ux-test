@@ -9,6 +9,7 @@ import {Messages} from "@app/models";
 export class MessagesComponent implements OnInit {
 
   @Input() messages: Messages;
+  @Input() isDismiss: boolean = true;
 
   constructor() { }
 
