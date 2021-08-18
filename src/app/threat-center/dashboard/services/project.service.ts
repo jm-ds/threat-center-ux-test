@@ -277,6 +277,7 @@ export class ProjectDashboardService {
                       parentScanAssetId,
                       attributionStatus, 
                       matchType,
+                      percentEmbedded,
                       embeddedAssets {
                         edges {
                           node {
@@ -472,6 +473,7 @@ export class ProjectDashboardService {
                 originAssetId
                 workspacePath
                 status,
+                percentEmbedded,
                 embeddedAssets {
                   edges {
                     node {
