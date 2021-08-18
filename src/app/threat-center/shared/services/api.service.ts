@@ -911,7 +911,7 @@ export class ApiService {
                   parentScanAssetId,
                   attributionStatus, 
                   matchType,
-                  percentEmbedded,
+                  embeddedAssetPercent,
                   embeddedAssets {
                     edges {
                       node {
