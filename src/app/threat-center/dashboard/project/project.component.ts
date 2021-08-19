@@ -173,6 +173,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
         this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
       }
+      _.each(this.projectMetrics, data => {
+        this.xaxis.categories.push(this.getFormattedDate(new Date(data.measureDate)));
+      });
+
       //Initializa all chart data.....
       //Init Vul Chart
       this.initCharts('vulnerabilityChart', 'vulnerabilityMetrics', 'severityMetrics', this.vulLabelSeq);
@@ -185,9 +189,6 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       const assetCountData = this.getAssetcountString();
       this.assetCount = assetCountData.orgText;
       this.assetCountTooltip = assetCountData.tooltipText;
-      _.each(this.projectMetrics, data => {
-        this.xaxis.categories.push(data.measureDate);
-      });
     });
   }
 
@@ -288,7 +289,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.xaxis = {
       categories: [],
       labels: {
-        show: false,
+        show: true,
         rotate: -45,
       },
     };
@@ -675,6 +676,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       )
     });
+    this[chartVarName].xaxis = this.xaxis;
   }
 
   private initProjectBradcum(project) {
@@ -689,6 +691,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.projectBreadcumsService.settingProjectBreadcum("Project", project.name, project.projectId, false);
     }
+  }
+
+  private getFormattedDate(date) {
+    var year = date.getFullYear();
+  
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+  
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+    
+    return month + '/' + day + '/' + year;
   }
 
   //Below method will fire when click on browser back button.
