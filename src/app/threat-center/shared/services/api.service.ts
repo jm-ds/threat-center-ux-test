@@ -1142,7 +1142,7 @@ export class ApiService {
             }
           }
         }
-      `);
+      `,'no-cache');
   }
 
   // Request gitlab repos data from backend
