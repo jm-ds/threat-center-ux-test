@@ -1,12 +1,6 @@
 <app-card [hidHeader]="true" cardClass="tab-card">
 
-  <div style="float: right; text-align: right">
-    <button class="btn btn-primary" ngbtooltip="Refresh"
-      type="button" (click)="refreshData()"><i style="color:greenyellow" class="far fa-sync-alt">
-      </i> Refresh
-    </button>
-  </div>
-
+  
   <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
     <!-- Github -->
     <ngb-tab id="Github">
@@ -235,7 +229,13 @@
   <ng-template ngbTabContent #headertem>
     <div class="step-header active">
       <div class="step-header-stepnum active">1</div>
-      <div style="float:left;padding-top:3px">Select Repositories</div>
+      <div style="float:left;padding-top:3px">Select Repositories &nbsp;</div>
+      <div>
+        <button class="btn btn-primary btn-sm btn-custom-sm" ngbtooltip="Refresh"
+          type="button" (click)="refreshData()"><i style="color:greenyellow" class="far fa-sync-alt">
+          </i> Refresh
+        </button>
+      </div>
     </div>
   </ng-template>
 
