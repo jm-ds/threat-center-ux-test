@@ -82,117 +82,140 @@
     </div>
   </div>
 
-  <!--DONUT CHART DATA -->
-  <div class="row entity-chart-row"
-    *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
-    <div class="col-lg-3 col-md-3 cursor-pointer"
-      [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Vulnerability'}"
-      (click)="initStackedChartAccordingToDonut('Vulnerability')">
-      <entity-donut-chart [chartlabel]="'Vulnerabilities'" [chartId]="'vulnerabilityChart'"
-        [chartConfig]="vulnerabilityDonutChart" [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'">
-      </entity-donut-chart>
-    </div>
 
-    <div class="col-lg-3 col-md-3 cursor-pointer"
-      [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Licenses'}"
-      (click)="initStackedChartAccordingToDonut('Licenses')">
-      <span *ngIf="selectedlicenseChartDropValue == 'License Name'">
-        <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseChart'" [chartConfig]="licenseDonutChart"
-          (changeDropdownValue)="onChangeLicensedropdown($event)" (dropdownClick)="dropdownClick($event)" [nameSelection]="'License'" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"
-          [dropdownValues]="licenseChartDropValues" [selecteddropdownValue]="selectedlicenseChartDropValue">
+<div class="mt-10" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
+  <ngb-accordion #acc="ngbAccordion" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)" class="chart-panel">
+    <ngb-panel id="chart-panel">
+      <ng-template ngbPanelHeader let-opened="opened">
+        <div class="d-flex align-items-center justify-content-between">
+          <button ngbPanelToggle class="btn btn-link p-0">&nbsp;<i class="fas fa-chart-bar"></i>&nbsp; View Charts</button>
+        </div>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <!--DONUT CHART DATA -->
+        <div class="row entity-chart-row">
+          <div class="col-lg-3 col-md-3 cursor-pointer"
+            [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Vulnerability'}"
+            (click)="initStackedChartAccordingToDonut('Vulnerability')">
+            <entity-donut-chart [chartlabel]="'Vulnerabilities'" [chartId]="'vulnerabilityChart'"
+              [chartConfig]="vulnerabilityDonutChart" [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'">
+            </entity-donut-chart>
+          </div>
+
+          <div class="col-lg-3 col-md-3 cursor-pointer"
+            [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Licenses'}"
+            (click)="initStackedChartAccordingToDonut('Licenses')">
+            <span *ngIf="selectedlicenseChartDropValue == 'License Name'">
+              <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseChart'" [chartConfig]="licenseDonutChart"
+                (changeDropdownValue)="onChangeLicensedropdown($event)" (dropdownClick)="dropdownClick($event)"
+                [nameSelection]="'License'" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"
+                [dropdownValues]="licenseChartDropValues" [selecteddropdownValue]="selectedlicenseChartDropValue">
+              </entity-donut-chart>
+            </span>
+            <span *ngIf="selectedlicenseChartDropValue == 'License Category'">
+              <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseCat'"
+                [chartConfig]="licenseCategoryChart" (changeDropdownValue)="onChangeLicensedropdown($event)"
+                (dropdownClick)="dropdownClick($event)" [nameSelection]="'License'"
+                [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'" [dropdownValues]="licenseChartDropValues"
+                [selecteddropdownValue]="selectedlicenseChartDropValue">
+              </entity-donut-chart>
+            </span>
+          </div>
+
+          <!-- <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
+        [ngClass]="{'entity-chart-blk-active': selectedDonut === 'SupplyChain'}"
+        (click)="initStackedChartAccordingToDonut('SupplyChain')">
+        <entity-donut-chart [chartlabel]="'Supply chain risk & quality'" [supplyChainChart]="supplyChainChart" [iconClass]="'fas fa-link text-c-red f-15 m-r-5'">
         </entity-donut-chart>
-      </span>
-      <span *ngIf="selectedlicenseChartDropValue == 'License Category'">
-        <entity-donut-chart [chartlabel]="'Licenses'" [chartId]="'licenseCat'" [chartConfig]="licenseCategoryChart"
-          (changeDropdownValue)="onChangeLicensedropdown($event)" (dropdownClick)="dropdownClick($event)" [nameSelection]="'License'" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"
-          [dropdownValues]="licenseChartDropValues" [selecteddropdownValue]="selectedlicenseChartDropValue">
-        </entity-donut-chart>
-      </span>
-    </div>
-
-    <!-- <div class="col-lg-3 col-md-3 entity-chart-blk supply-chart cursor-pointer"
-      [ngClass]="{'entity-chart-blk-active': selectedDonut === 'SupplyChain'}"
-      (click)="initStackedChartAccordingToDonut('SupplyChain')">
-      <entity-donut-chart [chartlabel]="'Supply chain risk & quality'" [supplyChainChart]="supplyChainChart" [iconClass]="'fas fa-link text-c-red f-15 m-r-5'">
-      </entity-donut-chart>
-    </div> -->
+      </div> -->
 
 
-    <div class="col-lg-3 col-md-3 cursor-pointer"
-      [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Components'}"
-      (click)="initStackedChartAccordingToDonut('Components')">
-      <span *ngIf="selectedComponentChartDropvalue == 'Vulnerabilities'">
-        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentChart'"
-          [chartConfig]="componentVulnerabilityRiskChart" (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
-          [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
-          [selecteddropdownValue]="selectedComponentChartDropvalue">
-        </entity-donut-chart>
-      </span>
-      <span *ngIf="selectedComponentChartDropvalue == 'License Category'">
-        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
-          [chartConfig]="componentLicenseCategory" (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
-          [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
-          [selecteddropdownValue]="selectedComponentChartDropvalue">
-        </entity-donut-chart>
-      </span>
-      <span *ngIf="selectedComponentChartDropvalue == 'License Name'">
-        <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
-          [chartConfig]="componentLicense" (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
-          [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
-          [selecteddropdownValue]="selectedComponentChartDropvalue">
-        </entity-donut-chart>
-      </span>
+          <div class="col-lg-3 col-md-3 cursor-pointer"
+            [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Components'}"
+            (click)="initStackedChartAccordingToDonut('Components')">
+            <span *ngIf="selectedComponentChartDropvalue == 'Vulnerabilities'">
+              <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentChart'"
+                [chartConfig]="componentVulnerabilityRiskChart"
+                (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
+                [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
+                [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"
+                [selecteddropdownValue]="selectedComponentChartDropvalue">
+              </entity-donut-chart>
+            </span>
+            <span *ngIf="selectedComponentChartDropvalue == 'License Category'">
+              <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'"
+                [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'" [chartConfig]="componentLicenseCategory"
+                (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
+                [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
+                [selecteddropdownValue]="selectedComponentChartDropvalue">
+              </entity-donut-chart>
+            </span>
+            <span *ngIf="selectedComponentChartDropvalue == 'License Name'">
+              <entity-donut-chart [chartlabel]="'Components'" [chartId]="'componentLicenseCategory'"
+                [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'" [chartConfig]="componentLicense"
+                (changeDropdownValue)="onChangeComponentdropdown($event)" (dropdownClick)="dropdownClick($event)"
+                [nameSelection]="'Component'" [dropdownValues]="componentChartDropValues"
+                [selecteddropdownValue]="selectedComponentChartDropvalue">
+              </entity-donut-chart>
+            </span>
 
-    </div>
+          </div>
 
-    <div class="col-lg-3 col-md-3 cursor-pointer"
-      [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Assets'}"
-      (click)="initStackedChartAccordingToDonut('Assets')">
-      <entity-donut-chart [chartlabel]="'Assets'" [chartId]="'assetChart'" [chartConfig]="assetDonutChart" [iconClass]="'fas fa-code text-c-red f-15 m-r-5'">
-      </entity-donut-chart>
-    </div>
-  </div>
+          <div class="col-lg-3 col-md-3 cursor-pointer"
+            [ngClass]="{'entity-chart-blk-active': selectedDonut === 'Assets'}"
+            (click)="initStackedChartAccordingToDonut('Assets')">
+            <entity-donut-chart [chartlabel]="'Assets'" [chartId]="'assetChart'" [chartConfig]="assetDonutChart"
+              [iconClass]="'fas fa-code text-c-red f-15 m-r-5'">
+            </entity-donut-chart>
+          </div>
+        </div>
 
 
-  <div class="row" *ngIf="entity.entityMetricsGroup && entity.entityMetricsGroup.entityMetrics.length >= 1">
-    <div class="col-12 entity-chart-tabbing">
-      <div class="card mb-3">
-        <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
-          (tabChange)="onStackedChartTabChange($event)">
-          <ngb-tab id="Week">
-            <ng-template ngbTabTitle>Week</ng-template>
-            <ng-template ngbTabContent>
-              <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
-                            seriesOverTime:weekSeriesOverTime,areaChartCommonOption:areaChartCommonOption}">
-              </ng-container>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab id="Month">
-            <ng-template ngbTabTitle>Month</ng-template>
-            <ng-template ngbTabContent>
-              <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
-                seriesOverTime:monthSeriesOverTime,areaChartCommonOption:areaChartCommonOption}">
-              </ng-container>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab id="Quarter">
-            <ng-template ngbTabTitle>Quarter</ng-template>
-            <ng-template ngbTabContent>
-              <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
-                seriesOverTime:quarterSeriesOverTime,areaChartCommonOption:areaChartCommonOption}"></ng-container>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab id="Year">
-            <ng-template ngbTabTitle>Year</ng-template>
-            <ng-template ngbTabContent>
-              <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
-                seriesOverTime:yearSeriesOverTime,areaChartCommonOption:areaChartCommonOption}"></ng-container>
-            </ng-template>
-          </ngb-tab>
-        </ngb-tabset>
-      </div>
-    </div>
-  </div>
+        <div class="row">
+          <div class="col-12 entity-chart-tabbing">
+            <div class="card mb-3">
+              <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify"
+                (tabChange)="onStackedChartTabChange($event)">
+                <ngb-tab id="Week">
+                  <ng-template ngbTabTitle>Week</ng-template>
+                  <ng-template ngbTabContent>
+                    <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
+                              seriesOverTime:weekSeriesOverTime,areaChartCommonOption:areaChartCommonOption}">
+                    </ng-container>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab id="Month">
+                  <ng-template ngbTabTitle>Month</ng-template>
+                  <ng-template ngbTabContent>
+                    <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
+                  seriesOverTime:monthSeriesOverTime,areaChartCommonOption:areaChartCommonOption}">
+                    </ng-container>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab id="Quarter">
+                  <ng-template ngbTabTitle>Quarter</ng-template>
+                  <ng-template ngbTabContent>
+                    <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
+                  seriesOverTime:quarterSeriesOverTime,areaChartCommonOption:areaChartCommonOption}"></ng-container>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab id="Year">
+                  <ng-template ngbTabTitle>Year</ng-template>
+                  <ng-template ngbTabContent>
+                    <ng-container *ngTemplateOutlet="timeSericeChart;context:{stackedChartCommonOptions:stackedChartCommonOptions,
+                  seriesOverTime:yearSeriesOverTime,areaChartCommonOption:areaChartCommonOption}"></ng-container>
+                  </ng-template>
+                </ngb-tab>
+              </ngb-tabset>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+
+
 
   <div class="row" *ngIf="entity?.childEntities?.edges.length > 0 || entity.entityMetricsGroup?.projectCount > 0">
     <div class="col-12">

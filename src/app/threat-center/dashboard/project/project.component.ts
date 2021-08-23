@@ -31,6 +31,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
   vulLabelSeq = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
   isDisablePaggination: boolean = false;
+  panelActiveId:string = '';
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -63,9 +64,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   }
+
   ngOnDestroy(): void {
     this.scanHelperService.updateIsHighlightNewScan(false);
     this.highlitedScanId = "";
+    this.userPreferenceService.settingUserPreference("Project", null, null, null, 
+    this.panelActiveId, null, null);
   }
 
   ngAfterViewInit(): void {
@@ -142,6 +146,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.getLastTabSelected();
     this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan");
+    this.initChartPreference();
+  }
+
+  toggleAccordian(event) {
+    this.panelActiveId = this.panelActiveId == event.panelId ? "" : event.panelId;
+  }
+
+  initChartPreference() {
+    const detail = this.userPreferenceService.getPanelDetailByModule("Project");
+    if (!!detail) {
+      this.panelActiveId = !!detail.panelActiveId ? detail.panelActiveId : this.panelActiveId;
+    }
   }
 
   public getProjectScanData(idElement: string = '') {

@@ -10,7 +10,7 @@ export class UserPreferenceService {
     constructor() { }
 
     // Set Preference details to session storage
-    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null) {
+    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null, panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -55,6 +55,19 @@ export class UserPreferenceService {
                             prefrence.itemPerPageDetails.push(itemPerPageD);
                         }
                     }
+
+                    if (panelActiveId !== null) {
+                        prefrence.panelActiveId = panelActiveId;
+                    }
+
+                    if (selectedDonutChart !== null) {
+                        prefrence.selectedDonutChart = selectedDonutChart;
+                    }
+
+                    if (selectedLinechartTab !== null) {
+                        prefrence.selectedLinechartTab = selectedLinechartTab;
+                    }
+
                 }
             });
         } else {
@@ -78,6 +91,20 @@ export class UserPreferenceService {
             const preferenceDetails = this.getPreferenceDetailsFromSession();
             if (!!preferenceDetails && preferenceDetails.length >= 1) {
                 return !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ? preferenceDetails.find(pre => { return pre.moduleName === moduleName }).lastTabSelectedName : null;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    //getting panel details for chart
+    getPanelDetailByModule(moduleName:string){
+        if (!!sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                return !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ? preferenceDetails.find(pre => { return pre.moduleName === moduleName }) : null;
             } else {
                 return null;
             }

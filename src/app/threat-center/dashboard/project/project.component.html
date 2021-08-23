@@ -23,24 +23,41 @@
     </div>
   </div>
 
-  <div class="row chart-block-p">
-    <div class="col-lg-3 col-md-3">
-      <project-chart [chartLabel]="'Vulnerabilities'" [chartArray]='vulnerabilityChart.series'
-        [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart" [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'"></project-chart>
-    </div>
-    <div class="col-lg-3 col-md-3">
-      <project-chart [chartLabel]="'Licenses'" [chartArray]='licenseChart.series' [chartId]="'projectLicenseChart'"
-        [chartconfig]="licenseChart" [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"></project-chart>
-    </div>
-
-    <div class="col-lg-3 col-md-3">
-      <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
-        [chartId]="'projectComponentChart'" [chartconfig]="componentChart" [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"></project-chart>
-    </div>
-    <div class="col-lg-3 col-md-3">
-      <project-chart [chartLabel]="'Asset Composition'" [chartArray]='assetChart.series' [chartId]="'projectAssetChart'"
-        [chartconfig]="assetChart" [iconClass]="'fas fa-code text-c-red f-15 m-r-5'"></project-chart>
-    </div>
+  <div class="mt-10">
+    <ngb-accordion #acc="ngbAccordion" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)" class="chart-panel">
+      <ngb-panel id="chart-panel">
+        <ng-template ngbPanelHeader let-opened="opened">
+          <div class="d-flex align-items-center justify-content-between">
+            <button ngbPanelToggle class="btn btn-link p-0">&nbsp;<i class="fas fa-chart-bar"></i>&nbsp; View Charts</button>
+          </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <div class="row chart-block-p">
+            <div class="col-lg-3 col-md-3">
+              <project-chart [chartLabel]="'Vulnerabilities'" [chartArray]='vulnerabilityChart.series'
+                [chartId]="'projectVulnerabilityChart'" [chartconfig]="vulnerabilityChart"
+                [iconClass]="'fas fa-exclamation-triangle text-c-red f-15 m-r-5'"></project-chart>
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <project-chart [chartLabel]="'Licenses'" [chartArray]='licenseChart.series'
+                [chartId]="'projectLicenseChart'" [chartconfig]="licenseChart"
+                [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"></project-chart>
+            </div>
+  
+            <div class="col-lg-3 col-md-3">
+              <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
+                [chartId]="'projectComponentChart'" [chartconfig]="componentChart"
+                [iconClass]="'fas fa-cubes text-c-red f-15 m-r-5'"></project-chart>
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <project-chart [chartLabel]="'Asset Composition'" [chartArray]='assetChart.series'
+                [chartId]="'projectAssetChart'" [chartconfig]="assetChart"
+                [iconClass]="'fas fa-code text-c-red f-15 m-r-5'"></project-chart>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
   </div>
 
   <div class="row">

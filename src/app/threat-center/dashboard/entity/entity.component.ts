@@ -109,6 +109,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // running scan task count subscription
   runningTaskCountSubscription: Subscription = undefined;
+  panelActiveId:string = '';
 
   constructor(
     private router: Router,
@@ -156,6 +157,15 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.supplyChainChart = this.chartHelperService.getSupplyChartConfig();
   }
 
+  initChartPreference() {
+    const detail = this.userPreferenceService.getPanelDetailByModule("Entity");
+    if (!!detail) {
+      this.panelActiveId = !!detail.panelActiveId ? detail.panelActiveId : this.panelActiveId;
+      this.selectedDonut = !!detail.selectedDonutChart ? detail.selectedDonutChart : this.selectedDonut;
+      this.lineChartActiveTab = !!detail.selectedLinechartTab ? detail.selectedLinechartTab : this.lineChartActiveTab;
+    }
+  }
+
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
@@ -172,6 +182,11 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       // unsubscribe subscription
       this.runningTaskCountSubscription.unsubscribe();
     }
+    this.userPreferenceService.settingUserPreference("Entity", null, null, null, this.panelActiveId, this.selectedDonut, this.lineChartActiveTab);
+  }
+
+  toggleAccordian(event) {
+    this.panelActiveId = this.panelActiveId == event.panelId ? "" : event.panelId;
   }
 
   //Initializing stacked chart according to donut chart selection
@@ -400,7 +415,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.currentEntityId = entityId;
     this.entityTreeModel = { data: [] };
     this.organizationTreeModel = [];
-    this.selectedDonut = 'Vulnerability';
     this.isTreeProgressBar = true;
     this.entityNewBreadCum = [];
     this.router.navigateByUrl('dashboard/entity/' + entityId);
@@ -647,6 +661,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.lineChartActiveTab = "Week";
     this.selectedComponentChartDropvalue = "Vulnerabilities";
     this.selectedlicenseChartDropValue = "License Name";
+
+    this.initChartPreference();
   }
 
   private getLastTabSelected() {
