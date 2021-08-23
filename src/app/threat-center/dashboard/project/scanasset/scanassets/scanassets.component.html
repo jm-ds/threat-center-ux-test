@@ -90,11 +90,11 @@
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value,'matchTypeSearch')">
                   <option value="ALL" selected>- All -</option>
-                  <option value="UNIQUE_PROPRIETARY">UNIQUE PROPRIETARY</option>
-                  <option value="PROPRIETARY">PROPRIETARY</option>
-                  <option value="EMBEDDED_OPEN_SOURCE">EMBEDDED OPEN SOURCE</option>
+                  <option value="UNIQUE_PROPRIETARY">PROPRIETARY</option>
+                  <option value="PROPRIETARY">PROPRIETARY/OPEN SOURCE</option>
+                  <option value="EMBEDDED_OPEN_SOURCE">OPEN SOURCE/PROPRIETARY</option>
                   <option value="OPEN_SOURCE">OPEN SOURCE</option>
-                  <option value="OPEN_COMPONENT">OPEN COMPONENT</option>
+                  <option value="OPEN_COMPONENT">OPEN SOURCE COMPONENT</option>
                 </select>
               </th>
             </tr>
@@ -119,7 +119,7 @@
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?scanAsset.node.matchType.replaceAll('_',' '):''}}</td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?matchTypeVal2Caption(scanAsset.node.matchType):''}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.assetType != 'DIR'" >
@@ -136,7 +136,7 @@
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?scanAsset.node.matchType.replaceAll('_',' '):''}}</td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?matchTypeVal2Caption(scanAsset.node.matchType):''}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
             </tr>
           </ng-template>

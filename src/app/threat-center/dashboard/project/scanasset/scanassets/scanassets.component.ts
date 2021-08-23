@@ -233,4 +233,16 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
     }
   }
 
+  // return match type caption by match type code
+  public matchTypeVal2Caption(val: string) {
+    switch(val) {
+      case 'UNIQUE_PROPRIETARY': return 'PROPRIETARY ';
+      case 'PROPRIETARY': return 'PROPRIETARY/OPEN SOURCE ';
+      case 'EMBEDDED_OPEN_SOURCE': return 'OPEN SOURCE/PROPRIETARY ';
+      case 'OPEN_SOURCE': return 'OPEN SOURCE ';
+      case 'OPEN_COMPONENT': return 'OPEN SOURCE COMPONENT ';
+      default: return 'STATIC REFERENCE ';
+    }
+  }
+
 }
