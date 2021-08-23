@@ -560,7 +560,9 @@ export class ApiService {
                     spdxId,
                     publicationYear,
                     isOsiApproved,
-                    isFsfLibre
+                    isFsfLibre,
+                    licenseDiscovery,
+                    licenseOrigin
                   }
                 }
               }
@@ -569,7 +571,9 @@ export class ApiService {
       `,'no-cache');
   }
 
+  // todo: ref: use optional params instead of initializing defaults to undefined
   getComponent(componentId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+    // todo: ref: eliminate code duplications
     const firstArg = (!!first) ? `first: ${first}` : '';
     const lastArg = (!!last) ? `last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';

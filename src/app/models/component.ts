@@ -24,3 +24,6 @@ export class Copyright {
 export interface ComponentQuery {
     component: TxComponent;
 }
+export interface ScanComponentQuery {
+    scanComponent: TxComponent;
+}

@@ -62,6 +62,15 @@
             </td>
             <td>{{license.node.style}}</td>
             <td>
+                <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                      class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+                <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                      class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+            </td>
+            <td>
+              {{messages.license.origin[license.node.licenseOrigin]}}
+            </td>
+            <td>
               <span *ngIf="license.node.isOsiApproved === true;else notApproved" class="badge m-r-5 badge-light-success">YES</span>
               <ng-template #notApproved><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
             </td>

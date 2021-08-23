@@ -10,9 +10,11 @@ import { CoreHelperService } from '@app/core/services/core-helper.service';
 
 import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
 import { LazyLoadEvent, Table } from "primeng";
-import { TxComponent } from '@app/models';
+import {TxComponent} from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import {ScanComponentService} from "@app/threat-center/dashboard/services/scan-component.service";
+import {Messages} from "@app/messages/messages";
 
 @Component({
   selector: 'component-detail',
@@ -22,6 +24,9 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 export class ComponentDetailComponent implements OnInit {
 
   obsComponent: Observable<TxComponent>;
+  component: TxComponent;
+  obsScanComponent: Observable<TxComponent>;
+  messages = Messages;
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
   releaseCols = ['Version', 'Release Date'];
@@ -57,6 +62,7 @@ export class ComponentDetailComponent implements OnInit {
   breadcumDetail: any = {};
   constructor(
     private apiService: ApiService,
+    private scanComponentService: ScanComponentService,
     private stateService: StateService,
     private route: ActivatedRoute,
     private router: Router,
@@ -72,14 +78,17 @@ export class ComponentDetailComponent implements OnInit {
     this.scanId = this.route.snapshot.paramMap.get('scanId');
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
     console.log("componentId:", componentId);
-    this.obsComponent = this.apiService.getComponent(componentId, Number(this.defaultPageSize))
-      .pipe(map(result => result.data.component));
+    /*this.obsComponent = this.apiService.getComponent(componentId, Number(this.defaultPageSize))
+      .pipe(map(result => result.data.component));*/
+    this.obsScanComponent = this.scanComponentService.getScanComponent(this.scanId, componentId, Number(this.defaultPageSize))
+      .pipe(map(result => result.data.scanComponent));
 
-    this.obsComponent.subscribe((res: any) => {
+    this.obsScanComponent.subscribe((res: any) => {
+      this.component = res["component"];
       if (!!this.projectBreadcumsService.getProjectBreadcum()) {
         this.projectBreadcumsService.settingProjectBreadcum("Component", res.name, res.componentId, false);
       }
-      this.vulnerabilityDetails = res["vulnerabilities"];
+      this.vulnerabilityDetails = res["component"]["vulnerabilities"];
     });
 
     this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {

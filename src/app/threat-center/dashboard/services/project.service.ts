@@ -251,7 +251,9 @@ export class ProjectDashboardService {
                       spdxId,
                       publicationYear,
                       isOsiApproved,
-                      isFsfLibre
+                      isFsfLibre,
+                      licenseDiscovery,
+                      licenseOrigin
                     }
                   }
                 }

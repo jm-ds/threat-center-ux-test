@@ -7,6 +7,7 @@ import { Scan } from '@app/models';
 import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {Messages} from "@app/messages/messages";
 
 @Component({
     selector: 'app-licenses',
@@ -18,7 +19,7 @@ export class LicensesComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
 
-    columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+    columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'Discovery', 'Origin', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -28,6 +29,10 @@ export class LicensesComponent implements OnInit {
     timeOut;
     timeOutDuration = 1000;
     isDisablePaggination:boolean = false;
+
+    messages = Messages;
+
+
     constructor(private apiService: ApiService,
         private router: Router,
         private route: ActivatedRoute,

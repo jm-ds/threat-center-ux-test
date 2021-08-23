@@ -22,5 +22,19 @@ export const Messages = {
         filter: {
             embedded_and_opensource: "Embedded and open source assets"
         }
+    },
+
+    license: {
+        discovery: {
+            DECLARED: "DECLARED",
+            DISCOVERED: "DISCOVERED"
+        },
+        origin: {
+            COMPONENT: "Component",
+            REPOSITORY: "Repository",
+            REPOSITORY_META: "Repository Meta Data",
+            REPOSITORY_LICENSE: "Repository License File",
+            ASSET: "Asset"
+        }
     }
 };
