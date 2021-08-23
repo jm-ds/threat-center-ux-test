@@ -18,7 +18,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     activePanelId: string = "Configuration";
     activeLink: string = "Threat Agent Configuration";
     activeIntegrationTabId: string = undefined;
-    public orgSettings: EntitySettings = new EntitySettings();
+    public orgSettings: EntitySettings;
 
     panelIntegration = [
         {
@@ -80,6 +80,20 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.orgService.getOrgSettings().subscribe(
+            data => {
+                this.orgSettings = data.data.orgSettings;
+                this.calcActivePanel();
+            },
+            error => {
+                this.orgSettings = undefined;
+                console.error("OrganizationSettingComponent", error);
+            }
+        );
+
+    }
+
+    calcActivePanel() {
         let panelId = this.route.snapshot.paramMap.get('activePanelId') || "integration";
         if (!!panelId) {
             this.activePanelId = panelId;
@@ -96,17 +110,6 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
             this.setActiveTab(panel.panelList, tab);
         }
         this.setActivePanel(this.activePanelId);
-
-
-        this.orgService.getOrgSettings().subscribe(
-            data => {
-                this.orgSettings = data.data.orgSettings;
-            },
-            error => {
-                this.orgSettings = undefined;
-                console.error("OrganizationSettingComponent", error);
-            }
-        );
     }
 
     beforeChange(event) {
