@@ -193,6 +193,18 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
             return attribute.attributeType == attributeType;
         });
     }
+    
+    refreshData() {
+        if (this.activeTab === "Github" && this.authService.currentUser.accessToken.startsWith("github-")) {
+            this.loadGitHubUser();
+        }
+        else if (this.activeTab === "Gitlab" && this.authService.currentUser.accessToken.startsWith("gitlab-")) {
+            this.loadGitLabUser();
+        }
+        else if (this.activeTab === "Bitbucket" && this.authService.currentUser.accessToken.startsWith("bitbucket-")) {
+            this.loadBitbucketUser();
+        } else { }
+    }
 
     ngOnInit() {
         this.entityId = this.route.snapshot.paramMap.get('entityId');
