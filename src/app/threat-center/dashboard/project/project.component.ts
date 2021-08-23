@@ -544,14 +544,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getAssetcountString() {
     if (!!this.assetChart && this.assetChart.series.length >= 1) {
-      let orgtext = "";
-      let tooltipText = "";
-      const data = this.getSequenceWiseAssets();
-      _.each(data, ser => {
-        orgtext += ser.data[0] + '/';
-        tooltipText += " " + ser.data[0] + ' ' + ser['name'] + ','
-      });
-      return { orgText: orgtext.slice(0, -1), tooltipText: tooltipText.slice(0, -1) };
+      return this.getSequenceWiseAssets();
     } else {
       return { orgText: '0', tooltipText: '' };
     }
@@ -559,20 +552,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //need to get assets sequence wise
   private getSequenceWiseAssets() {
-    const embededItem = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'embedded' });
-    const openSource = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'opensource' });
-    const unique = _.find(this.assetChart.series, ser => { return ser['name'].toLowerCase() === 'unique' });
-    const data = [];
-    if (!!embededItem) {
-      data.push(embededItem);
-    }
-    if (!!openSource) {
-      data.push(openSource);
-    }
-    if (!!unique) {
-      data.push(unique);
-    }
-    return data;
+  const metrics =  this.projectMetrics.sort(function (a, b) { return Number(new Date(b.measureDate)) - Number(new Date(a.measureDate)) });
+    const embededItem = !!metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] ? metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] : '0';
+    const openSource = !!metrics[0].assetMetrics.assetCompositionMetrics['OPENSOURCE'] ? metrics[0].assetMetrics.assetCompositionMetrics['OPENSOURCE'] : '0';
+    const unique = !!metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] ? metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] : '0';
+    return { orgText: embededItem + '/'+openSource+'/'+unique, tooltipText: embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique' }
   }
 
   //load all metrics data after selecting scan in table.
@@ -688,7 +672,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
           }),
           name: _.upperFirst(_.camelCase(key)),
           hover: false,
-          colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) : this.colorsClass[index]
+          colorClass: !!this.chartHelperService.getProjectPageColorCodeByLabel(key) ? this.chartHelperService.getProjectPageColorCodeByLabel(key) : this.colorsClass[index],
         }
       )
     });

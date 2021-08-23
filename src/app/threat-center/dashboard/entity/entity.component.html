@@ -344,13 +344,13 @@
                               </td>
                               <td style="padding: 0.75rem;">
                                 <span title="Critical"
-                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
+                                  class="badge m-r-5 badge-red">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
                                 <span title="High"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
+                                  class="badge m-r-5 badge-pink">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
                                 <span title="Medium"
-                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.medium}}</span>
+                                  class="badge m-r-5 badge-orange">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.medium}}</span>
                                 <span title="Low"
-                                  class="badge m-r-5 badge-light-info">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.low}}</span>
+                                  class="badge m-r-5 badge-yellow">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.low}}</span>
                                 <span title="Info"
                                   class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.info}}</span>
                               </td>
@@ -379,12 +379,12 @@
                                   class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.supplyChainMetrics.quality}}</span>
                               </td> -->
                               <td style="padding: 0.75rem;">
-                                <span title="Open Source"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
                                 <span title="Embedded"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.assetMetrics?.embedded}}</span>
+                                  class="badge m-r-5 badge-blue">{{rowData?.projectMetricsSummary?.assetMetrics?.embedded}}</span>
+                                <span title="Open Source"
+                                  class="badge m-r-5 badge-yellow">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
                                 <span title="Unique"
-                                  class="badge m-r-5 badge-light-success">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
+                                  class="badge m-r-5 badge-green">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
                               </td>
                               <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date
                                 :'M/d/y h:mmaa' | lowercase}}</td>

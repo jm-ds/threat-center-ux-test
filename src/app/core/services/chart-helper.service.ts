@@ -428,6 +428,18 @@ export class ChartHelperService {
             case 'low':
                 color = "yellow";
                 break;
+            case 'UNIQUE':
+            case 'unique':
+                color = "green";
+                break;
+            case 'OPENSOURCE':
+            case 'openSource':
+                color = "yellow";
+                break;
+            case 'EMBEDDED':
+            case 'embedded':
+                color = "blue";
+                break;
             default:
                 color = null
                 break;

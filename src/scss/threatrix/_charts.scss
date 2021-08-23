@@ -664,6 +664,18 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     color: #ffa21d;
 }
 
+.badge-green {
+    background: rgba(17, 193, 91,0.2) ;
+    border-color: rgba(17, 193, 91,0.2);
+    color: #11c15b;
+}
+
+.badge-blue {
+    background: rgba(0, 172, 193,0.2) ;
+    border-color: rgba(0, 172, 193,0.2);
+    color: #00acc1;
+}
+
 .clip-board-copy>div {
     max-width: 300px !important;
 
