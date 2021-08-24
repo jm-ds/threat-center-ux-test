@@ -44,6 +44,19 @@ export class CoreErrorHelperService {
                         this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: Messages.commonErrorHeaderText });
                     }
                     break;
+                case 400:
+                    console.log("REQUEST PAYLOAD", requestPayload);
+                    if (Array.isArray(errObj.error.errors)) {
+                        let msg = '';
+                        errObj.error.errors.forEach(function (element) {
+                            msg += "<br/>";
+                            msg += element.field + ' ' + element.defaultMessage+'.';
+                        });
+                        this.alertService.alertBoxHtml(msg,errObj.error.message,'error');
+                    } else {
+                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
+                    }
+                    break;
                 default:
                     //Rest Of all status code perform over here..
                     if (errObj.status === 502) {
