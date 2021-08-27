@@ -20,38 +20,38 @@
                 <app-alert type="danger" dismiss="true" *ngIf="messageError">{{messageError}}</app-alert>
             </div>
 
-            <form *ngIf="user.email == null || user.email == '' || user.organization == null || user.organization.name == null || user.coverLetter == null"
+            <form *ngIf="user?.email == null || user?.email == '' || user?.organization == null || user?.organization.name == null || user?.coverLetter == null"
                   name="form" class="auth-form mt-2" (ngSubmit)="f.form.valid && updateAccount()" #f="ngForm" novalidate>
 
                 <h6>Please provide missing info</h6>
 
                 <!-- org name -->
-                <div class="form-group" *ngIf="user.organization == null || user.organization.name == null || user.organization.name == '' || user.organization.name == user.organization.orgId"
+                <div class="form-group" *ngIf="user?.organization == null || user?.organization.name == null || user?.organization.name == '' || user?.organization.name == user?.organization.orgId"
                      [ngClass]="{ 'has-error': f.submitted && !orgName.valid }">
                     <input class="form-control" name="companyName" [(ngModel)]="model.orgName" #orgName="ngModel" required placeholder="Company name">
                     <div class="text-danger" *ngIf="f.submitted && !orgName.valid">Please provide the name of the the company you represent.</div>
                 </div>
 
                 <!-- position -->
-                <div class="form-group" *ngIf="user.position == null || user.position == ''" [ngClass]="{ 'has-error': f.submitted && !position.valid }">
+                <div class="form-group" *ngIf="user?.position == null || user?.position == ''" [ngClass]="{ 'has-error': f.submitted && !position.valid }">
                     <input class="form-control" name="position" [(ngModel)]="model.position" #position="ngModel" required placeholder="Position">
                     <div class="text-danger" *ngIf="f.submitted && !position.valid">Please tell us your position.</div>
                 </div>
 
                 <!-- email -->
-                <div class="form-group" *ngIf="user.email == null || user.email == ''" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                <div class="form-group" *ngIf="user?.email == null || user?.email == ''" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
                     <input class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" [email]="true" required placeholder="Email (to receive notifications)">
                     <div class="text-danger" *ngIf="f.submitted && !email.valid">Please provide valid email to receive account approval and other notifications.</div>
                 </div>
 
                 <!-- phone -->
-                <div class="form-group" *ngIf="user.phone == null || user.phone == ''" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
+                <div class="form-group" *ngIf="user?.phone == null || user?.phone == ''" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
                     <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required placeholder="Phone number">
                     <div class="text-danger" *ngIf="f.submitted && !phone.valid">Please provide phone number.</div>
                 </div>
 
                 <!-- cover letter -->
-                <div class="form-group" *ngIf="user.coverLetter == null || user.coverLetter == ''" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
+                <div class="form-group" *ngIf="user?.coverLetter == null || user?.coverLetter == ''" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
                     <textarea class="form-control" name="coverLetter" [(ngModel)]="model.coverLetter" #coverLetter="ngModel" rows="4"
                               placeholder="Please tell us a little bit about your interest in Threatrix."></textarea>
                     <div class="text-danger" *ngIf="f.submitted && !coverLetter.valid">Please tell us a little bit about your interest in Threatrix.</div>

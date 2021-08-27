@@ -75,6 +75,7 @@ export class AuthenticationService {
     const body = { email, fullName, phone, password, companyName, position, coverLetter };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
+        this.setInSessionStorageBasedEnv("currentUser",response);
         const user = response.user;
         return user;
       },
