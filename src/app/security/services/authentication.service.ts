@@ -8,6 +8,7 @@ import { User } from '../../models';
 import { environment } from '../../../environments/environment';
 import { LocalService } from '@app/core/services/local.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -16,7 +17,8 @@ export class AuthenticationService {
   private websocketClient = null;
 
   constructor(private http: HttpClient, private localService: LocalService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private cookieService: CookieService) {
     // let user = this.getFromStorageBasedEnv('currentUser');
     let user = this.getFromSessionStorageBasedEnv('currentUser');
     this.currentUserSubject = new BehaviorSubject<User>(user);
@@ -69,13 +71,14 @@ export class AuthenticationService {
         }));
   }
 
-  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string, position: string, coverLetter: string) {
+  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string, position: string, coverLetter: string, inviteHash: string) {
     // todo[5]: don't forget to that "this.host_url" to "environment.apiUrl" on merge
     const url = environment.apiUrl + '/account/create';
-    const body = { email, fullName, phone, password, companyName, position, coverLetter };
+    const body = { email, fullName, phone, password, companyName, position, coverLetter, inviteHash };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
         const user = response.user;
+        this.cookieService.delete('invite')
         return user;
       },
         (err) => {
