@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-create-account',
@@ -22,7 +23,8 @@ export class CreateAccountComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         public router: Router,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private cookieService: CookieService
     ) {
         this.apiUrl = environment.apiUrl;
     }
@@ -44,6 +46,7 @@ export class CreateAccountComponent implements OnInit {
             this.model.companyName,
             this.model.position,
             this.model.coverLetter,
+            this.cookieService.get("invite")
         )
             .pipe(first())
             .subscribe(
