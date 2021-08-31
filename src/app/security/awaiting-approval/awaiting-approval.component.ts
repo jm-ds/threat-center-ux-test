@@ -34,13 +34,15 @@ export class AwaitingApprovalComponent implements OnInit {
 
     ngOnInit() {
         this.user = this.authenticationService.currentUser;
-        this.model = {
-            email: this.user.email,
-            orgName: this.user.organization != null && this.user.organization.name != this.user.organization.orgId ? this.user.organization.name : null,
-            coverLetter: this.user.coverLetter,
-            phone: this.user.phone,
-            position: this.user.position
-        };
+        if(!!this.user){
+            this.model = {
+                email: this.user.email,
+                orgName: this.user.organization != null && this.user.organization.name != this.user.organization.orgId ? this.user.organization.name : null,
+                coverLetter: this.user.coverLetter,
+                phone: this.user.phone,
+                position: this.user.position
+            };
+        }
     }
 
     updateAccount() {

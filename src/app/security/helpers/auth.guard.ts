@@ -73,6 +73,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if ('invite' in route.queryParams) {
             const invite = route.queryParams['invite'];
             this.setInviteCookie(invite);
+            this.router.navigate(['/create-account'], { queryParams: { returnUrl: state.url } });
+            return false
         }
         // not logged in so redirect to login page with the return url
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
