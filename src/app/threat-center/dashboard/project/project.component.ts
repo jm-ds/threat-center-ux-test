@@ -31,7 +31,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
   vulLabelSeq = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
   isDisablePaggination: boolean = false;
-  panelActiveId:string = '';
+  panelActiveId:string = 'chart-panel';
   constructor(
     private apiService: ApiService,
     private stateService: StateService,
@@ -156,7 +156,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   initChartPreference() {
     const detail = this.userPreferenceService.getPanelDetailByModule("Project");
     if (!!detail) {
-      this.panelActiveId = !!detail.panelActiveId ? detail.panelActiveId : this.panelActiveId;
+      this.panelActiveId = detail.panelActiveId !== null && detail.panelActiveId !== undefined ? detail.panelActiveId : this.panelActiveId;
     }
   }
 
