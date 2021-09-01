@@ -109,7 +109,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // running scan task count subscription
   runningTaskCountSubscription: Subscription = undefined;
-  panelActiveId:string = '';
+  panelActiveId:string = 'chart-panel';
 
   constructor(
     private router: Router,
@@ -160,7 +160,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   initChartPreference() {
     const detail = this.userPreferenceService.getPanelDetailByModule("Entity");
     if (!!detail) {
-      this.panelActiveId = !!detail.panelActiveId ? detail.panelActiveId : this.panelActiveId;
+      this.panelActiveId = detail.panelActiveId !== null && detail.panelActiveId !== undefined ? detail.panelActiveId : this.panelActiveId;
       this.selectedDonut = !!detail.selectedDonutChart ? detail.selectedDonutChart : this.selectedDonut;
       this.lineChartActiveTab = !!detail.selectedLinechartTab ? detail.selectedLinechartTab : this.lineChartActiveTab;
     }
