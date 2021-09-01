@@ -230,9 +230,16 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stateService.selectedScan = $event.data;
     console.log(this.stateService.selectedScan);
   }
-
+  
   onRowSelect($event) {
     this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
+    if (!!$event.data && !!$event.data.node.scanMetricsSummary && !!$event.data.node.scanMetricsSummary.assetMetrics) {
+      const embededItem = !!$event.data.node.scanMetricsSummary.assetMetrics["embedded"] ? $event.data.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
+      const openSource = !!$event.data.node.scanMetricsSummary.assetMetrics["openSource"] ? $event.data.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
+      const unique = !!$event.data.node.scanMetricsSummary.assetMetrics["unique"] ? $event.data.node.scanMetricsSummary.assetMetrics["unique"] : '0';
+      this.assetCount = embededItem + '/' + openSource + '/' + unique;
+      this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+    } else { }
   }
 
   chart;
