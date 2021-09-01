@@ -50,7 +50,7 @@ export class CoreErrorHelperService {
                         let msg = '';
                         errObj.error.errors.forEach(function (element) {
                             msg += "<br/>";
-                            msg += element.field + ' ' + element.defaultMessage+'.';
+                            msg += element.field.replace(/\b\w/g, l => l.toUpperCase()) + ' ' + element.defaultMessage+'.';
                         });
                         this.alertService.alertBoxHtml(msg,errObj.error.message,'error');
                     } else {
