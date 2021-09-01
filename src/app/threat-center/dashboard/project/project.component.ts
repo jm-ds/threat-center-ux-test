@@ -230,8 +230,16 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stateService.selectedScan = $event.data;
     console.log(this.stateService.selectedScan);
   }
+  
   onRowSelect($event) {
     this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
+    if (!!$event.data && !!$event.data.node.scanMetricsSummary && !!$event.data.node.scanMetricsSummary.assetMetrics) {
+      const embededItem = !!$event.data.node.scanMetricsSummary.assetMetrics["embedded"] ? $event.data.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
+      const openSource = !!$event.data.node.scanMetricsSummary.assetMetrics["openSource"] ? $event.data.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
+      const unique = !!$event.data.node.scanMetricsSummary.assetMetrics["unique"] ? $event.data.node.scanMetricsSummary.assetMetrics["unique"] : '0';
+      this.assetCount = embededItem + '/' + openSource + '/' + unique;
+      this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+    } else { }
   }
 
   chart;
@@ -460,7 +468,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       legend: this.legend,
       dataLabels: this.dataLabels,
       stroke: this.stroke,
-      colors: ['#11c15b', '#00acc1', '#ffa21d'],
+      colors: ['#00acc1', '#ffa21d','#11c15b'],
       series: [],
       xaxis: this.xaxis,
       noData: {
@@ -552,11 +560,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //need to get assets sequence wise
   private getSequenceWiseAssets() {
-  const metrics =  this.projectMetrics.sort(function (a, b) { return Number(new Date(b.measureDate)) - Number(new Date(a.measureDate)) });
+    const metrics = this.projectMetrics.sort(function (a, b) { return Number(new Date(b.measureDate)) - Number(new Date(a.measureDate)) });
     const embededItem = !!metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] ? metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] : '0';
-    const openSource = !!metrics[0].assetMetrics.assetCompositionMetrics['OPENSOURCE'] ? metrics[0].assetMetrics.assetCompositionMetrics['OPENSOURCE'] : '0';
+    const openSource = !!metrics[0].assetMetrics.assetCompositionMetrics['OPEN_SOURCE'] ? metrics[0].assetMetrics.assetCompositionMetrics['OPEN_SOURCE'] : '0';
     const unique = !!metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] ? metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] : '0';
-    return { orgText: embededItem + '/'+openSource+'/'+unique, tooltipText: embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique' }
+    return { orgText: embededItem + '/' + openSource + '/' + unique, tooltipText: embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique' }
   }
 
   //load all metrics data after selecting scan in table.
@@ -659,7 +667,11 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!proper) {
       properties = proper;
     } else {
-      properties = this.getProperties(propFirstPara, propSecondPara);
+      if(propFirstPara === 'assetMetrics'){
+        properties = ["EMBEDDED","OPEN_SOURCE","UNIQUE"];
+      }else{
+        properties = this.getProperties(propFirstPara, propSecondPara);
+      }
     }
     this[chartVarName].series = [];
     properties.forEach((key, index) => {

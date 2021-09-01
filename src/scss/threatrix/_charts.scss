@@ -132,6 +132,11 @@
                 background: rgb(70, 128, 255);
             }
 
+            &.light-blue::after {
+                background: rgb(0, 172, 193);
+            }
+
+
             &.pink::after {
                 background: #ff5252;
             }
