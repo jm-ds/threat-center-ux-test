@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
 import { NextConfig } from '@app/app-config';
+import { AlertService } from '@app/core/services/alert.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +14,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         private authenticationService: AuthenticationService,
         private authorizationService: AuthorizationService,
         private cookieService: CookieService,
-        private corehelperService: CoreHelperService
+        private corehelperService: CoreHelperService,
+        private alertService: AlertService
     ) {
     }
 
@@ -77,6 +79,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             return false
         }
         // not logged in so redirect to login page with the return url
+        this.alertService.alertBox("Authentication is required",'','warning');
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;
     }
