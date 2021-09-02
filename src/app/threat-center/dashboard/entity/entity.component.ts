@@ -192,7 +192,6 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   //Initializing stacked chart according to donut chart selection
   initStackedChartAccordingToDonut(value: string) {
     if (!this.isDropdownClick) {
-      console.log("indide");
       this.selectedDonut = value;
       // let properties = [];
       let activeTabVar: string = "";
