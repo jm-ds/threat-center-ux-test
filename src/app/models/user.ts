@@ -42,6 +42,8 @@ export class User {
     avatarUrl: string;
     // api keys
     apiKeys: ApiKeyConnection;
+
+    invitedByUsername: string;
 }
 
 export class OrganizationModel {

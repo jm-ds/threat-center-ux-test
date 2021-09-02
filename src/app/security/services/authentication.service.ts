@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
 import * as jwt_decode from 'jwt-decode';
-import { User } from '../../models';
+import { OrganizationData, User } from '../../models';
 import { environment } from '../../../environments/environment';
 import { LocalService } from '@app/core/services/local.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -77,8 +77,9 @@ export class AuthenticationService {
     const body = { email, fullName, phone, password, companyName, position, coverLetter, inviteHash };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
-        this.setInSessionStorageBasedEnv("currentUser",response);
+        this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
+        this.setInSessionStorageBasedEnv("currentUser",user);
         this.cookieService.delete('invite')
         return user;
       },
@@ -171,6 +172,12 @@ export class AuthenticationService {
       this.websocketClient.close(true);
       this.websocketClient = null;
     }
+ }
+
+ // fetch organization name for invite
+ loadOrgNameByInviteHash(inviteHash: string): Observable<OrganizationData> {
+   const url = environment.apiUrl + '/account/invite_org?inviteHash='+inviteHash;
+   return  this.http.get<OrganizationData>(url).pipe();
  }
 
 }

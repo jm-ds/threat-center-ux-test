@@ -20,7 +20,7 @@
                 <app-alert type="danger" dismiss="true" *ngIf="messageError">{{messageError}}</app-alert>
             </div>
 
-            <form *ngIf="user?.email == null || user?.email == '' || user?.organization == null || user?.organization.name == null || user?.coverLetter == null"
+            <form *ngIf="!user?.invitedByUsername && (user?.email == null || user?.email == '' || user?.organization == null || user?.organization.name == null || user?.coverLetter == null)"
                   name="form" class="auth-form mt-2" (ngSubmit)="f.form.valid && updateAccount()" #f="ngForm" novalidate>
 
                 <h6>Please provide missing info</h6>
@@ -62,7 +62,7 @@
             </form>
 
 
-            <div class="lead mt-5">If you have another (approved) account <a href="javascript:" (click)="logout()">login as another user</a></div>
+            <div class="lead mt-5">Once your account is approved, you may <a href="javascript:" (click)="logout()">login here</a> or <a href="javascript:" (click)="logout()">login as another user</a></div>
 
 
         </div>
