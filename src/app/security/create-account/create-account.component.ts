@@ -19,6 +19,7 @@ export class CreateAccountComponent implements OnInit {
     model: any = {};
     errorMessage: string;
     apiUrl: string;
+    inviteHash: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -34,6 +35,12 @@ export class CreateAccountComponent implements OnInit {
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.inviteHash = this.cookieService.get("invite");
+        if (!!this.inviteHash) {
+            this.authenticationService.loadOrgNameByInviteHash(this.inviteHash).subscribe(res => {
+                this.model.companyName = res.name;
+              });
+        }
     }
 
     createAccount() {
@@ -46,7 +53,7 @@ export class CreateAccountComponent implements OnInit {
             this.model.companyName,
             this.model.position,
             this.model.coverLetter,
-            this.cookieService.get("invite")
+            this.inviteHash
         )
             .pipe(first())
             .subscribe(

@@ -4,3 +4,9 @@
     text-decoration: underline;
     pointer-events: none;
 }
+
+.disabled-input {
+    color: #a4a4a4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
