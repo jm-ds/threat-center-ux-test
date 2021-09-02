@@ -148,20 +148,20 @@
               <ng-template pTemplate="header" let-columns>
                 <tr>
                   <th>Asset ID</th>
-                  <!--<th>Earliest Version/Date</th>
-                  <th>Latest Version/Date</th>-->
-                  <th>Release Version</th>
-                  <th>Release Date</th>
+                  <th>Earliest Version/Date</th>
+                  <th>Latest Version/Date</th>
+                  <!--<th>Release Version</th>
+                  <th>Release Date</th>-->
                 </tr>
               </ng-template>
 
               <ng-template pTemplate="body" let-release >
                 <tr>
-                  <td>{{release.node.assetMatchId | slice:32}}</td>
-                  <!--<td>{{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
-                  <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>-->
-                  <td>{{release.node.earliestReleaseVersion}}</td>
-                  <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                  <td>{{release.node.assetMatchId | slice:32}}</td><!--| slice:32-->
+                  <td>{{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                  <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>
+                  <!--<td>{{release.node.earliestReleaseVersion}}</td>
+                  <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>-->
                   <!--
                   <td style="border-left:1px solid gray">
                     license

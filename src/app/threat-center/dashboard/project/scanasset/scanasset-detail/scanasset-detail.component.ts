@@ -22,6 +22,7 @@ import { AlertService } from '@app/core/services/alert.service';
       cursor: pointer;
     }`
   ],
+  styleUrls: ['./scanasset-detail.component.scss']
 })
 export class ScanAssetDetailComponent implements OnInit {
 

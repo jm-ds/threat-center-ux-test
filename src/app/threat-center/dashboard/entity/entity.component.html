@@ -234,10 +234,10 @@
                       <ng-template pTemplate="header">
                         <tr>
                           <th class="lg-col">Name</th>
-                          <th class="text-left projects-col">Projects</th>
+                          <!--<th class="text-left projects-col">Projects</th>-->
                           <th class="text-left">Vulnerability Risk</th>
                           <th class="text-left">License Risk</th>
-                          <th class="text-left">Supply Chain Risk</th>
+                          <!--<th class="text-left">Supply Chain Risk</th>-->
                           <th class="text-left">Asset Composition</th>
                         </tr>
                       </ng-template>
@@ -251,7 +251,7 @@
                               {{rowData.name}}
                             </div>
                           </td>
-                          <td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>
+                          <!--<td class="text-left">{{rowData?.entityMetrics?.projectCount}}</td>-->
                           <td class="text-left">
                             <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <!-- <span>{{rowData?.entityMetrics?.vulnerabilityMetrics?.total}}</span> -->
@@ -270,6 +270,7 @@
                               </apx-chart>
                             </div>
                           </td>
+                          <!--
                           <td class="text-left">
                             <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
@@ -277,7 +278,7 @@
                                 [series]="rowData.supplySericeData" [chart]="commonLineSparklineOptions.chart"
                                 [tooltip]="commonLineSparklineOptions.tooltip"></apx-chart>
                             </div>
-                          </td>
+                          </td>-->
                           <td class="text-left">
                             <div class="sparkline-chart-blk" *ngIf="sparkLinechartdelayFlag">
                               <span>{{rowData?.entityMetrics?.assetMetrics?.total}}</span>
