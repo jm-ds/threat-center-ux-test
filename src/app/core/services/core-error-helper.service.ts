@@ -178,13 +178,8 @@ export class CoreErrorHelperService {
 
     //Helper function which will redirect user to login page with notifying user.
     private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
-        if (actualStatus === 401) {
-            this.alertService.alertBox(dataObjToShow.message, 'Authentication required', 'warning')
-        } else {
-            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
-        }
         this.authenticationService.logout();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login'],{ state: { data: dataObjToShow.message } });
     }
 
 }

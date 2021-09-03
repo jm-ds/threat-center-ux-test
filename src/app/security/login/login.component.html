@@ -16,8 +16,11 @@
             <div class="caption-blue-underline mt-50">Don't have an account?</div>
             <a routerLink="/create-account" class="btn btn-primary btn-block">Sign Up!</a>
 
+            <div class="alert-box mt-50" *ngIf="!!loginPageError && loginPageError !== ''">
+                <app-alert type="warning">{{loginPageError}}</app-alert>
+            </div>
             <!-- OAuth login -->
-            <div class="caption-blue-underline  mt-50">
+            <div class="caption-blue-underline" [ngClass]="{ 'mt-50': !loginPageError || loginPageError == '' }">
                 OAuth Authentication
                 <a href="javascript:" [placement]="'top'" [popoverTitle]="'OAuth Authentication'" ngbPopover="Login or sign up with your GitHub, GitLab, BitBucket or Google account.">
                     <i class="far fa-question-circle" ></i>
