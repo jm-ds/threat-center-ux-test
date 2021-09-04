@@ -21,11 +21,11 @@ export class PolicyShowComponent implements OnInit {
 
 
     public actionCols = ['ActionType','ActionName'];
-    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Issue', value: 'ISSUE'},{label: 'Gate Release', value: 'RELEASE'},
+    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Gate Release', value: 'RELEASE'},
        {label: 'Attribute Source', value: 'ATTRIBUTION'}, {label: 'Upgrade library version', value: 'UPGRADE_VERSION'}];
     public actionNames = {
-        'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'},{label: 'Dashboard', value:'DASHBOARD'}],
-        'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
+        'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'}],//,{label: 'Dashboard', value:'DASHBOARD'}
+        //'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
         'RELEASE': [{label: 'No', value:'NO'},{label: 'Yes', value:'PROD'}],
         'ATTRIBUTION': [{label: 'Attribute Source', value:'ATTRIBUTION'}],
         'UPGRADE_VERSION': [{label: 'Latest Secured Version', value:'LAST_VERSION'},{label: 'Next Secured Version', value:'NEXT_VERSION'}]
