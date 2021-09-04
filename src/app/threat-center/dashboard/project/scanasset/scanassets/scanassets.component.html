@@ -104,7 +104,8 @@
             <tr *ngIf="story.length>0 && rowIndex==0" class="cursor-pointer">
               <td (click)="goBack()" colspan="7"><i class="fas fa-folder-open"></i>&nbsp;&nbsp;...</td>
             </tr>
-            <tr class="cursor-pointer" *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
+            <tr [ngStyle]="{'cursor': scanAsset.node.assetType !== 'DIR' && scanAsset.node.embeddedAssets.edges.length === 0 ? 'not-allowed' : 'pointer' }"
+                *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.assetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
               <td>
                 <i *ngIf="scanAsset.node.assetType === 'DIR'" class="fas fa-folder"></i>
