@@ -62,9 +62,11 @@
                 <!-- Company name -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !companyName.valid }">
                     <div class="input-group">
-                        <input class="form-control fontAwesome" name="companyName" [(ngModel)]="model.companyName"
-                            #companyName="ngModel" required placeholder="Company name *">
-                        <div class="input-group-append">
+                        <input class="form-control fontAwesome" name="companyName" [(ngModel)]="model.companyName" 
+                            [required] = "!inviteHash"
+                            [ngClass]="{ 'disabled-input': !!inviteHash }"
+                            #companyName="ngModel" placeholder="Company name ">
+                        <div class="input-group-append" *ngIf = "!inviteHash">
                             <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
                                     aria-hidden="true"></i></span>
                         </div>
@@ -89,8 +91,8 @@
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !position.valid }">
                     <div class="input-group">
                         <input class="form-control" name="position" [(ngModel)]="model.position" #position="ngModel"
-                            required placeholder="Position *">
-                        <div class="input-group-append">
+                            [required] = "!inviteHash" [placeholder]="(!!inviteHash)? 'Position': 'Position *'">
+                        <div class="input-group-append"  *ngIf = "!inviteHash">
                             <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
                                     aria-hidden="true"></i></span>
                         </div>
@@ -99,9 +101,9 @@
                 </div>
 
                 <!-- Phone number -->
-                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }" [hidden] = "!!inviteHash">
                     <div class="input-group">
-                        <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required
+                        <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" [required] = "!inviteHash"
                             placeholder="Phone number *">
                         <div class="input-group-append">
                             <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
@@ -162,7 +164,7 @@
                 <!-- Cover letter -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">
                     <textarea class="form-control" name="coverLetter" [(ngModel)]="model.coverLetter"
-                        #coverLetter="ngModel" rows="4"
+                        #coverLetter="ngModel" rows="4" [hidden] = "!!inviteHash"
                         placeholder="Please tell us a little bit about your interest in Threatrix."></textarea>
                     <div class="text-danger" *ngIf="f.submitted && !coverLetter.valid">Please tell us a little bit about
                         your interest in Threatrix.</div>
