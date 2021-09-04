@@ -17,6 +17,7 @@ export const Messages = {
     wrongMessage: 'Something went wrong!',
     tokenNotFound: 'JWT Token not found!',
     graphQlCommonErrorMessage: 'An unexpected error occurred while trying to fetch the requested data.',
+    tokenExpired:'Your access token has expired, please login again.',
     commonErrorHeaderText: 'Error!',
     asset: {
         filter: {

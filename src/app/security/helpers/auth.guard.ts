@@ -3,6 +3,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanAc
 import { NextConfig } from '@app/app-config';
 import { AlertService } from '@app/core/services/alert.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { Messages } from '@app/messages/messages';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService, AuthorizationService } from '../services';
@@ -61,7 +62,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             if (jwt) {
                 if (this.authenticationService.isTokenExpired(jwt)) {
                     this.authenticationService.logout();
-                    this.router.navigate(['/login']);
+                    this.router.navigate(['/login'], { state: { data: Messages.tokenExpired } });
                 }
                 // if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
                 //     await this.authenticationService.loadAuthenticatedUser();
@@ -79,8 +80,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             return false
         }
         // not logged in so redirect to login page with the return url
-        this.alertService.alertBox("Authentication is required",'','warning');
-        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }, state: { data: 'Please authenticate with the new user session.' } });
         return false;
     }
 
