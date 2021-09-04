@@ -240,6 +240,7 @@ export class ConditionBuilderComponent implements OnInit {
         componentType.conditionMetadatas = conditions;
         this.categories.subordinateConditions.set(componentType.code, componentType);
 
+        /*
         conditions = new Map<string, ConditionMetadata>();
         conditions.set("EMBEDDED_ASSET", { code: "EMBEDDED_ASSET", title: "IP w/Embedded Assets", dataType: "DBL", 
             operators: [{ code: "GT", name: ">" },
@@ -248,6 +249,7 @@ export class ConditionBuilderComponent implements OnInit {
         let codeQualityType = new ConditionTypeMetadata("CODE_QUALITY", "Code Quality");
         codeQualityType.conditionMetadatas = conditions;
         this.categories.subordinateConditions.set(codeQualityType.code, codeQualityType);
+        */
 
         conditions = new Map<string, ConditionMetadata>();
         conditions.set("RELEASE_STAGE", { code: "RELEASE_STAGE", title: "Release Stage", dataType: "STR", 
