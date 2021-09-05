@@ -39,11 +39,6 @@ export class EntitySettingsComponent implements OnInit, AfterViewInit {
         tabName: "SLACK Integration",
         tabId: "slack",
         isActive: false
-    },
-    {
-        tabName: "JIRA Integration",
-        tabId: "jira",
-        isActive: false
     }
 ];
 
