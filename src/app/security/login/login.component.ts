@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   apiUrl: string;
+  loginPageError:string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,6 +33,9 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/']);
     }
     this.apiUrl = environment.apiUrl;
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation.extras.state as { data: string };
+    this.loginPageError = !!state && !!state.data ? state.data : null;
   }
 
   ngOnInit() {

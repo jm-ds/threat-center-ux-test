@@ -130,12 +130,14 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reload();
     } else {
-      this.isAssetStory.emit(false);
-      let sAssetId = scanAsset.node.scanAssetId;
-      const entityId = this.route.snapshot.paramMap.get('entityId');
-      const projectId = this.route.snapshot.paramMap.get('projectId');
-      const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
-      this.router.navigate([decodeURIComponent(url)]);
+      if (scanAsset.node.embeddedAssets.edges.length >= 1) {
+        this.isAssetStory.emit(false);
+        let sAssetId = scanAsset.node.scanAssetId;
+        const entityId = this.route.snapshot.paramMap.get('entityId');
+        const projectId = this.route.snapshot.paramMap.get('projectId');
+        const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+        this.router.navigate([decodeURIComponent(url)]);
+      }
     }
   }
 
