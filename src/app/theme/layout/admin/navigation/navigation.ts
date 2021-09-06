@@ -42,7 +42,7 @@ const NavigationItems = [
       },
       {
         id: 'entity',
-        title: 'My Business Unit',
+        title: 'My Team',
         type: 'item',
         url: '/dashboard/entity',
         icon: 'far fa-building',
@@ -170,7 +170,7 @@ const NavigationItems = [
           },
           {
             id: 'business-units',
-            title: 'Business Units',
+            title: 'Entity Manager',
             icon: 'far fa-building',
             type: 'item',
             url: '/admin/entity',
