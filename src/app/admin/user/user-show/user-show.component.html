@@ -88,7 +88,7 @@
                         <!-- ROLES -->
                         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between">
                             <h5 class="mb-0">Roles</h5>
-                            <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
+                            <button type="button" *ngIf="authorizationService.hasPermissions('ROLE_VIEW')" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
                                 <i class="feather icon-edit"></i>
                             </button>
                         </app-card>
@@ -168,8 +168,8 @@
                         </ng-template>
                     </ng-template>
                 </ngb-tab>
-
-                <ngb-tab>
+                <!-- API keys -->
+                <ngb-tab *ngIf="authorizationService.hasPermissions('USER_APITOKEN_CREATE')">
                     <ng-template ngbTabTitle>API keys&nbsp;&nbsp;
                         <span class="badge badge-light">
                           {{user.apiKeys?.edges.length}}
@@ -178,7 +178,7 @@
 
                     <ng-template ngbTabContent>
                         <app-card [hidHeader]="true" cardClass="user-profile-list">
-                            <div class="mb-2 mt-1 float-right">
+                            <div class="mb-2 mt-1 float-right" *ngIf="authorizationService.hasPermissions('USER_APITOKEN_CREATE')">
                                 <div class="text-left">
                                     <a routerLink="/admin/user/show/{{user.username}}/create/apikey/new" class="btn btn-outline-info">Add API key</a>
                                 </div>

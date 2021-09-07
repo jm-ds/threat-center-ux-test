@@ -36,7 +36,8 @@ export class InviteService {
                 username,
                 inviteHash,
                 expiredDate,
-                inviteUrl
+                inviteUrl,
+                inviteHash
             }
         }`
       });
@@ -53,6 +54,7 @@ export class InviteService {
           inviteHash,
           expiredDate,
           inviteUrl
+          inviteHash
         }
       }`),
       fetchPolicy: 'no-cache'
@@ -65,7 +67,9 @@ export class InviteService {
       query: gql(`query {
         getInviteMailData(inviteHash: "${inviteHash}") {
           subject,
-          body
+          body,
+          inviteHash,
+          inviteUrl
           }
       }`),
       fetchPolicy: 'no-cache'

@@ -3,7 +3,7 @@ import {Messages, User} from "@app/models";
 import {UserService} from "@app/admin/services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserUtils} from "@app/admin/user/user-utils";
-import { AuthenticationService } from '@app/security/services';
+import { AuthenticationService, AuthorizationService } from '@app/security/services';
 
 @Component({
     selector: 'app-user',
@@ -20,7 +20,8 @@ export class UserShowComponent extends UserUtils implements OnInit {
         private userService: UserService,
         protected router: Router,
         private route: ActivatedRoute,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        protected authorizationService: AuthorizationService
     ) {
         super(router);
         this.messages = Messages.fromRouter(this.router);

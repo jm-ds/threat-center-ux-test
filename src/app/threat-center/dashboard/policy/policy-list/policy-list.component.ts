@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
 import { TreeNode } from 'primeng/api';
 import { type } from 'jquery';
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
     selector: 'app-policy-list',
@@ -24,7 +25,8 @@ export class PolicyListComponent implements OnInit {
     constructor(
         private policyService: PolicyService,
         protected router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        protected authorizationService: AuthorizationService
     ) {
         this.messages = Messages.fromRouter(this.router);
     }
