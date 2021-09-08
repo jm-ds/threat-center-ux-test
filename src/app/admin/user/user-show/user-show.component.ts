@@ -28,6 +28,14 @@ export class UserShowComponent extends UserUtils implements OnInit {
     }
 
     ngOnInit() {
+        this.route.params.subscribe(params=>{
+            this.init();
+        });
+    }
+
+
+    // initialize user data
+    init() {
         const user = this.authService.getFromSessionStorageBasedEnv("currentUser");
         if(!!user){
             this.organizationDetails = user['organization'];

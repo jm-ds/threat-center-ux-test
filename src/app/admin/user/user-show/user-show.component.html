@@ -1,7 +1,7 @@
 <ng-template [ngIf]="user != undefined">
 
     <div>
-        <nav aria-label="breadcrumb" class="float-right">
+        <nav aria-label="breadcrumb" class="float-right" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
                 <li class="breadcrumb-item active text-muted" aria-current="page">User</li>
@@ -19,7 +19,7 @@
             <app-user-card [user]="user" [organizationDetails]="organizationDetails" [showMenu]="true"></app-user-card>
 
 
-            <div class="actions mt-2 text-center">
+            <div class="actions mt-2 text-center" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
                 <a routerLink="/admin/user/list" class="btn btn-outline-secondary">
                     <i class="feather icon-users"></i>
                     Back to list

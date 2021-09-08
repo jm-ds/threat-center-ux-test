@@ -209,8 +209,10 @@
     </ngb-tab> -->
   </ngb-tabset>
   <ng-template #loading>
-    <span *ngIf="!loadingScan">
-      You don’t have any repositories available for scanning.</span>
+    <div *ngIf="!loadingScan">
+      <p>You don’t have any repositories available for scanning.</p> 
+      <p>You must use Github/Gitlab OAuth login in order for Threatrix to access your repositories to run scans from Threat Center</p>
+    </div>
     <span *ngIf="loadingScan">Loading...</span>
   </ng-template>
 
