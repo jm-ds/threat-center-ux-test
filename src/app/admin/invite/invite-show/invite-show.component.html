@@ -44,7 +44,7 @@
           class="form-control input-contrast"
           [(ngModel)]="inviteMailData.subject" />
       </div>       
-      <div class="form-group" style="width: 100%;">
+      <div class="form-group" style="width: 100%;" *ngIf="false">
         <div class="float-right">
           <input type="checkbox" name="mail-body-custom" 
           class="js-user-status-limited-availability-checkbox" [value]="customMailBody" (change)="customMailBodyChange()"

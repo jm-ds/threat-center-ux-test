@@ -16,7 +16,7 @@
       </h3>
     </div>
     <div class="col-6 entity-btns" style="text-align:right">
-      <a [routerLink]="['/admin/entity']">
+      <a [routerLink]="['/admin/entity']" *ngIf="authorizationService.hasPermissions('ENTITY_CREATE')">
         <button type="submit" class="btn btn-outline-warning ml-2">
           <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child
         </button>
@@ -31,7 +31,7 @@
           <i class="fas fa-cogs" style="margin-right:5px"></i>Settings
         </button>
       </a> -->
-      <a [routerLink]="['/dashboard/policy/list/',entity.entityId]">
+      <a [routerLink]="['/dashboard/policy/list/',entity.entityId]" *ngIf="authorizationService.hasPermissions('ENTITY_POLICY_MANAGE')">
         <button type="submit" class="btn btn-outline-info ml-2">
           <i class="fas fa-feather-alt" style="margin-right:5px"></i>Policies
         </button>
@@ -57,7 +57,7 @@
         <span style="font-size:20px;color:#4680ff">
           A fresh dashboard ready to get to work.
         </span>
-        <div style="margin-top:20px;text-align: justify;">
+        <div style="margin-top:20px;text-align: justify;" *ngIf="authorizationService.hasPermissions('ENTITY_CREATE')">
           <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a
             hierarchy of company Divisions, Business Units, Teams or even individual developers
             who can scan their own projects while automatically sharing the data with your team.</p>

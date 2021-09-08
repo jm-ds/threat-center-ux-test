@@ -1,7 +1,7 @@
 <ng-template [ngIf]="user != undefined">
 
     <div>
-        <nav aria-label="breadcrumb" class="float-right">
+        <nav aria-label="breadcrumb" class="float-right" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
                 <li class="breadcrumb-item active text-muted" aria-current="page">User</li>
@@ -19,7 +19,7 @@
             <app-user-card [user]="user" [organizationDetails]="organizationDetails" [showMenu]="true"></app-user-card>
 
 
-            <div class="actions mt-2 text-center">
+            <div class="actions mt-2 text-center" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
                 <a routerLink="/admin/user/list" class="btn btn-outline-secondary">
                     <i class="feather icon-users"></i>
                     Back to list
@@ -88,7 +88,7 @@
                         <!-- ROLES -->
                         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between">
                             <h5 class="mb-0">Roles</h5>
-                            <button type="button" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
+                            <button type="button" *ngIf="authorizationService.hasPermissions('ROLE_VIEW')" (click)="goToAssignRoles(user.username)" class="btn btn-primary btn-sm rounded m-0 float-right">
                                 <i class="feather icon-edit"></i>
                             </button>
                         </app-card>
@@ -168,8 +168,8 @@
                         </ng-template>
                     </ng-template>
                 </ngb-tab>
-
-                <ngb-tab>
+                <!-- API keys -->
+                <ngb-tab *ngIf="authorizationService.hasPermissions('USER_APITOKEN_CREATE')">
                     <ng-template ngbTabTitle>API keys&nbsp;&nbsp;
                         <span class="badge badge-light">
                           {{user.apiKeys?.edges.length}}
@@ -178,7 +178,7 @@
 
                     <ng-template ngbTabContent>
                         <app-card [hidHeader]="true" cardClass="user-profile-list">
-                            <div class="mb-2 mt-1 float-right">
+                            <div class="mb-2 mt-1 float-right" *ngIf="authorizationService.hasPermissions('USER_APITOKEN_CREATE')">
                                 <div class="text-left">
                                     <a routerLink="/admin/user/show/{{user.username}}/create/apikey/new" class="btn btn-outline-info">Add API key</a>
                                 </div>

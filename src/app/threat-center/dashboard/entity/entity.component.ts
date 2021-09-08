@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { StateService } from '@app/threat-center/shared/services/state.service';
-import { AuthenticationService } from '@app/security/services';
+import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
@@ -125,7 +125,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private chartHelperService: ChartHelperService,
     private cdRef: ChangeDetectorRef,
     private projectBreadcumsService:ProjectBreadcumsService,
-    private userPreferenceService:UserPreferenceService
+    private userPreferenceService:UserPreferenceService,
+    public authorizationService: AuthorizationService
   ) {
     this.dailyVisitorStatus = '1y';
     this.deviceProgressBar = [

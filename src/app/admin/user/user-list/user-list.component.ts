@@ -4,6 +4,7 @@ import {User} from "@app/models";
 
 import {Router} from '@angular/router';
 import {UserUtils} from "@app/admin/user/user-utils";
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
     selector: 'app-user-list',
@@ -18,6 +19,7 @@ export class UserListComponent extends UserUtils implements OnInit {
     constructor(
         private userService: UserService,
         protected router: Router,
+        protected authorizationService: AuthorizationService
     ) {
         super(router);
     }

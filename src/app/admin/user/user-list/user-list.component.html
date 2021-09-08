@@ -1,6 +1,6 @@
 <h1>User list</h1>
 
-<div class="mb-3">
+<div class="mb-3" *ngIf="authorizationService.hasPermissions('USER_CREATE')">
     <a routerLink="/admin/user/create" class="btn btn-outline-info">Add user</a>
 
     <!-- <form action="javascript:" class="form-inline float-right form-filter">
@@ -54,8 +54,9 @@
                     <td class="skip-row-link">
                         <span class="badge badge-light-success">Active</span>
                         <div class="overlay-edit">
-                            <button routerLink="/admin/user/edit/{{user.username}}" type="button" class="btn btn-icon btn-success"><i class="feather icon-edit"></i></button>
-                            <button type="button" class="btn btn-icon btn-danger disabled"><i class="feather icon-trash-2"></i></button>
+                            <button *ngIf="authorizationService.hasPermissions('USER_EDIT')"
+                             routerLink="/admin/user/edit/{{user.username}}" type="button" class="btn btn-icon btn-success"><i class="feather icon-edit"></i></button>
+                            <button *ngIf="authorizationService.hasPermissions('USER_REMOVE')" type="button" class="btn btn-icon btn-danger disabled"><i class="feather icon-trash-2"></i></button>
                         </div>
                     </td>
                 </tr>

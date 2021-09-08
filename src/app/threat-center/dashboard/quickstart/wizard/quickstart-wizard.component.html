@@ -209,13 +209,15 @@
     </ngb-tab> -->
   </ngb-tabset>
   <ng-template #loading>
-    <span *ngIf="!loadingScan">
-      You don’t have any repositories available for scanning.</span>
+    <div *ngIf="!loadingScan">
+      <p>You don’t have any repositories available for scanning.</p> 
+      <p>You must use Github/Gitlab OAuth login in order for Threatrix to access your repositories to run scans from Threat Center</p>
+    </div>
     <span *ngIf="loadingScan">Loading...</span>
   </ng-template>
 
   <ng-template ngbTabContent #getGithub>
-    <button class="btn btn-outline-primary" type="button">Get Github Repositories</button>
+    <button *ngIf="!!authService.currentUser && !!authService.currentUser.repositoryAccounts && authService.currentUser.repositoryAccounts.githubAccount" class="btn btn-outline-primary" type="button">Get Github Repositories</button>
   </ng-template>
 
   <ng-template ngbTabContent #getGitlab>

@@ -20,6 +20,7 @@ import { UserPreferenceService } from '@app/core/services/user-preference.servic
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { ClipboardDialogComponent } from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
   selector: 'project-dashboard',
@@ -44,7 +45,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private userPreferenceService: UserPreferenceService,
     private projectBreadcumsService: ProjectBreadcumsService,
-    private chartHelperService: ChartHelperService) {
+    private chartHelperService: ChartHelperService,
+    protected authorizationService: AuthorizationService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.scanHelperService.isHighlightNewScanObservable$

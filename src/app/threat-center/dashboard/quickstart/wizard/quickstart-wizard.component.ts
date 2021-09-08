@@ -224,7 +224,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         let accessToken = this.authService.currentUser.accessToken;
         console.log("accessToken: " + accessToken);
         if (this.isEmail(accessToken)) {
-            this.activeTab = "DragDrop";
+            this.activeTab = "Github";//"DragDrop";
         } else if (accessToken.startsWith("github-")) {
             this.loadGitHubUser();
             this.activeTab = "Github";
@@ -297,7 +297,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.readyScanRepo.selectedItem = this.selectedItem;
+        if (!!this.readyScanRepo) {
+            this.readyScanRepo.selectedItem = this.selectedItem;
+        }
     }
 
     onRowUnselect(event) {
@@ -310,7 +312,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         this.userPreferenceService.settingUserPreference("ThreatScan", $event.activeId, this.activeTab);
         this.selectedItem = '';
         this.selectedRepos = [];
-        this.readyScanRepo.selectedItem = this.selectedItem;
+        if (!!this.readyScanRepo) {
+            this.readyScanRepo.selectedItem = this.selectedItem;
+        }
     }
 
 
