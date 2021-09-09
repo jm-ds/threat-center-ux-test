@@ -5,6 +5,7 @@ import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
+import { InviteService } from '@app/admin/services/invite.service';
 
 @Component({
   selector: 'app-create-account',
@@ -25,7 +26,8 @@ export class CreateAccountComponent implements OnInit {
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private inviteService: InviteService
     ) {
         this.apiUrl = environment.apiUrl;
     }
@@ -37,9 +39,14 @@ export class CreateAccountComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.inviteHash = this.cookieService.get("invite");
         if (!!this.inviteHash) {
-            this.authenticationService.loadOrgNameByInviteHash(this.inviteHash).subscribe(res => {
-                this.model.companyName = res.name;
-              });
+            this.inviteService.getOrgDataByInvite(this.inviteHash).subscribe(
+                res => {
+                    this.model.companyName = res.data.inviteOrg.name;
+                },
+                error => {
+                    console.error('GET ORG DATA ERROR', error);
+                }
+            )
         }
     }
 

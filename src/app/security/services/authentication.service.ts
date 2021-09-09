@@ -174,10 +174,4 @@ export class AuthenticationService {
     }
  }
 
- // fetch organization name for invite
- loadOrgNameByInviteHash(inviteHash: string): Observable<OrganizationData> {
-   const url = environment.apiUrl + '/account/invite_org?inviteHash='+inviteHash;
-   return  this.http.get<OrganizationData>(url).pipe();
  }
-
-}

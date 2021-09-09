@@ -161,6 +161,13 @@ export class InviteMailDataRequestInput {
     }
 }
 
+export class InviteOrganizationData {
+    readonly name: string;
+}
+
+export interface InviteOrganizationDataQuery {
+    inviteOrg: InviteOrganizationData;
+}
 
 
 export class ApiKey {
