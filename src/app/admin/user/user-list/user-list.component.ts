@@ -19,7 +19,7 @@ export class UserListComponent extends UserUtils implements OnInit {
     constructor(
         private userService: UserService,
         protected router: Router,
-        protected authorizationService: AuthorizationService
+        public authorizationService: AuthorizationService
     ) {
         super(router);
     }
