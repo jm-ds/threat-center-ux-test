@@ -3,7 +3,7 @@ import {CoreGraphQLService} from '@app/core/services/core-graphql.service';
 import {AuthenticationService} from '@app/security/services';
 import gql from 'graphql-tag';
 import {Apollo} from "apollo-angular";
-import {InviteMailData, InviteMailDataRequestInput, InviteQuery, User, UserQuery} from '@app/models';
+import {InviteMailData, InviteMailDataRequestInput, InviteOrganizationDataQuery, InviteQuery, User, UserQuery} from '@app/models';
 import {CoreHelperService} from '@app/core/services/core-helper.service';
 import {AlertService} from '@app/core/services/alert.service';
 
@@ -89,32 +89,44 @@ export class InviteService {
     });
   }
 
-    getUserByInvite(inviteHash: string): any {
-        return this.apollo.watchQuery<UserQuery>({
-            query: gql(`query {
-        getUserByInvite(inviteHash: "${inviteHash}") {
-          orgId,
-          username,
-          email,
-          fname,
-          lname,
-          position,
-          phone,
-          created,
-        }
-      }`), fetchPolicy: 'no-cache'
-        }).valueChanges;
-    }
+  getUserByInvite(inviteHash: string): any {
+      return this.apollo.watchQuery<UserQuery>({
+          query: gql(`query {
+      getUserByInvite(inviteHash: "${inviteHash}") {
+        orgId,
+        username,
+        email,
+        fname,
+        lname,
+        position,
+        phone,
+        created,
+      }
+    }`), fetchPolicy: 'no-cache'
+      }).valueChanges;
+  }
 
-    updateInvitedUser(user: User, inviteHash: string): any {
-        const userRequest = new InvitedUserRequestInput(user);
+  updateInvitedUser(user: User, inviteHash: string): any {
+      const userRequest = new InvitedUserRequestInput(user);
 
-        return this.apollo.mutate({
-            mutation: gql`mutation updateInvitedUser($user: InvitedUserRequestInput, $inviteHash: String) {
-                updateInvitedUser(user: $user, inviteHash: $inviteHash)
-            }`, variables: {user: userRequest, inviteHash: inviteHash}
-        });
-    }
+      return this.apollo.mutate({
+          mutation: gql`mutation updateInvitedUser($user: InvitedUserRequestInput, $inviteHash: String) {
+              updateInvitedUser(user: $user, inviteHash: $inviteHash)
+          }`, variables: {user: userRequest, inviteHash: inviteHash}
+      });
+  }
+
+  // fetch organization name for invite  
+  getOrgDataByInvite(inviteHash: string) {
+    return this.apollo.watchQuery<InviteOrganizationDataQuery>({
+        query: gql(`query {
+          inviteOrg(inviteHash: "${inviteHash}") {
+              name
+            }
+          }`
+        ), fetchPolicy: 'no-cache'
+    }).valueChanges;
+  }
 
 }
 
