@@ -26,7 +26,7 @@ export class PolicyListComponent implements OnInit {
         private policyService: PolicyService,
         protected router: Router,
         private route: ActivatedRoute,
-        protected authorizationService: AuthorizationService
+        public authorizationService: AuthorizationService
     ) {
         this.messages = Messages.fromRouter(this.router);
     }
