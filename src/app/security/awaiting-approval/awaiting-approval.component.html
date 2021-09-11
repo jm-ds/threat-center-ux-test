@@ -46,8 +46,7 @@
 
                 <!-- phone -->
                 <div class="form-group" *ngIf="user?.phone == null || user?.phone == ''" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
-                    <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" required placeholder="Phone number">
-                    <div class="text-danger" *ngIf="f.submitted && !phone.valid">Please provide phone number.</div>
+                    <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" placeholder="Phone number">
                 </div>
 
                 <!-- cover letter -->

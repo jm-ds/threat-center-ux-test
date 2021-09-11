@@ -103,14 +103,9 @@
                 <!-- Phone number -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
                     <div class="input-group">
-                        <input class="form-control" name="phone" [(ngModel)]="user.phone" #phone="ngModel" required
-                               placeholder="Phone number *">
-                        <div class="input-group-append">
-                            <span class="input-group-text text-danger" id="basic-addon2"><i class="fa fa-asterisk"
-                                                                                            aria-hidden="true"></i></span>
-                        </div>
+                        <input class="form-control" name="phone" [(ngModel)]="user.phone" #phone="ngModel" 
+                               placeholder="Phone number">
                     </div>
-                    <div class="text-danger" *ngIf="f.submitted && !phone.valid">Phone number is required</div>
                 </div>
 
                 <!--

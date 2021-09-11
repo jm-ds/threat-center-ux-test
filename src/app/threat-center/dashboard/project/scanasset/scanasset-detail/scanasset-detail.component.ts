@@ -5,12 +5,13 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
-import { AuthenticationService } from '@app/security/services';
+import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import Swal from "sweetalert2";
 import { ScanAsset, ScanAssetMatch } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { AlertService } from '@app/core/services/alert.service';
+import { User } from '@app/threat-center/shared/models/types';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class ScanAssetDetailComponent implements OnInit {
   attributionStatus: string = "";
   attributionComment: string = "";
   selectedMatches: ScanAssetMatch[] = [];
+  user: User;
 
   attributionStatuses: CodeNamePair[] = [
     { code: "REVIEWED", name: "Reviewed" },
@@ -61,7 +63,8 @@ export class ScanAssetDetailComponent implements OnInit {
     private router: Router,
     private coreHelperService: CoreHelperService,
     private projectBreadcumsService:ProjectBreadcumsService,
-    private alertService:AlertService) { }
+    private alertService:AlertService,
+    protected authorizationService: AuthorizationService) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -74,6 +77,7 @@ export class ScanAssetDetailComponent implements OnInit {
     let obsScanAsset = this.apiService.getScanAsset(this.scanId, this.scanAssetId)
       .pipe(map(result => result.data.scanAsset));
 
+    this.user = this.authService.getFromSessionStorageBasedEnv("currentUser");      
     // https://github.com/threatrix/threat-center-ux/issues/4
     // Don't attempt to pull data for files that were not ACCEPTED status
 
@@ -93,16 +97,19 @@ export class ScanAssetDetailComponent implements OnInit {
             let assetId = this.sourceAsset.originAssetId;
 
             // let user = this.authService.getFromStorageBasedEnv("currentUser");
-            let user = this.authService.getFromSessionStorageBasedEnv("currentUser");
-            const accessToken = user.repositoryAccounts.githubAccount.accessToken;
-            console.log("ACCESS TOKEN:", accessToken);
-
-            if (accessToken) {
-              console.log("Getting file");
-              this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
-                .subscribe(result => {
-                  this.sourceAsset.content = atob(result.content);
-                });
+            if (!!this.user.repositoryAccounts && !!this.user.repositoryAccounts.githubAccount) {
+              const accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
+              console.log("ACCESS TOKEN:", accessToken);
+  
+              if (accessToken) {
+                console.log("Getting file");
+                this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
+                  .subscribe(result => {
+                    this.sourceAsset.content = atob(result.content);
+                  });
+              }
+            } else {
+              console.error("Current user hasn't registered Github account")
             }
           });
         }

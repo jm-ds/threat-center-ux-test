@@ -25,7 +25,7 @@
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
             <ng-template pTemplate="caption">
-              <div style="text-align: right">
+              <div style="text-align: right" *ngIf="authorizationService.hasPermissions('SCAN_ASSET_EDIT')">
                 <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mb-1"
                   (click)="openAttributionModel(attributionModal)" [disabled]="isDisableAttributeLicensebtn">
                   <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
@@ -42,7 +42,7 @@
                 <th>Size</th>
                 <th>Versions</th>
                 <th>License(s)</th>
-                <th>SIMM</th>
+                <th *ngIf="!!user.repositoryAccounts">SIMM</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
@@ -76,7 +76,7 @@
                     </span>
                   </a>
                 </td>
-                <td class="align-middle">
+                <td class="align-middle" *ngIf="!!user.repositoryAccounts">
                   <button class="btn btn-outline-info" (click)="fetchRepositoryAsset(embeddedAsset.node); simmtool.open()">
                     <i class="fad fa-clone"></i>
                   </button>
