@@ -94,12 +94,16 @@
                           <div class="form-group row  p-l-5">
                             <label class="col-sm-12 col-form-label">Category</label>
                             <div class="col-xl-12">
-                              <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                              <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                              <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                              <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                              <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                              <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                              <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                              <span *ngIf="license.node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                              <span *ngIf="license.node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                              <span *ngIf="license.node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                              <span *ngIf="license.node.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                              <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+
+                              <span *ngIf="license.node.category === 'PROPRIETARY_FREE'" title="Permissive" class="badge m-r-5 badge-light-success">PROPRIETARY FREE</span>
+                              <span *ngIf="license.node.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
+                              <span *ngIf="license.node.category === 'PROPRIETARY'" title="Permissive" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
@@ -107,7 +111,7 @@
                             <div class="col-xl-12">
                               <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.node.spdxId}}">
                             </div>
-                          </div>publicationYear
+                          </div>
                           <div class="form-group row  p-l-5">
                             <label for="style" class="col-sm-12 col-form-label">Style</label>
                             <div class="col-xl-12">
