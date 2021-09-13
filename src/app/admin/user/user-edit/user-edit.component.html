@@ -42,7 +42,12 @@
 
         <div class="form-group">
             <label for="entities">Entities</label>
-            <ng-select name="entities" id="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'"></ng-select>
+            <ng-select name="entities" id="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'" (ngModelChange)="updateListForDefaultEntity()" ></ng-select>
+        </div>
+
+        <div *ngIf="entitySelectSelectedItems && entitySelectSelectedItems.length>0" class="form-group">
+            <label for="defaultEntityId">Default Entity</label>
+            <ng-select name="defaultEntityId" id="defaultEntityId" [ngClass]="'ng-select'" [options]="defaultEntitySelectionItems" [(ngModel)]="defaultEntityId" [placeholder]="'Select default entity...'"></ng-select>
         </div>
 
         <!-- [(destination)]="selectedRoles" -->
