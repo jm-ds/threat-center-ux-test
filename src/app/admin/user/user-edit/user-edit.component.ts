@@ -26,6 +26,9 @@ export class UserEditComponent implements OnInit {
     entities: Entity[];
     entitySelectItems: Array<IOption>;
     entitySelectSelectedItems: Array<string>;
+    
+    defaultEntitySelectionItems: Array<IOption>;
+    defaultEntityId: string;
 
 
     constructor(
@@ -50,6 +53,7 @@ export class UserEditComponent implements OnInit {
                     this.newUser = false;
                     this.selectedRoles = this.user.userRoles;
                     this.entitySelectSelectedItems = this.user.userEntities.edges.map(edge => edge.node.entityId);
+                    this.updateListForDefaultEntity();
                 },
                 error => {
                     console.error("UserEditComponent", error);
@@ -76,7 +80,7 @@ export class UserEditComponent implements OnInit {
         );
 
         this.apiService.getEntityList().subscribe(data => {
-            this.entities = data.data.entities.edges.map((e)=>e.node);
+            this.entities = data.data.entities.edges.map((e) => e.node);
             this.entitySelectItems = this.getSelectItemsFromEntities(this.entities);
         }, error => {
             console.error("UserEditComponent", error);
@@ -116,8 +120,8 @@ export class UserEditComponent implements OnInit {
 
     private saveUser() {
         this.user.userRoles = this.selectedRoles;
-        this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity=> new EntityEdge(entity, "")) : [];
-
+        this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity => new EntityEdge(entity, "")) : [];
+        this.user.defaultEntityId = this.defaultEntityId;
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {
                 this.router.navigate(['/admin/user/show/' + this.user.email],
@@ -133,6 +137,15 @@ export class UserEditComponent implements OnInit {
         const firstInvalidControl: HTMLElement = this.el.nativeElement.querySelector(
           "form .ng-invalid"
         );
-        firstInvalidControl.focus(); //without smooth behavior
+        firstInvalidControl.focus(); // without smooth behavior
       }
+
+    updateListForDefaultEntity() {
+        this.defaultEntitySelectionItems = new Array<IOption>();
+        this.entitySelectSelectedItems.forEach(selectedItem => {
+            let iOption = this.entitySelectItems.find(item => item.value === selectedItem);
+            this.defaultEntitySelectionItems.push(iOption);
+        });
+        this.defaultEntityId = this.defaultEntitySelectionItems[0].value;
+    }
 }

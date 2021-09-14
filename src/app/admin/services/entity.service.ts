@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { EntityQuery, EntitySettingsQuery, JiraCredentials } from '@app/models';
+import {EntityArray, EntityQuery, EntitySettingsQuery, JiraCredentials} from '@app/models';
 import { AuthenticationService } from '@app/security/services';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
@@ -14,6 +14,30 @@ import { EntityRequestInput, EntitySettingsRequestInput, EntityUpdateRequestInpu
 export class EntityService {
 
   constructor(private coreGraphQLService: CoreGraphQLService) {
+  }
+
+  getTopLevelEntitiesByOrg(orgId: string): Observable<ApolloQueryResult<EntityArray>> {
+    return this.coreGraphQLService.coreGQLReqWithQuery<EntityArray>(
+        gql`
+        query {
+          topLevelEntitiesByOrg(orgId: "${orgId}") {
+              entityId,
+              name,
+              entityType,
+              removed,
+              childEntities {
+                  edges {
+                      node {
+                          entityId
+                          parentEntityId
+                          name
+                          entityType
+                          removed
+                      }
+                  }    
+              }
+          }
+        }`, "no-cache");
   }
 
   //get tree entity data

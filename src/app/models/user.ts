@@ -78,14 +78,16 @@ export class UserRequestInput {
     readonly roles: string[];
     readonly permissions: string[];
 
+    readonly defaultEntityId: string;
 
-    constructor(email: string, fname: string, lname: string, entities: string[], roles: string[], permissions: string[]) {
+    constructor(email: string, fname: string, lname: string, entities: string[], roles: string[], permissions: string[], defaultEntityId: string) {
         this.email = email;
         this.fname = fname;
         this.lname = lname;
         this.entities = entities;
         this.roles = roles;
         this.permissions = permissions;
+        this.defaultEntityId = defaultEntityId;
     }
 
     static from(user: User) {
@@ -113,7 +115,7 @@ export class UserRequestInput {
             permissions = [];
         }
 
-        return new UserRequestInput(user.email, user.fname, user.lname, entities, roles, permissions);
+        return new UserRequestInput(user.email, user.fname, user.lname, entities, roles, permissions, user.defaultEntityId);
     }
 }
 

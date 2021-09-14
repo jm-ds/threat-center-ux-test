@@ -11,6 +11,7 @@ import { ChildEntityManageComponent } from './child-entity/child-manage.componen
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
 import { AlertService } from '@app/core/services/alert.service';
+import {EntityEdge} from "@app/models";
 
 @Component({
     selector: 'app-entity-manage',
@@ -39,7 +40,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
         private toastr: ToastrService,
-        private alertService:AlertService
+        private alertService: AlertService
     ) {
     }
 
@@ -53,13 +54,13 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             scrollOnActivate: false,
             animateSpeed: 5,
             animateAcceleration: 2.5
-        }
+        };
     }
 
     ngAfterViewInit(): void { }
     ngOnDestroy(): void { }
 
-    //helper function for assign tree data
+    // helper function for assign tree data
     async getTreeEntityData() {
         if (!!this.route.snapshot.data['defaultEntityDetails'] && this.route.snapshot.data['defaultEntityDetails'].data.entity) {
             this.userDefaultEntityDetails = this.route.snapshot.data['defaultEntityDetails'].data.entity;
@@ -70,21 +71,21 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    //while initialize tree data
+    // while initialize tree data
     onTreeLoad(evn) {
         if (!!evn && !!evn.treeModel && !!evn.treeModel.getFirstRoot()) {
             evn.treeModel.getFirstRoot().toggleActivated();
         }
     }
 
-    //event of tree.
+    // event of tree.
     onEvent(ev) {
         if (ev.eventName === 'activate') {
             this.initSelectedEntity(ev.node.data);
         }
     }
 
-    //edit entity with server call.
+    // edit entity with server call.
     editEntity() {
         this.entityService.updateEntity({ entityId: this.selectedTreeNode.entityId, entityName: this.selectedTreeNode.name, entityType: this.selectedTreeNode.entityType })
             .subscribe((data: any) => {
@@ -95,9 +96,9 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    //Update Organization Name
+    // Update Organization Name
     saveOrgName() {
-        //Save Organization name
+        // Save Organization name
         this.entityService.updateOrganizationName(this.organizationInfo)
             .subscribe((data: any) => {
                 if (!!data && !!data.data && !!data.data.updateOrgName) {
@@ -115,7 +116,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    //add child entity button call
+    // add child entity button call
     addChildEntity() {
         if (this.selectedTreeNode && !!this.selectedTreeNode.entityId) {
             this.manageChildEntity("ADD", { parentEntityId: this.selectedTreeNode.entityId });
@@ -128,18 +129,18 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    //edit child entity data with server call
+    // edit child entity data with server call
     editChildEntity(data) {
         this.manageChildEntity("EDIT", data);
     }
 
-    //delete entity data with server call
+    // delete entity data with server call
     deleteEntity(data) {
         this.alertService.alertConfirm("Are you sure?", "Once deleted, you will not be able to recover this entity!"
         ,'warning',true,true,'#4680ff', '#6c757d','Yes', 'No')
             .then((willDelete) => {
                 if (willDelete.value) {
-                    //delete...
+                    // delete...
                     this.entityService.deleteEntity(data.entityId)
                         .subscribe(res => {
                             if (!!res && !!res.data) {
@@ -151,7 +152,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    //while select any tree node.
+    // while select any tree node.
     private initSelectedEntity(data) {
         this.childDataList = new Array<EntityModel>();
         this.organizationInfo = { orgId: null, name: null };
@@ -160,7 +161,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.selectedTreeNode = Object.assign({}, data.tagData);
             this.selectedTreeNode.isChildEntity = data.isChildEntity;
             this.selectedTreeNode.isProjects = data.isProjects;
-            this.selectedTreeNode.isChildEntity = data.children.length >= 1 ? true : false;
+            this.selectedTreeNode.isChildEntity = data.children.length >= 1;
         } else {
             if (data.isOrg) {
                 this.organizationInfo = {
@@ -172,7 +173,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
         }
-        //Init child table list.
+        // Init child table list.
         if (!!data.children && data.children.length >= 1) {
             data.children.forEach(d => {
                 const entity = Object.assign({}, d['tagData']);
@@ -183,68 +184,45 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    //helper method which will initialize tree data
+    // helper method which will initialize tree data
     private async actualTreeLogic() {
         this.recursionHelperArray = new Array();
-        if (!!this.userDefaultEntityDetails.parentEntityId && this.userDefaultEntityDetails.parentEntityId !== '') {
-            // Here User default entity have parent so root entity will be default entity;
-            this.coreHelperService.spinnerEdit("VISIBLE");
 
-            //For now implemented below function logic will change it when server will return proper data with child entity
-            await this.populateChildernRecusivaly(this.userDefaultEntityDetails.childEntities.edges, null);
-            this.coreHelperService.spinnerEdit("INVISIBLE");
-            this.entityTreeNodeList = [
-                {
-                    id: this.userDefaultEntityDetails.entityId,
-                    name: this.userDefaultEntityDetails.name,
-                    isExpanded: true,
-                    tagData: this.userDefaultEntityDetails,
-                    isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
-                    isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
-                    classes: ['text-bold'],
-                    children: this.list_to_tree(this.recursionHelperArray),
-                    isOrg: false
-                }
-            ];
-        } else {
-            // set organization on root of tree because default entity dose not have parent.
-            this.coreHelperService.spinnerEdit("VISIBLE");
-            await this.populateChildernRecusivaly(this.userDefaultEntityDetails.childEntities.edges, null);
-            this.coreHelperService.spinnerEdit("INVISIBLE");
-            this.entityTreeNodeList = [
-                {
-                    id: this.authService.currentUser.orgId,
-                    name: this.getOrganizationInfo(),
-                    isExpanded: true,
-                    tagData: null,
-                    isChildEntity: true,
-                    isProjects: true,
-                    classes: ['text-bold'],
-                    children: [
-                        {
-                            id: this.userDefaultEntityDetails.entityId,
-                            name: this.userDefaultEntityDetails.name,
-                            isExpanded: true,
-                            tagData: this.userDefaultEntityDetails,
-                            isChildEntity: (!!this.userDefaultEntityDetails.childEntities && this.userDefaultEntityDetails.childEntities.edges.length >= 1) ? true : false,
-                            isProjects: (!!this.userDefaultEntityDetails.projects && this.userDefaultEntityDetails.projects.edges.length >= 1) ? true : false,
-                            classes: ['text-bold'],
-                            children: this.list_to_tree(this.recursionHelperArray),
-                            isOrg: false
+        this.coreHelperService.spinnerEdit("VISIBLE");
 
-                        }
-                    ],
-                    isOrg: true
-                }
-            ];
+        let orgId = this.authService.currentUser.orgId;
+        let topLevelEntities: any = await this.getTopLevelEntities(orgId);
+        let topLevelEntitiesEdges = [];
+        let arr = topLevelEntities.data.topLevelEntitiesByOrg;
+        for (let item of arr) {
+            let edge = new EntityEdge(item, null);
+            topLevelEntitiesEdges.push(edge);
         }
+
+        await this.populateChildernRecusivaly(topLevelEntitiesEdges, null);
+        this.coreHelperService.spinnerEdit("INVISIBLE");
+
+        // set organization on root of tree because default entity dose not have parent.
+        this.entityTreeNodeList = [
+            {
+                id: this.authService.currentUser.orgId,
+                name: this.getOrganizationInfo(),
+                isExpanded: true,
+                tagData: null,
+                isChildEntity: true,
+                isProjects: true,
+                classes: ['text-bold'],
+                children: this.list_to_tree(this.recursionHelperArray),
+                isOrg: true
+            }
+        ];
     }
 
     private getOrganizationInfo(): string {
         let orgName = "";
         if (!!this.authService.currentUser.organization) {
             if (this.authService.currentUser.organization.name === this.authService.currentUser.organization.orgId) {
-                orgName = "PoC Company"
+                orgName = "PoC Company";
                 this.isOrgChangeNameLinkAppear = true;
             } else {
                 this.isOrgChangeNameLinkAppear = false;
@@ -255,10 +233,10 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             orgName = "PoC Company";
             this.isOrgChangeNameLinkAppear = true;
         }
-        return orgName
+        return orgName;
     }
 
-    //Temporory method to getting child data recursivly once server return proper record then we don't need this helper func more.
+    // Temporary method to getting child data recursivly once server return proper record then we don't need this helper func more.
     private async populateChildernRecusivaly(childData, prId) {
         if (childData.length >= 1) {
             for (let i = 0; i < childData.length; i++) {
@@ -271,10 +249,8 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                     d['name'] = childData[i].node.name;
                     d['children'] = null;
                     d['isExpanded'] = false;
-                    d['isChildEntity'] = (!!cData.data.entity.childEntities && cData.data.entity.childEntities.edges.length >= 1)
-                        ? true : false;
-                    d['isProjects'] = (!!cData.data.entity.projects && cData.data.entity.projects.edges.length >= 1)
-                        ? true : false;
+                    d['isChildEntity'] = (!!cData.data.entity.childEntities && cData.data.entity.childEntities.edges.length >= 1);
+                    d['isProjects'] = (!!cData.data.entity.projects && cData.data.entity.projects.edges.length >= 1);
                     d['classes'] = ['text-bold'];
 
                     this.recursionHelperArray.push(d);
@@ -285,11 +261,11 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         } else {
-            this.recursionHelperArray = new Array();
+            this.recursionHelperArray = [];
         }
     }
 
-    //Helper function which will return treeview from flat array according to parentId..
+    // Helper function which will return treeview from flat array according to parentId..
     private list_to_tree(list) {
         var map = {}, node, roots = [], i;
         for (i = 0; i < list.length; i += 1) {
@@ -308,40 +284,40 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         return roots;
     }
 
-    //Helper function for child entity manage(open popup and server calls)
+    // Helper function for child entity manage(open popup and server calls)
     private manageChildEntity(from: string, data) {
         const modelRef = this.modalService.open(ChildEntityManageComponent, { ariaLabelledBy: 'modal-basic-title' });
         modelRef.componentInstance.entityData = Object.assign({}, data);
         modelRef.result.then((result) => {
             if (!!result && !!result.entityId) {
-                //edit
+                // edit
                 this.entityService.updateEntity({ entityId: result.entityId, entityName: result.name, entityType: result.entityType })
                     .subscribe((data: any) => {
                         if (!!data && !!data.data) {
                             this.toastr.success("Entity updated successfully.");
-                            //updating into table
+                            // updating into table
                             this.childDataList.forEach(d => {
                                 if (d.entityId === result.entityId) {
                                     d.name = result.name;
                                     d.entityType = result.entityType
                                 }
                             });
-                            //Updating tree..
+                            // Updating tree..
                             this.refreshTreeView(result.entityId, "EDIT", result);
                         }
                     });
             } else {
-                //add entity..
+                // add entity..
                 this.entityService.createEntity({ entityName: result.name, entityType: result.entityType, parentEntityId: result.parentEntityId })
                     .subscribe((data: any) => {
                         if (!!data && !!data.data) {
-                            //updatig into table...
+                            // updatig into table...
                             let newData = Object.assign({}, data.data.createEntity);
                             newData['isChildEntity'] = (!!newData.childEntities && newData.childEntities.edges.length >= 1) ? true : false;
                             newData['isProjects'] = (!!newData.projects && newData.projects.edges.length >= 1) ? true : false;
                             this.childDataList.push(newData);
                             this.toastr.success("Entity created successfully.");
-                            //Updating tree view...
+                            // Updating tree view...
                             this.refreshTreeView(result.parentEntityId, 'ADD_CHILD', data.data.createEntity);
                         }
                     });
@@ -350,7 +326,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    //Refreshing tree view locally after any actions taken by user
+    // Refreshing tree view locally after any actions taken by user
     private refreshTreeView(entityId, action, eData) {
         switch (action) {
             case 'EDIT': {
@@ -382,21 +358,21 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
                 break;
             }
             default: {
-                //statements; 
+                // statements;
                 break;
             }
         }
         this.tree.treeModel.update();
     }
 
-    //Helper function to serlect first root node od the tree.
+    // Helper function to serlect first root node od the tree.
     private selectFirstRootNode() {
         const firstRoot = this.tree.treeModel.roots[0];
         firstRoot.setActiveAndVisible(true);
         firstRoot.expand();
     }
 
-    //Helper functions to remove children from tree...
+    // Helper functions to remove children from tree...
     private removeNode(node: TreeNode) {
         let parentNode = node.realParent
             ? node.realParent
@@ -405,5 +381,9 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         _.remove(parentNode.data.children, function (child) {
             return child === node.data;
         });
+    }
+
+    private async getTopLevelEntities(orgId: string) {
+        return await this.entityService.getTopLevelEntitiesByOrg(orgId).toPromise();
     }
 }
