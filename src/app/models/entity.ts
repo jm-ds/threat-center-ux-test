@@ -36,11 +36,15 @@ export class EntityEdge {
 
 export type EntityQuery = {
     entity: Entity;
-}
+};
+
+export type EntityArray = {
+    entities: Entity[]
+};
 
 export type EntityListQuery = {
     entities: EntityConnection;
-}
+};
 
 export class JiraCredentials {
     projectUrl: string;
