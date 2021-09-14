@@ -120,7 +120,7 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
                     <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
-                      [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId }">
+                      [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId,'scan-highlight': stateService.selectedScan.node?.scanId === scan.node?.scanId }">
                       <td (dblclick)="copyToClipboard(scan.node?.scanId, 'Scan ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
                       <td (dblclick)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">{{scan.node?.versionHash}}</td>
                       <td>{{scan.node?.branch}}</td>
