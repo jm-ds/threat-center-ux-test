@@ -17,6 +17,8 @@ import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import {IOption} from "ng-select";
+import {UserService} from "@app/admin/services/user.service";
 
 
 @Component({
@@ -111,7 +113,10 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   runningTaskCountSubscription: Subscription = undefined;
   panelActiveId:string = 'chart-panel';
 
+  entitySelectionItems: Array<IOption>;
+
   constructor(
+      private userService: UserService,
     private router: Router,
     private apiService: ApiService,
     private stateService: StateService,
@@ -172,8 +177,21 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.userService.getUser(this.authService.currentUser.username).subscribe(data => {
+      let user = data.data.user;
+      let entities = user.userEntities.edges.map((e) => e.node);
+      this.entitySelectionItems = this.getSelectItemsFromEntities(entities);
+    });
+        
     this.loadEntityPage();
   }
+
+  private getSelectItemsFromEntities(entities: Array<Entity>): Array<IOption> {
+    return entities.map(entity => {
+      return {value: entity.entityId, label: entity.name} as IOption;
+    });
+  }
+
 
   ngOnDestroy(): void {
     sessionStorage.removeItem('EntityBreadCums');
@@ -517,6 +535,10 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!isPush) {
       this.entityPageBreadCums.pop();
     }
+  }
+
+  changeSelectedEntity() {
+    this.loadEntity(this.currentEntityId);
   }
 
   goBackfromBreadcum(entityId, currentIndex) {
