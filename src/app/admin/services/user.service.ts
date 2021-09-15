@@ -55,6 +55,7 @@ export class UserService {
                     lname,
                     created,
                     avatarUrl,
+                    defaultEntityId,
                     userRoles {
                         roleId,
                         description,

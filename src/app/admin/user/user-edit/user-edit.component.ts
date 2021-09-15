@@ -6,6 +6,7 @@ import {DualListComponent} from "angular-dual-listbox";
 import {RoleService} from "@app/admin/services/role.service";
 import {ApiService} from "@app/threat-center/shared/services";
 import {IOption} from "ng-select";
+import {AuthenticationService} from "@app/security/services";
 
 @Component({
     selector: 'app-user-edit',
@@ -37,7 +38,8 @@ export class UserEditComponent implements OnInit {
         private apiService: ApiService,
         protected router: Router,
         private route: ActivatedRoute,
-        private el: ElementRef
+        private el: ElementRef,
+        private authService: AuthenticationService,
     ) {
         this.messages = Messages.fromRouter(this.router);
     }
@@ -53,7 +55,9 @@ export class UserEditComponent implements OnInit {
                     this.newUser = false;
                     this.selectedRoles = this.user.userRoles;
                     this.entitySelectSelectedItems = this.user.userEntities.edges.map(edge => edge.node.entityId);
-                    this.updateListForDefaultEntity();
+                    setTimeout(() => {
+                        this.updateListForDefaultEntity();
+                    }, 100);
                 },
                 error => {
                     console.error("UserEditComponent", error);
@@ -122,13 +126,25 @@ export class UserEditComponent implements OnInit {
         this.user.userRoles = this.selectedRoles;
         this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity => new EntityEdge(entity, "")) : [];
         this.user.defaultEntityId = this.defaultEntityId;
+        let username = this.newUser ? this.user.email : this.user.username;
         this.userService.saveUser(this.user, this.newUser)
             .subscribe(({data}) => {
-                this.router.navigate(['/admin/user/show/' + this.user.email],
-                    {state: {messages: [Message.success("User saved successfully.")]}});
+                if (!this.newUser) {
+                    let currentUser: User = this.authService.currentUser;
+                    if (currentUser && currentUser.username === username) { // change yourself
+                        currentUser.fname = this.user.fname;
+                        currentUser.lname = this.user.lname;
+                        currentUser.userEntities = this.user.userEntities;
+                        currentUser.defaultEntityId = this.user.defaultEntityId;
+                        currentUser.userRoles = this.user.userRoles;
+                        this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
+                        this.authService.currentUserSubject.next(currentUser);
+                    }
+                }
+                this.router.navigate(['/admin/user/show/' + username], {state: {messages: [Message.success("User saved successfully.")]}});
             }, (error) => {
                 console.error('User Saving', error);
-                this.router.navigate([this.newUser ? '/admin/user/list' : '/admin/user/show/' + this.user.username],
+                this.router.navigate([this.newUser ? '/admin/user/list' : '/admin/user/show/' + username],
                     {state: {messages: [Message.error("Unexpected error occurred while trying to save user.")]}});
             });
     }
@@ -141,11 +157,17 @@ export class UserEditComponent implements OnInit {
       }
 
     updateListForDefaultEntity() {
+        this.defaultEntityId = '';
         this.defaultEntitySelectionItems = new Array<IOption>();
         this.entitySelectSelectedItems.forEach(selectedItem => {
             let iOption = this.entitySelectItems.find(item => item.value === selectedItem);
             this.defaultEntitySelectionItems.push(iOption);
+            if (this.user.defaultEntityId === iOption.value) {
+                this.defaultEntityId = iOption.value;
+            }
         });
-        this.defaultEntityId = this.defaultEntitySelectionItems[0].value;
+        if (!this.defaultEntityId) {
+            this.defaultEntityId = this.defaultEntitySelectionItems[0].value;
+        }
     }
 }
