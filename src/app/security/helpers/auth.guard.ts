@@ -79,8 +79,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             this.router.navigate(['/create-account'], { queryParams: { returnUrl: state.url } });
             return false
         }
+        let message = "";
+        if(new URL(window.location.href).pathname !== '/'){
+            message = "Please authenticate with the new user session.";
+        }
         // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }, state: { data: 'Please authenticate with the new user session.' } });
+        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }, state: { data: message } });
         return false;
     }
 
