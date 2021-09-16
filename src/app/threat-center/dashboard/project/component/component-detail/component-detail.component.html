@@ -85,8 +85,8 @@
           <ngb-tab title="Licenses" id="licenses">
             <ng-template ngbTabContent>
 
-              <div style="display: flex;">
-                <div class="card m-3" style="flex: 33%;flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
+              <div style="display: flex; flex-wrap: wrap;">
+                <div class="card m-3" style="flex: 30%; flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
                   <div class="card-body" (click)="gotoOtherDetailsPage(license.node.licenseId,'license')">
                     <h6 class="card-title">{{license.node.name}}</h6>
                       <div class="card p-2 m-3">
