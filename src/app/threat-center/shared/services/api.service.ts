@@ -930,7 +930,7 @@ export class ApiService {
             }
           }
         }
-      `, 'no-cache');
+      `, 'cache-first');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
