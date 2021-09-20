@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { Scan } from '@app/models';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Messages} from "@app/messages/messages";
+import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Messages } from "@app/messages/messages";
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-licenses',
@@ -19,7 +20,7 @@ export class LicensesComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
 
-    columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'Discovery', 'Origin', 'OSI Approved', 'FSF Libre'];
+    columns = ['Name', 'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -31,13 +32,13 @@ export class LicensesComponent implements OnInit {
     isDisablePaggination:boolean = false;
 
     messages = Messages;
-
+    totalLicenses:number = 0;
 
     constructor(private apiService: ApiService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
-        private userPreferenceService:UserPreferenceService) {
+        private userPreferenceService: UserPreferenceService) {
     }
 
     ngOnInit() {
@@ -95,6 +96,8 @@ export class LicensesComponent implements OnInit {
         licenses.subscribe(license => {
             this.licensesDetails = license;
             this.isDisablePaggination = false;
+            this.totalLicenses = this.licensesDetails.licenses.totalCount;
+            this.calculateLogic();
         });
 
     }
@@ -121,6 +124,8 @@ export class LicensesComponent implements OnInit {
             obsScan.subscribe(licenses => {
                 this.licensesDetails = licenses;
                 this.coreHelperService.setFocusOnElement(idElement);
+                this.totalLicenses = this.licensesDetails.licenses.totalCount;
+                this.calculateLogic();
             });
         }, this.timeOutDuration);
     }
@@ -146,7 +151,60 @@ export class LicensesComponent implements OnInit {
     private initData() {
         this.obsScan.subscribe(licenses => {
             this.licensesDetails = licenses;
+            this.totalLicenses = this.licensesDetails.licenses.totalCount;
+            this.calculateLogic();
         });
     }
 
+    private calculateLogic() {
+        const value = _.chain(this.licensesDetails.licenses.edges).groupBy("node.name")
+            .map((value, key) => ({ key: key, value: value })).value();
+        let originalArray = [];
+        _.each(value, mainValue => {
+
+            if (mainValue.value.length >= 2) {
+                originalArray.push({ isColspan: true, name: mainValue.key });
+                _.each(mainValue.value, val => {
+                    originalArray.push({
+                        isColspan: false,
+                        node: {
+                            category: val.node.category,
+                            isFsfLibre: val.node.isFsfLibre,
+                            isOsiApproved: val.node.isOsiApproved,
+                            licenseDiscovery: val.node.licenseDiscovery,
+                            licenseId: val.node.licenseId,
+                            licenseOrigin: val.node.licenseOrigin,
+                            name: '',
+                            publicationYear: val.node.publicationYear,
+                            spdxId: val.node.spdxId,
+                            style: val.node.style,
+                            type: val.node.type,
+                            isColspan: false
+                        }
+                    });
+                });
+            } else {
+                _.each(mainValue.value, val => {
+                    originalArray.push(
+                        {
+                            isColspan: false,
+                            node: {
+                                isFsfLibre: val.node.isFsfLibre,
+                                isOsiApproved: val.node.isOsiApproved,
+                                licenseDiscovery: val.node.licenseDiscovery,
+                                licenseId: val.node.licenseId,
+                                licenseOrigin: val.node.licenseOrigin,
+                                name: val.node.name,
+                                publicationYear: val.node.publicationYear,
+                                spdxId: val.node.spdxId,
+                                style: val.node.style,
+                                type: val.node.type,
+                                isColspan: false
+                            }
+                        });
+                });
+            }
+        });
+        this.licensesDetails = originalArray;
+    }
 }
