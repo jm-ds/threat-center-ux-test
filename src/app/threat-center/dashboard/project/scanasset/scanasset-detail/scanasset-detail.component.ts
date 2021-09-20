@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
@@ -12,6 +12,7 @@ import { ScanAsset, ScanAssetMatch } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
+import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialog.component';
 
 
 @Component({
@@ -64,7 +65,8 @@ export class ScanAssetDetailComponent implements OnInit {
     private coreHelperService: CoreHelperService,
     private projectBreadcumsService:ProjectBreadcumsService,
     private alertService:AlertService,
-    protected authorizationService: AuthorizationService) { }
+    protected authorizationService: AuthorizationService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     // we could use the scanId to load scan, which has the repository,
@@ -229,6 +231,18 @@ export class ScanAssetDetailComponent implements OnInit {
     }
   }
 
+  copyToClipboard(value: string, message: string) {
+    if (value != null && value.length > 0) {
+      navigator.clipboard.writeText(value).then(r => {
+        const modalRef = this.modalService.open(ClipboardDialogComponent, {
+          keyboard: false,
+          centered: true,
+          windowClass: 'clip-board-copy'
+        });
+        modalRef.componentInstance.message = message;
+      });
+    }
+  }
 }
 
 class CodeNamePair {
