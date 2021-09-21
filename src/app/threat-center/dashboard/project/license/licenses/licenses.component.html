@@ -18,7 +18,7 @@
       </mat-progress-spinner>
     </div>
     <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
-      <p-table #dt [columns]="columns" [value]="licensesDetails.licenses?.edges" [paginator]="false" [rows]="50"
+      <p-table #dt [columns]="columns" [value]="licensesDetails" [paginator]="false" [rows]="50"
         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
         [filterDelay]="0" [globalFilterFields]="['name']">
 
@@ -43,8 +43,20 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-license>
-          <tr (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
+          <tr *ngIf="license.isColspan" style="background-color: #363e4f;">
+            <td colspan="8"><span style="font-size: 15px;">{{license?.name}}</span><i class="fas fa-layer-group ml-1"></i></td>
+          </tr>
+          <tr *ngIf="!license.isColspan" (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
             <td>{{license.node.name}}</td>
+            <td>
+              <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                    class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+              <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                    class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+          </td>
+          <td>
+            {{messages.license.origin[license.node.licenseOrigin]}}
+          </td>
             <td>{{license.node.spdxId}}</td>
             <td>
               <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
@@ -62,15 +74,6 @@
             </td>
             <td>{{license.node.style}}</td>
             <td>
-                <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
-                      class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
-                <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
-                      class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
-            </td>
-            <td>
-              {{messages.license.origin[license.node.licenseOrigin]}}
-            </td>
-            <td>
               <span *ngIf="license.node.isOsiApproved === true;else notApproved" class="badge m-r-5 badge-light-success">YES</span>
               <ng-template #notApproved><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
             </td>
@@ -83,7 +86,7 @@
       </p-table>
     </perfect-scrollbar>
     <div class="col-sm-12">
-      <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="licensesDetails.licenses?.totalCount"
+      <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="totalLicenses"
         [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
       </mat-paginator>
     </div>
