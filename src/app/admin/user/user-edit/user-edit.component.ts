@@ -123,38 +123,40 @@ export class UserEditComponent implements OnInit {
 
 
     private saveUser() {
-        this.user.userRoles = this.selectedRoles;
-        this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity => new EntityEdge(entity, "")) : [];
-        this.user.defaultEntityId = this.defaultEntityId;
-        let username = this.newUser ? this.user.email : this.user.username;
-        this.userService.saveUser(this.user, this.newUser)
-            .subscribe(({data}) => {
-                if (!this.newUser) {
-                    let currentUser: User = this.authService.currentUser;
-                    if (currentUser && currentUser.username === username) { // change yourself
-                        currentUser.fname = this.user.fname;
-                        currentUser.lname = this.user.lname;
-                        currentUser.userEntities = this.user.userEntities;
-                        currentUser.defaultEntityId = this.user.defaultEntityId;
-                        currentUser.userRoles = this.user.userRoles;
-                        this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
-                        this.authService.currentUserSubject.next(currentUser);
+        if (!!this.selectedRoles && this.selectedRoles.length >= 1) {
+            this.user.userRoles = this.selectedRoles;
+            this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity => new EntityEdge(entity, "")) : [];
+            this.user.defaultEntityId = this.defaultEntityId;
+            let username = this.newUser ? this.user.email : this.user.username;
+            this.userService.saveUser(this.user, this.newUser)
+                .subscribe(({ data }) => {
+                    if (!this.newUser) {
+                        let currentUser: User = this.authService.currentUser;
+                        if (currentUser && currentUser.username === username) { // change yourself
+                            currentUser.fname = this.user.fname;
+                            currentUser.lname = this.user.lname;
+                            currentUser.userEntities = this.user.userEntities;
+                            currentUser.defaultEntityId = this.user.defaultEntityId;
+                            currentUser.userRoles = this.user.userRoles;
+                            this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
+                            this.authService.currentUserSubject.next(currentUser);
+                        }
                     }
-                }
-                this.router.navigate(['/admin/user/show/' + username], {state: {messages: [Message.success("User saved successfully.")]}});
-            }, (error) => {
-                console.error('User Saving', error);
-                this.router.navigate([this.newUser ? '/admin/user/list' : '/admin/user/show/' + username],
-                    {state: {messages: [Message.error("Unexpected error occurred while trying to save user.")]}});
-            });
+                    this.router.navigate(['/admin/user/show/' + username], { state: { messages: [Message.success("User saved successfully.")] } });
+                }, (error) => {
+                    console.error('User Saving', error);
+                    this.router.navigate([this.newUser ? '/admin/user/list' : '/admin/user/show/' + username],
+                        { state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] } });
+                });
+        }
     }
 
     private scrollToFirstInvalidControl() {
         const firstInvalidControl: HTMLElement = this.el.nativeElement.querySelector(
-          "form .ng-invalid"
+            "form .ng-invalid"
         );
         firstInvalidControl.focus(); // without smooth behavior
-      }
+    }
 
     updateListForDefaultEntity() {
         this.defaultEntityId = '';
