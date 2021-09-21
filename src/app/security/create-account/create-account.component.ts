@@ -6,6 +6,7 @@ import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { InviteService } from '@app/admin/services/invite.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-account',
@@ -21,13 +22,15 @@ export class CreateAccountComponent implements OnInit {
     errorMessage: string;
     apiUrl: string;
     inviteHash: string;
+    choosenRepoType: string = 'public';
 
     constructor(
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService,
         private cookieService: CookieService,
-        private inviteService: InviteService
+        private inviteService: InviteService,
+        private modalService: NgbModal
     ) {
         this.apiUrl = environment.apiUrl;
     }
@@ -74,10 +77,45 @@ export class CreateAccountComponent implements OnInit {
                 });
     }
 
-    redirectToExternalLogin(urlText: string) {
-        if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
-          sessionStorage.setItem('ReturnUrl', this.returnUrl);
+  // login via external oauth
+  externalLogin(urlText: string, repoTypeDialog) {
+    let param = undefined;
+    if (urlText === 'github_login') {
+      let repotype = this.authenticationService.getGitHubRepoType();
+      if (!repotype) {
+        // show repo type dialog
+        this.openRepoTypeDialog(repoTypeDialog);
+        return; 
+      } else {
+        if (repotype === 'private') {
+          param = 'needPrivateRepos=true';
         }
-        window.location.href = this.apiUrl + '/' + urlText;
+      }
+    } 
+    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
+  }
+
+  // redirect to authenticate url
+  redirectToExternalLogin(url: string)   {
+    if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
+      sessionStorage.setItem('ReturnUrl', this.returnUrl);
     }
+    window.location.href = url;
+  }
+
+  // open repo type dialog
+  openRepoTypeDialog(content) {
+    this.modalService.open(content, { windowClass: 'md-class', centered: true });
+  }
+
+  // save repo type
+  setGithubRepoType() {
+    this.authenticationService.setGitHubRepoType(this.choosenRepoType);
+    let param = undefined;
+    if (this.choosenRepoType === 'private') {
+      param = 'needPrivateRepos=true';
+    }
+    this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
+  }
+
 }

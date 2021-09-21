@@ -172,6 +172,22 @@ export class AuthenticationService {
       this.websocketClient.close(true);
       this.websocketClient = null;
     }
- }
+  }
+
+  // get available github repository type from cookie
+  getGitHubRepoType() {
+    if (this.cookieService.check('gh_rt')) {
+      return this.cookieService.get('gh_rt');
+    } else {
+      return undefined;
+    }
+  }
+
+  // save github repository type in cookie
+  setGitHubRepoType(value: string) {
+    let expiredDate = new Date();
+    expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
+    this.cookieService.set('gh_rt', value, {path: '/',  expires: expiredDate, sameSite: 'Lax' });
+  }
 
  }
