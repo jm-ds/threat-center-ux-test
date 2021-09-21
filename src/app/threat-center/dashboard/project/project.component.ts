@@ -691,6 +691,12 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       )
     });
     this[chartVarName].xaxis = this.xaxis;
+    if (chartVarName === 'licenseChart') {
+      this[chartVarName].colors = [];
+      _.each(properties, p => {
+        this[chartVarName].colors.push(this.chartHelperService.getColorByLabel(p));
+      });
+    }
   }
 
   private initProjectBradcum(project) {
