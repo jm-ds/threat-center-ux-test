@@ -42,7 +42,11 @@
 
         <div class="form-group">
             <label for="entities">Entities</label>
-            <ng-select name="entities" id="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'" (ngModelChange)="updateListForDefaultEntity()" ></ng-select>
+            <ng-select name="entities" id="entities" [ngClass]="'ng-select'" [options]="entitySelectItems" [(ngModel)]="entitySelectSelectedItems" [multiple]="true" [placeholder]="'Select entities...'" (ngModelChange)="updateListForDefaultEntity()" required></ng-select>
+            <div class="invalid-form"
+                *ngIf="userForm.submitted && !entitySelectSelectedItems">
+                <span>Entity is required.</span>
+            </div>
         </div>
 
         <div *ngIf="entitySelectSelectedItems && entitySelectSelectedItems.length>0" class="form-group">
@@ -54,7 +58,10 @@
         <label>Roles</label>
         <dual-list [source]="roles" [sort]="true" [key]="'roleId'" [display]="roleDisplay" [filter]="false"
                    [(destination)]="selectedRoles" height="265px" [format]="format" [disabled]="false"></dual-list>
-
+                   
+        <span class="mt-4" *ngIf="userForm.submitted && (!selectedRoles || selectedRoles.length == 0)">
+            <app-alert type="danger">Role is required.</app-alert>
+        </span>
 
         <div class="actions mt-5 mb-5">
             <button type="submit" class="btn btn-success" (click)="save(userForm)">
