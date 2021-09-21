@@ -64,7 +64,7 @@ export class AuthorizationService {
             return this.FAIL_VALUE || hasAuth;
         }
 
-        console.error("Authorization Service Error: user not found.");
+        //console.error("Authorization Service Error: user not found.");
         return false;
     }
 

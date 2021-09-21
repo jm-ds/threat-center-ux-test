@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'login',
@@ -21,12 +22,14 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
   apiUrl: string;
   loginPageError:string = '';
+  choosenRepoType: string = 'public';
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private modalService: NgbModal
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentUser) {
@@ -67,11 +70,45 @@ export class LoginComponent implements OnInit {
         });
   }
 
-  redirectToExternalLogin(urlText: string) {
+  // login via external oauth
+  externalLogin(urlText: string, repoTypeDialog) {
+    let param = undefined;
+    if (urlText === 'github_login') {
+      let repotype = this.authenticationService.getGitHubRepoType();
+      if (!repotype) {
+        // show repo type dialog
+        this.openRepoTypeDialog(repoTypeDialog);
+        return; 
+      } else {
+        if (repotype === 'private') {
+          param = 'needPrivateRepos=true';
+        }
+      }
+    } 
+    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
+  }
+
+  // redirect to authenticate url
+  redirectToExternalLogin(url: string)   {
     if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
       sessionStorage.setItem('ReturnUrl', this.returnUrl);
     }
-    window.location.href = this.apiUrl + '/' + urlText;
+    window.location.href = url;
+  }
+
+  // open repo type dialog
+  openRepoTypeDialog(content) {
+    this.modalService.open(content, { windowClass: 'md-class', centered: true });
+  }
+
+  // save repo type
+  setGithubRepoType() {
+    this.authenticationService.setGitHubRepoType(this.choosenRepoType);
+    let param = undefined;
+    if (this.choosenRepoType === 'private') {
+      param = 'needPrivateRepos=true';
+    }
+    this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
   }
 
 }
