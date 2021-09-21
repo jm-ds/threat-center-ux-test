@@ -343,28 +343,59 @@ export class ChartHelperService {
     getColorByLabel(label: string) {
         let color = '';
         switch (label) {
-            case 'UNDEFINED':
-            case 'PROPRIETARY':
-            case 'COPYLEFT_STRONG':
-            case 'copyleftStrong':
             case 'COPYLEFT':
             case 'copyleft':
-                color = "#FF0000";
+            case 'Copyleft':
+            case 'COPYLEF':
+                color = "#ff5252";
+                break;
+            case 'Proprietary':
+            case 'PROPRIETARY':
+            case 'proprietary':
+                color = "#c71585";
+                break;
+            case 'Undefined':
+            case 'UNDEFINED':
+                color = "#8305eb";
+                break;
+            case 'Copyleft Strong':
+            case 'COPYLEFT_STRONG':
+            case 'copyleftStrong':
+                color = "#ff2b2b";
                 break;
             case 'PROPRIETARY_FREE':
-            case 'PUBLIC_DOMAIN':
             case 'PERMISSIVE':
             case 'permissive':
-            case 'COPYLEF':
                 color = "#11c15b";
                 break;
             case 'COPYLEFT_WEAK':
             case 'copyleftWeak':
-            case 'COPYLEFT_PARTIAL':
-            case 'copyleftPartial':
+            case 'Copyleft Weak':
+                color = "#ebe305";
+                break;
             case 'COPYLEFT_LIMITED':
             case 'copyleftLimited':
+            case 'Copyleft Limited':
+                color = "#c1bb00";
+                break;
+            case 'COPYLEFT_PARTIAL':
+            case 'Copyleft Partial':
+            case 'copyleftPartial':
                 color = "#ffa21d";
+                break;
+            case 'Proprietary Free':
+            case 'ProprietaryFree':
+            case 'proprietaryFree':
+            case 'Proprietary_Free':
+            case 'PROPRIETARY_FREE':
+                color ='#00e396'
+                break;
+            case 'PUBLIC_DOMAIN':
+            case 'Public Domain':
+            case 'publicDomain':
+            case 'Public_Domain':
+            case 'PublicDomain':
+                color = '#00acc1'
                 break;
             case 'CRITICAL':
             case 'critical':
@@ -432,7 +463,7 @@ export class ChartHelperService {
             case 'unique':
                 color = "green";
                 break;
-            case 'OPEN_SOURCE':    
+            case 'OPEN_SOURCE':
             case 'OPENSOURCE':
             case 'openSource':
                 color = "yellow";
@@ -440,6 +471,62 @@ export class ChartHelperService {
             case 'EMBEDDED':
             case 'embedded':
                 color = "light-blue";
+                break;
+
+
+            case 'COPYLEFT':
+            case 'copyleft':
+            case 'Copyleft':
+            case 'COPYLEF':
+                color = "copyLeft";
+                break;
+            case 'Proprietary':
+            case 'PROPRIETARY':
+            case 'proprietary':
+                color = "proprietary";
+                break;
+            case 'Undefined':
+            case 'UNDEFINED':
+                color = "undefined";
+                break;
+            case 'Copyleft Strong':
+            case 'COPYLEFT_STRONG':
+            case 'copyleftStrong':
+                color = "copyleftstrong";
+                break;
+            case 'PROPRIETARY_FREE':
+            case 'PERMISSIVE':
+            case 'permissive':
+                color = "permissive";
+                break;
+            case 'COPYLEFT_WEAK':
+            case 'copyleftWeak':
+            case 'Copyleft Weak':
+                color = "copyleftWeak";
+                break;
+            case 'COPYLEFT_LIMITED':
+            case 'copyleftLimited':
+            case 'Copyleft Limited':
+                color = "copyleftLimited";
+                break;
+            case 'COPYLEFT_PARTIAL':
+            case 'Copyleft Partial':
+            case 'copyleftPartial':
+                color = "copyleftPartial";
+                break;
+            case 'Proprietary Free':
+            case 'ProprietaryFree':
+            case 'proprietaryFree':
+            case 'Proprietary_Free':
+            case 'PROPRIETARY_FREE':
+                color = 'proprietaryFree'
+                break;
+            case 'PUBLIC_DOMAIN':
+            case 'Public Domain':
+            case 'publicDomain':
+            case 'Public_Domain':
+            case 'PublicDomain':
+                color = 'publicdomain'
                 break;
             default:
                 color = null

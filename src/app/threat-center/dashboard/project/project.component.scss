@@ -120,6 +120,63 @@
                 //border-radius: 4px;
             }
 
+            &.copyLeft{
+                color: rgb(255, 82, 82);
+                background: transparent;
+                border-bottom: 2px solid rgb(255, 82, 82);
+            }
+            &.proprietary{
+                color: rgb(199, 21, 133);
+                background: transparent;
+                border-bottom: 2px solid rgb(199, 21, 133);
+            }
+            &.undefined{
+                color: rgb(131, 5, 235);
+                background: transparent;
+                border-bottom: 2px solid rgb(131, 5, 235);
+            }
+            &.copyleftstrong{
+                color: rgb(255, 43, 43);
+                background: transparent;
+                border-bottom: 2px solid rgb(255, 43, 43);
+            }
+
+            &.permissive{
+                color: rgb(17, 193, 91);
+                background: transparent;
+                border-bottom: 2px solid rgb(17, 193, 91);
+            }
+            
+            &.copyleftWeak{
+                color: rgb(235, 227, 5);
+                background: transparent;
+                border-bottom: 2px solid rgb(235, 227, 5);
+            }
+
+            &.copyleftLimited{
+                color: rgb(193, 187, 0);
+                background: transparent;
+                border-bottom: 2px solid rgb(193, 187, 0);
+            }
+
+            &.copyleftPartial{
+                color: rgb(255, 162, 29);
+                background: transparent;
+                border-bottom: 2px solid rgb(255, 162, 29);
+            }
+
+            &.proprietaryFree{
+                color: rgb(0, 227, 150);
+                background: transparent;
+                border-bottom: 2px solid rgb(0, 227, 150);
+            }
+
+            &.publicdomain{
+                color: rgb(0, 172, 193);
+                background: transparent;
+                border-bottom: 2px solid rgb(0, 172, 193);
+            }
+
             .lgnd-tltp {
                 position: absolute;
                 min-width: 80px;

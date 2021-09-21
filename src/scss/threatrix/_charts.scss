@@ -145,6 +145,42 @@
                 background: rgb(248, 248, 255);
             }
 
+            &.copyLeft::after{
+                background: rgb(255, 82, 82);
+            }
+            &.proprietary::after{
+                background: rgb(199, 21, 133);
+            }
+            &.undefined::after{
+                background: rgb(131, 5, 235);
+            }
+            &.copyleftstrong::after{
+                background: rgb(255, 43, 43);
+            }
+
+            &.permissive::after{
+                background: rgb(17, 193, 91);
+            }
+            
+            &.copyleftWeak::after{
+                background: rgb(235, 227, 5);
+            }
+
+            &.copyleftLimited::after{
+                background: rgb(193, 187, 0);
+            }
+
+            &.copyleftPartial::after{
+                background: rgb(255, 162, 29);
+            }
+
+            &.proprietaryFree::after{
+                background: rgb(0, 227, 150);
+            }
+
+            &.publicdomain::after{
+                background: rgb(0, 172, 193);
+            }
         }
     }
 }
@@ -679,6 +715,66 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     background: rgba(0, 172, 193,0.2) ;
     border-color: rgba(0, 172, 193,0.2);
     color: #00acc1;
+}
+
+.badge-copyLeft {
+    background: rgba(255, 82, 82, 0.2);
+    border-color: rgba(255, 82, 82, 0.2);
+    color: #ff5252;
+}
+
+.badge-proprietary{
+    background: rgba(199, 21, 133,0.2);
+    border-color: rgba(199, 21, 133,0.2);
+    color: #c71585;
+}
+
+.badge-undefined{
+    background: rgba(131, 5, 235,0.2);
+    border-color: rgba(131, 5, 235,0.2);
+    color: #8305eb;
+}
+
+.badge-copyleftstrong{
+    background: rgba(255, 43, 43,0.2);
+    border-color: rgba(255, 43, 43,0.2);
+    color: #ff2b2b;
+}
+
+.badge-permissive{
+    background: rgba(17, 193, 91,0.2);
+    border-color: rgba(17, 193, 91,0.2);;
+    color: #11c15b;
+}
+
+.badge-copyleftWeak{
+    background: rgba(235, 227, 5,0.2);
+    border-color: rgba(235, 227, 5,0.2);
+    color: #ebe305;
+}
+
+.badge-copyleftLimited{
+    background: rgba(193, 187, 0,0.2);
+    border-color: rgba(193, 187, 0,0.2);
+    color: #c1bb00;
+}
+
+.badge-copyleftPartial{
+    background: rgba(255, 162, 29,0.2);
+    border-color: rgba(255, 162, 29,0.2);
+    color: #ffa21d;
+}
+
+.badge-proprietaryFree{
+    background: rgba(0, 227, 150,0.2);
+    border-color: rgba(0, 227, 150,0.2);
+    color: #00e396;
+}
+
+.badge-publicdomain{
+    background: rgba(0, 172, 193,0.2);
+    border-color: rgba(0, 172, 193,0.2);
+    color:#00acc1;
 }
 
 .clip-board-copy>div {
