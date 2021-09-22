@@ -190,7 +190,7 @@ export class PolicyService {
         return {
             "SECURITY": "Security",
             "LEGAL": "Legal",
-            "SUPPLY_CHAIN": "Supply Chain" /*,
+            /*"SUPPLY_CHAIN": "Supply Chain",
             "CODE_QUALITY": "Code quality",
             "RELEASE_STAGE": "Release Stage"*/
         };
