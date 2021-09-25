@@ -219,7 +219,7 @@ export class ConditionBuilderComponent implements OnInit {
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("COMPONENT_ARTIFACT_ID", { code: "COMPONENT_ARTIFACT_ID", title: "Component ID", dataType: "STR", 
+        conditions.set("COMPONENT_ARTIFACT_ID", { code: "COMPONENT_ARTIFACT_ID", title: "Component SHA1", dataType: "STR", 
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
@@ -286,11 +286,11 @@ export class ConditionBuilderComponent implements OnInit {
             values: [{ code: "PROJECT", name: "Project" },
                     { code: "COMPONENT", name: "Component" }], inputType: "CMB"};
 
-
-        this.categories.mainConditions.forEach((value: ConditionTypeMetadata, key: string) => {
-                    value.conditionMetadatas.set(threshold.code, threshold);
-                    value.conditionMetadatas.set(scope.code, scope);
-        });   
+        //Remove Scope and Threshold from policy conditions. These should only exist in subordinate conditions.
+        // this.categories.mainConditions.forEach((value: ConditionTypeMetadata, key: string) => {
+        //             value.conditionMetadatas.set(threshold.code, threshold);
+        //             value.conditionMetadatas.set(scope.code, scope);
+        // });   
         let condType = new ConditionTypeMetadata("THRESHOLD", "Threshold");
         condType.conditionMetadatas.set("THRESHOLD", threshold);
         this.categories.subordinateConditions.set(condType.code, condType);

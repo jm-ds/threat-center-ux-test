@@ -11,7 +11,7 @@
         </span> 
         <span class="text-wrap"> {{entity.name}}
         </span>
-        <select *ngIf="!!entitySelectionItems && entitySelectionItems.length >= 1" [ngClass]="'ng-select'" class="form-control form-control-sm custom-select select-utility" id="entityType"
+        <select *ngIf="!!entitySelectionItems && entitySelectionItems.length >= 2" [ngClass]="'ng-select'" class="form-control form-control-sm custom-select select-utility" id="entityType"
             [(ngModel)]="currentEntityId" (ngModelChange)="changeSelectedEntity()">
             <option *ngFor="let item of entitySelectionItems" [ngValue]="item.value">{{ item.label }}</option>
         </select>
