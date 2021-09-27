@@ -101,10 +101,13 @@ export class ScanComponentService {
                             name,
                             category,
                             style,
+                            type,
                             spdxId,
                             publicationYear,
                             licenseDiscovery,
-                            licenseOrigin
+                            licenseOrigin,
+                            isOsiApproved,
+                            isFsfLibre
                         }
                     }
                 }
