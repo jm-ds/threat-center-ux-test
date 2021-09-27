@@ -15,6 +15,7 @@ import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.se
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import {ScanComponentService} from "@app/threat-center/dashboard/services/scan-component.service";
 import {Messages} from "@app/messages/messages";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'component-detail',
@@ -60,6 +61,8 @@ export class ComponentDetailComponent implements OnInit {
   vulnerabilityDetails: any = {};
 
   breadcumDetail: any = {};
+  licensesList = [];
+  columns = ['Name', 'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
   constructor(
     private apiService: ApiService,
     private scanComponentService: ScanComponentService,
@@ -84,7 +87,9 @@ export class ComponentDetailComponent implements OnInit {
       .pipe(map(result => result.data.scanComponent));
 
     this.obsScanComponent.subscribe((res: any) => {
+      
       this.component = res["component"];
+      this.calculateLogic(res);
       if (!!this.projectBreadcumsService.getProjectBreadcum()) {
         this.projectBreadcumsService.settingProjectBreadcum("Component", res.name, res.componentId, false);
       }
@@ -191,6 +196,59 @@ export class ComponentDetailComponent implements OnInit {
       }
     }
   }
+
+  private calculateLogic(license) {
+    const value = _.chain(license.licenses.edges).groupBy("node.name")
+        .map((value, key) => ({ key: key, value: value })).value();
+    let originalArray = [];
+    _.each(value, mainValue => {
+
+        if (mainValue.value.length >= 2) {
+            originalArray.push({ isColspan: true, name: mainValue.key });
+            _.each(mainValue.value, val => {
+                originalArray.push({
+                    isColspan: false,
+                    node: {
+                        category: val.node.category,
+                        isFsfLibre: val.node.isFsfLibre,
+                        isOsiApproved: val.node.isOsiApproved,
+                        licenseDiscovery: val.node.licenseDiscovery,
+                        licenseId: val.node.licenseId,
+                        licenseOrigin: val.node.licenseOrigin,
+                        name: '',
+                        publicationYear: val.node.publicationYear,
+                        spdxId: val.node.spdxId,
+                        style: val.node.style,
+                        type: val.node.type,
+                        isColspan: false
+                    }
+                });
+            });
+        } else {
+            _.each(mainValue.value, val => {
+                originalArray.push(
+                    {
+                        isColspan: false,
+                        node: {
+                            category: val.node.category,
+                            isFsfLibre: val.node.isFsfLibre,
+                            isOsiApproved: val.node.isOsiApproved,
+                            licenseDiscovery: val.node.licenseDiscovery,
+                            licenseId: val.node.licenseId,
+                            licenseOrigin: val.node.licenseOrigin,
+                            name: val.node.name,
+                            publicationYear: val.node.publicationYear,
+                            spdxId: val.node.spdxId,
+                            style: val.node.style,
+                            type: val.node.type,
+                            isColspan: false
+                        }
+                    });
+            });
+        }
+    });
+    this.licensesList = originalArray;
+}
 
   //Loading vulnerability data after paggination.
   private loadVulData(first, last, endCursor = undefined, startCursor = undefined) {
