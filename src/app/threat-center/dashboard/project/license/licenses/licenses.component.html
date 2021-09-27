@@ -48,29 +48,30 @@
           </tr>
           <tr *ngIf="!license.isColspan" (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
             <td>{{license.node.name}}</td>
+<!--            <td>{{license.node.licenseId}}</td>-->
             <td>
               <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
                     class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
               <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
                     class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
-          </td>
-          <td>
-            {{messages.license.origin[license.node.licenseOrigin]}}
-          </td>
+            </td>
+            <td>
+              {{messages.license.origin[license.node.licenseOrigin]}}
+            </td>
             <td>{{license.node.spdxId}}</td>
             <td>
               <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
-                class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                    class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
               <span *ngIf="license.node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak"
-                class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                    class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
               <span *ngIf="license.node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial"
-                class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                    class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
               <span *ngIf="license.node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited"
-                class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                    class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
               <span *ngIf="license.node.category === 'COPYLEFT'" title="Copyleft"
-                class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                    class="badge m-r-5 badge-light-warning">COPYLEFT</span>
               <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive"
-                class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                    class="badge m-r-5 badge-light-success">PERMISSIVE</span>
             </td>
             <td>{{license.node.style}}</td>
             <td>
