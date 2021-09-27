@@ -86,7 +86,77 @@
             <ng-template ngbTabContent>
 
               <div style="display: flex; flex-wrap: wrap;">
-                <div class="card m-3" style="flex: 30%; flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
+
+                <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
+                  <p-table #dt [columns]="columns" [value]="licensesList" [paginator]="false" [rows]="50"
+                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
+                    [filterDelay]="0" [globalFilterFields]="['name']">
+            
+                    <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        <th *ngFor="let col of columns">
+                          {{col}}
+                        </th>
+                      </tr>
+                      <!-- <tr>
+                        <th *ngFor="let col of columns">
+                          <input *ngIf="col =='Name'" id="nameSearch" type="text" placeholder="{{col}}" name="search-name"
+                                 class="form-control" (input)="filterColumn(col, $event.target.value,'nameSearch')" [value]="getColumnFilterValue(col)"/>
+                          <input *ngIf="col =='SPDX'" id="spdxSearch" type="text" placeholder="{{col}}" name="search-name"
+                                 class="form-control" (input)="filterColumn(col, $event.target.value,'spdxSearch')" [value]="getColumnFilterValue(col)"/>
+                          <input *ngIf="col =='Threat Category'" id="threatCategorySearch" type="text" placeholder="{{col}}" name="search-name"
+                                 class="form-control" (input)="filterColumn(col, $event.target.value,'threatCategorySearch')" [value]="getColumnFilterValue(col)"/>
+                          <input *ngIf="col =='Style'" id="styleSearch" type="text" placeholder="{{col}}" name="search-name"
+                                 class="form-control" (input)="filterColumn(col, $event.target.value,'styleSearch')" [value]="getColumnFilterValue(col)"/>
+                        </th>
+                      </tr> -->
+                    </ng-template>
+            
+                    <ng-template pTemplate="body" let-license>
+                      <tr *ngIf="license.isColspan" style="background-color: #363e4f;">
+                        <td colspan="8"><span style="font-size: 15px;">{{license?.name}}</span><i class="fas fa-layer-group ml-1"></i></td>
+                      </tr>
+                      <tr *ngIf="!license.isColspan" (click)="gotoDetails(license.node.licenseId)" class="cursor-pointer">
+                        <td>{{license.node.name}}</td>
+                        <td>
+                          <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                                class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+                          <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
+                                class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+                      </td>
+                      <td>
+                        {{messages.license.origin[license.node.licenseOrigin]}}
+                      </td>
+                        <td>{{license.node.spdxId}}</td>
+                        <td>
+                          <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
+                            class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                          <span *ngIf="license.node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak"
+                            class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                          <span *ngIf="license.node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial"
+                            class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                          <span *ngIf="license.node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited"
+                            class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                          <span *ngIf="license.node.category === 'COPYLEFT'" title="Copyleft"
+                            class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                          <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive"
+                            class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                        </td>
+                        <td>{{license.node.style}}</td>
+                        <td>
+                          <span *ngIf="license.node.isOsiApproved === true;else notApproved" class="badge m-r-5 badge-light-success">YES</span>
+                          <ng-template #notApproved><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
+                        </td>
+                        <td>
+                          <span *ngIf="license.node.isFsfLibre === true;else notFsfLib" class="badge m-r-5 badge-light-success">YES</span>
+                          <ng-template #notFsfLib><span class="badge m-r-5 badge-light-danger">NO</span></ng-template>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </perfect-scrollbar>
+
+                <!-- <div class="card m-3" style="flex: 30%; flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
                   <div class="card-body" (click)="gotoOtherDetailsPage(license.node.licenseId,'license')">
                     <h6 class="card-title">{{license.node.name}}</h6>
                       <div class="card p-2 m-3">
@@ -141,7 +211,7 @@
                       </div>
 
                   </div>
-                </div>
+                </div> -->
               </div>
             </ng-template>
           </ngb-tab>
