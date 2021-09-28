@@ -50,4 +50,16 @@ export class RepositoryListComponent implements OnInit {
     deSelection() {
         this.selectedRepos = [];
     }
+
+    getIfDuplicate(name:string){
+        return this.values.filter(val => { return val.node.name === name }).length >= 2;
+    }
+
+    getIfDuplicateIn(name){
+        return this.values.filter(val => { return val.name === name }).length >= 2;
+    }
+
+    getName(str:string){
+        return str.split("/")[1].split("/")[0]
+    }
 }
