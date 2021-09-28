@@ -2,13 +2,15 @@ import {Injectable} from '@angular/core';
 import {Apollo} from "apollo-angular";
 import {PoliciesQuery, Policy, PolicyQuery, PolicyRequestInput} from "@app/models";
 import gql from "graphql-tag";
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PolicyService {
 
-    constructor(private apollo: Apollo) {
+    constructor(private apollo: Apollo,
+        private coreGraphQLService: CoreGraphQLService) {
     }
 
     getPolicyList(entityId: string, projectId: string, onlyActive: Boolean) {
@@ -19,28 +21,24 @@ export class PolicyService {
         if (filter) {
             filter = '('+filter+')';
         }
-        
-        
-        return this.apollo.watchQuery<PoliciesQuery>({
-            query: gql(`query {
-                policies ${filter} {
-                    edges {
-                      node {
-                        orgId
-                        entityId
-                        projectId
-                        policyId
-                        name
-                        active
-                        title
-                        conditionType
-                        description
-                      }
-                    }
+
+        return this.coreGraphQLService.coreGQLReq<PoliciesQuery>(gql(`query {
+            policies ${filter} {
+                edges {
+                  node {
+                    orgId
+                    entityId
+                    projectId
+                    policyId
+                    name
+                    active
+                    title
+                    conditionType
+                    description
+                  }
                 }
-            }`),
-            fetchPolicy: 'no-cache'
-        }).valueChanges;
+            }
+        }`),'no-cache');
     }
 
     getPolicy(entityId: string, projectId: string, policyId: string) {
@@ -96,30 +94,21 @@ export class PolicyService {
                 }
             }
         }`;
-        return this.apollo.watchQuery<PolicyQuery>({
-            query: gql(query),
-            fetchPolicy: 'no-cache'
-        }).valueChanges;
+        return this.coreGraphQLService.coreGQLReq<PolicyQuery>(gql(query),'no-cache');
     }
 
 
     savePolicy(policy: Policy): any {
         const policyRequest = new PolicyRequestInput(policy);
-
-        return this.apollo.mutate({
-            mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
-                createPolicy(policyRequest: $policyRequest) {
-                    orgId,
-                    entityId,
-                    projectId,
-                    active,
-                    policyId
-                }
-            }`,
-            variables: {
-                policyRequest: policyRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($policyRequest: PolicyRequestInput) {
+            createPolicy(policyRequest: $policyRequest) {
+                orgId,
+                entityId,
+                projectId,
+                active,
+                policyId
             }
-        });
+        }`, { policyRequest: policyRequest });
     }
 
     // clear uuid if null uuid  
@@ -147,21 +136,15 @@ export class PolicyService {
     removePolicy(policy: Policy) {
         const policyRequest = new PolicyRequestInput(policy);
 
-        return this.apollo.mutate({
-            mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
-                removePolicy(policyRequest: $policyRequest) {
-                    orgId,
-                    entityId,
-                    projectId,
-                    policyId,
-                    active
-                }
-            }`,
-            variables: {
-                policyRequest: policyRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($policyRequest: PolicyRequestInput) {
+            removePolicy(policyRequest: $policyRequest) {
+                orgId,
+                entityId,
+                projectId,
+                policyId,
+                active
             }
-        });
-
+        }`, { policyRequest: policyRequest });
     }
 
 
@@ -169,21 +152,15 @@ export class PolicyService {
     enablePolicy(policy: Policy) {
         const policyRequest = new PolicyRequestInput(policy);
 
-        return this.apollo.mutate({
-            mutation: gql`mutation ($policyRequest: PolicyRequestInput) {
-                enablePolicy(policyRequest: $policyRequest) {
-                    orgId,
-                    entityId,
-                    projectId,
-                    policyId,
-                    active
-                }
-            }`,
-            variables: {
-                policyRequest: policyRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($policyRequest: PolicyRequestInput) {
+            enablePolicy(policyRequest: $policyRequest) {
+                orgId,
+                entityId,
+                projectId,
+                policyId,
+                active
             }
-        });
-
+        }`,{policyRequest: policyRequest});
     }
 
     getConditionTypes() {

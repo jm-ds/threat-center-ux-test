@@ -115,50 +115,34 @@ export class OrgService {
   // post "generate org API key" command
   generateOrgApiKey(apiKey: ApiKey) {
     const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
-
-    return this.apollo.mutate({
-        mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-          generateApiKey: generateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
-                keyId
-            }
-        }`,
-        variables: {
-            apiKeyRequest: apiKeyRequest
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+      generateApiKey: generateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+            keyId
         }
-    });
+    }`, { apiKeyRequest: apiKeyRequest });
   }
-
 
   // post "update org API key" command
   updateOrgApiKey(apiKey: ApiKey) {
     const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
-    return this.apollo.mutate({
-        mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-          updateApiKey: updateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
-                keyId
-            }
-        }`,
-        variables: {
-            apiKeyRequest: apiKeyRequest
+
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+      updateApiKey: updateOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+            keyId
         }
-    });
+    }`, { apiKeyRequest: apiKeyRequest });
   }
 
 
   // post "remove org API key" command
   removeOrgApiKey(apiKey: ApiKey) {
-      const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
+    const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
 
-      return this.apollo.mutate({
-          mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-            removeApiKey: removeOrgApiKey(apiKeyRequest: $apiKeyRequest) {
-                  keyId
-              }
-          }`,
-          variables: {
-              apiKeyRequest: apiKeyRequest
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+        removeApiKey: removeOrgApiKey(apiKeyRequest: $apiKeyRequest) {
+              keyId
           }
-      });
+      }`, { apiKeyRequest: apiKeyRequest });
   }
 
 }
