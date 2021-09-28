@@ -15,7 +15,8 @@
                 <div *ngIf="!!repo.node;else reponame" style="float:left">{{repo.node['name']}}
                     <span *ngIf="getIfDuplicate(repo.node['name'])">({{getName(repo.node['resourcePath'])}})</span></div>
                 <ng-template #reponame>
-                    <div style="float:left">{{repo['name']}}</div>
+                    <div style="float:left">{{repo['name']}}
+                        <span *ngIf="getIfDuplicateIn(repo['name'])">({{getName(repo['resourcePath'])}})</span></div>
                 </ng-template>
             </td>
             <td *ngIf="isLanguage">
