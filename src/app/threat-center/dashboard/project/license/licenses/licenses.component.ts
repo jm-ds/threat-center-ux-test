@@ -20,7 +20,7 @@ export class LicensesComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
 
-    columns = ['Name', 'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+    columns = ['Name', /*'ID', */'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -33,6 +33,7 @@ export class LicensesComponent implements OnInit {
 
     messages = Messages;
     totalLicenses:number = 0;
+    pageInfo:any;
 
     constructor(private apiService: ApiService,
         private router: Router,
@@ -74,15 +75,15 @@ export class LicensesComponent implements OnInit {
             // Next and Previous changed
             if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
                 // call with after...
-                if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasNextPage) {
+                if (!!this.pageInfo && this.pageInfo) {
                     this.loadLicensesData(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")), undefined,
-                        this.licensesDetails.licenses.pageInfo.endCursor, undefined);
+                        this.pageInfo.endCursor, undefined);
                 }
             } else {
                 // call with before..
-                if (!!this.licensesDetails.licenses.pageInfo && this.licensesDetails.licenses.pageInfo.hasPreviousPage) {
+                if (!!this.pageInfo && this.pageInfo.hasPreviousPage) {
                     this.loadLicensesData(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")),
-                        undefined, this.licensesDetails.licenses.pageInfo.startCursor);
+                        undefined, this.pageInfo.startCursor);
                 }
             }
         }
@@ -97,6 +98,7 @@ export class LicensesComponent implements OnInit {
             this.licensesDetails = license;
             this.isDisablePaggination = false;
             this.totalLicenses = this.licensesDetails.licenses.totalCount;
+            this.pageInfo = this.licensesDetails.licenses.pageInfo;
             this.calculateLogic();
         });
 
@@ -125,6 +127,7 @@ export class LicensesComponent implements OnInit {
                 this.licensesDetails = licenses;
                 this.coreHelperService.setFocusOnElement(idElement);
                 this.totalLicenses = this.licensesDetails.licenses.totalCount;
+                this.pageInfo = this.licensesDetails.licenses.pageInfo;
                 this.calculateLogic();
             });
         }, this.timeOutDuration);
@@ -152,6 +155,7 @@ export class LicensesComponent implements OnInit {
         this.obsScan.subscribe(licenses => {
             this.licensesDetails = licenses;
             this.totalLicenses = this.licensesDetails.licenses.totalCount;
+            this.pageInfo = this.licensesDetails.licenses.pageInfo;
             this.calculateLogic();
         });
     }
@@ -189,6 +193,7 @@ export class LicensesComponent implements OnInit {
                         {
                             isColspan: false,
                             node: {
+                                category: val.node.category,
                                 isFsfLibre: val.node.isFsfLibre,
                                 isOsiApproved: val.node.isOsiApproved,
                                 licenseDiscovery: val.node.licenseDiscovery,
