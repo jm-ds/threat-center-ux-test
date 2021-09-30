@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Apollo} from "apollo-angular";
-import {SimmQuery, UserQuery} from "@app/models";
+import { Injectable } from '@angular/core';
+import { SimmQuery, UserQuery } from "@app/models";
 import gql from "graphql-tag";
+import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 
 @Injectable({
@@ -9,21 +9,16 @@ import gql from "graphql-tag";
 })
 export class SimmService {
 
-    constructor(private apollo: Apollo) {
+    constructor(private coreGraphQLService: CoreGraphQLService) {
     }
 
     compare(sourceContent: string, matchContent: string) {
-        return this.apollo.watchQuery<SimmQuery>({
-            query: gql`query($sourceContent: String, $matchContent: String) {
-                simmCompare(sourceContent: $sourceContent, matchContent: $matchContent) {
-                    leftStart, leftEnd, rightStart, rightEnd
-                }
-            }`,
-            variables: {
-                sourceContent: sourceContent,
-                matchContent: matchContent
+
+        return this.coreGraphQLService.coreGQLReq(gql`query($sourceContent: String, $matchContent: String) {
+            simmCompare(sourceContent: $sourceContent, matchContent: $matchContent) {
+                leftStart, leftEnd, rightStart, rightEnd
             }
-        }).valueChanges;
+        }`, 'no-cache', { sourceContent: sourceContent, matchContent: matchContent });
     }
 
 }
