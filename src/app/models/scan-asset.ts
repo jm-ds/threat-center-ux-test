@@ -1,4 +1,5 @@
-import { Repository } from "./scan";
+import {Repository, ScanEdge} from "./scan";
+import {PageInfo} from "@app/models/common";
 
 export class ScanAsset {
     name: string;
@@ -46,4 +47,24 @@ export class AttributeAssetRequestInput {
         this.attributeStatus = attributeStatus;
         this.attributeComment = attributeComment;
     }
+}
+
+export class ScanAssetsTreeConnection {
+    edges: ScanAssetsTreeEdge[];
+    pageInfo: PageInfo;
+    totalCount: number;
+}
+
+export class ScanAssetsTreeEdge {
+    node: ScanAssetTree;
+    cursor: string;
+}
+
+export class ScanAssetTree extends ScanAsset{
+    orgId: string;
+    scanId: string;
+    parentScanAssetId: string;
+    projectId: string;
+    assetType: string;
+    embeddedAssetPercent: number;
 }

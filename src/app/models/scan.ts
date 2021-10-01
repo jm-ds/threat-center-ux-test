@@ -1,5 +1,7 @@
 import { PageInfo } from "./common";
 import { Vulnerability } from "./vulnerability";
+import {License} from "@app/models/license";
+import {ScanAssetsTreeConnection} from "@app/models/scan-asset";
 
 export class ScanRequest {
     login: string;
@@ -92,6 +94,7 @@ export class Scan {
     scanRepository: Repository;
     scanMetrics: any;
     scanAssets: any;
+    licenses: ScanLicense[];
 }
 
 export class GithubAccount {
@@ -112,6 +115,25 @@ export class ScanConnection {
 export class ScanEdge {
     node: Scan;
     cursor: string;
+}
+
+export class ScanLicense {
+    orgId: string;
+    scanId: string;
+    licenseId: string;
+    spdxId: string;
+    name: string;
+    style: string;
+    type: string;
+    publicationYear: number;
+    isOsiApproved: boolean;
+    isFsfLibre: boolean;
+    category: string;
+    licenseOrigin: string;
+    license: License;
+    assetCount: number;
+    scanComponents: ScanConnection;
+    scanAssetsTree: ScanAssetsTreeConnection;
 }
 
 // GRAPHQL QUERIES
@@ -141,4 +163,8 @@ export type ScanQuery = {
 // check if already scanned
 export type CheckAlreadyScannedQuery = {
     checkAlreadyScannedProject: Date
+}
+
+export type ScanLicenseQuery = {
+    scanLicense: ScanLicense;
 }
