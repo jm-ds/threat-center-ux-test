@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
@@ -12,7 +11,6 @@ export class ApiService {
   private userSelection: UserSelection;
 
   constructor(
-    private apollo: Apollo,
     private coreGraphQLService: CoreGraphQLService) { }
 
   getEntityList() {
@@ -249,10 +247,12 @@ export class ApiService {
     query = query.replace("%childProjects%", "");
     query = query.replace("%childEntityChildProjects%", "");
 
-    return this.apollo.watchQuery<EntityQuery>({
-      query: gql(query),
-      fetchPolicy: 'no-cache'
-    }).valueChanges;
+    // return this.coreGraphQLService.watchQuery<EntityQuery>({
+    //   query: gql(query),
+    //   fetchPolicy: 'no-cache'
+    // }).valueChanges;
+
+    return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql(query),'no-cache');
   }
 
 
@@ -1151,8 +1151,8 @@ export class ApiService {
 
   // Request gitlab repos data from backend
   getGitLabUser() {
-    return this.apollo.watchQuery<GitLabUserQuery>({
-      query: gql`
+    return this.coreGraphQLService.coreGQLReq<GitLabUserQuery>(
+      gql`
           query {
             gitLabUser {
               id,
@@ -1178,15 +1178,15 @@ export class ApiService {
               }
             }
           }
-        `,
-    }).valueChanges;
+        `
+    );
   }
 
 
   // Request bitbucket repos data from backend
   getBitbucketUser() {
-    return this.apollo.watchQuery<BitbucketUserQuery>({
-      query: gql`
+    return this.coreGraphQLService.coreGQLReq<BitbucketUserQuery>(
+      gql`
           query {
             bitbucketUser {
               id,
@@ -1211,8 +1211,7 @@ export class ApiService {
               }
             }
           }
-        `,
-    }).valueChanges;
+      `);
   }
 
 
@@ -1223,14 +1222,9 @@ export class ApiService {
       assetMatchesInput.push(new ScanAssetMatchRequest(match.assetMatchId, match.percentMatch));
     }
     let attributeAssetRequest = new AttributeAssetRequestInput(scanId, scanAssetId, assetMatchesInput, attributeStatus, attributeComment);
-    return this.apollo.mutate({
-      mutation: gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
-        attributeAsset(attributeAssetRequest: $attributeAssetRequest)
-      }`,
-      variables: {
-        attributeAssetRequest: attributeAssetRequest
-      }  
-    });    
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
+      attributeAsset(attributeAssetRequest: $attributeAssetRequest)
+    }`, { attributeAssetRequest: attributeAssetRequest });
   }
 
 }

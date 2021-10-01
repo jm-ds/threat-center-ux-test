@@ -60,37 +60,26 @@ export class RoleService {
 
         const roleRequest = RoleRequestInput.from(role, permissions);
 
-        return this.apollo.mutate({
-            mutation: gql`mutation ${mutationName}($role: RoleRequestInput) {
-                ${mutationName}(role: $role) {
-                    orgId,
-                    roleId,
-                    permissions,
-                    description
-                }
-            }`,
-            variables: {
-                role: roleRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ${mutationName}($role: RoleRequestInput) {
+            ${mutationName}(role: $role) {
+                orgId,
+                roleId,
+                permissions,
+                description
             }
-        });
+        }`, { role: roleRequest });
     }
 
 
     removeRole(role: Role) {
         const roleRequest = RoleRequestInput.from(role);
-        return this.apollo.mutate({
-            mutation: gql`mutation removeRole($role: RoleRequestInput) {
-                removeRole(role: $role) {
-                    orgId,
-                    roleId,
-                    removed
-                }
-            }`,
-            variables: {
-                role: roleRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation removeRole($role: RoleRequestInput) {
+            removeRole(role: $role) {
+                orgId,
+                roleId,
+                removed
             }
-        });
+        }`, { role: roleRequest });
     }
-
 
 }

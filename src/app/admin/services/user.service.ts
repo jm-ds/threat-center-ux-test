@@ -181,49 +181,32 @@ export class UserService {
     // post "generate API key" command
     generateApiKey(apiKey: ApiKey) {
         const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
-
-        return this.apollo.mutate({
-            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-                generateApiKey(apiKeyRequest: $apiKeyRequest) {
-                    keyId
-                }
-            }`,
-            variables: {
-                apiKeyRequest: apiKeyRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+            generateApiKey(apiKeyRequest: $apiKeyRequest) {
+                keyId
             }
-        });
+        }`, { apiKeyRequest: apiKeyRequest });
     }
 
 
     // post "update API key" command
     updateApiKey(apiKey: ApiKey) {
         const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
-        return this.apollo.mutate({
-            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-                updateApiKey(apiKeyRequest: $apiKeyRequest) {
-                    keyId
-                }
-            }`,
-            variables: {
-                apiKeyRequest: apiKeyRequest
-            }
-        });
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+              updateApiKey(apiKeyRequest: $apiKeyRequest) {
+                        keyId
+                     }
+                 }`, { apiKeyRequest: apiKeyRequest });
     }
 
 
     // post "remove API key" command
     removeApiKey(apiKey: ApiKey) {
         const apiKeyRequest = ApiKeyRequestInput.from(apiKey);
-
-        return this.apollo.mutate({
-            mutation: gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
-                removeApiKey(apiKeyRequest: $apiKeyRequest) {
-                    keyId
-                }
-            }`,
-            variables: {
-                apiKeyRequest: apiKeyRequest
+        return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($apiKeyRequest: ApiKeyRequestInput) {
+            removeApiKey(apiKeyRequest: $apiKeyRequest) {
+                keyId
             }
-        });
+        }`, { apiKeyRequest: apiKeyRequest });
     }
 }

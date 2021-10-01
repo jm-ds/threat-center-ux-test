@@ -41,34 +41,28 @@ export class TaskService {
   }
 
   getTaskUpdate(taskToken: string) {
-    return this.apollo.watchQuery<TaskQuery>({
-      query: gql`  query {
-        task_update(taskToken:"${taskToken}") {
+    return this.coreGraphQLService.coreGQLReq<TaskQuery>(gql` query {
+      task_update(taskToken:"${taskToken}") {
+      taskToken,
+      pctComplete,
+      status,
+      statusMessage,
+      resourceId
+      subtasks {
         taskToken,
         pctComplete,
         status,
         statusMessage,
         resourceId
-        subtasks {
-          taskToken,
-          pctComplete,
-          status,
-          statusMessage,
-          resourceId
         }
       }
-    }
-  `, fetchPolicy: 'no-cache'
-    }).valueChanges;
+    }`, 'no-cache');
   }
 
   getRunningScanTasksCount(entityId: string) {
-    return this.apollo.watchQuery<RunningTaskCountQuery>({
-      query: gql`  query {
-        running_scan_tasks_count(entityId:"${entityId}")
-    }
-  `, fetchPolicy: 'no-cache'
-    }).valueChanges;
+    return this.coreGraphQLService.coreGQLReq<RunningTaskCountQuery>(gql`  query {
+      running_scan_tasks_count(entityId:"${entityId}")
+    }`, 'no-cache');
   }
 
 

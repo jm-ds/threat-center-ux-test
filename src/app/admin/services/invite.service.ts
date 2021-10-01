@@ -29,69 +29,56 @@ export class InviteService {
       this.alertService.alertBox('Organization not found!', 'Not Found', 'error');
       return undefined;
     } else {
-      return this.apollo.mutate<InviteQuery>({
-        mutation: gql`mutation {
-          createInvite(orgId: "${this.authService.currentUser.orgId}") {
-                orgId,
-                username,
-                inviteHash,
-                expiredDate,
-                inviteUrl,
-                inviteHash
-            }
-        }`
-      });
+      return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation {
+        createInvite(orgId: "${this.authService.currentUser.orgId}") {
+              orgId,
+              username,
+              inviteHash,
+              expiredDate,
+              inviteUrl,
+              inviteHash
+          }
+      }`);
     }
   }
 
   // fetch invite
   getInvite(inviteHash: string): any {
-    return this.apollo.watchQuery<InviteQuery>({
-      query: gql(`query {
-        getInvite(inviteHash: "${inviteHash}") {
-          orgId,
-          username,
-          inviteHash,
-          expiredDate,
-          inviteUrl
-          inviteHash
-        }
-      }`),
-      fetchPolicy: 'no-cache'
-    }).valueChanges;
+    return this.coreGraphQLService.coreGQLReq<InviteQuery>(gql(`query {
+      getInvite(inviteHash: "${inviteHash}") {
+        orgId,
+        username,
+        inviteHash,
+        expiredDate,
+        inviteUrl
+        inviteHash
+      }
+    }`),'no-cache');
   }
 
   // fetch invite mail data
   getInviteMailData(inviteHash: string): any {
-    return this.apollo.watchQuery<InviteQuery>({
-      query: gql(`query {
-        getInviteMailData(inviteHash: "${inviteHash}") {
-          subject,
-          body,
-          inviteHash,
-          inviteUrl
-          }
-      }`),
-      fetchPolicy: 'no-cache'
-    }).valueChanges;
+
+    return this.coreGraphQLService.coreGQLReq<InviteQuery>(gql(`query {
+      getInviteMailData(inviteHash: "${inviteHash}") {
+        subject,
+        body,
+        inviteHash,
+        inviteUrl
+        }
+    }`),'no-cache');
   }
 
   // send invitation email
   sendInviteMail(inviteMailData: InviteMailData): any {
     const inviteMailDataRequest = new InviteMailDataRequestInput(inviteMailData);
-    return this.apollo.mutate({
-      mutation: gql`mutation ($inviteMailDataRequest: InviteMailDataRequestInput) {
-        sendInviteMail(inviteMailDataRequest: $inviteMailDataRequest)
-      }`,
-      variables: {
-        inviteMailDataRequest: inviteMailDataRequest
-      }
-    });
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($inviteMailDataRequest: InviteMailDataRequestInput) {
+      sendInviteMail(inviteMailDataRequest: $inviteMailDataRequest)
+    }`,{inviteMailDataRequest: inviteMailDataRequest});
   }
 
   getUserByInvite(inviteHash: string): any {
-      return this.apollo.watchQuery<UserQuery>({
-          query: gql(`query {
+    return this.coreGraphQLService.coreGQLReq<UserQuery>(gql(`query {
       getUserByInvite(inviteHash: "${inviteHash}") {
         orgId,
         username,
@@ -102,32 +89,24 @@ export class InviteService {
         phone,
         created,
       }
-    }`), fetchPolicy: 'no-cache'
-      }).valueChanges;
+    }`), 'no-cache');
   }
 
   updateInvitedUser(user: User, inviteHash: string): any {
-      const userRequest = new InvitedUserRequestInput(user);
-
-      return this.apollo.mutate({
-          mutation: gql`mutation updateInvitedUser($user: InvitedUserRequestInput, $inviteHash: String) {
-              updateInvitedUser(user: $user, inviteHash: $inviteHash)
-          }`, variables: {user: userRequest, inviteHash: inviteHash}
-      });
+    const userRequest = new InvitedUserRequestInput(user);
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation updateInvitedUser($user: InvitedUserRequestInput, $inviteHash: String) {
+      updateInvitedUser(user: $user, inviteHash: $inviteHash)
+      }`, { user: userRequest, inviteHash: inviteHash });
   }
 
   // fetch organization name for invite  
   getOrgDataByInvite(inviteHash: string) {
-    return this.apollo.watchQuery<InviteOrganizationDataQuery>({
-        query: gql(`query {
-          inviteOrg(inviteHash: "${inviteHash}") {
-              name
-            }
-          }`
-        ), fetchPolicy: 'no-cache'
-    }).valueChanges;
+    return this.coreGraphQLService.coreGQLReq<InviteOrganizationDataQuery>(gql(`query {
+      inviteOrg(inviteHash: "${inviteHash}") {
+          name
+        }
+      }`,), 'no-cache');
   }
-
 }
 
 export class InvitedUserRequestInput {

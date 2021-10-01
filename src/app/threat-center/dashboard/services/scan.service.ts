@@ -88,7 +88,8 @@ export class ScanHelperService {
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
                     if (tUpdate.status === 'COMPLETE_WITH_ERRORS') {
-                        this.alertService.alertBox("Scan is completed with errors", "Warning", "warning")
+                        const message = !!tUpdate.statusMessage ? tUpdate.statusMessage : "Scan is completed with errors";
+                        this.alertService.alertBox(message, "Warning", "warning")
                             .then(() => {
                                 this.highlightNewScanIfInSamePage(tUpdate);
                                 this.refreshObjectPageIfFirstScan();
