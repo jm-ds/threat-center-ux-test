@@ -10,7 +10,7 @@ export class UserPreferenceService {
     constructor() { }
 
     // Set Preference details to session storage
-    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null, panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null) {
+    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null, panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null,lastSelectedScan:string = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -68,6 +68,10 @@ export class UserPreferenceService {
                         prefrence.selectedLinechartTab = selectedLinechartTab;
                     }
 
+                    if (lastSelectedScan !== null) {
+                        prefrence.lastSelectedScanId = lastSelectedScan;
+                    }
+
                 }
             });
         } else {
@@ -101,6 +105,20 @@ export class UserPreferenceService {
 
     //getting panel details for chart
     getPanelDetailByModule(moduleName:string){
+        if (!!sessionStorage.getItem("UserPreference")) {
+            const preferenceDetails = this.getPreferenceDetailsFromSession();
+            if (!!preferenceDetails && preferenceDetails.length >= 1) {
+                return !!preferenceDetails.find(pre => { return pre.moduleName === moduleName }) ? preferenceDetails.find(pre => { return pre.moduleName === moduleName }) : null;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    //getting last scan selected
+    getLastScanSelectedByModule(moduleName:string){
         if (!!sessionStorage.getItem("UserPreference")) {
             const preferenceDetails = this.getPreferenceDetailsFromSession();
             if (!!preferenceDetails && preferenceDetails.length >= 1) {
