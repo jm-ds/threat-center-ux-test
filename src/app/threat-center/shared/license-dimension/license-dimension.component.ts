@@ -278,6 +278,12 @@ export class LicenseDimensionComponent implements OnInit {
       this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.assetBreadcumSetting(scanAsset) });
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reloadAssets();
+    }else {
+      if (scanAsset.node.embeddedAssets.edges.length >= 1) {
+        let sAssetId = scanAsset.node.scanAssetId;
+        const url = "dashboard/entity/" + this.entityId + '/project/' + this.projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+        this.router.navigate([decodeURIComponent(url)]);
+      }
     }
   }
 
