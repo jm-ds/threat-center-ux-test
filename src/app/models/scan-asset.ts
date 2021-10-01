@@ -68,3 +68,42 @@ export class ScanAssetTree extends ScanAsset{
     assetType: string;
     embeddedAssetPercent: number;
 }
+
+export class ScanLicenseAssetConnection {
+    edges: ScanLicenseAssetEdge[];
+    pageInfo: PageInfo;
+    totalCount: number;
+}
+
+export class ScanLicenseAssetEdge {
+    node: ScanLicenseAsset;
+    cursor: string;
+}
+
+export class ScanLicenseAsset {
+    orgId: string;
+    scanId: string;
+    licenseId: string;
+    scanAssetId: string;
+}
+
+export class ScanComponentConnection {
+    edges: ScanComponentEdge[];
+    pageInfo: PageInfo;
+    totalCount: number;
+}
+
+export class ScanComponentEdge {
+    node: ScanComponent;
+    cursor: string;
+}
+
+export class ScanComponent {
+    orgId: string;
+    scanId: string;
+    componentId: string;
+    group: string;
+    name: string;
+    version: string;
+    purl: string;
+}

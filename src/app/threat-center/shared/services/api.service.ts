@@ -878,6 +878,13 @@ export class ApiService {
                     }
                   }
                 }
+                scanLicenseAssets(first:1) {
+                  edges {
+                    node {
+                      scanAssetId
+                    }
+                  }    
+                }
             }  
          }
       `);

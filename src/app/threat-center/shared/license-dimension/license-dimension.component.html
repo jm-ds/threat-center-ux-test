@@ -70,9 +70,18 @@
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
-                            <label for="first-occurrence" class="col-sm-12 col-form-label">First occurrence</label>
+                            <label class="col-sm-12 col-form-label">First occurrence</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="first-occurrence" readonly placeholder="{{scanLicense.licenseOrigin}}">
+                              <a *ngIf= "scanLicense.licenseOrigin === 'ASSET'"
+                                 routerLink="/dashboard/entity/{{entityId}}/project/{{projectId}}/scan/{{scanId}}/scanasset/{{scanLicense.scanLicenseAssets?.edges[0]?.node?.scanAssetId}}"
+                                 class="form-control border-2" style="border-color: #6c757d;">
+                                  {{scanLicense.licenseOrigin}}
+                              </a>
+                              <a *ngIf= "scanLicense.licenseOrigin === 'COMPONENT'"
+                                 routerLink="/dashboard/entity/{{entityId}}/project/{{projectId}}/scan/{{scanId}}/component/{{scanLicense.scanComponents?.edges[0]?.node?.componentId}}"
+                                 class="form-control badge-light-warning" style="border-color: #6c757d;">
+                                {{scanLicense.licenseOrigin}}
+                              </a>
                             </div>
                           </div>
                         </div>

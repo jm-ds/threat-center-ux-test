@@ -1,7 +1,7 @@
 import { PageInfo } from "./common";
 import { Vulnerability } from "./vulnerability";
 import {License} from "@app/models/license";
-import {ScanAssetsTreeConnection} from "@app/models/scan-asset";
+import {ScanAssetsTreeConnection, ScanComponentConnection, ScanLicenseAssetConnection} from "@app/models/scan-asset";
 
 export class ScanRequest {
     login: string;
@@ -132,8 +132,9 @@ export class ScanLicense {
     licenseOrigin: string;
     license: License;
     assetCount: number;
-    scanComponents: ScanConnection;
+    scanComponents: ScanComponentConnection;
     scanAssetsTree: ScanAssetsTreeConnection;
+    scanLicenseAssets: ScanLicenseAssetConnection;
 }
 
 // GRAPHQL QUERIES
