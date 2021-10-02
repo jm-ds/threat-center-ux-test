@@ -7,6 +7,7 @@ export class UserPreferenceModel {
     lastTabSelectedName?: any;
     itemPerPageDetails?: Array<{ componentName: string, value: string }>;
     lastSelectedTabLists: Array<string>;
+    lastSelectedScanId?:string;
 }
 
 

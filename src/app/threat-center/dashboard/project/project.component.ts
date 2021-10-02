@@ -71,7 +71,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scanHelperService.updateIsHighlightNewScan(false);
     this.highlitedScanId = "";
     this.userPreferenceService.settingUserPreference("Project", null, null, null, 
-    this.panelActiveId, null, null);
+    this.panelActiveId, null, null, this.stateService.selectedScan.node.scanId);
   }
 
   ngAfterViewInit(): void {
@@ -134,6 +134,22 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
         this.populateScanComponents(projData.otherComponentData);
         this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
+
+        // if previously any scan selected then get counts of all components, licens eand assets...
+        const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+        if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+          this.obsProject.subscribe((project: any) => {
+            const scan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId });
+            this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
+            if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
+              const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
+              const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
+              const unique = !!scan.node.scanMetricsSummary.assetMetrics["unique"] ? scan.node.scanMetricsSummary.assetMetrics["unique"] : '0';
+              this.assetCount = embededItem + '/' + openSource + '/' + unique;
+              this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+            } else { }
+          });
+        }
       }
     });
 
@@ -186,7 +202,13 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       //Taking sacn list to show in scan tab
       this.scanList = project.scans.edges;
       this.projectDetails = project;
-      this.stateService.selectedScan = project.scans.edges[0];
+      const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+      // this.stateService.selectedScan = !!lastScanSelected && !!lastScanSelected.lastSelectedScanId ?  project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId }) : project.scans.edges[0];
+      if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+        this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
+      } else {
+        this.stateService.selectedScan = project.scans.edges[0];
+      }
       let categories = [];
       if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
         this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
@@ -212,16 +234,28 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId);
+    this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId,null,null,null,null,this.stateService.selectedScan.node.scanId);
     if ($event.nextId === 'scan') {
       this.initProjectsChartConfig();
       this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
       this.initProjectData();
 
-      this.obsProject.subscribe(data => {
+      // if previously any scan selected then get counts of all components, licens eand assets...
+      const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+      this.obsProject.subscribe((data:any) => {
         if (!!data.scans && data.scans.edges.length >= 1 && !!data.scans.edges[0]) {
-          this.apicallTogetCounts(data.scans.edges[0].node.scanId);
+          
+          const scan = data.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId });
+          this.apicallTogetCounts(this.stateService.selectedScan.node.scanId);
+          if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
+            const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
+            const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
+            const unique = !!scan.node.scanMetricsSummary.assetMetrics["unique"] ? scan.node.scanMetricsSummary.assetMetrics["unique"] : '0';
+            this.assetCount = embededItem + '/' + openSource + '/' + unique;
+            this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+          } else { }
+
         }
       });
     }
