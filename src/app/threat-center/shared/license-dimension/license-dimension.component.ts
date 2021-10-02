@@ -8,7 +8,12 @@ import {FixService} from '@app/threat-center/dashboard/project/services/fix.serv
 import {MatPaginator} from '@angular/material';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {License} from '@app/models';
+import {License, ScanLicense} from '@app/models';
+import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
+import {CoreHelperService} from "@app/core/services/core-helper.service";
+import {UserPreferenceService} from "@app/core/services/user-preference.service";
+import {Messages} from "@app/messages/messages";
+
 
 
 @Component({
@@ -21,18 +26,19 @@ export class LicenseDimensionComponent implements OnInit {
   public licenseCols = ['Name', 'Threat'];
 
   @Input() licenseId:string;
-  @Input() licenses:License[];
   @Input() scanId: string;
   @Input() projectId: string;
   @Input() entityId: string;
   @Input() isFromComponent: boolean;
   @Output() getLicenseName: EventEmitter<any> = new EventEmitter();
+  obsScanLicense: Observable<ScanLicense>;
   obsLicense: Observable<License>;
   obsLicenseComponents: Observable<any>;
   licenseComponents: any;
   newVersion: string;
   defaultPageSize = 25;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
 
 
   
@@ -40,10 +46,22 @@ export class LicenseDimensionComponent implements OnInit {
     {field: 'name', header: 'Name'},
     {field: 'group', header: 'Group'},
     {field: 'version', header: 'Version'},
-    {field: 'disc', header: 'Source'},
+    {field: 'location', header: 'Location' },
+    {field: 'discoveryMethod', header: 'Discovery' },
     {field: 'license.name', header: 'Licenses'},
     {field: 'vulnerabilities', header: 'Vulnerabilities'}
   ];
+
+  assetColumns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Match Type'];
+  scanAssetDetails: any;
+  columnsAssetFilter = new Map();
+  story = [];
+  assetTimeOut;
+  assetTimeOutDuration = 1000;
+  parentScanAssetId = '';
+  messages = Messages;
+  obsScanLicenseAssets: Observable<ScanLicense>
+
 
 
   permissions:any[];
@@ -54,7 +72,9 @@ export class LicenseDimensionComponent implements OnInit {
       private apiService: ApiService,
       private router: Router,
       private fixService: FixService,
-      private modalService: NgbModal
+      private modalService: NgbModal,
+      private coreHelperService: CoreHelperService,
+      private userPreferenceService: UserPreferenceService
   ) {
   }
 
@@ -65,6 +85,7 @@ export class LicenseDimensionComponent implements OnInit {
       }else{
         this.loadLicense();
         this.loadLicenseComponents(this.defaultPageSize);
+        this.reloadAssets();
       }
     }
   }
@@ -80,17 +101,20 @@ export class LicenseDimensionComponent implements OnInit {
 
 
   loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined){
-    this.obsLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId,this.scanId, first, last, endCursor, startCursor)
-    .pipe(map(result => result.data.license));
-    this.obsLicense.subscribe(license => {
-      this.getLicenseName.emit(license.name);
-      this.permissions = this.licenseAttributeFilter(license, 'PERMISSION');
-      this.limitations = this.licenseAttributeFilter(license, 'LIMITATION');
-      this.conditions = this.licenseAttributeFilter(license, 'CONDITION');
-      if (!!this.isFromComponent || !this.scanId) {
-        return;
+    this.obsScanLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId,this.scanId, first, last, endCursor, startCursor)
+    .pipe(map(result => result.data.scanLicense));
+    this.obsScanLicense.subscribe(scanLicense => {
+      if (!!scanLicense.license) {
+        this.getLicenseName.emit(scanLicense.license.name);
+        this.permissions = this.licenseAttributeFilter(scanLicense.license, 'PERMISSION');
+        this.limitations = this.licenseAttributeFilter(scanLicense.license, 'LIMITATION');
+        this.conditions = this.licenseAttributeFilter(scanLicense.license, 'CONDITION');
+        if (!!this.isFromComponent || !this.scanId) {
+          return;
+        }
+        this.licenseComponents = scanLicense.scanComponents;
+        this.scanAssetDetails = scanLicense.scanAssetsTree;
       }
-      this.licenseComponents = license.components;
     });
   }
 
@@ -112,7 +136,7 @@ export class LicenseDimensionComponent implements OnInit {
       return;
     }
     this.obsLicenseComponents = this.apiService.getLicenseComponents(this.licenseId, this.scanId, first, last, endCursor, startCursor)
-    .pipe(map(result => result.data.license.components));
+    .pipe(map(result => result.data.scanLicense.scanComponents));
     this.obsLicenseComponents.subscribe(licenseComponents => {
       this.licenseComponents = licenseComponents;
     });
@@ -164,6 +188,138 @@ export class LicenseDimensionComponent implements OnInit {
             }
         }
     }
+  }
+
+  // filter asset
+  filterAssetColumn(column, value, idElement: string = '') {
+    if (value.length === 0 || value === 'ALL') {
+      this.columnsAssetFilter.delete(column);
+    } else {
+      this.columnsAssetFilter.set(column, value);
+    }
+    clearTimeout(this.assetTimeOut);
+    this.assetTimeOut = setTimeout(() => {
+      const obsScanLicense = this.apiService.getScanLicenseAssets(this.licenseId, this.scanId,
+          Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+          undefined, undefined, undefined,
+          this.parentScanAssetId, this.makeAssetFilterMapForService())
+          .pipe(map(result => result.data.scanLicense))
+      obsScanLicense.subscribe(scanLicense => {
+        this.scanAssetDetails = scanLicense.scanAssetsTree;;
+        this.coreHelperService.setFocusOnElement(idElement);
+      });
+    }, this.assetTimeOutDuration);
+  }
+
+  // return asset filter value
+  getAssetColumnFilterValue(key) {
+    let value = this.columnsAssetFilter.get(key);
+    if (value === undefined) {
+      if (key === 'Status' || key === 'File Size' || key === 'Embedded Assets' || key === 'Attribution' || key === 'Match Type') {
+        return 'ALL';
+      } else {
+        return '';
+      }
+    } else {
+      return value;
+    }
+  }
+
+  // asset sort
+  sortAssets(scanAssets: any) {
+    if (!scanAssets) {
+      return;
+    }
+    return scanAssets
+        .sort((a, b) => a.node.status.localeCompare(b.node.status))
+        .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+        .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+  }
+
+  // build asset filter string
+  private makeAssetFilterMapForService() {
+    let filterString = '';
+    this.columnsAssetFilter.forEach((val, key) => {
+      filterString += key + ":" + val + ",";
+    });
+    return filterString;
+  }
+
+  getAssetName(name: string) {
+    if (name.includes('/') || name.includes("\\")) {
+      const orgname = name.replace('\\', '/');
+      return orgname.substring(orgname.lastIndexOf('/') + 1);
+    } else {
+      return name;
+    }
+  }
+
+  // return match type caption by match type code
+  public assetMatchTypeVal2Caption(val: string) {
+    switch(val) {
+      case 'UNIQUE_PROPRIETARY': return 'PROPRIETARY ';
+      case 'PROPRIETARY': return 'PROPRIETARY/OPEN SOURCE ';
+      case 'EMBEDDED_OPEN_SOURCE': return 'OPEN SOURCE/PROPRIETARY ';
+      case 'OPEN_SOURCE': return 'OPEN SOURCE ';
+      case 'OPEN_COMPONENT': return 'OPEN SOURCE COMPONENT ';
+      default: return 'STATIC REFERENCE ';
+    }
+  }
+
+  // Move up the asset hierarchy
+  assetGoBack() {
+    this.parentScanAssetId = this.story.pop().id;
+    this.refreshAssetListHelper();
+  }
+
+  // Move down the asset hierarchy
+  assetGotoDetails(scanAsset) {
+    if (scanAsset.node.assetType === 'DIR') {
+      this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.assetBreadcumSetting(scanAsset) });
+      this.parentScanAssetId = scanAsset.node.scanAssetId;
+      this.reloadAssets();
+    }else {
+      if (scanAsset.node.embeddedAssets.edges.length >= 1) {
+        let sAssetId = scanAsset.node.scanAssetId;
+        const url = "dashboard/entity/" + this.entityId + '/project/' + this.projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
+        this.router.navigate([decodeURIComponent(url)]);
+      }
+    }
+  }
+
+  refreshAssetListHelper() {
+    this.reloadAssets();
+  }
+
+  // reload asset tree
+  reloadAssets() {
+    this.scanAssetDetails = [];
+    let obsScanLicenseAssets = this.apiService.getScanLicenseAssets(this.licenseId, this.scanId,
+        Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+        undefined, undefined, undefined,
+        this.parentScanAssetId, this.makeAssetFilterMapForService())
+        .pipe(map(result => result.data.scanLicense));
+    obsScanLicenseAssets.subscribe(scanLicense => {
+      this.scanAssetDetails = scanLicense.scanAssetsTree;
+    });
+  }
+
+  private assetBreadcumSetting(scanAsset) {
+    if (!!this.story && this.story.length >= 1) {
+      const lastRecord = this.story[this.story.length - 1].originalName;
+      if (!!lastRecord) {
+        const diffrence = this.coreHelperService.getDifferencebetweenStrings(lastRecord, scanAsset.node.name);
+        return diffrence.replace('/', "");
+      } else {
+        return scanAsset.node.name;
+      }
+    } else {
+      return scanAsset.node.name;
+    }
+  }
+
+  getAssetSummationOfEmbeded(array:any[]){
+    return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
   }
 
 }

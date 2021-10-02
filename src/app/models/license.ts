@@ -7,6 +7,10 @@ export class License {
     isOsiApproved: boolean;
     isFsfLibre: boolean;
     isDeprecated: boolean;
+    category: string;
+    style: string;
+    publicationYear: number;
+    type: string;
     attributes: LicenseAttribute[];
     components: any;
 }

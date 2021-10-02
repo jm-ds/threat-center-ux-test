@@ -1,7 +1,26 @@
 import { Injectable } from '@angular/core';
 import gql from 'graphql-tag';
 import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { AttributeAssetRequestInput, BitbucketUserQuery, ComponentQuery, EntityListQuery, EntityQuery, GitHubUserQuery, GitLabUserQuery, LicenseQuery, Period, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanQuery, UserSelection, VulnerabilityQuery } from '@app/models';
+import {
+  AttributeAssetRequestInput,
+  BitbucketUserQuery,
+  ComponentQuery,
+  EntityListQuery,
+  EntityQuery,
+  GitHubUserQuery,
+  GitLabUserQuery,
+  LicenseQuery,
+  Period,
+  ProjectQuery,
+  Scan,
+  ScanAssetMatch,
+  ScanAssetMatchRequest,
+  ScanAssetQuery,
+  ScanLicenseQuery,
+  ScanQuery,
+  UserSelection,
+  VulnerabilityQuery
+} from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -695,11 +714,11 @@ export class ApiService {
     const lastArg = (!!last) ? `, last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
-    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+    return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
-            license(licenseId:"${licenseId}") {
+            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
               licenseId,
-              components(scanId:"${scanId}"${firstArg}${lastArg}${afterArg}${beforeArg}) {
+              scanComponents(${firstArg}${lastArg}${afterArg}${beforeArg}) {
                 pageInfo {
                   hasNextPage
                   hasPreviousPage
@@ -749,34 +768,39 @@ export class ApiService {
         `);
   }
 
-  getLicenseAndLicenseComponent(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined){
+  getLicenseAndLicenseComponent(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined,
+                                parentScanAssetId: string = undefined, assetFilter: string = undefined){
+    let parentAssetId = (!!parentScanAssetId && parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
+    let assetFilterArg = 'filter: \"' + (!!assetFilter? assetFilter: "") + '\"';
     const firstArg = (!!first) ? `, first: ${first}` : '';
     const lastArg = (!!last) ? `, last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
 
-    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+    return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
-             license(licenseId:"${licenseId}") {
-                 licenseId,
-                 name,
-                 spdxId
-                 body,
-                 category,
-                 style,
-                 type,
-                 publicationYear,
-                 description,
-                 isOsiApproved,
-                 isFsfLibre,
-                 isDeprecated,
-                 attributes {
-                   name,
-                   type,
-                   description
-                 }
-
-                 components(scanId:"${scanId}"${firstArg}${lastArg}${afterArg}${beforeArg}) {
+             scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
+                 licenseOrigin,
+                 license {
+                     licenseId,
+                     name,
+                     spdxId
+                     body,
+                     category,
+                     style,
+                     type,
+                     publicationYear,
+                     description,
+                     isOsiApproved,
+                     isFsfLibre,
+                     isDeprecated,
+                     attributes {
+                       name,
+                       type,
+                       description
+                     }
+                }
+                scanComponents(${firstArg}${lastArg}${afterArg}${beforeArg}) {
                   pageInfo {
                     hasNextPage
                     hasPreviousPage
@@ -786,12 +810,14 @@ export class ApiService {
                   totalCount
                   edges {
                     node {
-                      componentId,
+                      componentId, 
                       name,
                       group,
                       version,
                       isInternal,
-                      lastInheritedRiskScore,
+                      lastInheritedRiskScore
+                      componentLocation
+                      componentDiscoveryMethod
                       licenses {
                         edges {
                           node {
@@ -815,13 +841,106 @@ export class ApiService {
                           }
                         }
                       }
-                    }    
+                    }
                   }
-                } 
-            }
+                }
+                scanAssetsTree(${parentAssetId}${assetFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                  pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
+                  }
+                  totalCount
+                  edges {
+                    node {
+                      name,
+                      size,
+                      assetSize,
+                      scanAssetId,
+                      originAssetId
+                      workspacePath
+                      status,
+                      assetType,
+                      parentScanAssetId,
+                      attributionStatus, 
+                      matchType,
+                      embeddedAssetPercent,
+                      embeddedAssets {
+                        edges {
+                          node {
+                            name,
+                            percentMatch,
+                            assetSize
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                scanLicenseAssets(first:1) {
+                  edges {
+                    node {
+                      scanAssetId
+                    }
+                  }    
+                }
+            }  
          }
       `);
   }
+
+  getScanLicenseAssets(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined,
+                       parentScanAssetId: string = undefined, assetFilter: string = undefined) {
+    let parentAssetId = (!!parentScanAssetId && parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
+    let assetFilterArg = 'filter: \"' + (!!assetFilter? assetFilter: "") + '\"';
+    const firstArg = (!!first) ? `, first: ${first}` : '';
+    const lastArg = (!!last) ? `, last: ${last}` : '';
+    const afterArg = (after) ? `, after: "${after}"` : '';
+    const beforeArg = (before) ? `, before: "${before}"` : '';
+    return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
+          query {
+            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
+              licenseId,
+              scanAssetsTree(${parentAssetId}${assetFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
+                pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
+                totalCount
+                edges {
+                  node {
+                    name,
+                    size,
+                    assetSize,
+                    scanAssetId,
+                    originAssetId
+                    workspacePath
+                    status,
+                    assetType,
+                    parentScanAssetId,
+                    attributionStatus, 
+                    matchType,
+                    embeddedAssetPercent,
+                    embeddedAssets {
+                      edges {
+                        node {
+                          name,
+                          percentMatch,
+                          assetSize
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }    
+          }
+        `);
+  }
+
 
   getVulnerability(vulnerabilityId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
