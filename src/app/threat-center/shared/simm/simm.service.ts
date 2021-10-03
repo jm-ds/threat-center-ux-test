@@ -14,11 +14,10 @@ export class SimmService {
 
     compare(sourceContent: string, matchContent: string) {
 
-        return this.coreGraphQLService.coreGQLReq(gql`query($sourceContent: String, $matchContent: String) {
+        return this.coreGraphQLService.coreGQLReq<SimmQuery>(gql`query($sourceContent: String, $matchContent: String) {
             simmCompare(sourceContent: $sourceContent, matchContent: $matchContent) {
                 leftStart, leftEnd, rightStart, rightEnd
             }
         }`, 'no-cache', { sourceContent: sourceContent, matchContent: matchContent });
     }
-
 }
