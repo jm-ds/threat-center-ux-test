@@ -141,6 +141,12 @@
                             class="badge m-r-5 badge-light-warning">COPYLEFT</span>
                           <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive"
                             class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                          <span *ngIf="license.node.category === 'PROPRIETARY_FREE'" title="Proprietary Free"
+                                class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                          <span *ngIf="license.node.category === 'PUBLIC_DOMAIN'" title="Permissive"
+                                class="badge m-r-5 badge-light-success f-18">PUBLIC DOMAIN</span>
+                          <span *ngIf="license.node.category === 'UNDEFINED'" title="Undefined"
+                                class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
                         </td>
                         <td>{{license.node.style}}</td>
                         <td>

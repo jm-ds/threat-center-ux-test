@@ -31,9 +31,11 @@
                                   class="badge m-r-5 badge-light-warning f-18">COPYLEFT</span>
                             <span *ngIf="scanLicense.license?.category === 'PERMISSIVE'" title="Permissive"
                                   class="badge m-r-5 badge-light-success f-18">PERMISSIVE</span>
+                            <span *ngIf="scanLicense.license?.category === 'PROPRIETARY_FREE'" title="Proprietary Free"
+                                  class="badge m-r-5 badge-light-warning">PROPRIETARY FREE</span>
                             <span *ngIf="scanLicense.license?.category === 'PUBLIC_DOMAIN'" title="Permissive"
                                   class="badge m-r-5 badge-light-success f-18">PUBLIC DOMAIN</span>
-                            <span *ngIf="scanLicense.license?.category === 'UNDEFINED'" title="Copyleft Limited"
+                            <span *ngIf="scanLicense.license?.category === 'UNDEFINED'" title="Undefined"
                                   class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
                           </div>
                         </div>
@@ -124,9 +126,11 @@
                               class="badge m-r-5 badge-light-warning f-18">COPYLEFT</span>
                             <span *ngIf="scanLicense.license?.category === 'PERMISSIVE'" title="Permissive"
                               class="badge m-r-5 badge-light-success f-18">PERMISSIVE</span>
+                            <span *ngIf="scanLicense.license?.category === 'PROPRIETARY_FREE'" title="Proprietary Free"
+                                  class="badge m-r-5 badge-light-warning">PROPRIETARY FREE</span>
                             <span *ngIf="scanLicense.license?.category === 'PUBLIC_DOMAIN'" title="Permissive"
                               class="badge m-r-5 badge-light-success f-18">PUBLIC DOMAIN</span>
-                            <span *ngIf="scanLicense.license?.category === 'UNDEFINED'" title="Copyleft Limited"
+                            <span *ngIf="scanLicense.license?.category === 'UNDEFINED'" title="Undefined"
                               class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
                           </div>
                         </div>
@@ -284,12 +288,15 @@
                     <td>{{!!component.node.componentDiscoveryMethod?component.node.componentDiscoveryMethod.replaceAll('_',' '):''}}</td>
                     <td>
                       <ng-container *ngIf="component.node.licenses.edges.length > 0">
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                        <span *ngIf="component.node.licenses.edges[0].node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">Permissive</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'PROPRIETARY_FREE'" title="Proprietary Free" class="badge m-r-5 badge-light-warning">Proprietary Free</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'PUBLIC_DOMAIN'" title="Public Domain" class="badge m-r-5 badge-light-success">Public Domain</span>
+                        <span *ngIf="component.node.licenses.edges[0].node.category === 'UNDEFINED'" title="Undefined" class="badge m-r-5 badge-light-warning">Undefined</span>
                         <span>{{component.node.licenses.edges[0].node.name}}</span>
                       </ng-container>
                       <span *ngIf="!component.node.licenses">No License</span>

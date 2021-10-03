@@ -199,10 +199,11 @@ METRICS
                                 <span *ngIf="license.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
                                 <span *ngIf="license.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
                                 <span *ngIf="license.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                                <span *ngIf="license.category === 'PROPRIETARY'" title="Permissive" class="badge m-r-5 badge-light-danger">PROPRIETARY</span>
+                                <span *ngIf="license.category === 'PROPRIETARY'" title="Proprietary" class="badge m-r-5 badge-light-danger">PROPRIETARY</span>
+                                <span *ngIf="license.category === 'PROPRIETARY'" title="Proprietary Free" class="badge m-r-5 badge-light-warning">PROPRIETARY FREE</span>
                                 <span *ngIf="license.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-                                <span *ngIf="license.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
-                                <span *ngIf="license.category === 'UNDEFINED'" title="Permissive" class="badge m-r-5">UNDEFINED</span>
+                                <span *ngIf="license.category === 'PUBLIC_DOMAIN'" title="Public Domain" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
+                                <span *ngIf="license.category === 'UNDEFINED'" title="Undefined" class="badge m-r-5">UNDEFINED</span>
                             </td>
                             <td>{{license.style}}</td>
 <!--                            <td>{{license.isOsiApproved}}</td>-->
