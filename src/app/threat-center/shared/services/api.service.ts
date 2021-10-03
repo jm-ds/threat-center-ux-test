@@ -791,9 +791,12 @@ export class ApiService {
                      type,
                      publicationYear,
                      description,
+                     notes,
                      isOsiApproved,
                      isFsfLibre,
                      isDeprecated,
+                     compatible,
+                     incompatible,
                      attributes {
                        name,
                        type,

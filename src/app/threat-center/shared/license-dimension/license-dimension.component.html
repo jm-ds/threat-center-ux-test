@@ -68,7 +68,13 @@
                           <div class="form-group row  p-l-5">
                             <label for="summary-compat" class="col-sm-12 col-form-label">Compatible</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="summary-compat" readonly placeholder="GPL-2.0 GPL-3.0">
+                              <input type="text" class="form-control" id="summary-compat" readonly placeholder="{{scanLicense.license?.compatible}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="summary-incompat" class="col-sm-12 col-form-label">Incompatible</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="summary-incompat" readonly placeholder="{{scanLicense.license?.incompatible}}">
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
@@ -86,6 +92,12 @@
                               </a>
                             </div>
                           </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="notes" class="col-sm-12 col-form-label">Notes</label>
+                            <div class="col-xl-12">
+                              <textarea rows="5" class="form-control" id="notes" readonly>{{scanLicense.license?.notes}}</textarea>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -99,7 +111,7 @@
     </ngb-tab>
     <ngb-tab title="License" >
       <ng-template ngbTabContent>
-        <app-card [hidHeader]="true" cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between">
+        <app-card [hidHeader]="true" cardClass="mb-0" blockClass="align-items-center">
           <div class="row">
             <div class="col-xl-12">
               <div class="inner-card">
@@ -161,9 +173,21 @@
                             </div>
                           </div>
                           <div class="form-group row  p-l-5">
-                            <label for="compat" class="col-sm-12 col-form-label">Compatible</label>
+                            <label for="summary-compat" class="col-sm-12 col-form-label">Compatible</label>
                             <div class="col-xl-12">
-                              <input type="text" class="form-control" id="compat" readonly placeholder="GPL-2.0 GPL-3.0">
+                              <input type="text" class="form-control" id="summary-compat" readonly placeholder="{{scanLicense.license?.compatible}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="summary-incompat" class="col-sm-12 col-form-label">Incompatible</label>
+                            <div class="col-xl-12">
+                              <input type="text" class="form-control" id="summary-incompat" readonly placeholder="{{scanLicense.license?.incompatible}}">
+                            </div>
+                          </div>
+                          <div class="form-group row  p-l-5">
+                            <label for="notes" class="col-sm-12 col-form-label">Notes</label>
+                            <div class="col-xl-12">
+                              <textarea rows="10" class="form-control" id="notes" readonly>{{scanLicense.license?.notes}}</textarea>
                             </div>
                           </div>
                         </div>
