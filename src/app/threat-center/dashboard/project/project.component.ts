@@ -137,9 +137,9 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // if previously any scan selected then get counts of all components, licens eand assets...
         const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-        if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+        if (!!this.stateService.selectedScan.node["scanId"]) {
           this.obsProject.subscribe((project: any) => {
-            const scan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId });
+            const scan = project.scans.edges.find(d => { return d.node.scanId === this.stateService.selectedScan.node["scanId"] });
             this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
             if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
               const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
@@ -204,7 +204,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectDetails = project;
       const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
       // this.stateService.selectedScan = !!lastScanSelected && !!lastScanSelected.lastSelectedScanId ?  project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId }) : project.scans.edges[0];
-      if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+      if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })) {
         this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
       } else {
         this.stateService.selectedScan = project.scans.edges[0];
