@@ -44,7 +44,7 @@
                 <div class="scan-started-blk">
                     <div class="scan-progress">
                         <i class="scan-icon far fa-thumbs-up status-success loader-img"></i>
-                        <div class="scan-progress-rt">
+                        <div class="scan-progress-rt" *ngIf="!!item.projectId">
                             <p>{{item.projectName}} scan is complete. <a class="cursor-pointer"
                                     (click)="gotoProject(item)"><u>View
                                         results</u></a> &nbsp;<i class="fas fa-external-link-alt"></i></p>
@@ -110,7 +110,7 @@
                     <h6>Recently Completed Scans</h6>
                     <ul>
                         <li *ngFor="let project of filterUniqRecords()">
-                            <a (click)="gotoProject(project)"
+                            <a (click)="gotoProject(project)" *ngIf="!!project.projectId"
                                 style="color: #4680ff !important;"><u>{{project.projectName}}</u></a>
                             project. <i class="fas fa-external-link-alt"></i>
                         </li>
