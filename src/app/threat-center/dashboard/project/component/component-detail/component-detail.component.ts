@@ -199,7 +199,6 @@ export class ComponentDetailComponent implements OnInit {
 
   // goto license detail Page
   gotoDetails(lId) {
-    debugger;
     const entityId = this.route.snapshot.paramMap.get('entityId'),
         projectId = this.route.snapshot.paramMap.get('projectId');
     const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
