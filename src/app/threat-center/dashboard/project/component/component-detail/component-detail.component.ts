@@ -197,6 +197,14 @@ export class ComponentDetailComponent implements OnInit {
     }
   }
 
+  // goto license detail Page
+  gotoDetails(lId) {
+    const entityId = this.route.snapshot.paramMap.get('entityId'),
+        projectId = this.route.snapshot.paramMap.get('projectId');
+    const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
+    this.router.navigate([decodeURIComponent(url)]);
+}
+
   private calculateLogic(license) {
     const value = _.chain(license.licenses.edges).groupBy("node.name")
         .map((value, key) => ({ key: key, value: value })).value();
