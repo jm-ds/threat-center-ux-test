@@ -7,7 +7,7 @@
             <div style="display: flex;text-align: right;">
                 <ul *ngIf="!!chartArray && chartArray.length >= 1">
                     <li *ngFor="let item of chartArray" class="{{item.colorClass}}" (mouseover)="item.hover=true"
-                        (mouseleave)="item.hover=false">
+                        [ngStyle]="getStyle(item)" (mouseleave)="item.hover=false">
                         {{getAdditionData(item.data)}}
                         <div *ngIf="item.hover" class="lgnd-tltp">
                             {{item.name}}
