@@ -30,5 +30,12 @@ export class ProjectChartComponent implements OnInit {
         }
     }
 
+    getStyle(item){
+        let style ={};
+        style['width'] = this.getAdditionData(item.data).toString().length >= 1 && this.getAdditionData(item.data).toString().length <= 4 ? '18px' : '30px';
+        style['margin'] = this.getAdditionData(item.data).toString().length >= 1 && this.getAdditionData(item.data).toString().length <= 4 ? '0 7px 10px 0' : '0 12px 10px 0';
+        return style;
+    }
+
 
 }
