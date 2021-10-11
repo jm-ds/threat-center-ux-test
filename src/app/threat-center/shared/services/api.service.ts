@@ -709,14 +709,15 @@ export class ApiService {
       `);
   }
 
-  getLicenseComponents(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getLicenseComponents(licenseId: string, licenseDiscovery: string, licenseOrigin: string, scanId: string,
+                       first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
     const firstArg = (!!first) ? `, first: ${first}` : '';
     const lastArg = (!!last) ? `, last: ${last}` : '';
     const afterArg = (after) ? `, after: "${after}"` : '';
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
-            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
+            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
               licenseId,
               scanComponents(${firstArg}${lastArg}${afterArg}${beforeArg}) {
                 pageInfo {
@@ -768,7 +769,8 @@ export class ApiService {
         `);
   }
 
-  getLicenseAndLicenseComponent(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined,
+  getLicenseAndLicenseComponent(licenseId: string, licenseDiscovery: string, licenseOrigin: string,
+                                scanId: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined,
                                 parentScanAssetId: string = undefined, assetFilter: string = undefined){
     let parentAssetId = (!!parentScanAssetId && parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
     let assetFilterArg = 'filter: \"' + (!!assetFilter? assetFilter: "") + '\"';
@@ -779,8 +781,9 @@ export class ApiService {
 
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
-             scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
+             scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
                  licenseOrigin,
+                 licenseDiscovery
                  license {
                      licenseId,
                      name,
@@ -893,7 +896,8 @@ export class ApiService {
       `);
   }
 
-  getScanLicenseAssets(licenseId: string, scanId: string = null, first = undefined, last = undefined, after: string = undefined, before: string = undefined,
+  getScanLicenseAssets(licenseId: string, licenseDiscovery: string, licenseOrigin: string, scanId: string = null,
+                       first = undefined, last = undefined, after: string = undefined, before: string = undefined,
                        parentScanAssetId: string = undefined, assetFilter: string = undefined) {
     let parentAssetId = (!!parentScanAssetId && parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
     let assetFilterArg = 'filter: \"' + (!!assetFilter? assetFilter: "") + '\"';
@@ -903,7 +907,7 @@ export class ApiService {
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
-            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}") {
+            scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
               licenseId,
               scanAssetsTree(${parentAssetId}${assetFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
                 pageInfo {

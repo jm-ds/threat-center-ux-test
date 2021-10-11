@@ -121,6 +121,7 @@ export class ScanLicense {
     orgId: string;
     scanId: string;
     licenseId: string;
+    licenseDiscovery: string;
     spdxId: string;
     name: string;
     style: string;

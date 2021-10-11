@@ -27,11 +27,16 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
     private projectBreadcumsService:ProjectBreadcumsService) { }
 
   licenseId:string;
+  licenseDiscovery:string;
+  licenseOrigin:string;
 
   breadcumDetail: any = {};
   licenseName:string = "";
   ngOnInit() {
     console.log("Loading LicenseDetailComponent");
+    this.licenseId = this.route.snapshot.paramMap.get('licenseId');
+    this.licenseDiscovery = this.route.snapshot.paramMap.get('licenseDiscovery');
+    this.licenseOrigin = this.route.snapshot.paramMap.get('licenseOrigin');
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     this.scanId = this.route.snapshot.paramMap.get('scanId');

@@ -26,6 +26,8 @@ export class LicenseDimensionComponent implements OnInit {
   public licenseCols = ['Name', 'Threat'];
 
   @Input() licenseId:string;
+  @Input() licenseDiscovery:string;
+  @Input() licenseOrigin:string;
   @Input() scanId: string;
   @Input() projectId: string;
   @Input() entityId: string;
@@ -101,7 +103,7 @@ export class LicenseDimensionComponent implements OnInit {
 
 
   loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined){
-    this.obsScanLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId,this.scanId, first, last, endCursor, startCursor)
+    this.obsScanLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
     .pipe(map(result => result.data.scanLicense));
     this.obsScanLicense.subscribe(scanLicense => {
       if (!!scanLicense.license) {
@@ -135,7 +137,7 @@ export class LicenseDimensionComponent implements OnInit {
     if (!!this.isFromComponent || !this.scanId) {
       return;
     }
-    this.obsLicenseComponents = this.apiService.getLicenseComponents(this.licenseId, this.scanId, first, last, endCursor, startCursor)
+    this.obsLicenseComponents = this.apiService.getLicenseComponents(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
     .pipe(map(result => result.data.scanLicense.scanComponents));
     this.obsLicenseComponents.subscribe(licenseComponents => {
       this.licenseComponents = licenseComponents;
@@ -199,7 +201,7 @@ export class LicenseDimensionComponent implements OnInit {
     }
     clearTimeout(this.assetTimeOut);
     this.assetTimeOut = setTimeout(() => {
-      const obsScanLicense = this.apiService.getScanLicenseAssets(this.licenseId, this.scanId,
+      const obsScanLicense = this.apiService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
           Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
           undefined, undefined, undefined,
           this.parentScanAssetId, this.makeAssetFilterMapForService())
@@ -294,7 +296,7 @@ export class LicenseDimensionComponent implements OnInit {
   // reload asset tree
   reloadAssets() {
     this.scanAssetDetails = [];
-    let obsScanLicenseAssets = this.apiService.getScanLicenseAssets(this.licenseId, this.scanId,
+    let obsScanLicenseAssets = this.apiService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
         Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
         undefined, undefined, undefined,
         this.parentScanAssetId, this.makeAssetFilterMapForService())

@@ -105,10 +105,10 @@ export class LicensesComponent implements OnInit {
     }
 
     // goto detail Page
-    gotoDetails(lId) {
+    gotoDetails(lId, licenseDiscovery, licenseOrigin) {
         const entityId = this.route.snapshot.paramMap.get('entityId'),
             projectId = this.route.snapshot.paramMap.get('projectId');
-        const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId;
+        const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId+"/discovery/"+licenseDiscovery+"/origin/"+licenseOrigin;
         this.router.navigate([decodeURIComponent(url)]);
     }
 

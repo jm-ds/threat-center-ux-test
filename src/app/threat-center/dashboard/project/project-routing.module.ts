@@ -47,7 +47,7 @@ const routes: Routes = [
         component: LicenseDetailComponent
       },
       {
-        path: 'scan/:scanId/license/:licenseId',
+        path: 'scan/:scanId/license/:licenseId/discovery/:licenseDiscovery/origin/:licenseOrigin',
         component: LicenseDetailComponent
       },
       {
