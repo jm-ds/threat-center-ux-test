@@ -8,8 +8,8 @@
             <th *ngIf="isLanguage">Language</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex">
-        <tr *ngIf="(repo?.node?.primaryLanguage?.name === 'Java' || repo?.language === 'Java') && (repo?.node?.name === 'threat-matrix' || repo?.name === 'threat-matrix')" [pSelectableRow]="repo"
+    <ng-template pTemplate="body" let-repo let-rowIndex="rowIndex"> <!--&& (repo?.node?.name === 'threat-matrix' || repo?.name === 'threat-matrix') -->
+        <tr *ngIf="(repo?.node?.primaryLanguage?.name === 'Java' || repo?.language === 'Java')" [pSelectableRow]="repo"
             [pSelectableRowIndex]="rowIndex">
             <td style="width:70%">
                 <div *ngIf="!!repo.node;else reponame" style="float:left">{{repo.node['name']}}
