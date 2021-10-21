@@ -706,7 +706,15 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       if(propFirstPara === 'assetMetrics'){
         properties = ["EMBEDDED","OPEN_SOURCE","UNIQUE"];
       }else{
-        properties = this.getProperties(propFirstPara, propSecondPara);
+        if(propFirstPara === 'licenseMetrics'){
+          properties = this.getProperties(propFirstPara, propSecondPara);
+          if(!properties || properties.length === 0){
+            properties = ['PERMISSIVE'];
+          }
+        }else{
+          properties = this.getProperties(propFirstPara, propSecondPara);
+        }
+        
       }
     }
     this[chartVarName].series = [];
