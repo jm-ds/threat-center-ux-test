@@ -122,11 +122,11 @@ export class ProjectDashboardService {
 
   getAllScanData(scanId: string, defaultPage, scanAssetDetails: any) {
 
-    //Scan Asset Config Start
+    // Scan Asset Config Start
     let parentId = (scanAssetDetails.parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + scanAssetDetails.parentScanAssetId + '\", ' : "";
     let filterArg = 'filter: \"' + scanAssetDetails.filter + '\"';
     const firstArg = (!!scanAssetDetails.first) ? `first: ${scanAssetDetails.first}` : '';
-    //Scan Asset Config End
+    // Scan Asset Config End
 
     return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
           query {
@@ -253,7 +253,8 @@ export class ProjectDashboardService {
                       isOsiApproved,
                       isFsfLibre,
                       licenseDiscovery,
-                      licenseOrigin
+                      licenseOrigin,
+                      trustLevel
                     }
                   }
                 }

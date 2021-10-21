@@ -581,7 +581,8 @@ export class ApiService {
                     isOsiApproved,
                     isFsfLibre,
                     licenseDiscovery,
-                    licenseOrigin
+                    licenseOrigin,
+                    trustLevel
                   }
                 }
               }
