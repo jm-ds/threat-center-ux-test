@@ -28,7 +28,7 @@
             <ng-template ngbTabContent>
                 <app-card cardClass="mb-0" [hidHeader]="true" blockClass="align-items-center justify-content-between">
                   <div class="row">
-                    <perfect-scrollbar [style.max-height]="'650px'">
+                    <perfect-scrollbar class="overflowshadowTop" [style.max-height]="'650px'">
                       <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                         [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
@@ -87,7 +87,7 @@
 
               <div style="display: flex; flex-wrap: wrap;">
 
-                <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
+                <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" class="overflowshadow" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
                   <p-table #dt [columns]="columns" [value]="licensesList" [paginator]="false" [rows]="50"
                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
                     [filterDelay]="0" [globalFilterFields]="['name']">
@@ -256,7 +256,8 @@
                         </div>
                       </div>
                       <div style="width:60%;float:right;">
-                        <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollBinaryRelese (psYReachEnd)="loadBinaryReleasesLazy($event)">
+                        <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollBinaryRelese (psYReachEnd)="loadBinaryReleasesLazy($event)" 
+                              class="overflowshadowTop">
                           <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
                                    [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
                                    [virtualScroll]="false" [virtualRowHeight]="34"
