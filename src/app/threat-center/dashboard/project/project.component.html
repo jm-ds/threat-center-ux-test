@@ -97,11 +97,11 @@
                 <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
                 </mat-progress-spinner>
               </div>
-              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
+              <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}" class="overflowshadow">
                 <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
                   tableStyleClass="table table-bordered table-hover dataTable no-footer table-width" selectionMode="single"
                   [(selection)]="stateService.selectedScan" (onRowUnselect)="rowUnselect($event)" [autoLayout]="true"
-                  (onRowSelect)="onRowSelect($event)">
+                  (onRowSelect)="onRowSelect($event)" [scrollable]="false">
 
                   <ng-template pTemplate="header" let-columns>
                     <tr>

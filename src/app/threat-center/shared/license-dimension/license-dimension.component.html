@@ -289,7 +289,8 @@
       <ng-template ngbTabContent>
         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="align-items-center justify-content-between">
           <div class="row">
-            <perfect-scrollbar [style.max-height]="'650px'" [style.padding-right]="'10px'" class="col-sm-12">
+            <perfect-scrollbar [style.max-height]="'650px'" [style.padding-right]="'10px'" class="col-sm-12" class="overflowshadow" 
+              [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <p-table #dt [columns]="componentColumns" [value]="licenseComponents?.edges" [paginator]="false" [rows]="50"
                       tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                       class="m-r-5"
@@ -367,7 +368,8 @@
       </ng-template>
       <ng-template ngbTabContent>
 
-        <perfect-scrollbar [style.max-height]="'auto'">
+        <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow" 
+        [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
           <p-table *ngIf="scanAssetDetails" #dt [columns]="assetColumns" [value]="sortAssets(scanAssetDetails.edges)" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" sortField="embedded" [sortOrder]="-1">

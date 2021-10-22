@@ -13,9 +13,9 @@
         <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
         </mat-progress-spinner>
       </div>
-      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
+      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" class="overflowshadow" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
         <p-table #dt [columns]="columns" [value]="componentDetails.components?.edges" [paginator]="false" [rows]="50"
-                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                 tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width scroll-shadow"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
 
           <ng-template pTemplate="header" let-columns>
