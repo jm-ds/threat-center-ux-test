@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from "@angular/core";
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
     selector: 'repo-list',
@@ -31,7 +32,7 @@ export class RepositoryListComponent implements OnInit {
         return this.selectedRepos;
     }
 
-    constructor() { }
+    constructor(protected authorizationService: AuthorizationService) { }
     ngOnInit(): void {
     }
 
