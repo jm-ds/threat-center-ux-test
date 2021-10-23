@@ -55,8 +55,10 @@
               <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
                     class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
             </td>
+            <td>{{messages.license.origin[license.node.licenseOrigin]}}</td>
             <td>
-              {{messages.license.origin[license.node.licenseOrigin]}}
+              <span *ngIf="license.node.trustLevel ==='LEVEL_1'">Original repo license</span>
+              <span *ngIf="license.node.trustLevel ==='LEVEL_2'">Context relevant license</span>
             </td>
             <td>{{license.node.spdxId}}</td>
             <td>

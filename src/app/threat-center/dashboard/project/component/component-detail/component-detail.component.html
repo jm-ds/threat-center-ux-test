@@ -127,6 +127,10 @@
                       <td>
                         {{messages.license.origin[license.node.licenseOrigin]}}
                       </td>
+                        <td>
+                          <span *ngIf="license.node.trustLevel ==='LEVEL_1'">Original repo license</span>
+                          <span *ngIf="license.node.trustLevel ==='LEVEL_2'">Context relevant license</span>
+                        </td>
                         <td>{{license.node.spdxId}}</td>
                         <td>
                           <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"

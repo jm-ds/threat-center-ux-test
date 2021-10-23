@@ -20,7 +20,7 @@ export class LicensesComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
 
-    columns = ['Name', /*'ID', */'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+    columns = ['Name', /*'ID', */'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -172,6 +172,7 @@ export class LicensesComponent implements OnInit {
                     originalArray.push({
                         isColspan: false,
                         node: {
+                            trustLevel: val.node.trustLevel,
                             category: val.node.category,
                             isFsfLibre: val.node.isFsfLibre,
                             isOsiApproved: val.node.isOsiApproved,
@@ -193,6 +194,7 @@ export class LicensesComponent implements OnInit {
                         {
                             isColspan: false,
                             node: {
+                                trustLevel: val.node.trustLevel,
                                 category: val.node.category,
                                 isFsfLibre: val.node.isFsfLibre,
                                 isOsiApproved: val.node.isOsiApproved,

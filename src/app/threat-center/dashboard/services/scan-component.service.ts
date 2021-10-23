@@ -107,7 +107,8 @@ export class ScanComponentService {
                             licenseDiscovery,
                             licenseOrigin,
                             isOsiApproved,
-                            isFsfLibre
+                            isFsfLibre,
+                            trustLevel
                         }
                     }
                 }

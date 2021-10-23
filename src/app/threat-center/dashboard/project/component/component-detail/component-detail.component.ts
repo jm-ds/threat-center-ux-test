@@ -62,7 +62,7 @@ export class ComponentDetailComponent implements OnInit {
 
   breadcumDetail: any = {};
   licensesList = [];
-  columns = ['Name', 'Discovery', 'Origin', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+  columns = ['Name', 'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
   constructor(
     private apiService: ApiService,
     private scanComponentService: ScanComponentService,
@@ -217,6 +217,7 @@ export class ComponentDetailComponent implements OnInit {
                 originalArray.push({
                     isColspan: false,
                     node: {
+                        trustLevel: val.node.trustLevel,
                         category: val.node.category,
                         isFsfLibre: val.node.isFsfLibre,
                         isOsiApproved: val.node.isOsiApproved,
@@ -238,6 +239,7 @@ export class ComponentDetailComponent implements OnInit {
                     {
                         isColspan: false,
                         node: {
+                            trustLevel: val.node.trustLevel,
                             category: val.node.category,
                             isFsfLibre: val.node.isFsfLibre,
                             isOsiApproved: val.node.isOsiApproved,
