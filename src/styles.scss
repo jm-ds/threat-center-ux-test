@@ -114,3 +114,40 @@ app-navigation.navbar.pcoded-header.navbar-expand-lg.navbar-light.pcoded-navbar.
 .pcoded-navbar.theme-horizontal~.pcoded-main-container {
     margin-top: 20px
 }
+
+
+body::-webkit-scrollbar {
+    width: 6px;
+    /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+    /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #aeb5da !important;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    // border: 3px solid orange;
+    /* creates padding around scroll thumb */
+}
+
+.CRITICAL{
+    color: #990000 !important;
+}
+
+.HIGH{
+    color: #ff5252 !important;
+}
+.MEDIUM{
+    color: #ffa21d !important;
+}
+.LOW{
+    color: #4680ff !important;
+}
+.INFO{
+    color: #11c15b !important;
+}
