@@ -60,6 +60,23 @@ perfect-scrollbar[class*="overflowshadowTop"] div[class*="ps--active-y"] {
     overflow-x: inherit;
 }
 
+.CRITICAL{
+    font-weight: 700;
+    color: #ff3737 !important;
+}
+
+.HIGH{
+    color: #ff5252 !important;
+}
+.MEDIUM{
+    color: #ffa21d !important;
+}
+.LOW{
+    color: #4680ff !important;
+}
+.INFO{
+    color: #11c15b !important;
+}
 app-nav-content {
     width: 100%;
     float: left;
