@@ -1,4 +1,6 @@
-<perfect-scrollbar *ngIf="this.nextConfig['layout'] === 'vertical'" (clickOutside)="navMob()" [excludeBeforeClick]="true" [exclude]="'#mobile-collapse'" id="nav-ps-next" ngClass="next-scroll" [style.max-width]="'300px'" [style.max-height]="'calc(100vh - 60px)'" [usePSClass]="'next'" [disabled]="null">
+<perfect-scrollbar *ngIf="this.nextConfig['layout'] === 'vertical'" (clickOutside)="navMob()"
+  [excludeBeforeClick]="true" [exclude]="'#mobile-collapse'" id="nav-ps-next" ngClass="next-scroll"
+  [style.max-width]="'300px'" [style.max-height]="'calc(100vh - 60px)'" [usePSClass]="'next'" [disabled]="null">
   <div class="navbar-content">
     <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()">
       <ng-container *ngFor="let item of navigation">
@@ -16,16 +18,45 @@
   </div>
 </perfect-scrollbar>
 
-<div *ngIf="this.nextConfig['layout'] === 'horizontal'" #navbarWrapper class="navbar-content sidenav-horizontal" id="layout-sidenav">
-  <a href="javascript:" class="sidenav-horizontal-prev" [ngClass]="prevDisabled" (click)="scrollMinus()"></a>
-  <div  class="sidenav-horizontal-wrapper"><!-- add 14-4 viral -->
-    <ul #navbarContent id="side-nav-horizontal" class="nav pcoded-inner-navbar sidenav-inner" (clickOutside)="fireLeave()" (mouseleave)="fireLeave()">
-      <ng-container *ngFor="let item of navigation">
-        <app-nav-group *ngIf="item.type=='group'" [item]="item"></app-nav-group>
-        <app-nav-collapse *ngIf="item.type=='collapse'" [item]="item"></app-nav-collapse>
-        <app-nav-item *ngIf="item.type=='item'" [item]="item"></app-nav-item>
-      </ng-container>
-    </ul>
+<div class="logo_menu_box">
+  <div class="m-header">
+    <a href="javascript:" class="mobile-menu" id="mobile-collapse" (click)="navCollapse()"><span></span></a>
+    <a [routerLink]="['/dashboard/entity']" class="b-brand">
+      <img id="main-logo" src="assets/images/website_logo_white-letters-transparent_background.png" alt="" class="logo"
+        *ngIf="this.nextConfig.navBrandColor !== 'brand-default' || this.nextConfig.headerBackColor !== 'header-default'">
+      <img src="assets/images/logo-dark.png" alt="" class="logo"
+        *ngIf="this.nextConfig.navBrandColor === 'brand-default' && this.nextConfig.headerBackColor === 'header-default'">
+      <img src="assets/images/logo-icon.png" alt="" class="logo-thumb">
+    </a>
+    <div class="threat-center">
+      Threat Center
+    </div>
+    <a class="mob-toggler" [ngClass]="{'on' : this.menuClass}" href="javascript:" (click)="toggleMobOption()"><i
+        class="feather icon-more-vertical"></i></a>
   </div>
-  <!-- <a href="javascript:" class="sidenav-horizontal-next" [ngClass]="nextDisabled" (click)="scrollPlus()"></a>-->
+
+  <div *ngIf="this.nextConfig['layout'] === 'horizontal'" #navbarWrapper class="navbar-content sidenav-horizontal"
+    id="layout-sidenav">
+    <a href="javascript:" class="sidenav-horizontal-prev" [ngClass]="prevDisabled" (click)="scrollMinus()"></a>
+    <div class="sidenav-horizontal-wrapper">
+      <!-- add 14-4 viral -->
+      <ul #navbarContent id="side-nav-horizontal" class="nav pcoded-inner-navbar sidenav-inner"
+        (clickOutside)="fireLeave()" (mouseleave)="fireLeave()">
+        <ng-container *ngFor="let item of navigation">
+          <app-nav-group *ngIf="item.type=='group'" [item]="item"></app-nav-group>
+          <app-nav-collapse *ngIf="item.type=='collapse'" [item]="item"></app-nav-collapse>
+          <app-nav-item *ngIf="item.type=='item'" [item]="item"></app-nav-item>
+        </ng-container>
+      </ul>
+    </div>
+    <!-- <a href="javascript:" class="sidenav-horizontal-next" [ngClass]="nextDisabled" (click)="scrollPlus()"></a>-->
+  </div>
+
+  <div class="userimagebox">
+
+    <div class="collapse navbar-collapse" [style.display]="this.collapseStyle">
+      <app-nav-left class="mr-auto"></app-nav-left>
+      <app-nav-right class="ml-auto"></app-nav-right>
+    </div>
+  </div>
 </div>

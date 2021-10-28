@@ -18,6 +18,9 @@ export class NavContentComponent implements OnInit, AfterViewInit {
   public scrollWidth: any;
   public windowWidth: number;
 
+  public collapseStyle: string;
+
+  public menuClass: boolean;
   private readonly disabledClass = 'disabled d-none';
 
   @Output() onNavMobCollapse = new EventEmitter();
@@ -34,6 +37,8 @@ export class NavContentComponent implements OnInit, AfterViewInit {
     this.nextDisabled = '';
     this.scrollWidth = 0;
     this.contentWidth = 0;
+    this.collapseStyle = 'none';
+    this.menuClass = false;
   }
 
   ngOnInit() {
@@ -51,6 +56,19 @@ export class NavContentComponent implements OnInit, AfterViewInit {
       this.contentWidth = this.navbarContent.nativeElement.clientWidth;
       this.wrapperWidth = this.navbarWrapper.nativeElement.clientWidth;
     }
+  }
+
+  toggleMobOption() {
+    this.menuClass = !this.menuClass;
+    this.collapseStyle = (this.menuClass) ? 'block' : 'none';
+  }
+
+  navCollapse() {
+    // if (this.windowWidth >= 992) {
+    //   this.onNavCollapse.emit();
+    // } else {
+    //   this.onNavHeaderMobCollapse.emit();
+    // }
   }
 
   scrollPlus() {

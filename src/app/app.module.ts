@@ -36,6 +36,8 @@ import { LoadingDialogComponent } from './threat-center/dashboard/project-scan-d
 import { PreScanLoadingDialogComponent } from './threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
 import { MatProgressBarModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxScrollTopModule } from 'ngx-scrolltop';
+
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatProgressBarModule,
     NgbModule,
     NgbPopoverModule, NgbProgressbarModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgxScrollTopModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
