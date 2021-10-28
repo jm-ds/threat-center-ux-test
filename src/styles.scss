@@ -42,20 +42,95 @@ perfect-scrollbar[class*="overflowshadow"] div[class*="ps--active-x"] {
 }
 
 
-perfect-scrollbar[class*="overflowshadowTop"] div[class*="ps--active-y"]  {
+perfect-scrollbar[class*="overflowshadowTop"] div[class*="ps--active-y"] {
     background-image: linear-gradient(to top, #1f2831, #1f2831),
-    linear-gradient(to top, #1f2831, #1f2831),
-    linear-gradient(to top, rgba(255, 255, 255, 0.50), rgba(255, 255, 255, 0)),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.50), rgba(255, 255, 255, 0));
-  background-position: bottom center, top center, bottom center, top center;
-  
-  background-repeat: no-repeat;
-  background-size: 100% 20px, 100% 20px, 100% 10px, 100% 10px;
-  background-attachment: local, local, scroll, scroll;
-  max-height: 650px;
+        linear-gradient(to top, #1f2831, #1f2831),
+        linear-gradient(to top, rgba(255, 255, 255, 0.50), rgba(255, 255, 255, 0)),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.50), rgba(255, 255, 255, 0));
+    background-position: bottom center, top center, bottom center, top center;
+
+    background-repeat: no-repeat;
+    background-size: 100% 20px, 100% 20px, 100% 10px, 100% 10px;
+    background-attachment: local, local, scroll, scroll;
+    max-height: 650px;
 }
 
 
-.ui-table-auto-layout>.ui-table-wrapper{
+.ui-table-auto-layout>.ui-table-wrapper {
     overflow-x: inherit;
+}
+
+app-nav-content {
+    width: 100%;
+    float: left;
+}
+
+.logo_menu_box {
+    width: 100%;
+    float: left;
+    display: flex;
+    align-items: center;
+
+    .m-header {
+        position: relative;
+        width: 225px;
+        background: transparent !important;
+    }
+
+    img.logo-thumb {
+        display: none;
+    }
+
+    a#mobile-collapse {
+        display: none;
+    }
+
+    div#layout-sidenav {
+        width: auto;
+        float: left;
+    }
+
+    .threat-center {
+        top: 38px;
+        right: 25px;
+    }
+
+    .userimagebox {
+        float: right;
+        margin-left: auto;
+
+        .collapse.navbar-collapse {
+            display: flex !important;
+        }
+    }
+
+}
+
+app-navigation.navbar.pcoded-header.navbar-expand-lg.navbar-light.pcoded-navbar.theme-horizontal.navbar-dark.header-blue.brand-blue.headerpos-fixed {
+    position: relative;
+    background: #202932;
+}
+
+.pcoded-navbar.theme-horizontal~.pcoded-main-container {
+    margin-top: 20px
+}
+
+
+body::-webkit-scrollbar {
+    width: 6px;
+    /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+    /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #aeb5da !important;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    // border: 3px solid orange;
+    /* creates padding around scroll thumb */
 }

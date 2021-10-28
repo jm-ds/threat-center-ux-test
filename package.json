@@ -72,6 +72,7 @@
     "ngx-lightbox": "^2.0.0",
     "ngx-markdown": "^9.0.0",
     "ngx-perfect-scrollbar": "^8.0.0",
+    "ngx-scrolltop": "^2.4.0",
     "ngx-spinner": "^8.1.0",
     "ngx-text-diff": "^0.6.0",
     "ngx-toastr": "^10.0.4",
