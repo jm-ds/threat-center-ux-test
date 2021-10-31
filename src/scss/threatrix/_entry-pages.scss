@@ -13,7 +13,7 @@
 
 
     .graph-background-col {
-        background-color:#384359;
+        background-color:#242E38;// #384359
         // height:100%;
         display: flex;
         align-items: center;
@@ -26,8 +26,9 @@
             left: 0;
             right: 0;
             background-image: url("/assets/images/node-graph-login.png");
+            filter: drop-shadow(3px 3px 3px #41a8e3); //#007bff
             background-repeat: no-repeat;
-            opacity: 0.15;
+            opacity: 0.25;
             width: 100%;
             height: 100%;
         }
