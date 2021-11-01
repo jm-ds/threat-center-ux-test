@@ -2,8 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
-import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
+import { EntityService } from '@app/services/entity.service';
+import { ProjectService } from '@app/services/project.service';
 
 @Component({
   selector: 'app-policy-edit',
@@ -45,7 +46,9 @@ export class PolicyEditComponent implements OnInit {
 
     constructor(
         private policyService: PolicyService,
-        private apiService: ApiService,
+        // private apiService: ApiService,
+        private entityService:EntityService,
+        private projectService:ProjectService,
         protected router: Router,
         private route: ActivatedRoute,
     ) {
@@ -88,12 +91,12 @@ export class PolicyEditComponent implements OnInit {
             this.policy.applyToChilds = true;
             this.confirmed = [];
             if (!!this.entityId) {
-                this.apiService.getEntity(this.entityId).subscribe(data=>{
+                this.entityService.getEntity(this.entityId).subscribe(data=>{
                     this.policy.entity=data.data.entity;
                 })
             }
             if (!!this.projectId) {
-                this.apiService.getProject(this.projectId, "",  1).subscribe(data=>{
+                this.projectService.getProject(this.projectId, "",  1).subscribe(data=>{
                     this.policy.project=data.data.project;
                 })
             }
