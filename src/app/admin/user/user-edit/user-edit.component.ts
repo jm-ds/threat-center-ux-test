@@ -1,12 +1,12 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {Entity, EntityEdge, Message, Messages, Role, User} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {UserService} from "@app/admin/services/user.service";
 import {DualListComponent} from "angular-dual-listbox";
-import {RoleService} from "@app/admin/services/role.service";
 import {IOption} from "ng-select";
 import {AuthenticationService} from "@app/security/services";
 import { EntityService } from '@app/services/entity.service';
+import { UserService } from '@app/services/user.service';
+import { RoleService } from '@app/services/role.service';
 
 @Component({
     selector: 'app-user-edit',

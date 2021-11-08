@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Messages, Role} from "@app/models";
 import {Router} from "@angular/router";
-import {RoleService} from "@app/admin/services/role.service";
+import { RoleService } from '@app/services/role.service';
+
 
 @Component({
     selector: 'app-role-list',

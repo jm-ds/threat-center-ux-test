@@ -16,8 +16,8 @@ import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import {IOption} from "ng-select";
-import {UserService} from "@app/admin/services/user.service";
 import { EntityService } from '@app/services/entity.service';
+import { UserService } from '@app/services/user.service';
 
 
 @Component({
