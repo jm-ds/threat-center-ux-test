@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "@app/security/services";
 import {environment} from "../../../environments/environment";
-import {InviteService} from "@app/admin/services/invite.service";
 import {User} from "@app/models";
 import {first} from "rxjs/operators";
+import { InviteService } from '@app/services/invite.service';
 
 @Component({
     selector: 'app-finish-signup',

@@ -4,7 +4,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "@app/admin/services/user.service";
 import {DualListComponent} from "angular-dual-listbox";
 import {RoleService} from "@app/admin/services/role.service";
-import {ApiService} from "@app/threat-center/shared/services";
 import {IOption} from "ng-select";
 import {AuthenticationService} from "@app/security/services";
 import { EntityService } from '@app/services/entity.service';
@@ -36,7 +35,6 @@ export class UserEditComponent implements OnInit {
     constructor(
         private userService: UserService,
         private roleService: RoleService,
-        private apiService: ApiService,
         private entityService:EntityService,
         protected router: Router,
         private route: ActivatedRoute,

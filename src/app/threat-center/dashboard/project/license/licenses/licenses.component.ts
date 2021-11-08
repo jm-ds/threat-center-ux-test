@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { Scan } from '@app/models';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";

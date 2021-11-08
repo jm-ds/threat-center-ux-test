@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService,StateService } from '@app/threat-center/shared/services';
+import { StateService } from '@app/threat-center/shared/services';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 
@@ -19,7 +19,6 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   scanId: string="";
   entityId: string="";
   constructor(
-    private apiService:ApiService,
     public stateService:StateService,
     private route: ActivatedRoute,
     private router:Router,

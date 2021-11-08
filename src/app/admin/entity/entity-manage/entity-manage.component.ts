@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EntityService } from '@app/admin/services/entity.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { AuthenticationService } from '@app/security/services';
 import { ITreeOptions, TreeComponent, TreeNode } from '@circlon/angular-tree-component';
@@ -12,6 +11,7 @@ import * as _ from 'lodash';
 import { User } from '@app/models/user';
 import { AlertService } from '@app/core/services/alert.service';
 import {EntityEdge} from "@app/models";
+import { EntityManageService } from '@app/services/entity-manage.service';
 
 @Component({
     selector: 'app-entity-manage',
@@ -36,7 +36,7 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         private authService: AuthenticationService,
         private route: ActivatedRoute,
-        private entityService: EntityService,
+        private entityService: EntityManageService,
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
         private toastr: ToastrService,

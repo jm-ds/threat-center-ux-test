@@ -1,8 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-
-import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Router} from '@angular/router';
 import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
 import {MatPaginator} from '@angular/material';
@@ -13,6 +11,7 @@ import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanas
 import {CoreHelperService} from "@app/core/services/core-helper.service";
 import {UserPreferenceService} from "@app/core/services/user-preference.service";
 import {Messages} from "@app/messages/messages";
+import { ProjectService } from '@app/services/project.service';
 
 
 
@@ -71,7 +70,7 @@ export class LicenseDimensionComponent implements OnInit {
   conditions:any[];
 
   constructor(
-      private apiService: ApiService,
+      private projectService:ProjectService,
       private router: Router,
       private fixService: FixService,
       private modalService: NgbModal,
@@ -103,7 +102,7 @@ export class LicenseDimensionComponent implements OnInit {
 
 
   loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined){
-    this.obsScanLicense = this.apiService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
+    this.obsScanLicense = this.projectService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
     .pipe(map(result => result.data.scanLicense));
     this.obsScanLicense.subscribe(scanLicense => {
       if (!!scanLicense.license) {
@@ -122,7 +121,7 @@ export class LicenseDimensionComponent implements OnInit {
 
   // load license data
   loadLicense() {
-    this.obsLicense = this.apiService.getLicense(this.licenseId)
+    this.obsLicense = this.projectService.getLicense(this.licenseId)
     .pipe(map(result => result.data.license));
     this.obsLicense.subscribe(license => {
       this.getLicenseName.emit(license.name);
@@ -137,7 +136,7 @@ export class LicenseDimensionComponent implements OnInit {
     if (!!this.isFromComponent || !this.scanId) {
       return;
     }
-    this.obsLicenseComponents = this.apiService.getLicenseComponents(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
+    this.obsLicenseComponents = this.projectService.getLicenseComponents(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
     .pipe(map(result => result.data.scanLicense.scanComponents));
     this.obsLicenseComponents.subscribe(licenseComponents => {
       this.licenseComponents = licenseComponents;
@@ -201,7 +200,7 @@ export class LicenseDimensionComponent implements OnInit {
     }
     clearTimeout(this.assetTimeOut);
     this.assetTimeOut = setTimeout(() => {
-      const obsScanLicense = this.apiService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
+      const obsScanLicense = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
           Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
           undefined, undefined, undefined,
           this.parentScanAssetId, this.makeAssetFilterMapForService())
@@ -296,7 +295,7 @@ export class LicenseDimensionComponent implements OnInit {
   // reload asset tree
   reloadAssets() {
     this.scanAssetDetails = [];
-    let obsScanLicenseAssets = this.apiService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
+    let obsScanLicenseAssets = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
         Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
         undefined, undefined, undefined,
         this.parentScanAssetId, this.makeAssetFilterMapForService())

@@ -3,12 +3,12 @@ import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { Scan } from '@app/models';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { SaveFilterStateService } from '@app/core/services/save-filter-state.service';
+import { ProjectService } from '@app/services/project.service';
 
 @Component({
   selector: 'app-scanassets',
@@ -39,7 +39,8 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   story = [];
   messages = Messages;
   isDisablePaggination: boolean = false;
-  constructor(private apiService: ApiService,
+  constructor(
+    private projectService:ProjectService,
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
@@ -63,7 +64,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
   checkScanDataExists() {
     // if (!this.obsScan) {
-      this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
     // } else {
@@ -110,7 +111,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
 
   // Loading Scan Assets data after paggination.
   loadScanAssetData(first, last, endCursor = undefined, startCursor = undefined) {
-    let scanAsset = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+    let scanAsset = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
@@ -142,7 +143,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   }
 
   reload() {
-    this.obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+    this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
       .pipe(map(result => result.data.scan));
     this.initData();
   }
@@ -155,7 +156,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      const obsScan = this.apiService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       obsScan.subscribe(asset => {
         this.scanAssetDetails = asset;

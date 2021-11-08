@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import { OrgService } from '@app/admin/services/org.service';
 import { UserService } from '@app/admin/services/user.service';
 import {ApiKey, Message, Messages, User} from "@app/models";
+import { OrgService } from '@app/services/org.service';
 import { UserUtils } from '../user-utils';
 
 @Component({

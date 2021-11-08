@@ -1,8 +1,8 @@
 import { ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrgService } from '@app/admin/services/org.service';
 import { EntitySettings } from '@app/models';
+import { OrgService } from '@app/services/org.service';
 import * as $ from 'jquery'
 
 @Component({

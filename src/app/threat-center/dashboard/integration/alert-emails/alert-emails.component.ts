@@ -1,9 +1,9 @@
 import { Component, Injectable, Input, OnInit } from '@angular/core';
-import { EntityService } from '@app/admin/services/entity.service';
-import { OrgService } from '@app/admin/services/org.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { EntitySettings } from '@app/models/entity';
+import { EntityManageService } from '@app/services/entity-manage.service';
+import { OrgService } from '@app/services/org.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
@@ -27,7 +27,7 @@ export class AlertEmailsComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private orgService: OrgService,
-    private entityService: EntityService,
+    private entityService: EntityManageService,
     private coreHelperService:CoreHelperService,
     private alertService:AlertService
   ) {

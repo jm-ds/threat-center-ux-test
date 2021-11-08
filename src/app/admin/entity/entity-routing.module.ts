@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { GetDefaultEntityResolver } from '../services/entity.service';
+import { GetDefaultEntityResolver } from '@app/services/entity-manage.service';
 import { EntityManageComponent } from './entity-manage/entity-manage.component';
 
 

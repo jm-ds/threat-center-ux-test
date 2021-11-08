@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TreeviewItem} from "ngx-treeview";
 import {compareBy} from "@app/shared/compare-utils";
-import {ApiService} from "@app/threat-center/shared/services";
 import { EntityService } from '@app/services/entity.service';
 
 @Component({

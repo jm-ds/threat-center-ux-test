@@ -5,8 +5,8 @@ import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { InviteService } from '@app/admin/services/invite.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { InviteService } from '@app/services/invite.service';
 
 @Component({
   selector: 'app-create-account',
