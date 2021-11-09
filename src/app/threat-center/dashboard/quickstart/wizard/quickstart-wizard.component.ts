@@ -44,6 +44,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     snippetText: string;
     matchCounter: number;
+    languageType: string;
     obsSnippetMatch: Observable<SnippetMatchResult>;
 
 
@@ -156,8 +157,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     submitSnippet() {
         console.log("SNIPPET", this.snippetText);
+        console.log("LANG TYPE", this.languageType);
 
-        this.obsSnippetMatch = this.apiService.getSnippetMatches(this.snippetText)
+        this.obsSnippetMatch = this.apiService.getSnippetMatches(this.snippetText, this.languageType)
             .pipe(map(result => result.data.snippetMatchResult));
         this.obsSnippetMatch.subscribe(d => console.log(d));
 

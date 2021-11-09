@@ -1354,10 +1354,10 @@ export class ApiService {
     }`, { attributeAssetRequest: attributeAssetRequest });
   }
 
-  getSnippetMatches(snippetText: string) {
+  getSnippetMatches(snippetText: string, languageType: string) {
     return this.coreGraphQLService.coreGQLReq<SnippetQuery>(gql`
-      query ($snippetText: String){
-          snippetMatchResult(snippetText: $snippetText) {
+      query ($snippetText: String $languageType: String){
+          snippetMatchResult(snippetText: $snippetText languageType: $languageType) {
             matchTime,
             scanTime,
             snippetSize,
@@ -1390,7 +1390,7 @@ export class ApiService {
             }
           }
       }
-    `,'no-cache', { snippetText: snippetText });
+    `,'no-cache', { snippetText: snippetText, languageType: languageType });
   }
 
 }

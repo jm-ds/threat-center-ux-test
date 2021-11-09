@@ -211,8 +211,8 @@
     </ngb-tab>
     -->
 
-    <!-- SNIPPET -->
-    <ngb-tab class="mb-3" id="Snippet" *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))">
+    <!-- SNIPPET *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))" -->
+    <ngb-tab class="mb-3" id="Snippet" >
       <ng-template ngbTabTitle>
         <span class="tab-title">Super Snippet Matcher</span>
       </ng-template>
@@ -221,23 +221,32 @@
           <form >
             <textarea class="form-control form-control-sm" id="snippetText"
                    [(ngModel)]="snippetText" name="snippetText"
-                      required rows="30" cols="50"></textarea>
+                      required rows="20" cols="30"></textarea>
           </form>
           <div class="text-center m-t-20">
+            <select class="form-control form-control-sm custom-select" style="width: 100px;margin-right: 20px" id="languageType"
+                    [(ngModel)]="languageType" name="languageType" required>
+              <option value="" selected>Select language type</option>
+              <option value="JAVASCRIPT">Javascript</option>
+              <option value="PYTHON">Python</option>
+              <option value="JAVA">Java</option>
+              <option value="C">C</option>
+              <option value="CPP">C++</option>
+            </select>
             <button class="btn btn-primary" (click)="submitSnippet()">Find Matches</button>
           </div>
-          <div *ngIf='obsSnippetMatch | async as results;' style="margin-top:20px;font-size:16px; ">
+          <div *ngIf='obsSnippetMatch | async as results;' style="margin-top:20px;font-size:14px; ">
             <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641;font-weight: bold">
               Scan Results
             </div>
             <div style="margin-bottom:20px;">
-            Scan time: {{results.scanTime}}ms <br/>
-            Match time: {{results.matchTime}}ms <br/>
-            Snippet size: {{results.snippetSize/1024| number: '1.0-2'}}Kb
+              Scan time: {{results.scanTime}}ms <br/>
+              Match time: {{results.matchTime}}ms <br/>
+              Snippet size: {{results.snippetSize/1024| number: '1.0-2'}}Kb
             </div>
 
 
-            <div class="row" *ngFor="let match of results.snippetMatches" style="margin:0px;padding:15px;border: 1px solid #4680ff;">
+            <div class="row" *ngFor="let match of results.snippetMatches" style="margin:0px;margin-top:10px;padding:15px;border: 1px solid #4680ff;">
 
               <!--
               <div class="step-header-stepnum" style="border-color: #4680ff;font-size: 17px;">
@@ -250,11 +259,11 @@
                 <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641">
                   Asset Details
                 </div>
-                <span style="font-weight: bold">{{match.matchPercent*100| number: '1.0-2'}}% match</span><br/>
+                <span style="font-weight: bold;color: cyan">{{match.matchPercent*100| number: '1.0-2'}}% match</span><br/>
                 Asset: {{match.assetName}}<br/>
+                {{match.repositoryOwner}} / {{match.repositoryName}}<br/>
                 SHA-1: {{match.matchAssetId}}<br/>
                 <!--<i class="btn-outline-info fab fa-github fa-1x align-middle m-r-5"></i>-->
-                {{match.repositoryOwner}} / {{match.repositoryName}}<br/>
                 <div *ngFor="let assetLicense of match.assetLicenses">
                   {{assetLicense.name}}
                 </div>
