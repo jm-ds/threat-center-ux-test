@@ -212,7 +212,7 @@
     -->
 
     <!-- SNIPPET -->
-    <ngb-tab class="mb-3" id="Snippet">
+    <ngb-tab class="mb-3" id="Snippet" *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))">
       <ng-template ngbTabTitle>
         <span class="tab-title">Super Snippet Matcher</span>
       </ng-template>

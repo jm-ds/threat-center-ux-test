@@ -20,6 +20,7 @@ import { ReloadService } from '../../services/reload.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
     selector: 'app-quickstart',
@@ -72,7 +73,8 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
         private reloadService: ReloadService,
-        private userPreferenceService:UserPreferenceService) {
+        private userPreferenceService:UserPreferenceService,
+        private authorizationService: AuthorizationService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
