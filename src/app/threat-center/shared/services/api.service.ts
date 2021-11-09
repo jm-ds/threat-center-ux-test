@@ -17,7 +17,7 @@ import {
   ScanAssetMatchRequest,
   ScanAssetQuery,
   ScanLicenseQuery,
-  ScanQuery,
+  ScanQuery, SnippetQuery,
   UserSelection,
   VulnerabilityQuery
 } from '@app/models';
@@ -1352,6 +1352,45 @@ export class ApiService {
     return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
       attributeAsset(attributeAssetRequest: $attributeAssetRequest)
     }`, { attributeAssetRequest: attributeAssetRequest });
+  }
+
+  getSnippetMatches(snippetText: string) {
+    return this.coreGraphQLService.coreGQLReq<SnippetQuery>(gql`
+      query ($snippetText: String){
+          snippetMatchResult(snippetText: $snippetText) {
+            matchTime,
+            scanTime,
+            snippetSize,
+            snippetMatches {
+              matchAssetId,
+              repositoryName,
+              repositoryOwner,
+              assetName,
+              matchPercent,
+              earliestRelease {
+                releaseDate,
+                releaseName
+              },
+              latestRelease {
+                releaseDate,
+                releaseName
+              },
+              earliestReleaseLicenses {
+                licenseId,
+                licenseName
+              },
+              latestReleaseLicenses {
+                licenseId,
+                licenseName
+              },
+              assetLicenses {
+                licenseId,
+                name
+              }
+            }
+          }
+      }
+    `,'no-cache', { snippetText: snippetText });
   }
 
 }

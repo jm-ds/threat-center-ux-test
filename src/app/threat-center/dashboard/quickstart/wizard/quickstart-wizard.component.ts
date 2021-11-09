@@ -15,7 +15,7 @@ import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { HostListener } from '@angular/core';
-import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
+import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
 import { ReloadService } from '../../services/reload.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
@@ -40,6 +40,11 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     bitbucketUser: BitbucketUser;
     loadingScan = false;
     entityId: string;
+
+    snippetText: string;
+    matchCounter: number;
+    obsSnippetMatch: Observable<SnippetMatchResult>;
+
 
     activeTab = "1";
 
@@ -144,8 +149,18 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
         this.isDisableScanBtn = true;
         //Starting Scaning process....
-        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.')
+        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
     }
+
+    submitSnippet() {
+        console.log("SNIPPET", this.snippetText);
+
+        this.obsSnippetMatch = this.apiService.getSnippetMatches(this.snippetText)
+            .pipe(map(result => result.data.snippetMatchResult));
+        this.obsSnippetMatch.subscribe(d => console.log(d));
+
+    }
+
 
     loadGitHubUser() {
         console.log("Loading github user");
