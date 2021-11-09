@@ -8,7 +8,6 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator } from '@angular/material';
 
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
 import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
@@ -22,6 +21,7 @@ import { ClipboardDialogComponent } from "@app/threat-center/dashboard/project/c
 import { AuthorizationService } from '@app/security/services';
 import { ProjectService } from '@app/services/project.service';
 import { ProjectDashboardService } from '@app/services/project-dashboard.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
 
 @Component({
   selector: 'project-dashboard',

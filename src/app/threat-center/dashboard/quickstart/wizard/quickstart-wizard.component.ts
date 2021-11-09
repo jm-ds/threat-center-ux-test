@@ -5,11 +5,9 @@ import { FilterUtils } from 'primeng/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
-import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { HostListener } from '@angular/core';
@@ -19,6 +17,8 @@ import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { ScanService } from '@app/services/scan.service';
+import { TaskService } from '@app/services/task.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
 
 @Component({
     selector: 'app-quickstart',

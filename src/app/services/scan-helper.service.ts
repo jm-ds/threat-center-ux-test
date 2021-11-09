@@ -1,18 +1,18 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable, TemplateRef } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { NextConfig } from "@app/app-config";
 import { AlertService } from "@app/core/services/alert.service";
 import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
 import { CoreHelperService } from "@app/core/services/core-helper.service";
 import { Messages } from "@app/messages/messages";
-import { TaskService } from "@app/threat-center/shared/task/task.service";
+import { PreScanLoadingDialogComponent } from "@app/threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import * as moment from "moment";
 import { BehaviorSubject, Subscription } from "rxjs";
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map } from "rxjs/operators";
 import Swal from "sweetalert2";
-import { PreScanLoadingDialogComponent } from "../pre-scan-dialog/pre-scan-dialog.component";
+import { TaskService } from "./task.service";
 
 @Injectable({
     providedIn: 'root'

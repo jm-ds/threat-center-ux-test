@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { RunningTaskCountSubscription, RunningTaskCountQuery, ScanRequest, TaskQuery, SubscriptionResult } from '../models/types';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { CheckAlreadyScannedQuery } from '@app/models';
+import { Injectable } from "@angular/core";
+import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { CheckAlreadyScannedQuery, ScanRequest, TaskQuery } from "@app/models";
+import { RunningTaskCountQuery, RunningTaskCountSubscription } from "@app/threat-center/shared/models/types";
+import { Apollo } from "apollo-angular";
+import gql from "graphql-tag";
 
 @Injectable({
   providedIn: 'root'

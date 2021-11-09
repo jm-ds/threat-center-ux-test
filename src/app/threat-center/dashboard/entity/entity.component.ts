@@ -8,8 +8,6 @@ import { ApexChartService } from '../../../theme/shared/components/chart/apex-ch
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { TaskService } from '@app/threat-center/shared/task/task.service';
-import { ScanHelperService } from '../services/scan.service';
 import * as _ from 'lodash';
 import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
@@ -18,6 +16,8 @@ import { UserPreferenceService } from '@app/core/services/user-preference.servic
 import {IOption} from "ng-select";
 import { EntityService } from '@app/services/entity.service';
 import { UserService } from '@app/services/user.service';
+import { TaskService } from '@app/services/task.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
 
 
 @Component({
@@ -115,7 +115,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   entitySelectionItems: Array<IOption>;
 
   constructor(
-      private userService: UserService,
+    private userService: UserService,
     private router: Router,
     // private apiService: ApiService,
     private entService:EntityService,
