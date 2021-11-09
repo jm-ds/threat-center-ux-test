@@ -13,10 +13,11 @@ import { LazyLoadEvent, Table } from "primeng";
 import { TxComponent } from '@app/models';
 import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import { ScanComponentService } from "@app/threat-center/dashboard/services/scan-component.service";
+
 import { Messages } from "@app/messages/messages";
 import * as _ from 'lodash';
 import { ProjectService } from '@app/services/project.service';
+import { ScanComponentService } from '@app/services/scan-component.service';
 
 @Component({
   selector: 'component-detail',

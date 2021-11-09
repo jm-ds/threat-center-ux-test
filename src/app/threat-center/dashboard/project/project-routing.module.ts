@@ -5,8 +5,8 @@ import { ComponentDetailComponent } from './component';
 import { VulnerabilityDetailComponent } from './vulnerability';
 import { LicenseDetailComponent } from './license';
 import { ScanAssetDetailComponent } from './scanasset';
-import { GetProjectData, ProjectDashboardResolver } from '../services/project.service';
 import { CanDeactivateGuard } from '@app/security/helpers/auth.guard';
+import { GetProjectData, ProjectDashboardResolver } from '@app/services/project-dashboard.service';
 
 
 const routes: Routes = [

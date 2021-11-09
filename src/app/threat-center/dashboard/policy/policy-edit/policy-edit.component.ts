@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
+
 import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
 import { EntityService } from '@app/services/entity.service';
 import { ProjectService } from '@app/services/project.service';
+import { PolicyService } from '@app/services/policy.service';
 
 @Component({
   selector: 'app-policy-edit',

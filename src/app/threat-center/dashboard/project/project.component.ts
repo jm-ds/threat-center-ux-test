@@ -6,7 +6,7 @@ import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator } from '@angular/material';
-import { ProjectDashboardService } from '../services/project.service';
+
 import { CoreHelperService } from '@app/core/services/core-helper.service';
 import { ScanHelperService } from '../services/scan.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,6 +21,7 @@ import { ChartHelperService } from '@app/core/services/chart-helper.service';
 import { ClipboardDialogComponent } from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
 import { AuthorizationService } from '@app/security/services';
 import { ProjectService } from '@app/services/project.service';
+import { ProjectDashboardService } from '@app/services/project-dashboard.service';
 
 @Component({
   selector: 'project-dashboard',
