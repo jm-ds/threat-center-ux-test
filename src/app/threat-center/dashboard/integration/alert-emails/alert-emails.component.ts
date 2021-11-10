@@ -8,9 +8,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
 
-@Injectable({
-    providedIn: 'root'
-})
 @Component({
     selector: 'alert-emails',
     templateUrl: './alert-emails.component.html',
