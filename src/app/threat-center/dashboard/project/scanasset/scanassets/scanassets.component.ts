@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { Scan } from '@app/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
-import { SaveFilterStateService } from '@app/core/services/save-filter-state.service';
+import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
+import { SaveFilterStateService } from '@app/services/core/services/save-filter-state.service';
 import { ProjectService } from '@app/services/project.service';
 
 @Component({

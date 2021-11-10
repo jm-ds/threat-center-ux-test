@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 
 @Component({
   selector: 'app-auth',

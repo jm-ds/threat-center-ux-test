@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
 import { CheckAlreadyScannedQuery, ScanRequest, TaskQuery } from "@app/models";
 import { RunningTaskCountQuery, RunningTaskCountSubscription } from "@app/threat-center/shared/models/types";
 import { Apollo } from "apollo-angular";

@@ -4,11 +4,11 @@ import {map} from 'rxjs/operators';
 import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CoreHelperService} from '@app/core/services/core-helper.service';
+import {CoreHelperService} from '@app/services/core/services/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import {Scan} from '@app/models';
-import {UserPreferenceService} from '@app/core/services/user-preference.service';
+import {UserPreferenceService} from '@app/services/core/services/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 
 @Component({

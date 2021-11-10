@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { AuthenticationService } from '@app/security/services';
 import { ITreeOptions, TreeComponent, TreeNode } from '@circlon/angular-tree-component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,7 +9,7 @@ import { EntityModel, TreeViewNodeModel } from '../entity.class';
 import { ChildEntityManageComponent } from './child-entity/child-manage.component';
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
-import { AlertService } from '@app/core/services/alert.service';
+import { AlertService } from '@app/services/core/services/alert.service';
 import {EntityEdge} from "@app/models";
 import { EntityManageService } from '@app/services/entity-manage.service';
 

@@ -1,6 +1,6 @@
 import { Component, Injectable, Input, OnInit } from '@angular/core';
-import { AlertService } from '@app/core/services/alert.service';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { AlertService } from '@app/services/core/services/alert.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { EntitySettings } from '@app/models/entity';
 import { EntityManageService } from '@app/services/entity-manage.service';
 import { OrgService } from '@app/services/org.service';

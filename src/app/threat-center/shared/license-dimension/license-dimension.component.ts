@@ -8,8 +8,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import {License, ScanLicense} from '@app/models';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import {CoreHelperService} from "@app/core/services/core-helper.service";
-import {UserPreferenceService} from "@app/core/services/user-preference.service";
+import {CoreHelperService} from "@app/services/core/services/core-helper.service";
+import {UserPreferenceService} from "@app/services/core/services/user-preference.service";
 import {Messages} from "@app/messages/messages";
 import { ProjectService } from '@app/services/project.service';
 

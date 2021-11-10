@@ -5,7 +5,7 @@ import { environment } from "../../../environments/environment";
 import { first, map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 
 @Component({
     selector: 'app-awaiting-approval',

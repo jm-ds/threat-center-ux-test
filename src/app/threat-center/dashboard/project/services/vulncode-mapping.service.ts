@@ -3,7 +3,7 @@ import { environment } from "../../../../../environments/environment";
 import { Injectable } from "@angular/core";
 
 import { HttpHeaders, HttpParams } from "@angular/common/http";
-import { CoreHttpService } from "@app/core/services/core-http.service";
+import { CoreHttpService } from "@app/services/core/services/core-http.service";
 import { VulnerableReleaseResponseMap, VulnerableReleaseResponse } from "@app/threat-center/shared/models/types";
 
 @Injectable({

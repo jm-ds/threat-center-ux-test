@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { EntityRequestInput, EntitySettingsRequestInput, EntityUpdateRequestInput, OrganizationUpdateRequestInput } from "@app/admin/entity/entity.class";
-import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
 import { EntityArray, EntityQuery, JiraCredentials } from "@app/models";
 import { AuthenticationService } from "@app/security/services";
 import { ApolloQueryResult } from "apollo-client";

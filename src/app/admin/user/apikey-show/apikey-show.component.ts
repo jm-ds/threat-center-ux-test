@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import { AlertService } from '@app/core/services/alert.service';
+import { AlertService } from '@app/services/core/services/alert.service';
 import {ApiKey, Message, Messages, User} from "@app/models";
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';

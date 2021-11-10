@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CoreHelperService } from "@app/core/services/core-helper.service";
+import { CoreHelperService } from "@app/services/core/services/core-helper.service";
 import { ScanHelperService } from "@app/services/scan-helper.service";
 import { TaskService } from "@app/services/task.service";
 

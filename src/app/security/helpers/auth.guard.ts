@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
 import { NextConfig } from '@app/app-config';
-import { AlertService } from '@app/core/services/alert.service';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { AlertService } from '@app/services/core/services/alert.service';
+import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { Messages } from '@app/messages/messages';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs/Observable';

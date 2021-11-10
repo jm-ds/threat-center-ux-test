@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
 import { ApiKey, ApiKeyQuery, ApiKeyRequestInput, Role, User, UserQuery, UserRequestInput, UsersQuery } from "@app/models";
 import { Apollo } from "apollo-angular";
 import gql from "graphql-tag";

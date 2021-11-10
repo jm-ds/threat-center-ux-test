@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '@app/security/services/authentication.service';
-import { Subject } from 'rxjs';
-import Swal, { SweetAlertType } from 'sweetalert2';
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { AuthenticationService } from "@app/security/services";
+import { Subject } from "rxjs";
 
 
 @Injectable({

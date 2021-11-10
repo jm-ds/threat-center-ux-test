@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { AlertService } from "@app/core/services/alert.service";
-import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { AlertService } from "@app/services/core/services/alert.service";
+import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
 import { InviteMailData, InviteMailDataRequestInput, InviteOrganizationDataQuery, InviteQuery, User, UserQuery } from "@app/models";
 import { AuthenticationService } from "@app/security/services";
 import gql from "graphql-tag";
