@@ -7,9 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+
 @Component({
     selector: 'slack-urls',
     templateUrl: './slack-urls.component.html',

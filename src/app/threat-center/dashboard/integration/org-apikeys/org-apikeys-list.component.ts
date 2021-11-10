@@ -5,9 +5,6 @@ import { ApiKeyConnection } from '@app/models';
 import { OrgService } from '@app/services/org.service';
 
 
-@Injectable({
-  providedIn: 'root'
-})
 @Component({
   selector: 'org-apikeys',
   templateUrl: './org-apikeys-list.component.html',

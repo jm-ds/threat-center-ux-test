@@ -6,9 +6,7 @@ import { OrgService } from '@app/services/org.service';
 import Swal from 'sweetalert2';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+
 @Component({
     selector: 'jira-credentials',
     templateUrl: './jira-credentials.component.html',
