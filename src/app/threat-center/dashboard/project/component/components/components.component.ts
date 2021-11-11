@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CoreHelperService} from '@app/services/core/services/core-helper.service';
@@ -10,6 +9,7 @@ import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/
 import {Scan} from '@app/models';
 import {UserPreferenceService} from '@app/services/core/services/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
+import { FixService } from '@app/services/fix.service';
 
 @Component({
     selector: 'app-components',

@@ -12,13 +12,13 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { HostListener } from '@angular/core';
 import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
-import { ReloadService } from '../../services/reload.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
 import { ScanService } from '@app/services/scan.service';
 import { TaskService } from '@app/services/task.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
+import { ReloadService } from '@app/services/reload.service';
 
 @Component({
     selector: 'app-quickstart',

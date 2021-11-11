@@ -7,8 +7,6 @@ import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseRespo
 import { StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
-
-import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
 import { LazyLoadEvent, Table } from "primeng";
 import { TxComponent } from '@app/models';
 import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
@@ -18,6 +16,7 @@ import { Messages } from "@app/messages/messages";
 import * as _ from 'lodash';
 import { ProjectService } from '@app/services/project.service';
 import { ScanComponentService } from '@app/services/scan-component.service';
+import { VulnerableCodeMappingService } from '@app/services/vulncode-mapping.service';
 
 @Component({
   selector: 'component-detail',

@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {FixService} from '@app/threat-center/dashboard/project/services/fix.service';
-import {MatPaginator} from '@angular/material';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {License, ScanLicense} from '@app/models';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { License, ScanLicense } from '@app/models';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import {CoreHelperService} from "@app/services/core/services/core-helper.service";
-import {UserPreferenceService} from "@app/services/core/services/user-preference.service";
-import {Messages} from "@app/messages/messages";
+import { CoreHelperService } from "@app/services/core/services/core-helper.service";
+import { UserPreferenceService } from "@app/services/core/services/user-preference.service";
+import { Messages } from "@app/messages/messages";
 import { ProjectService } from '@app/services/project.service';
+import { FixService } from '@app/services/fix.service';
 
 
 
@@ -24,9 +24,9 @@ export class LicenseDimensionComponent implements OnInit {
 
   public licenseCols = ['Name', 'Threat'];
 
-  @Input() licenseId:string;
-  @Input() licenseDiscovery:string;
-  @Input() licenseOrigin:string;
+  @Input() licenseId: string;
+  @Input() licenseDiscovery: string;
+  @Input() licenseOrigin: string;
   @Input() scanId: string;
   @Input() projectId: string;
   @Input() entityId: string;
@@ -38,19 +38,19 @@ export class LicenseDimensionComponent implements OnInit {
   licenseComponents: any;
   newVersion: string;
   defaultPageSize = 25;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
 
 
-  
+
   componentColumns = [
-    {field: 'name', header: 'Name'},
-    {field: 'group', header: 'Group'},
-    {field: 'version', header: 'Version'},
-    {field: 'location', header: 'Location' },
-    {field: 'discoveryMethod', header: 'Discovery' },
-    {field: 'license.name', header: 'Licenses'},
-    {field: 'vulnerabilities', header: 'Vulnerabilities'}
+    { field: 'name', header: 'Name' },
+    { field: 'group', header: 'Group' },
+    { field: 'version', header: 'Version' },
+    { field: 'location', header: 'Location' },
+    { field: 'discoveryMethod', header: 'Discovery' },
+    { field: 'license.name', header: 'Licenses' },
+    { field: 'vulnerabilities', header: 'Vulnerabilities' }
   ];
 
   assetColumns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Match Type'];
@@ -65,25 +65,25 @@ export class LicenseDimensionComponent implements OnInit {
 
 
 
-  permissions:any[];
-  limitations:any[];
-  conditions:any[];
+  permissions: any[];
+  limitations: any[];
+  conditions: any[];
 
   constructor(
-      private projectService:ProjectService,
-      private router: Router,
-      private fixService: FixService,
-      private modalService: NgbModal,
-      private coreHelperService: CoreHelperService,
-      private userPreferenceService: UserPreferenceService
+    private projectService: ProjectService,
+    private router: Router,
+    private fixService: FixService,
+    private modalService: NgbModal,
+    private coreHelperService: CoreHelperService,
+    private userPreferenceService: UserPreferenceService
   ) {
   }
 
   ngOnInit() {
-    if(this.licenseId) {
-      if(this.isFromComponent || !!this.scanId){
+    if (this.licenseId) {
+      if (this.isFromComponent || !!this.scanId) {
         this.loadLicenseAndLicenseComponent(this.defaultPageSize);
-      }else{
+      } else {
         this.loadLicense();
         this.loadLicenseComponents(this.defaultPageSize);
         this.reloadAssets();
@@ -93,7 +93,7 @@ export class LicenseDimensionComponent implements OnInit {
 
   setLicense(event) {
     this.licenseId = event.data.licenseId;
-    if(this.licenseId) {
+    if (this.licenseId) {
       this.loadLicense();
       this.loadLicenseComponents(this.defaultPageSize);
 
@@ -101,9 +101,9 @@ export class LicenseDimensionComponent implements OnInit {
   }
 
 
-  loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined){
+  loadLicenseAndLicenseComponent(first, last = undefined, endCursor = undefined, startCursor = undefined) {
     this.obsScanLicense = this.projectService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
-    .pipe(map(result => result.data.scanLicense));
+      .pipe(map(result => result.data.scanLicense));
     this.obsScanLicense.subscribe(scanLicense => {
       if (!!scanLicense.license) {
         this.getLicenseName.emit(scanLicense.license.name);
@@ -122,7 +122,7 @@ export class LicenseDimensionComponent implements OnInit {
   // load license data
   loadLicense() {
     this.obsLicense = this.projectService.getLicense(this.licenseId)
-    .pipe(map(result => result.data.license));
+      .pipe(map(result => result.data.license));
     this.obsLicense.subscribe(license => {
       this.getLicenseName.emit(license.name);
       this.permissions = this.licenseAttributeFilter(license, 'PERMISSION');
@@ -137,14 +137,14 @@ export class LicenseDimensionComponent implements OnInit {
       return;
     }
     this.obsLicenseComponents = this.projectService.getLicenseComponents(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
-    .pipe(map(result => result.data.scanLicense.scanComponents));
+      .pipe(map(result => result.data.scanLicense.scanComponents));
     this.obsLicenseComponents.subscribe(licenseComponents => {
       this.licenseComponents = licenseComponents;
     });
   }
 
-  licenseAttributeFilter(license:any, type:string) {
-    return license.attributes.filter(function(attribute) {
+  licenseAttributeFilter(license: any, type: string) {
+    return license.attributes.filter(function (attribute) {
       return attribute.type == type;
     });
   }
@@ -156,7 +156,7 @@ export class LicenseDimensionComponent implements OnInit {
   }
 
   fixVersion(componentId: string, oldVersion: string) {
-    const  modalRef = this.modalService.open(FixComponentDialogComponent, {
+    const modalRef = this.modalService.open(FixComponentDialogComponent, {
       keyboard: false,
     });
     modalRef.componentInstance.scanId = this.scanId;
@@ -168,26 +168,26 @@ export class LicenseDimensionComponent implements OnInit {
   // While any changes occurred in page
   changePage(pageInfo) {
     if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
-        // page size changed...
-        this.defaultPageSize = pageInfo.pageSize;
-        // API Call
-        this.loadLicenseComponents(Number(this.defaultPageSize), undefined, undefined, undefined);
-        this.paginator.firstPage();
+      // page size changed...
+      this.defaultPageSize = pageInfo.pageSize;
+      // API Call
+      this.loadLicenseComponents(Number(this.defaultPageSize), undefined, undefined, undefined);
+      this.paginator.firstPage();
     } else {
-        // Next and Previous changed
-        if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
-            // call with after...
-            if (!!this.licenseComponents.pageInfo && this.licenseComponents.pageInfo['hasNextPage']) {
-                this.loadLicenseComponents(Number(this.defaultPageSize), undefined,
-                    this.licenseComponents.pageInfo['endCursor'], undefined);
-            }
-        } else {
-            // call with before..
-            if (!!this.licenseComponents.pageInfo && this.licenseComponents.pageInfo['hasPreviousPage']) {
-                this.loadLicenseComponents(undefined, Number(this.defaultPageSize),
-                    undefined, this.licenseComponents.pageInfo['startCursor']);
-            }
+      // Next and Previous changed
+      if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
+        // call with after...
+        if (!!this.licenseComponents.pageInfo && this.licenseComponents.pageInfo['hasNextPage']) {
+          this.loadLicenseComponents(Number(this.defaultPageSize), undefined,
+            this.licenseComponents.pageInfo['endCursor'], undefined);
         }
+      } else {
+        // call with before..
+        if (!!this.licenseComponents.pageInfo && this.licenseComponents.pageInfo['hasPreviousPage']) {
+          this.loadLicenseComponents(undefined, Number(this.defaultPageSize),
+            undefined, this.licenseComponents.pageInfo['startCursor']);
+        }
+      }
     }
   }
 
@@ -201,10 +201,10 @@ export class LicenseDimensionComponent implements OnInit {
     clearTimeout(this.assetTimeOut);
     this.assetTimeOut = setTimeout(() => {
       const obsScanLicense = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
-          Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
-          undefined, undefined, undefined,
-          this.parentScanAssetId, this.makeAssetFilterMapForService())
-          .pipe(map(result => result.data.scanLicense))
+        Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+        undefined, undefined, undefined,
+        this.parentScanAssetId, this.makeAssetFilterMapForService())
+        .pipe(map(result => result.data.scanLicense))
       obsScanLicense.subscribe(scanLicense => {
         this.scanAssetDetails = scanLicense.scanAssetsTree;;
         this.coreHelperService.setFocusOnElement(idElement);
@@ -232,9 +232,9 @@ export class LicenseDimensionComponent implements OnInit {
       return;
     }
     return scanAssets
-        .sort((a, b) => a.node.status.localeCompare(b.node.status))
-        .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
-        .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+      .sort((a, b) => a.node.status.localeCompare(b.node.status))
+      .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+      .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
   }
 
   // build asset filter string
@@ -257,7 +257,7 @@ export class LicenseDimensionComponent implements OnInit {
 
   // return match type caption by match type code
   public assetMatchTypeVal2Caption(val: string) {
-    switch(val) {
+    switch (val) {
       case 'UNIQUE_PROPRIETARY': return 'PROPRIETARY ';
       case 'PROPRIETARY': return 'PROPRIETARY/OPEN SOURCE ';
       case 'EMBEDDED_OPEN_SOURCE': return 'OPEN SOURCE/PROPRIETARY ';
@@ -279,7 +279,7 @@ export class LicenseDimensionComponent implements OnInit {
       this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.assetBreadcumSetting(scanAsset) });
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reloadAssets();
-    }else {
+    } else {
       if (scanAsset.node.embeddedAssets.edges.length >= 1) {
         let sAssetId = scanAsset.node.scanAssetId;
         const url = "dashboard/entity/" + this.entityId + '/project/' + this.projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
@@ -296,10 +296,10 @@ export class LicenseDimensionComponent implements OnInit {
   reloadAssets() {
     this.scanAssetDetails = [];
     let obsScanLicenseAssets = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
-        Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
-        undefined, undefined, undefined,
-        this.parentScanAssetId, this.makeAssetFilterMapForService())
-        .pipe(map(result => result.data.scanLicense));
+      Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+      undefined, undefined, undefined,
+      this.parentScanAssetId, this.makeAssetFilterMapForService())
+      .pipe(map(result => result.data.scanLicense));
     obsScanLicenseAssets.subscribe(scanLicense => {
       this.scanAssetDetails = scanLicense.scanAssetsTree;
     });
@@ -319,7 +319,7 @@ export class LicenseDimensionComponent implements OnInit {
     }
   }
 
-  getAssetSummationOfEmbeded(array:any[]){
+  getAssetSummationOfEmbeded(array: any[]) {
     return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
   }
 
