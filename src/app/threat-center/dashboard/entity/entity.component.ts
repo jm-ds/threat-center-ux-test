@@ -2,7 +2,6 @@ import { Component, OnInit, HostListener, OnDestroy, AfterViewChecked, ChangeDet
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -13,11 +12,12 @@ import { ChartHelperService } from '@app/services/core/services/chart-helper.ser
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
 import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
 import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
-import {IOption} from "ng-select";
-import { EntityService } from '@app/services/entity.service';
+import { IOption } from "ng-select";
 import { UserService } from '@app/services/user.service';
-import { TaskService } from '@app/services/task.service';
+import { EntityService } from '@app/services/entity.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
+import { TaskService } from '@app/services/task.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({
@@ -110,7 +110,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // running scan task count subscription
   runningTaskCountSubscription: Subscription = undefined;
-  panelActiveId:string = 'chart-panel';
+  panelActiveId: string = 'chart-panel';
 
   entitySelectionItems: Array<IOption>;
 
@@ -118,7 +118,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private userService: UserService,
     private router: Router,
     // private apiService: ApiService,
-    private entService:EntityService,
+    private entService: EntityService,
     private stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
@@ -129,8 +129,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     // private entityService: EntityService,
     private chartHelperService: ChartHelperService,
     private cdRef: ChangeDetectorRef,
-    private projectBreadcumsService:ProjectBreadcumsService,
-    private userPreferenceService:UserPreferenceService,
+    private projectBreadcumsService: ProjectBreadcumsService,
+    private userPreferenceService: UserPreferenceService,
     public authorizationService: AuthorizationService
   ) {
     this.dailyVisitorStatus = '1y';
@@ -182,13 +182,13 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       let entities = user.userEntities.edges.map((e) => e.node);
       this.entitySelectionItems = this.getSelectItemsFromEntities(entities);
     });
-        
+
     this.loadEntityPage();
   }
 
   private getSelectItemsFromEntities(entities: Array<Entity>): Array<IOption> {
     return entities.map(entity => {
-      return {value: entity.entityId, label: entity.name} as IOption;
+      return { value: entity.entityId, label: entity.name } as IOption;
     });
   }
 
@@ -464,7 +464,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+          if (entity.entityMetricsGroup.entityMetrics.length >= 1) {
             entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
           }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
@@ -1129,7 +1129,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(map(countData => {
         if (!!countData.data.subscribeRunningScanTaskCount.errors) {
           countData.data.subscribeRunningScanTaskCount.errors
-            .forEach(err=>console.error("Running task count subscription error: "+err.message));
+            .forEach(err => console.error("Running task count subscription error: " + err.message));
         }
         if (!!countData.data.subscribeRunningScanTaskCount.value) {
           return countData.data.subscribeRunningScanTaskCount.value;
@@ -1139,9 +1139,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       }))
       .subscribe(count => {
         this.activeScanCount = count;
-     }, err => {
-        console.error("error subscription "+err);
-     });
+      }, err => {
+        console.error("error subscription " + err);
+      });
   }
 
 }

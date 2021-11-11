@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { StateService, RepositoryService } from '@app/threat-center/shared/services';
+
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
@@ -14,6 +14,8 @@ import { AlertService } from '@app/services/core/services/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
 import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialog.component';
 import { ProjectService } from '@app/services/project.service';
+import { RepositoryService } from '@app/services/repository.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({

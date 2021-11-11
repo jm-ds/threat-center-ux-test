@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StateService } from '@app/threat-center/shared/services/state.service';
 import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator } from '@angular/material';
-
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
@@ -22,6 +20,8 @@ import { AuthorizationService } from '@app/security/services';
 import { ProjectService } from '@app/services/project.service';
 import { ProjectDashboardService } from '@app/services/project-dashboard.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
+import { StateService } from '@app/services/state.service';
+
 
 @Component({
   selector: 'project-dashboard',

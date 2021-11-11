@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
-import { StateService } from '@app/threat-center/shared/services';
 import { MatPaginator } from '@angular/material';
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { LazyLoadEvent, Table } from "primeng";
@@ -17,6 +16,7 @@ import * as _ from 'lodash';
 import { ProjectService } from '@app/services/project.service';
 import { ScanComponentService } from '@app/services/scan-component.service';
 import { VulnerableCodeMappingService } from '@app/services/vulncode-mapping.service';
+import { StateService } from '@app/services/state.service';
 
 @Component({
   selector: 'component-detail',
