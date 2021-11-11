@@ -11,14 +11,15 @@ import { AuthenticationService } from '@app/security/services';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/services/core/services/core-helper.service';
 import { HostListener } from '@angular/core';
-import { BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest } from '@app/models';
-import { RepositoryListComponent } from './repo-list/repo-list.component';
-import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
 import { ScanService } from '@app/services/scan.service';
 import { TaskService } from '@app/services/task.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
 import { ReloadService } from '@app/services/reload.service';
+import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
+import { RepositoryListComponent } from './repo-list/repo-list.component';
+import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
+import { AuthorizationService } from '@app/security/services';
+import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
 
 @Component({
     selector: 'app-quickstart',
@@ -39,6 +40,12 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     bitbucketUser: BitbucketUser;
     loadingScan = false;
     entityId: string;
+
+    snippetText: string;
+    matchCounter: number;
+    languageType: string;
+    obsSnippetMatch: Observable<SnippetMatchResult>;
+
 
     activeTab = "1";
 
@@ -66,7 +73,8 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private coreHelperService: CoreHelperService,
         private reloadService: ReloadService,
-        private userPreferenceService: UserPreferenceService) {
+        private userPreferenceService:UserPreferenceService,
+        private authorizationService: AuthorizationService) {
         this.scanHelperService.isEnabaleNewScanObservable$
             .subscribe(x => {
                 this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
@@ -143,8 +151,19 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
         this.isDisableScanBtn = true;
         //Starting Scaning process....
-        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.')
+        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
     }
+
+    submitSnippet() {
+        console.log("SNIPPET", this.snippetText);
+        console.log("LANG TYPE", this.languageType);
+
+        this.obsSnippetMatch = this.scanService.getSnippetMatches(this.snippetText, this.languageType)
+            .pipe(map(result => result.data.snippetMatchResult));
+        this.obsSnippetMatch.subscribe(d => console.log(d));
+
+    }
+
 
     loadGitHubUser() {
         console.log("Loading github user");

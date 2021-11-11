@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
-import { BitbucketUserQuery, GitHubUserQuery, GitLabUserQuery } from "@app/models";
+import { BitbucketUserQuery, GitHubUserQuery, GitLabUserQuery,SnippetQuery } from "@app/models";
 import gql from "graphql-tag";
-
 @Injectable({
   providedIn: 'root'
 })
 
 export class ScanService {
   constructor(private coreGraphQLService: CoreGraphQLService) { }
-  
+
   // Request github repos data from backend
   getGitHubUser() {
     return this.coreGraphQLService.coreGQLReq<GitHubUserQuery>(gql`
@@ -177,5 +176,44 @@ export class ScanService {
                 }
               }
           `);
+  }
+
+  getSnippetMatches(snippetText: string, languageType: string) {
+    return this.coreGraphQLService.coreGQLReq<SnippetQuery>(gql`
+      query ($snippetText: String $languageType: String){
+          snippetMatchResult(snippetText: $snippetText languageType: $languageType) {
+            matchTime,
+            scanTime,
+            snippetSize,
+            snippetMatches {
+              matchAssetId,
+              repositoryName,
+              repositoryOwner,
+              assetName,
+              matchPercent,
+              earliestRelease {
+                releaseDate,
+                releaseName
+              },
+              latestRelease {
+                releaseDate,
+                releaseName
+              },
+              earliestReleaseLicenses {
+                licenseId,
+                licenseName
+              },
+              latestReleaseLicenses {
+                licenseId,
+                licenseName
+              },
+              assetLicenses {
+                licenseId,
+                name
+              }
+            }
+          }
+      }
+    `, 'no-cache', { snippetText: snippetText, languageType: languageType });
   }
 }

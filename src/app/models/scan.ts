@@ -138,35 +138,72 @@ export class ScanLicense {
     scanLicenseAssets: ScanLicenseAssetConnection;
 }
 
+export class SnippetMatchResult {
+    matchTime: number;
+    scanTime: number;
+    snippetSize: number;
+    snippetMatches: SnippetMatch[];
+};
+export class SnippetMatch {
+    matchAssetId: string;
+    repositoryName: string;
+    repositoryOwner: string;
+    assetName: string;
+    matchPercent: number;
+    earliestRelease: AssetRelease;
+    latestRelease: AssetRelease;
+    earliestReleaseLicenses: RepositoryReleaseLicense[];
+    latestReleaseLicenses: RepositoryReleaseLicense[];
+    assetLicenses: AssetLicense[];
+};
+
+export class AssetRelease {
+    releaseDate: Date;
+    releaseName: string;
+};
+export class AssetLicense {
+    licenseId: string;
+    name: string;
+};
+export class RepositoryReleaseLicense {
+    licenseId: string;
+    licenseName: string;
+};
+
 // GRAPHQL QUERIES
 export type TaskQuery = {
     task_submitScanRequest: Task;
     task_update: Task;
-}
+};
 
 export type GitHubUserQuery = {
     gitHubUser: GitHubUser;
-}
+};
 
 // GitLabUserQuery
 export type GitLabUserQuery = {
     gitLabUser: GitLabUser;
-}
+};
 
 // BitbucketUserQuery
 export type BitbucketUserQuery = {
     bitbucketUser: BitbucketUser;
-}
+};
 
 export type ScanQuery = {
     scan: Scan;
-}
+};
+
+export type SnippetQuery = {
+    snippetMatchResult: SnippetMatchResult;
+};
 
 // check if already scanned
 export type CheckAlreadyScannedQuery = {
     checkAlreadyScannedProject: Date
-}
+};
 
 export type ScanLicenseQuery = {
     scanLicense: ScanLicense;
-}
+};
+
