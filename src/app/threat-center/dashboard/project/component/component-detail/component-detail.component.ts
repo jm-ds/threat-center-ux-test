@@ -258,19 +258,17 @@ export class ComponentDetailComponent implements OnInit {
         }
     });
 
-    console.log("ARRAY:", originalArray);
-
     // jdm: filter licenses for DECLARED because the other licenses seem wrong right now
     // Once we've cleaned up the license data(probably by Q1 2022), we can remove this filter.
-    //this.licensesList = originalArray.filter(s => s.node.licenseDiscovery.includes('DECLARED') || s.node.licenseOrigin.includes('REPOSITORY_META'));
-    this.licensesList = originalArray.filter(s => {
+    this.licensesList = originalArray;
+    /*this.licensesList = originalArray.filter(s => {
         if (s.isColspan) {
             return false;
         }
         else {
             return s.node.licenseDiscovery === 'DECLARED' || s.node.licenseOrigin === 'REPOSITORY_META';
         }
-    });
+    });*/
 
 
 }
