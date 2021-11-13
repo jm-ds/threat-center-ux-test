@@ -33,7 +33,7 @@ export const Messages = {
         origin: {
             COMPONENT: "Component",
             REPOSITORY: "Repository",
-            REPOSITORY_META: "Repository Meta Data",
+            REPOSITORY_META: "Repository",
             REPOSITORY_LICENSE: "Repository License File",
             ASSET: "Asset"
         }
