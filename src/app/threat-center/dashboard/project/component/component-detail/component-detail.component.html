@@ -98,18 +98,6 @@
                           {{col}}
                         </th>
                       </tr>
-                      <!-- <tr>
-                        <th *ngFor="let col of columns">
-                          <input *ngIf="col =='Name'" id="nameSearch" type="text" placeholder="{{col}}" name="search-name"
-                                 class="form-control" (input)="filterColumn(col, $event.target.value,'nameSearch')" [value]="getColumnFilterValue(col)"/>
-                          <input *ngIf="col =='SPDX'" id="spdxSearch" type="text" placeholder="{{col}}" name="search-name"
-                                 class="form-control" (input)="filterColumn(col, $event.target.value,'spdxSearch')" [value]="getColumnFilterValue(col)"/>
-                          <input *ngIf="col =='Threat Category'" id="threatCategorySearch" type="text" placeholder="{{col}}" name="search-name"
-                                 class="form-control" (input)="filterColumn(col, $event.target.value,'threatCategorySearch')" [value]="getColumnFilterValue(col)"/>
-                          <input *ngIf="col =='Style'" id="styleSearch" type="text" placeholder="{{col}}" name="search-name"
-                                 class="form-control" (input)="filterColumn(col, $event.target.value,'styleSearch')" [value]="getColumnFilterValue(col)"/>
-                        </th>
-                      </tr> -->
                     </ng-template>
             
                     <ng-template pTemplate="body" let-license>
@@ -127,10 +115,13 @@
                       <td>
                         {{messages.license.origin[license.node.licenseOrigin]}}
                       </td>
-                        <td>
+                        <div *ngIf="license.node.licenseOrigin === 'ASSET'">
+                          Asset license
+                        </div>
+                        <div *ngIf="license.node.licenseOrigin !== 'ASSET'">
                           <span *ngIf="license.node.trustLevel ==='LEVEL_1'">Original repo license</span>
                           <span *ngIf="license.node.trustLevel ==='LEVEL_2'">Context relevant license</span>
-                        </td>
+                        </div>
                         <td>{{license.node.spdxId}}</td>
                         <td>
                           <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
@@ -166,62 +157,6 @@
                   </p-table>
                 </perfect-scrollbar>
 
-                <!-- <div class="card m-3" style="flex: 30%; flex-grow: 0;" *ngFor="let license of scanComponent.licenses.edges">
-                  <div class="card-body" (click)="gotoOtherDetailsPage(license.node.licenseId,'license')">
-                    <h6 class="card-title">{{license.node.name}}</h6>
-                      <div class="card p-2 m-3">
-                        <form>
-                          <div class="form-group row  p-l-5">
-                            <label class="col-sm-12 col-form-label">Category</label>
-                            <div class="col-xl-12">
-                              <span *ngIf="license.node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                              <span *ngIf="license.node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                              <span *ngIf="license.node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                              <span *ngIf="license.node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                              <span *ngIf="license.node.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                              <span *ngIf="license.node.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-
-                              <span *ngIf="license.node.category === 'PROPRIETARY_FREE'" title="Permissive" class="badge m-r-5 badge-light-success">PROPRIETARY FREE</span>
-                              <span *ngIf="license.node.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success">PUBLIC DOMAIN</span>
-                              <span *ngIf="license.node.category === 'PROPRIETARY'" title="Permissive" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
-                            </div>
-                          </div>
-                          <div class="form-group row  p-l-5">
-                            <label for="spdx" class="col-sm-12 col-form-label">SPDX</label>
-                            <div class="col-xl-12">
-                              <input type="text" class="form-control" id="spdx" readonly placeholder="{{license.node.spdxId}}">
-                            </div>
-                          </div>
-                          <div class="form-group row  p-l-5">
-                            <label for="style" class="col-sm-12 col-form-label">Style</label>
-                            <div class="col-xl-12">
-                              <input type="text" class="form-control" id="style" readonly placeholder="{{license.node.style}}">
-                            </div>
-                          </div>
-                          <div class="form-group row  p-l-5">
-                            <label for="publicationYear" class="col-sm-12 col-form-label">Publication Year</label>
-                            <div class="col-xl-12">
-                              <input type="text" class="form-control" id="publicationYear" readonly placeholder="{{license.node.publicationYear}}">
-                            </div>
-                          </div>
-                          <div class="form-group row  p-l-5">
-                            <label for="publicationYear" class="col-sm-12 col-form-label">License discovery</label>
-                            <div class="col-xl-12">
-                              <input type="text" class="form-control" id="licenseDiscovery" readonly placeholder="{{messages.license.discovery[license.node.licenseDiscovery]}}">
-                            </div>
-                          </div>
-                          <div class="form-group row  p-l-5">
-                            <label for="publicationYear" class="col-sm-12 col-form-label">License origin</label>
-                            <div class="col-xl-12">
-                              <input type="text" class="form-control" id="licenseOrigin" readonly placeholder="{{messages.license.origin[license.node.licenseOrigin]}}">
-                            </div>
-                          </div>
-
-                        </form>
-                      </div>
-
-                  </div>
-                </div> -->
               </div>
             </ng-template>
           </ngb-tab>
