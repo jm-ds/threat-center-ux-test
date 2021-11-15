@@ -10,11 +10,16 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import {Scan} from '@app/models';
 import {UserPreferenceService} from '@app/core/services/user-preference.service';
+import { LicenseDialogComponent } from '../../licenses-common-dialog/license-dialog.component';
 
 @Component({
     selector: 'app-components',
     templateUrl: './components.component.html',
-    styles: []
+    styles: [
+        `.multiple-license-text:hover{
+            text-decoration: underline;
+        }`
+    ]
 })
 export class ComponentsComponent implements OnInit {
 
@@ -160,6 +165,11 @@ export class ComponentsComponent implements OnInit {
         } else {
             return value;
         }
+    }
+
+    gotoLicense(selectedData){
+        const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
+        modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
     }
 
     private makeFilterMapForService() {
