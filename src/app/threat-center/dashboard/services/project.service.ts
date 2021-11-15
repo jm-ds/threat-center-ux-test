@@ -194,7 +194,8 @@ export class ProjectDashboardService {
                           node {
                             licenseId,
                             name,
-                            category
+                            category,
+                            spdxId
                           }
                         }
                       }
