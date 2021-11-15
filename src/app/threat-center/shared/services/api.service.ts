@@ -744,7 +744,8 @@ export class ApiService {
                         node {
                           licenseId,
                           name,
-                          category
+                          category,
+                          spdxId
                         }
                       }
                     }
@@ -830,7 +831,8 @@ export class ApiService {
                           node {
                             licenseId,
                             name,
-                            category
+                            category,
+                            spdxId
                           }
                         }
                       }
