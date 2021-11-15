@@ -587,7 +587,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getAssetcountString() {
-    if (!!this.assetChart && this.assetChart.series.length >= 1) {
+    if (!!this.assetChart && this.assetChart.series.length >= 1 && !!this.projectMetrics && this.projectMetrics.length >= 1) {
       return this.getSequenceWiseAssets();
     } else {
       return { orgText: '0', tooltipText: '' };
