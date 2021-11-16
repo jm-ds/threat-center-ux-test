@@ -84,7 +84,8 @@ export class LoginComponent implements OnInit {
           param = 'needPrivateRepos=true';
         }
       }
-    } 
+    }
+    this.loading = true;
     this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
   }
 
@@ -103,7 +104,7 @@ export class LoginComponent implements OnInit {
 
   // save repo type
   setGithubRepoType() {
-    this.authenticationService.setGitHubRepoType(this.choosenRepoType);
+   this.authenticationService.setGitHubRepoType(this.choosenRepoType);
     let param = undefined;
     if (this.choosenRepoType === 'private') {
       param = 'needPrivateRepos=true';
