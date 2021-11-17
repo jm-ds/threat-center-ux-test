@@ -448,7 +448,8 @@ export class ProjectService {
                           node {
                             licenseId,
                             name,
-                            category
+                            category,
+                            spdxId
                           }
                         }
                       }
@@ -549,7 +550,8 @@ export class ProjectService {
                         node {
                           licenseId,
                           name,
-                          category
+                          category,
+                          spdxId
                         }
                       }
                     }
