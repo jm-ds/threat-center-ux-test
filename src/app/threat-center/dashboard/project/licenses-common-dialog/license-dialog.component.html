@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h5 class="modal-title">{{selectedLicenseDetail?.name}}</h5>
+    <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close"
+        (click)="activeModal.dismiss()"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="modal-body">
+    <div class="app-modal-body">
+        <perfect-scrollbar [style.max-height]="'auto'"
+            [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}"
+            class="overflowshadow-dialog-table">
+            <p-table #dt [value]="selectedLicenseDetail?.licensesList" [paginator]="false" [rows]="50"
+                tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" [scrollable]="false">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>License ID</th>
+                        <th>License Name</th>
+                        <th>License Catgory</th>
+                        <th>SPDX</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-license>
+                    <tr>
+                        <td>{{license.node.licenseId}}</td>
+                        <td>{{license.node.name}}</td>
+                        <td>
+                            <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{license.node.category}}">
+                                {{license.node.category.replace("_", " ")}}
+                            </span>
+                        </td>
+                        <td>{{license.node.spdxId}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </perfect-scrollbar>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.dismiss()">Close</button>
+</div>

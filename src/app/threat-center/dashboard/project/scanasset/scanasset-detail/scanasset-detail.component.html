@@ -18,21 +18,18 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-md-12" style="text-align: right; float: right;" *ngIf="authorizationService.hasPermissions('SCAN_ASSET_EDIT')">
+        <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mb-1 attribute-btn"
+          (click)="openAttributionModel(attributionModal)" [disabled]="isDisableAttributeLicensebtn">
+          <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
+        </button>
+      </div>
       <div class="col-md-12">
-<!--        <perfect-scrollbar [style.max-height]="'250px'">-->
+       <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow-dialog-table" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
           <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered  dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
-            <ng-template pTemplate="caption">
-              <div style="text-align: right" *ngIf="authorizationService.hasPermissions('SCAN_ASSET_EDIT')">
-                <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mb-1"
-                  (click)="openAttributionModel(attributionModal)" [disabled]="isDisableAttributeLicensebtn">
-                  <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
-                </button>
-
-              </div>
-            </ng-template>
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th></th>
@@ -84,7 +81,7 @@
               </tr>
             </ng-template>
           </p-table>
-<!--        </perfect-scrollbar>-->
+       </perfect-scrollbar>
       </div>
     </div>
 
@@ -99,7 +96,7 @@
         <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
           <p-table #dt [value]="selectedEmbeddedAsset?.matchLicenses" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
-                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" [scrollable]="false">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th>License ID</th>

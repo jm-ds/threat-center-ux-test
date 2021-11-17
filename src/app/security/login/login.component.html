@@ -1,5 +1,5 @@
 <div class="row entry-page">
-    <div class="col-6 col-lg-6 col-xl-8 graph-background-col">
+    <div class="col-6 col-lg-6 col-xl-8 graph-background-col"><!--background-image: linear-gradient(to top left, rgb(36, 46, 56) 70%, #1d3557) -->
         <div class="graph-background"></div>
         <div class="threatrix-title" >
             <div><img class="logo" src="/assets/images/website_logo_white-letters-transparent_background-large.png">
@@ -31,8 +31,8 @@
             </div>
             <div id="auth01" class="row" style="margin-bottom:20px">
                 <div class="col-xl-6">
-                    <a (click)="externalLogin('github_login', repoTypeDialog)" class="cursor-pointer">
-                        <div class="auth-button"><i class="fab fa-github"></i></div>
+                    <a (click)="externalLogin('github_login', repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                        <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
                 <div title="Gitlab disabled during Beta" class="col-xl-6">

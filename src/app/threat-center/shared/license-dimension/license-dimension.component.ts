@@ -7,11 +7,10 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import { License, ScanLicense } from '@app/models';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import { CoreHelperService } from "@app/services/core/services/core-helper.service";
-import { UserPreferenceService } from "@app/services/core/services/user-preference.service";
-import { Messages } from "@app/messages/messages";
-import { ProjectService } from '@app/services/project.service';
-import { FixService } from '@app/services/fix.service';
+import {CoreHelperService} from "@app/core/services/core-helper.service";
+import {UserPreferenceService} from "@app/core/services/user-preference.service";
+import {Messages} from "@app/messages/messages";
+import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
 
 
 
@@ -303,6 +302,11 @@ export class LicenseDimensionComponent implements OnInit {
     obsScanLicenseAssets.subscribe(scanLicense => {
       this.scanAssetDetails = scanLicense.scanAssetsTree;
     });
+  }
+
+  gotoLicense(selectedData){
+    const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
+    modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
   }
 
   private assetBreadcumSetting(scanAsset) {

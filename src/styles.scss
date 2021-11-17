@@ -41,6 +41,19 @@ perfect-scrollbar[class*="overflowshadow"] div[class*="ps--active-x"] {
     background-attachment: local, local, scroll, scroll;
 }
 
+perfect-scrollbar[class*="overflowshadow-dialog-table"] div[class*="ps--active-x"] {
+    background-image: linear-gradient(to right, #242e38, #242e38),
+        linear-gradient(to right, #242e38, #242e38),
+        linear-gradient(to right, rgba(255, 255, 255, .50), rgba(255, 255, 255, 0)),
+        linear-gradient(to left, rgba(255, 255, 255, .50), rgba(255, 255, 255, 0));
+    /* Shadows */
+    /* Shadow covers */
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+
+    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+}
 
 perfect-scrollbar[class*="overflowshadowTop"] div[class*="ps--active-y"] {
     background-image: linear-gradient(to top, #1f2831, #1f2831),
@@ -129,7 +142,7 @@ app-navigation.navbar.pcoded-header.navbar-expand-lg.navbar-light.pcoded-navbar.
 }
 
 .pcoded-navbar.theme-horizontal~.pcoded-main-container {
-    margin-top: 20px
+    margin-top: 0px;
 }
 
 

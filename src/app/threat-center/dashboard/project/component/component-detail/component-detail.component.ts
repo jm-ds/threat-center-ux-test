@@ -258,8 +258,21 @@ export class ComponentDetailComponent implements OnInit {
         });
       }
     });
+
+    // jdm: filter licenses for DECLARED because the other licenses seem wrong right now
+    // Once we've cleaned up the license data(probably by Q1 2022), we can remove this filter.
     this.licensesList = originalArray;
-  }
+    /*this.licensesList = originalArray.filter(s => {
+        if (s.isColspan) {
+            return false;
+        }
+        else {
+            return s.node.licenseDiscovery === 'DECLARED' || s.node.licenseOrigin === 'REPOSITORY_META';
+        }
+    });*/
+
+
+}
 
   //Loading vulnerability data after paggination.
   private loadVulData(first, last, endCursor = undefined, startCursor = undefined) {
