@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { EntityRequestInput, EntitySettingsRequestInput, EntityUpdateRequestInput, OrganizationUpdateRequestInput } from "@app/admin/entity/entity.class";
-import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { EntityArray, EntityQuery, JiraCredentials } from "@app/models";
 import { AuthenticationService } from "@app/security/services";
 import { ApolloQueryResult } from "apollo-client";
@@ -12,7 +12,7 @@ import { Observable } from "rxjs";
     providedIn: 'root'
 })
 
-export class EntityManageService {
+export class EntityManagerService {
     constructor(private coreGraphQLService: CoreGraphQLService) { }
 
     getTopLevelEntitiesByOrg(orgId: string): Observable<ApolloQueryResult<EntityArray>> {
@@ -242,7 +242,7 @@ export class EntityManageService {
 
 export class GetDefaultEntityResolver implements Resolve<Observable<any>> {
     constructor(
-        private entityService: EntityManageService,
+        private entityService: EntityManagerService,
         private authService: AuthenticationService) { }
     resolve(
         route: ActivatedRouteSnapshot,

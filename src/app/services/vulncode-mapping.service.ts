@@ -3,7 +3,8 @@ import { Injectable } from "@angular/core";
 import { VulnerableReleaseResponse, VulnerableReleaseResponseMap } from "@app/threat-center/shared/models/types";
 import { environment } from "environments/environment";
 import { Observable } from "rxjs";
-import { CoreHttpService } from "./core/services/core-http.service";
+import { CoreHttpService } from "@app/services/core/core-http.service";
+
 
 @Injectable({
     providedIn: 'root'

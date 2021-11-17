@@ -5,10 +5,10 @@ import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
 import { MatPaginator } from '@angular/material';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { LazyLoadEvent, Table } from "primeng";
 import { TxComponent } from '@app/models';
-import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 import { Messages } from "@app/messages/messages";

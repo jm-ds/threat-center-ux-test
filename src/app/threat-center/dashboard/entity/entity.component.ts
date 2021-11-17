@@ -6,12 +6,12 @@ import { AuthenticationService, AuthorizationService } from '@app/security/servi
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import * as _ from 'lodash';
-import { ChartHelperService } from '@app/services/core/services/chart-helper.service';
+import { ChartHelperService } from '@app/services/core/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
-import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
-import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { IOption } from "ng-select";
 import { UserService } from '@app/services/user.service';
 import { EntityService } from '@app/services/entity.service';

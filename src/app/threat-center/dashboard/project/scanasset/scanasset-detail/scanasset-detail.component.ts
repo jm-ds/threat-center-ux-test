@@ -6,11 +6,11 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import Swal from "sweetalert2";
 import { ScanAsset, ScanAssetMatch } from '@app/models';
-import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
-import { AlertService } from '@app/services/core/services/alert.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { AlertService } from '@app/services/core/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
 import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialog.component';
 import { ProjectService } from '@app/services/project.service';

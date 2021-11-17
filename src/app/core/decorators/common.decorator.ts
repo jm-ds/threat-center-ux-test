@@ -1,4 +1,5 @@
-import { CoreHelperService, LogOutStaticHelper } from "../../services/core/services/core-helper.service";
+import { CoreHelperService, LogOutStaticHelper } from "@app/services/core/core-helper.service";
+
 
 export function CommonUIMethodsDecorator(): Function {
     return (target: Function) => {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
-import { ProjectBreadcumsService } from '@app/services/core/services/project-breadcums.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { StateService } from '@app/services/state.service';
 
 

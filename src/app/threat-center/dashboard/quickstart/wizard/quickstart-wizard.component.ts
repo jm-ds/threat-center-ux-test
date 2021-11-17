@@ -9,7 +9,7 @@ import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { HostListener } from '@angular/core';
 import { ScanService } from '@app/services/scan.service';
 import { TaskService } from '@app/services/task.service';
@@ -19,7 +19,7 @@ import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatch
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 import { AuthorizationService } from '@app/security/services';
-import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 
 @Component({
     selector: 'app-quickstart',

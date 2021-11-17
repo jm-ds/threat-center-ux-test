@@ -6,7 +6,7 @@ import 'rxjs/add/observable/of';
 import * as jwt_decode from 'jwt-decode';
 import { OrganizationData, User } from '../../models';
 import { environment } from '../../../environments/environment';
-import { LocalService } from '@app/services/core/services/local.service';
+import { LocalService } from '@app/services/core/local.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
 

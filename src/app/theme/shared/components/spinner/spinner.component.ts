@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, Inject, ViewEncapsulation } from '@angular
 import { Spinkit } from './spinkits';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 
 @Component({
     selector: 'app-spinner',

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
-import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { Scan } from '@app/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

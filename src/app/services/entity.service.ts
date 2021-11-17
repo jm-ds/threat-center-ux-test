@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { EntityListQuery, EntityQuery, LicenseQuery, Period } from "@app/models";
 import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";

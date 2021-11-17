@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { LoadingDialogComponent } from "@app/threat-center/dashboard/project-scan-dialog/loading-dialog.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { CoreHelperService } from "./core/services/core-helper.service";
+import { CoreHelperService } from "./core/core-helper.service";
 import { ScanHelperService } from "./scan-helper.service";
 import { TaskService } from "./task.service";
 

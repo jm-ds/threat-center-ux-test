@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { EntitySettingsRequestInput } from "@app/admin/entity/entity.class";
-import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { ApiKey, ApiKeyConnectionQuery, ApiKeyQuery, ApiKeyRequestInput, JiraCredentials, OrgSettingsQuery } from "@app/models";
 import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";

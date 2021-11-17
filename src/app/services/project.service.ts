@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { CoreGraphQLService } from "@app/services/core/services/core-graphql.service";
 import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery } from "@app/models";
 import gql from "graphql-tag";
+import { CoreGraphQLService } from "./core/core-graphql.service";
 
 @Injectable({
   providedIn: 'root'

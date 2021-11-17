@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { EntitySettings } from "@app/models/entity";
-import { EntityManageService } from "@app/services/entity-manage.service";
+import { EntityManagerService } from "@app/services/entity-manage.service";
 
 @Component({
   selector: 'app-entity-settings',
@@ -72,7 +72,7 @@ export class EntitySettingsComponent implements OnInit, AfterViewInit {
 
   constructor(
         private route: ActivatedRoute,
-        private entityService: EntityManageService
+        private entityService: EntityManagerService
   ) {
   }
 

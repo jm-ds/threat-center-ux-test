@@ -11,8 +11,8 @@ import {Messages} from "@app/messages/messages";
 import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
 import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
-import { CoreHelperService } from '@app/services/core/services/core-helper.service';
-import { UserPreferenceService } from '@app/services/core/services/user-preference.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 
 
 
