@@ -53,10 +53,10 @@
                     </a>
                 </div>
             </div>
-            <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
+            <div class="hint-block">By clicking log in or signing up, you agree to our policies, including our <a href="https://threatrix.io/terms">Terms of Service</a> and <a href="https://threatrix.io/privacy">Privacy Policy</a></div>
 
             <!-- Basic Authentication -->
-            <div class="caption-blue-underline mt-50">Basic Authentication</div>
+            <div class="caption-blue-underline mt-50">Standard Authentication</div>
             <form name="form" class="auth-form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
                 <!-- username || email -->
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -70,7 +70,7 @@
                 </div>
                 <!-- submit -->
                 <button [disabled]="loading" class="btn btn-primary btn-block ">Login</button>
-                <div class="hint-block">By clicking login you agree to our <a href="#">Terms of Service</a></div>
+                <div class="hint-block">By clicking log in or signing up, you agree to our policies, including our <a href="https://threatrix.io/terms">Terms of Service</a> and <a href="https://threatrix.io/privacy">Privacy Policy</a></div>
             </form>
 
         </div>
