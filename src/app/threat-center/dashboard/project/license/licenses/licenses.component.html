@@ -44,7 +44,7 @@
 
         <ng-template pTemplate="body" let-license>
           <tr *ngIf="license.isColspan" style="background-color: #363e4f;">
-            <td colspan="8"><span style="font-size: 15px;">{{license?.name}}</span><i class="fas fa-layer-group ml-1"></i></td>
+            <td [attr.colspan]="columns.length"><span style="font-size: 15px;">{{license?.name}}</span><i class="fas fa-layer-group ml-1"></i></td>
           </tr>
           <tr *ngIf="!license.isColspan" (click)="gotoDetails(license.node.licenseId, license.node.licenseDiscovery, license.node.licenseOrigin)" class="cursor-pointer">
             <td>{{license.node.name}}</td>
