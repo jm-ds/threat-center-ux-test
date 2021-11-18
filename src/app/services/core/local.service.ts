@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { StorageService } from "./storage.service";
+import { StorageService } from "@app/services/core/storage.service";
 
 @Injectable({ providedIn: 'root' })
 export class LocalService {
