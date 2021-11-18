@@ -1,15 +1,13 @@
 import { Component, Injectable, Input, OnInit } from '@angular/core';
-import { EntityService } from '@app/admin/services/entity.service';
-import { OrgService } from '@app/admin/services/org.service';
-import { AlertService } from '@app/core/services/alert.service';
+import { AlertService } from '@app/services/core/alert.service';
 import { EntitySettings } from '@app/models/entity';
+import { EntityManagerService } from '@app/services/entity-manage.service';
+import { OrgService } from '@app/services/org.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+
 @Component({
     selector: 'slack-urls',
     templateUrl: './slack-urls.component.html',
@@ -26,7 +24,7 @@ export class SlackUrlsComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private orgService: OrgService,
-    private entityService: EntityService,
+    private entityService: EntityManagerService,
     private alertService:AlertService
   ) {
   }

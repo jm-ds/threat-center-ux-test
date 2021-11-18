@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import { ApiKey, ApiKeyQuery, ApiKeyRequestInput, Role, User, UserQuery, UserRequestInput, UsersQuery } from "@app/models";
 import { Apollo } from "apollo-angular";
-import { Role, User, UserQuery, UserRequestInput, UsersQuery, ApiKey, ApiKeyQuery, ApiKeyRequestInput } from "@app/models";
 import gql from "graphql-tag";
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 @Injectable({
     providedIn: 'root'

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NextConfig } from '../../../app-config';
 import { Location } from '@angular/common';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 
 @Component({
   selector: 'app-admin',

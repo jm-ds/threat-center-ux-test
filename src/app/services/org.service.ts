@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
-import { CoreGraphQLService } from "@app/core/services/core-graphql.service";
+import { EntitySettingsRequestInput } from "@app/admin/entity/entity.class";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { ApiKey, ApiKeyConnectionQuery, ApiKeyQuery, ApiKeyRequestInput, JiraCredentials, OrgSettingsQuery } from "@app/models";
-import { Apollo } from "apollo-angular";
 import { ApolloQueryResult } from "apollo-client";
 import gql from "graphql-tag";
 import { Observable } from "rxjs";
-import { EntitySettingsRequestInput } from "../entity/entity.class";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrgService {
 
-  constructor(private coreGraphQLService: CoreGraphQLService, private apollo: Apollo) {
+  constructor(private coreGraphQLService: CoreGraphQLService) {
   }
 
   //get org settings

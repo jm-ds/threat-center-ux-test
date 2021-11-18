@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TreeviewItem} from "ngx-treeview";
 import {compareBy} from "@app/shared/compare-utils";
-import {ApiService} from "@app/threat-center/shared/services";
+import { EntityService } from '@app/services/entity.service';
 
 @Component({
   selector: 'app-entity-tree-filter',
@@ -22,12 +22,12 @@ export class EntityTreeFilterComponent implements OnInit {
   };
 
 
-  constructor(private apiService: ApiService) { }
+  constructor(private entityService: EntityService) { }
 
   ngOnInit() {
     this.entityTree = [];
 
-    this.apiService.getEntityList().subscribe(data => {
+    this.entityService.getEntityList().subscribe(data => {
       let entities = data.data.entities.edges.map((e) => {
         return {value: e.node.entityId, text: e.node.name, children: [], parentId: e.node.parentEntityId};
       });

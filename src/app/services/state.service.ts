@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Project, ScanEdge, UserSelection } from '@app/models';
-import { Observable } from 'rxjs';
-
-
+import { Injectable } from "@angular/core";
+import { UserSelection, ScanEdge, Project } from "@app/models";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'

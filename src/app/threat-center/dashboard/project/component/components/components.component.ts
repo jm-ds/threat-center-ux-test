@@ -1,16 +1,17 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ApiService} from '@app/threat-center/shared/services/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {FixService} from "@app/threat-center/dashboard/project/services/fix.service";
 import {MatPaginator} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CoreHelperService} from '@app/core/services/core-helper.service';
+import {CoreHelperService} from '@app/services/core/core-helper.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import {Scan} from '@app/models';
-import {UserPreferenceService} from '@app/core/services/user-preference.service';
+
 import { LicenseDialogComponent } from '../../licenses-common-dialog/license-dialog.component';
+import { ProjectService } from '@app/services/project.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { FixService } from '@app/services/fix.service';
 
 @Component({
     selector: 'app-components',
@@ -49,7 +50,8 @@ export class ComponentsComponent implements OnInit {
     isDisablePaggination:boolean = false;
 
     constructor(
-        private apiService: ApiService,
+        // private apiService: ApiService,
+        private projectService:ProjectService,
         private fixService: FixService,
         private router: Router,
         private route: ActivatedRoute,
@@ -68,7 +70,7 @@ export class ComponentsComponent implements OnInit {
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            this.obsScan = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             this.initData();
         } else {
@@ -117,7 +119,7 @@ export class ComponentsComponent implements OnInit {
 
     // Loading Component data after paggination for scan tab.
     loadComponentData(first, last, endCursor = undefined, startCursor = undefined) {
-        let component = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+        let component = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
             .pipe(map(result => result.data.scan));
         component.subscribe(component => {
             this.componentDetails = component;
@@ -145,7 +147,7 @@ export class ComponentsComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            const scnObj = this.apiService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            const scnObj = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             scnObj.subscribe(component => {
                 this.componentDetails = component;

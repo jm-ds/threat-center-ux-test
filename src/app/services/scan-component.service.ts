@@ -1,12 +1,13 @@
-import {Injectable} from "@angular/core";
-import {Apollo} from "apollo-angular";
-import {CoreGraphQLService} from "@app/core/services/core-graphql.service";
-import {ScanComponentQuery} from "@app/models";
+import { Injectable } from "@angular/core";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import { ScanComponentQuery } from "@app/models";
+import { Apollo } from "apollo-angular";
 import gql from "graphql-tag";
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class ScanComponentService {
 
     constructor(private apollo: Apollo, private coreGraphQLService: CoreGraphQLService) {}
@@ -116,7 +117,6 @@ export class ScanComponentService {
         }
         `);
     } // getScanComponent
-
-
+    
 
 }

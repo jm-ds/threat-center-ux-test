@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Message, Messages, Permission, Role} from "@app/models";
-import {RoleService} from "@app/admin/services/role.service";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {DualListComponent} from "angular-dual-listbox";
+import { RoleService } from '@app/services/role.service';
 
 @Component({
     selector: 'app-role-edit',

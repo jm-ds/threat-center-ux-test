@@ -1,10 +1,10 @@
-import { Observable } from "rxjs";
-import { environment } from "../../../../../environments/environment";
-import { Injectable } from "@angular/core";
-
 import { HttpHeaders, HttpParams } from "@angular/common/http";
-import { CoreHttpService } from "@app/core/services/core-http.service";
-import { VulnerableReleaseResponseMap, VulnerableReleaseResponse } from "@app/threat-center/shared/models/types";
+import { Injectable } from "@angular/core";
+import { VulnerableReleaseResponse, VulnerableReleaseResponseMap } from "@app/threat-center/shared/models/types";
+import { environment } from "environments/environment";
+import { Observable } from "rxjs";
+import { CoreHttpService } from "@app/services/core/core-http.service";
+
 
 @Injectable({
     providedIn: 'root'
