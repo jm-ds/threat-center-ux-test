@@ -49,6 +49,9 @@ NVM: https://github.com/nvm-sh/nvm
     # install project packages
     npm install
     
+    # install angular cli 8.1.3
+    npm install -g @angular/cli@8.1.3
+    
     # For Linux, Also run
     npm link @angular/cli
 
@@ -65,7 +68,15 @@ To fix it run following:
     
     npm install
 
+If there are errors in the console after `ng serve` like
 
+    ERROR in ./node_modules/css-animator/builder/animation_builder.js
+    "export '__spreadArray' was not found in 'tslib'
+
+Run these commands:
+
+    npm uninstall --save css-animator
+    npm install --save css-animator@2.3.1
 
 ## Development server
 
