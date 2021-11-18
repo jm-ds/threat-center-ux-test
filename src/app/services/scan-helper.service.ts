@@ -12,7 +12,7 @@ import * as moment from "moment";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import Swal from "sweetalert2";
-import { TaskService } from "./task.service";
+import { TaskService } from "@app/services/task.service";
 
 @Injectable({
     providedIn: 'root'

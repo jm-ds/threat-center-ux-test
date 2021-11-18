@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Messages } from "@app/messages/messages";
 import { AuthenticationService } from "@app/security/services";
 import { environment } from "environments/environment";
-import { AlertService } from "./alert.service";
+import { AlertService } from "@app/services/core/alert.service";
 
 @Injectable({
     providedIn: 'root'
