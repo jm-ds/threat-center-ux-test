@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { NextConfig } from '@app/app-config';
-import { AlertService } from '@app/core/services/alert.service';
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
-import { Messages } from '@app/messages/messages';
-import { Entity, ProjectQuery, Scan, ScanQuery } from '@app/models';
-import gql from 'graphql-tag';
-import { EMPTY, forkJoin, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
+import { NextConfig } from "@app/app-config";
+import { AlertService } from "@app/services/core/alert.service";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import { CoreHelperService } from "@app/services/core/core-helper.service";
+import { UserPreferenceService } from "@app/services/core/user-preference.service";
+import { Messages } from "@app/messages/messages";
+import { ProjectQuery, Scan, ScanQuery } from "@app/models";
+import gql from "graphql-tag";
+import { EMPTY, forkJoin, Observable } from "rxjs";
+import { mergeMap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'

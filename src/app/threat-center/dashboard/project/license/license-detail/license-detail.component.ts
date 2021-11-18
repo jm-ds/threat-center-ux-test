@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService,StateService } from '@app/threat-center/shared/services';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({
@@ -10,28 +10,27 @@ import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.se
   templateUrl: './license-detail.component.html',
   styles: []
 })
-export class LicenseDetailComponent implements OnInit,OnDestroy {
+export class LicenseDetailComponent implements OnInit, OnDestroy {
 
   //obsComponent:Observable<Component>;
   //vulnerabilityColumns = ['Vulnerability','Cwe','Severity','CVSS2','CVSS3'];
 
-  projectId:string = ""
-  scanId: string="";
-  entityId: string="";
+  projectId: string = ""
+  scanId: string = "";
+  entityId: string = "";
   constructor(
-    private apiService:ApiService,
-    public stateService:StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
-    private router:Router,
-    private coreHelperService:CoreHelperService,
-    private projectBreadcumsService:ProjectBreadcumsService) { }
+    private router: Router,
+    private coreHelperService: CoreHelperService,
+    private projectBreadcumsService: ProjectBreadcumsService) { }
 
-  licenseId:string;
-  licenseDiscovery:string;
-  licenseOrigin:string;
+  licenseId: string;
+  licenseDiscovery: string;
+  licenseOrigin: string;
 
   breadcumDetail: any = {};
-  licenseName:string = "";
+  licenseName: string = "";
   ngOnInit() {
     console.log("Loading LicenseDetailComponent");
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');
@@ -51,7 +50,7 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
 
   ngOnDestroy(): void {
     if (!!this.projectBreadcumsService.getProjectBreadcum()) {
-      this.projectBreadcumsService.settingProjectBreadcum("","","",false);
+      this.projectBreadcumsService.settingProjectBreadcum("", "", "", false);
     }
   }
 
@@ -74,7 +73,7 @@ export class LicenseDetailComponent implements OnInit,OnDestroy {
   }
 
   //Getting license name after emiting
-  getLicenseName(name){
+  getLicenseName(name) {
     this.licenseName = name;
     if (!!this.projectBreadcumsService.getProjectBreadcum()) {
       this.projectBreadcumsService.settingProjectBreadcum("License", this.licenseName, this.licenseId, false);

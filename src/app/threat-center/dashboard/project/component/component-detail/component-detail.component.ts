@@ -3,19 +3,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import {  VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
-import { ApiService, StateService } from '@app/threat-center/shared/services';
+import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
 import { MatPaginator } from '@angular/material';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-
-import { VulnerableCodeMappingService } from '@app//threat-center/dashboard/project/services/vulncode-mapping.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { LazyLoadEvent, Table } from "primeng";
-import {TxComponent} from '@app/models';
-import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
+import { TxComponent } from '@app/models';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import {ScanComponentService} from "@app/threat-center/dashboard/services/scan-component.service";
-import {Messages} from "@app/messages/messages";
+
+import { Messages } from "@app/messages/messages";
 import * as _ from 'lodash';
+import { ProjectService } from '@app/services/project.service';
+import { ScanComponentService } from '@app/services/scan-component.service';
+import { VulnerableCodeMappingService } from '@app/services/vulncode-mapping.service';
+import { StateService } from '@app/services/state.service';
 
 @Component({
   selector: 'component-detail',
@@ -49,14 +50,14 @@ export class ComponentDetailComponent implements OnInit {
   sourceNextPagingState: string;
 
   projectId: string = "";
-  scanId: string="";
-  licenseId: string="";
+  scanId: string = "";
+  licenseId: string = "";
 
   defaultPageSize = 25;
   pageIndex = 0;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('perfectScrollSourceRelese',{static:false}) perfectScrollSourceRelese: PerfectScrollbarComponent;
-  @ViewChild('perfectScrollBinaryRelese',{static:false}) perfectScrollBinaryRelese: PerfectScrollbarComponent;
+  @ViewChild('perfectScrollSourceRelese', { static: false }) perfectScrollSourceRelese: PerfectScrollbarComponent;
+  @ViewChild('perfectScrollBinaryRelese', { static: false }) perfectScrollBinaryRelese: PerfectScrollbarComponent;
 
   vulnerabilityDetails: any = {};
 
@@ -64,7 +65,7 @@ export class ComponentDetailComponent implements OnInit {
   licensesList = [];
   columns = ['Name', 'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
   constructor(
-    private apiService: ApiService,
+    private projectService: ProjectService,
     private scanComponentService: ScanComponentService,
     private stateService: StateService,
     private route: ActivatedRoute,
@@ -72,7 +73,7 @@ export class ComponentDetailComponent implements OnInit {
     private coreHelperService: CoreHelperService,
     private vulnerableCodeMappingService: VulnerableCodeMappingService,
     private changeDetector: ChangeDetectorRef,
-    private projectBreadcumsService:ProjectBreadcumsService) { }
+    private projectBreadcumsService: ProjectBreadcumsService) { }
 
   ngOnInit() {
     console.log("Loading ComponentDetailComponent");
@@ -87,7 +88,7 @@ export class ComponentDetailComponent implements OnInit {
       .pipe(map(result => result.data.scanComponent));
 
     this.obsScanComponent.subscribe((res: any) => {
-      
+
       this.component = res["component"];
       this.calculateLogic(res);
       if (!!this.projectBreadcumsService.getProjectBreadcum()) {
@@ -128,7 +129,7 @@ export class ComponentDetailComponent implements OnInit {
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.component_tabs_selectedTab = $event.nextId;
     setTimeout(() => {
-      if(!!this.paginator){
+      if (!!this.paginator) {
         this.paginator.pageIndex = this.pageIndex;
       }
     }, 1000);
@@ -144,14 +145,14 @@ export class ComponentDetailComponent implements OnInit {
   //goto license page
   gotoLicense() {
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId+"/scan/"+this.scanId+"/license/"+this.licenseId;
+    const url = "dashboard/entity/" + entityId + "/project/" + this.projectId + "/scan/" + this.scanId + "/license/" + this.licenseId;
     this.router.navigate([url]);
   }
 
   //goto details pages
   gotoOtherDetailsPage(id, pageName: string) {
-    if(!!this.projectBreadcumsService.getProjectBreadcum()){
-      this.projectBreadcumsService.settingProjectBreadcum("","","",true);
+    if (!!this.projectBreadcumsService.getProjectBreadcum()) {
+      this.projectBreadcumsService.settingProjectBreadcum("", "", "", true);
     }
     const entityId = this.route.snapshot.paramMap.get('entityId'),
       projectId = this.route.snapshot.paramMap.get('projectId'),
@@ -207,55 +208,55 @@ export class ComponentDetailComponent implements OnInit {
 
   private calculateLogic(license) {
     const value = _.chain(license.licenses.edges).groupBy("node.name")
-        .map((value, key) => ({ key: key, value: value })).value();
+      .map((value, key) => ({ key: key, value: value })).value();
     let originalArray = [];
     _.each(value, mainValue => {
 
-        if (mainValue.value.length >= 2) {
-            originalArray.push({ isColspan: true, name: mainValue.key });
-            _.each(mainValue.value, val => {
-                originalArray.push({
-                    isColspan: false,
-                    node: {
-                        trustLevel: val.node.trustLevel,
-                        category: val.node.category,
-                        isFsfLibre: val.node.isFsfLibre,
-                        isOsiApproved: val.node.isOsiApproved,
-                        licenseDiscovery: val.node.licenseDiscovery,
-                        licenseId: val.node.licenseId,
-                        licenseOrigin: val.node.licenseOrigin,
-                        name: '',
-                        publicationYear: val.node.publicationYear,
-                        spdxId: val.node.spdxId,
-                        style: val.node.style,
-                        type: val.node.type,
-                        isColspan: false
-                    }
-                });
+      if (mainValue.value.length >= 2) {
+        originalArray.push({ isColspan: true, name: mainValue.key });
+        _.each(mainValue.value, val => {
+          originalArray.push({
+            isColspan: false,
+            node: {
+              trustLevel: val.node.trustLevel,
+              category: val.node.category,
+              isFsfLibre: val.node.isFsfLibre,
+              isOsiApproved: val.node.isOsiApproved,
+              licenseDiscovery: val.node.licenseDiscovery,
+              licenseId: val.node.licenseId,
+              licenseOrigin: val.node.licenseOrigin,
+              name: '',
+              publicationYear: val.node.publicationYear,
+              spdxId: val.node.spdxId,
+              style: val.node.style,
+              type: val.node.type,
+              isColspan: false
+            }
+          });
+        });
+      } else {
+        _.each(mainValue.value, val => {
+          originalArray.push(
+            {
+              isColspan: false,
+              node: {
+                trustLevel: val.node.trustLevel,
+                category: val.node.category,
+                isFsfLibre: val.node.isFsfLibre,
+                isOsiApproved: val.node.isOsiApproved,
+                licenseDiscovery: val.node.licenseDiscovery,
+                licenseId: val.node.licenseId,
+                licenseOrigin: val.node.licenseOrigin,
+                name: val.node.name,
+                publicationYear: val.node.publicationYear,
+                spdxId: val.node.spdxId,
+                style: val.node.style,
+                type: val.node.type,
+                isColspan: false
+              }
             });
-        } else {
-            _.each(mainValue.value, val => {
-                originalArray.push(
-                    {
-                        isColspan: false,
-                        node: {
-                            trustLevel: val.node.trustLevel,
-                            category: val.node.category,
-                            isFsfLibre: val.node.isFsfLibre,
-                            isOsiApproved: val.node.isOsiApproved,
-                            licenseDiscovery: val.node.licenseDiscovery,
-                            licenseId: val.node.licenseId,
-                            licenseOrigin: val.node.licenseOrigin,
-                            name: val.node.name,
-                            publicationYear: val.node.publicationYear,
-                            spdxId: val.node.spdxId,
-                            style: val.node.style,
-                            type: val.node.type,
-                            isColspan: false
-                        }
-                    });
-            });
-        }
+        });
+      }
     });
 
     // jdm: filter licenses for DECLARED because the other licenses seem wrong right now
@@ -276,7 +277,7 @@ export class ComponentDetailComponent implements OnInit {
   //Loading vulnerability data after paggination.
   private loadVulData(first, last, endCursor = undefined, startCursor = undefined) {
     let componentId = this.route.snapshot.paramMap.get('componentId');
-    let vulnerability = this.apiService.getComponent(componentId, first, last, endCursor, startCursor)
+    let vulnerability = this.projectService.getComponent(componentId, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.component));
     vulnerability.subscribe(res => {
       this.vulnerabilityDetails = res["vulnerabilities"];

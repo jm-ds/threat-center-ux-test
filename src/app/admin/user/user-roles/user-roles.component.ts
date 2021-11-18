@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserUtils } from "@app/admin/user/user-utils";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Role, User, Message } from "@app/models";
-import { UserService } from "@app/admin/services/user.service";
 import { DualListComponent } from "angular-dual-listbox";
-import { RoleService } from "@app/admin/services/role.service";
+import { UserService } from '@app/services/user.service';
+import { RoleService } from '@app/services/role.service';
 
 @Component({
     selector: 'app-user-roles',

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { SimmQuery, UserQuery } from "@app/models";
+import { Injectable } from "@angular/core";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import { SimmQuery } from "@app/models";
 import gql from "graphql-tag";
-import { CoreGraphQLService } from '@app/core/services/core-graphql.service';
 
 
 @Injectable({

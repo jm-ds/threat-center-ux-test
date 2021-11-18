@@ -2,25 +2,24 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { Location } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
-
-import { interval, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskService } from '@app/threat-center/shared/task/task.service';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
-import { ScanHelperService } from '../../services/scan.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { HostListener } from '@angular/core';
+import { ScanService } from '@app/services/scan.service';
+import { TaskService } from '@app/services/task.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
+import { ReloadService } from '@app/services/reload.service';
 import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
-import { ReloadService } from '../../services/reload.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
 import { AuthorizationService } from '@app/security/services';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 
 @Component({
     selector: 'app-quickstart',
@@ -63,7 +62,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
 
     constructor(
-        private apiService: ApiService,
+        private scanService: ScanService,
         private location: Location,
         private router: Router,
         private route: ActivatedRoute,
@@ -159,7 +158,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         console.log("SNIPPET", this.snippetText);
         console.log("LANG TYPE", this.languageType);
 
-        this.obsSnippetMatch = this.apiService.getSnippetMatches(this.snippetText, this.languageType)
+        this.obsSnippetMatch = this.scanService.getSnippetMatches(this.snippetText, this.languageType)
             .pipe(map(result => result.data.snippetMatchResult));
         this.obsSnippetMatch.subscribe(d => console.log(d));
 
@@ -169,7 +168,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     loadGitHubUser() {
         console.log("Loading github user");
         this.loadingScan = true;
-        this.obsGithubUser = this.apiService.getGitHubUser()
+        this.obsGithubUser = this.scanService.getGitHubUser()
             .pipe(map(result => result.data.gitHubUser));
         this.obsGithubUser.subscribe(d => this.loadingScan = false);
     }
@@ -179,10 +178,10 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     loadGitLabUser() {
         console.log("Loading gitlab user");
         this.loadingScan = true;
-        this.obsGitlabUser = this.apiService.getGitLabUser()
+        this.obsGitlabUser = this.scanService.getGitLabUser()
             .pipe(map(result => {
-                let user  = result.data.gitLabUser;
-                let avatar  = user.avatarUrl;
+                let user = result.data.gitLabUser;
+                let avatar = user.avatarUrl;
                 if (!avatar.startsWith("http")) {
                     avatar = "https://gitlab.com" + avatar;
                     user.avatarUrl = avatar;
@@ -197,7 +196,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     loadBitbucketUser() {
         console.log("Loading bitbucket user");
         this.loadingScan = true;
-        this.obsBitbucketUser = this.apiService.getBitbucketUser()
+        this.obsBitbucketUser = this.scanService.getBitbucketUser()
             .pipe(map(result => result.data.bitbucketUser));
         this.obsBitbucketUser.subscribe(d => this.loadingScan = false);
     }
@@ -212,7 +211,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
             return attribute.attributeType == attributeType;
         });
     }
-    
+
     refreshData() {
         if (this.activeTab === "Github" && this.authService.currentUser.accessToken.startsWith("github-")) {
             this.loadGitHubUser();

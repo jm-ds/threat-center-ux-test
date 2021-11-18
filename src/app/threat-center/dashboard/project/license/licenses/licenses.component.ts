@@ -1,14 +1,14 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { Scan } from '@app/models';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
 import * as _ from 'lodash';
+import { ProjectService } from '@app/services/project.service';
 
 @Component({
     selector: 'app-licenses',
@@ -35,7 +35,8 @@ export class LicensesComponent implements OnInit {
     totalLicenses:number = 0;
     pageInfo:any;
 
-    constructor(private apiService: ApiService,
+    constructor(
+        private projectService:ProjectService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
@@ -51,7 +52,7 @@ export class LicensesComponent implements OnInit {
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         if (!this.obsScan) {
-            this.obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
+            this.obsScan = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
 
             this.initData();
@@ -91,7 +92,7 @@ export class LicensesComponent implements OnInit {
 
     // Loading Licenses data after paggination for scan tab.
     loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
-        let licenses = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+        let licenses = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
             .pipe(map(result => result.data.scan));
 
         licenses.subscribe(license => {
@@ -120,7 +121,7 @@ export class LicensesComponent implements OnInit {
         }
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            const obsScan = this.apiService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
+            const obsScan = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
                 .pipe(map(result => result.data.scan));
 
             obsScan.subscribe(licenses => {

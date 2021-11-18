@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Message, Messages, Role} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {RoleService} from "@app/admin/services/role.service";
+import { RoleService } from '@app/services/role.service';
 
 @Component({
     selector: 'app-role-view',

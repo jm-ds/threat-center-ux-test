@@ -1,18 +1,18 @@
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {FixResult, PatchedInfo} from "@app/threat-center/shared/models/types";
-import {Observable} from "rxjs";
-import {environment} from "../../../../../environments/environment";
-import {Injectable} from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { FixResult } from "@app/models";
+import { PatchedInfo } from "@app/threat-center/shared/models/types";
+import { environment } from "environments/environment";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class FixService {
     constructor(private http: HttpClient) {
-
     }
 
-    fixComponentVersion(scanId: string, componentId: string,  oldVersion: string, newVersion: string): Observable<FixResult[]> {
+    fixComponentVersion(scanId: string, componentId: string, oldVersion: string, newVersion: string): Observable<FixResult[]> {
         const url = environment.apiUrl + '/fixComponentVersion';
         const body = new FormData();
 

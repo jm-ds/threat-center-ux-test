@@ -1,26 +1,27 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { StateService } from '@app/threat-center/shared/services/state.service';
 import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator } from '@angular/material';
-import { ProjectDashboardService } from '../services/project.service';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { ScanHelperService } from '../services/scan.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
 import { ScanAssetsComponent } from './scanasset/scanassets/scanassets.component';
 import * as _ from 'lodash';
 import { Entity, Project } from '@app/models';
 import { NextConfig } from '@app/app-config';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
-import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
-import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { ChartHelperService } from '@app/services/core/chart-helper.service';
 import { ClipboardDialogComponent } from "@app/threat-center/dashboard/project/clipboard-dialog/clipboard-dialog.component";
 import { AuthorizationService } from '@app/security/services';
+import { ProjectService } from '@app/services/project.service';
+import { ProjectDashboardService } from '@app/services/project-dashboard.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
+import { StateService } from '@app/services/state.service';
+
 
 @Component({
   selector: 'project-dashboard',
@@ -32,9 +33,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
   vulLabelSeq = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
   isDisablePaggination: boolean = false;
-  panelActiveId:string = 'chart-panel';
+  panelActiveId: string = 'chart-panel';
   constructor(
-    private apiService: ApiService,
+    // private apiService: ApiService,
+    private projectService: ProjectService,
     private stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
@@ -70,8 +72,8 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.scanHelperService.updateIsHighlightNewScan(false);
     this.highlitedScanId = "";
-    this.userPreferenceService.settingUserPreference("Project", null, null, null, 
-    this.panelActiveId, null, null, this.stateService.selectedScan.node.scanId);
+    this.userPreferenceService.settingUserPreference("Project", null, null, null,
+      this.panelActiveId, null, null, this.stateService.selectedScan.node.scanId);
   }
 
   ngAfterViewInit(): void {
@@ -157,7 +159,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(this.projectId);
     if (!this.obsProject) {
       console.log("Loading ScansComponent");
-      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      this.obsProject = this.projectService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
 
       this.stateService.obsProject = this.obsProject;
@@ -180,7 +182,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getProjectScanData(idElement: string = '') {
     this.projectId = this.route.snapshot.paramMap.get('projectId');
-    const obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    const obsProject = this.projectService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(map(result => result.data.project));
     obsProject.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -234,18 +236,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange($event: NgbTabChangeEvent) {
     this.stateService.project_tabs_selectedTab = $event.nextId;
-    this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId,null,null,null,null,this.stateService.selectedScan.node.scanId);
+    this.userPreferenceService.settingUserPreference("Project", $event.activeId, $event.nextId, null, null, null, null, this.stateService.selectedScan.node.scanId);
     if ($event.nextId === 'scan') {
       this.initProjectsChartConfig();
-      this.obsProject = this.apiService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+      this.obsProject = this.projectService.getProject(this.projectId, this.filterBranchName, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
         .pipe(map(result => result.data.project));
       this.initProjectData();
 
       // if previously any scan selected then get counts of all components, licens eand assets...
       const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-      this.obsProject.subscribe((data:any) => {
+      this.obsProject.subscribe((data: any) => {
         if (!!data.scans && data.scans.edges.length >= 1 && !!data.scans.edges[0]) {
-          
+
           const scan = data.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId });
           this.apicallTogetCounts(this.stateService.selectedScan.node.scanId);
           if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
@@ -266,7 +268,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stateService.selectedScan = $event.data;
     console.log(this.stateService.selectedScan);
   }
-  
+
   onRowSelect($event) {
     this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
     if (!!$event.data && !!$event.data.node.scanMetricsSummary && !!$event.data.node.scanMetricsSummary.assetMetrics) {
@@ -504,7 +506,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
       legend: this.legend,
       dataLabels: this.dataLabels,
       stroke: this.stroke,
-      colors: ['#00acc1', '#ffa21d','#11c15b'],
+      colors: ['#00acc1', '#ffa21d', '#11c15b'],
       series: [],
       xaxis: this.xaxis,
       noData: {
@@ -577,7 +579,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Loading project data after pagination for scan tab.
   loadProjectData(first, last, endCursor = undefined, startCursor = undefined) {
-    let projects = this.apiService.getProject(this.projectId, this.filterBranchName, first, last, endCursor, startCursor)
+    let projects = this.projectService.getProject(this.projectId, this.filterBranchName, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.project));
     projects.subscribe(project => {
       this.scanList = project.scans.edges;
@@ -703,18 +705,18 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!proper) {
       properties = proper;
     } else {
-      if(propFirstPara === 'assetMetrics'){
-        properties = ["EMBEDDED","OPEN_SOURCE","UNIQUE"];
-      }else{
-        if(propFirstPara === 'licenseMetrics'){
+      if (propFirstPara === 'assetMetrics') {
+        properties = ["EMBEDDED", "OPEN_SOURCE", "UNIQUE"];
+      } else {
+        if (propFirstPara === 'licenseMetrics') {
           properties = this.getProperties(propFirstPara, propSecondPara);
-          if(!properties || properties.length === 0){
+          if (!properties || properties.length === 0) {
             properties = ['PERMISSIVE'];
           }
-        }else{
+        } else {
           properties = this.getProperties(propFirstPara, propSecondPara);
         }
-        
+
       }
     }
     this[chartVarName].series = [];
@@ -757,13 +759,13 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private getFormattedDate(date) {
     var year = date.getFullYear();
-  
+
     var month = (1 + date.getMonth()).toString();
     month = month.length > 1 ? month : '0' + month;
-  
+
     var day = date.getDate().toString();
     day = day.length > 1 ? day : '0' + day;
-    
+
     return month + '/' + day + '/' + year;
   }
 

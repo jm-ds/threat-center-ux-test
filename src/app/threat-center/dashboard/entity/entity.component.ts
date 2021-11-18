@@ -2,23 +2,22 @@ import { Component, OnInit, HostListener, OnDestroy, AfterViewChecked, ChangeDet
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from '@app/threat-center/shared/services/api.service';
-import { StateService } from '@app/threat-center/shared/services/state.service';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/api';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
-import { TaskService } from '@app/threat-center/shared/task/task.service';
-import { ScanHelperService } from '../services/scan.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import * as _ from 'lodash';
-import { EntityService } from '@app/admin/services/entity.service';
-import { ChartHelperService } from '@app/core/services/chart-helper.service';
+import { ChartHelperService } from '@app/services/core/chart-helper.service';
 import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
-import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
-import { UserPreferenceService } from '@app/core/services/user-preference.service';
-import {IOption} from "ng-select";
-import {UserService} from "@app/admin/services/user.service";
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { IOption } from "ng-select";
+import { UserService } from '@app/services/user.service';
+import { EntityService } from '@app/services/entity.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
+import { TaskService } from '@app/services/task.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({
@@ -111,14 +110,15 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // running scan task count subscription
   runningTaskCountSubscription: Subscription = undefined;
-  panelActiveId:string = 'chart-panel';
+  panelActiveId: string = 'chart-panel';
 
   entitySelectionItems: Array<IOption>;
 
   constructor(
-      private userService: UserService,
+    private userService: UserService,
     private router: Router,
-    private apiService: ApiService,
+    // private apiService: ApiService,
+    private entService: EntityService,
     private stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
@@ -126,11 +126,11 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private coreHelperService: CoreHelperService,
     private taskService: TaskService,
     private scanHelperService: ScanHelperService,
-    private entityService: EntityService,
+    // private entityService: EntityService,
     private chartHelperService: ChartHelperService,
     private cdRef: ChangeDetectorRef,
-    private projectBreadcumsService:ProjectBreadcumsService,
-    private userPreferenceService:UserPreferenceService,
+    private projectBreadcumsService: ProjectBreadcumsService,
+    private userPreferenceService: UserPreferenceService,
     public authorizationService: AuthorizationService
   ) {
     this.dailyVisitorStatus = '1y';
@@ -182,13 +182,13 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       let entities = user.userEntities.edges.map((e) => e.node);
       this.entitySelectionItems = this.getSelectItemsFromEntities(entities);
     });
-        
+
     this.loadEntityPage();
   }
 
   private getSelectItemsFromEntities(entities: Array<Entity>): Array<IOption> {
     return entities.map(entity => {
-      return {value: entity.entityId, label: entity.name} as IOption;
+      return { value: entity.entityId, label: entity.name } as IOption;
     });
   }
 
@@ -341,7 +341,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
 
     //API Call to get data for timeserice According to period selections
-    this.apiService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, period)
+    this.entService.getEntityMetricsPeriod(this.authService.currentUser.orgId, entityId, period)
       .pipe(map(result => result))
       .subscribe((res: any) => {
         if (!!res.data && !!res.data.entityMetricsPeriod && res.data.entityMetricsPeriod.entityMetrics.length >= 1) {
@@ -406,7 +406,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   //Load Vul
   loadVulnerabilities(entityId: any) {
     console.log("Loading entity components:", entityId);
-    this.apiService.getEntityComponents(entityId)
+    this.entService.getEntityComponents(entityId)
       .pipe(map(result => result.data.entity))
       .subscribe(entity => {
         this.componentsEntity = entity;
@@ -436,7 +436,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isTreeProgressBar = true;
     this.entityNewBreadCum = [];
     this.router.navigateByUrl('dashboard/entity/' + entityId);
-    this.obsEntity = this.apiService.getEntity(entityId)
+    this.obsEntity = this.entService.getEntity(entityId)
       .pipe(map(result => result.data.entity));
 
 
@@ -464,7 +464,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           //    any changes needing to be made in the UX. If this approach is time consuming, let's work on it later
           //    as it's critical that we have the UX complete by Tuesday evening your time as we need to still work
           //    on an updated demonstration.
-          if(entity.entityMetricsGroup.entityMetrics.length >= 1){
+          if (entity.entityMetricsGroup.entityMetrics.length >= 1) {
             entity.entityMetricsGroup.entityMetrics = entity.entityMetricsGroup.entityMetrics.sort((a, b) => { return Number(new Date(b.measureDate)) - Number(new Date(a['measureDate'])) });
           }
           const entityMetrics = entity.entityMetricsGroup.entityMetrics;
@@ -862,7 +862,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (childData.length >= 1) {
       for (let i = 0; i < childData.length; i++) {
         if (!!childData[i].node) {
-          let cData: any = await this.entityService.getTreeEntity(childData[i].node.entityId).toPromise();
+          let cData: any = await this.entService.getTreeEntity(childData[i].node.entityId).toPromise();
           let d = {};
           cData.data.entity['vulSericeData'] = this.initSparkLineChart(cData.data.entity, 'vulnerabilityMetrics');
           cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
@@ -1129,7 +1129,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       .pipe(map(countData => {
         if (!!countData.data.subscribeRunningScanTaskCount.errors) {
           countData.data.subscribeRunningScanTaskCount.errors
-            .forEach(err=>console.error("Running task count subscription error: "+err.message));
+            .forEach(err => console.error("Running task count subscription error: " + err.message));
         }
         if (!!countData.data.subscribeRunningScanTaskCount.value) {
           return countData.data.subscribeRunningScanTaskCount.value;
@@ -1139,9 +1139,9 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       }))
       .subscribe(count => {
         this.activeScanCount = count;
-     }, err => {
-        console.error("error subscription "+err);
-     });
+      }, err => {
+        console.error("error subscription " + err);
+      });
   }
 
 }

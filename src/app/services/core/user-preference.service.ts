@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NextConfig } from "@app/app-config";
-import { UserPreferenceModel } from "../core.class";
+import { UserPreferenceModel } from "@app/core/core.class";
 
 @Injectable({
     providedIn: 'root'

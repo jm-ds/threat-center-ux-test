@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { InviteService } from '@app/admin/services/invite.service';
 import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { User } from '@app/models';
 import { AuthenticationService } from '@app/security/services';
+import { InviteService } from '@app/services/invite.service';
 import { NgbDropdownConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 

@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {UserService} from "@app/admin/services/user.service";
 import {User} from "@app/models";
 
 import {Router} from '@angular/router';
 import {UserUtils} from "@app/admin/user/user-utils";
 import { AuthorizationService } from '@app/security/services';
+import { UserService } from '@app/services/user.service';
 
 @Component({
     selector: 'app-user-list',

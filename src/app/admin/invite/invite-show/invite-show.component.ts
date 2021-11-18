@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Invite, InviteMailData, Message, Messages, } from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import { InviteService } from '@app/admin/services/invite.service';
-import { AlertService } from '@app/core/services/alert.service';
+import { AlertService } from '@app/services/core/alert.service';
+import { InviteService } from '@app/services/invite.service';
 
 @Component({
     selector: 'invite-view',

@@ -1,9 +1,7 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
 import { Policy, PolicyCondition, PolicyConditionGroup } from '@app/models';
 
-@Injectable({
-    providedIn: 'root'
-})
+
 @Component({
     selector: 'condition-builder',
     templateUrl: './condition-builder.component.html',

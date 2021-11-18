@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Message, Messages, Policy, PolicyConditionGroup} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
+import { PolicyService } from '@app/services/policy.service';
+
 
 @Component({
     selector: 'app-policy-view',

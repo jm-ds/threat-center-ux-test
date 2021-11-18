@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Messages, Policy, PolicyConnection} from "@app/models";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PolicyService} from "@app/threat-center/dashboard/services/policy.service";
 import { TreeNode } from 'primeng/api';
 import { type } from 'jquery';
 import { AuthorizationService } from '@app/security/services';
+import { PolicyService } from '@app/services/policy.service';
 
 @Component({
     selector: 'app-policy-list',

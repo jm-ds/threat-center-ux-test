@@ -3,16 +3,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService, StateService, RepositoryService } from '@app/threat-center/shared/services';
+
 import { FileViewComponent } from '@app/threat-center/shared/file-view/file-view.component';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
-import { CoreHelperService } from '@app/core/services/core-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import Swal from "sweetalert2";
 import { ScanAsset, ScanAssetMatch } from '@app/models';
-import { ProjectBreadcumsService } from '@app/core/services/project-breadcums.service';
-import { AlertService } from '@app/core/services/alert.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { AlertService } from '@app/services/core/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
 import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialog.component';
+import { ProjectService } from '@app/services/project.service';
+import { RepositoryService } from '@app/services/repository.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({
@@ -56,7 +59,7 @@ export class ScanAssetDetailComponent implements OnInit {
   ];
   isDisableAttributeLicensebtn: boolean = false;
   constructor(
-    private apiService: ApiService,
+    private projectService:ProjectService,
     private stateService: StateService,
     private repositoryService: RepositoryService,
     private authService: AuthenticationService,
@@ -76,7 +79,7 @@ export class ScanAssetDetailComponent implements OnInit {
     this.scanId = this.route.snapshot.paramMap.get('scanId');
     this.projectId = this.route.snapshot.paramMap.get('projectId');
     // get the scan asset for this page
-    let obsScanAsset = this.apiService.getScanAsset(this.scanId, this.scanAssetId)
+    let obsScanAsset = this.projectService.getScanAsset(this.scanId, this.scanAssetId)
       .pipe(map(result => result.data.scanAsset));
 
     this.user = this.authService.getFromSessionStorageBasedEnv("currentUser");      
@@ -84,7 +87,7 @@ export class ScanAssetDetailComponent implements OnInit {
     // Don't attempt to pull data for files that were not ACCEPTED status
 
     // lookup scan repository(it's attached to scan, not scanasset)
-    this.apiService.getScanRepository(this.scanId)
+    this.projectService.getScanRepository(this.scanId)
       .pipe(map(result => result.data.scan))
       .subscribe(result => {
         let scanRepository = result.scanRepository;
@@ -175,7 +178,7 @@ export class ScanAssetDetailComponent implements OnInit {
   // send attribute asset request
   attributeAsset(assetMatch, modelContent) {
     this.isDisableAttributeLicensebtn = true;
-    this.apiService.attributeAsset(this.scanId, this.scanAssetId,
+    this.projectService.attributeAsset(this.scanId, this.scanAssetId,
       this.selectedMatches, this.attributionStatus, this.attributionComment)
       .subscribe(data => {
         this.isDisableAttributeLicensebtn = false;

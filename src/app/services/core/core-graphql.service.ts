@@ -1,18 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
-import { DocumentNode } from 'graphql';
-import { catchError, map } from 'rxjs/operators';
-import { EMPTY, Observable, of, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CoreHelperService } from './core-helper.service';
-import { FetchResult } from 'apollo-link';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthenticationService } from '@app/security/services';
-import { Router } from '@angular/router';
-import { CoreErrorHelperService } from './core-error-helper.service';
-import { Messages } from '@app/messages/messages';
-import { AlertService } from './alert.service';
+import { HttpErrorResponse } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Messages } from "@app/messages/messages";
+import { Apollo } from "apollo-angular";
+import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from "apollo-client";
+import { FetchResult } from "apollo-link";
+import { DocumentNode } from "graphql";
+import { NgxSpinnerService } from "ngx-spinner";
+import { EMPTY, Observable } from "rxjs";
+import { catchError, map } from "rxjs/operators";
+import { AlertService } from "./alert.service";
+import { CoreErrorHelperService } from "./core-error-helper.service";
+import { CoreHelperService } from "./core-helper.service";
 
 @Injectable({
     providedIn: 'root'
