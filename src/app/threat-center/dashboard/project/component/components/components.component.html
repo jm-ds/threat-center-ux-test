@@ -13,7 +13,7 @@
         <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
         </mat-progress-spinner>
       </div>
-      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'">
+      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" class="overflowshadow" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
         <p-table #dt [columns]="columns" [value]="componentDetails.components?.edges" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width scroll-shadow"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name','licenses']">
@@ -34,38 +34,48 @@
                        class="form-control" (input)="filterColumn(col.header, $event.target.value,'groupSearch')" [value]="getColumnFilterValue(col.header)"/>
                 <input *ngIf="col.header =='Version'" type="text" placeholder="{{col.header}}" name="search-name"
                        class="form-control" id="versionSearch" (input)="filterColumn(col.header, $event.target.value,'versionSearch')" [value]="getColumnFilterValue(col.header)"/>
-                <select id="internalSearch" *ngIf="col.header == 'Internal'" class="form-control custom-select"
+                
+                <select id="internalSearch" *ngIf="isInternal && col.header == 'Internal'" class="form-control custom-select search-dropdown-w"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value,'internalSearch')">
+                        (change)="filterColumn(col.header, $event.target.value,'internalSearch','isInternal')">
                   <option value="ALL" selected>- All -</option>
                   <option value="TRUE">True</option>
                   <option value="FALSE">False</option>
                 </select>
-                <select id="locationSearch" *ngIf="col.header == 'Location'" class="form-control custom-select"
+                <i [ngClass]="{'text-primary': getColumnFilterValue(col.header) !== 'ALL' && getColumnFilterValue(col.header) !== ''}" class="fas fa-filter fa-lg cursor-pointer m-2" 
+                  *ngIf="col.header == 'Internal'" (click)="onclickFilterIcon('isInternal')"></i>
+                <select id="locationSearch" *ngIf="isLocation && col.header == 'Location'" class="form-control custom-select search-dropdown-w"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value,'locationSearch')">
+                        (change)="filterColumn(col.header, $event.target.value,'locationSearch','isLocation')">
                   <option value="ALL" selected>- All -</option>
                   <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
                   <option value="DRIVE">DRIVE</option>
                   <option value="STATIC_REF">STATIC REF</option>
                 </select>
-                <select id="typeSearch" *ngIf="col.header == 'Type'" class="form-control custom-select"
+                <i [ngClass]="{'text-primary': getColumnFilterValue(col.header) !== 'ALL' && getColumnFilterValue(col.header) !== ''}" class="fas fa-filter fa-lg cursor-pointer m-2" 
+                  *ngIf="col.header == 'Location'" (click)="onclickFilterIcon('isLocation')"></i>
+                
+                <select id="typeSearch" *ngIf="isType && col.header == 'Type'" class="form-control custom-select search-dropdown-w"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value,'typeSearch')">
+                        (change)="filterColumn(col.header, $event.target.value,'typeSearch','isType')">
                   <option value="ALL" selected>- All -</option>
                   <option value="LIBRARY">LIBRARY</option>
                   <option value="ASSET">ASSET</option>
                 </select>
-                <select id="discoverySearch" *ngIf="col.header == 'Discovery'" class="form-control custom-select"
+                <i [ngClass]="{'text-primary': getColumnFilterValue(col.header) !== 'ALL' && getColumnFilterValue(col.header) !== ''}" class="fas fa-filter fa-lg cursor-pointer m-2" 
+                  *ngIf="col.header == 'Type'" (click)="onclickFilterIcon('isType')" ></i>
+                <select id="discoverySearch" *ngIf="isDiscovery && col.header == 'Discovery'" class="form-control custom-select search-dropdown-w"
                         [value]="getColumnFilterValue(col.header)"
-                        (change)="filterColumn(col.header, $event.target.value,'discoverySearch')">
+                        (change)="filterColumn(col.header, $event.target.value,'discoverySearch','isDiscovery')">
                   <option value="ALL" selected>- All -</option>
                   <option value="DECLARED">DECLARED</option>
                   <option value="DISCOVERED">DISCOVERED</option>
                 </select>
+                <i [ngClass]="{'text-primary': getColumnFilterValue(col.header) !== 'ALL' && getColumnFilterValue(col.header) !== ''}" class="fas fa-filter fa-lg cursor-pointer m-2" 
+                  *ngIf="col.header == 'Discovery'" (click)="onclickFilterIcon('isDiscovery')"></i>
 <!--                <input *ngIf="col.header =='Source'" type="text" placeholder="{{col.header}}" name="search-name"-->
 <!--                       class="form-control" (input)="filterColumn(col.header, $event.target.value)" [value]="getColumnFilterValue(col.header)"/>-->
-                <select id="vulSearch" *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select"
+                <select id="vulSearch" *ngIf="col.header == 'Vulnerabilities'" class="form-control custom-select search-dropdown-w"
                         [value]="getColumnFilterValue(col.header)"
                         (change)="filterColumn(col.header, $event.target.value,'vulSearch')">
                   <option value="ALL" selected>- All -</option>

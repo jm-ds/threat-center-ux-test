@@ -19,7 +19,15 @@ import { FixService } from '@app/services/fix.service';
     styles: [
         `.multiple-license-text:hover{
             text-decoration: underline;
-        }`
+        }
+        .search-dropdown-w{
+            max-width:100px;
+            width:auto;
+        }
+        .m-2{
+            margin-left:2px;
+        }
+        `
     ]
 })
 export class ComponentsComponent implements OnInit {
@@ -27,10 +35,14 @@ export class ComponentsComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
     newVersion: string;
-
+    
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
+    isType:boolean = false;
+    isInternal:boolean = false;
+    isLocation:boolean = false;
+    isDiscovery:boolean = false;
 
     columns = [
         { field: 'name', header: 'Name' },
@@ -65,6 +77,10 @@ export class ComponentsComponent implements OnInit {
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+    }
+
+    onclickFilterIcon(valName:string){
+        this[valName] = !this[valName];
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
@@ -139,12 +155,13 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value,idElement:string = '') {
+    filterColumn(column, value,idElement:string = '',valName:string) {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
             this.columnsFilter.set(column, value);
         }
+        this[valName] = !this[valName];
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
             const scnObj = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
