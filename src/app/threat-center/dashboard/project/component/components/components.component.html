@@ -94,19 +94,19 @@
               <td (click)="gotoDetails(component.node.componentId)">{{component.node.version}}</td>
               <td (click)="gotoDetails(component.node.componentId)">
                 <!-- {{component.node.isInternal}} -->
-                <div *ngIf="component.node.isInternal">
+                <div *ngIf="component.node.isInternal" ngbTooltip="{{component.node.isInternal}}">
                   <i class="far fa-file-import fa-lg"></i>
                 </div>
-                <div *ngIf="!component.node.isInternal">
+                <div *ngIf="!component.node.isInternal" ngbTooltip="{{component.node.isInternal}}">
                   <i class="far fa-file-export fa-lg"></i>
                 </div>
               </td>
               <td (click)="gotoDetails(component.node.componentId)">
                 <div *ngIf="!!component.node.componentLocation" [ngSwitch]="component.node.componentLocation">
                   <div *ngSwitchDefault></div>
-                  <div *ngSwitchCase="'DEPENDENCY_FILE'"><i class="fas fa-file-code fa-lg"></i></div>
-                  <div *ngSwitchCase="'DRIVE'"><i class="fas fa-hdd fa-lg"></i></div>
-                  <div *ngSwitchCase="'STATIC_REF'"><i class="fas fa-link fa-lg"></i></div>
+                  <div *ngSwitchCase="'DEPENDENCY_FILE'" ngbTooltip="{{component.node.componentLocation}}"><i class="fas fa-file-code fa-lg"></i></div>
+                  <div *ngSwitchCase="'DRIVE'" ngbTooltip="{{component.node.componentLocation}}"><i class="fas fa-hdd fa-lg"></i></div>
+                  <div *ngSwitchCase="'STATIC_REF'" ngbTooltip="{{component.node.componentLocation}}"><i class="fas fa-link fa-lg"></i></div>
                 </div>
 
                 <!-- {{!!component.node.componentLocation?component.node.componentLocation.replaceAll('_',' '):''}} -->
@@ -115,8 +115,8 @@
                 <!-- {{!!component.node.componentType?component.node.componentType.replaceAll('_',' '):''}} -->
                 <div *ngIf="!!component.node.componentType" [ngSwitch]="component.node.componentType">
                   <div *ngSwitchDefault></div>
-                  <div *ngSwitchCase="'LIBRARY'"><i class="far fa-file-archive fa-lg"></i></div>
-                  <div *ngSwitchCase="'ASSET'"><i class="far fa-file fa-lg"></i></div>
+                  <div *ngSwitchCase="'LIBRARY'" ngbTooltip="{{component.node.componentType}}"><i class="far fa-file-archive fa-lg"></i></div>
+                  <div *ngSwitchCase="'ASSET'" ngbTooltip="{{component.node.componentType}}"><i class="far fa-file fa-lg"></i></div>
                 </div>
               </td>
               <td (click)="gotoDetails(component.node.componentId)">
@@ -124,8 +124,8 @@
 
                 <div *ngIf="!!component.node.componentDiscoveryMethod" [ngSwitch]="component.node.componentDiscoveryMethod">
                   <div *ngSwitchDefault></div>
-                  <div *ngSwitchCase="'DECLARED'"><i class="far fa-file-check fa-lg"></i></div>
-                  <div *ngSwitchCase="'DISCOVERED'"><i class="far fa-file-search fa-lg"></i></div>
+                  <div *ngSwitchCase="'DECLARED'" ngbTooltip="{{component.node.componentDiscoveryMethod}}"><i class="far fa-file-check fa-lg"></i></div>
+                  <div *ngSwitchCase="'DISCOVERED'" ngbTooltip="{{component.node.componentDiscoveryMethod}}"><i class="far fa-file-search fa-lg"></i></div>
                 </div>
 
               </td>
