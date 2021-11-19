@@ -20,13 +20,6 @@ import { FixService } from '@app/services/fix.service';
         `.multiple-license-text:hover{
             text-decoration: underline;
         }
-        .search-dropdown-w{
-            max-width:100px;
-            width:auto;
-        }
-        .m-2{
-            margin-left:2px;
-        }
         `
     ]
 })
@@ -39,10 +32,6 @@ export class ComponentsComponent implements OnInit {
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
-    isType:boolean = false;
-    isInternal:boolean = false;
-    isLocation:boolean = false;
-    isDiscovery:boolean = false;
 
     columns = [
         { field: 'name', header: 'Name' },
@@ -155,20 +144,21 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value,idElement:string = '',valName:string) {
+    filterColumn(column, value,idElement:string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
             this.columnsFilter.set(column, value);
         }
-        this[valName] = !this[valName];
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
             const scnObj = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
                 .pipe(map(result => result.data.scan));
             scnObj.subscribe(component => {
                 this.componentDetails = component;
-                this.coreHelperService.setFocusOnElement(idElement);
+                if(!!idElement && idElement !== ''){
+                    this.coreHelperService.setFocusOnElement(idElement);
+                }
             });
         }, this.timeOutDuration);
     }
