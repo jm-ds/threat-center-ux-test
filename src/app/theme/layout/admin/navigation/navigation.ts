@@ -45,7 +45,7 @@ const NavigationItems = [
         title: 'My Team',
         type: 'item',
         url: '/dashboard/entity',
-        icon: 'far fa-building',
+        icon: 'fad fa-chart-pie',
         permissions: ["ENTITY_VIEW"],
       },
       {
@@ -196,7 +196,16 @@ const NavigationItems = [
             target: false,
           }
         ]
-      },
+      }
+      /*,
+      {
+        id: 'documentation',
+        title: 'Documentation',
+        type: 'item',
+        url: 'https://docs.threatrix.io',
+        icon: 'fad fa-books',
+        permissions: ["ENTITY_VIEW"],
+      }*/
 
       // {
       //   id: 'orgSetting',

@@ -35,21 +35,33 @@
                         <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
-                <div title="Gitlab disabled during Beta" class="col-xl-6">
+                <div title="Gitlab login coming soon!" class="col-xl-6">
                     <a  (click)="externalLogin('gitlab_login', repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
             </div>
-            <div id="auth02" class="row mb-0">
-                <div title="Bitbucket disabled during Beta" class="col-xl-6">
+            <div id="auth02" class="row" style="margin-bottom:20px">
+                <div title="Bitbucket login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('bitbucket_login', repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
                     </a>
                 </div>
-                <div title="Google disabled during Beta" class="col-xl-6">
+                <div title="Google login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('google_login', repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div id="auth03" class="row mb-0">
+                <div title="Docker login coming soon!" class="col-xl-6">
+                    <a (click)="externalLogin('docker_login', repoTypeDialog)" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-docker"></i></div>
+                    </a>
+                </div>
+                <div title="Azure login coming soon!" class="col-xl-6">
+                    <a (click)="externalLogin('azure_login', repoTypeDialog)" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><img style="opacity: 0.25;padding-bottom: 3px" width="25px" src="assets/images/azure-gray.png"></div>
                     </a>
                 </div>
             </div>

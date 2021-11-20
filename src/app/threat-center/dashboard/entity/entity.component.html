@@ -62,9 +62,49 @@
     *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <span style="font-size:20px;color:#4680ff">
-          A fresh dashboard ready to get to work.
+        <span style="font-size:20px;color:#00acc1"><!--#41a8e3-->
+          This is your fresh Team dashboard ready to get to work.
         </span>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>
+            If you used Github to login, you're all set to scan your first project. Threatrix supports more than <span style="color:#00acc1">400 languages</span> and we currently
+          support the following package managers:
+          <ul>
+            <li>Maven</li>
+            <li>NPM</li>
+            <li>PIP & Poetry</li>
+            <li>Nuget</li>
+            <li>More coming very soon..</li>
+          </ul>
+
+          <a [routerLink]="['/dashboard/scan/',entity.entityId]">
+            <button type="submit" class="btn btn-outline-info ml-2">
+              <i class="fas fa-fingerprint" style="margin-right: 5px"></i>Execute ThreatScan</button>
+          </a>
+        </div>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>Check out our documentation for information on scan results, administration or automating
+            Threatrix scans by <span style="color:#00acc1">integrating our Threat Agent into your build pipeline.</span></p>
+          <a href="https://docs.threatrix.io" target="_blank">
+            <button type="submit" class="btn btn-outline-info ml-2" >
+              <i class="fad fa-books" style="margin-right: 5px"></i>Documentation</button>
+          </a>
+        </div>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>Threatrix is more useful when you add members from your team. Make their
+            jobs easier by automating their security and compliance tasks with Threatrix.
+            <br/>
+            <span style="color:#00acc1;margin-right:10px">Invite your team and avoid termination!</span>
+            <!--<img src="https://cdn4.iconfinder.com/data/icons/heroes-villains-vol-2-colored/100/Terminator-512.png" width="30px">-->
+            <!--<img src="assets/images/terminator.png" width="30px">-->
+            <img src="assets/images/terminator1.png" width="25px">
+          </p>
+
+          <a href="javascript:"  (click)="inviteUser(inviteUrlDialog)">
+            <button type="submit" class="btn btn-outline-info ml-2" >
+              <i class="fas fa-user-plus" style="margin-right: 5px"></i>Add team members</button>
+          </a>
+        </div>
         <div style="margin-top:20px;text-align: justify;" *ngIf="authorizationService.hasPermissions('ENTITY_CREATE')">
           <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a
             hierarchy of company Divisions, Business Units, Teams or even individual developers
@@ -73,19 +113,10 @@
             across your organization.</p>
           <a [routerLink]="['/admin/entity']">
             <button type="submit" class="btn btn-outline-warning ml-2">
-              <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child Dashboard
-            </button>
+              <i class="fas fa-level-down-alt" style="margin-right: 5px"></i>Add Child Dashboard</button>
           </a>
         </div>
-        <div style="margin-top:20px;text-align: justify;">
-          <p>Get started quickly by connecting Threatrix with your Github, GitLab or Bitbucket accounts to see results
-            in seconds.</p>
-          <a [routerLink]="['/dashboard/scan/',entity.entityId]">
-            <button type="submit" class="btn btn-outline-info ml-2">
-              <i class="fas fa-fingerprint" style="margin-right:5px"></i>Execute ThreatScan
-            </button>
-          </a>
-        </div>
+
       </app-card>
     </div>
   </div>

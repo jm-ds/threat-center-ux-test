@@ -68,7 +68,7 @@
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
                     <div class="input-group">
                         <input class="form-control disabled" name="email" [(ngModel)]="user.email" #email="ngModel"
-                               placeholder="Email *" [email]="true" readonly >
+                               placeholder="Work Email *" [email]="true" readonly >
 
                     </div>
                     <div class="text-danger" *ngIf="f.submitted && !email.valid">Valid email is required</div>
