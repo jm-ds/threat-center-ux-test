@@ -1,5 +1,5 @@
 import {Directive, ElementRef, OnInit, Input} from '@angular/core';
-import {AuthorizationService} from './services/authorization.service';
+import {AuthorizationService} from "@app/security/services/authorization.service"
 
 @Directive({
     selector: '[hideIfUnauthorized]'

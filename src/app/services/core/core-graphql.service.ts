@@ -8,9 +8,9 @@ import { DocumentNode } from "graphql";
 import { NgxSpinnerService } from "ngx-spinner";
 import { EMPTY, Observable } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { AlertService } from "./alert.service";
-import { CoreErrorHelperService } from "./core-error-helper.service";
-import { CoreHelperService } from "./core-helper.service";
+import { CoreHelperService } from "@app/services/core/core-helper.service";
+import { CoreErrorHelperService } from "@app/services/core/core-error-helper.service";
+import { AlertService } from "@app/services/core/alert.service";
 
 @Injectable({
     providedIn: 'root'

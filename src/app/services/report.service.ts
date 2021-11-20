@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { EntityListQuery } from "@app/models";
 import { Apollo } from "apollo-angular";
 import gql from "graphql-tag";
-import { CoreGraphQLService } from "./core/core-graphql.service";
+import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 
 @Injectable({
     providedIn: 'root'
