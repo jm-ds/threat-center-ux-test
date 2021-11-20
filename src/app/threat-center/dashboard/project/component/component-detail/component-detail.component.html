@@ -196,7 +196,7 @@
                           <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
                         </div>
                       </div>
-                      <div style="width:60%;float:right;">
+                      <div style="width:60%;float:right;" *ngIf="!!binaryReleases && binaryReleases.length >= 1">
                         <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollBinaryRelese (psYReachEnd)="loadBinaryReleasesLazy($event)" 
                               class="overflowshadowTop">
                           <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
@@ -248,6 +248,9 @@
                           </p-table>
                         </perfect-scrollbar>
                       </div>
+                      <div *ngIf="!binaryReleases || binaryReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
+                        Data for this repository is coming soon.
+                      </div>
                     </div>
                   </app-card>
                 </div>
@@ -280,7 +283,7 @@
                           <input class="form-control" disabled placeholder="Text" value="{{component.repositoryMeta?.lastCheck | date :'MMMM d, y'}}">
                         </div>
                       </div>
-                      <div style="width:60%;float:right;">
+                      <div *ngIf="!!sourceReleases && sourceReleases.length >= 1" style="width:60%;float:right;">
                         <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollSourceRelese (psYReachEnd)="loadSourceReleasesLazy($event)">
                           <p-table #dtSource [columns]="releaseCols" [value]="sourceReleases" [scrollable]="false" [rows]="25"
                             [style]="{width:'100%'}" scrollHeight="300px" [virtualScroll]="false" [virtualRowHeight]="34" [lazy]="false"
@@ -330,6 +333,9 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
+                      </div>
+                      <div *ngIf="!sourceReleases || sourceReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
+                        Data for this repository is coming soon.
                       </div>
                     </div>
 
