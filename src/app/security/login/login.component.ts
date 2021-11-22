@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
   apiUrl: string;
   loginPageError:string = '';
-  choosenRepoType: string = 'public';
+  choosenRepoType: string = 'private';
 
   constructor(
     private formBuilder: FormBuilder,
