@@ -22,7 +22,7 @@ export class CreateAccountComponent implements OnInit {
     errorMessage: string;
     apiUrl: string;
     inviteHash: string;
-    choosenRepoType: string = 'public';
+    choosenRepoType: string = 'private';
 
     constructor(
         private route: ActivatedRoute,

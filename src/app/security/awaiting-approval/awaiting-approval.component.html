@@ -10,9 +10,23 @@
     <div class="col-6 white-col">
         <div>
 
-            <h5 class="mb-4">We are currently in beta, so all accounts are pre-moderated.</h5>
+            <app-alert type="warning"><p class="lead mb-0">Your account is pending approval.</p></app-alert>
+            <h5 class="mb-4">Thank you for your interest in Threatrix!</h5>
+            <h5 class="mb-4">All accounts are currently moderated. We will approve your account shortly.</h5>
+            <div style="color: #1dc4e9; font-size: 30px;">
+                Threatrix is a "Game Changer"
+            </div>
+            <div style="font-size: 18px">
+                <div class="intro-text-div">
+                    Threatrix has been in stealth mode, for more than three years, building the most comprehensive, and accurate
+                    open source detection, reporting and risk mitigation solution on earth.
+                </div>
+                <div class="intro-text-div">
+                    See why Threatrix is being called a <b>"Game-Changer"</b> by our customers when they compare our scan results to other tools.
+                </div>
+            </div>
 
-            <app-alert type="warning"><p class="lead mb-0">Your account has not been approved yet.</p></app-alert>
+
 
 
             <div class="mt-5">
@@ -23,7 +37,18 @@
             <form *ngIf="!user?.invitedByUsername && (user?.email == null || user?.email == '' || user?.organization == null || user?.organization.name == null || user?.coverLetter == null)"
                   name="form" class="auth-form mt-2" (ngSubmit)="f.form.valid && updateAccount()" #f="ngForm" novalidate>
 
-                <h6>Please provide missing info</h6>
+                <h6>
+                    Please help us by providing a bit of detail about your project.
+                    <p>
+                    <ul>
+                        <li>Languages</li>
+                        <li>Dependency Managers (Maven, NPM, Poetry, etc..)</li>
+                        <li>SCM (Github/Gitlab, Bitbutcket)</li>
+                        <li>Build tools (Jenkins, CicleCI, etc..)</li>
+                        <li>Current tools for open source risk management(if any)</li>
+                    </ul>
+
+                </h6>
 
                 <!-- org name -->
                 <div class="form-group" *ngIf="user?.organization == null || user?.organization.name == null || user?.organization.name == '' || user?.organization.name == user?.organization.orgId"
@@ -44,10 +69,10 @@
                     <div class="text-danger" *ngIf="f.submitted && !email.valid">Please provide valid email to receive account approval and other notifications.</div>
                 </div>
 
-                <!-- phone -->
+                <!-- phone
                 <div class="form-group" *ngIf="user?.phone == null || user?.phone == ''" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
                     <input class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" placeholder="Phone number">
-                </div>
+                </div>-->
 
                 <!-- cover letter -->
                 <div class="form-group" *ngIf="user?.coverLetter == null || user?.coverLetter == ''" [ngClass]="{ 'has-error': f.submitted && !coverLetter.valid }">

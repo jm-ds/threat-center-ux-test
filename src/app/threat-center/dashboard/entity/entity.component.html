@@ -62,30 +62,63 @@
     *ngIf="!entity.entityMetricsGroup || entity.entityMetricsGroup.entityMetrics.length == 0">
     <div class="col-md-5">
       <app-card [hidHeader]="true" cardClass="proj-t-card">
-        <span style="font-size:20px;color:#4680ff">
-          A fresh dashboard ready to get to work.
+        <span style="font-size:20px;color:#00acc1"><!--#41a8e3-->
+          This is your new Team dashboard, ready for action
         </span>
-        <div style="margin-top:20px;text-align: justify;" *ngIf="authorizationService.hasPermissions('ENTITY_CREATE')">
-          <p><b>Child dashboards</b> always propagate their scan data up to your dashboard. This allows you to create a
-            hierarchy of company Divisions, Business Units, Teams or even individual developers
-            who can scan their own projects while automatically sharing the data with your team.</p>
-          <p>Risk Metrics, from child entities, will also be rolled up to your dashboard so as to easily assess the risk
-            across your organization.</p>
-          <a [routerLink]="['/admin/entity']">
-            <button type="submit" class="btn btn-outline-warning ml-2">
-              <i class="fas fa-level-down-alt" style="margin-right:5px"></i>Add Child Dashboard
-            </button>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>
+            If you used GitHub to log in, you're all set to scan your first project. Threatrix
+            supports more than 400 languages and currently supports the following package managers.
+          <ul>
+            <li>Maven</li>
+            <li>NPM</li>
+            <li>PIP & Poetry</li>
+            <li>Nuget</li>
+            <li>More coming very soon..</li>
+          </ul>
+
+          <a [routerLink]="['/dashboard/scan/',entity.entityId]">
+            <button type="submit" class="btn btn-outline-info ml-2">
+              <i class="fas fa-fingerprint" style="margin-right: 5px"></i>Execute ThreatScan</button>
           </a>
         </div>
         <div style="margin-top:20px;text-align: justify;">
-          <p>Get started quickly by connecting Threatrix with your Github, GitLab or Bitbucket accounts to see results
-            in seconds.</p>
-          <a [routerLink]="['/dashboard/scan/',entity.entityId]">
-            <button type="submit" class="btn btn-outline-info ml-2">
-              <i class="fas fa-fingerprint" style="margin-right:5px"></i>Execute ThreatScan
-            </button>
+          <p>Check out our documentation for information on scan results, administration or automating
+            Threatrix scans by <span style="color:#00acc1">integrating our Threat Agent into your build pipeline.</span></p>
+          <a href="https://docs.threatrix.io" target="_blank">
+            <button type="submit" class="btn btn-outline-info ml-2" >
+              <i class="fad fa-books" style="margin-right: 5px"></i>Documentation</button>
           </a>
         </div>
+        <div style="margin-top:20px;text-align: justify;">
+          <p>When members of your team become part of Threatrix, it becomes more valuable.
+            By automating security and compliance tasks, you can simplify their work.
+            <br/>
+            <span style="color:#00acc1;margin-right:10px">Invite your team and avoid termination!</span>
+            <!--<img src="https://cdn4.iconfinder.com/data/icons/heroes-villains-vol-2-colored/100/Terminator-512.png" width="30px">-->
+            <!--<img src="assets/images/terminator.png" width="30px">-->
+            <img src="assets/images/terminator1.png" width="25px">
+          </p>
+
+          <a href="javascript:"  (click)="inviteUser(inviteUrlDialog)">
+            <button type="submit" class="btn btn-outline-info ml-2" >
+              <i class="fas fa-user-plus" style="margin-right: 5px"></i>Add team members</button>
+          </a>
+        </div>
+        <div style="margin-top:20px;text-align: justify;" *ngIf="authorizationService.hasPermissions('ENTITY_CREATE')">
+          <p>
+            Data from child dashboards always propagate to the parent dashboard. Create a hierarchy of
+            company divisions, business units, teams, or individual developers who scan their projects
+            and automatically share their results with your team. Risk metrics from child entities will
+            also be rolled up to your dashboard to quickly access the risk across your organization.
+          </p>
+            <a [routerLink]="['/admin/entity']">
+              <button type="submit" class="btn btn-outline-warning ml-2">
+                <i class="fas fa-level-down-alt" style="margin-right: 5px"></i>Add Child Dashboard</button>
+            </a>
+
+        </div>
+
       </app-card>
     </div>
   </div>
