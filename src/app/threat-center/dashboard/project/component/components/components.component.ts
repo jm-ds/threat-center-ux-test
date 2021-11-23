@@ -19,7 +19,8 @@ import { FixService } from '@app/services/fix.service';
     styles: [
         `.multiple-license-text:hover{
             text-decoration: underline;
-        }`
+        }
+        `
     ]
 })
 export class ComponentsComponent implements OnInit {
@@ -27,7 +28,7 @@ export class ComponentsComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
     newVersion: string;
-
+    
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
@@ -65,6 +66,10 @@ export class ComponentsComponent implements OnInit {
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+    }
+
+    onclickFilterIcon(valName:string){
+        this[valName] = !this[valName];
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
@@ -151,7 +156,9 @@ export class ComponentsComponent implements OnInit {
                 .pipe(map(result => result.data.scan));
             scnObj.subscribe(component => {
                 this.componentDetails = component;
-                this.coreHelperService.setFocusOnElement(idElement);
+                if(!!idElement && idElement !== ''){
+                    this.coreHelperService.setFocusOnElement(idElement);
+                }
             });
         }, this.timeOutDuration);
     }
