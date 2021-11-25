@@ -73,7 +73,7 @@
         
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
-          <!-- SCANS TAB -->
+          <!-- SCANS TAB
           <ngb-tab id="scan">
             <ng-template ngbTabTitle>Scans&nbsp;
               <span class="badge badge-light">
@@ -112,10 +112,10 @@
                       <th>Created</th>
                       <th>Vulnerabilities</th>
                       <th>Licenses</th>
-                      <!-- <th>Supply Chain</th> -->
+
                       <th title="Asset Composition">ASSETS COMPOSITION</th>
                       <th>Status</th>
-                      <!--<th>Policy Violations</th>-->
+
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
@@ -156,12 +156,7 @@
                         <span title="Permissive"
                           class="badge m-r-5 badge-permissive">{{scan.node.scanMetricsSummary?.licenseMetrics?.permissive}}</span>
                       </td>
-                      <!-- <td>
-                        <span title="supply-chain"
-                          class="badge m-r-5 badge-light-danger">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.risk}}</span>
-                        <span title="Risky Licenses"
-                          class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.supplyChainMetrics?.quality}}</span>
-                      </td> -->
+
                       <td>
                         <span title="Embedded"
                           class="badge m-r-5 badge-blue">{{scan.node.scanMetricsSummary?.assetMetrics?.embedded}}</span>
@@ -190,7 +185,7 @@
                           </span></ng-template>
                       </td>
 
-                      <!--<th>Policy Violations</th -->
+
                     </tr>
                   </ng-template>
                 </p-table>
@@ -202,7 +197,7 @@
                 </mat-paginator>
               </div>
             </ng-template>
-          </ngb-tab>
+          </ngb-tab>-->
 
           <!-- VULNERABILITIES TAB -->
           <ngb-tab id="vulnerabilities">
