@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Messages, User} from "@app/models";
-import {ActivatedRoute, Router} from "@angular/router";
-import {UserUtils} from "@app/admin/user/user-utils";
+import { Component, OnInit } from '@angular/core';
+import { Messages, User } from "@app/models";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UserUtils } from "@app/admin/user/user-utils";
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { UserService } from '@app/services/user.service';
 
@@ -14,7 +14,7 @@ export class UserShowComponent extends UserUtils implements OnInit {
 
     user: User;
     messages: Messages;
-    organizationDetails:{orgId:string,name:string,tenantId:string,created:string};
+    organizationDetails: { orgId: string, name: string, tenantId: string, created: string };
 
     constructor(
         private userService: UserService,
@@ -28,19 +28,23 @@ export class UserShowComponent extends UserUtils implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params.subscribe(params=>{
-            this.init();
+        // this.route.params.subscribe(params=>{
+        //     this.init();
+        // });
+        this.route.queryParams.subscribe(params => {
+            const userName = params["userName"];
+            this.init(userName);
         });
     }
 
 
     // initialize user data
-    init() {
+    init(username) {
         const user = this.authService.getFromSessionStorageBasedEnv("currentUser");
-        if(!!user){
+        if (!!user) {
             this.organizationDetails = user['organization'];
         }
-        const username = this.route.snapshot.paramMap.get('username');
+        // const username = this.route.snapshot.paramMap.get('username');
         this.userService.getUser(username).subscribe(
             data => {
                 this.user = data.data.user;

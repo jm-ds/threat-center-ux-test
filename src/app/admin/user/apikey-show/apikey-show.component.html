@@ -69,7 +69,7 @@
             <i class="feather icon-trash"></i>
             Delete
           </a>
-          <a *ngIf="!!user" routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+          <a *ngIf="!!user" (click)="gotoUser()" class="btn btn-outline-secondary">
             <i class="feather  icon-user"></i>
             Back to user
           </a>
@@ -87,7 +87,7 @@
 <ng-template [ngIf]="apiKey === undefined">
   <app-alert type="warning">API key is not found.</app-alert>
 
-  <a *ngIf="!!user" routerLink="/admin/user/show/{{username}}" class="btn btn-outline-secondary">
+  <a *ngIf="!!user" (click)="gotoUser()" class="btn btn-outline-secondary">
       <i class="feather icon-user"></i>
       Back to user
   </a>

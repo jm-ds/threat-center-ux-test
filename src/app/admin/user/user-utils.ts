@@ -1,5 +1,5 @@
 import {EntityConnection, Role} from "@app/models";
-import {Router} from "@angular/router";
+import {NavigationExtras, Router} from "@angular/router";
 
 export class UserUtils {
 
@@ -32,7 +32,12 @@ export class UserUtils {
         if (td !== null && td.className.indexOf("skip-row-link") >= 0) {
             return false;
         }
-        this.router.navigateByUrl('admin/user/show/' + encodeURIComponent(username));
+        const navigationExtras: NavigationExtras = {
+            queryParams: {
+                "userName": username
+            }
+        };
+        this.router.navigate(['/admin/user/show'], navigationExtras);
     }
 
     goToUserList() {

@@ -25,7 +25,7 @@ const routes: Routes = [
                 data: {auth: "USER_VIEW"}
             },
             {
-                path: 'show/:username',
+                path: 'show',
                 component: UserShowComponent,
                 data: {auth: ["AUTHENTICATED", "USER_VIEW"]}
             },

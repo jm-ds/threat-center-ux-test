@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
 import { AlertService } from '@app/services/core/alert.service';
-import {ApiKey, Message, Messages, User} from "@app/models";
+import { ApiKey, Message, Messages, User } from "@app/models";
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';
 import { UserUtils } from '../user-utils';
@@ -25,7 +25,7 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
         private userService: UserService,
         protected router: Router,
         private route: ActivatedRoute,
-        private alertService:AlertService,
+        private alertService: AlertService,
         private orgService: OrgService
     ) {
         super(router);
@@ -36,7 +36,7 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
         this.keyId = this.route.snapshot.paramMap.get('keyid');
         this.username = this.route.snapshot.paramMap.get('username');
         this.isUserKey = !!this.username
-        let getApiKeyObservable=undefined;
+        let getApiKeyObservable = undefined;
         if (this.isUserKey) { // user key
             this.userService.getUser(this.username).subscribe(
                 data => {
@@ -63,33 +63,42 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
                 console.error("ApiKeyShowComponent", error);
             }
         );
-    }   
+    }
 
 
     // remove API key
     removeApiKey() {
         if (confirm("Are you sure you want to delete API key?")) {
-            let removeApiKeyObservable=undefined;
+            let removeApiKeyObservable = undefined;
             let successLink = undefined;
             if (this.isUserKey) { // user key
-                removeApiKeyObservable = this.userService.removeApiKey(this.apiKey);    
-                successLink = '/admin/user/show/'+this.username;
+                removeApiKeyObservable = this.userService.removeApiKey(this.apiKey);
             } else { // org key
-                removeApiKeyObservable = this.orgService.removeOrgApiKey(this.apiKey);    
+                removeApiKeyObservable = this.orgService.removeOrgApiKey(this.apiKey);
                 successLink = '/dashboard/org-setting/integration/org-apikeys'
             }
             removeApiKeyObservable
                 .subscribe(() => {
-                    this.router.navigate([successLink],
-                        {state: {messages: [Message.success("API key removed successfully.")]}});
+                    if (this.isUserKey) {
+                        const navigationExtras: NavigationExtras = {
+                            state: { messages: [Message.success("API key removed successfully.")] },
+                            queryParams: {
+                                "userName": this.username
+                            }
+                        };
+                        this.router.navigate(['/admin/user/show'], navigationExtras);
+                    } else {
+                        this.router.navigate([successLink],
+                            { state: { messages: [Message.success("API key removed successfully.")] } });
+                    }
                 }, (error) => {
                     console.error('API key Removing', error);
                     this.messages = [Message.error("Unexpected error occurred while trying to remove API key.")];
                 });
         }
-    }     
+    }
 
-    
+
     // Copy API key to clipboard
     copyKey() {
         var dummy = document.createElement("textarea");
@@ -98,11 +107,20 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
         dummy.select();
         document.execCommand("copy");
         document.body.removeChild(dummy);
-        this.alertService.alertBox('API key copied to clipboard!','API key!','success');
+        this.alertService.alertBox('API key copied to clipboard!', 'API key!', 'success');
     }
 
     // navigate to organization settings
     goToOrgSettings() {
-        this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');        
-    }    
+        this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');
+    }
+
+    gotoUser() {
+        const navigationExtras: NavigationExtras = {
+            queryParams: {
+                "userName": this.username
+            }
+        };
+        this.router.navigate(['/admin/user/show'], navigationExtras);
+    }
 }
