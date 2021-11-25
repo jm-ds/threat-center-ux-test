@@ -18,6 +18,7 @@ import { EntityService } from '@app/services/entity.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
 import { TaskService } from '@app/services/task.service';
 import { StateService } from '@app/services/state.service';
+import { InviteService } from '@app/services/invite.service';
 
 
 @Component({
@@ -131,7 +132,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private projectBreadcumsService: ProjectBreadcumsService,
     private userPreferenceService: UserPreferenceService,
-    public authorizationService: AuthorizationService
+    public authorizationService: AuthorizationService,
+    private inviteService: InviteService
   ) {
     this.dailyVisitorStatus = '1y';
     this.deviceProgressBar = [
@@ -660,6 +662,19 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     return !!content.offsetHeight && content.offsetHeight > 0 ? (Number(content.offsetHeight) + 20) + 'px' : '38px'
   }
 
+  inviteUser(inviteUrlDialog) {
+    this.inviteService.createInvite().subscribe(
+      data => {
+        let inviteHash = data.data.createInvite.inviteHash;
+        const link = '/admin/invite/show/' + inviteHash;
+        this.router.navigate([link]);
+      },
+      error => {
+        console.error("NavRightComponent", error);
+      }
+    );
+  }
+  
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
     this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
