@@ -1,12 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {MatPaginator} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoreHelperService} from '@app/services/core/core-helper.service';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {Scan} from '@app/models';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { Scan } from '@app/models';
 
 import { LicenseDialogComponent } from '../../licenses-common-dialog/license-dialog.component';
 import { ProjectService } from '@app/services/project.service';
@@ -28,7 +28,7 @@ export class ComponentsComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
     newVersion: string;
-    
+
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
@@ -48,17 +48,17 @@ export class ComponentsComponent implements OnInit {
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
-    isDisablePaggination:boolean = false;
+    isDisablePaggination: boolean = false;
 
     constructor(
         // private apiService: ApiService,
-        private projectService:ProjectService,
+        private projectService: ProjectService,
         private fixService: FixService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
         private modalService: NgbModal,
-        private userPreferenceService:UserPreferenceService) {
+        private userPreferenceService: UserPreferenceService) {
     }
 
     ngOnInit() {
@@ -68,7 +68,7 @@ export class ComponentsComponent implements OnInit {
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    onclickFilterIcon(valName:string){
+    onclickFilterIcon(valName: string) {
         this[valName] = !this[valName];
     }
 
@@ -144,7 +144,7 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value,idElement:string = '') {
+    filterColumn(column, value, idElement: string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -156,7 +156,7 @@ export class ComponentsComponent implements OnInit {
                 .pipe(map(result => result.data.scan));
             scnObj.subscribe(component => {
                 this.componentDetails = component;
-                if(!!idElement && idElement !== ''){
+                if (!!idElement && idElement !== '') {
                     this.coreHelperService.setFocusOnElement(idElement);
                 }
             });
@@ -176,7 +176,11 @@ export class ComponentsComponent implements OnInit {
         }
     }
 
-    gotoLicense(selectedData){
+    getTootltipValue(key) {
+        return this.getColumnFilterValue(key) !== 'ALL' ? this.getColumnFilterValue(key) : '';
+    }
+
+    gotoLicense(selectedData) {
         const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
         modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
     }

@@ -43,7 +43,8 @@
               <div container="body" class="dropdown" *ngIf="col.header == 'Internal'" ngbDropdown>
                 <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-filter fa-lg"></i>
+                  <i class="fas fa-filter fa-lg" [ngClass]="{'text-primary':getColumnFilterValue(col.header) !== 'ALL'}"
+                  ngbTooltip={{getTootltipValue(col.header)}}></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'ALL'}" class="dropdown-item"
@@ -58,7 +59,7 @@
               <div container="body" class="dropdown" *ngIf="col.header == 'Location'" ngbDropdown>
                 <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-filter fa-lg"></i>
+                  <i class="fas fa-filter fa-lg" ngbTooltip={{getTootltipValue(col.header)}} [ngClass]="{'text-primary':getColumnFilterValue(col.header) !== 'ALL'}"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'ALL'}" class="dropdown-item"
@@ -76,7 +77,7 @@
               <div container="body" class="dropdown" *ngIf="col.header == 'Type'" ngbDropdown>
                 <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-filter fa-lg"></i>
+                  <i class="fas fa-filter fa-lg" ngbTooltip={{getTootltipValue(col.header)}} [ngClass]="{'text-primary':getColumnFilterValue(col.header) !== 'ALL'}"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'ALL'}" class="dropdown-item"
@@ -92,7 +93,7 @@
               <div container="body" class="dropdown" *ngIf="col.header == 'Discovery'" ngbDropdown>
                 <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-filter fa-lg"></i>
+                  <i class="fas fa-filter fa-lg" ngbTooltip={{getTootltipValue(col.header)}} [ngClass]="{'text-primary':getColumnFilterValue(col.header) !== 'ALL'}"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'ALL'}" class="dropdown-item"
