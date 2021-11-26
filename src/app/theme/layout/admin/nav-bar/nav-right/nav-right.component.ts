@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { User } from '@app/models';
@@ -54,7 +54,12 @@ export class NavRightComponent implements OnInit {
   gotoProfile() {
     //Navigate to user detail page
     if (!!this.authenticationService.currentUser && !!this.authenticationService.currentUser['username']) {
-      this.router.navigate(['/admin/user/show/' + this.authenticationService.currentUser['username']]);
+      const navigationExtras: NavigationExtras = {
+        queryParams: {
+          "userName": this.authenticationService.currentUser['username']
+        }
+      };
+      this.router.navigate(['/admin/user/show'], navigationExtras);
     }
   }
 

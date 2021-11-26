@@ -1,12 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {MatPaginator} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoreHelperService} from '@app/services/core/core-helper.service';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FixComponentDialogComponent} from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {Scan} from '@app/models';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
+import { Scan } from '@app/models';
 
 import { LicenseDialogComponent } from '../../licenses-common-dialog/license-dialog.component';
 import { ProjectService } from '@app/services/project.service';
@@ -19,7 +19,8 @@ import { FixService } from '@app/services/fix.service';
     styles: [
         `.multiple-license-text:hover{
             text-decoration: underline;
-        }`
+        }
+        `
     ]
 })
 export class ComponentsComponent implements OnInit {
@@ -47,17 +48,17 @@ export class ComponentsComponent implements OnInit {
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
-    isDisablePaggination:boolean = false;
+    isDisablePaggination: boolean = false;
 
     constructor(
         // private apiService: ApiService,
-        private projectService:ProjectService,
+        private projectService: ProjectService,
         private fixService: FixService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
         private modalService: NgbModal,
-        private userPreferenceService:UserPreferenceService) {
+        private userPreferenceService: UserPreferenceService) {
     }
 
     ngOnInit() {
@@ -65,6 +66,10 @@ export class ComponentsComponent implements OnInit {
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+    }
+
+    onclickFilterIcon(valName: string) {
+        this[valName] = !this[valName];
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
@@ -139,7 +144,7 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
-    filterColumn(column, value,idElement:string = '') {
+    filterColumn(column, value, idElement: string = '') {
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -151,7 +156,9 @@ export class ComponentsComponent implements OnInit {
                 .pipe(map(result => result.data.scan));
             scnObj.subscribe(component => {
                 this.componentDetails = component;
-                this.coreHelperService.setFocusOnElement(idElement);
+                if (!!idElement && idElement !== '') {
+                    this.coreHelperService.setFocusOnElement(idElement);
+                }
             });
         }, this.timeOutDuration);
     }
@@ -169,7 +176,11 @@ export class ComponentsComponent implements OnInit {
         }
     }
 
-    gotoLicense(selectedData){
+    getTootltipValue(key) {
+        return this.getColumnFilterValue(key) !== 'ALL' ? this.getColumnFilterValue(key) : '';
+    }
+
+    gotoLicense(selectedData) {
         const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
         modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
     }

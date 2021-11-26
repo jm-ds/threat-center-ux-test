@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {ApiKey, Message, Messages, User} from "@app/models";
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';
@@ -132,5 +132,14 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
     // navigate to organization settings
     goToOrgSettings() {
         this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');        
+    }
+
+    gotoUser() {
+        const navigationExtras: NavigationExtras = {
+            queryParams: {
+                "userName": this.username
+            }
+        };
+        this.router.navigate(['/admin/user/show'], navigationExtras);
     }
 }
