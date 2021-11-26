@@ -29,7 +29,7 @@
                         Save roles
                     </button>
 
-                    <a routerLink="/admin/user/show/{{user.username}}" class="btn btn-outline-secondary">
+                    <a (click)="gotoUser(user.username)" class="btn btn-outline-secondary">
                         <i class="feather icon-user"></i>
                         Back to user
                     </a>

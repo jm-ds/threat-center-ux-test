@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserUtils } from "@app/admin/user/user-utils";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
 import { Role, User, Message } from "@app/models";
 import { DualListComponent } from "angular-dual-listbox";
 import { UserService } from '@app/services/user.service';
@@ -70,16 +70,34 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
     private saveRoles() {
         this.userService.saveRoles(this.user.username, this.confirmed)
             .subscribe(({ data }) => {
-                this.router.navigate(['/admin/user/show/' + this.user.username],
-                    { state: { messages: [Message.success("Roles added successfully.")] } });
+                const navigationExtras: NavigationExtras = {
+                    state: { messages: [Message.success("Roles added successfully.")] },
+                    queryParams: {
+                        "userName": this.user.username
+                    }
+                }
+                this.router.navigate(['/admin/user/show'], navigationExtras);
             }, (error) => {
                 console.error('User Roles Saving', error);
-                this.router.navigate(['/admin/user/show/' + this.user.username],
-                    { state: { messages: [Message.error("Unexpected error occurred while trying to add roles.")] } });
+                const navigationExtras: NavigationExtras = {
+                    state: { messages: [Message.error("Unexpected error occurred while trying to add roles.")] },
+                    queryParams: {
+                        "userName": this.user.username
+                    }
+                }
             });
     }
 
     ngOnDestroy(): void {
+    }
+
+    gotoUser(userName) {
+        const navigationExtras: NavigationExtras = {
+            queryParams: {
+                "userName": userName
+            }
+        };
+        this.router.navigate(['/admin/user/show'], navigationExtras);
     }
 
 }

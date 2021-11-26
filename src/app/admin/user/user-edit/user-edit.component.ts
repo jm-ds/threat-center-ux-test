@@ -1,9 +1,9 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
-import {Entity, EntityEdge, Message, Messages, Role, User} from "@app/models";
-import {ActivatedRoute, Router} from "@angular/router";
-import {DualListComponent} from "angular-dual-listbox";
-import {IOption} from "ng-select";
-import {AuthenticationService} from "@app/security/services";
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { Entity, EntityEdge, Message, Messages, Role, User } from "@app/models";
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
+import { DualListComponent } from "angular-dual-listbox";
+import { IOption } from "ng-select";
+import { AuthenticationService } from "@app/security/services";
 import { EntityService } from '@app/services/entity.service';
 import { UserService } from '@app/services/user.service';
 import { RoleService } from '@app/services/role.service';
@@ -27,7 +27,7 @@ export class UserEditComponent implements OnInit {
     entities: Entity[];
     entitySelectItems: Array<IOption>;
     entitySelectSelectedItems: Array<string>;
-    
+
     defaultEntitySelectionItems: Array<IOption>;
     defaultEntityId: string;
 
@@ -35,7 +35,7 @@ export class UserEditComponent implements OnInit {
     constructor(
         private userService: UserService,
         private roleService: RoleService,
-        private entityService:EntityService,
+        private entityService: EntityService,
         protected router: Router,
         private route: ActivatedRoute,
         private el: ElementRef,
@@ -106,7 +106,7 @@ export class UserEditComponent implements OnInit {
 
     private getSelectItemsFromEntities(entities: Array<Entity>): Array<IOption> {
         return entities.map(entity => {
-            return {value: entity.entityId, label: entity.name} as IOption;
+            return { value: entity.entityId, label: entity.name } as IOption;
         });
     }
 
@@ -142,11 +142,27 @@ export class UserEditComponent implements OnInit {
                             this.authService.currentUserSubject.next(currentUser);
                         }
                     }
-                    this.router.navigate(['/admin/user/show/' + username], { state: { messages: [Message.success("User saved successfully.")] } });
+                    const navigationExtras: NavigationExtras = {
+                        state: { messages: [Message.success("User saved successfully.")] },
+                        queryParams: {
+                            "userName": username
+                        }
+                    };
+                    this.router.navigate(['/admin/user/show'], navigationExtras);
                 }, (error) => {
                     console.error('User Saving', error);
-                    this.router.navigate([this.newUser ? '/admin/user/list' : '/admin/user/show/' + username],
-                        { state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] } });
+                    if (this.newUser) {
+                        this.router.navigate(['/admin/user/list'],
+                            { state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] } });
+                    } else {
+                        const navigationExtras: NavigationExtras = {
+                            state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] },
+                            queryParams: {
+                                "userName": username
+                            }
+                        };
+                        this.router.navigate(['/admin/user/show'], navigationExtras);
+                    }
                 });
         }
     }
@@ -171,5 +187,14 @@ export class UserEditComponent implements OnInit {
         if (!this.defaultEntityId) {
             this.defaultEntityId = this.defaultEntitySelectionItems[0].value;
         }
+    }
+
+    gotoUser(userName) {
+        const navigationExtras: NavigationExtras = {
+            queryParams: {
+                "userName": userName
+            }
+        };
+        this.router.navigate(['/admin/user/show'], navigationExtras);
     }
 }
