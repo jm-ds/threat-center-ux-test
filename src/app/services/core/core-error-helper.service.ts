@@ -64,6 +64,7 @@ export class CoreErrorHelperService {
                     } else {
                         if (errObj.status === 500) {
                             console.log("REQUEST PAYLOAD", requestPayload);
+                            dataObjToShow.message = 'Invalid username or password!'
                         }
                         this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
                     }
