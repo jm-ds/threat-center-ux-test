@@ -50,9 +50,9 @@
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'ALL'}" class="dropdown-item"
                     (click)="filterColumn(col.header,'')">All</a>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'TRUE'}" class="dropdown-item"
-                    (click)="filterColumn(col.header,'TRUE')"><i class="far fa-file-import fa-lg"></i>&nbsp;True</a>
+                    (click)="filterColumn(col.header,'TRUE')"><i class="fal fa-file-import fa-lg"></i>&nbsp;True</a>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'FALSE'}" class="dropdown-item"
-                    (click)="filterColumn(col.header,'FALSE')"><i class="far fa-file-export fa-lg"></i>&nbsp;False</a>
+                    (click)="filterColumn(col.header,'FALSE')"><i class="fal fa-file-export fa-lg"></i>&nbsp;False</a>
                 </div>
               </div>
 
@@ -100,10 +100,10 @@
                     (click)="filterColumn(col.header,'')">All</a>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'DECLARED'}" class="dropdown-item"
                     (click)="filterColumn(col.header,'DECLARED')"><i
-                      class="far fa-file-check fa-lg"></i>&nbsp;DECLARED</a>
+                      class="fal fa-file-check fa-lg"></i>&nbsp;DECLARED</a>
                   <a [ngClass]="{'active' : getColumnFilterValue(col.header) === 'DISCOVERED'}" class="dropdown-item"
                     (click)="filterColumn(col.header,'DISCOVERED')"><i
-                      class="far fa-file-search fa-lg"></i>DISCOVERED</a>
+                      class="fal fa-file-search fa-lg"></i>DISCOVERED</a>
                 </div>
               </div>
 
@@ -127,10 +127,10 @@
             <td (click)="gotoDetails(component.node.componentId)">
               <!-- {{component.node.isInternal}} -->
               <div *ngIf="component.node.isInternal" ngbTooltip="{{component.node.isInternal}}">
-                <i class="far fa-file-import fa-lg"></i>
+                <i class="fal fa-file-import fa-lg"></i>
               </div>
               <div *ngIf="!component.node.isInternal" ngbTooltip="{{component.node.isInternal}}">
-                <i class="far fa-file-export fa-lg"></i>
+                <i class="fal fa-file-export fa-lg"></i>
               </div>
             </td>
             <td (click)="gotoDetails(component.node.componentId)">
@@ -162,10 +162,10 @@
               <div *ngIf="!!component.node.componentDiscoveryMethod"
                 [ngSwitch]="component.node.componentDiscoveryMethod">
                 <div *ngSwitchDefault></div>
-                <div *ngSwitchCase="'DECLARED'" ngbTooltip="{{component.node.componentDiscoveryMethod}}"><i
-                    class="far fa-file-check fa-lg"></i></div>
+                <div *ngSwitchCase="'DECLARED'" ngbTooltip="{{component.node.componentDiscoveryMethod}}">
+                  <i class="fal fa-file-check fa-lg"></i></div>
                 <div *ngSwitchCase="'DISCOVERED'" ngbTooltip="{{component.node.componentDiscoveryMethod}}"><i
-                    class="far fa-file-search fa-lg"></i></div>
+                    class="fal fa-file-search fa-lg"></i></div>
               </div>
 
             </td>
