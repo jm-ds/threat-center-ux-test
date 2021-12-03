@@ -39,6 +39,7 @@ export class ProjectService {
                       version
                       versionHash
                       created
+                      status
                       errorMsg
                       log,
                       scanMetricsSummary {
