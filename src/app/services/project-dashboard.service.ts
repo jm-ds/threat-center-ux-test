@@ -82,6 +82,7 @@ export class ProjectDashboardService {
                         version
                         versionHash
                         created,
+                        status,
                         errorMsg,
                         log,
                         scanMetricsSummary {
