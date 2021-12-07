@@ -164,3 +164,37 @@ body::-webkit-scrollbar-thumb {
     // border: 3px solid orange;
     /* creates padding around scroll thumb */
 }
+
+
+
+body .matrix-dash-tab {
+    .nav-tabs {
+        border-bottom: 2px solid #2DC6DB;
+
+        .nav-item {
+            margin: 0 5px 0 0;
+            .nav-link {
+                background: #C5CECF;
+                border-radius: 10px 10px 0px 0px;
+                font-size: 18px;
+                color: #182137;
+                padding: 2px 10px 0;
+                line-height: 38px;
+                min-width: 160px;
+                text-align: center;
+    
+                &.active, &:hover {
+                    background: #2DC6DB !important;
+                    color: #182137 !important;
+                    border: none !important;
+                    line-height: 40px;
+                }
+            }
+        }
+    }
+
+    .tab-pane {
+        padding: 20px 0 0;
+    }
+}
+

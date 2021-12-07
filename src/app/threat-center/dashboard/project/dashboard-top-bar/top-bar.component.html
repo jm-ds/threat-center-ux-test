@@ -1,0 +1,34 @@
+<div class="dash-passed-row">
+    <div class="dash-passed-lt">
+        <div [ngClass]="{'passed-lbl':!mostRecentScan?.node?.errorMsg,'failed-lbl':!!mostRecentScan?.node?.errorMsg}">
+            <span *ngIf="!mostRecentScan?.node?.errorMsg">Passed</span>
+            <span *ngIf="!!mostRecentScan?.node?.errorMsg">Failed</span>
+        </div>
+        <ul class="matrix-data">
+            <li>
+                <small>Scan Date</small>
+                <span>{{mostRecentScan?.node?.created | date}}</span>
+            </li>
+
+            <li>
+                <small>CommitID</small>
+                <span>{{mostRecentScan?.node?.versionHash}}</span>
+            </li>
+
+            <li>
+                <small>Branch</small>
+                <span>{{mostRecentScan?.node?.branch}}</span>
+            </li>
+
+            <li>
+                <small>Scan Tag</small>
+                <span>{{mostRecentScan?.node?.tag}}</span>
+            </li>
+
+            <li>
+                <small>Phase</small>
+                <span>development</span>
+            </li>
+        </ul>
+    </div>
+</div>

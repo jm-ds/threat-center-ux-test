@@ -1,0 +1,59 @@
+.matrix-task-section {
+    display: block;
+    width: 100%;
+    margin: 20px 0 0;
+
+    .tasks-card {
+        padding: 15px 15px 60px;
+        background: #202932;
+        border: 1px solid #888888;
+        height: 100%;
+
+        .task-ttl {
+            margin-bottom: 20px;
+
+            h6 {
+                display: flex;
+                align-items: center;
+                font-size: 20px;
+                color: #fff;
+                font-weight: 400;
+
+                i {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .tasks-listing {
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+
+                    i {
+                        margin-right: 10px;
+                    }
+
+                    &:last-child {
+                        margin: 0;
+                    }
+
+                    a {
+                        font-size: 16px;
+                        color: #2DC6DB;
+
+                        &:hover {
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

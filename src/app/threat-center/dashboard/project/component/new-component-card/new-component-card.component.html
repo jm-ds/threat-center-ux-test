@@ -1,0 +1,172 @@
+<div class="dash-tab-form">
+    <div class="row">
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="nameSearch" type="text" placeholder="Name" name="search-name" class="form-control"
+                    (input)="filterColumn('Name', $event.target.value,'nameSearch')"
+                    [value]="getColumnFilterValue('Name')" />
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <select id="locationSearch" class="form-control custom-select search-dropdown-w"
+                    [value]="getColumnFilterValue('Location')"
+                    (change)="filterColumn('Location', $event.target.value,'locationSearch')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
+                    <option value="DRIVE">DRIVE</option>
+                    <option value="STATIC_REF">STATIC REF</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <select id="typeSearch" class="form-control custom-select search-dropdown-w"
+                    [value]="getColumnFilterValue('Type')"
+                    (change)="filterColumn('Type', $event.target.value,'typeSearch')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="LIBRARY">LIBRARY</option>
+                    <option value="ASSET">ASSET</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <select id="discoverySearch" class="form-control custom-select search-dropdown-w"
+                    [value]="getColumnFilterValue('Discovery')"
+                    (change)="filterColumn('Discovery', $event.target.value,'discoverySearch')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="DECLARED">DECLARED</option>
+                    <option value="DISCOVERED">DISCOVERED</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-xs-12 mt-1">
+            <div class="checkbox checkbox-info d-inline p-0 mr-3">
+                <input type="checkbox" name="checkbox-01" id="checkbox-01"
+                    (change)="filterColumn('Internal', $event.target.value)" [value]="getColumnFilterValue('Internal')">
+                <label for="checkbox-01" class="cr mb-0">Internal</label>
+            </div>
+            <div class="checkbox checkbox-info d-inline p-0 mr-3">
+                <input type="checkbox" name="checkbox-02" id="checkbox-02"
+                    (change)="filterColumn('Vulnerabilities', $event.target.value)"
+                    [value]="getColumnFilterValue('Vulnerabilities')">
+                <label for="checkbox-02" class="cr mb-0">Vulnerabilites</label>
+            </div>
+            <div class="checkbox checkbox-info d-inline p-0 mr-3">
+                <input type="checkbox" name="checkbox-03" id="checkbox-03">
+                <label for="checkbox-03" class="cr mb-0">Fix Available</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+    <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+    </mat-progress-spinner>
+</div>
+
+<div class="vulnerabilites-data" *ngIf="!isDisablePaggination">
+    <ul>
+        <li *ngFor="let componentData of componentDetails.components?.edges" class="data-item high-data-card">
+            <div class="row">
+                <div class="col-sm-3 col-xs-12">
+                    <div class="vulner-data-lt">
+                        <div class="data-tag-ttl">
+                            <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
+                        </div>
+                        <div class="data-row row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Provenance</small> External
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Discovered in</small> {{componentData?.node?.componentLocation}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="data-row row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Type</small> {{componentData?.node?.componentType}}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Discovery Type</small> {{componentData?.node?.componentDiscoveryMethod}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <div class="vulner-data-lt">
+                        
+
+                        <div *ngFor="" class="data-row row mt-0">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Declared License(s)</small>
+                                    <div class="tag-row d-flex align-items-center mt-1"><label
+                                            class="data-tag green-tag  mr-2">Permissive</label>Apache
+                                        License 2.0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="data-row row mt-3">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Discovered License(s)</small>
+                                    <div class="tag-row d-flex align-items-center mt-1"><label
+                                            class="data-tag red-tag  mr-2">Copyleft Strong</label>
+                                        GNU General Public License v2.0 only</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-5 col-xs-12">
+                    <div class="component-fixed-box">
+                        <div class="vulner-data-rt vulner-sts-data">
+                            <div class="info-cols">
+                                <small>Vulnerabilites</small>
+
+                                <ul class="component-vulner-sts mt-2">
+                                    <li class="high"><em>H</em>CVE-2020-13949</li>
+                                    <li class="high"><em>H</em>CVE-2020-13949</li>
+                                    <li class="medium"><em>H</em>CVE-2020-13949</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="vulner-data-rt">
+                            <div class="info-cols">
+                                <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
+                            </div>
+
+                            <div class="action-btns mt-4">
+                                <a href="#" class="data-cta ingore-cta">Ignore</a>
+                                <a href="#" class="data-cta ml-2">Ignore</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="col-sm-12">
+    <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination"
+        [length]="componentDetails.components?.totalCount" [pageSize]="defaultPageSize"
+        [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+    </mat-paginator>
+</div>

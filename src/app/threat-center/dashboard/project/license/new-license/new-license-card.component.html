@@ -1,0 +1,102 @@
+<div class="dash-tab-form">
+    <div class="row">
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="nameSearch" type="text" placeholder="Name" name="search-name" class="form-control"
+                    (input)="filterColumn('Name', $event.target.value,'nameSearch')"
+                    [value]="getColumnFilterValue('Name')" />
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="spdxSearch" type="text" placeholder="SPDX" name="search-name" class="form-control"
+                    (input)="filterColumn('SPDX', $event.target.value,'spdxSearch')"
+                    [value]="getColumnFilterValue('SPDX')" />
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="threatCategorySearch" type="text" placeholder="Threat Category" name="search-name"
+                    class="form-control"
+                    (input)="filterColumn('Threat Category', $event.target.value,'threatCategorySearch')"
+                    [value]="getColumnFilterValue('Threat Category')" />
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="styleSearch" type="text" placeholder="Style" name="search-name" class="form-control"
+                    (input)="filterColumn('Style', $event.target.value,'styleSearch')"
+                    [value]="getColumnFilterValue('Style')" />
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <!-- <div class="form-group">
+                <select class="form-control form-control-sm input-sm ng-select custom-select">
+                    <option>Discovery 1</option>
+                    <option>Discovery 2</option>
+                    <option>Discovery 3</option>
+                    <option>Discovery 4</option>
+                </select>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+    <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+    </mat-progress-spinner>
+</div>
+
+<div *ngIf="!isDisablePaggination" class="vulnerabilites-data">
+    <ul>
+        <li *ngFor="let licenseData of licensesDetails.licenses.edges" class="data-item green-data-card">
+            <div class="row">
+                <div class="col-sm-9 col-xs-12">
+                    <div class="vulner-data-lt">
+                        <div class="data-tag-ttl">
+                            <label class="data-tag green-tag mr-1">{{licenseData?.node?.category}}</label>
+                            <p class="data-hdng">{{licenseData?.node?.name}}</p>
+                        </div>
+                        <div class="data-row">
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>Discovery</small> {{licenseData?.node?.licenseDiscovery}}
+                            </div>
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>Origin</small> {{licenseData?.node?.licenseOrigin}}
+                            </div>
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>Style</small> {{licenseData?.node?.style}}
+                            </div>
+
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>Trust Level</small> {{licenseData?.node?.trustLevel}}
+                            </div>
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>OSI Approved</small> {{licenseData?.node?.isOsiApproved ? 'YES' : 'NO'}}
+                            </div>
+                            <div class="info-cols flex-column align-items-start mr-3">
+                                <small>FSF Libre</small> {{licenseData?.node?.isFsfLibre ? 'YES' : 'NO'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-xs-12">
+                    <div class="vulner-data-rt">
+                        <div class="action-btns mt-4">
+                            <a href="#" class="data-cta ingore-cta">Ignore</a>
+                            <a href="#" class="data-cta ml-2">Annotate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="col-sm-12">
+    <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="totalLicenses"
+        [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+    </mat-paginator>
+</div>

@@ -7,6 +7,7 @@ import { LicenseDetailComponent } from './license';
 import { ScanAssetDetailComponent } from './scanasset';
 import { CanDeactivateGuard } from '@app/security/helpers/auth.guard';
 import { GetProjectData, ProjectDashboardResolver } from '@app/services/project-dashboard.service';
+import { ProjectDashboardComponent } from './project-dashboard.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: ProjectComponent,
+        component: ProjectDashboardComponent,
         canDeactivate: [CanDeactivateGuard],
         resolve: {
           project: GetProjectData,
