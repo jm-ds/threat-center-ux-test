@@ -78,9 +78,10 @@
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value,'attributionSearch')">
                   <option value="ALL" selected>- All -</option>
-                  <option value="REVIEWED">REVIEWED</option>
-                  <option value="IGNORED">IGNORED</option>
+                  <option value="REQUIRED">REQUIRED</option>
+                  <option value="PARTIAL">PARTIAL</option>
                   <option value="COMPLETE">COMPLETE</option>
+                  <option value="REVIEWED_IGNORED">REVIEWED_IGNORED</option>
                 </select>
                 <select *ngIf="col == 'Match Type'" class="form-control" id="matchTypeSearch"
                         [value]="getColumnFilterValue(col)"
