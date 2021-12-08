@@ -17,28 +17,34 @@
 
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <input id="threatCategorySearch" type="text" placeholder="Threat Category" name="search-name"
-                    class="form-control"
-                    (input)="filterColumn('Threat Category', $event.target.value,'threatCategorySearch')"
-                    [value]="getColumnFilterValue('Threat Category')" />
+
+                <select id="threatCategorySearch" class="form-control custom-select"
+                    [value]="getColumnFilterValue('Category')"
+                    (change)="filterColumn('Category', $event.target.value,'threatCategorySearch')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="UNDEFINED">Undefined</option>
+                    <option value="PROPRIETARY_FREE">Proprietary Free</option>
+                    <option value="PUBLIC_DOMAIN">Public Domain</option>
+                    <option value="PROPRIETARY">Proprietary</option>
+                    <option value="PERMISSIVE">Permissive</option>
+                    <option value="COPYLEFT_WEAK">Copyleft Weak</option>
+                    <option value="COPYLEFT_STRONG">Copyleft Strong</option>
+                    <option value="COPYLEFT_PARTIAL">Copyleft Partial</option>
+                    <option value="COPYLEFT_LIMITED">Copyleft Limited</option>
+                    <option value="COPYLEFT">Copyleft</option>
+                </select>
             </div>
         </div>
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <input id="styleSearch" type="text" placeholder="Style" name="search-name" class="form-control"
-                    (input)="filterColumn('Style', $event.target.value,'styleSearch')"
-                    [value]="getColumnFilterValue('Style')" />
-            </div>
-        </div>
-        <div class="col-sm-2 col-xs-12">
-            <!-- <div class="form-group">
-                <select class="form-control form-control-sm input-sm ng-select custom-select">
-                    <option>Discovery 1</option>
-                    <option>Discovery 2</option>
-                    <option>Discovery 3</option>
-                    <option>Discovery 4</option>
+                <select id="discovery" class="form-control custom-select"
+                    [value]="getColumnFilterValue('LicenseDiscovery')"
+                    (change)="filterColumn('LicenseDiscovery', $event.target.value,'discovery')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="DECLARED">DECLARED</option>
+                    <option value="DISCOVERED">DISCOVERED</option>
                 </select>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>
@@ -70,7 +76,7 @@
                             </div>
 
                             <div class="info-cols flex-column align-items-start mr-3">
-                                <small>Trust Level</small> {{licenseData?.node?.trustLevel}}
+                                <small>Trust Level</small> {{getTrustLevelValue(licenseData?.node?.trustLevel)}}
                             </div>
                             <div class="info-cols flex-column align-items-start mr-3">
                                 <small>OSI Approved</small> {{licenseData?.node?.isOsiApproved ? 'YES' : 'NO'}}

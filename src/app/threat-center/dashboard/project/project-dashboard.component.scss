@@ -13,7 +13,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
 
             h6 {
                 font-size: 20px;
@@ -49,6 +49,7 @@
                     justify-content: space-between;
                     margin: 0 0 3px;
                     font-size: 14px;
+                    line-height: 17px;
 
                     &:last-child {
                         margin-bottom: 0;
@@ -56,33 +57,60 @@
 
                     span {
                         color: #fff;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            width: 6px;
+                            height: 6px;
+                            background: #fff;
+                            top: 5px;
+                            left: 0;
+                            border-radius: 50%;
+                        }
 
                         &.red {
-                            color: #FB5B5B;
+                            &:before {
+                                background: #FB5B5B;
+                            }
                         }
 
                         &.orange {
-                            color: #EE8144;
+                            &:before {
+                                background: #EE8144;
+                            }
                         }
 
                         &.yellow {
-                            color: #D2E032;
+                            &:before {
+                                background: #D2E032;
+                            }
                         }
 
                         &.pink {
-                            color: #DE3FD8;
+                            &:before {
+                                background: #DE3FD8;
+                            }
                         }
 
                         &.skyblue {
-                            color: #58C7C0;
+                            &:before {
+                                background: #58C7C0;
+                            }
                         }
 
                         &.lgt-yellow {
-                            color: #C9E282;
+                            &:before {
+                                background: #C9E282;
+                            }
                         }
 
                         &.lgt-green {
-                            color: #26F08F;
+                            &:before {
+                                background: #26F08F;
+                            }
                         }
                     }
 
@@ -90,7 +118,7 @@
                         font-size: 14px;
                         color: #fff;
                         padding-left: 5px;
-                    }
+                    } 
                 }
             }
         }
@@ -370,4 +398,21 @@
 
 .mr-5 {
     margin-right: 5px;
+}
+
+.legend-show-more {
+    display: block;
+    text-align: center;
+    margin: 10px 0 0;
+
+    span {
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
 }

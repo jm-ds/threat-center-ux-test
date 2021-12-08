@@ -73,23 +73,27 @@ perfect-scrollbar[class*="overflowshadowTop"] div[class*="ps--active-y"] {
     overflow-x: inherit;
 }
 
-.CRITICAL{
+.CRITICAL {
     font-weight: 700;
     color: #ff3737 !important;
 }
 
-.HIGH{
+.HIGH {
     color: #ff5252 !important;
 }
-.MEDIUM{
+
+.MEDIUM {
     color: #ffa21d !important;
 }
-.LOW{
+
+.LOW {
     color: #4680ff !important;
 }
-.INFO{
+
+.INFO {
     color: #11c15b !important;
 }
+
 app-nav-content {
     width: 100%;
     float: left;
@@ -173,6 +177,7 @@ body .matrix-dash-tab {
 
         .nav-item {
             margin: 0 5px 0 0;
+
             .nav-link {
                 background: #C5CECF;
                 border-radius: 10px 10px 0px 0px;
@@ -182,12 +187,28 @@ body .matrix-dash-tab {
                 line-height: 38px;
                 min-width: 160px;
                 text-align: center;
-    
-                &.active, &:hover {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .badge {
+                    background: #182137 !important;
+                    border-radius: 8px;
+                    color: #2DC6DB;
+                    margin-left: 5px;
+                }
+
+                &.active,
+                &:hover {
                     background: #2DC6DB !important;
                     color: #182137 !important;
                     border: none !important;
                     line-height: 40px;
+
+                    .badge {
+                        background: #182137 !important;
+                        color: #2DC6DB !important;
+                    }
                 }
             }
         }
@@ -198,3 +219,13 @@ body .matrix-dash-tab {
     }
 }
 
+
+
+.my-custom-class {
+    background: aliceblue !important;
+    font-size: 125%;
+}
+
+.my-custom-class .arrow::after {
+    border-top-color: aliceblue;
+}

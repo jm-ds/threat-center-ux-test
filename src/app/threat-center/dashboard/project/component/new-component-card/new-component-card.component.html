@@ -46,13 +46,12 @@
         <div class="col-sm-4 col-xs-12 mt-1">
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
                 <input type="checkbox" name="checkbox-01" id="checkbox-01"
-                    (change)="filterColumn('Internal', $event.target.value)" [value]="getColumnFilterValue('Internal')">
+                    (change)="filterColumn('Internal', $event.target.value)" [value]="isInternal">
                 <label for="checkbox-01" class="cr mb-0">Internal</label>
             </div>
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
                 <input type="checkbox" name="checkbox-02" id="checkbox-02"
-                    (change)="filterColumn('Vulnerabilities', $event.target.value)"
-                    [value]="getColumnFilterValue('Vulnerabilities')">
+                    (change)="filterColumn('Vulnerabilities', $event.target.value)" [value]="isVul">
                 <label for="checkbox-02" class="cr mb-0">Vulnerabilites</label>
             </div>
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
@@ -86,7 +85,8 @@
 
                             <div class="col-sm-6 col-xs-12">
                                 <div class="info-cols flex-column align-items-start">
-                                    <small>Discovered in</small> {{componentData?.node?.componentLocation}}
+                                    <small>Discovered in</small>
+                                    {{getDiscoverIn(componentData?.node?.componentLocation)}}
                                 </div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-sm-4 col-xs-12">
                     <div class="vulner-data-lt">
-                        
+
 
                         <div *ngFor="" class="data-row row mt-0">
                             <div class="col-sm-12 col-xs-12">
@@ -140,11 +140,42 @@
                             <div class="info-cols">
                                 <small>Vulnerabilites</small>
 
-                                <ul class="component-vulner-sts mt-2">
-                                    <li class="high"><em>H</em>CVE-2020-13949</li>
-                                    <li class="high"><em>H</em>CVE-2020-13949</li>
-                                    <li class="medium"><em>H</em>CVE-2020-13949</li>
+                                <ul class="component-vulner-sts mt-2"
+                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                                    <li class="high"
+                                        *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                        <span *ngIf="i < 3">
+                                            <!-- <em>H</em>
+                                            {{data?.node?.vulnId}} -->
+
+                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                            <ng-template #otherTem> <span
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                            </ng-template>
+                                        </span>
+                                    </li>
                                 </ul>
+                                <p [ngbPopover]="popContent" class="cursor-pointer text-primary"
+                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
+                                    more
+                                </p>
+                                <ng-template #popContent>
+                                    <ul class="component-vulner-sts mt-2"
+                                        *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                                        <li class="high"
+                                            *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                            <ng-template #otherTem> <span
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                            </ng-template>
+                                        </li>
+                                    </ul>
+                                </ng-template>
+                                <p *ngIf="componentData?.node?.vulnerabilities?.edges.length == 0">
+                                    {{componentData?.node?.name}} have no vulnerabilities yet.
+                                </p>
                             </div>
                         </div>
                         <div class="vulner-data-rt">

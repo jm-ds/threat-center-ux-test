@@ -195,7 +195,8 @@ export class ProjectDashboardService {
                             licenseId,
                             name,
                             category,
-                            spdxId
+                            spdxId,
+                            licenseDiscovery
                           }
                         }
                       }

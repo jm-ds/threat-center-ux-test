@@ -33,6 +33,8 @@ export class NewComponentCardComponent implements OnInit {
     timeOutDuration = 1000;
     isDisablePaggination: boolean = false;
 
+    isInternal = false;
+    isVul = false;
     constructor(private projectService: ProjectService,
         private fixService: FixService,
         private router: Router,
@@ -119,7 +121,18 @@ export class NewComponentCardComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
+
     filterColumn(column, value, idElement: string = '') {
+        if (column === 'Internal') {
+            this.isInternal = !this.isInternal;
+            value = this.isInternal ? 'TRUE' : '';
+        }
+
+        if (column === 'Vulnerabilities') {
+            this.isVul = !this.isVul;
+            value = this.isVul ? 'TRUE' : '';
+        }
+
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -141,7 +154,7 @@ export class NewComponentCardComponent implements OnInit {
     getColumnFilterValue(key) {
         let value = this.columnsFilter.get(key);
         if (value === undefined) {
-            if (key === 'Internal' || key === 'Vulnerabilities' || key === 'Location' || key === 'Type' || key === 'Discovery') {
+            if (key === 'Vulnerabilities' || key === 'Location' || key === 'Type' || key === 'Discovery') {
                 return 'ALL';
             } else {
                 return '';
@@ -162,6 +175,24 @@ export class NewComponentCardComponent implements OnInit {
 
     getComponentName(componentData) {
         return !!componentData.node && componentData.node.group ? componentData.node.group + ':' + componentData.node.name + '@' + componentData.node.version : componentData.node.name + '@' + componentData.node.version;
+    }
+
+    getDiscoverIn(str) {
+        let val = '';
+        switch (str) {
+            case 'DEPENDENCY_FILE':
+                val = 'DEPENDENCY FILE';
+                break;
+            case 'DRIVE':
+                val = 'DRIVE';
+                break;
+            case 'STATIC_REF':
+                val = 'STATIC REF';
+                break;
+            default:
+                break;
+        }
+        return val;
     }
 
     private makeFilterMapForService() {

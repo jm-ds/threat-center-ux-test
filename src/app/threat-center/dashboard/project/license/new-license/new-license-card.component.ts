@@ -134,10 +134,30 @@ export class NewLicenseCardComponent implements OnInit {
     getColumnFilterValue(key) {
         let value = this.columnsFilter.get(key);
         if (value === undefined) {
-            return '';
+            if (key === 'LicenseDiscovery' || key === 'Category') {
+                return 'ALL';
+            } else {
+                return '';
+            }
+
         } else {
             return value;
         }
+    }
+
+    getTrustLevelValue(level) {
+        let val = '';
+        switch (level) {
+            case 'LEVEL_1':
+                val = 'Original repo license'
+                break;
+            case 'LEVEL_2':
+                val = 'Context relevant license'
+                break;
+            default:
+                break;
+        }
+        return val
     }
 
     private makeFilterMapForService() {
