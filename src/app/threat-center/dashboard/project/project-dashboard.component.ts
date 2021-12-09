@@ -28,6 +28,7 @@ import { ClipboardDialogComponent } from "./clipboard-dialog/clipboard-dialog.co
 
 export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
+    @ViewChild('ctdTabset', { static: false }) ctdTabset;
     mostRecentScan;
     vulDonutChart;
     colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
@@ -35,7 +36,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     isDisablePaggination: boolean = false;
     panelActiveId: string = 'chart-panel';
 
-    vulDonutChartLabel = [{ label: 'Critical', class: 'red' }, { label: 'High', class: 'orange' }, { label: 'Medium', class: 'yellow' }, { label: 'Low', class: 'pink' }, { label: 'Medium', class: 'skyblue' }];
+    vulDonutChartLabel = [{ label: 'Critical', class: 'red' }, { label: 'High', class: 'orange' }, { label: 'Medium', class: 'yellow' }, { label: 'Low', class: 'pink' }, { label: 'Info', class: 'skyblue' }];
     licenseDonutChartLabel = [{ label: 'Copyleft Limited', class: 'red', prop: 'copyleftLimited' }, { label: 'Copyleft', class: 'red', prop: 'copyleft' }, { label: 'Copyleft Strong', class: 'red', prop: 'copyleftStrong' }, { label: 'Copyleft Weak', class: 'lgt-yellow', prop: 'copyleftWeak' }, { label: 'Permissive', class: 'lgt-green', prop: 'permissive' }, { label: 'Copyleft Partial', class: 'copyleftPartial', prop: 'copyleftPartial' }, { label: 'Custom', class: 'custom', prop: 'custom' }, { label: 'Dual', class: 'dual', prop: 'dual' }];
     assetDonutChartLabel = [{ label: 'Unique', class: 'critical' }, { label: 'Embedded', class: 'high' }, { label: 'Open Source', class: 'medium' }];
     donutChartConfig;
@@ -899,5 +900,11 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
                 modalRef.componentInstance.message = message;
             });
         }
+    }
+
+
+
+    gotoAsset() {
+        this.ctdTabset.select('assets');
     }
 }

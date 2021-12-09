@@ -81,7 +81,7 @@
 
     <app-policy-compliance></app-policy-compliance>
     <div class="matrix-dash-tab">
-        <ngb-tabset [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
+        <ngb-tabset #ctdTabset="ngbTabset" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
             <ngb-tab id="vulnerabilities">
                 <ng-template ngbTabTitle>Vulnerabilites&nbsp;
                     <span class="badge badge-light">
@@ -112,7 +112,7 @@
                 </ng-template>
                 <ng-template ngbTabContent>
                     <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId"
-                        [obsScan]="licensesScanData"></app-license-new-card>
+                        [obsScan]="licensesScanData" (annotateClick)="gotoAsset()"></app-license-new-card>
                 </ng-template>
             </ngb-tab>
             <ngb-tab id="assets">

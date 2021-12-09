@@ -69,7 +69,8 @@
 
 <div class="vulnerabilites-data" *ngIf="!isDisablePaggination">
     <ul>
-        <li *ngFor="let componentData of componentDetails.components?.edges" class="data-item high-data-card">
+        <li *ngFor="let componentData of componentDetails.components?.edges"
+            class="data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}">
             <div class="row">
                 <div class="col-sm-3 col-xs-12">
                     <div class="vulner-data-lt">
@@ -108,34 +109,26 @@
                 </div>
                 <div class="col-sm-4 col-xs-12">
                     <div class="vulner-data-lt">
-
-
-                        <div *ngFor="" class="data-row row mt-0">
-                            <div class="col-sm-12 col-xs-12">
+                        <div *ngFor="let licenseData of componentData?.node?.licenses?.edges;index as i"
+                            class="data-row row mt-0">
+                            <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
                                 <div class="info-cols flex-column align-items-start">
-                                    <small>Declared License(s)</small>
+                                    <small
+                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
+                                        License(s)</small>
                                     <div class="tag-row d-flex align-items-center mt-1"><label
-                                            class="data-tag green-tag  mr-2">Permissive</label>Apache
-                                        License 2.0</div>
+                                            class="data-tag green-tag  mr-2">{{licenseData?.node?.category}}</label>{{licenseData?.node?.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="data-row row mt-3">
-                            <div class="col-sm-12 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Discovered License(s)</small>
-                                    <div class="tag-row d-flex align-items-center mt-1"><label
-                                            class="data-tag red-tag  mr-2">Copyleft Strong</label>
-                                        GNU General Public License v2.0 only</div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <p class="text-primary cursor-pointer" *ngIf="componentData?.node?.licenses?.edges.length > 2">
+                            more...
+                        </p>
                     </div>
                 </div>
                 <div class="col-sm-5 col-xs-12">
-                    <div class="component-fixed-box">
+                    <div class="component-fixed-box" *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
                         <div class="vulner-data-rt vulner-sts-data">
                             <div class="info-cols">
                                 <small>Vulnerabilites</small>
@@ -145,9 +138,6 @@
                                     <li class="high"
                                         *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
                                         <span *ngIf="i < 3">
-                                            <!-- <em>H</em>
-                                            {{data?.node?.vulnId}} -->
-
                                             <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
                                                 class="{{data.node.severity}}">{{data.node.vulnId}}</b>
                                             <ng-template #otherTem> <span

@@ -47,9 +47,43 @@
                 border-color: #CE6262;
             }
 
-            &.green-data-card {
+            &.PERMISSIVE {
                 border-color: #11C15B;
             }
+
+            &.PUBLIC_DOMAIN {
+                border-color: #11C15B;
+            }
+
+            &.COPYLEFT_STRONG {
+                border-color: #ff5252;
+            }
+
+            &.COPYLEFT_WEAK {
+                border-color: #ffa21d;
+            }
+
+            &.UNDEFINED {
+                border-color: #ffa21d;
+            }
+
+            &.COPYLEFT_PARTIAL {
+                border-color: #ffa21d;
+            }
+
+            &.COPYLEFT_LIMITED {
+                border-color: #ffa21d;
+            }
+
+            &.COPYLEFT {
+                border-color: #ffa21d;
+            }
+
+            &.PROPRIETARY_FREE {
+                border-color: #ffa21d;
+            }
+
+
 
             p {
                 font-size: 15px;
@@ -157,8 +191,8 @@
     text-align: center;
     padding: 0 5px;
     font-size: 14px;
-    color: #029eab;
-    background: #1a4554;
+    // color: #029eab;
+    // background: #1a4554;
     border-radius: 2px;
     margin-bottom: 0;
     flex-shrink: 0;
@@ -178,9 +212,49 @@
         color: #467ff8;
     }
 
-    &.green-tag {
+    &.PERMISSIVE {
         background: rgba(17, 204, 17, 0.2);
         color: #11C15B;
+    }
+
+    &.PUBLIC_DOMAIN {
+        background: rgba(17, 204, 17, 0.2);
+        color: #11C15B;
+    }
+
+    &.COPYLEFT_STRONG {
+        color: #ff5252;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.COPYLEFT_WEAK {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.UNDEFINED {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.COPYLEFT_PARTIAL {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.COPYLEFT_LIMITED {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.COPYLEFT {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
+    }
+
+    &.PROPRIETARY_FREE {
+        color: #ffa21d;
+        background: rgba(17, 204, 17, 0.2);
     }
 }
 

@@ -11,6 +11,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { FixComponentDialogComponent } from "../../fix-component-dialog/fix-component-dialog.component";
 import { LicenseDialogComponent } from "../../licenses-common-dialog/license-dialog.component";
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-component-new-cad',
@@ -193,6 +194,18 @@ export class NewComponentCardComponent implements OnInit {
                 break;
         }
         return val;
+    }
+
+    getMaxServity(vulnerabilities) {
+        const groupByValue = _.chain(vulnerabilities.edges).groupBy("node.severity")
+            .map((value, key) => ({ key: key, value: value })).value();
+        if (groupByValue.length >= 1) {
+            const val = groupByValue.reduce((max, obj) => (max.value.length > obj.value.length) ? max : obj);
+            console.log(val.key);
+            return val.key;
+        } else {
+            return '';
+        }
     }
 
     private makeFilterMapForService() {

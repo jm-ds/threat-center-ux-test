@@ -47,6 +47,30 @@
                 border-color: #CE6262;
             }
 
+            &.NONE {
+                border-color: #00acc1;
+            }
+
+            &.INFO {
+                border-color: #11c15b;
+            }
+
+            &.LOW {
+                border-color: #4680ff;
+            }
+
+            &.MEDIUM {
+                border-color: #ffa21d;
+            }
+
+            &.HIGH {
+                border-color: #ff5252;
+            }
+
+            &.CRITICAL {
+                border-color: #ff3737;
+            }
+
             &.green-data-card {
                 border-color: #11C15B;
             }

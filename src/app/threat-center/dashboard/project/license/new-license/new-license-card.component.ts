@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Messages } from "@app/messages/messages";
@@ -20,6 +20,7 @@ import * as _ from 'lodash';
 export class NewLicenseCardComponent implements OnInit {
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
+    @Output() annotateClick = new EventEmitter();
 
     defaultPageSize = 25;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -160,6 +161,10 @@ export class NewLicenseCardComponent implements OnInit {
         return val
     }
 
+    onClickAnnotate() {
+        this.annotateClick.emit();
+    }
+
     private makeFilterMapForService() {
         let filterString = '';
         this.columnsFilter.forEach((val, key) => {
@@ -179,8 +184,9 @@ export class NewLicenseCardComponent implements OnInit {
     }
 
     private calculateLogic() {
-        // const value = _.chain(this.licensesDetails.licenses.edges).groupBy("node.name")
-        //     .map((value, key) => ({ key: key, value: value })).value();
+        this.licensesDetails = _.chain(this.licensesDetails.licenses.edges).groupBy("node.name")
+            .map((value, key) => ({ key: key, value: value })).value();
+        // console.log(value);
         // let originalArray = [];
         // _.each(value, mainValue => {
 
