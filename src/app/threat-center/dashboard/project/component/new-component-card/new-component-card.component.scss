@@ -127,11 +127,11 @@
                 border: 1px solid #888;
 
                 .vulner-data-rt {
-                    width: 40%;
+                    width: 50%;
                     align-items: flex-start;
 
                     &.vulner-sts-data {
-                        width: 60%;
+                        width: 50%;
                     }
                 }
             }
@@ -219,5 +219,17 @@
         color: #2DC6DB;
         margin-right: 5px;
         font-size: 15px;
+    }
+}
+
+.more-link {
+    font-size: 14px;
+    color: #fff;
+    margin: 10px 0 0;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+        color: #2DC6DB;
     }
 }

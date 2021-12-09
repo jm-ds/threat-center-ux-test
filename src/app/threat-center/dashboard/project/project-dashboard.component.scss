@@ -252,11 +252,11 @@
                 border: 1px solid #888;
 
                 .vulner-data-rt {
-                    width: 40%;
+                    width: 50%;
                     align-items: flex-start;
 
                     &.vulner-sts-data {
-                        width: 60%;
+                        width: 50%;
                     }
                 }
             }
@@ -271,130 +271,6 @@
     }
 }
 
-.component-vulner-sts {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-
-    li {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        color: #fff;
-        font-weight: 300;
-        margin-bottom: 5px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        em {
-            font-size: 12px;
-            font-style: normal;
-            color: #fff;
-            border: 1px solid #818181;
-            width: 18px;
-            height: 18px;
-            line-height: 18px;
-            text-align: center;
-            flex-shrink: 0;
-            margin-right: 5px;
-            font-weight: 700;
-        }
-
-        &.high {
-            color: #FF0000;
-
-            em {
-                color: #FF0000;
-            }
-        }
-
-        &.medium {
-            color: #FF9900;
-
-            em {
-                color: #FF9900;
-            }
-        }
-    }
-}
-
-.data-tag {
-    display: inline-block;
-    min-width: 60px;
-    line-height: 28px;
-    text-align: center;
-    padding: 0 5px;
-    font-size: 14px;
-    color: #029eab;
-    background: #1a4554;
-    border-radius: 2px;
-    margin-bottom: 0;
-    flex-shrink: 0;
-
-    &.red-tag {
-        background: rgba(252, 16, 16, 0.2);
-        color: #EC6755;
-    }
-
-    &.blue-tag {
-        background: #1a4554;
-        color: #00acc1;
-    }
-
-    &.purple-tag {
-        background: #283b5b;
-        color: #467ff8;
-    }
-
-    &.green-tag {
-        background: rgba(17, 204, 17, 0.2);
-        color: #11C15B;
-    }
-}
-
-.info-cols {
-    display: flex;
-    font-size: 15px;
-    color: #fff;
-    align-items: center;
-    font-weight: 300;
-
-    small {
-        color: #2DC6DB;
-        margin-right: 5px;
-        font-size: 15px;
-    }
-}
-
-.action-btns {
-    display: flex;
-    align-items: center;
-
-    .data-cta {
-        min-width: 70px;
-        line-height: 36px;
-        text-align: center;
-        padding: 0 10px;
-        color: #fff;
-        background: #2EA54F;
-        font-size: 15px;
-        text-align: center;
-
-        &:hover {
-            background: #128532;
-        }
-
-        &.ingore-cta {
-            background: #818181;
-
-            &:hover {
-                background: #242E38;
-            }
-        }
-    }
-}
 
 .mr-5 {
     margin-right: 5px;

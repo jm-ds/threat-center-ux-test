@@ -72,7 +72,7 @@
         <li *ngFor="let componentData of componentDetails.components?.edges"
             class="data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}">
             <div class="row">
-                <div class="col-sm-3 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                     <div class="vulner-data-lt">
                         <div class="data-tag-ttl">
                             <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
@@ -127,7 +127,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-sm-5 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                     <div class="component-fixed-box" *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
                         <div class="vulner-data-rt vulner-sts-data">
                             <div class="info-cols">
@@ -137,7 +137,8 @@
                                     *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
                                     <li class="high"
                                         *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
-                                        <span *ngIf="i < 3">
+                                        <span class="component-vulner-inn" *ngIf="i < 3">
+                                            <em>V</em>
                                             <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
                                                 class="{{data.node.severity}}">{{data.node.vulnId}}</b>
                                             <ng-template #otherTem> <span
@@ -146,9 +147,9 @@
                                         </span>
                                     </li>
                                 </ul>
-                                <p [ngbPopover]="popContent" class="cursor-pointer text-primary"
+                                <p [ngbPopover]="popContent" class="more-link"
                                     *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
-                                    more
+                                    More
                                 </p>
                                 <ng-template #popContent>
                                     <ul class="component-vulner-sts mt-2"
