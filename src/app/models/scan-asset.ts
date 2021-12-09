@@ -14,6 +14,7 @@ export class ScanAsset {
     matchRepository: Repository;
     matches: ScanAssetMatch[];
     embeddedAssets: any;
+    attributionStatus: string;
 }
 
 export class ScanAssetMatch {
@@ -37,14 +38,12 @@ export class ScanAssetMatchRequest {
 export class AttributeAssetRequestInput {
     readonly scanId: string;
     readonly scanAssetId: string;
-    readonly assetMatchRequests: ScanAssetMatchRequest[];
-    readonly attributeStatus: string;
+    readonly licenseIds: any[];
     readonly attributeComment: string;
-    constructor(scanId: string, scanAssetId: string, assetMatchRequests: ScanAssetMatchRequest[], attributeStatus: string, attributeComment: string) {
+    constructor(scanId: string, scanAssetId: string, licenseIds: any[], attributeComment: string) {
         this.scanId = scanId;
         this.scanAssetId = scanAssetId;
-        this.assetMatchRequests = assetMatchRequests;
-        this.attributeStatus = attributeStatus;
+        this.licenseIds = licenseIds;
         this.attributeComment = attributeComment;
     }
 }

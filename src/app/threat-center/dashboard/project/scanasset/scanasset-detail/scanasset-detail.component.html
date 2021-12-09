@@ -10,17 +10,22 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6">
+    <div class="row" style="margin-bottom:20px">
+      <div>
         <h3>{{sourceAsset.name}}<span style="font-size:15px"></span></h3>
         <span title="Info" class="badge m-r-5 badge-light-primary">Path: </span> {{sourceAsset.workspacePath}}
         <!--Released: <span title="Info" class="badge m-r-5 badge-light-primary">Oct 10, 2017</span>-->
       </div>
     </div>
+    <div *ngIf="sourceAsset.sourceAssetAttribution" class="row">
+      <div class="col-md-6">
+        Licenses attributed by {{sourceAsset.sourceAssetAttribution.attributedBy}} {{sourceAsset.sourceAssetAttribution.attributedDate | date :'MMMM d, y'}} with status: {{sourceAsset.sourceAssetAttribution.attributionStatus}}, and comment:  {{sourceAsset.sourceAssetAttribution.attributedComment}}
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12" style="text-align: right; float: right;" *ngIf="authorizationService.hasPermissions('SCAN_ASSET_EDIT')">
-        <button *ngIf='sourceAsset.embeddedAssets.edges?.length>0' class="btn btn-outline-info mb-1 attribute-btn"
-          (click)="openAttributionModel(attributionModal)" [disabled]="isDisableAttributeLicensebtn">
+        <button *ngIf='needAttribution()' class="btn btn-outline-info mb-1 attribute-btn"
+          (click)="attributionLicensesModal.show()" [disabled]="isDisableAttributeLicensebtn">
           <i class="fas fa-hashtag" style="margin-right:5px"></i>Attribute Licenses
         </button>
       </div>
@@ -32,7 +37,6 @@
 
             <ng-template pTemplate="header" let-columns>
               <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Repository</th>
                 <th>Percent match <i class="badge-light-primary fas fa-question-circle"></i></th>
@@ -44,8 +48,6 @@
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
               <tr>
-                <td class="align-middle"><input type="checkbox" [id]="embeddedAsset.node.assetMatchId" name="selectedAssetMatch" [value]="embeddedAsset.node"
-                  (change)="onSelectedChange(embeddedAsset.node.assetMatchId, embeddedAsset.node.percentMatch, $event.target.checked)"></td>
                 <td class="align-middle" (dblclick)="copyToClipboard(embeddedAsset?.node?.assetMatchId, 'Asset ID copied to clipboard');">{{embeddedAsset.node.name}}</td>
                 <td class="align-middle">
                   <i class="btn-outline-info fab fa-github fa-2x align-middle m-r-5"></i>
@@ -57,7 +59,7 @@
                 <td class="align-middle" *ngIf='embeddedAsset.node.assetSize >= 1024'>{{embeddedAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
                 <td class="align-middle" *ngIf='embeddedAsset.node.assetSize < 1024'>{{embeddedAsset.node.assetSize | number:'1.0-0'}} bytes</td>
                 <td class="align-middle" style="word-spacing: 6px;">
-                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);exampleModalCenter.show()">
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node);assetVersionModal.show()">
                     {{embeddedAsset.node.earliestReleaseVersion}} - {{embeddedAsset.node.latestReleaseVersion}}
                   </a>
                 </td>
@@ -84,7 +86,6 @@
        </perfect-scrollbar>
       </div>
     </div>
-
 
     <!-- Licenses Dialog -->
     <app-ui-modal #licensesModal dialogClass="license-model-dialog modal-dialog-centered popup-Width-fix">
@@ -127,98 +128,116 @@
       </div>
     </app-ui-modal><!-- licensesModal -->
 
-
-    <!-- Asset Releases Dialog -->
-      <app-ui-modal #exampleModalCenter dialogClass="modal-dialog-centered popup-Width-fix">
-        <div class="app-modal-header">
-          <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
-          <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="exampleModalCenter.hide()"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="app-modal-body">
-
-
-          <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
-            <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.matchGroups.edges" [paginator]="false" [rows]="50"
-                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
-                     [autoLayout]="false" [filterDelay]="0" [globalFilterFields]="['name']">
-
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th>Asset ID</th>
-                  <th>Earliest Version/Date</th>
-                  <th>Latest Version/Date</th>
-                  <!--<th>Release Version</th>
-                  <th>Release Date</th>-->
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-release >
-                <tr>
-                  <td>{{release.node.assetMatchId | slice:32}}</td><!--| slice:32-->
-                  <td>{{release.node.earliestReleaseVersion}} / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
-                  <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>
-                  <!--<td>{{release.node.earliestReleaseVersion}}</td>
-                  <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>-->
-                  <!--
-                  <td style="border-left:1px solid gray">
-                    license
-
-                    <div *ngFor="let license of release?.node.licenses.edges">
-                      <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                      <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                      <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                      <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                      <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                      <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-                      <span *ngIf="license.node.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
-                      <a (click)="gotoLicense(license.node.licenseId)">{{license.node.shortName}}</a>
-                    </div>
-                  </td>
-                  -->
-                </tr>
-              </ng-template>
-            </p-table>
-          </perfect-scrollbar>
-
-
-        </div>
-        <div class="app-modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="exampleModalCenter.hide()">Close</button>
-        </div>
-      </app-ui-modal>
-
-
-    <!--<div class="row">
-      <div *ngIf='sourceAsset; else loading' class="col-xl-6">
-        <file-view [repositoryAsset]="sourceAsset"></file-view>
-      </div>
-      <div *ngIf='matchAsset' class="col-xl-6">
-        <file-view [repositoryAsset]="matchAsset"></file-view>
-      </div>
-
-    </div>-->
-
-    <app-simm #simmtool [sourceAsset]="sourceAsset" [matchAsset]="matchAsset"></app-simm>
-
-    <app-ui-modal #attributionModal dialogClass="modal-dialog-centered popup-Width-fix">
+    <!-- Attribution Licenses Dialog -->
+    <app-ui-modal #attributionLicensesModal dialogClass="license-model-dialog modal-dialog-centered popup-Width-fix">
       <div class="app-modal-header">
-        <h5 class="modal-title">Attribute License</h5>
-        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="attributionModal.hide()"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title">Select the licenses to be attributed in the header of this source file</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="attributionLicensesModal.hide()"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="app-modal-body">
-        <label class="font-weight-bolder pt-2">Attribution Status</label>
-        <select name="attributionStatus" [(ngModel)]="attributionStatus"
-        class="form-control mt-2 ng-select" style="overflow-y: auto;" >
-          <option *ngFor="let item of attributionStatuses" [ngValue]="item.code">{{ item.name }}</option>
-        </select>
+        <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
+          <p-table #dt [value]="getSourceAssetMatchLicenses()" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" [scrollable]="false">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th></th>
+                <th>License ID</th>
+                <th>License Name</th>
+                <th>License Category</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-matchLicense >
+              <tr>
+                <td class="align-middle"><input type="checkbox" [id]="matchLicense.licenseId" name="selectedAssetMatch" [value]="matchLicense"
+                                                (change)="onSelectedChange(matchLicense.licenseId, $event.target.checked)"></td>
+                <td>{{matchLicense.licenseId}}</td>
+                <td>{{matchLicense.licenseName}}</td>
+                <td>
+                  <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{matchLicense.licenseCategory}}">
+                        {{matchLicense.licenseCategory.replace("_", " ")}}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
         <label class="font-weight-bolder pt-2 mt-4">Attribution Comment</label>
         <textarea class="form-control mt-2" name="attributionComment" [(ngModel)]="attributionComment"  placeholder="Attribution Comment"></textarea>
       </div>
       <div class="app-modal-footer">
-        <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" (click)="attributeAsset(selectedEmbeddedAsset,attributeProcessExecuteMessageModel);attributionModal.hide();attributeProcessExecuteMessageModel.show()">Attribute</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributionModal.hide()">Close</button>
+        <button type="button" class="btn btn-danger mr-2" data-dismiss="modal"
+                (click)="attributeAsset(selectedEmbeddedAsset, attributionLicensesModal, attributeProcessExecuteMessageModel, true);">
+          Ignore
+        </button>
+        <button type="button" class="btn btn-primary mr-2" data-dismiss="modal"
+                (click)="attributeAsset(selectedEmbeddedAsset, attributionLicensesModal, attributeProcessExecuteMessageModel,  false);">
+          Attribute
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributionLicensesModal.hide()">Close</button>
+      </div>
+    </app-ui-modal><!-- licensesModal -->
+
+    <!-- Asset Releases Dialog -->
+    <app-ui-modal #assetVersionModal dialogClass="modal-dialog-centered popup-Width-fix">
+      <div class="app-modal-header">
+        <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close"
+                (click)="assetVersionModal.hide()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="app-modal-body">
+        <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
+          <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.matchGroups.edges"
+                   [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                   [autoLayout]="false" [filterDelay]="0" [globalFilterFields]="['name']">
+
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>Asset ID</th>
+                <th>Earliest Version/Date</th>
+                <th>Latest Version/Date</th>
+                <!--<th>Release Version</th>
+                <th>Release Date</th>-->
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-release>
+              <tr>
+                <td>{{release.node.assetMatchId | slice:32}}</td><!--| slice:32-->
+                <td>{{release.node.earliestReleaseVersion}}
+                  / {{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>
+                <td>{{release.node.latestReleaseVersion}} / {{release.node.latestReleaseDate | date :'MMMM d, y'}}</td>
+                <!--<td>{{release.node.earliestReleaseVersion}}</td>
+                <td>{{release.node.earliestReleaseDate | date :'MMMM d, y'}}</td>-->
+                <!--
+                <td style="border-left:1px solid gray">
+                  license
+
+                  <div *ngFor="let license of release?.node.licenses.edges">
+                    <span *ngIf="license.node.category === 'Copyleft Strong'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                    <span *ngIf="license.node.category === 'Copyleft Weak'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                    <span *ngIf="license.node.category === 'Copyleft Partial'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                    <span *ngIf="license.node.category === 'Copyleft Limited'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                    <span *ngIf="license.node.category === 'Copyleft'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                    <span *ngIf="license.node.category === 'Permissive'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                    <span *ngIf="license.node.category === 'Proprietary'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
+                    <a (click)="gotoLicense(license.node.licenseId)">{{license.node.shortName}}</a>
+                  </div>
+                </td>
+                -->
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="assetVersionModal.hide()">Close
+        </button>
       </div>
     </app-ui-modal>
+
+    <app-simm #simmtool [sourceAsset]="sourceAsset" [matchAsset]="matchAsset"></app-simm>
 
     <app-ui-modal #attributeProcessExecuteMessageModel>
       <div class="app-modal-header">
