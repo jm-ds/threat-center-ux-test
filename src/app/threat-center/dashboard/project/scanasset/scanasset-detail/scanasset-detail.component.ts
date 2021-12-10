@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {map} from 'rxjs/operators';
-import {NgbModal, NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {AuthenticationService, AuthorizationService} from '@app/security/services';
-import {CoreHelperService} from '@app/services/core/core-helper.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService, AuthorizationService } from '@app/security/services';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import Swal from "sweetalert2";
-import {ScanAsset, ScanAssetMatch} from '@app/models';
-import {ProjectBreadcumsService} from '@app/services/core/project-breadcums.service';
-import {AlertService} from '@app/services/core/alert.service';
-import {User} from '@app/threat-center/shared/models/types';
-import {ClipboardDialogComponent} from '../../clipboard-dialog/clipboard-dialog.component';
-import {ProjectService} from '@app/services/project.service';
-import {RepositoryService} from '@app/services/repository.service';
-import {StateService} from '@app/services/state.service';
+import { ScanAsset, ScanAssetMatch } from '@app/models';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { AlertService } from '@app/services/core/alert.service';
+import { User } from '@app/threat-center/shared/models/types';
+import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialog.component';
+import { ProjectService } from '@app/services/project.service';
+import { RepositoryService } from '@app/services/repository.service';
+import { StateService } from '@app/services/state.service';
 
 
 @Component({
@@ -83,7 +83,10 @@ export class ScanAssetDetailComponent implements OnInit {
                     const repositoryOwner = scanRepository.repositoryOwner;
                     const repositoryName = scanRepository.repositoryName;
                     obsScanAsset.subscribe(obsScanResult => {
-
+                        this.attributionStatus = obsScanResult['attributionStatus'];
+                        if(!!obsScanResult && !!obsScanResult['sourceAssetAttribution'] && this.attributionStatus === 'COMPLETE'){
+                            this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
+                        }
                         this.sourceAsset = obsScanResult;
                         let assetId = this.sourceAsset.originAssetId;
 
@@ -105,8 +108,33 @@ export class ScanAssetDetailComponent implements OnInit {
                     });
                 }
             });
-        this.attributionStatus = "COMPLETE";
+        // this.attributionStatus = "COMPLETE";
         this.initBreadcum();
+    }
+
+    getTextForButton() {
+        return !this.attributionStatus ? 'Attribute Licenses' : 'License Attribution ' + this.getStatus();
+    }
+
+    getStatus() {
+        let status = this.attributionStatus;
+        switch (this.attributionStatus) {
+            case 'REQUIRED':
+                status = 'Required';
+                break;
+            case 'PARTIAL':
+                status = 'Partial';
+                break;
+            case 'COMPLETE':
+                status = 'Complete';
+                break;
+            case 'REVIEWED_IGNORED':
+                status = 'Reviewed Ignored';
+                break;
+            default:
+                break;
+        }
+        return status;
     }
 
     setSelectedEmbeddedAsset(embeddedAsset: any) {
@@ -177,7 +205,7 @@ export class ScanAssetDetailComponent implements OnInit {
                 this.alertService.alertBox('Attribution error', 'License attribution', 'error');
             });
     }
-    
+
     attributeProcessExecutionModel(modelContent) {
         this.alertService.alertConfirm('Do you want to close dialog?', 'You can close modal, attribution process will complete. But if you leave this page you won’t get completion notification message.',
             'question', true, true, '#4680ff', '#6c757d', 'Yes', 'No')
@@ -187,7 +215,7 @@ export class ScanAssetDetailComponent implements OnInit {
                 }
             });
     }
-    
+
     //  selected matches change handler
     onSelectedChange(licenseId, isChecked) {
         if (isChecked) {
@@ -204,7 +232,7 @@ export class ScanAssetDetailComponent implements OnInit {
             }
         }
     }
-    
+
     // Open repository source in (target="_blank")
     openInNewTab(repositoryCode, repositoryOwner, repositoryName) {
         if (repositoryCode == 'GITHUB') {
@@ -238,7 +266,7 @@ export class ScanAssetDetailComponent implements OnInit {
         });
         return licenses;
     }
-    
+
     needAttribution() {
         return this.sourceAsset.embeddedAssets.edges != null &&
             this.sourceAsset.embeddedAssets.edges.length > 0 &&
