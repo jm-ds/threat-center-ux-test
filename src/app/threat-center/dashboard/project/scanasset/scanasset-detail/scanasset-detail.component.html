@@ -17,14 +17,14 @@
         <!--Released: <span title="Info" class="badge m-r-5 badge-light-primary">Oct 10, 2017</span>-->
       </div>
     </div>
-    <div *ngIf="sourceAsset.sourceAssetAttribution" class="row">
+    <!-- <div *ngIf="sourceAsset.sourceAssetAttribution" class="row">
       <div class="col-md-6">
         Licenses attributed by {{sourceAsset.sourceAssetAttribution.attributedBy}} {{sourceAsset.sourceAssetAttribution.attributedDate | date :'MMMM d, y'}} with status: {{sourceAsset.sourceAssetAttribution.attributionStatus}}, and comment:  {{sourceAsset.sourceAssetAttribution.attributedComment}}
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-md-12" style="text-align: right; float: right;" *ngIf="authorizationService.hasPermissions('SCAN_ASSET_EDIT')">
-        <button class="btn btn-outline-info mb-1 attribute-btn"
+        <button *ngIf='needAttribution()' class="btn btn-outline-info mb-1 attribute-btn"
           (click)="attributionLicensesModal.show()" [disabled]="isDisableAttributeLicensebtn">
           <i class="fas fa-hashtag" style="margin-right:5px"></i>{{getTextForButton()}}
         </button>
@@ -136,8 +136,8 @@
       </div>
       <div class="app-modal-body">
         <div *ngIf="sourceAsset.sourceAssetAttribution" class="row" style="margin-bottom: 10px;">
-          <div class="col-md-6">
-            Licenses attributed by {{sourceAsset.sourceAssetAttribution.attributedBy}} {{sourceAsset.sourceAssetAttribution.attributedDate | date :'MMMM d, y'}} with status: {{sourceAsset.sourceAssetAttribution.attributionStatus}}, and comment:  {{sourceAsset.sourceAssetAttribution.attributedComment}}
+          <div class="col-md-8">
+            Licenses attributed by {{sourceAsset.sourceAssetAttribution.attributedBy}} {{sourceAsset.sourceAssetAttribution.attributedDate | date :'MMMM d, y'}} with status: {{sourceAsset.sourceAssetAttribution.attributionStatus}}
           </div>
         </div>
         <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
