@@ -180,7 +180,7 @@ export class ProjectService {
                         version,
                         isInternal,
                         lastInheritedRiskScore,
-                        componentType, 
+                        componentType,
                         componentLocation,
                         componentDiscoveryMethod,
                         licenses {
@@ -436,7 +436,7 @@ export class ProjectService {
                   totalCount
                   edges {
                     node {
-                      componentId, 
+                      componentId,
                       name,
                       group,
                       version,
@@ -490,7 +490,7 @@ export class ProjectService {
                       status,
                       assetType,
                       parentScanAssetId,
-                      attributionStatus, 
+                      attributionStatus,
                       matchType,
                       embeddedAssetPercent,
                       embeddedAssets {
@@ -510,9 +510,9 @@ export class ProjectService {
                     node {
                       scanAssetId
                     }
-                  }    
+                  }
                 }
-            }  
+            }
          }
       `);
   }
@@ -543,7 +543,7 @@ export class ProjectService {
                     version,
                     isInternal,
                     lastInheritedRiskScore,
-                    componentType, 
+                    componentType,
                     componentLocation,
                     componentDiscoveryMethod,
                     licenses {
@@ -570,10 +570,10 @@ export class ProjectService {
                         }
                       }
                     }
-                  }    
+                  }
                 }
-              }  
-            }    
+              }
+            }
           }
         `);
   }
@@ -610,7 +610,7 @@ export class ProjectService {
                     status,
                     assetType,
                     parentScanAssetId,
-                    attributionStatus, 
+                    attributionStatus,
                     matchType,
                     embeddedAssetPercent,
                     embeddedAssets {
@@ -625,7 +625,7 @@ export class ProjectService {
                   }
                 }
               }
-            }    
+            }
           }
         `);
   }
@@ -719,7 +719,7 @@ export class ProjectService {
                   status,
                   assetType,
                   parentScanAssetId,
-                  attributionStatus, 
+                  attributionStatus,
                   matchType,
                   embeddedAssetPercent,
                   embeddedAssets {
@@ -751,13 +751,15 @@ export class ProjectService {
             workspacePath,
             status,
             percentEmbedded,
-
-            sourceAssetAttribution {
-            orgId,
-            scanId,
-            scanAssetId,
             attributionStatus,
-            attributedComment
+            sourceAssetAttribution {
+              orgId,
+              scanId,
+              scanAssetId,
+              attributedBy,
+              attributedDate,
+              attributionStatus,
+              attributedComment,
             },
             embeddedAssets {
               edges {
@@ -796,7 +798,8 @@ export class ProjectService {
                     earliestReleaseDate,
                     latestReleaseDate,
                     earliestReleaseVersion,
-                    latestReleaseVersion
+                    latestReleaseVersion,
+                    needIncludeInCode
                   },
                   releases{
                     edges {
@@ -827,12 +830,8 @@ export class ProjectService {
   }
 
   // send attribute asset graphql mutation
-  attributeAsset(scanId: string, scanAssetId: string, assetMatches: ScanAssetMatch[], attributeStatus: string, attributeComment: string): any {
-    const assetMatchesInput = [];
-    for (let match of assetMatches) {
-      assetMatchesInput.push(new ScanAssetMatchRequest(match.assetMatchId, match.percentMatch));
-    }
-    let attributeAssetRequest = new AttributeAssetRequestInput(scanId, scanAssetId, assetMatchesInput, attributeStatus, attributeComment);
+  attributeAsset(scanId: string, scanAssetId: string, licenses: any[], attributeComment: string): any {
+    let attributeAssetRequest = new AttributeAssetRequestInput(scanId, scanAssetId, licenses, attributeComment);
     return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
       attributeAsset(attributeAssetRequest: $attributeAssetRequest)
     }`, { attributeAssetRequest: attributeAssetRequest });
