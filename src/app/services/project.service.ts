@@ -751,6 +751,14 @@ export class ProjectService {
             workspacePath,
             status,
             percentEmbedded,
+
+            sourceAssetAttribution {
+            orgId,
+            scanId,
+            scanAssetId,
+            attributionStatus,
+            attributedComment
+            },
             embeddedAssets {
               edges {
                 node {
