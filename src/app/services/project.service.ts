@@ -736,7 +736,7 @@ export class ProjectService {
             }
           }
         }
-      `, 'cache-first');
+      `, 'no-cache');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
@@ -826,7 +826,7 @@ export class ProjectService {
             }
           }
         }
-      `);
+      `,'no-cache');
   }
 
   // send attribute asset graphql mutation
