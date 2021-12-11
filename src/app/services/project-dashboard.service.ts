@@ -148,7 +148,8 @@ export class ProjectDashboardService {
                                 node {
                                   group,
                                   name,
-                                  version
+                                  version,
+                                  componentId
                                 }
                               }
                             }
@@ -196,7 +197,8 @@ export class ProjectDashboardService {
                             licenseId,
                             name,
                             category,
-                            spdxId
+                            spdxId,
+                            licenseDiscovery
                           }
                         }
                       }
@@ -256,7 +258,8 @@ export class ProjectDashboardService {
                       isFsfLibre,
                       licenseDiscovery,
                       licenseOrigin,
-                      trustLevel
+                      trustLevel,
+                      
                     }
                   }
                 }

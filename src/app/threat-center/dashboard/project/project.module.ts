@@ -23,6 +23,16 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClipboardDialogComponent } from './clipboard-dialog/clipboard-dialog.component';
 import { LicenseDialogComponent } from './licenses-common-dialog/license-dialog.component';
+import { ProjectDashboardComponent } from './project-dashboard.component';
+import { ProjectDashboardHeaderComponent } from './dashboard-header/dashboard-header.component';
+import { ProjectDashboardTopbarComponent } from './dashboard-top-bar/top-bar.component';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { PolicyComplianceComponent } from './policyandcompilance/policyandcompilance.component';
+import { NewVulnerabilitiesCardComponent } from './vulnerability/new-vulnerability/new-vulnerability-card.component';
+import { NewComponentCardComponent } from './component/new-component-card/new-component-card.component';
+import { NewLicenseCardComponent } from './license/new-license/new-license-card.component';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -44,10 +54,12 @@ import { LicenseDialogComponent } from './licenses-common-dialog/license-dialog.
     MatPaginatorModule,
     NgbModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgApexchartsModule
   ],
   declarations: [
     ProjectComponent,
+    ProjectDashboardComponent,
     VulnerabilitiesComponent,
     VulnerabilityDetailComponent,
     ComponentsComponent,
@@ -61,7 +73,13 @@ import { LicenseDialogComponent } from './licenses-common-dialog/license-dialog.
     FixComponentDialogComponent,
     ProjectChartComponent,
     ClipboardDialogComponent,
-    LicenseDialogComponent
+    LicenseDialogComponent,
+    ProjectDashboardHeaderComponent,
+    ProjectDashboardTopbarComponent,
+    PolicyComplianceComponent,
+    NewVulnerabilitiesCardComponent,
+    NewComponentCardComponent,
+    NewLicenseCardComponent
   ],
   entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent, ClipboardDialogComponent, LicenseDialogComponent]
 })

@@ -1,7 +1,7 @@
 
 <div class="col-xl-12" *ngIf='obsScanLicense | async as scanLicense;'>
-  <ngb-tabset type="pills" class="tab-card">
-    <ngb-tab title="Summary" >
+  <ngb-tabset type="pills" class="tab-card" #ctdTabset="ngbTabset">
+    <ngb-tab title="Summary"id="tab1" >
       <ng-template ngbTabContent>
         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="align-items-center justify-content-between">
           <div class="row">
@@ -115,7 +115,7 @@
         </app-card>
       </ng-template>
     </ngb-tab>
-    <ngb-tab title="License" >
+    <ngb-tab title="License" id="tab2">
       <ng-template ngbTabContent>
         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="align-items-center">
           <div class="row">
@@ -280,7 +280,7 @@
       </ng-template>
     </ngb-tab>
     <!-- Components -->  
-    <ngb-tab *ngIf="!isFromComponent && scanId">
+    <ngb-tab id="tab3" *ngIf="!isFromComponent && scanId">
       <ng-template ngbTabTitle>Components&nbsp;
         <span class="badge badge-light">
           {{licenseComponents?.totalCount}}
@@ -374,7 +374,7 @@
     </ngb-tab>
 
     <!-- Assets -->
-    <ngb-tab *ngIf="!isFromComponent && scanId">
+    <ngb-tab *ngIf="!isFromComponent && scanId" id="asset">
       <ng-template ngbTabTitle>Assets&nbsp;
         <span class="badge badge-light">
           {{scanAssetDetails?.totalCount}}

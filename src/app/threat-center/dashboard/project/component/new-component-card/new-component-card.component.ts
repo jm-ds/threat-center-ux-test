@@ -1,28 +1,25 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MatPaginator } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { MatPaginator } from "@angular/material";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Scan } from "@app/models";
+import { CoreHelperService } from "@app/services/core/core-helper.service";
+import { UserPreferenceService } from "@app/services/core/user-preference.service";
+import { FixService } from "@app/services/fix.service";
+import { ProjectService } from "@app/services/project.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import { Scan } from '@app/models';
-
-import { LicenseDialogComponent } from '../../licenses-common-dialog/license-dialog.component';
-import { ProjectService } from '@app/services/project.service';
-import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { FixService } from '@app/services/fix.service';
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { FixComponentDialogComponent } from "../../fix-component-dialog/fix-component-dialog.component";
+import { LicenseDialogComponent } from "../../licenses-common-dialog/license-dialog.component";
+import * as _ from 'lodash';
 
 @Component({
-    selector: 'app-components',
-    templateUrl: './components.component.html',
-    styles: [
-        `.multiple-license-text:hover{
-            text-decoration: underline;
-        }`
-    ]
+    selector: 'app-component-new-cad',
+    templateUrl: './new-component-card.component.html',
+    styleUrls: ['./new-component-card.component.scss']
 })
-export class ComponentsComponent implements OnInit {
+
+export class NewComponentCardComponent implements OnInit {
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
@@ -32,43 +29,25 @@ export class ComponentsComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
 
-    columns = [
-        { field: 'name', header: 'Name' },
-        { field: 'group', header: 'Group' },
-        { field: 'version', header: 'Version' },
-        { field: 'isInternal', header: 'Internal' },
-        { field: 'location', header: 'Location' },
-        { field: 'componentType', header: 'Type' },
-        { field: 'discoveryMethod', header: 'Discovery' },
-        { field: 'license.name', header: 'Licenses' },
-        { field: 'vulnerabilities', header: 'Vulnerabilities' }
-    ];
-
     columnsFilter = new Map();
     timeOut;
     timeOutDuration = 1000;
     isDisablePaggination: boolean = false;
 
-    constructor(
-        // private apiService: ApiService,
-        private projectService: ProjectService,
+    isInternal = false;
+    isVul = false;
+    constructor(private projectService: ProjectService,
         private fixService: FixService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
         private modalService: NgbModal,
-        private userPreferenceService: UserPreferenceService) {
-    }
-
-    ngOnInit() {
+        private userPreferenceService: UserPreferenceService) { }
+    ngOnInit(): void {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
-    }
-
-    onclickFilterIcon(valName: string) {
-        this[valName] = !this[valName];
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
@@ -143,7 +122,18 @@ export class ComponentsComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
+
     filterColumn(column, value, idElement: string = '') {
+        if (column === 'Internal') {
+            this.isInternal = !this.isInternal;
+            value = this.isInternal ? 'TRUE' : '';
+        }
+
+        if (column === 'Vulnerabilities') {
+            this.isVul = !this.isVul;
+            value = this.isVul ? 'TRUE' : '';
+        }
+
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {
@@ -165,7 +155,7 @@ export class ComponentsComponent implements OnInit {
     getColumnFilterValue(key) {
         let value = this.columnsFilter.get(key);
         if (value === undefined) {
-            if (key === 'Internal' || key === 'Vulnerabilities' || key === 'Location' || key === 'Type' || key === 'Discovery') {
+            if (key === 'Vulnerabilities' || key === 'Location' || key === 'Type' || key === 'Discovery') {
                 return 'ALL';
             } else {
                 return '';
@@ -182,6 +172,40 @@ export class ComponentsComponent implements OnInit {
     gotoLicense(selectedData) {
         const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
         modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
+    }
+
+    getComponentName(componentData) {
+        return !!componentData.node && componentData.node.group ? componentData.node.group + ':' + componentData.node.name + '@' + componentData.node.version : componentData.node.name + '@' + componentData.node.version;
+    }
+
+    getDiscoverIn(str) {
+        let val = '';
+        switch (str) {
+            case 'DEPENDENCY_FILE':
+                val = 'DEPENDENCY FILE';
+                break;
+            case 'DRIVE':
+                val = 'DRIVE';
+                break;
+            case 'STATIC_REF':
+                val = 'STATIC REF';
+                break;
+            default:
+                break;
+        }
+        return val;
+    }
+
+    getMaxServity(vulnerabilities) {
+        const groupByValue = _.chain(vulnerabilities.edges).groupBy("node.severity")
+            .map((value, key) => ({ key: key, value: value })).value();
+        if (groupByValue.length >= 1) {
+            const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
+            
+            return val.key;
+        } else {
+            return '';
+        }
     }
 
     private makeFilterMapForService() {

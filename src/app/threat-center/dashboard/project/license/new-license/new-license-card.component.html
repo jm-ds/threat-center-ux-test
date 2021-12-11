@@ -1,0 +1,144 @@
+<div class="dash-tab-form">
+    <div class="row">
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="nameSearch" type="text" placeholder="Name" name="search-name" class="form-control"
+                    (input)="filterColumn('Name', $event.target.value,'nameSearch')"
+                    [value]="getColumnFilterValue('Name')" />
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <input id="spdxSearch" type="text" placeholder="SPDX" name="search-name" class="form-control"
+                    (input)="filterColumn('SPDX', $event.target.value,'spdxSearch')"
+                    [value]="getColumnFilterValue('SPDX')" />
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+
+                <select id="threatCategorySearch" class="form-control custom-select"
+                    [value]="getColumnFilterValue('Category')"
+                    (change)="filterColumn('Category', $event.target.value,'threatCategorySearch')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="UNDEFINED">Undefined</option>
+                    <option value="PROPRIETARY_FREE">Proprietary Free</option>
+                    <option value="PUBLIC_DOMAIN">Public Domain</option>
+                    <option value="PROPRIETARY">Proprietary</option>
+                    <option value="PERMISSIVE">Permissive</option>
+                    <option value="COPYLEFT_WEAK">Copyleft Weak</option>
+                    <option value="COPYLEFT_STRONG">Copyleft Strong</option>
+                    <option value="COPYLEFT_PARTIAL">Copyleft Partial</option>
+                    <option value="COPYLEFT_LIMITED">Copyleft Limited</option>
+                    <option value="COPYLEFT">Copyleft</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <div class="form-group">
+                <select id="discovery" class="form-control custom-select"
+                    [value]="getColumnFilterValue('LicenseDiscovery')"
+                    (change)="filterColumn('LicenseDiscovery', $event.target.value,'discovery')">
+                    <option value="ALL" selected>- All -</option>
+                    <option value="DECLARED">DECLARED</option>
+                    <option value="DISCOVERED">DISCOVERED</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+    <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+    </mat-progress-spinner>
+</div>
+
+<div *ngIf="!isDisablePaggination" class="vulnerabilites-data">
+    <ul>
+        <li *ngFor="let licenseData of licensesDetails" class="data-item {{licenseData.value[0].node?.category}}">
+
+            <div class="row">
+                <div class="col-sm-10 col-xs-12">
+                    <div class="vulner-data-lt">
+                        <div (click)="gotoDetails(licenseData.value[0].node?.licenseId,
+                            licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin)">
+                            <div class="data-tag-ttl">
+                                <label class="mr-1">
+                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'"
+                                        title="Copyleft Strong" class="data-tag badge m-r-5 badge-light-danger">COPYLEFT
+                                        STRONG</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'"
+                                        title="Copyleft Weak" class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
+                                        WEAK</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'"
+                                        title="Copyleft Partial"
+                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
+                                        PARTIAL</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'"
+                                        title="Copyleft Limited"
+                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
+                                        LIMITED</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'" title="Copyleft"
+                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'"
+                                        title="Permissive"
+                                        class="data-tag badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'"
+                                        title="Proprietary Free"
+                                        class="data-tag badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'PUBLIC_DOMAIN'"
+                                        title="Permissive" class="data-tag badge m-r-5 badge-light-success f-18">PUBLIC
+                                        DOMAIN</span>
+                                    <span *ngIf="licenseData.value[0].node?.category === 'UNDEFINED'" title="Undefined"
+                                        class="data-tag badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                </label>
+                                <p class="data-hdng">{{licenseData?.key}}</p>
+                            </div>
+                            <div class="data-row">
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>Discovery</small> {{licenseData.value[0].node?.licenseDiscovery}}
+                                </div>
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>Origin</small> {{licenseData.value[0].node?.licenseOrigin}}
+                                </div>
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>Style</small> {{licenseData.value[0].node?.style}}
+                                </div>
+
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>Trust Level</small>
+                                    {{getTrustLevelValue(licenseData.value[0].node?.trustLevel)}}
+                                </div>
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>OSI Approved</small> {{licenseData.value[0].node?.isOsiApproved ? 'YES' :
+                                    'NO'}}
+                                </div>
+                                <div class="info-cols flex-column align-items-start mr-3">
+                                    <small>FSF Libre</small> {{licenseData.value[0].node?.isFsfLibre ? 'YES' : 'NO'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2 col-xs-12">
+                    <div class="vulner-data-rt">
+                        <div class="action-btns mt-4">
+                            <a class="data-cta ingore-cta">Ignore</a>
+                            <a *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'" class="data-cta ml-2"
+                                (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </li>
+    </ul>
+</div>
+
+<div class="col-sm-12">
+    <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="totalLicenses"
+        [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+    </mat-paginator>
+</div>

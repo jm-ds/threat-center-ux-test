@@ -1,0 +1,294 @@
+.matrix-chart {
+    display: block;
+    margin: 20px 0 0;
+
+    .matrix-chart-card {
+        width: 100%;
+        padding: 15px;
+        background: #202932;
+        border: 1px solid #888888;
+        height: 100%;
+
+        .matrix-chart-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+
+            h6 {
+                font-size: 20px;
+                color: #2DC6DB;
+                font-weight: 400;
+                margin: 0;
+            }
+
+            .graph-act {
+                cursor: pointer;
+            }
+        }
+
+        .matrix-chart-btm {
+            width: 100%;
+            display: flex;
+
+            .matrix-chart-blk {
+                width: 50%;
+
+                img {
+                    max-width: 100%;
+                }
+            }
+
+            .matrix-chart-legend {
+                width: 50%;
+                padding-left: 10px;
+
+                p {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin: 0 0 3px;
+                    font-size: 16px;
+                    line-height: 17px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    span {
+                        color: #fff;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            width: 6px;
+                            height: 6px;
+                            background: #fff;
+                            top: 5px;
+                            left: 0;
+                            border-radius: 50%;
+                        }
+
+                        &.red {
+                            &:before {
+                                background: #FB5B5B;
+                            }
+                        }
+
+                        &.orange {
+                            &:before {
+                                background: #EE8144;
+                            }
+                        }
+
+                        &.yellow {
+                            &:before {
+                                background: #D2E032;
+                            }
+                        }
+
+                        &.pink {
+                            &:before {
+                                background: #DE3FD8;
+                            }
+                        }
+
+                        &.skyblue {
+                            &:before {
+                                background: #58C7C0;
+                            }
+                        }
+
+                        &.lgt-yellow {
+                            &:before {
+                                background: #C9E282;
+                            }
+                        }
+
+                        &.lgt-green {
+                            &:before {
+                                background: #26F08F;
+                            }
+                        }
+                    }
+
+                    small {
+                        font-size: 16px;
+                        color: #fff;
+                        padding-left: 5px;
+                    } 
+                }
+            }
+        }
+    }
+}
+
+.more-act {
+    text-align: center;
+    margin: 25px 0 0;
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+
+    a {
+        color: #fff;
+        font-size: 20px;
+
+        &:hover {
+            color: #2DC6DB !important;
+        }
+    }
+}
+
+.matrix-dash-tab {
+    margin: 40px 0 0;
+
+    .dash-tab-form {
+        padding: 15px;
+        background: #445361;
+        border: 1px solid #888888;
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .checkbox {
+            &.checkbox-info {
+                input[type=checkbox]+.cr:before {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 5px;
+                    font-size: 13px;
+                    line-height: 12px;
+                    position: relative;
+                    top: -1px;
+                }
+            }
+        }
+    }
+}
+
+.vulnerabilites-data {
+    margin-top: 20px;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .data-item {
+            // display: flex;
+            // flex-wrap: wrap;
+            padding: 15px;
+            background: #202932;
+            border-left: 5px solid transparent;
+            margin-bottom: 10px;
+            line-height: 20px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &.high-data-card {
+                border-color: #CE6262;
+            }
+
+            &.green-data-card {
+                border-color: #11C15B;
+            }
+
+            p {
+                font-size: 15px;
+                color: #fff;
+                font-weight: 300;
+                margin-bottom: 0;
+                line-height: 20px;
+            }
+
+            .vulner-data-lt {
+                width: 100%;
+                padding-right: 10px;
+
+                .data-tag-ttl {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                }
+
+                .data-code {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #fff;
+                }
+
+                .data-hdng {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #fff;
+                    margin: 0 0 0 10px;
+                }
+            }
+
+            .vulner-data-rt {
+                width: 100%;
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+
+                .info-cols {
+                    flex-direction: column;
+                    font-size: 13px;
+                    align-items: flex-start;
+                    line-height: 18px;
+                }
+            }
+
+            .component-fixed-box {
+                display: flex;
+                padding: 15px;
+                border: 1px solid #888;
+
+                .vulner-data-rt {
+                    width: 50%;
+                    align-items: flex-start;
+
+                    &.vulner-sts-data {
+                        width: 50%;
+                    }
+                }
+            }
+
+            .data-row {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.legend-show-more {
+    display: block;
+    text-align: center;
+    margin: 10px 0 0;
+
+    span {
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}

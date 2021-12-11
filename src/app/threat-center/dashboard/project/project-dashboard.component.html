@@ -1,0 +1,161 @@
+<div *ngIf='obsProject | async as project; '>
+    <project-dashboard-header [obsProject]="obsProject" (openProjectTag)="openProjectTagDialog(projectTags)"></project-dashboard-header>
+    <project-dashboard-top-bar [obsProject]="obsProject"></project-dashboard-top-bar>
+
+    <!-- donut chart for scan data -->
+    <div class="matrix-chart">
+        <div class="row">
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="matrix-chart-card">
+                    <div class="matrix-chart-top">
+                        <h6>Vulnerabilites</h6>
+                        <i class="far fa-chart-bar fa-lg"></i>
+                    </div>
+                    <div class="matrix-chart-btm">
+                        <div class="matrix-chart-blk">
+                            <apx-chart [series]="vulDonutData.series" [fill]="donutChartConfig.fill"
+                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
+                                [labels]="vulDonutData.labels" [legend]="donutChartConfig.legend"
+                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
+                            </apx-chart>
+                        </div>
+                        <div class="matrix-chart-legend">
+                            <p *ngFor="let data of vulDonutChartLabel;let i = index">
+                                <span class="{{data.class}}">{{data.label}}</span>
+                                <small>{{vulDonutData?.series[i]}}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="matrix-chart-card">
+                    <div class="matrix-chart-top">
+                        <h6>License Risk</h6>
+                        <i class="far fa-chart-bar fa-lg"></i>
+                    </div>
+                    <div class="matrix-chart-btm">
+                        <div class="matrix-chart-blk">
+                            <apx-chart [series]="licenseDonutData.series" [fill]="donutChartConfig.fill"
+                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
+                                [labels]="licenseDonutData.labels" [legend]="donutChartConfig.legend"
+                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
+                            </apx-chart>
+                        </div>
+                        <div class="matrix-chart-legend">
+                            <p *ngFor="let data of licenseDonutChartLabel;let i = index">
+                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0"
+                                    class="{{data.class}}">{{data.label}}</span>
+                                <small
+                                    *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+                <div class="matrix-chart-card">
+                    <div class="matrix-chart-top">
+                        <h6>Asset composition</h6>
+                        <i class="far fa-chart-bar fa-lg"></i>
+                    </div>
+                    <div class="matrix-chart-btm">
+                        <div class="matrix-chart-blk">
+                            <apx-chart [series]="assetDonutData.series" [fill]="donutChartConfig.fill"
+                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
+                                [labels]="assetDonutData.labels" [legend]="donutChartConfig.legend"
+                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
+                            </apx-chart>
+                        </div>
+                        <div class="matrix-chart-legend">
+                            <p *ngFor="let data of assetDonutChartLabel;let i = index">
+                                <span class="{{data.class}}">{{data.label}}</span>
+                                <small>{{assetDonutData?.series[i]}}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-policy-compliance></app-policy-compliance>
+    <div class="matrix-dash-tab">
+        <ngb-tabset #ctdTabset="ngbTabset" [activeId]="stateService.project_tabs_selectedTab"
+            (tabChange)="onTabChange($event)">
+            <ngb-tab id="vulnerabilities">
+                <ng-template ngbTabTitle>Vulnerabilites&nbsp;
+                    <span class="badge badge-light">
+                        {{vulnerabilityCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-vulnerabilities-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
+                    </app-vulnerabilities-card>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="components">
+                <ng-template ngbTabTitle>Components&nbsp;
+                    <span class="badge badge-light">
+                        {{componentCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
+                        [obsScan]="componentScanData"></app-component-new-cad>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="licenses">
+                <ng-template ngbTabTitle>Licenses&nbsp;
+                    <span class="badge badge-light">
+                        {{licensesCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"
+                        (annotateClick)="gotoAsset()"></app-license-new-card>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="assets">
+                <ng-template ngbTabTitle>Assets&nbsp;
+                    <span class="badge badge-light" ngbTooltip="{{assetCountTooltip}}">
+                        {{assetCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
+                        (isAssetStory)="getStory($event)"></app-scanassets>
+                    <p></p>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+    <ng-template #projectTags let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Project Tags</h4>
+        </div>
+        <div class="modal-body">
+            <mat-chip-list #tagList>
+                <mat-chip *ngFor="let tag of project.tags" removable="true">
+                    {{tag}}
+                    <button type="button" class="btn btn-icon float-right" title="Remove Tag"
+                        (click)="removeProjectTag(project, tag)" style="color: #c9d0d5; padding: unset;">
+                        <i class="feather icon-x" style="font-weight: 800;"></i>
+                    </button>
+                </mat-chip>
+                <input placeholder="Project Tags..." class="next-dark form-control place-holder"
+                    [matChipInputFor]="tagList" [(ngModel)]="projectTagInputValue"
+                    (matChipInputTokenEnd)="addProjectTagHandler(project, $event)">
+            </mat-chip-list>
+            <div class="hint-block">hit "enter" to add tag then "Save Project Tags" to save your changes</div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="modal.close('click'); setProjectTags(project);">Save
+                Project Tags</button>
+            <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+        </div>
+    </ng-template>
+</div>
