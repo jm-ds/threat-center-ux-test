@@ -630,7 +630,7 @@ export class ProjectService {
         `);
   }
 
-  getVulnerability(vulnerabilityId: string) {
+  getVulnerability(vulnerabilityId: string, orgId: string, scanId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
         query {
             vulnerability(vulnerabilityId:"${vulnerabilityId}") {
@@ -661,7 +661,7 @@ export class ProjectService {
               patchedVersions,
               title,
               subtitle,
-              components{
+              components(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
                 edges {
                   node {
                     componentId,
