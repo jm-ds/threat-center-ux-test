@@ -35,9 +35,9 @@
                         <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
-                <div title="Gitlab login coming soon!" class="col-xl-6">
-                    <a  (click)="externalLogin('gitlab_login', repoTypeDialog)" class="cursor-pointer">
-                        <div class="auth-button"><i class="fab fa-gitlab"></i></div>
+                <div title="Gitlab login" class="col-xl-6">
+                    <a  (click)="externalLogin('gitlab_login', repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                        <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
             </div>

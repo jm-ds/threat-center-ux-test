@@ -82,6 +82,7 @@ export class ProjectDashboardService {
                         version
                         versionHash
                         created,
+                        status,
                         errorMsg,
                         log,
                         scanMetricsSummary {
@@ -499,7 +500,7 @@ export class ProjectDashboardService {
   // set project tags
   setProjectTags(projectId: string, tags: string[]): any {
     return this.coreGraphQLService.coreGQLReqForMutation(
-       gql` mutation { setProjectTags(projectId: "${projectId}", tags: "${tags}") {
+      gql` mutation { setProjectTags(projectId: "${projectId}", tags: "${tags}") {
           projectId
       }}`
     );
@@ -516,7 +517,7 @@ export class GetProjectData implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
     private coreHelperService: CoreHelperService,
-    private userPreferenceService:UserPreferenceService) { }
+    private userPreferenceService: UserPreferenceService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -534,8 +535,8 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
     private coreHelperService: CoreHelperService,
-    private userPreferenceService:UserPreferenceService,
-    private alertService:AlertService) { }
+    private userPreferenceService: UserPreferenceService,
+    private alertService: AlertService) { }
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -544,11 +545,16 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
     return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(
         mergeMap((data: any) => {
-          if (!!data.data.project && !!data.data.project.scans.edges[0]) {
-            const res1 = this.projectDashboardService.getAllScanData(data.data.project.scans.edges[0].node.scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+          const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+          let scanId = data.data.project.scans.edges[0].node.scanId;
+          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+            scanId = lastScanSelected.lastSelectedScanId;
+          }
+          if (!!data.data.project && !!scanId) {
+            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
           } else {
-            this.alertService.alertBox("Project data not found!",Messages.commonErrorHeaderText,'error');
+            this.alertService.alertBox("Project data not found!", Messages.commonErrorHeaderText, 'error');
             return EMPTY;
           }
         })
