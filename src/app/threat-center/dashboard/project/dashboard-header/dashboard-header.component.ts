@@ -1,6 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { AuthorizationService } from "@app/security/services";
 import { Project } from "@app/threat-center/shared/models/types";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 
 @Component({
@@ -12,11 +13,18 @@ import { Observable } from "rxjs";
 export class ProjectDashboardHeaderComponent implements OnInit, OnDestroy {
 
     @Input() obsProject: Observable<Project>;
-    constructor(protected authorizationService: AuthorizationService) {
+    @Output() openProjectTag: EventEmitter<any> = new EventEmitter();
+    constructor(protected authorizationService: AuthorizationService, private modalService: NgbModal) {
     }
     ngOnDestroy(): void {
     }
     ngOnInit(): void {
     }
+
+    // open project tags popup
+    openProjectTagDialog(content: any) {
+        this.openProjectTag.emit();
+    }
+
 
 }

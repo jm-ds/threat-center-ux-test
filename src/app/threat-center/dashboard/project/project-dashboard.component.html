@@ -1,5 +1,5 @@
 <div *ngIf='obsProject | async as project; '>
-    <project-dashboard-header [obsProject]="obsProject"></project-dashboard-header>
+    <project-dashboard-header [obsProject]="obsProject" (openProjectTag)="openProjectTagDialog(projectTags)"></project-dashboard-header>
     <project-dashboard-top-bar [obsProject]="obsProject"></project-dashboard-top-bar>
 
     <!-- donut chart for scan data -->
@@ -9,7 +9,7 @@
                 <div class="matrix-chart-card">
                     <div class="matrix-chart-top">
                         <h6>Vulnerabilites</h6>
-                        <i class="graph-act"><img src="/assets/images/graph-icon.svg" alt="Graph"></i>
+                        <i class="far fa-chart-bar fa-lg"></i>
                     </div>
                     <div class="matrix-chart-btm">
                         <div class="matrix-chart-blk">
@@ -33,7 +33,7 @@
                 <div class="matrix-chart-card">
                     <div class="matrix-chart-top">
                         <h6>License Risk</h6>
-                        <i class="graph-act"><img src="/assets/images/graph-icon.svg" alt="Graph"></i>
+                        <i class="far fa-chart-bar fa-lg"></i>
                     </div>
                     <div class="matrix-chart-btm">
                         <div class="matrix-chart-blk">
@@ -45,8 +45,10 @@
                         </div>
                         <div class="matrix-chart-legend">
                             <p *ngFor="let data of licenseDonutChartLabel;let i = index">
-                                <span class="{{data.class}}">{{data.label}}</span>
-                                <small>{{licenseDonutData?.series[i]}}</small>
+                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0"
+                                    class="{{data.class}}">{{data.label}}</span>
+                                <small
+                                    *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
                             </p>
                         </div>
                     </div>
@@ -56,8 +58,8 @@
             <div class="col-lg-4 col-sm-4 col-xs-12">
                 <div class="matrix-chart-card">
                     <div class="matrix-chart-top">
-                        <h6>Vulnerabilites</h6>
-                        <i class="graph-act"><img src="/assets/images/graph-icon.svg" alt="Graph"></i>
+                        <h6>Asset composition</h6>
+                        <i class="far fa-chart-bar fa-lg"></i>
                     </div>
                     <div class="matrix-chart-btm">
                         <div class="matrix-chart-blk">
@@ -81,7 +83,8 @@
 
     <app-policy-compliance></app-policy-compliance>
     <div class="matrix-dash-tab">
-        <ngb-tabset #ctdTabset="ngbTabset" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
+        <ngb-tabset #ctdTabset="ngbTabset" [activeId]="stateService.project_tabs_selectedTab"
+            (tabChange)="onTabChange($event)">
             <ngb-tab id="vulnerabilities">
                 <ng-template ngbTabTitle>Vulnerabilites&nbsp;
                     <span class="badge badge-light">
@@ -111,8 +114,8 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId"
-                        [obsScan]="licensesScanData" (annotateClick)="gotoAsset()"></app-license-new-card>
+                    <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"
+                        (annotateClick)="gotoAsset()"></app-license-new-card>
                 </ng-template>
             </ngb-tab>
             <ngb-tab id="assets">
@@ -129,7 +132,6 @@
             </ngb-tab>
         </ngb-tabset>
     </div>
-
     <ng-template #projectTags let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Project Tags</h4>

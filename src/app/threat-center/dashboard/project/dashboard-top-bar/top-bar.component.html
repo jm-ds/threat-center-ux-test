@@ -1,13 +1,21 @@
 <div class="dash-passed-row">
     <div class="dash-passed-lt">
-        <div [ngClass]="{'passed-lbl':!mostRecentScan?.node?.errorMsg,'failed-lbl':!!mostRecentScan?.node?.errorMsg}">
-            <span *ngIf="!mostRecentScan?.node?.errorMsg">Passed</span>
-            <span *ngIf="!!mostRecentScan?.node?.errorMsg">Failed</span>
+        <div
+            [ngClass]="{'passed-lbl':mostRecentScan?.node?.status === 'SUCCESS','failed-lbl':mostRecentScan?.node?.status === 'FAIL','warning-lbl':mostRecentScan?.node?.status === 'WARNING'}">
+            <span class="cursor-pointer"
+                (click)="openLogs(scanError, mostRecentScan?.node?.errorMsg, mostRecentScan?.node?.log)"
+                *ngIf="mostRecentScan?.node?.status === 'SUCCESS'">Passed</span>
+            <span class="cursor-pointer"
+                (click)="openLogs(scanError, mostRecentScan?.node?.errorMsg, mostRecentScan?.node?.log)"
+                *ngIf="mostRecentScan?.node?.status === 'FAIL'">Failed</span>
+            <span class="cursor-pointer"
+                (click)="openLogs(scanError, mostRecentScan?.node?.errorMsg, mostRecentScan?.node?.log)"
+                *ngIf="mostRecentScan?.node?.status === 'WARNING'">WARNINGS</span>
         </div>
         <ul class="matrix-data">
             <li>
                 <small>Scan Date</small>
-                <span>{{mostRecentScan?.node?.created | date}}</span>
+                <span>{{mostRecentScan?.node?.created | date:'medium'}}</span>
             </li>
 
             <li>
@@ -32,3 +40,44 @@
         </ul>
     </div>
 </div>
+
+<ng-template #scanError let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Scan info</h4>
+    </div>
+    <div class="modal-body">
+        <ngb-tabset style="margin-top: 10px;" type="pills">
+            <!-- ERRORS TAB -->
+            <ngb-tab id="scanErrors" *ngIf="!!errorMsg">
+                <ng-template ngbTabTitle>
+                    ERRORS
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <perfect-scrollbar [style.max-height]="'500px'"
+                        [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+                        <div style="display: inline-block; margin-top: 10px;">
+                            <pre style="text-align: left;color: #fff;">{{errorMsg}}</pre>
+                        </div>
+                    </perfect-scrollbar>
+                </ng-template>
+            </ngb-tab>
+            <!-- LOGS TAB -->
+            <ngb-tab id="scanLogs" *ngIf="!!log">
+                <ng-template ngbTabTitle>
+                    LOG
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <perfect-scrollbar [style.max-height]="'500px'"
+                        [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+                        <div style="display: inline-block; margin-top: 10px;">
+                            <pre style="text-align: left;color: #fff;">{{log}}</pre>
+                        </div>
+                    </perfect-scrollbar>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+    </div>
+</ng-template>

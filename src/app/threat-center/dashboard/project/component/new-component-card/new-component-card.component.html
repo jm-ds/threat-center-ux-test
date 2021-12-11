@@ -71,112 +71,116 @@
     <ul>
         <li *ngFor="let componentData of componentDetails.components?.edges"
             class="data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}">
-            <div class="row">
-                <div class="col-sm-4 col-xs-12">
-                    <div class="vulner-data-lt">
-                        <div class="data-tag-ttl">
-                            <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
-                        </div>
-                        <div class="data-row row">
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Provenance</small> External
+            <div class="cursor-pointer" (click)="gotoDetails(componentData?.node?.componentId)">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="vulner-data-lt">
+                            <div class="data-tag-ttl">
+                                <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
+                            </div>
+                            <div class="data-row row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Provenance</small> External
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Discovered in</small>
+                                        {{getDiscoverIn(componentData?.node?.componentLocation)}}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Discovered in</small>
-                                    {{getDiscoverIn(componentData?.node?.componentLocation)}}
+                            <div class="data-row row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Type</small> {{componentData?.node?.componentType}}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="data-row row">
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Type</small> {{componentData?.node?.componentType}}
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Discovery Type</small> {{componentData?.node?.componentDiscoveryMethod}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-xs-12">
-                    <div class="vulner-data-lt">
-                        <div *ngFor="let licenseData of componentData?.node?.licenses?.edges;index as i"
-                            class="data-row row mt-0">
-                            <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small
-                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
-                                        License(s)</small>
-                                    <div class="tag-row d-flex align-items-center mt-1"><label
-                                            class="data-tag green-tag  mr-2">{{licenseData?.node?.category}}</label>{{licenseData?.node?.name}}
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Discovery Type</small> {{componentData?.node?.componentDiscoveryMethod}}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-primary cursor-pointer" *ngIf="componentData?.node?.licenses?.edges.length > 2">
-                            more...
-                        </p>
                     </div>
-                </div>
-                <div class="col-sm-4 col-xs-12">
-                    <div class="component-fixed-box" *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                        <div class="vulner-data-rt vulner-sts-data">
-                            <div class="info-cols">
-                                <small>Vulnerabilites</small>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="vulner-data-lt">
+                            <div *ngFor="let licenseData of componentData?.node?.licenses?.edges;index as i"
+                                class="data-row row mt-0">
+                                <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small
+                                            *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
+                                            License(s)</small>
+                                        <div class="tag-row d-flex align-items-center mt-1"><label
+                                                class="data-tag green-tag  mr-2">{{licenseData?.node?.category}}</label>{{licenseData?.node?.name}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-primary cursor-pointer"
+                                *ngIf="componentData?.node?.licenses?.edges.length > 2">
+                                more...
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="component-fixed-box"
+                            *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                            <div class="vulner-data-rt vulner-sts-data">
+                                <div class="info-cols">
+                                    <small>Vulnerabilites</small>
 
-                                <ul class="component-vulner-sts mt-2"
-                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                                    <li class="high"
-                                        *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
-                                        <span class="component-vulner-inn" *ngIf="i < 3">
-                                            <em>V</em>
-                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
-                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
-                                            <ng-template #otherTem> <span
-                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
-                                            </ng-template>
-                                        </span>
-                                    </li>
-                                </ul>
-                                <p [ngbPopover]="popContent" class="more-link"
-                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
-                                    More
-                                </p>
-                                <ng-template #popContent>
                                     <ul class="component-vulner-sts mt-2"
                                         *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
                                         <li class="high"
                                             *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
-                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
-                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
-                                            <ng-template #otherTem> <span
-                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
-                                            </ng-template>
+                                            <span class="component-vulner-inn" *ngIf="i < 3">
+                                                <em>V</em>
+                                                <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                                <ng-template #otherTem> <span
+                                                        class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                                </ng-template>
+                                            </span>
                                         </li>
                                     </ul>
-                                </ng-template>
-                                <p *ngIf="componentData?.node?.vulnerabilities?.edges.length == 0">
-                                    {{componentData?.node?.name}} have no vulnerabilities yet.
-                                </p>
+                                    <p triggers="mouseenter:mouseleave" [ngbPopover]="popContent" class="more-link"
+                                        *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
+                                        More
+                                    </p>
+                                    <ng-template #popContent>
+                                        <ul class="component-vulner-sts mt-2"
+                                            *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                                            <li class="high"
+                                                *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                                <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                                <ng-template #otherTem> <span
+                                                        class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                                </ng-template>
+                                            </li>
+                                        </ul>
+                                    </ng-template>
+                                    <p *ngIf="componentData?.node?.vulnerabilities?.edges.length == 0">
+                                        {{componentData?.node?.name}} have no vulnerabilities yet.
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="vulner-data-rt">
-                            <div class="info-cols">
-                                <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
-                            </div>
+                            <div class="vulner-data-rt">
+                                <div class="info-cols">
+                                    <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
+                                </div>
 
-                            <div class="action-btns mt-4">
-                                <a href="#" class="data-cta ingore-cta">Ignore</a>
-                                <a href="#" class="data-cta ml-2">Ignore</a>
+                                <div class="action-btns mt-4">
+                                    <a href="#" class="data-cta ingore-cta">Ignore</a>
+                                    <a href="#" class="data-cta ml-2">Ignore</a>
+                                </div>
                             </div>
                         </div>
                     </div>

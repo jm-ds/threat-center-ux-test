@@ -104,11 +104,16 @@ export class NewLicenseCardComponent implements OnInit {
     }
 
     // goto detail Page
-    gotoDetails(lId, licenseDiscovery, licenseOrigin) {
+    gotoDetails(lId, licenseDiscovery, licenseOrigin, isAsset: boolean = false) {
         const entityId = this.route.snapshot.paramMap.get('entityId'),
             projectId = this.route.snapshot.paramMap.get('projectId');
         const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/license/" + lId + "/discovery/" + licenseDiscovery + "/origin/" + licenseOrigin;
-        this.router.navigate([decodeURIComponent(url)]);
+        if (isAsset) {
+            this.router.navigate([decodeURIComponent(url)], { queryParams: { isAsset: 'Yes' } });
+        } else {
+            this.router.navigate([decodeURIComponent(url)]);
+        }
+
     }
 
     filterColumn(column, value, idElement: string = '') {

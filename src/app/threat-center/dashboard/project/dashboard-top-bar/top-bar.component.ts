@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Project } from "@app/models";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 
 @Component({
@@ -14,7 +15,10 @@ export class ProjectDashboardTopbarComponent implements OnInit, OnDestroy {
         this.initMostRecentScan(val);
     }
     mostRecentScan;
-    constructor() {
+    errorMsg: string;
+    log: string;
+
+    constructor(private modalService: NgbModal) {
     }
     ngOnDestroy(): void {
     }
@@ -30,6 +34,13 @@ export class ProjectDashboardTopbarComponent implements OnInit, OnDestroy {
                 console.log(this.mostRecentScan);
             });
         }
+    }
+
+    openLogs(content, errorMsg: string, log: string) {
+        // open logs popup
+        this.errorMsg = errorMsg;
+        this.log = log;
+        this.modalService.open(content, { windowClass: 'md-class', centered: true });
     }
 
 }

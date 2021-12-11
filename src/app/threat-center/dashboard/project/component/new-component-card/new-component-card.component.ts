@@ -200,8 +200,8 @@ export class NewComponentCardComponent implements OnInit {
         const groupByValue = _.chain(vulnerabilities.edges).groupBy("node.severity")
             .map((value, key) => ({ key: key, value: value })).value();
         if (groupByValue.length >= 1) {
-            const val = groupByValue.reduce((max, obj) => (max.value.length > obj.value.length) ? max : obj);
-            console.log(val.key);
+            const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
+            
             return val.key;
         } else {
             return '';

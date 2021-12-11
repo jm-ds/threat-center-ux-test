@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
 import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
 import { License, ScanLicense } from '@app/models';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import {Messages} from "@app/messages/messages";
+import { Messages } from "@app/messages/messages";
 import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
 import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
@@ -21,9 +21,10 @@ import { UserPreferenceService } from '@app/services/core/user-preference.servic
   templateUrl: './license-dimension.component.html',
   styleUrls: ['./license-dimension.component.scss']
 })
-export class LicenseDimensionComponent implements OnInit {
+export class LicenseDimensionComponent implements OnInit,AfterViewInit {
 
   public licenseCols = ['Name', 'Threat'];
+  @ViewChild('ctdTabset', { static: false }) ctdTabset: NgbTabset;
 
   @Input() licenseId: string;
   @Input() licenseDiscovery: string;
@@ -76,8 +77,13 @@ export class LicenseDimensionComponent implements OnInit {
     private fixService: FixService,
     private modalService: NgbModal,
     private coreHelperService: CoreHelperService,
-    private userPreferenceService: UserPreferenceService
+    private userPreferenceService: UserPreferenceService,
+    private route: ActivatedRoute
   ) {
+
+  }
+  ngAfterViewInit(): void {
+    console.log(this.ctdTabset);
   }
 
   ngOnInit() {
@@ -306,7 +312,7 @@ export class LicenseDimensionComponent implements OnInit {
     });
   }
 
-  gotoLicense(selectedData){
+  gotoLicense(selectedData) {
     const modalRef = this.modalService.open(LicenseDialogComponent, { size: 'lg' });
     modalRef.componentInstance.selectedLicenseDetail = { name: selectedData.name, licensesList: selectedData.licenses['edges'] };
   }
