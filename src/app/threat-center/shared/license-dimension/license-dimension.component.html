@@ -317,35 +317,6 @@
                     <td (click)="gotoComponentDetails(component.node.componentId)">{{component.node.version}}</td>
                     <td (click)="gotoComponentDetails(component.node.componentId)">{{!!component.node.componentLocation?component.node.componentLocation.replaceAll('_',' '):''}}</td>
                     <td (click)="gotoComponentDetails(component.node.componentId)">{{!!component.node.componentDiscoveryMethod?component.node.componentDiscoveryMethod.replaceAll('_',' '):''}}</td>
-                    <td>
-                      <ng-container *ngIf="component.node.licenses.edges.length > 0">
-                        <span *ngIf="component.node.licenses.edges.length === 1" (click)="gotoComponentDetails(component.node.componentId)">
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_STRONG'" title="Copyleft Strong"
-                            class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_WEAK'" title="Copyleft Weak"
-                            class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial"
-                            class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited"
-                            class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'COPYLEFT'" title="Copyleft"
-                            class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'PERMISSIVE'" title="Permissive"
-                            class="badge m-r-5 badge-light-success">Permissive</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'PROPRIETARY_FREE'" title="Proprietary Free"
-                            class="badge m-r-5 badge-light-warning">Proprietary Free</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'PUBLIC_DOMAIN'" title="Public Domain"
-                            class="badge m-r-5 badge-light-success">Public Domain</span>
-                          <span *ngIf="component.node.licenses.edges[0].node.category === 'UNDEFINED'" title="Undefined"
-                            class="badge m-r-5 badge-light-warning">Undefined</span>
-                          <span>{{component.node.licenses.edges[0].node.name}}</span>
-                        </span>
-                        <a class="text-primary multiple-license-text" *ngIf="component.node.licenses.edges.length >= 2" (click)="gotoLicense(component.node)">
-                          Multiple Licenses ({{component.node.licenses.edges.length}})
-                        </a>
-                      </ng-container>
-                      <span *ngIf="!component.node.licenses">No License</span>
-                    </td>
                     <td (click)="gotoComponentDetails(component.node.componentId)">
                       <div *ngFor="let vulnerabilityEdge of component.node.vulnerabilities.edges">
                           <span>{{component.node.vulnerabilities.edges[0]?.node.vulnId}}:{{component.node.vulnerabilities.edges[0]?.node.severity}}</span>
@@ -469,7 +440,7 @@
                 <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
                 <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
                 <td>{{scanAsset.node.status}}</td>
-                <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.embeddedAssets.edges.length}} <span *ngIf='scanAsset.node.embeddedAssets.edges[0]'> / {{scanAsset.node.embeddedAssetPercent | number:'1.1-2'}}% </span></td>
+                <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.matchCount}} <span *ngIf='scanAsset.node.matchCount>0'> / {{scanAsset.node.embeddedAssetPercent | number:'1.1-2'}}%</span></td>
                 <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
                 <td *ngIf="scanAsset.node.assetType != 'DIR'">{{!!scanAsset.node.matchType?assetMatchTypeVal2Caption(scanAsset.node.matchType):''}}</td>
                 <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>

@@ -50,7 +50,6 @@ export class LicenseDimensionComponent implements OnInit {
     { field: 'version', header: 'Version' },
     { field: 'location', header: 'Location' },
     { field: 'discoveryMethod', header: 'Discovery' },
-    { field: 'license.name', header: 'Licenses' },
     { field: 'vulnerabilities', header: 'Vulnerabilities' }
   ];
 
@@ -62,9 +61,6 @@ export class LicenseDimensionComponent implements OnInit {
   assetTimeOutDuration = 1000;
   parentScanAssetId = '';
   messages = Messages;
-  obsScanLicenseAssets: Observable<ScanLicense>
-
-
 
   permissions: any[];
   limitations: any[];
@@ -205,9 +201,9 @@ export class LicenseDimensionComponent implements OnInit {
         Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
         undefined, undefined, undefined,
         this.parentScanAssetId, this.makeAssetFilterMapForService())
-        .pipe(map(result => result.data.scanLicense))
+        .pipe(map(result => result.data.scanLicense));
       obsScanLicense.subscribe(scanLicense => {
-        this.scanAssetDetails = scanLicense.scanAssetsTree;;
+        this.scanAssetDetails = scanLicense.scanAssetsTree;
         this.coreHelperService.setFocusOnElement(idElement);
       });
     }, this.assetTimeOutDuration);
@@ -234,7 +230,7 @@ export class LicenseDimensionComponent implements OnInit {
     }
     return scanAssets
       .sort((a, b) => a.node.status.localeCompare(b.node.status))
-      .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+      .sort((a, b) => b.node.matchCount - a.node.matchCount)
       .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
   }
 
@@ -281,7 +277,7 @@ export class LicenseDimensionComponent implements OnInit {
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reloadAssets();
     } else {
-      if (scanAsset.node.embeddedAssets.edges.length >= 1) {
+      if (scanAsset.node.matchCount >= 1) {
         let sAssetId = scanAsset.node.scanAssetId;
         const url = "dashboard/entity/" + this.entityId + '/project/' + this.projectId + '/scan/' + this.scanId + "/scanasset/" + sAssetId;
         this.router.navigate([decodeURIComponent(url)]);

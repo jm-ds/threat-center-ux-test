@@ -187,7 +187,7 @@ export class ProjectDashboardService {
                       version,
                       isInternal,
                       lastInheritedRiskScore,
-                      componentType, 
+                      componentType,
                       componentLocation,
                       componentDiscoveryMethod,
                       licenses {
@@ -260,48 +260,12 @@ export class ProjectDashboardService {
                     }
                   }
                 }
-
-                scanAssetsTree(${parentId}${filterArg}${firstArg}) {
-                  pageInfo {
-                    hasNextPage
-                    hasPreviousPage
-                    startCursor
-                    endCursor
-                  }
-                  totalCount
-                  edges {
-                    node {
-                      name,
-                      size,
-                      assetSize,
-                      scanAssetId,
-                      originAssetId
-                      workspacePath
-                      status,
-                      assetType,
-                      parentScanAssetId,
-                      attributionStatus, 
-                      matchType,
-                      embeddedAssetPercent,
-                      embeddedAssets {
-                        edges {
-                          node {
-                            name,
-                            percentMatch,
-                            assetSize
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-
             }
           }
       `);
   }
 
-  //Get Scan Vulnerabilities
+  // Get Scan Vulnerabilities
   getScanVulnerabilities(scanId: string, defaultPage) {
     return this.coreGraphQLService.coreGQLReqWithQuery<Scan>(gql`
           query {
@@ -371,7 +335,7 @@ export class ProjectDashboardService {
                   version,
                   isInternal,
                   lastInheritedRiskScore,
-                  componentType, 
+                  componentType,
                   componentLocation,
                   componentDiscoveryMethod,
                   licenses {
@@ -453,47 +417,6 @@ export class ProjectDashboardService {
          }
        }
    `);
-  }
-
-  //get assets
-  getScanAssets(scanId: string, defaultPage) {
-    return this.coreGraphQLService.coreGQLReqWithQuery<ScanQuery>(gql`
-      query {
-         scan(scanId:"${scanId}") {
-          scanId
-          scanAssets(first:${defaultPage}) {
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-            totalCount
-            edges {
-              node {
-                name,
-                size,
-                assetSize,
-                scanAssetId,
-                originAssetId
-                workspacePath
-                status,
-                percentEmbedded,
-                embeddedAssets {
-                  edges {
-                    node {
-                      name,
-                      percentMatch,
-                      assetSize
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `);
   }
 
   // set project tags
