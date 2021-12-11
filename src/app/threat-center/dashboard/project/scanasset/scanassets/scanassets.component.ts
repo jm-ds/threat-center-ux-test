@@ -61,7 +61,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
     this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets");
   }
 
-  //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
+  // Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
   checkScanDataExists() {
     // if (!this.obsScan) {
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
@@ -75,7 +75,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   sort(scanAssets: any) {
     return scanAssets
       .sort((a, b) => a.node.status.localeCompare(b.node.status))
-      .sort((a, b) => b.node.embeddedAssets.length - a.node.embeddedAssets.length)
+      .sort((a, b) => b.node.matchCount - a.node.matchCount)
       .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
   }
 
@@ -131,7 +131,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reload();
     } else {
-      if (scanAsset.node.embeddedAssets.edges.length >= 1) {
+      if (scanAsset.node.matchCount >= 1) {
         this.isAssetStory.emit(false);
         let sAssetId = scanAsset.node.scanAssetId;
         const entityId = this.route.snapshot.paramMap.get('entityId');

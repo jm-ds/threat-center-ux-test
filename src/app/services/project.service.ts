@@ -444,20 +444,6 @@ export class ProjectService {
                       lastInheritedRiskScore
                       componentLocation
                       componentDiscoveryMethod
-                      licenses {
-                        edges {
-                          node {
-                            licenseId,
-                            name,
-                            category,
-                            spdxId
-                          }
-                        }
-                      }
-                      resolvedLicense {
-                        licenseId,
-                        name
-                      }
                       vulnerabilities {
                         edges {
                           node {
@@ -493,15 +479,7 @@ export class ProjectService {
                       attributionStatus,
                       matchType,
                       embeddedAssetPercent,
-                      embeddedAssets {
-                        edges {
-                          node {
-                            name,
-                            percentMatch,
-                            assetSize
-                          }
-                        }
-                      }
+                      matchCount
                     }
                   }
                 }
@@ -546,20 +524,6 @@ export class ProjectService {
                     componentType,
                     componentLocation,
                     componentDiscoveryMethod,
-                    licenses {
-                      edges {
-                        node {
-                          licenseId,
-                          name,
-                          category,
-                          spdxId
-                        }
-                      }
-                    }
-                    resolvedLicense {
-                      licenseId,
-                      name
-                    }
                     vulnerabilities {
                       edges {
                         node {
@@ -613,15 +577,7 @@ export class ProjectService {
                     attributionStatus,
                     matchType,
                     embeddedAssetPercent,
-                    embeddedAssets {
-                      edges {
-                        node {
-                          name,
-                          percentMatch,
-                          assetSize
-                        }
-                      }
-                    }
+                    matchCount
                   }
                 }
               }
@@ -722,15 +678,7 @@ export class ProjectService {
                   attributionStatus,
                   matchType,
                   embeddedAssetPercent,
-                  embeddedAssets {
-                    edges {
-                      node {
-                        name,
-                        percentMatch,
-                        assetSize
-                      }
-                    }
-                  }
+                  matchCount
                 }
               }
             }
