@@ -1,5 +1,5 @@
 
-<div class="col-xl-12">
+
     <div *ngIf='obsScan | async as scan;'>
 
       <div style="float:left;clear: both;">
@@ -22,15 +22,13 @@
         <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
         </mat-progress-spinner>
       </div>
-      <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" class="overflowshadow" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+
         <p-table *ngIf="scanAssetDetails" #dt [columns]="columns" [value]="sort(scanAssetDetails.scanAssetsTree.edges)" [paginator]="false" [rows]="50"
                  tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                  [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" sortField="embedded" [sortOrder]="-1">
 
-          <ng-template pTemplate="caption">
-          </ng-template>
 
-          <ng-template pTemplate="header">
+          <ng-template pTemplate="header" >
             <tr>
               <th>Name</th>
               <th>File Size</th>
@@ -139,7 +137,7 @@
             </tr>
           </ng-template>
         </p-table>
-      </perfect-scrollbar>
+
       <div class="col-sm-12">
         <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="scanAssetDetails.scanAssetsTree?.totalCount"
           [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
@@ -148,4 +146,3 @@
     </div>
 
 
-</div>

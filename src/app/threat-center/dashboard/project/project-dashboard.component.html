@@ -96,17 +96,6 @@
                     </app-vulnerabilities-card>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id="components">
-                <ng-template ngbTabTitle>Components&nbsp;
-                    <span class="badge badge-light">
-                        {{componentCount}}
-                    </span>
-                </ng-template>
-                <ng-template ngbTabContent>
-                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
-                        [obsScan]="componentScanData"></app-component-new-cad>
-                </ng-template>
-            </ngb-tab>
             <ngb-tab id="licenses">
                 <ng-template ngbTabTitle>Licenses&nbsp;
                     <span class="badge badge-light">
@@ -118,6 +107,17 @@
                         (annotateClick)="gotoAsset()"></app-license-new-card>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab id="components">
+                <ng-template ngbTabTitle>Components&nbsp;
+                    <span class="badge badge-light">
+                        {{componentCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
+                                           [obsScan]="componentScanData"></app-component-new-cad>
+                </ng-template>
+            </ngb-tab>
             <ngb-tab id="assets">
                 <ng-template ngbTabTitle>Assets&nbsp;
                     <span class="badge badge-light" ngbTooltip="{{assetCountTooltip}}">
@@ -125,8 +125,7 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
-                        (isAssetStory)="getStory($event)"></app-scanassets>
+                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData" (isAssetStory)="getStory($event)"></app-scanassets>
                     <p></p>
                 </ng-template>
             </ngb-tab>
