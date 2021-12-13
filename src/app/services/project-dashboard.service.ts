@@ -265,7 +265,7 @@ export class ProjectDashboardService {
                 }
             }
           }
-      `);
+      `,'no-cache');
   }
 
   // Get Scan Vulnerabilities
