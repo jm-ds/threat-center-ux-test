@@ -67,13 +67,13 @@
         </span>
         <div style="margin-top:20px;text-align: justify;">
           <p>
-            If you used GitHub to log in, you're all set to scan your first project. Threatrix
+            If you used GitHub or Gitlab to log in, you're all set to scan your first project. Threatrix
             supports more than 400 languages and currently supports the following package managers.
           <ul>
             <li>Maven</li>
-            <li>NPM</li>
-            <li>PIP & Poetry</li>
-            <li>Nuget</li>
+            <li>NPM (Node.js v12.0.0 or higher)</li>
+            <li>PIP & Poetry (Python 3.6+)</li>
+            <li>Nuget (.NET Core 2.1, .NET Core 3.1, .NET 5.0 and .NET 6.0)</li>
             <li>More coming very soon..</li>
           </ul>
 
@@ -105,7 +105,7 @@
             Data from child dashboards always propagate to the parent dashboard. Create a hierarchy of
             company divisions, business units, teams, or individual developers who scan their projects
             and automatically share their results with your team. Risk metrics from child entities will
-            also be rolled up to your dashboard to quickly access the risk across your organization.
+            also be rolled up to your dashboard to quickly assess the risk across your organization.
           </p>
             <a [routerLink]="['/admin/entity']">
               <button type="submit" class="btn btn-outline-warning ml-2">
