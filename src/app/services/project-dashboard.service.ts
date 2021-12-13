@@ -265,7 +265,7 @@ export class ProjectDashboardService {
                 }
             }
           }
-      `,'no-cache');
+      `, 'no-cache');
   }
 
   // Get Scan Vulnerabilities
@@ -471,10 +471,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
       .pipe(
         mergeMap((data: any) => {
           const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-          let scanId = data.data.project.scans.edges[0].node.scanId;
-          // if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
-          //   scanId = lastScanSelected.lastSelectedScanId;
-          // }
+          let scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
           if (!!data.data.project && !!scanId) {
             const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);
