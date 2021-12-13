@@ -96,17 +96,6 @@
                     </app-vulnerabilities-card>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id="components">
-                <ng-template ngbTabTitle>Components&nbsp;
-                    <span class="badge badge-light">
-                        {{componentCount}}
-                    </span>
-                </ng-template>
-                <ng-template ngbTabContent>
-                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
-                        [obsScan]="componentScanData"></app-component-new-cad>
-                </ng-template>
-            </ngb-tab>
             <ngb-tab id="licenses">
                 <ng-template ngbTabTitle>Licenses&nbsp;
                     <span class="badge badge-light">
@@ -116,6 +105,17 @@
                 <ng-template ngbTabContent>
                     <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"
                         (annotateClick)="gotoAsset()"></app-license-new-card>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="components">
+                <ng-template ngbTabTitle>Components&nbsp;
+                    <span class="badge badge-light">
+                        {{componentCount}}
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
+                                           [obsScan]="componentScanData"></app-component-new-cad>
                 </ng-template>
             </ngb-tab>
             <ngb-tab id="assets">
