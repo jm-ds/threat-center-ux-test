@@ -147,20 +147,20 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
                 this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
 
                 // if previously any scan selected then get counts of all components, licens eand assets...
-                const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-                if (!!this.stateService.selectedScan.node["scanId"]) {
-                    this.obsProject.subscribe((project: any) => {
-                        const scan = project.scans.edges.find(d => { return d.node.scanId === this.stateService.selectedScan.node["scanId"] });
-                        this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
-                        if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
-                            const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
-                            const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
-                            const unique = !!scan.node.scanMetricsSummary.assetMetrics["unique"] ? scan.node.scanMetricsSummary.assetMetrics["unique"] : '0';
-                            this.assetCount = embededItem + '/' + openSource + '/' + unique;
-                            this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
-                        } else { }
-                    });
-                }
+                // const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+                // if (!!this.stateService.selectedScan.node["scanId"]) {
+                //     this.obsProject.subscribe((project: any) => {
+                //         const scan = project.scans.edges.find(d => { return d.node.scanId === this.stateService.selectedScan.node["scanId"] });
+                //         this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
+                //         if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
+                //             const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
+                //             const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
+                //             const unique = !!scan.node.scanMetricsSummary.assetMetrics["unique"] ? scan.node.scanMetricsSummary.assetMetrics["unique"] : '0';
+                //             this.assetCount = embededItem + '/' + openSource + '/' + unique;
+                //             this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+                //         } else { }
+                //     });
+                // }
             }
         });
 
