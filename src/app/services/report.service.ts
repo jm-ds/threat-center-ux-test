@@ -3,6 +3,9 @@ import { EntityListQuery } from "@app/models";
 import { Apollo } from "apollo-angular";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import {environment} from "../../environments/environment";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {PatchedInfo} from "@app/threat-center/shared/models/types";
 
 @Injectable({
     providedIn: 'root'
@@ -11,12 +14,20 @@ export class ReportService {
 
     constructor(
         private apollo: Apollo,
-        private coreGraphQLService: CoreGraphQLService) {
+        private coreGraphQLService: CoreGraphQLService,
+        private http: HttpClient
+    ) {
     }
 
 
     // return entity list with vulnerabilities
-    getVulnerabilities() {
+    getVulnerabilities2(severity, vulns) {
+      const url = environment.apiUrl + '/vulnerability-state-report';
+      const opts = { params: new HttpParams().set('severity', severity).set('vulns', vulns)};
+      return this.http.get<PatchedInfo>(url, opts).pipe();
+    }
+
+  getVulnerabilities() {
         return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {
           entities {
             edges {
