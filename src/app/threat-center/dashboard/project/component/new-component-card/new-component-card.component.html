@@ -118,7 +118,41 @@
                                             *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
                                             License(s)</small>
                                         <div class="tag-row d-flex align-items-center mt-1"><label
-                                                class="data-tag green-tag  mr-2">{{licenseData?.node?.category}}</label>{{licenseData?.node?.name}}
+                                                class="mr-2">
+                                                <!-- {{licenseData?.node?.category}} -->
+                                                <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
+                                                    title="Copyleft Strong"
+                                                    class="badge m-r-5 badge-light-danger">COPYLEFT
+                                                    STRONG</span>
+                                                <span *ngIf="licenseData?.node?.category === 'COPYLEFT_WEAK'"
+                                                    title="Copyleft Weak"
+                                                    class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                    WEAK</span>
+                                                <span *ngIf="licenseData?.node?.category === 'COPYLEFT_PARTIAL'"
+                                                    title="Copyleft Partial"
+                                                    class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                    PARTIAL</span>
+                                                <span *ngIf="licenseData?.node?.category === 'COPYLEFT_LIMITED'"
+                                                    title="Copyleft Limited"
+                                                    class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                    LIMITED</span>
+                                                <span *ngIf="licenseData?.node?.category === 'COPYLEFT'"
+                                                    title="Copyleft"
+                                                    class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                                <span *ngIf="licenseData?.node?.category === 'PERMISSIVE'"
+                                                    title="Permissive"
+                                                    class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                                <span *ngIf="licenseData?.node?.category === 'PROPRIETARY_FREE'"
+                                                    title="Proprietary Free"
+                                                    class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                                <span *ngIf="licenseData?.node?.category === 'PUBLIC_DOMAIN'"
+                                                    title="Permissive"
+                                                    class="badge m-r-5 badge-light-success f-18">PUBLIC
+                                                    DOMAIN</span>
+                                                <span *ngIf="licenseData?.node?.category === 'UNDEFINED'"
+                                                    title="Undefined"
+                                                    class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                            </label>{{licenseData?.node?.name}}
                                         </div>
                                     </div>
                                 </div>
