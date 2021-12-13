@@ -472,9 +472,9 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
         mergeMap((data: any) => {
           const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
           let scanId = data.data.project.scans.edges[0].node.scanId;
-          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
-            scanId = lastScanSelected.lastSelectedScanId;
-          }
+          // if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId) {
+          //   scanId = lastScanSelected.lastSelectedScanId;
+          // }
           if (!!data.data.project && !!scanId) {
             const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
             return forkJoin([res1]);

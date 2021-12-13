@@ -61,33 +61,34 @@
             <div class="row">
                 <div class="col-sm-10 col-xs-12">
                     <div class="vulner-data-lt">
-                        <div (click)="gotoDetails(licenseData.value[0].node?.licenseId,
+                        <div class="cursor-pointer" (click)="gotoDetails(licenseData.value[0].node?.licenseId,
                             licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin)">
                             <div class="data-tag-ttl">
-                                <label class="mr-1">
+                                <label class="mr-1" style="font-size: 20px;text-align:center;">
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'"
-                                        title="Copyleft Strong" class="data-tag badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                                        title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT
+                                        STRONG</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'"
-                                        title="Copyleft Weak" class="data-tag badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                                        title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                        WEAK</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'"
-                                        title="Copyleft Partial"
-                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
+                                        title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT
                                         PARTIAL</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'"
-                                        title="Copyleft Limited"
-                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                                        title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                        LIMITED</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'" title="Copyleft"
-                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                        class="badge m-r-5 badge-light-warning">COPYLEFT</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'"
-                                        title="Permissive" class="data-tag badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                        title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'"
                                         title="Proprietary Free"
-                                        class="data-tag badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                        class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PUBLIC_DOMAIN'"
-                                        title="Permissive" class="data-tag badge m-r-5 badge-light-success f-18">PUBLIC
+                                        title="Permissive" class="badge m-r-5 badge-light-success f-18">PUBLIC
                                         DOMAIN</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'UNDEFINED'" title="Undefined"
-                                        class="data-tag badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                        class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
                                 </label>
                                 <p class="data-hdng">{{licenseData?.key}}</p>
                             </div>
@@ -119,10 +120,10 @@
                 </div>
 
                 <div class="col-sm-2 col-xs-12">
-                    <div class="vulner-data-rt">
+                    <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
                         <div class="action-btns mt-4">
                             <a class="data-cta ingore-cta">Ignore</a>
-                            <a *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'" class="data-cta ml-2"
+                            <a class="data-cta ml-2"
                                 (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
                         </div>
                     </div>
