@@ -64,24 +64,23 @@
                         <div class="cursor-pointer" (click)="gotoDetails(licenseData.value[0].node?.licenseId,
                             licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin)">
                             <div class="data-tag-ttl">
-                                <label class="mr-1">
+                                <label class="mr-1" style="font-size: 20px;text-align:center;">
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'"
-                                        title="Copyleft Strong" class="data-tag badge m-r-5 badge-light-danger">COPYLEFT
+                                        title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT
                                         STRONG</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'"
-                                        title="Copyleft Weak" class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
+                                        title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT
                                         WEAK</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'"
                                         title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT
                                         PARTIAL</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'"
-                                        title="Copyleft Limited"
-                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                                        title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                        LIMITED</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'" title="Copyleft"
                                         class="badge m-r-5 badge-light-warning">COPYLEFT</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'"
-                                        title="Permissive"
-                                        class="data-tag badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                        title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'"
                                         title="Proprietary Free"
                                         class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>

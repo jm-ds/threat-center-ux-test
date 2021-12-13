@@ -667,7 +667,10 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             this.vulnerabilityCount = data[0].data.scan.vulnerabilities['totalCount'];
             this.componentCount = data[0].data.scan.components['totalCount'];
             // this.assetCount = data[0].data.scan.scanAssetsTree['totalCount'];
-            this.licensesCount = data[0].data.scan.licenses['totalCount'];
+            const licensesDetails = _.chain(data[0].data.scan.licenses.edges).groupBy("node.name")
+                .map((value, key) => ({ key: key, value: value })).value();
+            // this.licensesCount = data[0].data.scan.licenses['totalCount'];
+            this.licensesCount = licensesDetails.length;
         }
     }
 
