@@ -191,7 +191,7 @@ export class NewLicenseCardComponent implements OnInit {
     private calculateLogic() {
         this.licensesDetails = _.chain(this.licensesDetails.licenses.edges).groupBy("node.name")
             .map((value, key) => ({ key: key, value: value })).value();
-            this.totalLicenses = this.licensesDetails;
+            this.totalLicenses = this.licensesDetails.length;
         // console.log(value);
         // let originalArray = [];
         // _.each(value, mainValue => {
