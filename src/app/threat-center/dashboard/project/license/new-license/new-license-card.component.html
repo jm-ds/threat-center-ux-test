@@ -66,24 +66,22 @@
                             <div class="data-tag-ttl">
                                 <label class="mr-1">
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'"
-                                        title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT
+                                        title="Copyleft Strong" class="data-tag badge m-r-5 badge-light-danger">COPYLEFT
                                         STRONG</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'"
-                                        title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                        title="Copyleft Weak" class="data-tag badge m-r-5 badge-light-warning">COPYLEFT
                                         WEAK</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'"
-                                        title="Copyleft Partial"
-                                        class="badge m-r-5 badge-light-warning">COPYLEFT
+                                        title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT
                                         PARTIAL</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'"
                                         title="Copyleft Limited"
-                                        class="badge m-r-5 badge-light-warning">COPYLEFT
-                                        LIMITED</span>
+                                        class="data-tag badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'" title="Copyleft"
                                         class="badge m-r-5 badge-light-warning">COPYLEFT</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'"
                                         title="Permissive"
-                                        class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                        class="data-tag badge m-r-5 badge-light-success">PERMISSIVE</span>
                                     <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'"
                                         title="Proprietary Free"
                                         class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
@@ -96,25 +94,25 @@
                                 <p class="data-hdng">{{licenseData?.key}}</p>
                             </div>
                             <div class="data-row">
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>Discovery</small> {{licenseData.value[0].node?.licenseDiscovery}}
                                 </div>
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>Origin</small> {{licenseData.value[0].node?.licenseOrigin}}
                                 </div>
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>Style</small> {{licenseData.value[0].node?.style}}
                                 </div>
 
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>Trust Level</small>
                                     {{getTrustLevelValue(licenseData.value[0].node?.trustLevel)}}
                                 </div>
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>OSI Approved</small> {{licenseData.value[0].node?.isOsiApproved ? 'YES' :
                                     'NO'}}
                                 </div>
-                                <div class="info-cols flex-column align-items-start mr-3">
+                                <div class="info-cols flex-column align-items-start">
                                     <small>FSF Libre</small> {{licenseData.value[0].node?.isFsfLibre ? 'YES' : 'NO'}}
                                 </div>
                             </div>
@@ -123,7 +121,7 @@
                 </div>
 
                 <div class="col-sm-2 col-xs-12">
-                    <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'" >
+                    <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
                         <div class="action-btns mt-4">
                             <a class="data-cta ingore-cta">Ignore</a>
                             <a class="data-cta ml-2"

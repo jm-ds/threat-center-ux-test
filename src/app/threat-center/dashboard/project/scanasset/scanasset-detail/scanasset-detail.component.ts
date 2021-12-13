@@ -58,56 +58,7 @@ export class ScanAssetDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        // we could use the scanId to load scan, which has the repository,
-        // then use the scanAssetId to load scanAsset.
-        // it's no ideal but will work for the demo.
-        this.scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
-        this.scanId = this.route.snapshot.paramMap.get('scanId');
-        this.projectId = this.route.snapshot.paramMap.get('projectId');
-        // get the scan asset for this page
-        let obsScanAsset = this.projectService.getScanAsset(this.scanId, this.scanAssetId)
-            .pipe(map(result => result.data.scanAsset));
-
-        this.user = this.authService.getFromSessionStorageBasedEnv("currentUser");
-        // https://github.com/threatrix/threat-center-ux/issues/4
-        // Don't attempt to pull data for files that were not ACCEPTED status
-
-        // lookup scan repository(it's attached to scan, not scanasset)
-        this.projectService.getScanRepository(this.scanId)
-            .pipe(map(result => result.data.scan))
-            .subscribe(result => {
-                let scanRepository = result.scanRepository;
-
-                // if we have a repo, pre-load the source asset
-                if (scanRepository) {
-                    const repositoryOwner = scanRepository.repositoryOwner;
-                    const repositoryName = scanRepository.repositoryName;
-                    obsScanAsset.subscribe(obsScanResult => {
-                        this.attributionStatus = obsScanResult['attributionStatus'];
-                        if(!!obsScanResult && !!obsScanResult['sourceAssetAttribution'] && this.attributionStatus === 'COMPLETE'){
-                            this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
-                        }
-                        this.sourceAsset = obsScanResult;
-                        let assetId = this.sourceAsset.originAssetId;
-
-                        // let user = this.authService.getFromStorageBasedEnv("currentUser");
-                        if (!!this.user.repositoryAccounts && !!this.user.repositoryAccounts.githubAccount) {
-                            const accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
-                            console.log("ACCESS TOKEN:", accessToken);
-
-                            if (accessToken) {
-                                console.log("Getting file");
-                                this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
-                                    .subscribe(r => {
-                                        this.sourceAsset.content = atob(r.content);
-                                    });
-                            }
-                        } else {
-                            console.error("Current user hasn't registered Github account");
-                        }
-                    });
-                }
-            });
+        this.loadData();
         // this.attributionStatus = "COMPLETE";
         this.initBreadcum();
     }
@@ -198,6 +149,7 @@ export class ScanAssetDetailComponent implements OnInit {
                 } else {
                     this.alertService.alertBox('Attribution is not required', 'License attribution', 'info');
                 }
+                this.loadData();
             }, (error) => {
                 this.isDisableAttributeLicensebtn = false;
                 Swal.close();
@@ -272,5 +224,58 @@ export class ScanAssetDetailComponent implements OnInit {
             this.sourceAsset.embeddedAssets.edges.length > 0 &&
             this.sourceAsset.attributionStatus != null &&
             this.sourceAsset.attributionStatus !== '';
+    }
+
+    private loadData() {
+        // we could use the scanId to load scan, which has the repository,
+        // then use the scanAssetId to load scanAsset.
+        // it's no ideal but will work for the demo.
+        this.scanAssetId = this.route.snapshot.paramMap.get('scanAssetId');
+        this.scanId = this.route.snapshot.paramMap.get('scanId');
+        this.projectId = this.route.snapshot.paramMap.get('projectId');
+        // get the scan asset for this page
+        let obsScanAsset = this.projectService.getScanAsset(this.scanId, this.scanAssetId)
+            .pipe(map(result => result.data.scanAsset));
+
+        this.user = this.authService.getFromSessionStorageBasedEnv("currentUser");
+        // https://github.com/threatrix/threat-center-ux/issues/4
+        // Don't attempt to pull data for files that were not ACCEPTED status
+
+        // lookup scan repository(it's attached to scan, not scanasset)
+        this.projectService.getScanRepository(this.scanId)
+            .pipe(map(result => result.data.scan))
+            .subscribe(result => {
+                let scanRepository = result.scanRepository;
+
+                // if we have a repo, pre-load the source asset
+                if (scanRepository) {
+                    const repositoryOwner = scanRepository.repositoryOwner;
+                    const repositoryName = scanRepository.repositoryName;
+                    obsScanAsset.subscribe(obsScanResult => {
+                        this.attributionStatus = obsScanResult['attributionStatus'];
+                        if (!!obsScanResult && !!obsScanResult['sourceAssetAttribution'] && this.attributionStatus === 'COMPLETE') {
+                            this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
+                        }
+                        this.sourceAsset = obsScanResult;
+                        let assetId = this.sourceAsset.originAssetId;
+
+                        // let user = this.authService.getFromStorageBasedEnv("currentUser");
+                        if (!!this.user.repositoryAccounts && !!this.user.repositoryAccounts.githubAccount) {
+                            const accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
+                            console.log("ACCESS TOKEN:", accessToken);
+
+                            if (accessToken) {
+                                console.log("Getting file");
+                                this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
+                                    .subscribe(r => {
+                                        this.sourceAsset.content = atob(r.content);
+                                    });
+                            }
+                        } else {
+                            console.error("Current user hasn't registered Github account");
+                        }
+                    });
+                }
+            });
     }
 }

@@ -15,7 +15,7 @@
         <ul class="matrix-data">
             <li>
                 <small>Scan Date</small>
-                <span *ngIf="!!mostRecentScan.node && !!mostRecentScan.node.created">{{mostRecentScan?.node?.created | date:'medium'}}</span>
+                <span *ngIf="!!mostRecentScan.node && !!mostRecentScan.node.created">{{mostRecentScan?.node?.created | date:'MMM d, HH:mm '}}</span>
                 <span *ngIf="!mostRecentScan.node || !mostRecentScan?.node?.created" class="text-center">-</span>
             </li>
 

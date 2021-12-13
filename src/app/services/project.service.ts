@@ -444,20 +444,6 @@ export class ProjectService {
                       lastInheritedRiskScore
                       componentLocation
                       componentDiscoveryMethod
-                      licenses {
-                        edges {
-                          node {
-                            licenseId,
-                            name,
-                            category,
-                            spdxId
-                          }
-                        }
-                      }
-                      resolvedLicense {
-                        licenseId,
-                        name
-                      }
                       vulnerabilities {
                         edges {
                           node {
@@ -493,15 +479,7 @@ export class ProjectService {
                       attributionStatus,
                       matchType,
                       embeddedAssetPercent,
-                      embeddedAssets {
-                        edges {
-                          node {
-                            name,
-                            percentMatch,
-                            assetSize
-                          }
-                        }
-                      }
+                      matchCount
                     }
                   }
                 }
@@ -546,20 +524,6 @@ export class ProjectService {
                     componentType,
                     componentLocation,
                     componentDiscoveryMethod,
-                    licenses {
-                      edges {
-                        node {
-                          licenseId,
-                          name,
-                          category,
-                          spdxId
-                        }
-                      }
-                    }
-                    resolvedLicense {
-                      licenseId,
-                      name
-                    }
                     vulnerabilities {
                       edges {
                         node {
@@ -613,15 +577,7 @@ export class ProjectService {
                     attributionStatus,
                     matchType,
                     embeddedAssetPercent,
-                    embeddedAssets {
-                      edges {
-                        node {
-                          name,
-                          percentMatch,
-                          assetSize
-                        }
-                      }
-                    }
+                    matchCount
                   }
                 }
               }
@@ -630,7 +586,7 @@ export class ProjectService {
         `);
   }
 
-  getVulnerability(vulnerabilityId: string) {
+  getVulnerability(vulnerabilityId: string, orgId: string, scanId: string) {
     return this.coreGraphQLService.coreGQLReq<VulnerabilityQuery>(gql`
         query {
             vulnerability(vulnerabilityId:"${vulnerabilityId}") {
@@ -661,7 +617,7 @@ export class ProjectService {
               patchedVersions,
               title,
               subtitle,
-              components{
+              components(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
                 edges {
                   node {
                     componentId,
@@ -722,21 +678,13 @@ export class ProjectService {
                   attributionStatus,
                   matchType,
                   embeddedAssetPercent,
-                  embeddedAssets {
-                    edges {
-                      node {
-                        name,
-                        percentMatch,
-                        assetSize
-                      }
-                    }
-                  }
+                  matchCount
                 }
               }
             }
           }
         }
-      `, 'cache-first');
+      `, 'no-cache');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
@@ -826,7 +774,7 @@ export class ProjectService {
             }
           }
         }
-      `);
+      `,'no-cache');
   }
 
   // send attribute asset graphql mutation
