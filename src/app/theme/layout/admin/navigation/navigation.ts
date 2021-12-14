@@ -70,58 +70,70 @@ const NavigationItems = [
         url: '/dashboard/licenses',
         icon: 'fas fa-balance-scale',
       },*/
-      // {
-      //   id: 'reports',
-      //   title: 'Reports',
-      //   type: 'collapse',
-      //   icon: 'fas fa-chart-pie',
-      //   children: [
-      //       // <i class="fas fa-flag-checkered"></i>
-      //     {
-      //       id: 'executive-report',
-      //       title: 'Executive',
-      //       icon: 'fas fa-flag-checkered',
-      //       type: 'item',
-      //       url: '/reports/executive',
-      //     },
-      //     {
-      //       id: 'vulnerability-report',
-      //       title: 'Vulnerabilities',
-      //       // icon: 'fas fa-fire-alt',
-      //       icon: 'fas fa-exclamation-triangle',
-      //       type: 'item',
-      //       url: '/reports/vulnerability',
-      //     },
-      //     {
-      //       id: 'license-report',
-      //       title: 'Licenses',
-      //       icon: 'fas fa-balance-scale',
-      //       type: 'item',
-      //       url: '/reports/license',
-      //     },
-      //     {
-      //       id: 'component-report',
-      //       title: 'Components',
-      //       icon: 'fas fa-cubes',
-      //       type: 'item',
-      //       url: '/reports/component',
-      //     },
-      //     {
-      //       id: 'embedded-report',
-      //       title: 'Embedded Assets',
-      //       icon: 'fas fa-code',
-      //       type: 'item',
-      //       url: '/reports/embedded',
-      //     },
-      //     {
-      //       id: 'software-leaks-report',
-      //       title: 'Software leaks',
-      //       icon: 'fas fa-file-export',
-      //       type: 'item',
-      //       url: '/reports/leaks',
-      //     },
-      //   ]
-      // },
+      {
+        id: 'reports',
+        title: 'Reports',
+        type: 'collapse',
+        icon: 'fas fa-chart-pie',
+        children: [
+            // <i class="fas fa-flag-checkered"></i>
+          /*{
+            id: 'executive-report',
+            title: 'Executive',
+            icon: 'fas fa-flag-checkered',
+            type: 'item',
+            url: '/reports/executive',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },*/
+          {
+            id: 'vulnerability-report',
+            title: 'Vulnerabilities',
+            // icon: 'fas fa-fire-alt',
+            icon: 'fas fa-exclamation-triangle',
+            type: 'item',
+            url: '/reports/vulnerability',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },
+          /*{
+            id: 'license-report',
+            title: 'Licenses',
+            icon: 'fas fa-balance-scale',
+            type: 'item',
+            url: '/reports/license',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },
+          {
+            id: 'component-report',
+            title: 'Components',
+            icon: 'fas fa-cubes',
+            type: 'item',
+            url: '/reports/component',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },
+          {
+            id: 'embedded-report',
+            title: 'Embedded Assets',
+            icon: 'fas fa-code',
+            type: 'item',
+            url: '/reports/embedded',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },
+          {
+            id: 'software-leaks-report',
+            title: 'Software leaks',
+            icon: 'fas fa-file-export',
+            type: 'item',
+            url: '/reports/leaks',
+            permissions: ["REPORT_VIEW"],
+            target: false,
+          },*/
+        ]
+      },
       // {
       //   id: "alerts",
       //   title: "Alerts",
