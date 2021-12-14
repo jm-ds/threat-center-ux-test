@@ -9,6 +9,7 @@ import { ProjectService } from "@app/services/project.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import * as _ from 'lodash';
+import { NextConfig } from "@app/app-config";
 
 @Component({
     selector: 'app-license-new-card',
@@ -22,7 +23,7 @@ export class NewLicenseCardComponent implements OnInit {
     @Input() obsScan: Observable<Scan>;
     @Output() annotateClick = new EventEmitter();
 
-    defaultPageSize = 25;
+    defaultPageSize = NextConfig.config.defaultItemPerPage;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     licensesDetails: any;
 
@@ -44,7 +45,7 @@ export class NewLicenseCardComponent implements OnInit {
     ngOnInit(): void {
         console.log("Loading LicensesComponent for scanId: ", this.scanId);
         this.checkScanDataExists();
-        this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+        // this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component

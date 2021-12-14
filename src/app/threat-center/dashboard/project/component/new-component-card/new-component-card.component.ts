@@ -12,6 +12,7 @@ import { map } from "rxjs/operators";
 import { FixComponentDialogComponent } from "../../fix-component-dialog/fix-component-dialog.component";
 import { LicenseDialogComponent } from "../../licenses-common-dialog/license-dialog.component";
 import * as _ from 'lodash';
+import { NextConfig } from "@app/app-config";
 
 @Component({
     selector: 'app-component-new-cad',
@@ -25,7 +26,7 @@ export class NewComponentCardComponent implements OnInit {
     @Input() obsScan: Observable<Scan>;
     newVersion: string;
 
-    defaultPageSize = 25;
+    defaultPageSize = NextConfig.config.defaultItemPerPage;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
 
@@ -47,7 +48,7 @@ export class NewComponentCardComponent implements OnInit {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
         this.checkScanDataExists();
-        this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+        // this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component

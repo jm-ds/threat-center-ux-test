@@ -60,14 +60,14 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         private chartHelperService: ChartHelperService,
         protected authorizationService: AuthorizationService) {
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.scanHelperService.isHighlightNewScanObservable$
-            .subscribe(x => {
-                this.isHighlightNewScan = x;
-                if (x == true) {
-                    // get new scan and highlight it.
-                    this.getProjectScanData();
-                }
-            });
+        // this.scanHelperService.isHighlightNewScanObservable$
+        //     .subscribe(x => {
+        //         this.isHighlightNewScan = x;
+        //         if (x == true) {
+        //             // get new scan and highlight it.
+        //             this.getProjectScanData();
+        //         }
+        //     });
 
         if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
             const state = this.router.getCurrentNavigation().extras.state;
@@ -243,13 +243,15 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             //Taking sacn list to show in scan tab
             this.scanList = project.scans.edges;
             this.projectDetails = project;
-            const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+            // const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
             // this.stateService.selectedScan = !!lastScanSelected && !!lastScanSelected.lastSelectedScanId ?  project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId }) : project.scans.edges[0];
-            if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })) {
-                this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
-            } else {
-                this.stateService.selectedScan = project.scans.edges[0];
-            }
+            // if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })) {
+            //     this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
+            // } else {
+            //     this.stateService.selectedScan = project.scans.edges[0];
+            // }
+            this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+
             let categories = [];
             if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
                 this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
