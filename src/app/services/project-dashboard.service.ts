@@ -94,14 +94,14 @@ export class ProjectDashboardService {
                             info,
                           },
                           licenseMetrics {
-                            copyleftStrong,
+                             copyleftStrong,
                              copyleftWeak,
                              copyleftPartial,
                              copyleftLimited,
                              copyleft,
                              custom,
                              dual,
-                             permissive,
+                             permissive
                           },
                           supplyChainMetrics {
                             risk
@@ -121,7 +121,7 @@ export class ProjectDashboardService {
           `, 'no-cache');
   }
 
-  getAllScanData(scanId: string, defaultPage, scanAssetDetails: any) {
+  getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage,vulPage,licensePage) {
 
     // Scan Asset Config Start
     let parentId = (scanAssetDetails.parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + scanAssetDetails.parentScanAssetId + '\", ' : "";
@@ -133,7 +133,7 @@ export class ProjectDashboardService {
           query {
             scan(scanId:"${scanId}") {
                 scanId,
-                vulnerabilities(first:${defaultPage}) {
+                vulnerabilities(first:${vulPage}) {
                   pageInfo {
                      hasNextPage
                      hasPreviousPage
@@ -172,7 +172,7 @@ export class ProjectDashboardService {
                 }
 
 
-                components(first:${defaultPage}) {
+                components(first:${componentPage}) {
                   pageInfo {
                     hasNextPage
                     hasPreviousPage
@@ -236,7 +236,7 @@ export class ProjectDashboardService {
                 }
 
 
-                licenses(first:${defaultPage}) {
+                licenses(first:${licensePage}) {
                   pageInfo {
                     hasNextPage
                     hasPreviousPage
@@ -473,7 +473,10 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
           const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
           let scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
           if (!!data.data.project && !!scanId) {
-            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+            const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+            const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
+            const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage,vulPage,licensePage);
             return forkJoin([res1]);
           } else {
             this.alertService.alertBox("Project data not found!", Messages.commonErrorHeaderText, 'error');

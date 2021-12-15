@@ -12,6 +12,7 @@ import { map } from "rxjs/operators";
 import { FixComponentDialogComponent } from "../../fix-component-dialog/fix-component-dialog.component";
 import { LicenseDialogComponent } from "../../licenses-common-dialog/license-dialog.component";
 import * as _ from 'lodash';
+import { NextConfig } from "@app/app-config";
 
 @Component({
     selector: 'app-component-new-cad',
@@ -25,7 +26,7 @@ export class NewComponentCardComponent implements OnInit {
     @Input() obsScan: Observable<Scan>;
     newVersion: string;
 
-    defaultPageSize = 25;
+    defaultPageSize = NextConfig.config.defaultItemPerPage;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     componentDetails: any;
 
@@ -36,6 +37,7 @@ export class NewComponentCardComponent implements OnInit {
 
     isInternal = false;
     isVul = false;
+    isFix: boolean = false;
     constructor(private projectService: ProjectService,
         private fixService: FixService,
         private router: Router,
@@ -52,16 +54,19 @@ export class NewComponentCardComponent implements OnInit {
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
-        if (!this.obsScan) {
-            this.obsScan = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
-                .pipe(map(result => result.data.scan));
-            this.initData();
-        } else {
-            this.initData();
-        }
+        this.isDisablePaggination = true;
+        // if (!this.obsScan) {
+        this.obsScan = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components")))
+            .pipe(map(result => result.data.scan));
+        this.initData();
+        // } else {
+        //     this.initData();
+        // }
     }
 
     fixVersion(componentId: string, oldVersion: string) {
+        console.log("fix");
+        this.isFix = true;
         const modalRef = this.modalService.open(FixComponentDialogComponent, {
             keyboard: false,
         });
@@ -112,6 +117,11 @@ export class NewComponentCardComponent implements OnInit {
 
     // goto detail Page
     gotoDetails(cId) {
+        if (this.isFix) {
+            this.isFix = false;
+            return;
+        }
+        console.log("goto");
         const entityId = this.route.snapshot.paramMap.get('entityId');
         const projectId = this.route.snapshot.paramMap.get('projectId');
         const url = "dashboard/entity/" + entityId + '/project/' + projectId + '/scan/' + this.scanId + "/component/" + cId;
@@ -201,7 +211,7 @@ export class NewComponentCardComponent implements OnInit {
             .map((value, key) => ({ key: key, value: value })).value();
         if (groupByValue.length >= 1) {
             const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
-            
+
             return val.key;
         } else {
             return '';
@@ -219,6 +229,7 @@ export class NewComponentCardComponent implements OnInit {
     // initializing data
     private initData() {
         this.obsScan.subscribe(component => {
+            this.isDisablePaggination = false;
             this.componentDetails = component;
         });
     }
