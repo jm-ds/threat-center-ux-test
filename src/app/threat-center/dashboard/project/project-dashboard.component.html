@@ -43,12 +43,11 @@
                                 [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
                             </apx-chart>
                         </div>
+
                         <div class="matrix-chart-legend">
                             <p *ngFor="let data of licenseDonutChartLabel;let i = index">
-                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0"
-                                    class="{{data.class}}">{{data.label}}</span>
-                                <small
-                                    *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
+                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0" class="{{data.class}}">{{data.label}}</span>
+                                <small *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
                             </p>
                         </div>
                     </div>

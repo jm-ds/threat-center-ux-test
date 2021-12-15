@@ -69,11 +69,12 @@
 
 <div class="vulnerabilites-data" *ngIf="!isDisablePaggination">
     <ul>
-        <li *ngFor="let componentData of componentDetails.components?.edges"
+        <li *ngFor="let componentData of componentDetails.components?.edges; let i = index"
             class="data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}">
             <div>
                 <div class="row">
                     <div class="col-sm-4 col-xs-12">
+                        {{i+1}}
                         <div class="cursor-pointer" (click)="gotoDetails(componentData?.node?.componentId)">
                             <div class="vulner-data-lt">
                                 <div class="data-tag-ttl">
@@ -211,12 +212,11 @@
                                 </div>
                             </div>
                             <div class="vulner-data-rt">
-                                <div class="info-cols">
-                                    <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
+                                <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
+                                    <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
                                 </div>
-
                                 <div class="action-btns mt-4">
-                                    <a href="#" class="data-cta ingore-cta">Ignore</a>
+                                    <a class="data-cta ingore-cta">Ignore</a>
                                     <a class="data-cta ml-2"
                                         (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
                                         Fix</a>
