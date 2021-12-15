@@ -24,7 +24,14 @@ export class ReportService {
     getVulnerabilities2(severity, vulns) {
       const url = environment.apiUrl + '/vulnerability-state-report';
       const opts = { params: new HttpParams().set('severity', severity).set('vulns', vulns)};
-      return this.http.get<PatchedInfo>(url, opts).pipe();
+      return this.http.get<any>(url, opts).pipe();
+    }
+
+    // return entity list with vulnerabilities
+  findLicenses(name, type, category) {
+      const url = environment.apiUrl + '/license-state-report';
+      const opts = { params: new HttpParams().set('name', name).set('type', type).set("category", category)};
+      return this.http.get<any>(url, opts).pipe();
     }
 
   getVulnerabilities() {
