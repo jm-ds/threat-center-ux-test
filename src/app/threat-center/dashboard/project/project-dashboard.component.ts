@@ -37,7 +37,17 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     panelActiveId: string = 'chart-panel';
 
     vulDonutChartLabel = [{ label: 'Critical', class: 'red' }, { label: 'High', class: 'orange' }, { label: 'Medium', class: 'yellow' }, { label: 'Low', class: 'pink' }, { label: 'Info', class: 'skyblue' }];
-    licenseDonutChartLabel = [{ label: 'Copyleft Limited', class: 'red', prop: 'copyleftLimited' }, { label: 'Copyleft', class: 'red', prop: 'copyleft' }, { label: 'Copyleft Strong', class: 'red', prop: 'copyleftStrong' }, { label: 'Copyleft Weak', class: 'lgt-yellow', prop: 'copyleftWeak' }, { label: 'Permissive', class: 'lgt-green', prop: 'permissive' }, { label: 'Copyleft Partial', class: 'copyleftPartial', prop: 'copyleftPartial' }, { label: 'Custom', class: 'custom', prop: 'custom' }, { label: 'Dual', class: 'dual', prop: 'dual' }];
+    licenseDonutChartLabel = [
+        { label: 'Copyleft Limited', class: 'red', prop: 'copyleftLimited' },
+        { label: 'Copyleft', class: 'red', prop: 'copyleft' },
+        { label: 'Copyleft Strong', class: 'red', prop: 'copyleftStrong' },
+        { label: 'Copyleft Weak', class: 'lgt-yellow', prop: 'copyleftWeak' },
+        { label: 'Permissive', class: 'lgt-green', prop: 'permissive' },
+        { label: 'Proprietary', class: 'proprietary', prop: 'proprietary' },
+        { label: 'Proprietary Free', class: 'proprietaryFree', prop: 'proprietaryFree' },
+        { label: 'Copyleft Partial', class: 'copyleftPartial', prop: 'copyleftPartial' },
+        { label: 'Custom', class: 'custom', prop: 'custom' },
+        { label: 'Dual', class: 'dual', prop: 'dual' }];
     assetDonutChartLabel = [{ label: 'Unique', class: 'critical' }, { label: 'Embedded', class: 'high' }, { label: 'Open Source', class: 'medium' }];
     donutChartConfig;
     vulDonutData = {};
@@ -196,7 +206,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
                 if (!!mostRecentScan.node) {
                     const metrics = mostRecentScan.node.scanMetricsSummary;
                     this.vulDonutData['series'] = [metrics.vulnerabilityMetrics['critical'] || 0, metrics.vulnerabilityMetrics['high'] || 0, metrics.vulnerabilityMetrics['medium'] || 0, metrics.vulnerabilityMetrics['low'] || 0, metrics.vulnerabilityMetrics['info'] || 0];
-                    this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
+                    this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['proprietary'] || 0, metrics.licenseMetrics['proprietaryFree'] || 0, metrics.licenseMetrics['copyleftPartial'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
                     this.assetDonutData['series'] = [metrics.assetMetrics['unique'] || 0, metrics.assetMetrics['embedded'] || 0, metrics.assetMetrics['openSource'] || 0];
 
                     // this.licenseDonutChartLabel.forEach((f, index) => {
