@@ -45,7 +45,7 @@ const NavigationItems = [
         title: 'My Team',
         type: 'item',
         url: '/dashboard/entity',
-        icon: 'fad fa-chart-pie',
+        icon: 'fad fa-user-friends',
         permissions: ["ENTITY_VIEW"],
       },
       {
@@ -74,7 +74,7 @@ const NavigationItems = [
         id: 'reports',
         title: 'Reports',
         type: 'collapse',
-        icon: 'fas fa-chart-pie',
+        icon: 'fad fa-chart-pie',
         children: [
             // <i class="fas fa-flag-checkered"></i>
           /*{

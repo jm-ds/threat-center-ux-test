@@ -69,170 +69,174 @@
 
 <div class="vulnerabilites-data" *ngIf="!isDisablePaggination">
     <ul>
-        <li *ngFor="let componentData of componentDetails.components?.edges"
-            class="data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}">
-            <div>
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12">
-                        <div class="cursor-pointer" (click)="gotoDetails(componentData?.node?.componentId)">
-                            <div class="vulner-data-lt">
-                                <div class="data-tag-ttl">
-                                    <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
+        <li *ngFor="let componentData of componentDetails.components?.edges;let i = index"
+            class="cursor-pointer data-item {{getMaxServity(componentData?.node?.vulnerabilities)}}"
+            (click)="gotoDetails(componentData?.node?.componentId)">
+
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div class="vulner-data-lt">
+                        <div class="data-tag-ttl">
+                            <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
+                        </div>
+                        <div class="data-row row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Provenance</small> External
                                 </div>
-                                <div class="data-row row">
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="info-cols flex-column align-items-start">
-                                            <small>Provenance</small> External
-                                        </div>
-                                    </div>
+                            </div>
 
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="info-cols flex-column align-items-start">
-                                            <small>Discovered in</small>
-                                            {{getDiscoverIn(componentData?.node?.componentLocation)}}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="data-row row">
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="info-cols flex-column align-items-start">
-                                            <small>Type</small> {{componentData?.node?.componentType}}
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="info-cols flex-column align-items-start">
-                                            <small>Discovery Type</small>
-                                            {{componentData?.node?.componentDiscoveryMethod}}
-                                        </div>
-                                    </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Discovered in</small>
+                                    {{getDiscoverIn(componentData?.node?.componentLocation)}}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <div class="cursor-pointer" (click)="gotoDetails(componentData?.node?.componentId)">
-                            <div class="vulner-data-lt">
-                                <div *ngFor="let licenseData of componentData?.node?.licenses?.edges;index as i"
-                                    class="data-row row mt-0">
-                                    <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
-                                        <div class="info-cols flex-column align-items-start">
-                                            <small
-                                                *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
-                                                License(s)</small>
-                                            <div class="tag-row d-flex align-items-center mt-1">
-                                                <label class="mr-2" style="font-size: 20px;text-align:center;">
-                                                    <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
-                                                        title="Copyleft Strong"
-                                                        class="badge m-r-5 badge-light-danger">COPYLEFT
-                                                        STRONG</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'COPYLEFT_WEAK'"
-                                                        title="Copyleft Weak"
-                                                        class="badge m-r-5 badge-light-warning">COPYLEFT
-                                                        WEAK</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'COPYLEFT_PARTIAL'"
-                                                        title="Copyleft Partial"
-                                                        class="badge m-r-5 badge-light-warning">COPYLEFT
-                                                        PARTIAL</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'COPYLEFT_LIMITED'"
-                                                        title="Copyleft Limited"
-                                                        class="badge m-r-5 badge-light-warning">COPYLEFT
-                                                        LIMITED</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'COPYLEFT'"
-                                                        title="Copyleft"
-                                                        class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'PERMISSIVE'"
-                                                        title="Permissive"
-                                                        class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'PROPRIETARY_FREE'"
-                                                        title="Proprietary Free"
-                                                        class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'PUBLIC_DOMAIN'"
-                                                        title="Permissive"
-                                                        class="badge m-r-5 badge-light-success f-18">PUBLIC
-                                                        DOMAIN</span>
-                                                    <span *ngIf="licenseData?.node?.category === 'UNDEFINED'"
-                                                        title="Undefined"
-                                                        class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
-                                                </label>{{licenseData?.node?.name}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-primary cursor-pointer"
-                                    *ngIf="componentData?.node?.licenses?.edges.length > 2">
-                                    more...
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <div class="component-fixed-box"
-                            *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                            <div class="vulner-data-rt vulner-sts-data">
-                                <div class="info-cols">
-                                    <small>Vulnerabilites</small>
 
-                                    <ul class="component-vulner-sts mt-2"
-                                        *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                                        <li class="high"
-                                            *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
-                                            <span class="component-vulner-inn" *ngIf="i < 3">
-                                                <em>V</em>
-                                                <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
-                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</b>
-                                                <ng-template #otherTem> <span
-                                                        class="{{data.node.severity}}">{{data.node.vulnId}}</span>
-                                                </ng-template>
-                                            </span>
-                                        </li>
-                                    </ul>
-                                    <p triggers="mouseenter:mouseleave" [ngbPopover]="popContent" class="more-link"
-                                        *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
-                                        More
-                                    </p>
-                                    <ng-template #popContent>
-                                        <ul class="component-vulner-sts mt-2"
-                                            *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                                            <li class="high"
-                                                *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
-                                                <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
-                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</b>
-                                                <ng-template #otherTem> <span
-                                                        class="{{data.node.severity}}">{{data.node.vulnId}}</span>
-                                                </ng-template>
-                                            </li>
-                                        </ul>
-                                    </ng-template>
-                                    <p *ngIf="componentData?.node?.vulnerabilities?.edges.length == 0">
-                                        {{componentData?.node?.name}} have no vulnerabilities yet.
-                                    </p>
+                        <div class="data-row row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Type</small> {{componentData?.node?.componentType}}
                                 </div>
                             </div>
-                            <div class="vulner-data-rt">
-                                <div class="info-cols">
-                                    <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
-                                </div>
 
-                                <div class="action-btns mt-4">
-                                    <a href="#" class="data-cta ingore-cta">Ignore</a>
-                                    <a class="data-cta ml-2"
-                                        (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
-                                        Fix</a>
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small>Discovery Type</small>
+                                    {{componentData?.node?.componentDiscoveryMethod}}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-4 col-xs-12">
+                    <div class="vulner-data-lt">
+                        <div *ngFor="let licenseData of componentData?.node?.licenses?.edges;index as i"
+                            class="data-row row mt-0">
+                            <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
+                                <div class="info-cols flex-column align-items-start">
+                                    <small
+                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
+                                        License(s)</small>
+                                    <div class="tag-row d-flex align-items-center mt-1">
+                                        <label class="mr-2" style="font-size: 20px;text-align:center;">
+                                            <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
+                                                title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT
+                                                STRONG</span>
+                                            <span *ngIf="licenseData?.node?.category === 'COPYLEFT_WEAK'"
+                                                title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                WEAK</span>
+                                            <span *ngIf="licenseData?.node?.category === 'COPYLEFT_PARTIAL'"
+                                                title="Copyleft Partial"
+                                                class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                PARTIAL</span>
+                                            <span *ngIf="licenseData?.node?.category === 'COPYLEFT_LIMITED'"
+                                                title="Copyleft Limited"
+                                                class="badge m-r-5 badge-light-warning">COPYLEFT
+                                                LIMITED</span>
+                                            <span *ngIf="licenseData?.node?.category === 'COPYLEFT'" title="Copyleft"
+                                                class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                            <span *ngIf="licenseData?.node?.category === 'PERMISSIVE'"
+                                                title="Permissive"
+                                                class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                            <span *ngIf="licenseData?.node?.category === 'PROPRIETARY_FREE'"
+                                                title="Proprietary Free"
+                                                class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                            <span *ngIf="licenseData?.node?.category === 'PUBLIC_DOMAIN'"
+                                                title="Permissive" class="badge m-r-5 badge-light-success f-18">PUBLIC
+                                                DOMAIN</span>
+                                            <span *ngIf="licenseData?.node?.category === 'UNDEFINED'" title="Undefined"
+                                                class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                        </label>{{licenseData?.node?.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-primary cursor-pointer" *ngIf="componentData?.node?.licenses?.edges.length > 2">
+                            more...
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 col-xs-12">
+                    <div class="component-fixed-box" *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                        <div class="vulner-data-rt vulner-sts-data">
+                            <div class="info-cols">
+                                <small>Vulnerabilites</small>
+
+                                <ul class="component-vulner-sts mt-2"
+                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                                    <li class="high"
+                                        *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                        <span class="component-vulner-inn" *ngIf="i < 3">
+                                            <em>V</em>
+                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                            <ng-template #otherTem> <span
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                            </ng-template>
+                                        </span>
+                                    </li>
+                                </ul>
+                                <p triggers="mouseenter:mouseleave" [ngbPopover]="popContent" class="more-link"
+                                    *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
+                                    More
+                                </p>
+                                <ng-template #popContent>
+                                    <ul class="component-vulner-sts mt-2"
+                                        *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
+                                        <li class="high"
+                                            *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                            <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
+                                                class="{{data.node.severity}}">{{data.node.vulnId}}</b>
+                                            <ng-template #otherTem> <span
+                                                    class="{{data.node.severity}}">{{data.node.vulnId}}</span>
+                                            </ng-template>
+                                        </li>
+                                    </ul>
+                                </ng-template>
+                                <p *ngIf="componentData?.node?.vulnerabilities?.edges.length == 0">
+                                    {{componentData?.node?.name}} have no vulnerabilities yet.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="vulner-data-rt">
+                            <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
+                                <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1, 2.8.11.4,
+                                2.7.9.6
+                            </div>
+                            <!-- <<<<<<< HEAD <div class="action-btns mt-4">
+                                <a class="data-cta ingore-cta">Ignore</a>
+                                <a class="data-cta ml-2"
+                                    (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
+                                    Fix</a> -->
+                            <!-- ======= -->
+                            <div class="vulner-data-rt">
+                                <!-- <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
+                                        <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1,
+                                        2.8.11.4, 2.7.9.6
+                                    </div> -->
+                                <div class="action-btns mt-4">
+                                    <a class="data-cta ingore-cta">Ignore</a>
+                                    <a class="data-cta ml-2"
+                                        (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
+                                        Fix</a>
+                                </div>
+                                <!-- >>>>>>> master -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </li>
     </ul>
 </div>
 
 <div class="col-sm-12">
     <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination"
-        [length]="componentDetails.components?.totalCount" [pageSize]="defaultPageSize"
+        [length]="componentDetails?.components?.totalCount" [pageSize]="defaultPageSize"
         [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
     </mat-paginator>
 </div>
