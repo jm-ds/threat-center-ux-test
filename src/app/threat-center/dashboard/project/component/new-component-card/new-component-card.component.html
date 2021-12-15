@@ -74,11 +74,9 @@
             (click)="gotoDetails(componentData?.node?.componentId)">
 
             <div class="row">
-                {{i +1}}
                 <div class="col-sm-4 col-xs-12">
                     <div class="vulner-data-lt">
                         <div class="data-tag-ttl">
-                            {{i + 1}}
                             <p class="data-hdng ml-0">{{getComponentName(componentData)}}</p>
                         </div>
                         <div class="data-row row">
@@ -207,26 +205,25 @@
                             <div class="info-cols">
                                 <small>Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
                             </div>
-<<<<<<< HEAD
-
-                            <div class="action-btns mt-4">
+                            <<<<<<< HEAD <div class="action-btns mt-4">
                                 <a class="data-cta ingore-cta">Ignore</a>
                                 <a class="data-cta ml-2"
                                     (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
                                     Fix</a>
-=======
-                            <div class="vulner-data-rt">
-                                <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
-                                    <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1, 2.8.11.4, 2.7.9.6
+                                =======
+                                <div class="vulner-data-rt">
+                                    <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
+                                        <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1,
+                                        2.8.11.4, 2.7.9.6
+                                    </div>
+                                    <div class="action-btns mt-4">
+                                        <a class="data-cta ingore-cta">Ignore</a>
+                                        <a class="data-cta ml-2"
+                                            (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
+                                            Fix</a>
+                                    </div>
+                                    >>>>>>> master
                                 </div>
-                                <div class="action-btns mt-4">
-                                    <a class="data-cta ingore-cta">Ignore</a>
-                                    <a class="data-cta ml-2"
-                                        (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
-                                        Fix</a>
-                                </div>
->>>>>>> master
-                            </div>
                         </div>
                     </div>
                 </div>
