@@ -18,14 +18,14 @@ export class LicensesReportComponent implements OnInit {
 
     reportDate = new Date();
 
-    nameFilter: string;
-    typeFilter = 'ALL';
+    nameFilter = '';
+    typeFilter = '';
     styleFilter = 'ALL';
     categoryFilter = 'ALL';
     previewStateOpen = false;
 
-    totals = {entities: 0, licenses: 0};
-    entities: Entity[];
+    totals = {entities: 0, licenses: 0, projects: 0};
+    entities = [];
 
 /*
 -   Name
@@ -43,7 +43,70 @@ export class LicensesReportComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.reportService.getLicenses().subscribe(data => {
+        // this.findLicenses("",'','ALL');
+        this.findLicenses(this.nameFilter, this.typeFilter, this.categoryFilter);
+    }
+
+    onApplyFilter() {
+        // todo: apply filter heres
+        // console.log(this.entitiesSelected);
+        // console.log(this.dateInterval.dateStart);
+        // console.log(this.dateInterval.dateEnd);
+        // console.log(this.entityTree.entitiesSelected);
+
+
+
+        console.log("apply filter =================================================================================================");
+        console.log(this.nameFilter);
+        console.log(this.typeFilter);
+        console.log(this.categoryFilter);
+
+        this.findLicenses(this.nameFilter, this.typeFilter, this.categoryFilter);
+    }
+
+    onClearFilter() {
+        this.nameFilter = '';
+        this.typeFilter = '';
+        this.categoryFilter = 'ALL';
+        // this.entityTree.entitiesSelected = [];
+
+        this.findLicenses(this.nameFilter, this.typeFilter, this.categoryFilter);
+    }
+
+
+    onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    findLicenses(name, type, category) {
+        this.reportService.findLicenses(name, type, category).subscribe(data => {
+
+            console.log("=================================================");
+            console.log(data);
+
+            this.entities = data;
+
+            this.totals = {entities: 0, licenses: 0, projects: 0};
+
+            let entities = [];
+
+            for (const entity of this.entities) {
+                // this.totals.entities += 1;
+                entities.push(entity.entityId);
+                this.totals.projects += 1;
+                for (const license of entity.licenses) {
+                    this.totals.licenses += 1;
+                }
+            }
+
+            this.totals.entities = entities.filter(this.onlyUnique).length;
+
+        }, error => {
+            console.error("LicenseReportComponent", error);
+        });
+
+        /*this.reportService.getLicenses().subscribe(data => {
+        http://localhost:8080/license-state-report?name=&type=ALL&category=ALL
             this.entities = data.data.entities.edges.map((e) => e.node).sort(compareByName);
 
             this.totals = {entities: 0, licenses: 0};
@@ -68,7 +131,7 @@ export class LicensesReportComponent implements OnInit {
 
         }, error => {
             console.error("LicenseReportComponent", error);
-        });
+        });*/
     }
 
     openPreview() {

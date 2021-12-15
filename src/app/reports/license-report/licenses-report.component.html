@@ -39,13 +39,13 @@ METRICS
         <div class="report-filter-row">
             <div>
                 <label>License Name</label>
-                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="nameFilter" placeholder="Type license name"/>
+                <input type="text" name="nameFilter" class="form-control" [(ngModel)]="nameFilter" placeholder="License name..." style="width: 200px;"/>
             </div>
 
             <div>
                 <label>License Type</label>
                 <select name="typeFilter" class="form-control custom-select" [(ngModel)]="typeFilter">
-                    <option value="ALL" selected>- All -</option>
+                    <option value="" selected>- All -</option>
                     <option value="Open Source">Open Source</option>
                     <option value="Proprietary">Proprietary</option>
                 </select>
@@ -68,7 +68,7 @@ METRICS
                 </select>
             </div>
 
-            <div>
+            <!--<div>
                 <label>License Style</label>
                 <select name="styleFilter" class="form-control custom-select" [(ngModel)]="styleFilter">
                     <option value="ALL" selected>- All -</option>
@@ -87,13 +87,13 @@ METRICS
                     <option value="Public Domain">Public Domain</option>
                     <option value="X11-Style">X11-Style</option>
                 </select>
-            </div>
+            </div>-->
 
-            <button type="submit" class="btn btn-info">
+            <button type="submit" class="btn btn-info" (click)="onApplyFilter()">
                 <i class="feather icon-filter"></i>
                 Filter
             </button>
-            <button type="submit" class="btn btn-warning">
+            <button type="submit" class="btn btn-warning" (click)="onClearFilter()">
                 <i class="feather icon-slash"></i>
                 Clear
             </button>
@@ -108,10 +108,10 @@ METRICS
 <div class="report-primary-actions" *ngIf="!displayDataOnly">
     <h2>Report actions</h2>
     <button class="btn btn-lg btn-outline-secondary" (click)="openPreview()"><i class="fas fa-search"></i> Preview report</button>
-    <button class="btn btn-lg btn-outline-danger"><i class="fas fa-file-pdf"></i> Export to PDF</button>
-    <button class="btn btn-lg btn-outline-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
-    <button class="btn btn-lg btn-outline-secondary"><i class="fas fa-file-csv"></i> Export to CSV</button>
-    <button class="btn btn-lg btn-outline-info"><i class="fas fa-file-contract"></i> Export to SPDX</button>
+    <button class="btn btn-lg btn-outline-danger" disabled title="coming soon..."><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    <button class="btn btn-lg btn-outline-success" disabled title="coming soon..."><i class="fas fa-file-excel"></i> Export to Excel</button>
+    <button class="btn btn-lg btn-outline-secondary" disabled title="coming soon..."><i class="fas fa-file-csv"></i> Export to CSV</button>
+    <button class="btn btn-lg btn-outline-info" disabled title="coming soon..."><i class="fas fa-file-contract"></i> Export to SPDX</button>
 </div>
 
 
@@ -160,6 +160,14 @@ METRICS
 
                 <div class="col-md-3">
                     <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
+                        <h3 class="text-white m-0">{{totals.projects}}</h3>
+                        <span class="m-t-10">Projects</span>
+                        <i class="fas fa-cubes"></i>
+                    </app-card>
+                </div>
+
+                <div class="col-md-3">
+                    <app-card [hidHeader]="true" cardClass="social-widget-card" blockClass="bg-total">
                         <h3 class="text-white m-0">{{totals.licenses}}</h3>
                         <span class="m-t-10">Licenses</span>
                         <i class="far fa-copyright"></i>
@@ -169,10 +177,87 @@ METRICS
         </div>
 
 
+        <app-alert type="warning" *ngIf="entities.length == 0">
+            <span class="lead">No licenses found for given criteria.</span>
+        </app-alert>
+
         <div class="report-data">
 
 
+
             <ng-template ngFor let-entity [ngForOf]="entities" let-i="index">
+                <div class="entity-caption">{{entity.entityName}} / {{entity.projectName}}</div>
+
+                <div class="vulnerabilites-data">
+                    <ul>
+                        <li *ngFor="let license of entity.licenses" class="data-item {{license.category}}">
+
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="vulner-data-lt">
+                                        <div class="cursor-pointer1">
+                                            <div class="data-tag-ttl">
+                                                <label class="mr-1" style="font-size: 20px;text-align:center;">
+                                                    <span *ngIf="license.category === 'COPYLEFT_STRONG'"
+                                                          title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
+                                                    <span *ngIf="license.category === 'COPYLEFT_WEAK'"
+                                                          title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
+                                                    <span *ngIf="license.category === 'COPYLEFT_PARTIAL'"
+                                                          title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
+                                                    <span *ngIf="license.category === 'COPYLEFT_LIMITED'"
+                                                          title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
+                                                    <span *ngIf="license.category === 'COPYLEFT'" title="Copyleft"
+                                                          class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                                    <span *ngIf="license.category === 'PERMISSIVE'"
+                                                          title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                                    <span *ngIf="license.category === 'PROPRIETARY_FREE'"
+                                                          title="Proprietary Free"
+                                                          class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                                    <span *ngIf="license.category === 'PUBLIC_DOMAIN'"
+                                                          title="Permissive" class="badge m-r-5 badge-light-success f-18">PUBLIC DOMAIN</span>
+                                                    <span *ngIf="license.category === 'UNDEFINED'" title="Undefined"
+                                                          class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                                </label>
+                                                <p class="data-hdng">{{license?.name}}</p>
+                                            </div>
+                                            <div class="data-row">
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>Discovery</small> {{license.licenseDiscovery}}
+                                                </div>
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>Origin</small> {{license.licenseOrigin}}
+                                                </div>
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>Style</small> {{license.style}}
+                                                </div>
+
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>Trust Level</small>
+<!--                                                    {{license.trustLevel}}-->
+
+                                                    <span *ngIf="license.trustLevel === 'LEVEL_1'"
+                                                          title="Original repo license">Original repo license</span>
+                                                    <span *ngIf="license.trustLevel === 'LEVEL_2'"
+                                                          title="Context relevant license">Context relevant license</span>
+                                                </div>
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>OSI Approved</small> {{license.isOsiApproved ? 'YES' : 'NO'}}
+                                                </div>
+                                                <div class="info-cols flex-column align-items-start">
+                                                    <small>FSF Libre</small> {{license.isFsfLibre ? 'YES' : 'NO'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </ng-template>
+
+            <!--<ng-template ngFor let-entity [ngForOf]="entities" let-i="index">
                 <div class="entity-caption">{{entity.name}}</div>
 
                 <p-table [columns]="columns" [value]="entity.licenses" [paginator]="false" [rows]="50"
@@ -190,7 +275,7 @@ METRICS
                     <ng-template pTemplate="body" let-license>
                         <tr [routerLink]="['/dashboard/project/license',license.licenseId]">
                             <td>{{license.name}}</td>
-<!--                            <td>{{license.spdxId}}</td>-->
+&lt;!&ndash;                            <td>{{license.spdxId}}</td>&ndash;&gt;
                             <td>{{license.type}}</td>
                             <td>{{license.familyName}}</td>
                             <td>
@@ -206,8 +291,8 @@ METRICS
                                 <span *ngIf="license.category === 'UNDEFINED'" title="Undefined" class="badge m-r-5">UNDEFINED</span>
                             </td>
                             <td>{{license.style}}</td>
-<!--                            <td>{{license.isOsiApproved}}</td>-->
-<!--                            <td>{{license.isFsfLibre}}</td>-->
+&lt;!&ndash;                            <td>{{license.isOsiApproved}}</td>&ndash;&gt;
+&lt;!&ndash;                            <td>{{license.isFsfLibre}}</td>&ndash;&gt;
                         </tr>
                     </ng-template>
 
@@ -219,7 +304,7 @@ METRICS
                         </tr>
                     </ng-template>
                 </p-table>
-            </ng-template>
+            </ng-template>-->
         </div>
     </div>
 </div>

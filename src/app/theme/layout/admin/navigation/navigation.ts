@@ -96,7 +96,7 @@ const NavigationItems = [
             permissions: ["REPORT_VIEW"],
             target: false,
           },
-          /*{
+          {
             id: 'license-report',
             title: 'Licenses',
             icon: 'fas fa-balance-scale',
@@ -105,7 +105,7 @@ const NavigationItems = [
             permissions: ["REPORT_VIEW"],
             target: false,
           },
-          {
+          /*{
             id: 'component-report',
             title: 'Components',
             icon: 'fas fa-cubes',
