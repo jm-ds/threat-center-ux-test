@@ -659,7 +659,10 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
     //chain of obsevables (helper function for api calls)
     private gettingDataforAllMetrics(scanId: string) {
-        const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) });
+        const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
+        const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
+        const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+        const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) },componentPage,vulPage,licensePage);
         return forkJoin([res]);
     }
 

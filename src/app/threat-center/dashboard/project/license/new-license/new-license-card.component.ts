@@ -45,19 +45,20 @@ export class NewLicenseCardComponent implements OnInit {
     ngOnInit(): void {
         console.log("Loading LicensesComponent for scanId: ", this.scanId);
         this.checkScanDataExists();
-        // this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
+        this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
-        if (!this.obsScan) {
-            this.obsScan = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
-                .pipe(map(result => result.data.scan));
+        this.isDisablePaggination = true;
+        // if (!this.obsScan) {
+        this.obsScan = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses")))
+            .pipe(map(result => result.data.scan));
 
-            this.initData();
-        } else {
-            this.initData();
-        }
+        this.initData();
+        // } else {
+        //     this.initData();
+        // }
     }
 
     // While any changes occurred in page
@@ -182,6 +183,7 @@ export class NewLicenseCardComponent implements OnInit {
     // initializing data
     private initData() {
         this.obsScan.subscribe(licenses => {
+            this.isDisablePaggination = false;
             this.licensesDetails = licenses;
             this.totalLicenses = this.licensesDetails.licenses.totalCount;
             this.pageInfo = this.licensesDetails.licenses.pageInfo;
@@ -192,7 +194,7 @@ export class NewLicenseCardComponent implements OnInit {
     private calculateLogic() {
         this.licensesDetails = _.chain(this.licensesDetails.licenses.edges).groupBy("node.name")
             .map((value, key) => ({ key: key, value: value })).value();
-            this.totalLicenses = this.licensesDetails.length;
+        this.totalLicenses = this.licensesDetails.length;
         // console.log(value);
         // let originalArray = [];
         // _.each(value, mainValue => {
