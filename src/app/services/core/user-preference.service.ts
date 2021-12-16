@@ -10,7 +10,10 @@ export class UserPreferenceService {
     constructor() { }
 
     // Set Preference details to session storage
-    settingUserPreference(moduleName: string, previousLastTabSelected: string, lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null, panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null,lastSelectedScan:string = null) {
+    settingUserPreference(moduleName: string, previousLastTabSelected: string,
+        lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null,
+        panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null, lastSelectedScan: string = null,
+        assetPreferences: { currentStory: any, currentAssetDetails: any, projectId: string } = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -72,6 +75,24 @@ export class UserPreferenceService {
                         prefrence.lastSelectedScanId = lastSelectedScan;
                     }
 
+                    if (!!assetPreferences && !!assetPreferences.currentAssetDetails && !!assetPreferences.currentStory && !!assetPreferences.projectId) {
+                        if (!!prefrence.assetPreferences && prefrence.assetPreferences.length >= 1) {
+                            if (!!prefrence.assetPreferences.find(f => { return f.projectId === assetPreferences.projectId })) {
+                                prefrence.assetPreferences.forEach(f => {
+                                    if (f.projectId === assetPreferences.projectId) {
+                                        f.projectId = assetPreferences.projectId;
+                                        f.currentStory = assetPreferences.currentStory;
+                                        f.currentAssetDetails = assetPreferences.currentAssetDetails;
+                                    }
+                                });
+                            } else {
+                                prefrence.assetPreferences.push(assetPreferences);
+                            }
+                        } else {
+                            prefrence.assetPreferences = [];
+                            prefrence.assetPreferences.push(assetPreferences);
+                        }
+                    }
                 }
             });
         } else {
@@ -104,7 +125,7 @@ export class UserPreferenceService {
     }
 
     //getting panel details for chart
-    getPanelDetailByModule(moduleName:string){
+    getPanelDetailByModule(moduleName: string) {
         if (!!sessionStorage.getItem("UserPreference")) {
             const preferenceDetails = this.getPreferenceDetailsFromSession();
             if (!!preferenceDetails && preferenceDetails.length >= 1) {
@@ -118,7 +139,7 @@ export class UserPreferenceService {
     }
 
     //getting last scan selected
-    getLastScanSelectedByModule(moduleName:string){
+    getLastScanSelectedByModule(moduleName: string) {
         if (!!sessionStorage.getItem("UserPreference")) {
             const preferenceDetails = this.getPreferenceDetailsFromSession();
             if (!!preferenceDetails && preferenceDetails.length >= 1) {
