@@ -65,7 +65,7 @@ export class ProjectDashboardService {
                         }
                     }
                   }
-                  scans(first:${first}) {
+                  scans(first:1) {
                     totalCount
                     pageInfo {
                       hasNextPage
@@ -101,7 +101,9 @@ export class ProjectDashboardService {
                              copyleft,
                              custom,
                              dual,
-                             permissive
+                             permissive,
+                             proprietary,
+                             proprietaryFree,
                           },
                           supplyChainMetrics {
                             risk
