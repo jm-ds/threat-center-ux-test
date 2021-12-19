@@ -390,6 +390,8 @@ export class GithubAccount {
 
 export class RepositoryAccounts {
   githubAccount:GithubAccount;
+  bitbucketAccount:any;
+  gitlabAccount:any;
 }
 
 export class Role {

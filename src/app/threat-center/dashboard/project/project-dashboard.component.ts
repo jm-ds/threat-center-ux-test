@@ -672,7 +672,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
         const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
         const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
-        const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) },componentPage,vulPage,licensePage);
+        const res = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage, vulPage, licensePage);
         return forkJoin([res]);
     }
 

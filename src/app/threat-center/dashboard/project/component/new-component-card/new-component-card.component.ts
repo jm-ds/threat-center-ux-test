@@ -209,12 +209,52 @@ export class NewComponentCardComponent implements OnInit {
     getMaxServity(vulnerabilities) {
         const groupByValue = _.chain(vulnerabilities.edges).groupBy("node.severity")
             .map((value, key) => ({ key: key, value: value })).value();
+        // console.log(groupByValue);
         if (groupByValue.length >= 1) {
-            const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
+            // const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
 
-            return val.key;
+            // return val.key;
+            return this.checkMaxANdReturnKeyhelper(groupByValue);
         } else {
             return '';
+        }
+    }
+
+    private checkMaxANdReturnKeyhelper(groupByValue) {
+        const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
+        const critical = groupByValue.find(a => { return a.key === 'CRITICAL' });
+        const high = groupByValue.find(a => { return a.key === 'HIGH' });
+        const medium = groupByValue.find(a => { return a.key === 'MEDIUM' });
+        const low = groupByValue.find(a => { return a.key === 'LOW' });
+        const info = groupByValue.find(a => { return a.key === 'INFO' });
+
+        if (!!critical) {
+            if (critical.value.length >= val.value.length) {
+                return critical.key;
+            }
+        }
+        if (!!high) {
+            if (high.value.length >= val.value.length) {
+                return high.key;
+            }
+        }
+        if (!!medium) {
+            if (medium.value.length >= val.value.length) {
+                return medium.key;
+            }
+        }
+
+        if (!!low) {
+            if (low.value.length >= val.value.length) {
+                return low.key;
+            }
+        }
+        if (!!info) {
+            if (info.value.length >= val.value.length) {
+                return info.key;
+            }
+        } else {
+            return ''
         }
     }
 
