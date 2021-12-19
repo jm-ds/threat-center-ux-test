@@ -80,7 +80,11 @@
         </div>
     </div>
 
-    <app-policy-compliance></app-policy-compliance>
+
+    <div *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))">
+        <app-policy-compliance></app-policy-compliance>
+    </div>
+
     <div class="matrix-dash-tab">
         <ngb-tabset #ctdTabset="ngbTabset" [activeId]="stateService.project_tabs_selectedTab"
             (tabChange)="onTabChange($event)">

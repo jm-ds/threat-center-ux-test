@@ -120,7 +120,7 @@ export class ProjectDashboardService {
                   }
                 }
             }
-          `, 'no-cache');
+          `);
   }
 
   getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage,vulPage,licensePage) {
