@@ -222,8 +222,7 @@ export class ScanAssetDetailComponent implements OnInit {
     needAttribution() {
         return this.sourceAsset.embeddedAssets.edges != null &&
             this.sourceAsset.embeddedAssets.edges.length > 0 &&
-            this.sourceAsset.attributionStatus != null &&
-            this.sourceAsset.attributionStatus !== '';
+            this.sourceAsset.attributionStatus === 'REQUIRED';
     }
 
     private loadData() {
