@@ -13,6 +13,7 @@ import { FixComponentDialogComponent } from "../../fix-component-dialog/fix-comp
 import { LicenseDialogComponent } from "../../licenses-common-dialog/license-dialog.component";
 import * as _ from 'lodash';
 import { NextConfig } from "@app/app-config";
+import { AuthenticationService } from "@app/security/services";
 
 @Component({
     selector: 'app-component-new-cad',
@@ -44,7 +45,9 @@ export class NewComponentCardComponent implements OnInit {
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
         private modalService: NgbModal,
-        private userPreferenceService: UserPreferenceService) { }
+        private userPreferenceService: UserPreferenceService,
+        private authService: AuthenticationService,
+    ) { }
     ngOnInit(): void {
         console.log("scanId:", this.scanId);
         console.log("Loading ComponentsComponent");
@@ -209,15 +212,18 @@ export class NewComponentCardComponent implements OnInit {
     getMaxServity(vulnerabilities) {
         const groupByValue = _.chain(vulnerabilities.edges).groupBy("node.severity")
             .map((value, key) => ({ key: key, value: value })).value();
-        // console.log(groupByValue);
         if (groupByValue.length >= 1) {
-            // const val = groupByValue.reduce((max, obj) => (max.value.length >= obj.value.length) ? max : obj);
-
-            // return val.key;
             return this.checkMaxANdReturnKeyhelper(groupByValue);
         } else {
             return '';
         }
+    }
+
+    isUserSCMAccountExists() {
+        return !!this.authService.currentUser.repositoryAccounts && !!this.authService.currentUser.repositoryAccounts
+            && (!!this.authService.currentUser.repositoryAccounts.bitbucketAccount ||
+                !!this.authService.currentUser.repositoryAccounts.githubAccount ||
+                !!this.authService.currentUser.repositoryAccounts.gitlabAccount);
     }
 
     private checkMaxANdReturnKeyhelper(groupByValue) {

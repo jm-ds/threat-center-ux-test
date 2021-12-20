@@ -204,24 +204,13 @@
                                 <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1, 2.8.11.4,
                                 2.7.9.6
                             </div>
-                            <!-- <<<<<<< HEAD <div class="action-btns mt-4">
-                                <a class="data-cta ingore-cta">Ignore</a>
-                                <a class="data-cta ml-2"
-                                    (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
-                                    Fix</a> -->
-                            <!-- ======= -->
-                            <div class="vulner-data-rt">
-                                <!-- <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
-                                        <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1,
-                                        2.8.11.4, 2.7.9.6
-                                    </div> -->
+                            <div class="vulner-data-rt" *ngIf="isUserSCMAccountExists()">
                                 <div class="action-btns mt-4">
                                     <a class="data-cta ingore-cta">Ignore</a>
                                     <a class="data-cta ml-2"
                                         (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
                                         Fix</a>
                                 </div>
-                                <!-- >>>>>>> master -->
                             </div>
                         </div>
                     </div>
