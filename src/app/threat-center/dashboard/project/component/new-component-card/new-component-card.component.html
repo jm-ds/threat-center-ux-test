@@ -116,9 +116,7 @@
                             class="data-row row mt-0">
                             <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
                                 <div class="info-cols flex-column align-items-start">
-                                    <small
-                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
-                                        License(s)</small>
+                                    <small *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}} License(s)</small>
                                     <div class="tag-row d-flex align-items-center mt-1">
                                         <label class="mr-2" style="font-size: 20px;text-align:center;">
                                             <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
@@ -206,24 +204,13 @@
                                 <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1, 2.8.11.4,
                                 2.7.9.6
                             </div>
-                            <!-- <<<<<<< HEAD <div class="action-btns mt-4">
-                                <a class="data-cta ingore-cta">Ignore</a>
-                                <a class="data-cta ml-2"
-                                    (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
-                                    Fix</a> -->
-                            <!-- ======= -->
-                            <div class="vulner-data-rt">
-                                <!-- <div class="info-cols" style="color: rgba(255, 255, 255, .2);">
-                                        <small style="color: rgba(255, 255, 255, .2);">Fixed Versions</small> 2.9.9.1,
-                                        2.8.11.4, 2.7.9.6
-                                    </div> -->
+                            <div class="vulner-data-rt" *ngIf="isUserSCMAccountExists()">
                                 <div class="action-btns mt-4">
                                     <a class="data-cta ingore-cta">Ignore</a>
                                     <a class="data-cta ml-2"
                                         (click)="fixVersion(componentData?.node?.componentId,componentData?.node?.version)">
                                         Fix</a>
                                 </div>
-                                <!-- >>>>>>> master -->
                             </div>
                         </div>
                     </div>
