@@ -116,9 +116,7 @@
                             class="data-row row mt-0">
                             <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
                                 <div class="info-cols flex-column align-items-start">
-                                    <small
-                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
-                                        License(s)</small>
+                                    <small *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}} License(s)</small>
                                     <div class="tag-row d-flex align-items-center mt-1">
                                         <label class="mr-2" style="font-size: 20px;text-align:center;">
                                             <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
