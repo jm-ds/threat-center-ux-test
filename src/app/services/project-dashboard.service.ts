@@ -65,7 +65,7 @@ export class ProjectDashboardService {
                         }
                     }
                   }
-                  scans(first:${first}) {
+                  scans(first:1) {
                     totalCount
                     pageInfo {
                       hasNextPage
@@ -101,7 +101,9 @@ export class ProjectDashboardService {
                              copyleft,
                              custom,
                              dual,
-                             permissive
+                             permissive,
+                             proprietary,
+                             proprietaryFree,
                           },
                           supplyChainMetrics {
                             risk
@@ -118,10 +120,10 @@ export class ProjectDashboardService {
                   }
                 }
             }
-          `, 'no-cache');
+          `,'no-cache');
   }
 
-  getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage,vulPage,licensePage) {
+  getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage, vulPage, licensePage) {
 
     // Scan Asset Config Start
     let parentId = (scanAssetDetails.parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + scanAssetDetails.parentScanAssetId + '\", ' : "";
@@ -476,7 +478,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
             const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
             const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
-            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage,vulPage,licensePage);
+            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage, vulPage, licensePage);
             return forkJoin([res1]);
           } else {
             this.alertService.alertBox("Project data not found!", Messages.commonErrorHeaderText, 'error');

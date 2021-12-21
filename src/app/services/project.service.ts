@@ -666,9 +666,11 @@ export class ProjectService {
               totalCount
               edges {
                 node {
+                  orgId,
                   name,
                   size,
                   assetSize,
+                  projectId
                   scanAssetId,
                   originAssetId
                   workspacePath
@@ -702,8 +704,6 @@ export class ProjectService {
             attributionStatus,
             sourceAssetAttribution {
               orgId,
-              scanId,
-              scanAssetId,
               attributedBy,
               attributedDate,
               attributionStatus,

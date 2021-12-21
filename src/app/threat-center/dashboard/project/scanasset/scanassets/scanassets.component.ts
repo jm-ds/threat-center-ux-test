@@ -21,7 +21,7 @@ import { ProjectService } from '@app/services/project.service';
   ]
 })
 
-export class ScanAssetsComponent implements OnInit,OnDestroy {
+export class ScanAssetsComponent implements OnInit, OnDestroy {
 
   @Input() scanId;
   @Input() obsScan: Observable<Scan>;
@@ -40,12 +40,12 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   messages = Messages;
   isDisablePaggination: boolean = false;
   constructor(
-    private projectService:ProjectService,
+    private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
     private userPreferenceService: UserPreferenceService,
-    private saveFilterStateService:SaveFilterStateService) { }
+    private saveFilterStateService: SaveFilterStateService) { }
 
   ngOnDestroy(): void {
     this.saveFilterStateService.saveFilter(this.columnsFilter);
@@ -63,13 +63,22 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
 
   // Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
   checkScanDataExists() {
-    // if (!this.obsScan) {
+    const preferenceDetails = this.userPreferenceService.getPanelDetailByModule("Project");
+    const projectId = this.route.snapshot.paramMap.get('projectId');
+    if (!!preferenceDetails && !!preferenceDetails.assetPreferences
+      && preferenceDetails.assetPreferences.length >= 1
+      && !!preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId })) {
+      const prefData = preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId });
+      this.scanAssetDetails = prefData.currentAssetDetails;
+      this.story = prefData.currentStory;
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
-    // } else {
-    //   this.initData();
-    // }
+    } else {
+      this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+        .pipe(map(result => result.data.scan));
+      this.initData();
+    }
   }
 
   sort(scanAssets: any) {
@@ -203,7 +212,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
     }
   }
 
-  getSummationOfEmbeded(array:any[]){
+  getSummationOfEmbeded(array: any[]) {
     return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
   }
 
@@ -219,6 +228,8 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
   private initData() {
     this.obsScan.subscribe(asset => {
       this.scanAssetDetails = asset;
+      const projectId = this.route.snapshot.paramMap.get('projectId');
+      this.userPreferenceService.settingUserPreference('Project', null, null, null, null, null, null, null, { currentStory: this.story, currentAssetDetails: this.scanAssetDetails, projectId: projectId });
     });
   }
 
@@ -238,7 +249,7 @@ export class ScanAssetsComponent implements OnInit,OnDestroy {
 
   // return match type caption by match type code
   public matchTypeVal2Caption(val: string) {
-    switch(val) {
+    switch (val) {
       case 'UNIQUE_PROPRIETARY': return 'PROPRIETARY ';
       case 'PROPRIETARY': return 'PROPRIETARY/OPEN SOURCE ';
       case 'EMBEDDED_OPEN_SOURCE': return 'OPEN SOURCE/PROPRIETARY ';

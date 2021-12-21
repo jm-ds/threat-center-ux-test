@@ -10,6 +10,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import * as _ from 'lodash';
 import { NextConfig } from "@app/app-config";
+import { AuthenticationService } from "@app/security/services";
 
 @Component({
     selector: 'app-license-new-card',
@@ -39,7 +40,8 @@ export class NewLicenseCardComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
-        private userPreferenceService: UserPreferenceService) {
+        private userPreferenceService: UserPreferenceService,
+        private authService: AuthenticationService) {
 
     }
     ngOnInit(): void {
@@ -170,6 +172,13 @@ export class NewLicenseCardComponent implements OnInit {
 
     onClickAnnotate() {
         this.annotateClick.emit();
+    }
+
+    isUserSCMAccountExists() {
+        return !!this.authService.currentUser.repositoryAccounts && !!this.authService.currentUser.repositoryAccounts
+            && (!!this.authService.currentUser.repositoryAccounts.bitbucketAccount ||
+                !!this.authService.currentUser.repositoryAccounts.githubAccount ||
+                !!this.authService.currentUser.repositoryAccounts.gitlabAccount);
     }
 
     private makeFilterMapForService() {

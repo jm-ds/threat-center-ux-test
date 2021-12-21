@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <!--
+
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
 
@@ -47,82 +47,102 @@
                 </select>
             </div>
         </div>
-    </div>-->
+    </div>
 </div>
 
-<div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
-    <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
-    </mat-progress-spinner>
-</div>
 
-<div *ngIf="!isDisablePaggination" class="vulnerabilites-data">
-    <ul>
-        <li *ngFor="let licenseData of licensesDetails" class="data-item {{licenseData.value[0].node?.category}}">
+    <div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+        <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </div>
 
-            <div class="row">
-                <div class="col-sm-10 col-xs-12">
-                    <div class="vulner-data-lt">
-                        <div class="cursor-pointer" (click)="gotoDetails(licenseData.value[0].node?.licenseId,
+    <div *ngIf="!isDisablePaggination" class="vulnerabilites-data">
+        <ul>
+            <li *ngFor="let licenseData of licensesDetails" class="data-item {{licenseData.value[0].node?.category}}">
+
+                <div class="row">
+                    <div class="col-sm-10 col-xs-12">
+                        <div class="vulner-data-lt">
+                            <div class="cursor-pointer" (click)="gotoDetails(licenseData.value[0].node?.licenseId,
                             licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin)">
-                            <div class="data-tag-ttl">
-                                <label class="mr-1" style="font-size: 20px;text-align:center;">
-                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'" title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT STRONG</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'" title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT WEAK</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'" title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT PARTIAL</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'" title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT LIMITED</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'" title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'" title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY'" title="Proprietary" class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'" title="Proprietary Free" class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'PUBLIC_DOMAIN'" title="Permissive" class="badge m-r-5 badge-light-success f-18">PUBLIC DOMAIN</span>
-                                    <span *ngIf="licenseData.value[0].node?.category === 'UNDEFINED'" title="Undefined" class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
-                                </label>
-                                <p class="data-hdng">{{licenseData?.key}}</p>
-                            </div>
-                            <div class="data-row">
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Discovery</small> {{licenseData.value[0].node?.licenseDiscovery}}
+                                <div class="data-tag-ttl">
+                                    <label class="mr-1" style="font-size: 20px;text-align:center;">
+                                        <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_STRONG'"
+                                            title="Copyleft Strong" class="badge m-r-5 badge-light-danger">COPYLEFT
+                                            STRONG</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_WEAK'"
+                                            title="Copyleft Weak" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                            WEAK</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_PARTIAL'"
+                                            title="Copyleft Partial" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                            PARTIAL</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT_LIMITED'"
+                                            title="Copyleft Limited" class="badge m-r-5 badge-light-warning">COPYLEFT
+                                            LIMITED</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'COPYLEFT'"
+                                            title="Copyleft" class="badge m-r-5 badge-light-warning">COPYLEFT</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'PERMISSIVE'"
+                                            title="Permissive" class="badge m-r-5 badge-light-success">PERMISSIVE</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY'"
+                                            title="Proprietary"
+                                            class="badge m-r-5 badge-light-warning">PROPRIETARY</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'PROPRIETARY_FREE'"
+                                            title="Proprietary Free"
+                                            class="badge m-r-5 badge-light-warning">PROPRIETARY_FREE</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'PUBLIC_DOMAIN'"
+                                            title="Permissive" class="badge m-r-5 badge-light-success f-18">PUBLIC
+                                            DOMAIN</span>
+                                        <span *ngIf="licenseData.value[0].node?.category === 'UNDEFINED'"
+                                            title="Undefined"
+                                            class="badge m-r-5 badge-light-warning f-18">UNDEFINED</span>
+                                    </label>
+                                    <p class="data-hdng">{{licenseData?.key}}</p>
                                 </div>
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Origin</small> {{licenseData.value[0].node?.licenseOrigin}}
-                                </div>
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Style</small> {{licenseData.value[0].node?.style}}
-                                </div>
+                                <div class="data-row">
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Discovery</small> {{licenseData.value[0].node?.licenseDiscovery}}
+                                    </div>
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Origin</small> {{licenseData.value[0].node?.licenseOrigin}}
+                                    </div>
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Style</small> {{licenseData.value[0].node?.style}}
+                                    </div>
 
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>Trust Level</small>
-                                    {{getTrustLevelValue(licenseData.value[0].node?.trustLevel)}}
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>Trust Level</small>
+                                        {{getTrustLevelValue(licenseData.value[0].node?.trustLevel)}}
+                                    </div>
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>OSI Approved</small> {{licenseData.value[0].node?.isOsiApproved ? 'YES' :
+                                        'NO'}}
+                                    </div>
+                                    <div class="info-cols flex-column align-items-start">
+                                        <small>FSF Libre</small> {{licenseData.value[0].node?.isFsfLibre ? 'YES' :
+                                        'NO'}}
+                                    </div>
                                 </div>
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>OSI Approved</small> {{licenseData.value[0].node?.isOsiApproved ? 'YES' :
-                                    'NO'}}
-                                </div>
-                                <div class="info-cols flex-column align-items-start">
-                                    <small>FSF Libre</small> {{licenseData.value[0].node?.isFsfLibre ? 'YES' : 'NO'}}
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
+                        <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
+                            <div class="action-btns mt-4">
+                                <a class="data-cta ingore-cta">Ignore</a>
+                                <a class="data-cta ml-2"
+                                    (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-2 col-xs-12">
-                    <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
-                        <div class="action-btns mt-4">
-                            <a class="data-cta ingore-cta">Ignore</a>
-                            <a class="data-cta ml-2"
-                                (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </li>
+        </ul>
+    </div>
 
-        </li>
-    </ul>
-</div>
-
-<div class="col-sm-12">
-    <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="totalLicenses"
-        [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
-    </mat-paginator>
-</div>
+    <div class="col-sm-12">
+        <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="totalLicenses"
+            [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+        </mat-paginator>
+    </div>
