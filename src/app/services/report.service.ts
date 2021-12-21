@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { EntityListQuery } from "@app/models";
+import {EntityListQuery, ScanLicenseQuery} from "@app/models";
 import { Apollo } from "apollo-angular";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
@@ -27,10 +27,113 @@ export class ReportService {
       return this.http.get<any>(url, opts).pipe();
     }
 
-    // return entity list with vulnerabilities
+    // return entity list with license
   findLicenses(name, type, category) {
       const url = environment.apiUrl + '/license-state-report';
       const opts = { params: new HttpParams().set('name', name).set('type', type).set("category", category)};
+      return this.http.get<any>(url, opts).pipe();
+    }
+
+    // return entity list with license
+  findComponents(nameFilter, versionFilter, typeFilter, locationFilter, discoveryFilter, isInternalFilter, hasVulnerabilitiesFilter) {
+      const url = environment.apiUrl + '/component-state-report';
+
+      let paramsVar = new HttpParams()
+          .set('name', nameFilter)
+          .set('version', versionFilter)
+          .set("type", typeFilter)
+          .set("discoveredIn", locationFilter)
+          .set("discoveryType", discoveryFilter);
+
+      if (isInternalFilter === true) {
+          paramsVar = paramsVar.set("isInternal", isInternalFilter);
+      }
+      if (hasVulnerabilitiesFilter === true) {
+          paramsVar = paramsVar.set("hasVulnerabilities", hasVulnerabilitiesFilter);
+      }
+
+      const opts = { params: paramsVar};
+      return this.http.get<any>(url, opts).pipe();
+    }
+
+  findComponentsGQL(nameFilter, versionFilter, typeFilter, locationFilter, discoveryFilter, isInternalFilter, hasVulnerabilitiesFilter) {
+      return this.coreGraphQLService.coreGQLReq<any>(gql`
+          query {
+              componentsReport(name:"${nameFilter}", version:"${versionFilter}", type:"${typeFilter}", discoveredIn:"${locationFilter}", 
+                               discoveryType:"${discoveryFilter}", isInternal: ${isInternalFilter}, hasVulnerabilities: ${hasVulnerabilitiesFilter}) {
+                  entityId,
+                  entityName,
+                  projectId,
+                  projectName,
+                  comps {
+                      id
+                      orgId
+                      orgName
+                      entityId
+                      entityName
+                      projectId
+                      projectName
+                      subProjectId
+                      subProjectName
+                      scanId
+                      scanRepoId
+                      scanDate
+                      dateCreated
+                      componentId
+                      group
+                      name
+                      version
+                      purl
+                      versionRecent
+                      versionFixed
+                      hasVulnerability
+                      classifier
+                      description
+                      isInternal
+                      license
+                      componentType
+                      componentLocation
+                      componentDiscoveryMethod
+                      vulnerabilitiesStr
+                      fixedVersions
+
+                      licenses(first: 100) {
+                          edges {
+                              node {
+                                  licenseId
+                                  name
+                                  category
+                                  licenseDiscovery
+                              }
+                          }
+                      }
+
+                      vulns(first: 100) {
+                          totalCount
+                          edges {
+                              node {
+                                  vulnerabilityId
+                                  vulnId
+                                  severity
+                                  patchedVersions
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      `);
+  }
+
+    // return entity list with license
+  findEmbeddedAssets(name, size, embeddedPercent, matchType) {
+      const url = environment.apiUrl + '/embedded-asset-state-report';
+      const opts = { params: new HttpParams()
+              .set('name', name)
+              .set('size', size)
+              .set("embeddedPercent", embeddedPercent)
+              .set("matchType", matchType)
+      };
       return this.http.get<any>(url, opts).pipe();
     }
 
