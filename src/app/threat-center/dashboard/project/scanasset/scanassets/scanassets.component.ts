@@ -71,6 +71,9 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       const prefData = preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId });
       this.scanAssetDetails = prefData.currentAssetDetails;
       this.story = prefData.currentStory;
+      this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+        .pipe(map(result => result.data.scan));
+      this.initData();
     } else {
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
