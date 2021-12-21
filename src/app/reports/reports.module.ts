@@ -9,7 +9,7 @@ import {ComponentsReportComponent} from './component-report/components-report.co
 import {EmbeddedAssetsReportComponent} from './embedded-asset-report/embedded-assets-report.component';
 import {IcDatepickerModule} from "ic-datepicker";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgbDatepickerModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDatepickerModule, NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
 import {TreeviewI18n, TreeviewModule} from "ngx-treeview";
 import {EntityTreeviewI18n} from "./ngx-treeview-i18n";
 import {SelectModule} from "ng-select";
@@ -39,7 +39,8 @@ import {NouisliderModule} from "ng2-nouislider";
         TableModule,
         MessageModule,
         AlertModule,
-        NouisliderModule
+        NouisliderModule,
+        NgbPopoverModule
     ],
     exports: [
         DateIntervalFilterComponent,

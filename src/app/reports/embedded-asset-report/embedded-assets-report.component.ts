@@ -32,12 +32,16 @@ export class EmbeddedAssetsReportComponent implements OnInit {
 
     reportDate = new Date();
 
-    nameFilter: string;
+    nameFilter = '';
+    sizeFilter = '';
+    embeddedPercentFilter = '';
+    matchTypeFilter = '';
+
     statusFilter = 'ALL';
 
     // @ts-ignore
     @ViewChild('sizeFilterRef') sizeFilterRef;
-    public sizeFilter: number[] = [0, 20];
+    // public sizeFilter: number[] = [0, 20];
     public sizeFilterConfig: any = {
         behaviour: 'drag',
         connect: true,
@@ -73,7 +77,7 @@ export class EmbeddedAssetsReportComponent implements OnInit {
     previewStateOpen = false;
 
     totals = {entities: 0, embedded: 0, projects: 0};
-    entities: Entity[];
+    entities = [];
 
 
     /*
@@ -82,13 +86,44 @@ export class EmbeddedAssetsReportComponent implements OnInit {
         -   Status
         -   Embedded
      */
-    columns = ['Project', 'File Name', 'File Size', 'Workspace Path', 'Status', 'Embedded Assets'];
+    columns = ['File Name', 'File Size', 'Status',  'Embedded percent', 'Attribution', 'Match type'/*, 'Workspace Path'*/];
 
 
     constructor(private reportService: ReportService,
                 private scrollDisableService: ScrollStateService
     ) {
-        this.reportService.getAssets().subscribe(data => {
+    }
+
+
+
+    findAssets(nameFilter, sizeFilter, embeddedPercentFilter, matchTypeFilter) {
+        this.reportService.findEmbeddedAssets(nameFilter, sizeFilter, embeddedPercentFilter, matchTypeFilter).subscribe(data => {
+
+            console.log("=================================================");
+            console.log(data);
+
+            this.entities = data;
+
+            this.totals = {entities: 0, embedded: 0, projects: 0};
+
+            let entities = [];
+
+            for (const entity of this.entities) {
+                // this.totals.entities += 1;
+                entities.push(entity.entityId);
+                this.totals.projects += 1;
+                for (const asset of entity.embeddedAssets) {
+                    this.totals.embedded += 1;
+                }
+            }
+
+            this.totals.entities = entities.filter(this.onlyUnique).length;
+        }, error => {
+            console.error("EmbeddedAssetReportComponent", error);
+        });
+
+
+        /*this.reportService.getAssets().subscribe(data => {
             this.entities = data.data.entities.edges.map((e) => e.node).sort(compareByName);
 
             this.totals = {entities: 0, embedded: 0, projects: 0};
@@ -135,10 +170,43 @@ export class EmbeddedAssetsReportComponent implements OnInit {
             }
         }, error => {
             console.error("EmbeddedAssetReportComponent", error);
-        });
+        });*/
     }
 
     ngOnInit() {
+        this.findAssets(this.nameFilter, this.sizeFilter, this.embeddedPercentFilter, this.matchTypeFilter);
+    }
+
+    onApplyFilter() {
+        // todo: apply filter heres
+        // console.log(this.entitiesSelected);
+        // console.log(this.dateInterval.dateStart);
+        // console.log(this.dateInterval.dateEnd);
+        // console.log(this.entityTree.entitiesSelected);
+
+
+
+        console.log("apply filter =================================================================================================");
+        console.log(this.nameFilter);
+        console.log(this.sizeFilter);
+        console.log(this.embeddedPercentFilter);
+        console.log(this.matchTypeFilter);
+
+        this.findAssets(this.nameFilter, this.sizeFilter, this.embeddedPercentFilter, this.matchTypeFilter);
+    }
+
+    onClearFilter() {
+        this.nameFilter = '';
+        this.sizeFilter = '';
+        this.embeddedPercentFilter = '';
+        this.matchTypeFilter = '';
+
+        this.findAssets(this.nameFilter, this.sizeFilter, this.embeddedPercentFilter, this.matchTypeFilter);
+    }
+
+
+    onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
     }
 
     openPreview() {

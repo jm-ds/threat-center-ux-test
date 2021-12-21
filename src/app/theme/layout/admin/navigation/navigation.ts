@@ -105,7 +105,7 @@ const NavigationItems = [
             permissions: ["REPORT_VIEW"],
             target: false,
           },
-          /*{
+          {
             id: 'component-report',
             title: 'Components',
             icon: 'fas fa-cubes',
@@ -123,7 +123,7 @@ const NavigationItems = [
             permissions: ["REPORT_VIEW"],
             target: false,
           },
-          {
+          /*{
             id: 'software-leaks-report',
             title: 'Software leaks',
             icon: 'fas fa-file-export',
