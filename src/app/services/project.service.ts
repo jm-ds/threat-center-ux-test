@@ -151,7 +151,7 @@ export class ProjectService {
                 }
             }
           }
-      `, 'no-cache');
+      `, 'cache-first');
   }
 
   getScanComponents(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
@@ -226,7 +226,7 @@ export class ProjectService {
                   }
                 }
               }
-          `, 'no-cache');
+          `, 'cache-first');
   }
 
   getScanLicenses(scanId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
@@ -267,7 +267,7 @@ export class ProjectService {
                   }
                 }
               }
-          `, 'no-cache');
+          `, 'cache-first');
   }
 
   // todo: ref: use optional params instead of initializing defaults to undefined
@@ -686,7 +686,7 @@ export class ProjectService {
             }
           }
         }
-      `, 'no-cache');
+      `, 'cache-first');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
