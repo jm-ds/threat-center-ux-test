@@ -13,7 +13,7 @@ export class UserPreferenceService {
     settingUserPreference(moduleName: string, previousLastTabSelected: string,
         lastTabSelectedName: string, itemPerPageD: { componentName: string, value: string } = null,
         panelActiveId = null, selectedDonutChart = null, selectedLinechartTab = null, lastSelectedScan: string = null,
-        assetPreferences: { currentStory: any, currentAssetDetails: any, projectId: string } = null) {
+        assetPreferences: { currentStory: any, currentAssetDetails: any, projectId: string, parentScanAssetId: string, currrentScanId: string } = null) {
         let preferenceDetails: Array<UserPreferenceModel> = [];
         if (!!sessionStorage.getItem("UserPreference")) {
             preferenceDetails = this.getPreferenceDetailsFromSession();
@@ -83,6 +83,8 @@ export class UserPreferenceService {
                                         f.projectId = assetPreferences.projectId;
                                         f.currentStory = assetPreferences.currentStory;
                                         f.currentAssetDetails = assetPreferences.currentAssetDetails;
+                                        f.parentScanAssetId = assetPreferences.parentScanAssetId;
+                                        f.currrentScanId = assetPreferences.currrentScanId;
                                     }
                                 });
                             } else {

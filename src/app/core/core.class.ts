@@ -8,7 +8,7 @@ export class UserPreferenceModel {
     itemPerPageDetails?: Array<{ componentName: string, value: string }>;
     lastSelectedTabLists: Array<string>;
     lastSelectedScanId?: string;
-    assetPreferences?: Array<{ projectId: string, currentStory: any, currentAssetDetails: any }>;
+    assetPreferences?: Array<{ projectId: string, currentStory: any, currentAssetDetails: any, parentScanAssetId: string, currrentScanId: string }>;
 }
 
 

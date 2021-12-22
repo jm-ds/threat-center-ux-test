@@ -67,10 +67,12 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     const projectId = this.route.snapshot.paramMap.get('projectId');
     if (!!preferenceDetails && !!preferenceDetails.assetPreferences
       && preferenceDetails.assetPreferences.length >= 1
-      && !!preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId })) {
+      && !!preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId })
+      && !!preferenceDetails.assetPreferences.find(s => { return s.currrentScanId === this.scanId })) {
       const prefData = preferenceDetails.assetPreferences.find(f => { return f.projectId === projectId });
       this.scanAssetDetails = prefData.currentAssetDetails;
       this.story = prefData.currentStory;
+      this.parentScanAssetId = !!prefData.parentScanAssetId ? prefData.parentScanAssetId : this.parentScanAssetId;
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
@@ -125,6 +127,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
       this.isDisablePaggination = false;
+      this.setUserPreferencesDetailsForAseets();
     });
   }
 
@@ -170,6 +173,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       obsScan.subscribe(asset => {
         this.scanAssetDetails = asset;
         this.coreHelperService.setFocusOnElement(idElement);
+        this.setUserPreferencesDetailsForAseets();
       });
     }, this.timeOutDuration);
   }
@@ -228,8 +232,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   private initData() {
     this.obsScan.subscribe(asset => {
       this.scanAssetDetails = asset;
-      const projectId = this.route.snapshot.paramMap.get('projectId');
-      this.userPreferenceService.settingUserPreference('Project', null, null, null, null, null, null, null, { currentStory: this.story, currentAssetDetails: this.scanAssetDetails, projectId: projectId });
+      this.setUserPreferencesDetailsForAseets();
     });
   }
 
@@ -259,4 +262,8 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
   }
 
+  private setUserPreferencesDetailsForAseets() {
+    const projectId = this.route.snapshot.paramMap.get('projectId');
+    this.userPreferenceService.settingUserPreference('Project', null, null, null, null, null, null, null, { currentStory: this.story, currentAssetDetails: this.scanAssetDetails, projectId: projectId, parentScanAssetId: this.parentScanAssetId, currrentScanId: this.scanId });
+  }
 }
