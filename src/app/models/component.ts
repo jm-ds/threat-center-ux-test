@@ -11,6 +11,9 @@ export class FixResult {
 export class TxComponent {
     componentId;
     copyrightList: Copyright[];
+    name;
+    group;
+    version;
 }
 
 export class Copyright {

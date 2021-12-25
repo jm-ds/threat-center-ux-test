@@ -363,6 +363,23 @@ export class ProjectService {
         `);
   }
 
+  getComponentByScanAssetId(scanAssetId: string) {
+    return this.coreGraphQLService.coreGQLReq<ComponentQuery>(gql`
+           query {
+              component(scanAssetId:"${scanAssetId}") {
+                componentId,
+                name,
+                group,
+                version,
+                isInternal,
+                cpe,
+                description,
+                usedBy
+            }
+          }
+        `);
+  }
+
   getLicense(licenseId: string) {
     return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
             query {
