@@ -13,6 +13,7 @@ import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { NextConfig } from '@app/app-config';
 
 
 
@@ -21,7 +22,7 @@ import { UserPreferenceService } from '@app/services/core/user-preference.servic
   templateUrl: './license-dimension.component.html',
   styleUrls: ['./license-dimension.component.scss']
 })
-export class LicenseDimensionComponent implements OnInit,AfterViewInit {
+export class LicenseDimensionComponent implements OnInit, AfterViewInit {
 
   public licenseCols = ['Name', 'Threat'];
   @ViewChild('ctdTabset', { static: false }) ctdTabset: NgbTabset;
@@ -39,7 +40,7 @@ export class LicenseDimensionComponent implements OnInit,AfterViewInit {
   obsLicenseComponents: Observable<any>;
   licenseComponents: any;
   newVersion: string;
-  defaultPageSize = 25;
+  defaultPageSize = NextConfig.config.defaultItemPerPage;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
 
@@ -189,6 +190,43 @@ export class LicenseDimensionComponent implements OnInit,AfterViewInit {
         if (!!this.licenseComponents.pageInfo && this.licenseComponents.pageInfo['hasPreviousPage']) {
           this.loadLicenseComponents(undefined, Number(this.defaultPageSize),
             undefined, this.licenseComponents.pageInfo['startCursor']);
+        }
+      }
+    }
+  }
+
+  loadLicenseAssetPage(first, last, endCursor = undefined, startCursor = undefined) {
+    let obsScanLicenseAssets = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
+      first, last, endCursor, startCursor,
+      this.parentScanAssetId, this.makeAssetFilterMapForService())
+      .pipe(map(result => result.data.scanLicense));
+    obsScanLicenseAssets.subscribe(scanLicense => {
+      this.scanAssetDetails = scanLicense.scanAssetsTree;
+    });
+  }
+
+  changeAssetPage(pageInfo) {
+    // this.isDisablePaggination = true;
+    if (this.defaultPageSize.toString() !== pageInfo.pageSize.toString()) {
+      // page size changed...
+      this.defaultPageSize = pageInfo.pageSize;
+      // API Call
+      this.loadLicenseAssetPage(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined);
+      this.paginator.firstPage();
+    }
+    else {
+      // Next and Previous changed
+      if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
+        // call with after...
+        if (!!this.scanAssetDetails.pageInfo && this.scanAssetDetails.pageInfo.hasNextPage) {
+          this.loadLicenseAssetPage(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined,
+            this.scanAssetDetails.pageInfo.endCursor, undefined);
+        }
+      } else {
+        // call with before..
+        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.pageInfo.hasPreviousPage) {
+          this.loadLicenseAssetPage(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
+            undefined, this.scanAssetDetails.pageInfo.startCursor);
         }
       }
     }
