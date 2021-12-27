@@ -230,9 +230,13 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
 
   // initializing data
   private initData() {
+    this.isDisablePaggination = true;
     this.obsScan.subscribe(asset => {
+      this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
       this.setUserPreferencesDetailsForAseets();
+    },err => {
+      this.isDisablePaggination = false;
     });
   }
 
