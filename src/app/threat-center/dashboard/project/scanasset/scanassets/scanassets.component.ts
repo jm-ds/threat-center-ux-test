@@ -216,27 +216,6 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getOpenSourceAssetInfo(scanAsset) {
-    console.log('before call');
-    let response = this.projectService.getComponentByScanAssetId(scanAsset.node.scanAssetId)
-        .pipe(map(result => String(result.data.component.name + ':' + result.data.component.group + ':' + result.data.component.version)));
-    console.log(response);
-    console.log('after call');
-    return response;
-
-    /*//alter method
-    console.log('before call');
-    const obsComponent = this.projectService.getComponentByScanAssetId(scanAsset.node.scanAssetId)
-        .pipe(map(result => result.data));
-    let response = null;
-    obsComponent.subscribe(component => {
-      response = component.component.componentId;
-    });
-    console.log(response);
-    console.log('after call');
-    return 'nen';*/
-  }
-
   getSummationOfEmbeded(array: any[]) {
     return array.map(f => f.node['percentMatch']).reduce((a, b) => a + b, 0);
   }
