@@ -264,8 +264,9 @@
                 {{match.repositoryOwner}} / {{match.repositoryName}}<br/>
                 SHA-1: {{match.matchAssetId}}<br/>
                 <!--<i class="btn-outline-info fab fa-github fa-1x align-middle m-r-5"></i>-->
-                <div *ngFor="let assetLicense of match.assetLicenses">
-                  {{assetLicense.name}}
+                <div *ngFor="let assetLicense of match.licenses">
+                  {{assetLicense.licenseName}} : {{assetLicense.licenseContext}}
+
                 </div>
 
               </div>

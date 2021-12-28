@@ -111,7 +111,7 @@
               <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.status}}</td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.matchCount}} <span *ngIf='scanAsset.node.matchCount>0'> / {{scanAsset.node.embeddedAssetPercent | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.matchCount}} <span *ngIf='scanAsset.node.matchCount>0'> / {{scanAsset?.node?.embeddedAssetPercent | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
@@ -128,7 +128,7 @@
               <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.assetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td>{{scanAsset.node.status}}</td>
-              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.matchCount}} <span *ngIf='scanAsset.node.matchCount>0'> / {{scanAsset.node.embeddedAssetPercent | number:'1.1-2'}}%</span></td>
+              <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.matchCount}} <span *ngIf='scanAsset.node.matchCount>0'> / {{scanAsset?.node?.embeddedAssetPercent | number:'1.1-2'}}%</span></td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
               <td *ngIf="scanAsset.node.assetType != 'DIR'">{{scanAsset.node.attributionStatus}}</td>
               <td *ngIf="scanAsset.node.assetType === 'DIR'"></td>
