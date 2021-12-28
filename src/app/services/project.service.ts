@@ -680,13 +680,23 @@ export class ProjectService {
                   attributionStatus,
                   matchType,
                   embeddedAssetPercent,
-                  matchCount
+                  matchCount,
+                  component {
+                    componentId,
+                    name,
+                    group,
+                    version,
+                    isInternal,
+                    cpe,
+                    description,
+                    usedBy
+                  }
                 }
               }
             }
           }
         }
-      `, 'cache-first');
+      `, 'no-cache');
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
