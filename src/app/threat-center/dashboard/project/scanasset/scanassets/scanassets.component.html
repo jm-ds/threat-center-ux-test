@@ -106,7 +106,7 @@
                 <i *ngIf="scanAsset.node.assetType === 'DIR'" class="fas fa-folder"></i>
                 <i *ngIf="scanAsset.node.assetType != 'DIR'" class="far fa-file"></i>
                 &nbsp;&nbsp;{{getName(scanAsset.node.name)}}
-                <i class="fas fa-cubes" triggers="mouseenter:mouseleave" [ngbPopover]="popContent"
+                <i class="fas fa-cubes" triggers="mouseenter:mouseleave" [ngbPopover]="popContent" style="color:#2DC6DB;margin-left: 3px"
                    *ngIf="scanAsset.node.matchType === 'OPEN_COMPONENT' && scanAsset.node.component">
                 </i>
                 <ng-template #popContent>
