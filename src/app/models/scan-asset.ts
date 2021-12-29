@@ -9,7 +9,7 @@ export class ScanAsset {
     originAssetId: string;
     workspacePath: string;
     status: string;
-    assetType: string;
+    scanAssetType: string;
     content: string;
     matchRepository: Repository;
     matches: ScanAssetMatch[];
@@ -55,17 +55,8 @@ export class ScanAssetsTreeConnection {
 }
 
 export class ScanAssetsTreeEdge {
-    node: ScanAssetTree;
+    node: ScanAsset;
     cursor: string;
-}
-
-export class ScanAssetTree extends ScanAsset{
-    orgId: string;
-    scanId: string;
-    parentScanAssetId: string;
-    projectId: string;
-    assetType: string;
-    embeddedAssetPercent: number;
 }
 
 export class ScanLicenseAssetConnection {
