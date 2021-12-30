@@ -224,7 +224,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
         }
       } else {
         // call with before..
-        if (!!this.scanAssetDetails.scanAssetsTree.pageInfo && this.scanAssetDetails.pageInfo.hasPreviousPage) {
+        if (!!this.scanAssetDetails.pageInfo && this.scanAssetDetails.pageInfo.hasPreviousPage) {
           this.loadLicenseAssetPage(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
             undefined, this.scanAssetDetails.pageInfo.startCursor);
         }
