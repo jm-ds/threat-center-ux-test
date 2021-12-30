@@ -1,6 +1,8 @@
 <div *ngIf='obsProject | async as project; '>
-    <project-dashboard-header [obsProject]="obsProject" (openProjectTag)="openProjectTagDialog(projectTags)"></project-dashboard-header>
-    <project-dashboard-top-bar [obsProject]="obsProject"></project-dashboard-top-bar>
+    <project-dashboard-header [obsProject]="obsProject" (openProjectTag)="openProjectTagDialog(projectTags)">
+    </project-dashboard-header>
+    <project-dashboard-top-bar [obsProject]="obsProject" (openScanTab)="openScanTable($event)">
+    </project-dashboard-top-bar>
 
     <!-- donut chart for scan data -->
     <div class="matrix-chart">
@@ -46,8 +48,10 @@
 
                         <div class="matrix-chart-legend">
                             <p *ngFor="let data of licenseDonutChartLabel;let i = index">
-                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0" class="{{data.class}}">{{data.label}}</span>
-                                <small *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
+                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0"
+                                    class="{{data.class}}">{{data.label}}</span>
+                                <small
+                                    *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
                             </p>
                         </div>
                     </div>
@@ -95,7 +99,8 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-vulnerabilities-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="vulScanData">
+                    <app-vulnerabilities-card #vulTemplate [scanId]="stateService.selectedScan?.node.scanId"
+                        [obsScan]="vulScanData">
                     </app-vulnerabilities-card>
                 </ng-template>
             </ngb-tab>
@@ -106,8 +111,8 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-license-new-card [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="licensesScanData"
-                        (annotateClick)="gotoAsset()"></app-license-new-card>
+                    <app-license-new-card #licenseCard [scanId]="stateService.selectedScan?.node.scanId"
+                        [obsScan]="licensesScanData" (annotateClick)="gotoAsset()"></app-license-new-card>
                 </ng-template>
             </ngb-tab>
             <ngb-tab id="components">
@@ -117,8 +122,8 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-component-new-cad [scanId]="stateService.selectedScan?.node.scanId"
-                                           [obsScan]="componentScanData"></app-component-new-cad>
+                    <app-component-new-cad #componentCard [scanId]="stateService.selectedScan?.node.scanId"
+                        [obsScan]="componentScanData"></app-component-new-cad>
                 </ng-template>
             </ngb-tab>
             <ngb-tab id="assets">
@@ -128,7 +133,8 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData" (isAssetStory)="getStory($event)"></app-scanassets>
+                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
+                        (isAssetStory)="getStory($event)"></app-scanassets>
                     <p></p>
                 </ng-template>
             </ngb-tab>
@@ -157,6 +163,131 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="modal.close('click'); setProjectTags(project);">Save
                 Project Tags</button>
+            <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
+        </div>
+    </ng-template>
+
+    <ng-template #scanTable let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Scans</h4>
+        </div>
+        <div class="modal-body">
+            <div class="text-center center-table-progressbar" *ngIf="isDisablePaggination">
+                <mat-progress-spinner strokeWidth="5" [diameter]="40" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </div>
+            <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'250px'">
+                <p-table id="tabPanels" [columns]="columns" [value]="scanList" [paginator]="false" [rows]="50"
+                    tableStyleClass="table table-bordered table-hover dataTable no-footer table-width"
+                    selectionMode="single" [(selection)]="stateService.selectedScan"
+                    (onRowUnselect)="rowUnselect($event)" [autoLayout]="true" (onRowSelect)="onRowSelect($event)"
+                    [scrollable]="false">
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>ID</th>
+                            <th>Commit</th>
+                            <th>Branch name</th>
+                            <th>Tag</th>
+                            <th>Created</th>
+                            <th>Vulnerabilities</th>
+                            <th>Licenses</th>
+                            <th title="Asset Composition">ASSETS COMPOSITION</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-scan let-columns="columns">
+                        <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" class="cursor-pointer"
+                            [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId,'scan-highlight': stateService.selectedScan.node?.scanId === scan.node?.scanId }">
+                            <td (dblclick)="copyToClipboard(scan.node?.scanId, 'Scan ID copied to clipboard');">
+                                {{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
+                            <td
+                                (dblclick)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">
+                                {{scan.node?.versionHash}}</td>
+                            <td>{{scan.node?.branch}}</td>
+                            <td>{{scan.node?.tag}}</td>
+                            <td>{{scan.node?.created | date :'M/d h:mmaa' | lowercase}}</td>
+                            <td>
+                                <span title="Critical"
+                                    class="badge m-r-5 badge-red">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.critical}}</span>
+                                <span title="High"
+                                    class="badge m-r-5 badge-pink">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.high}}</span>
+                                <span title="Medium"
+                                    class="badge m-r-5 badge-orange">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.medium}}</span>
+                                <span title="Low"
+                                    class="badge m-r-5 badge-yellow">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.low}}</span>
+                                <span title="Info"
+                                    class="badge m-r-5 badge-light-primary">{{scan.node.scanMetricsSummary?.vulnerabilityMetrics?.info}}</span>
+                            </td>
+                            <td>
+                                <span title="Copyleft Strong"
+                                    class="badge m-r-5 badge-copyleftstrong">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
+                                <span title="Copyleft Weak"
+                                    class="badge m-r-5 badge-copyleftWeak">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
+                                <span title="Copyleft Partial"
+                                    class="badge m-r-5 badge-copyleftPartial">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
+                                <span title="Copyleft Limited"
+                                    class="badge m-r-5 badge-copyleftLimited">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
+                                <span title="Copyleft"
+                                    class="badge m-r-5 badge-copyLeft">{{scan.node.scanMetricsSummary?.licenseMetrics?.copyleft}}</span>
+                                <span title="Dual"
+                                    class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.dual}}</span>
+                                <span title="Custom"
+                                    class="badge m-r-5 badge-light-warning">{{scan.node.scanMetricsSummary?.licenseMetrics?.custom}}</span>
+                                <span title="Permissive"
+                                    class="badge m-r-5 badge-permissive">{{scan.node.scanMetricsSummary?.licenseMetrics?.permissive}}</span>
+                            </td>
+
+                            <td>
+                                <span title="Embedded"
+                                    class="badge m-r-5 badge-blue">{{scan.node.scanMetricsSummary?.assetMetrics?.embedded}}</span>
+                                <span title="Open Source"
+                                    class="badge m-r-5 badge-yellow">{{scan.node.scanMetricsSummary?.assetMetrics?.openSource}}</span>
+                                <span title="Unique"
+                                    class="badge m-r-5 badge-green">{{scan.node.scanMetricsSummary?.assetMetrics?.unique}}</span>
+                            </td>
+                            <td style="text-align: center">
+                                <span *ngIf="scan.node?.status==='FAIL'">
+                                    <button class="btn badge-light-danger error-btn" title="Show log and error messages"
+                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                        <i class="feather icon-x badge-light-danger"
+                                            style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
+                                    </button>
+                                </span>
+                                <span *ngIf="scan.node?.status==='WARNING'">
+                                    <button class="btn badge-light-warning error-btn"
+                                        title="Show log and error messages"
+                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                        <i class="feather icon-x badge-light-warning"
+                                            style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
+                                    </button>
+                                </span>
+                                <span *ngIf="scan.node?.status==='SUCCESS'">
+                                    <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
+                                        class="btn badge-light-success error-btn" title="Show log"
+                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                        <i class="feather icon-check badge-light-success"
+                                            style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
+                                    </button>
+                                    <i *ngIf="!scan.node?.errorMsg&&!scan.node?.log"
+                                        class="feather icon-check badge-light-success"
+                                        style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </perfect-scrollbar>
+            <div class="col-sm-12">
+                <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination"
+                    [length]="projectDetails.scans?.totalCount" [pageSize]="defaultPageSize"
+                    [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
+                </mat-paginator>
+            </div>
+        </div>
+        <div class="modal-footer">
             <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
         </div>
     </ng-template>
