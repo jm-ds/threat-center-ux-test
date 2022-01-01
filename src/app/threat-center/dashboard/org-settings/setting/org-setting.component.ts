@@ -22,9 +22,14 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
 
     panelIntegration = [
         {
+            tabName: "General",
+            tabId: "general",
+            isActive: true
+        },
+        {
             tabName: "Emails",
             tabId: "email",
-            isActive: true
+            isActive: false
         },
         {
             tabName: "SLACK Integration",
@@ -97,7 +102,7 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
         if (!!tabId) {
             this.activeIntegrationTabId = tabId;
         } else {
-            this.activeIntegrationTabId = 'email';
+            this.activeIntegrationTabId = 'general';
         }
         let panel = this.getPanel(this.activePanelId);
         if (!!panel && !!panel.panelList) {
