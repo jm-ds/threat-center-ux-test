@@ -207,9 +207,10 @@ export class ScanService {
                 licenseId,
                 licenseName
               },
-              assetLicenses {
+              licenses {
                 licenseId,
-                name
+                licenseName,
+                licenseContext
               }
             }
           }
