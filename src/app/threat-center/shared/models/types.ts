@@ -341,12 +341,12 @@ export class ScanAsset {
   originAssetId:string;
   workspacePath:string;
   status:string;
-  assetType:string;
+  scanAssetType:string;
   content:string;
   matchRepository:Repository;
   matches:ScanAssetMatch[];
   embeddedAssets: EmbeddedAssetConnection;
-  embeddedAssetPercent:number;
+  percentEmbedded:number;
 }
 
 export class EmbeddedAssetConnection {
