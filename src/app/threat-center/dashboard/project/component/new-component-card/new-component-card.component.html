@@ -116,7 +116,9 @@
                             class="data-row row mt-0">
                             <div *ngIf="i < 2" class="col-sm-12 col-xs-12">
                                 <div class="info-cols flex-column align-items-start">
-                                    <small *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}} License(s)</small>
+                                    <small
+                                        *ngIf="!!licenseData?.node?.licenseDiscovery">{{licenseData?.node?.licenseDiscovery}}
+                                        License(s)</small>
                                     <div class="tag-row d-flex align-items-center mt-1">
                                         <label class="mr-2" style="font-size: 20px;text-align:center;">
                                             <span *ngIf="licenseData?.node?.category === 'COPYLEFT_STRONG'"
@@ -165,10 +167,10 @@
 
                                 <ul class="component-vulner-sts mt-2"
                                     *ngIf="componentData?.node?.vulnerabilities?.edges.length >= 1">
-                                    <li class="high"
-                                        *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i">
+                                    <li *ngFor="let data of componentData?.node?.vulnerabilities?.edges;index as i"
+                                        class="{{data.node.severity}}">
                                         <span class="component-vulner-inn" *ngIf="i < 3">
-                                            <em>V</em>
+                                            <em>{{data?.node?.severity?.charAt(0)}}</em>
                                             <b *ngIf="data.node.severity === 'CRITICAL';else otherTem"
                                                 class="{{data.node.severity}}">{{data.node.vulnId}}</b>
                                             <ng-template #otherTem> <span
@@ -177,7 +179,7 @@
                                         </span>
                                     </li>
                                 </ul>
-                                <p triggers="mouseenter:mouseleave" [ngbPopover]="popContent" class="more-link"
+                                <p triggers="mouseenter" [ngbPopover]="popContent" class="more-link"
                                     *ngIf="componentData?.node?.vulnerabilities?.edges.length > 3">
                                     More
                                 </p>
