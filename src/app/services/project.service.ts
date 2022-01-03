@@ -696,7 +696,7 @@ export class ProjectService {
             }
           }
         }
-      `, 'no-cache');
+      `);//, 'no-cache'
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
