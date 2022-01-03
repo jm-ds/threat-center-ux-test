@@ -87,7 +87,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     return scanAssets
       .sort((a, b) => a.node.status.localeCompare(b.node.status))
       .sort((a, b) => b.node.matchCount - a.node.matchCount)
-      .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+      .sort((a, b) => a.node.scanAssetType.localeCompare(b.node.scanAssetType));
   }
 
   // While any changes occurred in page
@@ -137,7 +137,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   }
 
   gotoDetails(scanAsset) {
-    if (scanAsset.node.assetType === 'DIR') {
+    if (scanAsset.node.scanAssetType === 'DIR') {
       this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.breadcumSetting(scanAsset) });
       this.isAssetStory.emit(true);
       this.parentScanAssetId = scanAsset.node.scanAssetId;

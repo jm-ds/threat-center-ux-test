@@ -275,7 +275,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     return scanAssets
       .sort((a, b) => a.node.status.localeCompare(b.node.status))
       .sort((a, b) => b.node.matchCount - a.node.matchCount)
-      .sort((a, b) => a.node.assetType.localeCompare(b.node.assetType));
+      .sort((a, b) => a.node.scanAssetType.localeCompare(b.node.scanAssetType));
   }
 
   // build asset filter string
@@ -316,7 +316,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
 
   // Move down the asset hierarchy
   assetGotoDetails(scanAsset) {
-    if (scanAsset.node.assetType === 'DIR') {
+    if (scanAsset.node.scanAssetType === 'DIR') {
       this.story.push({ id: this.parentScanAssetId, originalName: scanAsset.node.name, name: this.assetBreadcumSetting(scanAsset) });
       this.parentScanAssetId = scanAsset.node.scanAssetId;
       this.reloadAssets();

@@ -474,11 +474,11 @@ export class ProjectService {
                       originAssetId
                       workspacePath
                       status,
-                      assetType,
+                      scanAssetType,
                       parentScanAssetId,
                       attributionStatus,
                       matchType,
-                      embeddedAssetPercent,
+                      percentEmbedded,
                       matchCount
                     }
                   }
@@ -572,11 +572,11 @@ export class ProjectService {
                     originAssetId
                     workspacePath
                     status,
-                    assetType,
+                    scanAssetType,
                     parentScanAssetId,
                     attributionStatus,
                     matchType,
-                    embeddedAssetPercent,
+                    percentEmbedded,
                     matchCount
                   }
                 }
@@ -675,11 +675,11 @@ export class ProjectService {
                   originAssetId
                   workspacePath
                   status,
-                  assetType,
+                  scanAssetType,
                   parentScanAssetId,
                   attributionStatus,
                   matchType,
-                  embeddedAssetPercent,
+                  percentEmbedded,
                   matchCount,
                   component {
                     componentId,
