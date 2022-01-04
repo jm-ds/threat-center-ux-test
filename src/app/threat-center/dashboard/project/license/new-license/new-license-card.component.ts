@@ -50,6 +50,12 @@ export class NewLicenseCardComponent implements OnInit {
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
     }
 
+    updateDataOnSelectedScan(obsScan,scanId){
+        this.obsScan = obsScan;
+        this.scanId = scanId;
+        this.initData();
+    }
+
     //Checking if scanObject is already passed from parent component if not then get data from server To make it re-use component
     checkScanDataExists() {
         this.isDisablePaggination = true;

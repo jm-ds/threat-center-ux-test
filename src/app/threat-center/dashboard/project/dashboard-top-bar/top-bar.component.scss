@@ -41,7 +41,7 @@
             text-transform: uppercase;
         }
 
-        .warning-lbl{
+        .warning-lbl {
             display: inline-block;
             text-align: center;
             padding: 0 10px;
@@ -81,4 +81,10 @@
             }
         }
     }
+}
+
+.history {
+    cursor: pointer;
+    position: absolute;
+    right: 88px;
 }

@@ -12,13 +12,17 @@ import { ProjectService } from "@app/services/project.service";
 import { ScanHelperService } from "@app/services/scan-helper.service";
 import { StateService } from "@app/services/state.service";
 import { ApexChartService } from "@app/theme/shared/components/chart/apex-chart/apex-chart.service";
-import { NgbModal, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { forkJoin, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ScanAssetsComponent } from "./scanasset";
 import * as _ from 'lodash';
 import { NextConfig } from "@app/app-config";
 import { ClipboardDialogComponent } from "./clipboard-dialog/clipboard-dialog.component";
+import { ProjectDashboardTopbarComponent } from "./dashboard-top-bar/top-bar.component";
+import { NewVulnerabilitiesCardComponent } from "./vulnerability/new-vulnerability/new-vulnerability-card.component";
+import { NewLicenseCardComponent } from "./license/new-license/new-license-card.component";
+import { NewComponentCardComponent } from "./component/new-component-card/new-component-card.component";
 
 @Component({
     selector: 'app-project-dashboard',
@@ -29,6 +33,14 @@ import { ClipboardDialogComponent } from "./clipboard-dialog/clipboard-dialog.co
 export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('ctdTabset', { static: false }) ctdTabset;
+    @ViewChild('scanTable', { static: false }) scanTable;
+    @ViewChild(ProjectDashboardTopbarComponent, { static: false }) topBar: ProjectDashboardTopbarComponent;
+    @ViewChild('vulTemplate', { static: false }) newVulnerablityCard: NewVulnerabilitiesCardComponent;
+    @ViewChild('licenseCard', { static: false }) newLicenseCard: NewLicenseCardComponent;
+    @ViewChild('componentCard', { static: false }) newComponentCard: NewComponentCardComponent;
+    @ViewChild(ScanAssetsComponent, { static: false }) scanAssetComponent: ScanAssetsComponent;
+
+
     mostRecentScan;
     vulDonutChart;
     colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
@@ -153,7 +165,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.stateService.project_tabs_selectedTab = "scan";
         this.route.data.subscribe(projData => {
             if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
-                this.populateScanComponents(projData.otherComponentData);
+                this.populateScanComponents(projData.otherComponentData, false);
                 this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
 
                 // if previously any scan selected then get counts of all components, licens eand assets...
@@ -188,6 +200,10 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.initChartPreference();
     }
 
+    openScanTable(v) {
+        this.modalService.open(this.scanTable, { windowClass: 'md-class', centered: true });
+    }
+
     initDonutchart() {
         this.donutChartConfig = Object.assign(this.chartHelperService.initDonutChartConfiguration());
         this.donutChartConfig.chart['height'] = '140px';
@@ -203,19 +219,18 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.obsProject.subscribe(res => {
             if (res && res.scans.edges.length >= 1) {
                 const mostRecentScan: any = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
-                if (!!mostRecentScan.node) {
-                    const metrics = mostRecentScan.node.scanMetricsSummary;
-                    this.vulDonutData['series'] = [metrics.vulnerabilityMetrics['critical'] || 0, metrics.vulnerabilityMetrics['high'] || 0, metrics.vulnerabilityMetrics['medium'] || 0, metrics.vulnerabilityMetrics['low'] || 0, metrics.vulnerabilityMetrics['info'] || 0];
-                    this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['proprietary'] || 0, metrics.licenseMetrics['proprietaryFree'] || 0, metrics.licenseMetrics['copyleftPartial'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
-                    this.assetDonutData['series'] = [metrics.assetMetrics['unique'] || 0, metrics.assetMetrics['embedded'] || 0, metrics.assetMetrics['openSource'] || 0];
-
-                    // this.licenseDonutChartLabel.forEach((f, index) => {
-                    //     f['value'] = this.licenseDonutData.series[index];
-                    // });
-                    // console.log(this.licenseDonutChartLabel);
-                }
+                this.assignSericesToDonutChart(mostRecentScan);
             }
         });
+    }
+
+    assignSericesToDonutChart(selectedScan) {
+        if (!!selectedScan.node) {
+            const metrics = selectedScan.node.scanMetricsSummary;
+            this.vulDonutData['series'] = [metrics.vulnerabilityMetrics['critical'] || 0, metrics.vulnerabilityMetrics['high'] || 0, metrics.vulnerabilityMetrics['medium'] || 0, metrics.vulnerabilityMetrics['low'] || 0, metrics.vulnerabilityMetrics['info'] || 0];
+            this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['proprietary'] || 0, metrics.licenseMetrics['proprietaryFree'] || 0, metrics.licenseMetrics['copyleftPartial'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
+            this.assetDonutData['series'] = [metrics.assetMetrics['unique'] || 0, metrics.assetMetrics['embedded'] || 0, metrics.assetMetrics['openSource'] || 0];
+        }
     }
 
     toggleAccordian(event) {
@@ -300,7 +315,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
                 if (!!data.scans && data.scans.edges.length >= 1 && !!data.scans.edges[0]) {
 
                     const scan = data.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId });
-                    this.apicallTogetCounts(this.stateService.selectedScan.node.scanId);
+                    this.apicallTogetCounts(this.stateService.selectedScan.node.scanId, false);
                     if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
                         const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
                         const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
@@ -321,7 +336,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     onRowSelect($event) {
-        this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
+        this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"], true);
         if (!!$event.data && !!$event.data.node.scanMetricsSummary && !!$event.data.node.scanMetricsSummary.assetMetrics) {
             const embededItem = !!$event.data.node.scanMetricsSummary.assetMetrics["embedded"] ? $event.data.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
             const openSource = !!$event.data.node.scanMetricsSummary.assetMetrics["openSource"] ? $event.data.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
@@ -329,6 +344,12 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             this.assetCount = embededItem + '/' + openSource + '/' + unique;
             this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
         } else { }
+        this.updateTheAllcomponentDataAccordingToSelectScan(this.stateService.selectedScan);
+        this.topBar.updateData(this.stateService.selectedScan);
+    }
+
+    updateTheAllcomponentDataAccordingToSelectScan(selectedScan) {
+        this.assignSericesToDonutChart(selectedScan);
     }
 
     chart;
@@ -657,11 +678,11 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     //load all metrics data after selecting scan in table.
-    private apicallTogetCounts(scanId: string) {
+    private apicallTogetCounts(scanId: string, isUpdate = false) {
         this.gettingDataforAllMetrics(scanId)
             .subscribe(data => {
                 if (!!data && data.length >= 1) {
-                    this.populateScanComponents(data);
+                    this.populateScanComponents(data, isUpdate);
                     this.populateDataForTotalCountsOfMetrics(data);
                 }
             });
@@ -689,11 +710,23 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         }
     }
 
-    private populateScanComponents(data) {
+    private populateScanComponents(data, isUpdate = false) {
         this.vulScanData = Observable.of(data[0].data);
         this.componentScanData = Observable.of(data[0].data.scan);
         this.licensesScanData = Observable.of(data[0].data.scan);
         this.assetScanData = Observable.of(data[0].data.scan);
+        if (isUpdate) {
+            if (!!this.newVulnerablityCard) {
+                this.newVulnerablityCard.updateDataOnSelectedScan(this.vulScanData, this.stateService.selectedScan.node["scanId"]);
+            }
+            if (!!this.newLicenseCard) {
+                this.newLicenseCard.updateDataOnSelectedScan(this.licensesScanData, this.stateService.selectedScan.node["scanId"]);
+            }
+            if (!!this.newComponentCard) {
+                this.newComponentCard.updateDataOnSelectedScan(this.componentScanData, this.stateService.selectedScan.node["scanId"]);
+            }
+            this.modalService.dismissAll();
+        }
     }
 
     private getLastTabSelected() {
