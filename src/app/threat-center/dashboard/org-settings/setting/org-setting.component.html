@@ -38,6 +38,7 @@
                 </div> -->
                 <div class="tab-cnt" [ngClass]="{'active': activePanelId === 'integration'}">
                     <h4 class="tab-heading">Integrations</h4>
+                    <app-general-setting *ngIf="activeIntegrationTabId === 'general'" style="width: 100%"></app-general-setting>
                     <alert-emails *ngIf="activeIntegrationTabId === 'email'" style="width: 100%" [entitySettings]="orgSettings"></alert-emails>  
                     <slack-urls *ngIf="activeIntegrationTabId === 'slack'" style="width: 100%" [entitySettings]="orgSettings"></slack-urls>  
                     <jira-credentials *ngIf="activeIntegrationTabId === 'jira'" style="width: 100%" [entitySettings]="orgSettings"></jira-credentials>  

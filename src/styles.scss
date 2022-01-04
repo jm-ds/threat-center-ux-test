@@ -231,13 +231,16 @@ body .matrix-dash-tab {
 }
 
 body.next-dark {
-    .my-custom-class, .popover {
+
+    .my-custom-class,
+    .popover {
         background: #fff !important;
         border-radius: 10px;
         padding: 15px;
         max-width: 390px;
     }
-    .popover-body  {
+
+    .popover-body {
         background: none;
         border-radius: 10px;
         padding: 0;
@@ -260,6 +263,7 @@ body.next-dark {
             list-style: outside;
             list-style-type: disc;
             padding: 0 15px !important;
+
             li {
                 margin-bottom: 5px;
                 list-style: outside;
@@ -306,30 +310,37 @@ body.next-dark {
             }
         }
 
-        &.high {
-            color: #FF0000;
 
+        &.CRITICAL {
+            color: #ff3737;
             em {
-                color: #FF0000;
+                color: #ff3737;
             }
         }
-
-        &.medium {
-            color: #FF9900;
-
+        &.HIGH {
+            color: #ff5252;
             em {
-                color: #FF9900;
+                color: #ff5252;
             }
         }
-
-        &.green {
-            color: green;
-
+        &.MEDIUM {
+            color: #ffa21d;
             em {
-                color: green;
+                color: #ffa21d;
             }
         }
-
+        &.LOW {
+            color: #4680ff;
+            em {
+                color: #4680ff;
+            }
+        }
+        &.INFO {
+            color: #11c15b !important;
+            em {
+                color: #11c15b;
+            }
+        }
         &:last-child {
             .component-vulner-inn {
                 margin-bottom: 0;

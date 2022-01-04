@@ -17,10 +17,11 @@ import { SlackUrlsComponent } from './slack-urls/slack-urls.component';
 import { JiraCredentialsComponent } from './jira-credentials/jira-credentials.component';
 import { OrgApiKeysComponent } from './org-apikeys/org-apikeys-list.component';
 import { RouterModule } from '@angular/router';
+import { GeneralSettingComponent } from './general-setting/general-setting.component';
 
 
 @NgModule({
-  declarations: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent],
+  declarations: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent, GeneralSettingComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -37,6 +38,6 @@ import { RouterModule } from '@angular/router';
         TreeTableModule,
         RouterModule
     ],
-    exports: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent]
+    exports: [AlertEmailsComponent, SlackUrlsComponent, JiraCredentialsComponent, OrgApiKeysComponent, GeneralSettingComponent]
 })
 export class IntegrationModule { }
