@@ -171,6 +171,8 @@ export class EntityService {
                       custom
                       dual
                       permissive
+                      proprietary
+                      proprietaryFree
                     }
                     supplyChainMetrics {
                       risk
