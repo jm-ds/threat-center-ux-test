@@ -65,7 +65,7 @@ export class ProjectDashboardService {
                         }
                     }
                   }
-                  scans(first:1) {
+                  scans(first:${first}) {
                     totalCount
                     pageInfo {
                       hasNextPage
