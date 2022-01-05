@@ -227,9 +227,16 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     assignSericesToDonutChart(selectedScan) {
         if (!!selectedScan.node) {
             const metrics = selectedScan.node.scanMetricsSummary;
-            this.vulDonutData['series'] = [metrics.vulnerabilityMetrics['critical'] || 0, metrics.vulnerabilityMetrics['high'] || 0, metrics.vulnerabilityMetrics['medium'] || 0, metrics.vulnerabilityMetrics['low'] || 0, metrics.vulnerabilityMetrics['info'] || 0];
-            this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['proprietary'] || 0, metrics.licenseMetrics['proprietaryFree'] || 0, metrics.licenseMetrics['copyleftPartial'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
-            this.assetDonutData['series'] = [metrics.assetMetrics['unique'] || 0, metrics.assetMetrics['embedded'] || 0, metrics.assetMetrics['openSource'] || 0];
+            if (!!metrics) {
+                this.vulDonutData['series'] = [metrics.vulnerabilityMetrics['critical'] || 0, metrics.vulnerabilityMetrics['high'] || 0, metrics.vulnerabilityMetrics['medium'] || 0, metrics.vulnerabilityMetrics['low'] || 0, metrics.vulnerabilityMetrics['info'] || 0];
+                this.licenseDonutData['series'] = [metrics.licenseMetrics['copyleftLimited'] || 0, metrics.licenseMetrics['copyleft'] || 0, metrics.licenseMetrics['copyleftStrong'] || 0, metrics.licenseMetrics['copyleftWeak'] || 0, metrics.licenseMetrics['permissive'] || 0, metrics.licenseMetrics['proprietary'] || 0, metrics.licenseMetrics['proprietaryFree'] || 0, metrics.licenseMetrics['copyleftPartial'] || 0, metrics.licenseMetrics['custom'] || 0, metrics.licenseMetrics['dual'] || 0];
+                this.assetDonutData['series'] = [metrics.assetMetrics['unique'] || 0, metrics.assetMetrics['embedded'] || 0, metrics.assetMetrics['openSource'] || 0];
+            } else {
+                this.vulDonutData['series'] = [0, 0, 0, 0, 0];
+                this.licenseDonutData['series'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                this.assetDonutData['series'] = [0, 0, 0];
+            }
+
         }
     }
 
@@ -294,9 +301,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             this.initCharts('licenseChart', 'licenseMetrics', 'licenseCategoryMetrics', null);
             //Init Asset chart
             this.initCharts('assetChart', 'assetMetrics', 'assetCompositionMetrics', null);
-            const assetCountData = this.getAssetcountString();
-            this.assetCount = assetCountData.orgText;
-            this.assetCountTooltip = assetCountData.tooltipText;
+            this.getAssetcountString();
         });
     }
 
@@ -343,7 +348,10 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             const unique = !!$event.data.node.scanMetricsSummary.assetMetrics["unique"] ? $event.data.node.scanMetricsSummary.assetMetrics["unique"] : '0';
             this.assetCount = embededItem + '/' + openSource + '/' + unique;
             this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
-        } else { }
+        } else {
+            this.assetCount = 0 + '/' + 0 + '/' + 0;
+            this.assetCountTooltip = 0 + ' embedded, ' + 0 + ' openSource, ' + 0 + ' unique';
+        }
         this.updateTheAllcomponentDataAccordingToSelectScan(this.stateService.selectedScan);
         this.topBar.updateData(this.stateService.selectedScan);
     }
@@ -661,20 +669,22 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     getAssetcountString() {
-        if (!!this.assetChart && this.assetChart.series.length >= 1 && !!this.projectMetrics && this.projectMetrics.length >= 1) {
-            return this.getSequenceWiseAssets();
-        } else {
-            return { orgText: '0', tooltipText: '' };
-        }
+        this.getSequenceWiseAssets();
     }
 
     //need to get assets sequence wise
     private getSequenceWiseAssets() {
-        const metrics = this.projectMetrics.sort(function (a, b) { return Number(new Date(b.measureDate)) - Number(new Date(a.measureDate)) });
-        const embededItem = !!metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] ? metrics[0].assetMetrics.assetCompositionMetrics['EMBEDDED'] : '0';
-        const openSource = !!metrics[0].assetMetrics.assetCompositionMetrics['OPEN_SOURCE'] ? metrics[0].assetMetrics.assetCompositionMetrics['OPEN_SOURCE'] : '0';
-        const unique = !!metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] ? metrics[0].assetMetrics.assetCompositionMetrics['UNIQUE'] : '0';
-        return { orgText: embededItem + '/' + openSource + '/' + unique, tooltipText: embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique' }
+        const data: any = this.stateService.selectedScan.node;
+        if (!!data.scanMetricsSummary) {
+            const embededItem = data.scanMetricsSummary.assetMetrics["embedded"] ? data.scanMetricsSummary.assetMetrics["embedded"] : '0';
+            const openSource = data.scanMetricsSummary.assetMetrics["openSource"] ? data.scanMetricsSummary.assetMetrics["openSource"] : '0';
+            const unique = !!data.scanMetricsSummary.assetMetrics["unique"] ? data.scanMetricsSummary.assetMetrics["unique"] : '0';
+            this.assetCount = embededItem + '/' + openSource + '/' + unique;
+            this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
+        } else {
+            this.assetCount = 0 + '/' + 0 + '/' + 0;
+            this.assetCountTooltip = 0 + ' embedded, ' + 0 + ' openSource, ' + 0 + ' unique';
+        }
     }
 
     //load all metrics data after selecting scan in table.
