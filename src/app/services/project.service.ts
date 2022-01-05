@@ -640,7 +640,8 @@ export class ProjectService {
           scan(scanId:"${scanId}") {
             scanRepository {
               repositoryOwner,
-              repositoryName
+              repositoryName,
+              repositoryEndpointType
             }
           }
         }
@@ -715,6 +716,9 @@ export class ProjectService {
             status,
             percentEmbedded,
             attributionStatus,
+            assetRepositoryUrl {
+              data
+            },
             sourceAssetAttribution {
               orgId,
               attributedBy,
@@ -734,6 +738,9 @@ export class ProjectService {
                   earliestReleaseVersion,
                   latestReleaseDate,
                   latestReleaseVersion,
+                  assetRepositoryUrl {
+                    data
+                  },
                   matchRepository{
                     repositoryOwner,
                     repositoryName,

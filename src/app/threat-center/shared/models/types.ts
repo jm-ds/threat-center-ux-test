@@ -647,3 +647,7 @@ export type SubscriptionResult<T> = {
 export type RunningTaskCountSubscription = {
   subscribeRunningScanTaskCount:SubscriptionResult<number>;
 }
+
+export class StringHolder {
+  data: string;
+}
