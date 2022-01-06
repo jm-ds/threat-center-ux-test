@@ -291,7 +291,8 @@ export class ProjectDashboardService {
                                 node {
                                   group,
                                   name,
-                                  version
+                                  version,
+                                  componentId
                                 }
                               }
                             }

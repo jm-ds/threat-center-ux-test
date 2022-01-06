@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery } from "@app/models";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
+import { FetchPolicy } from "apollo-client";
 
 @Injectable({
   providedIn: 'root'
@@ -128,7 +129,8 @@ export class ProjectService {
                                 node {
                                   group,
                                   name,
-                                  version
+                                  version,
+                                  componentId
                                 }
                               }
                             }
@@ -645,7 +647,8 @@ export class ProjectService {
       `);
   }
 
-  getScanAssets(scanId: string, parentScanAssetId: string, filter: string, first = undefined, last = undefined, after: string = undefined, before: string = undefined) {
+  getScanAssets(scanId: string, parentScanAssetId: string, filter: string, first = undefined,
+    last = undefined, after: string = undefined, before: string = undefined,fetchPolicy?:FetchPolicy) {
     let parentId = (parentScanAssetId.length > 0) ? 'parentScanAssetId: \"' + parentScanAssetId + '\", ' : "";
     let filterArg = 'filter: \"' + filter + '\"';
     const firstArg = (!!first) ? `first: ${first}` : '';
@@ -696,7 +699,7 @@ export class ProjectService {
             }
           }
         }
-      `);//, 'no-cache'
+      `,fetchPolicy);//, 'no-cache'
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
