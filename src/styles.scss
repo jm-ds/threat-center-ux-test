@@ -4,6 +4,10 @@
 @import "scss/style";
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
 @import '@angular/material/prebuilt-themes/purple-green.css';
+@import '~primeng/resources/primeng.min.css';
+@import '~primeicons/primeicons.css';
+@import '~ngx-toastr/toastr';
+@import '@fortawesome/fontawesome-pro/css/all.min.css';
 
 .invalid-form {
     width: 100%;
