@@ -150,6 +150,7 @@ export class ScanAssetDetailComponent implements OnInit {
                     this.alertService.alertBox('Attribution is not required', 'License attribution', 'info');
                 }
                 this.loadData();
+                sessionStorage.setItem('UPDATED_SCAN_ASSETID',this.scanAssetId);
             }, (error) => {
                 this.isDisableAttributeLicensebtn = false;
                 Swal.close();

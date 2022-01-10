@@ -75,12 +75,36 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       this.parentScanAssetId = !!prefData.parentScanAssetId ? prefData.parentScanAssetId : this.parentScanAssetId;
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
-      this.initData();
+      if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
+        this.updateScanAssetDetailsWithNoCache();
+      } else {
+        this.initData();
+      }
     } else {
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
-      this.initData();
+      if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
+        this.updateScanAssetDetailsWithNoCache();
+      } else {
+        this.initData();
+      }
     }
+  }
+
+  updateScanAssetDetailsWithNoCache() {
+    this.obsScan.subscribe(res => {
+      const assetId = sessionStorage.getItem('UPDATED_SCAN_ASSETID');
+      if (res['scanAssetsTree'].edges.length >= 1 && !!res['scanAssetsTree'].edges.find(f => f.node.scanAssetId === assetId)) {
+        // need to updated cache
+        this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId,
+          this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined, 'no-cache')
+          .pipe(map(result => result.data.scan));
+        this.initData();
+        sessionStorage.removeItem('UPDATED_SCAN_ASSETID');
+      } else {
+        this.initData();
+      }
+    });
   }
 
   sort(scanAssets: any) {
@@ -235,7 +259,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
       this.setUserPreferencesDetailsForAseets();
-    },err => {
+    }, err => {
       this.isDisablePaggination = false;
     });
   }
