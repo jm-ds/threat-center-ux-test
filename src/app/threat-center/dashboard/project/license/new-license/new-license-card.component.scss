@@ -156,9 +156,24 @@
     }
 }
 
+.multiple-btn{
+    display: flex;
+    align-items: center;
+    margin-top: 50px !important;
+}
+
+@media only screen and (min-width: 1599px) {
+    .multiple-btn{
+        display: flex;
+        align-items: center;
+        margin-top: 30px !important;
+    }
+  }
+
 .action-btns {
     display: flex;
     align-items: center;
+    margin-top: 44px;
 
     .data-cta {
         min-width: 70px;
