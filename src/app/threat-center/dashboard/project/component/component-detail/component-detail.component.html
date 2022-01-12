@@ -168,7 +168,7 @@
             <ng-template ngbTabContent>
               <div class="row" style="padding:10px 0px 10px 0px;margin-left:5px;margin-right:5px">
                 <div class="col-md-6">
-                  <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+                  <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0" *ngIf="!!binaryReleases && binaryReleases.length >= 1">
                     <div>
                       <div style="width:38%;float:left;">
                         <div>
@@ -255,7 +255,7 @@
                   </app-card>
                 </div>
                 <div class="col-md-6">
-                  <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0">
+                  <app-card [hidHeader]="true" cardClass="mb-0" blockClass="pb-0" *ngIf="!!sourceReleases && sourceReleases.length >= 1">
                     <div>
                       <div style="width:38%;float:left;">
                         <div>
