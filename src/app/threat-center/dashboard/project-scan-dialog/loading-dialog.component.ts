@@ -38,6 +38,13 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
             this.recentlyScanCompleted = this.scanHelperService.recentlyScanCompleted;
             this.errorScanProject = this.scanHelperService.errorScanProject;
             this.closeModelIfNoScanInProgress();
+
+            if (this.recentlyScanCompleted.length >= 1) {
+                if (!this.filterRecentlyCompletedproject()) {
+                    this.closeModel();
+                }
+            }
+
             if (this.projectScanResults.length == 0 && this.recentlyScanCompleted.length == 0 && this.errorScanProject.length == 0) {
                 this.closeModel();
             }
@@ -64,7 +71,11 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     }
 
     filterUniqRecords() {
-        return [...new Map(this.recentlyScanCompleted.map(item => [item['projectId'], item])).values()];
+        return [...new Map(this.recentlyScanCompleted.filter(f => !!f['projectId'] && f['projectId'] !== '').map(item => [item['projectId'], item])).values()];
+    }
+
+    filterRecentlyCompletedproject() {
+        return !!this.recentlyScanCompleted.find(f => !!f['projectId'] && f['projectId'] !== '');
     }
 
     ngOnDestroy(): void {

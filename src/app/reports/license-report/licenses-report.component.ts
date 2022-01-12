@@ -1,8 +1,8 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {ScrollStateService} from "@app/shared/scroll-state.service";
-import {compareByName} from "@app/shared/compare-utils";
-import {log} from "util";
-import {uniqueElements, uniqueObjects} from "@app/shared/array-utils";
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import { ScrollStateService } from "@app/shared/scroll-state.service";
+import { compareByName } from "@app/shared/compare-utils";
+import { log } from "util";
+import { uniqueElements, uniqueObjects } from "@app/shared/array-utils";
 import { Entity } from '@app/models';
 import { ReportService } from '@app/services/report.service';
 
@@ -11,7 +11,7 @@ import { ReportService } from '@app/services/report.service';
     templateUrl: './licenses-report.component.html',
     styleUrls: ['./licenses-report.component.scss']
 })
-export class LicensesReportComponent implements OnInit {
+export class LicensesReportComponent implements OnInit, OnDestroy {
 
     @Input()
     displayDataOnly: false;
@@ -24,23 +24,29 @@ export class LicensesReportComponent implements OnInit {
     categoryFilter = 'ALL';
     previewStateOpen = false;
 
-    totals = {entities: 0, licenses: 0, projects: 0};
+    totals = { entities: 0, licenses: 0, projects: 0 };
     entities = [];
 
-/*
--   Name
--   Type
--   family
--   Style
--   Risk score
-*/
+    /*
+    -   Name
+    -   Type
+    -   family
+    -   Style
+    -   Risk score
+    */
     // columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
     columns = ['Name', 'Type', 'Family', 'Category', 'Style'/*, 'Risk score'*/];
 
     constructor(
         private reportService: ReportService,
         private scrollDisableService: ScrollStateService
-    ) {}
+    ) { }
+    ngOnDestroy(): void {
+        if (this.previewStateOpen) {
+            this.previewStateOpen = false;
+            this.scrollDisableService.enableWindowScroll();
+        }
+    }
 
     ngOnInit() {
         // this.findLicenses("",'','ALL');
@@ -86,7 +92,7 @@ export class LicensesReportComponent implements OnInit {
 
             this.entities = data;
 
-            this.totals = {entities: 0, licenses: 0, projects: 0};
+            this.totals = { entities: 0, licenses: 0, projects: 0 };
 
             let entities = [];
 
