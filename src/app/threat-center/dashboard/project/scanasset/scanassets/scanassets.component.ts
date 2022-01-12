@@ -17,7 +17,12 @@ import { ProjectService } from '@app/services/project.service';
     `.text-primary:hover{
       text-decoration: underline;
       cursor: pointer;
-    }`
+    }
+    .back-link{
+      position: relative;
+      top: 35px;
+    }
+    `
   ]
 })
 
