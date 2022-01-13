@@ -131,6 +131,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       .pipe(map(result => result.data.scan));
     scanAsset.subscribe(asset => {
       this.scanAssetDetails = asset;
+      this.filterOnlyAssetsIfFilterActivated();
       this.isDisablePaggination = false;
       this.setUserPreferencesDetailsForAseets();
     });
@@ -173,14 +174,22 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),undefined,undefined,undefined,'no-cache')
         .pipe(map(result => result.data.scan));
       obsScan.subscribe(asset => {
         this.scanAssetDetails = asset;
+        this.filterOnlyAssetsIfFilterActivated();
         this.coreHelperService.setFocusOnElement(idElement);
         this.setUserPreferencesDetailsForAseets();
       });
     }, this.timeOutDuration);
+  }
+
+  filterOnlyAssetsIfFilterActivated() {
+    if (!!this.scanAssetDetails && this.scanAssetDetails.scanAssetsTree.edges.length >= 1 && this.columnsFilter.size >= 1) {
+      this.scanAssetDetails.scanAssetsTree.edges =
+        this.scanAssetDetails.scanAssetsTree.edges.filter(asset => { return asset.node.scanAssetType !== 'DIR' });
+    }
   }
 
   getColumnFilterValue(key) {
@@ -239,8 +248,9 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.obsScan.subscribe(asset => {
       this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
+      this.filterOnlyAssetsIfFilterActivated();
       this.setUserPreferencesDetailsForAseets();
-    },err => {
+    }, err => {
       this.isDisablePaggination = false;
     });
   }
