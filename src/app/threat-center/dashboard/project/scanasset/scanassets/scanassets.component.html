@@ -135,6 +135,12 @@
                 <i *ngIf="scanAsset.node.scanAssetType === 'DIR'" class="fas fa-folder"></i>
                 <i *ngIf="scanAsset.node.scanAssetType != 'DIR'" class="far fa-file"></i>
                 &nbsp;&nbsp;{{scanAsset.node.name}}
+                <i *ngIf="scanAsset.node.scanAssetType !== 'DIR' && this.columnsFilter.size >= 1" triggers="mouseenter:mouseleave" [ngbPopover]="popContentWorkspace"
+                  style="color:#2DC6DB;margin-left: 3px;cursor: pointer" class="fad fa-folder-tree">
+                </i>
+                <ng-template #popContentWorkspace>
+                  {{scanAsset?.node?.workspacePath}}
+                </ng-template>
               </td>
               <td *ngIf="scanAsset.node.assetSize >= 1024 && scanAsset.node.scanAssetType != 'DIR'">{{scanAsset.node.assetSize/1024 | number:'1.0-1'}} kB</td>
               <td *ngIf="scanAsset.node.assetSize < 1024 && scanAsset.node.scanAssetType != 'DIR'">{{scanAsset.node.assetSize | number:'1.0-0'}} bytes</td>
