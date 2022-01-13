@@ -174,7 +174,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),undefined,undefined,undefined,'no-cache')
         .pipe(map(result => result.data.scan));
       obsScan.subscribe(asset => {
         this.scanAssetDetails = asset;

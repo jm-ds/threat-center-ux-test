@@ -699,7 +699,7 @@ export class ProjectService {
             }
           }
         }
-      `,'no-cache');//, 'no-cache'
+      `,fetchPolicy);//, 'no-cache'
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
