@@ -15,7 +15,7 @@ export class OrgService {
   constructor(private coreGraphQLService: CoreGraphQLService) {
   }
 
-  //get org settings
+  // get org settings
   getOrgSettings(): Observable<ApolloQueryResult<OrgSettingsQuery>> {
     return this.coreGraphQLService.coreGQLReqWithQuery<OrgSettingsQuery>(
       gql`
@@ -26,7 +26,8 @@ export class OrgService {
             alertSlackUrls
             jiraCredentials {
               projectUrl
-              projectKey
+              projectId
+              issueTypeId
               email
               apiToken
             }
@@ -57,7 +58,7 @@ export class OrgService {
       }`, { entitySettingsRequest: entitySettingsRequest });
   }
 
-  //set org jira settings
+  // set org jira settings
   setOrgJiraCredentials(entityId: string, jiraCredentials: JiraCredentials) {
     const entitySettingsRequest = EntitySettingsRequestInput.forJira(entityId, jiraCredentials);
     delete entitySettingsRequest.jiraCredentials["__typename"];
@@ -66,7 +67,8 @@ export class OrgService {
         setOrgJiraCredentials(entitySetting: $entitySettingsRequest){
           jiraCredentials {
             projectUrl
-            projectKey
+            projectId
+            issueTypeId
             email
             apiToken
           }

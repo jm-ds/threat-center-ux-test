@@ -1,11 +1,9 @@
-import { Component, Injectable, Input, OnInit } from '@angular/core';
-import { AlertService } from '@app/services/core/alert.service';
-import { EntitySettings, JiraCredentials } from '@app/models/entity';
-import { EntityManagerService } from '@app/services/entity-manage.service';
-import { OrgService } from '@app/services/org.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {AlertService} from '@app/services/core/alert.service';
+import {EntitySettings, JiraCredentials} from '@app/models/entity';
+import {EntityManagerService} from '@app/services/entity-manage.service';
+import {OrgService} from '@app/services/org.service';
 import Swal from 'sweetalert2';
-
-
 
 @Component({
     selector: 'jira-credentials',
@@ -13,13 +11,13 @@ import Swal from 'sweetalert2';
     styleUrls: ['./jira-credentials.component.scss']
 })
 export class JiraCredentialsComponent implements OnInit {
-  @Input() public entitySettings: EntitySettings
+  @Input() public entitySettings: EntitySettings;
   @Input() public entityId: string;
 
   constructor(
     private orgService: OrgService,
     private entityService: EntityManagerService,
-    private alertService:AlertService
+    private alertService: AlertService
   ) {
   }
 
@@ -36,28 +34,28 @@ export class JiraCredentialsComponent implements OnInit {
 
   // save urls
   saveCredentials() {
-    if (!this.entitySettings.entityId || this.entitySettings.entityId.substring(0,1) === '0') {
+    if (!this.entitySettings.entityId || this.entitySettings.entityId.substring(0, 1) === '0') {
       this.orgService.setOrgJiraCredentials(this.entitySettings.entityId, this.entitySettings.jiraCredentials)
       .subscribe(({data}) => {
         Swal.close();
-        this.alertService.alertBox('Successfully saved','JIRA credentials','success');
-      }, 
+        this.alertService.alertBox('Successfully saved', 'JIRA credentials', 'success');
+      },
        (error) => {
         console.error('Slack jira credential saving error', error);
         Swal.close();
-        this.alertService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
+        this.alertService.alertBox('Error while saving JIRA credentials', 'Saving JIRA credentials', 'error');
        }
       );
     } else {
       this.entityService.setEntityJiraCredentials(this.entitySettings.entityId, this.entitySettings.jiraCredentials)
       .subscribe(({data}) => {
         Swal.close();
-        this.alertService.alertBox('Successfully saved','JIRA credentials','success');
-      }, 
+        this.alertService.alertBox('Successfully saved', 'JIRA credentials', 'success');
+      },
        (error) => {
         console.error('Slack jira credential saving error', error);
         Swal.close();
-        this.alertService.alertBox('Error while saving JIRA credentials','Saving JIRA credentials','error');
+        this.alertService.alertBox('Error while saving JIRA credentials', 'Saving JIRA credentials', 'error');
        }
       );
     }
@@ -66,7 +64,7 @@ export class JiraCredentialsComponent implements OnInit {
   // validate datas
   validateData() {
     const jiraCredentials = this.entitySettings.jiraCredentials;
-    if (!jiraCredentials.projectUrl || !jiraCredentials.projectKey || !jiraCredentials.email || !jiraCredentials.apiToken) {
+    if (!jiraCredentials.projectUrl || !jiraCredentials.projectId || !jiraCredentials.issueTypeId || !jiraCredentials.email || !jiraCredentials.apiToken) {
       return false;
     }
     let urlRegEx = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
@@ -78,7 +76,7 @@ export class JiraCredentialsComponent implements OnInit {
 
   // refetch data from back
   resetCredentials() {
-    if (!this.entitySettings.entityId || this.entitySettings.entityId.substring(0,1) === '0') {
+    if (!this.entitySettings.entityId || this.entitySettings.entityId.substring(0, 1) === '0') {
       this.orgService.getOrgSettings().subscribe(
         data => {
             this.entitySettings = data.data.orgSettings;
@@ -112,7 +110,7 @@ export class JiraCredentialsComponent implements OnInit {
         error => {
             this.entitySettings = new EntitySettings();
             this.entitySettings.entityId = this.entityId;
-            this.entitySettings.jiraCredentials = new JiraCredentials();            
+            this.entitySettings.jiraCredentials = new JiraCredentials();
             console.error("JiraCredentialsComponent", error);
         }
       );
