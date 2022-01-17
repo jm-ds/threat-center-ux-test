@@ -21,7 +21,7 @@ export const Messages = {
     commonErrorHeaderText: 'Error!',
     asset: {
         filter: {
-            embedded_and_opensource: "Embedded and open source assets"
+            embedded_and_opensource: "Embedded and open source"
         }
     },
 
