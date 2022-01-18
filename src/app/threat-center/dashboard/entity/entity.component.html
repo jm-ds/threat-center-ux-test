@@ -268,7 +268,7 @@
                 <div class="col-sm-12">
                   <app-card [hidHeader]="true" cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
                     <div class="table-responsive">
-                      <perfect-scrollbar>
+                      <perfect-scrollbar [style.max-height]="'600px'">
                         <p-treeTable class="table table-hover m-b-0" [value]="projects">
                           <ng-template pTemplate="header">
                             <tr>

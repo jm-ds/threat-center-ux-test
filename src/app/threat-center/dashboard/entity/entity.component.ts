@@ -499,7 +499,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildProjectTree(entity: Entity) {
-    let edges = entity.projects.edges;
+    let edges = entity.projects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
 
     let nodes: TreeNode[] = edges.map(projectEdge => {
       let node: TreeNode = {
@@ -516,6 +516,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildProjectTreeHier(projectEdge: ProjectEdge, treeNode: TreeNode) {
+    projectEdge.node.childProjects.edges = projectEdge.node.childProjects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
     if (projectEdge.node.childProjects) {
       projectEdge.node.childProjects.edges.forEach(edge => {
         let childNode: TreeNode = {
@@ -674,7 +675,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     );
   }
-  
+
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
     this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
