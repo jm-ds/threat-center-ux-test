@@ -628,6 +628,9 @@ export class ProjectService {
                     group
                   }
                 }
+              },
+              jiraTicket(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
+                id, key, self
               }
           }
         }

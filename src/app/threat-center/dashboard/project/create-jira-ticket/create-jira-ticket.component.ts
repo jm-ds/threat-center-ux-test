@@ -12,7 +12,9 @@ export class CreateJiraTicketComponent implements OnInit {
     content: string;
     scanId;
     orgId;
+    projectId;
     vulnerabilityId;
+    vulnId;
 
     constructor(
         private modalService: NgbModal,
@@ -33,11 +35,12 @@ export class CreateJiraTicketComponent implements OnInit {
         console.log("Create jira content: " + this.content);
         this.spinner.show();
         this.jiraService
-            .createVulnerabilityJiraTicket(this.vulnerabilityId, this.orgId, this.scanId, this.content)
+            .createVulnerabilityJiraTicket(this.vulnerabilityId, this.projectId, this.scanId, this.orgId, this.vulnId, this.content)
             .subscribe(({data}) => {
                 console.log("Jira data: " + data);
                 this.spinner.hide();
                 this.activeModal.close();
+                window.location.reload();
             });
     }
 }

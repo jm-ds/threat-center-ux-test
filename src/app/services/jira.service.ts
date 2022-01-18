@@ -10,13 +10,13 @@ export class JiraService {
     constructor(private coreGraphQLService: CoreGraphQLService) {
     }
 
-    createVulnerabilityJiraTicket(vulnerabilityId: string, orgId: string, scanId: string, content: string) {
-        const vulnerabilityJiraRequest = new VulnerabilityJiraRequestInput(vulnerabilityId, orgId, scanId, content);
+    createVulnerabilityJiraTicket(vulnerabilityId: string, projectId: string, scanId: string, orgId: string, vulnId: string, content: string) {
+        const vulnerabilityJiraRequest = new VulnerabilityJiraRequestInput(vulnerabilityId, projectId, scanId, orgId, vulnId, content);
         return this.coreGraphQLService.coreGQLReqForMutation(
             gql`
                 mutation ($vulnerabilityJiraRequest: VulnerabilityJiraRequestInput){
                     createVulnerabilityJiraTicket(jiraRequest: $vulnerabilityJiraRequest){
-                        url, status, id
+                        id, key, self
                     }
                 }
                 `, {vulnerabilityJiraRequest}
@@ -27,14 +27,18 @@ export class JiraService {
 
 export class VulnerabilityJiraRequestInput {
     readonly vulnerabilityId: string;
-    readonly orgId: string;
+    readonly projectId: string;
     readonly scanId: string;
+    readonly orgId: string;
+    readonly vulnId: string;
     readonly content: string;
 
-    constructor(vulnerabilityId: string, orgId: string, scanId: string, content: string) {
+    constructor(vulnerabilityId: string, projectId: string, scanId: string, orgId: string, vulnId: string, content: string) {
         this.vulnerabilityId = vulnerabilityId;
-        this.orgId = orgId;
+        this.projectId = projectId;
         this.scanId = scanId;
+        this.orgId = orgId;
+        this.vulnId = vulnId;
         this.content = content;
     }
 }
