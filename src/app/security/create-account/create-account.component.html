@@ -72,17 +72,18 @@
                 <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
             </div>
             <div id="auth01" class="row" style="margin-bottom:20px">
-                <div class="col-xl-6">
+                <div title="Create account with Github" class="col-xl-6">
                     <a (click)="externalLogin('github_login', repoTypeDialog)" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
-                <div class="col-xl-6">
+                <div title="Create account with Gitlab" class="col-xl-6">
                     <a  (click)="externalLogin('gitlab_login', repoTypeDialog)" class="cursor-pointer">
                         <div class="auth-button"><i class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
             </div>
+            <!--
             <div id="auth02" class="row" style="margin-bottom:20px">
                 <div title="Bitbucket login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('bitbucket_login', repoTypeDialog)" class="cursor-pointer disabled">
@@ -107,6 +108,7 @@
                     </a>
                 </div>
             </div>
+            -->
             <div class="hint-block">By clicking log in or signing up, you agree to our policies, including our <a href="https://threatrix.io/terms">Terms of Service</a> and <a href="https://threatrix.io/privacy">Privacy Policy</a></div>
 
             <div>
