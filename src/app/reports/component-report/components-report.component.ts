@@ -1,7 +1,7 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {ScrollStateService} from "@app/shared/scroll-state.service";
-import {compareByName} from "@app/shared/compare-utils";
-import {uniqueElements, uniqueObjects} from "@app/shared/array-utils";
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import { ScrollStateService } from "@app/shared/scroll-state.service";
+import { compareByName } from "@app/shared/compare-utils";
+import { uniqueElements, uniqueObjects } from "@app/shared/array-utils";
 import { Entity } from '@app/models';
 import { ReportService } from '@app/services/report.service';
 import * as _ from 'lodash';
@@ -11,7 +11,7 @@ import * as _ from 'lodash';
     templateUrl: './components-report.component.html',
     styleUrls: ['./components-report.component.scss']
 })
-export class ComponentsReportComponent implements OnInit {
+export class ComponentsReportComponent implements OnInit, OnDestroy {
 
     @Input()
     displayDataOnly: false;
@@ -33,7 +33,7 @@ export class ComponentsReportComponent implements OnInit {
     previewStateOpen = false;
 
     // totals = {entities: 0, projects: 0, licenses: 0, components: 0, vulnerabilities: 0};
-    totals = {entities: 0, components: 0, projects: 0};
+    totals = { entities: 0, components: 0, projects: 0 };
     entities = [];
 
 
@@ -53,6 +53,12 @@ export class ComponentsReportComponent implements OnInit {
         private reportService: ReportService,
         private scrollDisableService: ScrollStateService
     ) {
+    }
+    ngOnDestroy(): void {
+        if (this.previewStateOpen) {
+            this.previewStateOpen = false;
+            this.scrollDisableService.enableWindowScroll();
+        }
     }
 
 
@@ -108,7 +114,7 @@ export class ComponentsReportComponent implements OnInit {
 
             this.entities = data.data.componentsReport;
 
-            this.totals = {entities: 0, components: 0, projects: 0};
+            this.totals = { entities: 0, components: 0, projects: 0 };
 
             let entities = [];
 

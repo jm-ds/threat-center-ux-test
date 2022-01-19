@@ -61,7 +61,7 @@
         <li *ngFor="let licenseData of licensesDetails" class="data-item {{licenseData.value[0].node?.category}}">
 
             <div class="row">
-                <div class="col-sm-10 col-xs-12">
+                <div class="col-sm-12 col-xs-12">
                     <div class="vulner-data-lt">
                         <div class="cursor-pointer" (click)="gotoDetails(licenseData.value[0].node?.licenseId,
                             licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin)">
@@ -98,14 +98,19 @@
                             </div>
                             <div *ngIf="licenseData.value.length >= 2;else licenseRowSingle">
                                 <div class="data-row" *ngFor="let license of licenseData?.value">
-                                    <ng-container *ngTemplateOutlet="licenseRowTem;context:{license: license}">
+                                    <ng-container
+                                        *ngTemplateOutlet="licenseRowTem;context:{license: license,licenseData:licenseData}">
                                     </ng-container>
+
                                 </div>
+
+
+
                             </div>
                             <ng-template #licenseRowSingle>
                                 <div class="data-row">
                                     <ng-container
-                                        *ngTemplateOutlet="licenseRowTem;context:{license: licenseData.value[0]}">
+                                        *ngTemplateOutlet="licenseRowTem;context:{license: licenseData.value[0],licenseData:licenseData}">
                                     </ng-container>
                                 </div>
                             </ng-template>
@@ -113,10 +118,10 @@
                     </div>
                 </div>
 
-                <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
+                <!-- <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
                     <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
                         <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
-                            <div class="action-btns mt-4" *ngIf="license.node?.licenseOrigin === 'ASSET'">
+                            <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
                                 <a class="data-cta ingore-cta">Ignore</a>
                                 <a class="data-cta ml-2"
                                     (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
@@ -125,14 +130,14 @@
                     </div>
                     <ng-template #licnseSignleBtn>
                         <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
-                            <div class="action-btns mt-4">
+                            <div class="action-btns">
                                 <a class="data-cta ingore-cta">Ignore</a>
                                 <a class="data-cta ml-2"
                                     (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
                             </div>
                         </div>
                     </ng-template>
-                </div>
+                </div> -->
             </div>
 
         </li>
@@ -145,8 +150,7 @@
     </mat-paginator>
 </div>
 
-<ng-template #licenseRowTem let-license="license">
-    <!-- <div class="data-row"> -->
+<ng-template #licenseRowTem let-license="license" let-licenseData="licenseData">
     <div class="info-cols flex-column align-items-start">
         <small>Discovery</small> {{license.node?.licenseDiscovery}}
     </div>
@@ -169,5 +173,30 @@
         <small>FSF Libre</small> {{license.node?.isFsfLibre ? 'YES' :
         'NO'}}
     </div>
-    <!-- </div> -->
+    <div class="info-cols flex-column align-items-start">
+        <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+            <a class="data-cta ingore-cta">Ignore</a>
+            <a class="data-cta ml-2"
+                (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
+        <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
+            <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+                <a class="data-cta ingore-cta">Ignore</a>
+                <a class="data-cta ml-2"
+                    (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
+            </div>
+        </div>
+    </div>
+    <ng-template #licnseSignleBtn>
+        <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
+            <div class="action-btns">
+                <a class="data-cta ingore-cta">Ignore</a>
+                <a class="data-cta ml-2"
+                    (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
+            </div>
+        </div>
+    </ng-template> -->
 </ng-template>

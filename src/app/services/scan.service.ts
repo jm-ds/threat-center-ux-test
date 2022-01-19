@@ -111,7 +111,7 @@ export class ScanService {
                 }
               }
             }
-          `, 'no-cache');
+          `); //, 'no-cache'
   }
 
   // Request gitlab repos data from backend

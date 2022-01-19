@@ -156,9 +156,22 @@
     }
 }
 
+.multiple-btn{
+    display: flex;
+    align-items: center;
+    @media only screen and (min-width: 1599px) {
+            margin-top: 2px !important;
+            position: relative;
+            left: 370px;
+      }
+}
+
+
+
 .action-btns {
     display: flex;
     align-items: center;
+    // margin-top: 44px;
 
     .data-cta {
         min-width: 70px;
@@ -260,7 +273,7 @@
 
 .info-cols {
     display: flex;
-    width: 150px;
+    width: 145px;
     font-size: 15px;
     color: #fff;
     align-items: center;

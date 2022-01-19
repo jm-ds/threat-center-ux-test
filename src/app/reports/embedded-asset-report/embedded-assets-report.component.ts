@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ScrollStateService} from "@app/shared/scroll-state.service";
 import {compareByName} from "@app/shared/compare-utils";
 import {NouiFormatter} from "ng2-nouislider";
@@ -25,7 +25,7 @@ export class FileSizeSliderFormatter implements NouiFormatter {
     templateUrl: './embedded-assets-report.component.html',
     styleUrls: ['./embedded-assets-report.component.scss']
 })
-export class EmbeddedAssetsReportComponent implements OnInit {
+export class EmbeddedAssetsReportComponent implements OnInit,OnDestroy {
 
     @Input()
     displayDataOnly: false;
@@ -92,6 +92,13 @@ export class EmbeddedAssetsReportComponent implements OnInit {
     constructor(private reportService: ReportService,
                 private scrollDisableService: ScrollStateService
     ) {
+    }
+
+    ngOnDestroy(): void {
+        if (this.previewStateOpen) {
+            this.previewStateOpen = false;
+            this.scrollDisableService.enableWindowScroll();
+        }
     }
 
 
