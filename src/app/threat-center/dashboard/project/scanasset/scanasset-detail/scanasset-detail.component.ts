@@ -149,13 +149,34 @@ export class ScanAssetDetailComponent implements OnInit {
                 } else {
                     this.alertService.alertBox('Attribution is not required', 'License attribution', 'info');
                 }
-                this.loadData();
+                this.loadData(true);
+                // this.getAndSetScanAssetIdWithStatus();
             }, (error) => {
                 this.isDisableAttributeLicensebtn = false;
                 Swal.close();
                 attributeProcessExecuteMessageModel.hide();
                 this.alertService.alertBox('Attribution error', 'License attribution', 'error');
             });
+    }
+
+    getAndSetScanAssetIdWithStatus() {
+        if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
+            let scanAssetIdLists = JSON.parse(sessionStorage.getItem('UPDATED_SCAN_ASSETID'));
+            if (scanAssetIdLists.find(f => { f.scanAssetId === this.scanAssetId && f.scanId === this.scanId })) {
+                scanAssetIdLists.forEach(element => {
+                    if (element.scanAssetId === this.scanAssetId && element.scanId === this.scanId) {
+                        element.status = this.attributionStatus;
+                    }
+                });
+            } else {
+                scanAssetIdLists.push({ scanAssetId: this.scanAssetId, status: this.attributionStatus, scanId: this.scanId });
+            }
+            sessionStorage.setItem('UPDATED_SCAN_ASSETID', JSON.stringify(scanAssetIdLists));
+        } else {
+            let scanAssetIdLists = [];
+            scanAssetIdLists.push({ scanAssetId: this.scanAssetId, status: this.attributionStatus, scanId: this.scanId });
+            sessionStorage.setItem('UPDATED_SCAN_ASSETID', JSON.stringify(scanAssetIdLists));
+        }
     }
 
     attributeProcessExecutionModel(modelContent) {
@@ -224,7 +245,7 @@ export class ScanAssetDetailComponent implements OnInit {
             this.sourceAsset.embeddedAssets.edges.length > 0;
     }
 
-    private loadData() {
+    private loadData(isUpdate: boolean = false) {
         // we could use the scanId to load scan, which has the repository,
         // then use the scanAssetId to load scanAsset.
         // it's no ideal but will work for the demo.
@@ -251,6 +272,9 @@ export class ScanAssetDetailComponent implements OnInit {
                     const repositoryName = scanRepository.repositoryName;
                     obsScanAsset.subscribe(obsScanResult => {
                         this.attributionStatus = obsScanResult['attributionStatus'];
+                        if (isUpdate) {
+                            this.getAndSetScanAssetIdWithStatus();
+                        }
                         if (!!obsScanResult && !!obsScanResult['sourceAssetAttribution'] && this.attributionStatus === 'COMPLETE') {
                             this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
                         }
