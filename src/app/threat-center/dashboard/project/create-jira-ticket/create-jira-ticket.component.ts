@@ -13,8 +13,13 @@ export class CreateJiraTicketComponent implements OnInit {
     scanId;
     orgId;
     projectId;
+
+    // For vulnerabilities
     vulnerabilityId;
     vulnId;
+
+    // For Licenses
+    licenseId;
 
     constructor(
         private modalService: NgbModal,
@@ -34,13 +39,25 @@ export class CreateJiraTicketComponent implements OnInit {
     createJiraTicket() {
         console.log("Create jira content: " + this.content);
         this.spinner.show();
-        this.jiraService
-            .createVulnerabilityJiraTicket(this.vulnerabilityId, this.projectId, this.scanId, this.orgId, this.vulnId, this.content)
-            .subscribe(({data}) => {
-                console.log("Jira data: " + data);
-                this.spinner.hide();
-                this.activeModal.close();
-                window.location.reload();
-            });
+        if (this.vulnId && this.vulnerabilityId) {
+            this.jiraService
+                .createVulnerabilityJiraTicket(this.vulnerabilityId, this.projectId, this.scanId, this.orgId, this.vulnId, this.content)
+                .subscribe(({data}) => {
+                    this.successTicketCreation(data);
+                });
+        } else if (this.licenseId) {
+            this.jiraService
+                .createLicenseJiraTicket(this.licenseId, this.projectId, this.scanId, this.orgId, this.content)
+                .subscribe(({data}) => {
+                    this.successTicketCreation(data);
+                });
+        }
+    }
+
+    successTicketCreation(data) {
+        console.log("Jira data: " + data);
+        this.spinner.hide();
+        this.activeModal.close();
+        window.location.reload();
     }
 }

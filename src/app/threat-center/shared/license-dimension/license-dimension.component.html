@@ -1,5 +1,15 @@
 
 <div class="col-xl-12" *ngIf='obsScanLicense | async as scanLicense;'>
+
+  <div style="margin-bottom: 15px" *ngIf="jiraCredentials && !jiraTicket">
+    <button class="btn btn-outline-primary " data-toggle="modal" type="button"
+            (click)="createJiraTicket()">Create Jira Ticket</button>
+  </div>
+  <div style="margin-bottom: 15px" *ngIf="jiraTicket">
+    <button class="btn btn-outline-primary " data-toggle="modal" type="button"
+            (click)="openJiraTicket(jiraTicket.key, jiraTicket.self)">{{jiraTicket.key}}</button>
+  </div>
+
   <ngb-tabset type="pills" class="tab-card" #ctdTabset="ngbTabset">
     <ngb-tab title="Summary"id="tab1" >
       <ng-template ngbTabContent>

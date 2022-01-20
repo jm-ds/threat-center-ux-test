@@ -138,6 +138,12 @@ export class ScanLicense {
     scanLicenseAssets: ScanLicenseAssetConnection;
 }
 
+export class JiraTicket {
+    id: string;
+    key: string;
+    self: string;
+}
+
 export class SnippetMatchResult {
     matchTime: number;
     scanTime: number;
@@ -205,5 +211,9 @@ export type CheckAlreadyScannedQuery = {
 
 export type ScanLicenseQuery = {
     scanLicense: ScanLicense;
+};
+
+export type JiraTicketQuery = {
+    licenseJiraTicket: JiraTicket;
 };
 

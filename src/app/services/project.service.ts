@@ -404,6 +404,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
              scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
+                 orgId,
                  licenseOrigin,
                  licenseDiscovery
                  license {
@@ -629,7 +630,7 @@ export class ProjectService {
                   }
                 }
               },
-              jiraTicket(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
+              vulnJiraTicket(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
                 id, key, self
               }
           }

@@ -54,12 +54,6 @@ export class JiraCredentials {
     apiToken: string;
 }
 
-export class JiraTicket {
-    url: string;
-    status: string;
-    id: string;
-}
-
 export class EntitySettings {
     orgId: string;
     entityId: string;

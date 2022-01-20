@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CoreGraphQLService} from "@app/services/core/core-graphql.service";
 import gql from "graphql-tag";
+import {JiraTicketQuery, ScanLicenseQuery} from "@app/models";
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +24,43 @@ export class JiraService {
         );
     }
 
+    createLicenseJiraTicket(licenseId, projectId, scanId, orgId, content: string) {
+        const licenseJiraRequest = new LicenseJiraRequestInput(licenseId, projectId, scanId, orgId, content);
+        return this.coreGraphQLService.coreGQLReqForMutation(
+            gql`
+                mutation ($licenseJiraRequest: LicenseJiraRequestInput){
+                    createLicenseJiraTicket(jiraRequest: $licenseJiraRequest){
+                        id, key, self
+                    }
+                }
+                `, {licenseJiraRequest}
+        );
+    }
+
+    getLicenseJiraTicket(licenseId, scanId, orgId: string) {
+        return this.coreGraphQLService.coreGQLReq<JiraTicketQuery>(gql`
+          query {
+             licenseJiraTicket(licenseId:"${licenseId}" orgId:"${orgId}" scanId:"${scanId}") {
+                 id, key, self
+             }
+         }`);
+    }
+}
+
+export class LicenseJiraRequestInput {
+    readonly licenseId: string;
+    readonly projectId: string;
+    readonly scanId: string;
+    readonly orgId: string;
+    readonly content: string;
+
+    constructor(licenseId: string, projectId: string, scanId: string, orgId: string, content: string) {
+        this.licenseId = licenseId;
+        this.projectId = projectId;
+        this.scanId = scanId;
+        this.orgId = orgId;
+        this.content = content;
+    }
 }
 
 export class VulnerabilityJiraRequestInput {
