@@ -1,7 +1,8 @@
-import {Repository, ScanEdge} from "./scan";
+import {Repository} from "./scan";
 import {PageInfo} from "@app/models/common";
 
 export class ScanAsset {
+    orgId: string;
     name: string;
     size: number;
     fileSize: number;
@@ -24,7 +25,7 @@ export class ScanAssetMatch {
 
 export type ScanAssetQuery = {
     scanAsset: ScanAsset;
-}
+};
 
 export class ScanAssetMatchRequest {
     readonly assetMatchId: string;

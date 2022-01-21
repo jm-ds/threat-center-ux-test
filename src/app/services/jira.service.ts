@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CoreGraphQLService} from "@app/services/core/core-graphql.service";
 import gql from "graphql-tag";
-import {JiraTicketQuery, ScanLicenseQuery} from "@app/models";
+import {JiraTicketQuery} from "@app/models";
 
 @Injectable({
     providedIn: 'root'
@@ -44,6 +44,35 @@ export class JiraService {
                  id, key, self
              }
          }`);
+    }
+
+    createScanAssetMatchJiraTicket(assetMatchId, projectId, scanId, orgId, content: string) {
+        const scanAssetMatchRequest = new ScanAssetMatchJiraRequestInput(assetMatchId, projectId, scanId, orgId, content);
+        return this.coreGraphQLService.coreGQLReqForMutation(
+            gql`
+                mutation ($scanAssetMatchRequest: ScanAssetMatchJiraRequestInput){
+                    createScanAssetMatchJiraTicket(jiraRequest: $scanAssetMatchRequest){
+                        id, key, self
+                    }
+                }
+                `, {scanAssetMatchRequest}
+        );
+    }
+}
+
+export class ScanAssetMatchJiraRequestInput {
+    readonly assetMatchId: string;
+    readonly projectId: string;
+    readonly scanId: string;
+    readonly orgId: string;
+    readonly content: string;
+
+    constructor(assetMatchId: string, projectId: string, scanId: string, orgId: string, content: string) {
+        this.assetMatchId = assetMatchId;
+        this.projectId = projectId;
+        this.scanId = scanId;
+        this.orgId = orgId;
+        this.content = content;
     }
 }
 

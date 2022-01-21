@@ -710,6 +710,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(gql`
         query {
         	scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
+        	orgId,
             name,
             size,
             assetSize
@@ -738,6 +739,9 @@ export class ProjectService {
                   earliestReleaseVersion,
                   latestReleaseDate,
                   latestReleaseVersion,
+                  scanAssetMatchJiraTicket {
+                    id, key, self
+                  },
                   matchRepository{
                     repositoryOwner,
                     repositoryName,

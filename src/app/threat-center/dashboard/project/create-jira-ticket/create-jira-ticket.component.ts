@@ -21,6 +21,9 @@ export class CreateJiraTicketComponent implements OnInit {
     // For Licenses
     licenseId;
 
+    // For scan asset match
+    assetMatchId;
+
     constructor(
         private modalService: NgbModal,
         public activeModal: NgbActiveModal,
@@ -48,6 +51,12 @@ export class CreateJiraTicketComponent implements OnInit {
         } else if (this.licenseId) {
             this.jiraService
                 .createLicenseJiraTicket(this.licenseId, this.projectId, this.scanId, this.orgId, this.content)
+                .subscribe(({data}) => {
+                    this.successTicketCreation(data);
+                });
+        } else if (this.assetMatchId) {
+            this.jiraService
+                .createScanAssetMatchJiraTicket(this.assetMatchId, this.projectId, this.scanId, this.orgId, this.content)
                 .subscribe(({data}) => {
                     this.successTicketCreation(data);
                 });
