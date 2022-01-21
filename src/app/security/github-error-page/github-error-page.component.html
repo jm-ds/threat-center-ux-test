@@ -1,0 +1,19 @@
+<section class="contain">
+    <app-alert type="danger">
+        <p class="lead mb-0">
+            <span *ngIf="!gitHubErrorMessage;else errortemplate">Something went wrong!</span>
+        </p>
+        <ng-template #errortemplate>
+            <p>{{gitHubErrorMessage?.error}}</p>
+            <p>{{gitHubErrorMessage?.error_description}}</p>
+        </ng-template>
+    </app-alert>
+
+    <section class="container">
+        <div class="action">
+            <button type="button" class="btn btn-outline-info big-btn" (click)="goBack()">
+                <i class="fal fa-arrow-circle-left" style="margin-right:5px"></i>Go Back
+            </button>
+        </div>
+    </section>
+</section>
