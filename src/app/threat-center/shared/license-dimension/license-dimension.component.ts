@@ -72,6 +72,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   permissions: any[];
   limitations: any[];
   conditions: any[];
+
+  // For Jira integration
   jiraCredentials: JiraCredentials;
   orgId;
   jiraTicket;
@@ -102,6 +104,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
         this.reloadAssets();
       }
     }
+
+    // Get the entity settings and check if there are any Jira settings
     this.orgService.getOrgSettings().subscribe(
         data => {
           if (data.data.orgSettings.jiraCredentials) {
@@ -128,11 +132,13 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     this.obsScanLicense = this.projectService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scanLicense));
     this.obsScanLicense.subscribe(scanLicense => {
+
+      // Getting jira ticket for license if exists
       this.orgId = scanLicense.orgId;
-      this.jiraService.getLicenseJiraTicket(this.licenseId, this.scanId, this.orgId)
-          .subscribe(jt => {
-            this.jiraTicket = jt.data.licenseJiraTicket;
-          });
+      this.jiraService.getLicenseJiraTicket(this.licenseId, this.scanId, this.orgId).subscribe(jt => {
+        this.jiraTicket = jt.data.licenseJiraTicket;
+      });
+
       if (!!scanLicense.license) {
         this.getLicenseName.emit(scanLicense.license.name);
         this.permissions = this.licenseAttributeFilter(scanLicense.license, 'PERMISSION');
@@ -204,6 +210,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     modalRef.componentInstance.licenseId = this.licenseId;
   }
 
+  // Generating the correct URL for a jira ticket
   openJiraTicket(key, self: string) {
     let url: string;
     if (this.jiraCredentials) {

@@ -11,6 +11,7 @@ export class JiraService {
     constructor(private coreGraphQLService: CoreGraphQLService) {
     }
 
+    // Request the backend to create a jira ticket from Vulnerability details page
     createVulnerabilityJiraTicket(vulnerabilityId: string, projectId: string, scanId: string, orgId: string, vulnId: string, content: string) {
         const vulnerabilityJiraRequest = new VulnerabilityJiraRequestInput(vulnerabilityId, projectId, scanId, orgId, vulnId, content);
         return this.coreGraphQLService.coreGQLReqForMutation(
@@ -24,6 +25,7 @@ export class JiraService {
         );
     }
 
+    // Request the backend to create a jira ticket from license details page
     createLicenseJiraTicket(licenseId, projectId, scanId, orgId, content: string) {
         const licenseJiraRequest = new LicenseJiraRequestInput(licenseId, projectId, scanId, orgId, content);
         return this.coreGraphQLService.coreGQLReqForMutation(
@@ -37,6 +39,7 @@ export class JiraService {
         );
     }
 
+    // Request the backend to get a jira ticket for selected license
     getLicenseJiraTicket(licenseId, scanId, orgId: string) {
         return this.coreGraphQLService.coreGQLReq<JiraTicketQuery>(gql`
           query {
@@ -46,6 +49,7 @@ export class JiraService {
          }`);
     }
 
+    // Request the backend to create a jira ticket from Scan asset details page
     createScanAssetMatchJiraTicket(assetMatchId, projectId, scanId, orgId, content: string) {
         const scanAssetMatchRequest = new ScanAssetMatchJiraRequestInput(assetMatchId, projectId, scanId, orgId, content);
         return this.coreGraphQLService.coreGQLReqForMutation(

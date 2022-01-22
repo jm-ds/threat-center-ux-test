@@ -69,6 +69,7 @@ export class ScanAssetDetailComponent implements OnInit {
         // this.attributionStatus = "COMPLETE";
         this.initBreadcum();
 
+        // Get the entity settings and check if there are any Jira settings
         this.orgService.getOrgSettings().subscribe(
             data => {
                 if (data.data.orgSettings.jiraCredentials) {
@@ -289,7 +290,7 @@ export class ScanAssetDetailComponent implements OnInit {
                     const repositoryOwner = scanRepository.repositoryOwner;
                     const repositoryName = scanRepository.repositoryName;
                     obsScanAsset.subscribe(obsScanResult => {
-                        this.orgId = obsScanResult.orgId;
+                        this.orgId = obsScanResult.orgId; // It is necessary for jira ticket
                         this.attributionStatus = obsScanResult['attributionStatus'];
                         if (isUpdate) {
                             this.getAndSetScanAssetIdWithStatus();
@@ -331,6 +332,7 @@ export class ScanAssetDetailComponent implements OnInit {
         modalRef.componentInstance.assetMatchId = assetMatchId;
     }
 
+    // Generating the correct URL for a jira ticket
     openJiraTicket(key: string, self: string) {
         let url: string;
         if (this.jiraCredentials) {
