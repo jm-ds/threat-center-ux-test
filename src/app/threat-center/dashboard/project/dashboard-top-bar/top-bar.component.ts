@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { Project } from "@app/models";
+import { UserPreferenceService } from "@app/services/core/user-preference.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs";
 
@@ -22,7 +23,7 @@ export class ProjectDashboardTopbarComponent implements OnInit, OnDestroy {
     log: string;
     totalScanCount = 0;
 
-    constructor(private modalService: NgbModal) {
+    constructor(private modalService: NgbModal,private userPreferenceService: UserPreferenceService) {
     }
     ngOnDestroy(): void {
     }
@@ -34,13 +35,18 @@ export class ProjectDashboardTopbarComponent implements OnInit, OnDestroy {
             val.subscribe(res => {
                 this.totalScanCount = res.scans.totalCount;
                 if (res && res.scans.edges.length >= 1) {
-                    this.mostRecentScan = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+                    const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+                    if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+                        this.mostRecentScan = res.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
+                    } else {
+                        this.mostRecentScan = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+                    }
                 }
             });
         }
     }
 
-    updateData(scan){
+    updateData(scan) {
         this.mostRecentScan = scan;
     }
 

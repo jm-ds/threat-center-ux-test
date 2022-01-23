@@ -120,7 +120,7 @@ export class ProjectDashboardService {
                   }
                 }
             }
-          `,'no-cache');
+          `, 'no-cache');
   }
 
   getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage, vulPage, licensePage) {
@@ -473,8 +473,14 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
     return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(
         mergeMap((data: any) => {
+          let scanId = '';
           const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-          let scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
+          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+            scanId = lastScanSelected.lastSelectedScanId;
+          } else {
+            scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
+          }
+
           if (!!data.data.project && !!scanId) {
             const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
             const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
