@@ -85,6 +85,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
         .pipe(map(result => result.data.scan));
       this.initData();
+
     }
   }
 
@@ -174,7 +175,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),undefined,undefined,undefined,'no-cache')
+      const obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined, undefined, undefined, 'no-cache')
         .pipe(map(result => result.data.scan));
       obsScan.subscribe(asset => {
         this.scanAssetDetails = asset;
@@ -248,6 +249,14 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.obsScan.subscribe(asset => {
       this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
+      if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
+        const scanAssetIdLists = JSON.parse(sessionStorage.getItem('UPDATED_SCAN_ASSETID'));
+        this.scanAssetDetails.scanAssetsTree.edges.forEach(element => {
+          if (!!scanAssetIdLists.find(f => f.scanAssetId === element.node.scanAssetId && this.scanId === f.scanId)) {
+            element.node.attributionStatus = scanAssetIdLists.find(f => f.scanAssetId === element.node.scanAssetId).status;
+          }
+        });
+      }
       this.filterOnlyAssetsIfFilterActivated();
       this.setUserPreferencesDetailsForAseets();
     }, err => {
