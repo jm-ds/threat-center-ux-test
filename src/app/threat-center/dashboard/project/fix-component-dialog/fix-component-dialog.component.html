@@ -9,14 +9,14 @@
             <p>Choose version:</p>
             <div class="form-group">
                 <label class="radio radio-primary d-inline">
-                    <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.latestPatchedVersion.version}}" name="{{componentId}}-latest" id="versionRedio1">
-                    <span for="versionRedio1" class="cr">Update to latest secure version <span class="badge m-r-5 badge-light-success">{{patchedVersions.latestPatchedVersion.version}}</span></span>
+                    <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.latestPatchedVersion}}" name="{{componentId}}-latest" id="versionRedio1">
+                    <span for="versionRedio1" class="cr">Update to latest secure version <span class="badge m-r-5 badge-light-success">{{patchedVersions.latestPatchedVersion}}</span></span>
                 </label>
             </div>
             <div class="form-group">
                 <label class="radio radio-primary d-inline">
-                    <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.nextPatchedVersion.version}}"  name="{{componentId}}-next" id="versionRedio2">
-                    <span for="versionRedio2" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">{{patchedVersions.nextPatchedVersion.version}}</span>(lowest risk of breaking build)</span>
+                    <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.nextPatchedVersion}}"  name="{{componentId}}-next" id="versionRedio2">
+                    <span for="versionRedio2" class="cr">Update to next secure version <span class="badge m-r-5 badge-light-success">{{patchedVersions.nextPatchedVersion}}</span>(lowest risk of breaking build)</span>
                 </label>
             </div>
         </div>
