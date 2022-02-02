@@ -1,3 +1,6 @@
+// todo: ref: move this file to /src/app/models
+// todo: ref: consider to split this file into several domain specific
+
 export class ScanRequest {
   login:string;
   repository:string;
@@ -283,6 +286,18 @@ export class PatchedInfo {
   cveId: string;
   nextPatchedVersion: VulnCodePatchedPackage;
   latestPatchedVersion: VulnCodePatchedPackage;
+}
+
+export class PatchedInfoSimplified {
+  namespace: string;
+  name: string;
+  vulnerableVersion: string;
+  cveId: string;
+  nextPatchedVersion: string;
+  latestPatchedVersion: string;
+}
+export interface PatchedInfoSimplifiedQuery {
+  autofixVersions: PatchedInfoSimplified;
 }
 
 export class Vulnerability {
