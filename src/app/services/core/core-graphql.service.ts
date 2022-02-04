@@ -1,123 +1,120 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Messages } from "@app/messages/messages";
-import { Apollo } from "apollo-angular";
-import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from "apollo-client";
-import { FetchResult } from "apollo-link";
-import { DocumentNode } from "graphql";
-import { NgxSpinnerService } from "ngx-spinner";
-import { EMPTY, Observable } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { CoreHelperService } from "@app/services/core/core-helper.service";
-import { CoreErrorHelperService } from "@app/services/core/core-error-helper.service";
-import { AlertService } from "@app/services/core/alert.service";
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Messages } from '@app/messages/messages';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+import { Apollo } from 'apollo-angular';
+import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
+import { FetchResult } from 'apollo-link';
+import { DocumentNode } from 'graphql';
+
+import { CoreErrorHelperService } from '@app/services/core/core-error-helper.service';
+import { AlertService } from '@app/services/core/alert.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class CoreGraphQLService {
-    constructor(private apollo: Apollo,
-        private coreHelperService: CoreHelperService,
-        private spinner: NgxSpinnerService,
-        private coreErrorHelperService: CoreErrorHelperService,
-        private alertService:AlertService
-    ) { }
+  constructor(private apollo: Apollo, private coreErrorHelperService: CoreErrorHelperService, private alertService: AlertService) { }
 
+  /** Core GraphQL service */
+  coreGQLReq<T>(
+    query: DocumentNode,
+    fetchPolicy?: WatchQueryFetchPolicy,
+    variables: OperationVariables = {},
+    errorHandler?: any
+  ): Observable<ApolloQueryResult<T>> {
+    return this.apollo
+      .watchQuery<T>({ query, fetchPolicy, variables })
+      .valueChanges
+      .pipe(
+        map(result => result as ApolloQueryResult<T>),
+        catchError(
+          errorHandler
+            ? errorHandler
+            : this.errorHandler.bind(this, 'CoreGraphQLService#coreGQLReq')
+        )
+      );
+  }
 
-    // Core graphQL service
-    coreGQLReq<T>(
+  coreGQLReqWithQuery<T>(
+    query: DocumentNode,
+    fetchPolicy?: FetchPolicy,
+    variables: OperationVariables = {}
+  ): Observable<ApolloQueryResult<T>> {
+    return this.apollo
+      .query<T>({ query, fetchPolicy, variables })
+      .pipe(
+        map(result => result as ApolloQueryResult<T>),
+        catchError(
+          this.errorHandler.bind(this, 'CoreGraphQLService#coreGQLReqWithQuery')
+        )
+      );
+  }
 
-        query: DocumentNode,
-        fetchPolicy?: WatchQueryFetchPolicy,
-        variable: OperationVariables = {},
-        errorHandler: any = undefined
-    ):
-        Observable<ApolloQueryResult<T>> {
-        return this.apollo.watchQuery<T>({
-            query: query,
-            fetchPolicy: fetchPolicy,
-            variables: variable
-        })
-            .valueChanges
-            .pipe(
-                map((result) => {
-                    return <ApolloQueryResult<T>>result;
-                }),
-                catchError(!!errorHandler? errorHandler: this.errorHandler));
-    }
+  coreGQLReqForMutation<T>(mutation: DocumentNode, variables: OperationVariables = {}): Observable<FetchResult<T>> {
+    return this.apollo
+      .mutate<T>({ mutation, variables })
+      .pipe(
+        map(result => result as FetchResult<T>),
+        catchError(
+          this.errorHandler.bind(this, 'CoreGraphQLService#coreGQLReqForMutation')
+        )
+      );
+  }
 
+  errorHandler = (errorSource: string, error: HttpErrorResponse | any, source?: Observable<any>) => {
+    let consoleError: string;
 
-    coreGQLReqWithQuery<T>(
-        query: DocumentNode,
-        fetchPolicyss?: FetchPolicy,
-        variable: OperationVariables = {}
-    ):
-        Observable<ApolloQueryResult<T>> {
-        return this.apollo.query<T>({
-            query: query,
-            fetchPolicy: fetchPolicyss,
-            variables: variable
-        })
-            .pipe(
-                map((result) => {
-                    return <ApolloQueryResult<T>>result;
-                }),
-                catchError(this.errorHandler));
-    }
+    let alert: Partial<{
+      title: string,
+      text: string,
+      hasHTML: boolean;
+    }> = {
+      title: Messages.commonErrorHeaderText
+    };
 
+    switch (typeof error) {
+      // set an error from an error object
+      case 'object': {
+        if (!error.networkError) {
+          const { message, graphQLErrors } = error;
 
-    coreGQLReqForMutation<T>(
-        mutationQ: DocumentNode,
-        variable: OperationVariables = {}
-    ): Observable<FetchResult<T>> {
-        return this.apollo.mutate<T>({
-            mutation: mutationQ,
-            variables: variable
-        })
-            .pipe(
-                map((result) => {
-                    return <FetchResult<T>>result;
-                }),
-                catchError(this.errorHandler));
-    }
+          consoleError = message;
 
-    // Handle errors
-    /*
-        todo: https://github.com/threatrix/product/issues/400
-            there are some todos in the method belo to point issues related to #400 task
-     */
-    public errorHandler = (error: HttpErrorResponse | any) => {
-        console.log("CoreGraphQLService.errorHandler:");
-        console.log("ERROR:");
-        console.log(error);
-        this.spinner.hide();
-        //Check if error is Object
-        if (typeof error === "object") {
-            let er = JSON.parse(JSON.stringify(error));
-            if (!!er.networkError) {
-                this.coreErrorHelperService.handleNetworkError(er.networkError, null);
-            } else {
-                this.coreErrorHelperService.printErrorMessageToConsol(er.message);
+          if (Array.isArray(graphQLErrors)) {
+            // gather an HTML alert text
+            alert.hasHTML = true;
 
-                if(Array.isArray(er.graphQLErrors)) {
-                    let msg = "";
-                    er.graphQLErrors.forEach(function(element, index) {
-                        if(index > 0)
-                            msg += "<br/>";
-                        msg += element.message;
-                    });
-                    this.alertService.alertBoxHtml(msg);
-                } else {
-                    this.alertService.alertBox(Messages.graphQlCommonErrorMessage,Messages.commonErrorHeaderText,'error');
-                }
-            }
-        } else if (typeof error === "string") { //check if error is string
-            this.coreErrorHelperService.printErrorMessageToConsol(error);
-            this.alertService.alertBox(error || Messages.graphQlCommonErrorMessage, Messages.commonErrorHeaderText, 'error');
-        } else {
-            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText, 'error');
+            graphQLErrors.forEach((element: any, index: any) => {
+              if (index > 0) {
+                alert.text += '<br>';
+              }
+
+              alert.text += element.message;
+            });
+          } else {
+            alert.text = Messages.graphQlCommonErrorMessage;
+          }
         }
-        return EMPTY;
+
+        break;
+      }
+
+      // set an error from an error string
+      case 'string': {
+        consoleError = error;
+        alert.text = error || Messages.graphQlCommonErrorMessage;
+
+        break;
+      }
+
+      default:
+        alert.text = Messages.wrongMessage;
     }
+
+    return this.coreErrorHelperService.errorHandler(errorSource, undefined, consoleError, alert, error, source);
+  }
 }

@@ -1,33 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { EMPTY, Observable } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { CoreErrorHelperService } from '@app/services/core/core-error-helper.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  constructor(private coreErrorHelperService: CoreErrorHelperService) { }
 
-    requestPayload: any;
-    constructor(private coreErrorHelperService: CoreErrorHelperService) { }
+  /** Error interceptor */
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const requestPayload = request.body;
 
-    //Error intersaptor
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.requestPayload = request.body;
-        return next.handle(request).pipe(catchError(this.errorHandler))
-    }
-
-
-    // error handler
-    /*
-        todo: https://github.com/threatrix/product/issues/400
-            there are some todos in the method belo to point issues related to #400 task
-     */
-    private errorHandler = (errObj: HttpErrorResponse): Observable<any> => {
-        console.log("ErrorInterceptor.errorHandler:");
-        console.log("ERROR:");
-        console.log(errObj);
-        this.coreErrorHelperService.handleNetworkError(errObj, this.requestPayload);
-        return EMPTY;
-    }
-
+    return next
+      .handle(request)
+      .pipe(
+        catchError(
+          this.coreErrorHelperService.errorHandler.bind(this, 'ErrorInterceptor#intercept', requestPayload)
+        )
+      );
+  }
 }

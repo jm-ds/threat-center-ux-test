@@ -1,19 +1,27 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Messages } from "@app/messages/messages";
-import { AuthenticationService } from "@app/security/services";
-import { environment } from "environments/environment";
-import { AlertService } from "@app/services/core/alert.service";
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { EMPTY, Observable } from 'rxjs';
+
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import { AuthenticationService } from '@app/security/services';
+import { AlertService } from '@app/services/core/alert.service';
+
+import { environment } from 'environments/environment';
+import { Messages } from '@app/messages/messages';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class CoreErrorHelperService {
-    constructor(private authenticationService: AuthenticationService,
-        private router: Router,
-        private alertService: AlertService) { }
+  constructor(
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private authenticationService: AuthenticationService,
+    private alertService: AlertService
+  ) { }
 
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
@@ -70,18 +78,18 @@ export class CoreErrorHelperService {
                     }
                     break;
             }
-            this.printErrorMessageToConsol(dataObjToShow.message)
+            this.printErrorMessageToConsole(dataObjToShow.message);
         }
     }
 
-    //helper function to print error in console if any from server side
-    printErrorMessageToConsol(message: any) {
-        //Print error in console when system is in development mode
-        if (!environment.production && !environment.staging) {
-            console.log("ERROR:");
-            console.log(message);
-        }
+  /** Helper function to print error in console if any from server side */
+  printErrorMessageToConsole(message: any) {
+    // Print error in console when system is in development mode
+    if (!environment.production && !environment.staging) {
+      console.log('ERROR:');
+      console.log(message);
     }
+  }
 
     //get messages according to status
     private getMessageStatusWise(status) {
@@ -183,4 +191,59 @@ export class CoreErrorHelperService {
         this.router.navigate(['/login'],{ state: { data: dataObjToShow.message } });
     }
 
+  /**
+   * Core error handler
+   * @param errorSource error source path
+   * @param requestPayload optional request payload for interceptor
+   * @param consoleError optional custom console error message
+   * @param alert optional alert
+   * @param error HTTP response error
+   * @param source source observable
+   * @returns silent empty observable
+   */
+  errorHandler(
+    errorSource: string,
+    requestPayload: any,
+    consoleError: string,
+    alert: Partial<{
+      title: string,
+      text: string,
+      hasHTML: boolean
+    }>,
+    error: HttpErrorResponse | any,
+    source: Observable<any>
+  ): Observable<never> {
+    this.spinner.hide();
+
+    if (errorSource) {
+      console.log(errorSource);
+    }
+
+    console.log('ERROR:');
+    console.log(error);
+
+    if (consoleError) {
+      this.printErrorMessageToConsole(consoleError);
+    }
+
+    if (alert || error.message) {
+      const showAlert = alert.hasHTML ? this.alertService.alertBoxHtml : this.alertService.alertBox;
+
+      let alertText = alert.text;
+
+      // Alert with error message from server
+      if (error.message) {
+        alertText = `${alertText} ${error.message})`;
+      }
+
+      showAlert(alertText, alert.title, 'error');
+    }
+
+    // GraphQL uses network error
+    if (requestPayload || error && error.networkError) {
+      this.handleNetworkError((error && error.networkError) || error, requestPayload);
+    }
+
+    return EMPTY;
+  }
 }
