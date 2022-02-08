@@ -1,22 +1,24 @@
-import { Component, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { debounceTime, map, filter, startWith, timeout } from 'rxjs/operators';
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
 import { MatPaginator } from '@angular/material';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { LazyLoadEvent, Table } from "primeng";
-import { TxComponent } from '@app/models';
-import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
+import { LazyLoadEvent } from 'primeng';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
-import { Messages } from "@app/messages/messages";
-import * as _ from 'lodash';
+import { VulnerableRelease, VulnerableReleaseResponseMap, VulnerableReleaseResponse } from '@app/threat-center/shared/models/types';
+
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { ProjectService } from '@app/services/project.service';
 import { ScanComponentService } from '@app/services/scan-component.service';
 import { VulnerableCodeMappingService } from '@app/services/vulncode-mapping.service';
 import { StateService } from '@app/services/state.service';
+
+import { TxComponent } from '@app/models';
 
 @Component({
   selector: 'component-detail',
@@ -28,7 +30,6 @@ export class ComponentDetailComponent implements OnInit {
   obsComponent: Observable<TxComponent>;
   component: TxComponent;
   obsScanComponent: Observable<TxComponent>;
-  messages = Messages;
   vulnerabilityColumns = ['Vulnerability', 'Cwe', 'Severity', 'CVSS2', 'CVSS3'];
 
   releaseCols = ['Version', 'Release Date'];

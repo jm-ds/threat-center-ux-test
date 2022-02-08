@@ -1,26 +1,29 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material';
-import { NgbModal, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
-import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {JiraCredentials, License, ScanLicense} from '@app/models';
-import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import { Messages } from "@app/messages/messages";
-import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { NgbModal, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+
+import { JiraCredentials, License, ScanLicense } from '@app/models';
+
+import { NextConfig } from '@app/app-config';
+
 import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { NextConfig } from '@app/app-config';
-import {OrgService} from "@app/services/org.service";
+import { OrgService } from "@app/services/org.service";
+import { JiraService } from "@app/services/jira.service";
+
+import { FixComponentDialogComponent } from '@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component';
+import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
+import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
 import {
   CreateJiraTicketComponent
 } from "@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component";
-import {JiraService} from "@app/services/jira.service";
-
-
 
 @Component({
   selector: 'license-dimension',
@@ -67,7 +70,6 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   assetTimeOut;
   assetTimeOutDuration = 1000;
   parentScanAssetId = '';
-  messages = Messages;
 
   permissions: any[];
   limitations: any[];

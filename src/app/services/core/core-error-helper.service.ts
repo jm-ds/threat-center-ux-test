@@ -9,7 +9,7 @@ import { AuthenticationService } from '@app/security/services';
 import { AlertService } from '@app/services/core/alert.service';
 
 import { environment } from 'environments/environment';
-import { Messages } from '@app/messages/messages';
+import { MESSAGES } from '@app/messages/messages';
 
 @Injectable({
   providedIn: 'root'
@@ -26,15 +26,25 @@ export class CoreErrorHelperService {
     //Below Method will going to handle network errors if any.
     handleNetworkError(errObj: HttpErrorResponse, requestPayload: any) {
         if (!errObj || errObj.status === null || errObj.status === undefined) {
-            this.alertService.alertBox(Messages.wrongMessage, Messages.commonErrorHeaderText, 'error');
+          this.alertService.alertBox(MESSAGES.ERROR_MESSAGE, MESSAGES.ERROR_TITLE, 'error');
         } else {
-            //getting server error if any other wise show default message according to status of server
-            const dataObjToShow: { status: number | string; message: string } = { status: Messages.commonErrorHeaderText, message: this.getDefaultErrorMessageFromServerIf(errObj) };
+            // Getting server error if any other wise show default message according to status of server
+            const dataObjToShow: {
+              status: number | string;
+              message: string;
+            } = {
+              status: MESSAGES.ERROR_TITLE,
+              message: this.getDefaultErrorMessageFromServerIf(errObj)
+            };
 
             switch (errObj.status) {
                 case 401:
-                    //Redirect user with notifying
-                    this.redirectUserToLoginPage(dataObjToShow, errObj.status);
+                    // Redirect user with notifying
+                    this.redirectUserToLoginPage({
+                      ...dataObjToShow,
+                      status: errObj.status
+                    });
+
                     break;
                 case 403:
                     console.log("REQUEST PAYLOAD", requestPayload);
@@ -45,11 +55,14 @@ export class CoreErrorHelperService {
                             //Redirect user with notifying
                             this.redirectUserToLoginPage(dataObjToShow);
                         } else {
-                            this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
+                          this.alertService.alertBox(dataObjToShow.message, MESSAGES.ERROR_TITLE, 'error');
                         }
                     } else {
-                        //If No JWT Then Redirect user with notifying
-                        this.redirectUserToLoginPage({ message: Messages.tokenNotFound, status: Messages.commonErrorHeaderText });
+                      // If no JWT then redirect user with notifying
+                      this.redirectUserToLoginPage({
+                        message: MESSAGES.TOKEN_NOT_FOUND,
+                        status: MESSAGES.ERROR_TITLE
+                      });
                     }
                     break;
                 case 400:
@@ -62,19 +75,20 @@ export class CoreErrorHelperService {
                         });
                         this.alertService.alertBoxHtml(msg,errObj.error.message,'error');
                     } else {
-                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
+                      this.alertService.alertBox(dataObjToShow.message, MESSAGES.ERROR_TITLE, 'error');
                     }
                     break;
                 default:
-                    //Rest Of all status code perform over here..
+                    // Rest of all status code perform over here
                     if (errObj.status === 502) {
-                        this.alertService.alertBox(Messages.status502, 'Server is restarting', 'error');
+                      this.alertService.alertBox(MESSAGES.STATUS_502, 'Server is restarting', 'error');
                     } else {
-                        if (errObj.status === 500) {
-                            console.log("REQUEST PAYLOAD", requestPayload);
-                            dataObjToShow.message = 'Invalid username or password!'
-                        }
-                        this.alertService.alertBox(dataObjToShow.message, Messages.commonErrorHeaderText, 'error');
+                      if (errObj.status === 500) {
+                        console.log('REQUEST PAYLOAD', requestPayload);
+
+                        dataObjToShow.message = 'Invalid username or password!';
+                      }
+                      this.alertService.alertBox(dataObjToShow.message, MESSAGES.ERROR_TITLE, 'error');
                     }
                     break;
             }
@@ -91,76 +105,10 @@ export class CoreErrorHelperService {
     }
   }
 
-    //get messages according to status
-    private getMessageStatusWise(status) {
-        let msg = "";
-        switch (status) {
-            case 0: {
-                msg = Messages.status0;
-                break;
-            }
-            case 500: {
-                msg = Messages.status500;
-                break;
-            }
-            case 501: {
-                msg = Messages.status501;
-                break;
-            }
-            case 502: {
-                msg = Messages.status502;
-                break;
-            }
-            case 503: {
-                msg = Messages.status503;
-                break;
-            }
-            case 504: {
-                msg = Messages.status504;
-                break;
-            }
-            case 505: {
-                msg = Messages.status505;
-                break;
-            }
-            case 400: {
-                msg = Messages.status400;
-                break;
-            }
-            case 403: {
-                msg = Messages.status403;
-                break;
-            }
-            case 404: {
-                msg = Messages.status404;
-                break;
-            }
-            case 405: {
-                msg = Messages.status405;
-            }
-            case 406: {
-                msg = Messages.status406;
-            }
-            case 407: {
-                msg = Messages.status407;
-            }
-            case 408: {
-                msg = Messages.status408;
-            }
-            case 415: {
-                msg = Messages.status415;
-            }
-            case 501: {
-                msg = Messages.status501;
-                break;
-            }
-            default: {
-                msg = Messages.wrongMessage;
-                break;
-            }
-        }
-        return msg;
-    }
+  /** Get messages according to status */
+  private getMessageStatusWise(status: number) {
+    return MESSAGES[`STATUS_${status}`] || MESSAGES.ERROR_MESSAGE;
+  }
 
     //Get default error message from server if any
     private getDefaultErrorMessageFromServerIf(errObj: HttpErrorResponse) {
@@ -185,11 +133,19 @@ export class CoreErrorHelperService {
         return errorMessage;
     }
 
-    //Helper function which will redirect user to login page with notifying user.
-    private redirectUserToLoginPage(dataObjToShow: { message: string, status: string | number }, actualStatus: number = 0) {
-        this.authenticationService.logout();
-        this.router.navigate(['/login'],{ state: { data: dataObjToShow.message } });
-    }
+  /** Helper function which will redirect user to login page with notifying user. */
+  private redirectUserToLoginPage(dataObjToShow: {
+    message: string,
+    status: string | number
+  }) {
+    this.authenticationService.logout();
+
+    this.router.navigate(['/login'], {
+      state: {
+        data: dataObjToShow.message
+      }
+    });
+  }
 
   /**
    * Core error handler

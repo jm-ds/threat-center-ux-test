@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Messages } from '@app/messages/messages';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -8,6 +7,8 @@ import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult, FetchPolicy, OperationVariables, WatchQueryFetchPolicy } from 'apollo-client';
 import { FetchResult } from 'apollo-link';
 import { DocumentNode } from 'graphql';
+
+import { MESSAGES } from '@app/messages/messages';
 
 import { CoreErrorHelperService } from '@app/services/core/core-error-helper.service';
 import { AlertService } from '@app/services/core/alert.service';
@@ -73,7 +74,7 @@ export class CoreGraphQLService {
       text: string,
       hasHTML: boolean;
     }> = {
-      title: Messages.commonErrorHeaderText
+      title: MESSAGES.ERROR_TITLE
     };
 
     switch (typeof error) {
@@ -96,7 +97,7 @@ export class CoreGraphQLService {
               alert.text += element.message;
             });
           } else {
-            alert.text = Messages.graphQlCommonErrorMessage;
+            alert.text = MESSAGES.GRAPHQL_ERROR_MESSAGE;
           }
         }
 
@@ -106,13 +107,13 @@ export class CoreGraphQLService {
       // set an error from an error string
       case 'string': {
         consoleError = error;
-        alert.text = error || Messages.graphQlCommonErrorMessage;
+        alert.text = error || MESSAGES.GRAPHQL_ERROR_MESSAGE;
 
         break;
       }
 
       default:
-        alert.text = Messages.wrongMessage;
+        alert.text = MESSAGES.ERROR_MESSAGE;
     }
 
     return this.coreErrorHelperService.errorHandler(errorSource, undefined, consoleError, alert, error, source);

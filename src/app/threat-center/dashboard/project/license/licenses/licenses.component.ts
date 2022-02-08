@@ -1,13 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { Scan } from '@app/models';
+import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Messages } from "@app/messages/messages";
+
 import * as _ from 'lodash';
+
+import { Scan } from '@app/models';
+
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 
 @Component({
@@ -31,7 +33,6 @@ export class LicensesComponent implements OnInit {
     timeOutDuration = 1000;
     isDisablePaggination:boolean = false;
 
-    messages = Messages;
     totalLicenses:number = 0;
     pageInfo:any;
 

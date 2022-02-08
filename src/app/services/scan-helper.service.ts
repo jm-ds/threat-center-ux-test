@@ -8,16 +8,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 
+import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
+
 import { AlertService } from '@app/services/core/alert.service';
 import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { TaskService } from '@app/services/task.service';
 
 import { PreScanLoadingDialogComponent } from '@app/threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
-
-import { NextConfig } from '@app/app-config';
-
-import { Messages } from '@app/messages/messages';
 
 @Injectable({
   providedIn: 'root'
@@ -117,7 +116,7 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.alertService.alertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
+                    this.alertService.alertBox(tUpdate.statusMessage,MESSAGES.ERROR_TITLE,'error');
 
                     //remove scan from storage
                     this.updateStorage(null);
