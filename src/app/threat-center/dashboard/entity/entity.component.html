@@ -8,7 +8,7 @@
       <h3 class="entity-ttl"><i class="fas fa-layer-group entity-icon"></i> <span *ngIf="entity.parentEntityId">
           <!-- <a (click)="changeEntity(entity.parentEntityId,entity.name,false)" style="font-size:15px;cursor: pointer;">
             <i class="fas fa-level-up-alt m-r-5"></i>Parent BU</a> /  -->
-        </span> 
+        </span>
         <span class="text-wrap"> {{entity.name}}
         </span>
         <select *ngIf="!!entitySelectionItems && entitySelectionItems.length >= 2" [ngClass]="'ng-select'" class="form-control form-control-sm custom-select select-utility" id="entityType"
@@ -266,96 +266,105 @@
               <!-- product-section start -->
               <div class="row">
                 <div class="col-sm-12">
-                  <app-card [hidHeader]="true" cardTitle="" cardClass="table-card" blockClass="px-0 py-0">
-                    <div class="table-responsive">
-                      <perfect-scrollbar [style.max-height]="'600px'">
-                        <p-treeTable class="table table-hover m-b-0" [value]="projects">
-                          <ng-template pTemplate="header">
-                            <tr>
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                  width="25%">PROJECT NAME</th>
-                              <!-- <th
-                                style="border-left:1px solid #4680ff;border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">
-                                DIVISION</th> -->
-                              <th class="text-left"
-                                  style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
-                                Vulnerability Risk</th>
-                              <th class="text-left"
-                                  style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
-                                License Risk</th>
-                              <!-- <th class="text-left"
-                                style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;" width="15%">
-                                Supply Chain Risk</th> -->
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;"
-                                  width="15%">Asset Composition</th>
-                              <th style="border-bottom:1px solid #4680ff;font-weight:bold; padding: 0.75rem;">Last Scan
-                              </th>
-                            </tr>
-                          </ng-template>
-                          <ng-template pTemplate="body" let-rowNode let-project let-rowData="rowData">
-                            <tr [ttRow]="rowNode" class="cursor-pointer"
-                                [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">
-                              <td style="font-weight:bold; padding: 0.75rem; overflow: hidden;">
-                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                <a
-                                        [routerLink]="['/dashboard/entity',entity.entityId, 'project',rowData.projectId]">{{rowData.name}}</a>
-                              </td>
-                              <td style="padding: 0.75rem;">
-                                <span title="Critical"
-                                      class="badge m-r-5 badge-red">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.critical}}</span>
-                                <span title="High"
-                                      class="badge m-r-5 badge-pink">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.high}}</span>
-                                <span title="Medium"
-                                      class="badge m-r-5 badge-orange">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.medium}}</span>
-                                <span title="Low"
-                                      class="badge m-r-5 badge-yellow">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.low}}</span>
-                                <span title="Info"
-                                      class="badge m-r-5 badge-light-primary">{{rowData?.projectMetricsSummary?.vulnerabilityMetrics.info}}</span>
-                              </td>
-                              <td style="padding: 0.75rem;">
-                                <span title="Copyleft Strong"
-                                      class="badge m-r-5 badge-copyleftstrong">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftStrong}}</span>
-                                <span title="Copyleft"
-                                      class="badge m-r-5 badge-copyLeft">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleft}}</span>
-                                <span title="Copyleft Weak"
-                                      class="badge m-r-5 badge-copyleftWeak">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftWeak}}</span>
-                                <span title="Copyleft Partial"
-                                      class="badge m-r-5 badge-copyleftPartial">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftPartial}}</span>
-                                <span title="Copyleft Limited"
-                                      class="badge m-r-5 badge-copyleftLimited">{{rowData?.projectMetricsSummary?.licenseMetrics?.copyleftLimited}}</span>
-                                <span title="Dual"
-                                      class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.dual}}</span>
-                                <span title="Custom"
-                                      class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.licenseMetrics?.custom}}</span>
-                                <span title="Permissive"
-                                      class="badge m-r-5 badge-permissive">{{rowData?.projectMetricsSummary?.licenseMetrics?.permissive}}</span>
-                                <span title="Proprietary"
-                                      class="badge m-r-5 badge-permissive">{{rowData?.projectMetricsSummary?.licenseMetrics?.proprietary}}</span>
-                                <span title="Proprietary Free"
-                                        class="badge m-r-5 badge-permissive">{{rowData?.projectMetricsSummary?.licenseMetrics?.proprietaryFree}}</span>
-                              </td>
-                              <!-- <td style="padding: 0.75rem;">
-                                <span title="Risk Score"
-                                  class="badge m-r-5 badge-light-danger">{{rowData?.projectMetricsSummary?.supplyChainMetrics.risk}}</span>
-                                <span title="Quality Score"
-                                  class="badge m-r-5 badge-light-warning">{{rowData?.projectMetricsSummary?.supplyChainMetrics.quality}}</span>
-                              </td> -->
-                              <td style="padding: 0.75rem;">
-                                <span title="Embedded"
-                                      class="badge m-r-5 badge-blue">{{rowData?.projectMetricsSummary?.assetMetrics?.embedded}}</span>
-                                <span title="Open Source"
-                                      class="badge m-r-5 badge-yellow">{{rowData?.projectMetricsSummary?.assetMetrics?.openSource}}</span>
-                                <span title="Unique"
-                                      class="badge m-r-5 badge-green">{{rowData?.projectMetricsSummary?.assetMetrics?.unique}}</span>
-                              </td>
-                              <td style="padding: 0.75rem;">{{rowData?.projectMetricsSummary?.measureDateTime | date
-                                      :'M/d/y h:mmaa' | lowercase}}</td>
-                            </tr>
-                          </ng-template>
-                        </p-treeTable>
-                      </perfect-scrollbar>
-                    </div>
-                  </app-card>
+                  <perfect-scrollbar class="mt-10">
+                    <p-treeTable [value]="projects">
+                      <ng-template let-projectNode let-project="rowData" pTemplate="body">
+                        <div class="project">
+                          <p-treeTableToggler [rowNode]="projectNode"></p-treeTableToggler>
+
+                          <div>
+                            <header>
+                              <a [routerLink]="['/dashboard/entity', entity.entityId, 'project', project.projectId]">{{ project.name }}</a>
+                            </header>
+
+                            <div class="project-metrics">
+                              <div>
+                                <span>Vulnerability Risk</span>
+
+                                <div>
+                                  <span class="badge m-r-5 badge-red" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.critical">
+                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.critical }} Critical
+                                  </span>
+                                  <span class="badge m-r-5 badge-pink" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.high">
+                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.high }} High
+                                  </span>
+                                  <span class="badge m-r-5 badge-orange" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.medium">
+                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.medium }} Medium
+                                  </span>
+                                  <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.low">
+                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.low }} Low
+                                  </span>
+                                  <span class="badge m-r-5 badge-light-primary" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.info">
+                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.info }} Info
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span>License Risk</span>
+
+                                <div>
+                                  <span class="badge m-r-5 badge-copyleftstrong" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftStrong">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftStrong }} Copyleft Strong
+                                  </span>
+                                  <span class="badge m-r-5 badge-copyLeft" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleft">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleft }} Copyleft
+                                  </span>
+                                  <span class="badge m-r-5 badge-copyleftWeak" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftWeak">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftWeak }} Copyleft Weak
+                                  </span>
+                                  <span class="badge m-r-5 badge-copyleftPartial"
+                                    *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftPartial">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftPartial }} Copyleft Partial
+                                  </span>
+                                  <span class="badge m-r-5 badge-copyleftLimited"
+                                    *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftLimited">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftLimited }} Copyleft Limited
+                                  </span>
+                                  <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary?.licenseMetrics?.dual">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.dual }} Dual
+                                  </span>
+                                  <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary?.licenseMetrics?.custom">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.custom }} Custom
+                                  </span>
+                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.permissive">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.permissive }} Permissive
+                                  </span>
+                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.proprietary">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.proprietary }} Proprietary
+                                  </span>
+                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.proprietaryFree">
+                                    {{ project.projectMetricsSummary?.licenseMetrics?.proprietaryFree }} Proprietary Free
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span>Asset Composition</span>
+
+                                <div>
+                                  <span class="badge m-r-5 badge-blue" *ngIf="project.projectMetricsSummary?.assetMetrics?.embedded">
+                                    {{ project.projectMetricsSummary?.assetMetrics?.embedded }} Embedded
+                                  </span>
+                                  <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary?.assetMetrics?.openSource">
+                                    {{ project.projectMetricsSummary?.assetMetrics?.openSource }} Open Source
+                                  </span>
+                                  <span class="badge m-r-5 badge-green" *ngIf="project.projectMetricsSummary?.assetMetrics?.unique">
+                                    {{ project.projectMetricsSummary?.assetMetrics?.unique }} Unique
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span>Last Scan</span>
+                                {{ project.projectMetricsSummary?.measureDateTime | date:'M/d/y h:mm aa' }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </p-treeTable>
+                  </perfect-scrollbar>
                 </div>
               </div>
               <!-- product-section end -->
