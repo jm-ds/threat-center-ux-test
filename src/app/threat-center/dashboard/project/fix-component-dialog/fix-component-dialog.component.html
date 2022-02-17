@@ -7,16 +7,32 @@
         <div *ngIf="patchedVersions">
             <p><b>Fix vulnerabilities in version <span class="badge m-r-5 badge-light-danger">{{oldVersion}}</span></b></p>
             <p>Choose version:</p>
-            <div
-                *ngIf="patchedVersions?.latestPatchedVersion?.version == patchedVersions.nextPatchedVersion.version;else noSameTempate">
-                <div class="form-group">
-                    <label class="radio radio-primary d-inline">
-                        <input [(ngModel)]="newVersion" type="radio" value="{{patchedVersions.nextPatchedVersion.version}}"
-                            name="{{componentId}}-latest" id="versionRedio1">
-                        <span for="versionRedio1" class="cr">Upgrade to the only secure version <span
-                                class="badge m-r-5 badge-light-success">{{patchedVersions.nextPatchedVersion.version}}</span>available.</span>
-                    </label>
-                </div>
+
+            <div class="form-group">
+              <label class="radio radio-primary d-inline">
+                <input type="radio" name="latest-version" [value]="patchedVersions.latestPatchedVersion" [(ngModel)]="newVersion">
+                <span class="cr">
+                  <ng-container *ngIf="patchedVersions.nextPatchedVersion !== patchedVersions.latestPatchedVersion; else onlyVersion">
+                    Update to latest secure version
+                    <span class="badge badge-light-success">{{ patchedVersions.latestPatchedVersion }}</span>
+                  </ng-container>
+
+                  <ng-template #onlyVersion>
+                    Upgrade to the only secure version
+                    <span class="badge badge-light-success">{{ patchedVersions.latestPatchedVersion }}</span> available.
+                  </ng-template>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group" *ngIf="patchedVersions.nextPatchedVersion !== patchedVersions.latestPatchedVersion">
+              <label class="radio radio-primary d-inline">
+                <input type="radio" name="next-version" [value]="patchedVersions.nextPatchedVersion" [(ngModel)]="newVersion">
+                <span class="cr">
+                  Update to next secure version <span class="badge badge-light-success">{{ patchedVersions.nextPatchedVersion }}</span>
+                  (lowest risk of breaking build)
+                </span>
+              </label>
             </div>
             <ng-template #noSameTempate>
                 <div class="form-group">
