@@ -17,6 +17,8 @@ import { AlertService } from '@app/services/core/alert.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService, AuthorizationService } from '../services';
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -26,7 +28,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         private authorizationService: AuthorizationService,
         private cookieService: CookieService,
         private corehelperService: CoreHelperService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private httpClient: HttpClient
     ) {
     }
 
@@ -77,6 +80,23 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let jwt = route.queryParams.jwt;
+    let hashedJwt = route.queryParams.redirect;
+    let username = route.queryParams.username;
+
+    // try to get impersonate jwt token from backend
+    if (hashedJwt && username) {
+        // browser send two http request in case of impersionation: options and get, so, ignore second request
+        if (this.authenticationService.getFromSessionStorageBasedEnv("jwt")) {
+            return true;
+        }
+        const promise = this.httpClient.get<any>(`${environment.apiUrl}/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
+        await promise.then((data) => {
+            jwt = data.jwt;
+        }, (error) => {
+            console.error('canActivate threat center call return error ' + JSON.stringify(error));
+            return false;
+        });
+    }
 
     if (jwt) {
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
