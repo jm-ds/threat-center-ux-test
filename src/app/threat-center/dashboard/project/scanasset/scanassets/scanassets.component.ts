@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { Scan } from '@app/models';
+import {Scan, ScanOpenSourceProject} from '@app/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Messages } from "@app/messages/messages";
@@ -37,6 +37,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   scanAssetDetails: any;
+  scanOpenSourceProject: ScanOpenSourceProject;
   columnsFilter = new Map();
   timeOut;
   timeOutDuration = 1000;
@@ -249,6 +250,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.obsScan.subscribe(asset => {
       this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
+      this.scanOpenSourceProject = asset.scanOpenSourceProject;
       if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
         const scanAssetIdLists = JSON.parse(sessionStorage.getItem('UPDATED_SCAN_ASSETID'));
         this.scanAssetDetails.scanAssetsTree.edges.forEach(element => {

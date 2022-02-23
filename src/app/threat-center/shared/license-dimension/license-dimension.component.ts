@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material';
 import { NgbModal, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
 import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import { License, ScanLicense } from '@app/models';
+import {License, ScanLicense, ScanOpenSourceProject} from '@app/models';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
 import { Messages } from "@app/messages/messages";
 import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
@@ -56,7 +56,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   ];
 
   assetColumns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Match Type'];
-  scanAssetDetails: any;
+  scanAssetsTree: any;
+  scanOpenSourceProject: ScanOpenSourceProject;
   columnsAssetFilter = new Map();
   story = [];
   assetTimeOut;
@@ -118,7 +119,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
           return;
         }
         this.licenseComponents = scanLicense.scanComponents;
-        this.scanAssetDetails = scanLicense.scanAssetsTree;
+        this.scanAssetsTree = scanLicense.scanAssetsTree;
+        this.scanOpenSourceProject = scanLicense.scanOpenSourceProject;
       }
     });
   }
@@ -201,7 +203,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
       this.parentScanAssetId, this.makeAssetFilterMapForService())
       .pipe(map(result => result.data.scanLicense));
     obsScanLicenseAssets.subscribe(scanLicense => {
-      this.scanAssetDetails = scanLicense.scanAssetsTree;
+      this.scanAssetsTree = scanLicense.scanAssetsTree;
     });
   }
 
@@ -218,15 +220,15 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
       // Next and Previous changed
       if (pageInfo.pageIndex > pageInfo.previousPageIndex) {
         // call with after...
-        if (!!this.scanAssetDetails.pageInfo && this.scanAssetDetails.pageInfo.hasNextPage) {
+        if (!!this.scanAssetsTree.pageInfo && this.scanAssetsTree.pageInfo.hasNextPage) {
           this.loadLicenseAssetPage(Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")), undefined,
-            this.scanAssetDetails.pageInfo.endCursor, undefined);
+            this.scanAssetsTree.pageInfo.endCursor, undefined);
         }
       } else {
         // call with before..
-        if (!!this.scanAssetDetails.pageInfo && this.scanAssetDetails.pageInfo.hasPreviousPage) {
+        if (!!this.scanAssetsTree.pageInfo && this.scanAssetsTree.pageInfo.hasPreviousPage) {
           this.loadLicenseAssetPage(undefined, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
-            undefined, this.scanAssetDetails.pageInfo.startCursor);
+            undefined, this.scanAssetsTree.pageInfo.startCursor);
         }
       }
     }
@@ -247,7 +249,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
         this.parentScanAssetId, this.makeAssetFilterMapForService())
         .pipe(map(result => result.data.scanLicense));
       obsScanLicense.subscribe(scanLicense => {
-        this.scanAssetDetails = scanLicense.scanAssetsTree;
+        this.scanAssetsTree = scanLicense.scanAssetsTree;
         this.coreHelperService.setFocusOnElement(idElement);
       });
     }, this.assetTimeOutDuration);
@@ -335,14 +337,14 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
 
   // reload asset tree
   reloadAssets() {
-    this.scanAssetDetails = [];
+    this.scanAssetsTree = [];
     let obsScanLicenseAssets = this.projectService.getScanLicenseAssets(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId,
       Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")),
       undefined, undefined, undefined,
       this.parentScanAssetId, this.makeAssetFilterMapForService())
       .pipe(map(result => result.data.scanLicense));
     obsScanLicenseAssets.subscribe(scanLicense => {
-      this.scanAssetDetails = scanLicense.scanAssetsTree;
+      this.scanAssetsTree = scanLicense.scanAssetsTree;
     });
   }
 
