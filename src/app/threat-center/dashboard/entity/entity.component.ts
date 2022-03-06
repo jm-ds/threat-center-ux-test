@@ -665,16 +665,16 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   inviteUser(inviteUrlDialog) {
     this.inviteService.createInvite().subscribe(
       data => {
-        let inviteHash = data.data.createInvite.inviteHash;
-        const link = '/admin/invite/show/' + inviteHash;
-        this.router.navigate([link]);
+        const inviteHash = data.data.createInvite.inviteHash;
+        
+        this.router.navigate(['/admin/invite', inviteHash]);
       },
       error => {
         console.error("NavRightComponent", error);
       }
     );
   }
-  
+
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
     this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
