@@ -95,6 +95,12 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
         generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
         successLink = `/admin/show/${this.username}/show/apikey/`;
       } else { // org key
+        if (!!this.apiKey.expiredDate) {
+            //workaround to convert date from date picker to right graphql date format
+            const value = this.apiKey.expiredDate;
+            this.apiKey.expiredDate = new Date();
+            this.apiKey.expiredDate.setFullYear(value['year'], value['month'] - 1, value['day']);
+        }
         generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
         successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
       }

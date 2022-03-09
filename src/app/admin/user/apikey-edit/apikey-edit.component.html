@@ -42,9 +42,11 @@
             <label class="font-weight-bolder">Created date</label>
             <input disabled class="form-control" value="{{apiKey.createdDate | date :'M/d/y h:mmaa' | lowercase}}"/>
           </div>
-          <div *ngIf="this.keyId !== 'new'" class="form-group" style="padding-left: 0px">
+          <div class="form-group" style="padding-left: 0px">
             <label class="font-weight-bolder">Expired date</label>
-            <input disabled class="form-control" value="{{apiKey.expiredDate | date :'M/d/y h:mmaa' | lowercase}}"/>
+            <input *ngIf="this.keyId == 'new'" class="form-control" autocomplete="off" [(ngModel)]="apiKey.expiredDate"
+              ngbDatepicker #dateStartPicker="ngbDatepicker" (click)="dateStartPicker.toggle()">
+            <input *ngIf="this.keyId !== 'new'" disabled class="form-control" value="{{apiKey.expiredDate | date :'M/d/y h:mmaa' | lowercase}}"/>
           </div>
         </div>
         <div class="actions mt-5">
