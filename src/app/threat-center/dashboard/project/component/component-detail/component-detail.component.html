@@ -202,7 +202,7 @@
                           <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
                                    [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
                                    [virtualScroll]="false" [virtualRowHeight]="34"
-                                   [lazy]="false"
+                                   [lazy]="false" [globalFilterFields]="['version','releaseDate']"
                                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width">
                             <ng-template pTemplate="colgroup">
                               <colgroup>
@@ -214,6 +214,16 @@
                               <tr>
                                 <th style="width:63%">Version</th>
                                 <th style="width:37%">Release Date</th>
+                              </tr>
+                              <tr>
+                                <th *ngFor="let col of binaryReleases" [ngSwitch]="col.version">
+                                  <input class="form-control" pInputText type="text"
+                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                </th>
+                                <th *ngFor="let col of binaryReleases" [ngSwitch]="col.releaseDate">
+                                  <input class="form-control" pInputText type="text"
+                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                </th>
                               </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-binaryRelease>
