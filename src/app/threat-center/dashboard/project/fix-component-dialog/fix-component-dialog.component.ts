@@ -29,13 +29,18 @@ export class FixComponentDialogComponent implements OnInit {
         private spinner: NgxSpinnerService) {
     }
 
-    ngOnInit() {
-        this.fixService.getPatchedVersion(this.componentId)
-            .subscribe(result => {
-                this.loading = false;
-                this.patchedVersions = result;
-            });
-    }
+  ngOnInit() {
+    this.fixService
+      .getPatchedVersion(this.componentId)
+      .subscribe(patchedVersion => {
+        this.loading = false;
+        this.patchedVersions = patchedVersion;
+
+        if (patchedVersion.nextPatchedVersion === patchedVersion.latestPatchedVersion) {
+          this.newVersion = patchedVersion.latestPatchedVersion;
+        }
+      });
+  }
 
     fixVersion() {
         this.spinner.show();
