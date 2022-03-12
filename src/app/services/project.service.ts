@@ -644,7 +644,8 @@ export class ProjectService {
           scan(scanId:"${scanId}") {
             scanRepository {
               repositoryOwner,
-              repositoryName
+              repositoryName,
+              repositoryEndpointType
             }
           }
         }
@@ -720,6 +721,9 @@ export class ProjectService {
             status,
             percentEmbedded,
             attributionStatus,
+            assetRepositoryUrl {
+              data
+            },
             sourceAssetAttribution {
               orgId,
               attributedBy,
@@ -741,6 +745,8 @@ export class ProjectService {
                   latestReleaseVersion,
                   scanAssetMatchJiraTicket {
                     id, key, self
+                  assetRepositoryUrl {
+                    data
                   },
                   matchRepository{
                     repositoryOwner,

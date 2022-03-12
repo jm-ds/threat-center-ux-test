@@ -1,5 +1,6 @@
 import {Repository} from "./scan";
 import {PageInfo} from "@app/models/common";
+import {StringHolder} from "@app/threat-center/shared/models/types";
 
 export class ScanAsset {
     orgId: string;
@@ -16,6 +17,7 @@ export class ScanAsset {
     matches: ScanAssetMatch[];
     embeddedAssets: any;
     attributionStatus: string;
+    assetRepositoryUrl: StringHolder;
 }
 
 export class ScanAssetMatch {

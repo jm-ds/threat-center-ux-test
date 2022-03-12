@@ -499,7 +499,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildProjectTree(entity: Entity) {
-    let edges = entity.projects.edges;
+    let edges = entity.projects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
 
     let nodes: TreeNode[] = edges.map(projectEdge => {
       let node: TreeNode = {
@@ -516,6 +516,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildProjectTreeHier(projectEdge: ProjectEdge, treeNode: TreeNode) {
+    projectEdge.node.childProjects.edges = projectEdge.node.childProjects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
     if (projectEdge.node.childProjects) {
       projectEdge.node.childProjects.edges.forEach(edge => {
         let childNode: TreeNode = {
@@ -634,7 +635,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.recursionHelperArray = [];
     this.recursivehelperArrayForIrgTree = [];
     if (!!entity && !!entity.childEntities && entity.childEntities.edges.length >= 1) {
-      await this.populateChildernRecusivaly(entity.childEntities.edges, null);
+
+      this.populateChildernRecusivaly(entity.childEntities.edges, null);
       this.entityTreeModel.data = [
         {
           data: entity,
@@ -674,7 +676,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     );
   }
-  
+
   private initCharts() {
     this.vulnerabilityDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
     this.licenseDonutChart = Object.assign(this.chartHelperService.initDonutChartConfiguration());
@@ -873,11 +875,17 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     return data;
   }
 
-  private async populateChildernRecusivaly(childData, prId) {
+  private populateChildernRecusivaly(childData, prId) {
+
     if (childData.length >= 1) {
       for (let i = 0; i < childData.length; i++) {
         if (!!childData[i].node) {
-          let cData: any = await this.entService.getTreeEntity(childData[i].node.entityId).toPromise();
+          // let cData: any = await this.entService.getTreeEntity(childData[i].node.entityId).toPromise();
+          let cData: any = {
+            data: {
+              entity: childData[i].node
+            }
+          };
           let d = {};
           cData.data.entity['vulSericeData'] = this.initSparkLineChart(cData.data.entity, 'vulnerabilityMetrics');
           cData.data.entity['licSericeData'] = this.initSparkLineChart(cData.data.entity, 'licenseMetrics');
@@ -893,7 +901,7 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.recursivehelperArrayForIrgTree.push({ parentId: prId, id: childData[i].node.entityId, name: childData[i].node.name, children: null, data: cData.data.entity, type: 'entity', expanded: false, styleClass: 'p-person' });
           if (!!cData.data && !!cData.data.entity && !!cData.data.entity.childEntities
             && cData.data.entity.childEntities.edges.length >= 1) {
-            await this.populateChildernRecusivaly(cData.data.entity.childEntities.edges, cData.data.entity.entityId);
+            this.populateChildernRecusivaly(cData.data.entity.childEntities.edges, cData.data.entity.entityId);
           }
         }
       }

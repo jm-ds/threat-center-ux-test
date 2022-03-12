@@ -89,6 +89,13 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateDataOnSelectedScan(obsScan, scanId) {
+    this.scanId = scanId;
+    this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      .pipe(map(result => result.data.scan));
+    this.initData();
+  }
+
   sort(scanAssets: any) {
     return scanAssets
       .sort((a, b) => a.node.status.localeCompare(b.node.status))

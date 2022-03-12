@@ -6,14 +6,14 @@ import gql from "graphql-tag";
 import { Observable } from "rxjs";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class EntityService {
-    constructor(private coreGraphQLService: CoreGraphQLService) { }
+  constructor(private coreGraphQLService: CoreGraphQLService) { }
 
-    getEntityList() {
-        return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {
+  getEntityList() {
+    return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {
           entities {
             edges {
               node {
@@ -24,10 +24,61 @@ export class EntityService {
             }
           }
         }`, 'no-cache');
-    }
+  }
 
-    getEntity(entityId: string) {
-        let childProjects = `
+  getEntity(entityId: string) {
+    const childEntity = `
+    childEntities(first:100) {
+      edges {
+        node {
+          entityId
+          parentEntityId
+          name
+          entityType
+          removed
+          
+          entityMetricsSummaryGroup {
+            entityMetricsSummaries {
+              measureDate
+              vulnerabilityMetrics {
+                  critical
+                  high
+                  medium
+                  low
+                  info
+              }
+              licenseMetrics {
+                  copyleftStrong
+                  copyleftWeak
+                  copyleftPartial
+                  copyleftLimited
+                  copyleft
+                  custom
+                  dual
+                  permissive
+              }
+              supplyChainMetrics {
+                  risk
+                  quality
+              }
+              assetMetrics {
+                  embedded
+                  openSource
+                  unique
+              }
+            }  
+          }
+          
+          %childEntities%
+        }
+      }
+    }
+    
+    `;
+
+
+
+    let childProjects = `
         childProjects(first:100) {
           edges {
             node {
@@ -77,7 +128,7 @@ export class EntityService {
             }
           }
         }`;
-        let query = `
+    let query = `
         query {
           entity(entityId: "${entityId}") {
             entityId
@@ -146,7 +197,7 @@ export class EntityService {
                     }
                 }
             }
-            projects {
+            projects(first:25) {
               edges {
                 node {
                   projectId
@@ -192,72 +243,30 @@ export class EntityService {
             }
             
     
-            childEntities {
-              edges {
-                node {
-                  entityId
-                  parentEntityId
-                  name
-                  entityType
-                  removed
-                  
-                  entityMetricsSummaryGroup {
-                    entityMetricsSummaries {
-                      measureDate
-                      vulnerabilityMetrics {
-                          critical
-                          high
-                          medium
-                          low
-                          info
-                      }
-                      licenseMetrics {
-                          copyleftStrong
-                          copyleftWeak
-                          copyleftPartial
-                          copyleftLimited
-                          copyleft
-                          custom
-                          dual
-                          permissive
-                      }
-                      supplyChainMetrics {
-                          risk
-                          quality
-                      }
-                      assetMetrics {
-                          embedded
-                          openSource
-                          unique
-                      }
-                    }  
-                  }
-                  
-                  
-                }
-              }
-            }
+            %childEntities%
           }
         }`;
 
-        // max child project depth = 10
-        for (let i = 0; i < 10; i++) {
-            query = query.replace("%childProjects%", childProjects);
-            query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%", "%childEntityChildProjects%"));
-        }
-        query = query.replace("%childProjects%", "");
-        query = query.replace("%childEntityChildProjects%", "");
-
-        // return this.coreGraphQLService.watchQuery<EntityQuery>({
-        //   query: gql(query),
-        //   fetchPolicy: 'no-cache'
-        // }).valueChanges;
-
-        return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql(query), 'no-cache');
+    // max child project depth = 10
+    for (let i = 0; i < 10; i++) {
+      query = query.replace("%childProjects%", childProjects);
+      query = query.replace("%childEntities%", childEntity);
+      query = query.replace("%childEntityChildProjects%", childProjects.replace("%childProjects%", "%childEntityChildProjects%"));
     }
+    query = query.replace("%childProjects%", "");
+    query = query.replace("%childEntities%", "");
+    query = query.replace("%childEntityChildProjects%", "");
 
-    getEntityComponents(entityId: string) {
-        return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql`
+    // return this.coreGraphQLService.watchQuery<EntityQuery>({
+    //   query: gql(query),
+    //   fetchPolicy: 'no-cache'
+    // }).valueChanges;
+
+    return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql(query), 'no-cache');
+  }
+
+  getEntityComponents(entityId: string) {
+    return this.coreGraphQLService.coreGQLReq<EntityQuery>(gql`
             query {
               entity(entityId:"${entityId}" ) {
                 entityId,
@@ -311,10 +320,10 @@ export class EntityService {
               }
             }
           `, 'no-cache');
-    }
+  }
 
-    getEntityMetricsPeriod(orgId: string, entityId: string, period: Period) {
-        return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
+  getEntityMetricsPeriod(orgId: string, entityId: string, period: Period) {
+    return this.coreGraphQLService.coreGQLReq<LicenseQuery>(gql`
            query {
               entityMetricsPeriod(orgId:"${orgId}" entityId:"${entityId}" period:${period})  {
                 projectCount
@@ -344,11 +353,12 @@ export class EntityService {
             }
           }
           `, 'no-cache');
-    }
+  }
 
-    getTreeEntity(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
-        return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
-            gql`
+  getTreeEntity(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
+
+    return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
+      gql`
             query {
               entity(entityId: "${entityId}") {
                 entityId
@@ -405,5 +415,5 @@ export class EntityService {
               }
             }
           `, "no-cache");
-    }
+  }
 }

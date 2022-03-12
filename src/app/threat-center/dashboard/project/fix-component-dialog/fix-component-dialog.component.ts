@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FixComponentResultDialogComponent} from "@app/threat-center/dashboard/project/fix-component-result-dialog/fix-component-result-dialog.component";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from "rxjs";
-import {FixResult, PatchedInfo} from "@app/threat-center/shared/models/types";
+import {FixResult, PatchedInfoSimplified} from "@app/threat-center/shared/models/types";
 import { FixService } from '@app/services/fix.service';
 
 
@@ -19,7 +19,7 @@ export class FixComponentDialogComponent implements OnInit {
     componentId;
 
     fixResultObservable: Observable<FixResult[]>;
-    patchedVersions: PatchedInfo;
+    patchedVersions: PatchedInfoSimplified;
     loading = true;
 
     constructor(
@@ -30,10 +30,11 @@ export class FixComponentDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.fixService.getPatchedVersion(this.componentId).subscribe(result => {
-            this.loading = false;
-            this.patchedVersions = result;
-        });
+        this.fixService.getPatchedVersion(this.componentId)
+            .subscribe(result => {
+                this.loading = false;
+                this.patchedVersions = result;
+            });
     }
 
     fixVersion() {

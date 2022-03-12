@@ -38,7 +38,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     @ViewChild('vulTemplate', { static: false }) newVulnerablityCard: NewVulnerabilitiesCardComponent;
     @ViewChild('licenseCard', { static: false }) newLicenseCard: NewLicenseCardComponent;
     @ViewChild('componentCard', { static: false }) newComponentCard: NewComponentCardComponent;
-    @ViewChild(ScanAssetsComponent, { static: false }) scanAssetComponent: ScanAssetsComponent;
+    @ViewChild('assetContent', { static: false }) scanAssetComponent: ScanAssetsComponent;
 
 
     mostRecentScan;
@@ -167,22 +167,6 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             if (!!projData.otherComponentData && projData.otherComponentData.length >= 1) {
                 this.populateScanComponents(projData.otherComponentData, false);
                 this.populateDataForTotalCountsOfMetrics(projData.otherComponentData);
-
-                // if previously any scan selected then get counts of all components, licens eand assets...
-                // const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-                // if (!!this.stateService.selectedScan.node["scanId"]) {
-                //     this.obsProject.subscribe((project: any) => {
-                //         const scan = project.scans.edges.find(d => { return d.node.scanId === this.stateService.selectedScan.node["scanId"] });
-                //         this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"]);
-                //         if (!!scan.node && !!scan.node.scanMetricsSummary && !!scan.node.scanMetricsSummary.assetMetrics) {
-                //             const embededItem = !!scan.node.scanMetricsSummary.assetMetrics["embedded"] ? scan.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
-                //             const openSource = !!scan.node.scanMetricsSummary.assetMetrics["openSource"] ? scan.node.scanMetricsSummary.assetMetrics["openSource"] : '0';
-                //             const unique = !!scan.node.scanMetricsSummary.assetMetrics["unique"] ? scan.node.scanMetricsSummary.assetMetrics["unique"] : '0';
-                //             this.assetCount = embededItem + '/' + openSource + '/' + unique;
-                //             this.assetCountTooltip = embededItem + ' embedded, ' + openSource + ' openSource, ' + unique + ' unique';
-                //         } else { }
-                //     });
-                // }
             }
         });
 
@@ -218,7 +202,13 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.assetDonutData['labels'] = this.assetDonutChartLabel.map(f => f.label);;
         this.obsProject.subscribe(res => {
             if (res && res.scans.edges.length >= 1) {
-                const mostRecentScan: any = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+                let mostRecentScan;
+                const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+                if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+                    mostRecentScan = res.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
+                } else {
+                    mostRecentScan = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+                }
                 this.assignSericesToDonutChart(mostRecentScan);
             }
         });
@@ -265,7 +255,6 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         });
     }
 
-
     initProjectData() {
         this.stateService.obsProject = this.obsProject;
         this.obsProject.subscribe((project: any) => {
@@ -275,16 +264,13 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             //Taking sacn list to show in scan tab
             this.scanList = project.scans.edges;
             this.projectDetails = project;
-            // const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-            // this.stateService.selectedScan = !!lastScanSelected && !!lastScanSelected.lastSelectedScanId ?  project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId }) : project.scans.edges[0];
-            // if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })) {
-            //     this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
-            // } else {
-            //     this.stateService.selectedScan = project.scans.edges[0];
-            // }
-            this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+            const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
+            if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+                this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
+            } else {
+                this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+            }
 
-            let categories = [];
             if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
                 this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
             }
@@ -341,6 +327,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     onRowSelect($event) {
+        this.userPreferenceService.settingUserPreference("Project", null, null, null, null, null, null, this.stateService.selectedScan.node.scanId);
         this.apicallTogetCounts(this.stateService.selectedScan.node["scanId"], true);
         if (!!$event.data && !!$event.data.node.scanMetricsSummary && !!$event.data.node.scanMetricsSummary.assetMetrics) {
             const embededItem = !!$event.data.node.scanMetricsSummary.assetMetrics["embedded"] ? $event.data.node.scanMetricsSummary.assetMetrics["embedded"] : '0';
@@ -734,6 +721,9 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             }
             if (!!this.newComponentCard) {
                 this.newComponentCard.updateDataOnSelectedScan(this.componentScanData, this.stateService.selectedScan.node["scanId"]);
+            }
+            if (!!this.scanAssetComponent) {
+                this.scanAssetComponent.updateDataOnSelectedScan(this.assetScanData, this.stateService.selectedScan.node["scanId"]);
             }
             this.modalService.dismissAll();
         }
