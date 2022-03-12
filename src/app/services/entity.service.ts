@@ -197,7 +197,7 @@ export class EntityService {
                     }
                 }
             }
-            projects {
+            projects(first:25) {
               edges {
                 node {
                   projectId
