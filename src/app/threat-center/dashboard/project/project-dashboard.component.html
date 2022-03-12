@@ -133,7 +133,7 @@
                     </span>
                 </ng-template>
                 <ng-template ngbTabContent>
-                    <app-scanassets [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
+                    <app-scanassets #assetContent [scanId]="stateService.selectedScan?.node.scanId" [obsScan]="assetScanData"
                         (isAssetStory)="getStory($event)"></app-scanassets>
                     <p></p>
                 </ng-template>
