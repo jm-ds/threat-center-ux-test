@@ -37,6 +37,11 @@ export class OrganizationSettingComponent implements OnInit, AfterViewInit {
             isActive: false
         },
         {
+            tabName: "JIRA Integration",
+            tabId: "jira",
+            isActive: false
+        },
+        {
             tabName: "API keys",
             tabId: "org-apikeys",
             isActive: false

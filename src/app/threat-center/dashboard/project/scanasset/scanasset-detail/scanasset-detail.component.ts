@@ -5,7 +5,7 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import Swal from "sweetalert2";
-import { ScanAsset, ScanAssetMatch } from '@app/models';
+import {JiraCredentials, ScanAsset} from '@app/models';
 import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { AlertService } from '@app/services/core/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
@@ -13,6 +13,10 @@ import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialo
 import { ProjectService } from '@app/services/project.service';
 import { RepositoryService } from '@app/services/repository.service';
 import { StateService } from '@app/services/state.service';
+import {OrgService} from "@app/services/org.service";
+import {
+    CreateJiraTicketComponent
+} from "@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component";
 
 
 @Component({
@@ -42,8 +46,11 @@ export class ScanAssetDetailComponent implements OnInit {
     user: User;
 
     isDisableAttributeLicensebtn = false;
+    jiraCredentials: JiraCredentials;
+    orgId;
 
     constructor(
+        private orgService: OrgService,
         private projectService: ProjectService,
         private stateService: StateService,
         private repositoryService: RepositoryService,
@@ -61,6 +68,18 @@ export class ScanAssetDetailComponent implements OnInit {
         this.loadData();
         // this.attributionStatus = "COMPLETE";
         this.initBreadcum();
+
+        // Get the entity settings and check if there are any Jira settings
+        this.orgService.getOrgSettings().subscribe(
+            data => {
+                if (data.data.orgSettings.jiraCredentials) {
+                    this.jiraCredentials = data.data.orgSettings.jiraCredentials;
+                }
+            },
+            error => {
+                console.error("orgService.getOrgSettings().subscribe", error);
+            }
+        );
     }
 
     getTextForButton() {
@@ -272,6 +291,7 @@ export class ScanAssetDetailComponent implements OnInit {
                 // if we have a repo, pre-load the source asset
                 if (scanRepository) {
                     obsScanAsset.subscribe(obsScanResult => {
+                        this.orgId = obsScanResult.orgId; // It is necessary for jira ticket
                         this.attributionStatus = obsScanResult['attributionStatus'];
                         if (isUpdate) {
                             this.getAndSetScanAssetIdWithStatus();
@@ -316,5 +336,28 @@ export class ScanAssetDetailComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    createJiraTicket(assetMatchId) {
+        const  modalRef = this.modalService.open(CreateJiraTicketComponent, {
+            keyboard: false,
+        });
+
+        modalRef.componentInstance.projectId = this.projectId;
+        modalRef.componentInstance.scanId = this.scanId;
+        modalRef.componentInstance.orgId = this.orgId;
+        modalRef.componentInstance.assetMatchId = assetMatchId;
+    }
+
+    // Generating the correct URL for a jira ticket
+    openJiraTicket(key: string, self: string) {
+        let url: string;
+        if (this.jiraCredentials) {
+            url = this.jiraCredentials.projectUrl + '/browse/' + key;
+        } else {
+            let selfUrl = new URL(self);
+            url = selfUrl.hostname + '/browse/' + key;
+        }
+        window.open(url, "_blank");
     }
 }

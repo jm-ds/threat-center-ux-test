@@ -1,8 +1,9 @@
-import {Repository, ScanEdge} from "./scan";
+import {Repository} from "./scan";
 import {PageInfo} from "@app/models/common";
 import {StringHolder} from "@app/threat-center/shared/models/types";
 
 export class ScanAsset {
+    orgId: string;
     name: string;
     size: number;
     fileSize: number;
@@ -26,7 +27,7 @@ export class ScanAssetMatch {
 
 export type ScanAssetQuery = {
     scanAsset: ScanAsset;
-}
+};
 
 export class ScanAssetMatchRequest {
     readonly assetMatchId: string;

@@ -48,7 +48,8 @@ export type EntityListQuery = {
 
 export class JiraCredentials {
     projectUrl: string;
-    projectKey: string;
+    projectId: string;
+    issueTypeId: string;
     email: string;
     apiToken: string;
 }

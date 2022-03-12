@@ -18,19 +18,21 @@ export class LicenseDetailComponent implements OnInit, OnDestroy {
   projectId: string = ""
   scanId: string = "";
   entityId: string = "";
-  constructor(
-    public stateService: StateService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private coreHelperService: CoreHelperService,
-    private projectBreadcumsService: ProjectBreadcumsService) { }
-
   licenseId: string;
   licenseDiscovery: string;
   licenseOrigin: string;
 
   breadcumDetail: any = {};
   licenseName: string = "";
+
+  constructor(
+      public stateService: StateService,
+      private route: ActivatedRoute,
+      private router: Router,
+      private coreHelperService: CoreHelperService,
+      private projectBreadcumsService: ProjectBreadcumsService) {
+  }
+
   ngOnInit() {
     console.log("Loading LicenseDetailComponent");
     this.licenseId = this.route.snapshot.paramMap.get('licenseId');

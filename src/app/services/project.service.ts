@@ -404,6 +404,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
              scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
+                 orgId,
                  licenseOrigin,
                  licenseDiscovery
                  license {
@@ -628,6 +629,9 @@ export class ProjectService {
                     group
                   }
                 }
+              },
+              vulnJiraTicket(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
+                id, key, self
               }
           }
         }
@@ -707,6 +711,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(gql`
         query {
         	scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
+        	orgId,
             name,
             size,
             assetSize
@@ -738,6 +743,8 @@ export class ProjectService {
                   earliestReleaseVersion,
                   latestReleaseDate,
                   latestReleaseVersion,
+                  scanAssetMatchJiraTicket {
+                    id, key, self
                   assetRepositoryUrl {
                     data
                   },

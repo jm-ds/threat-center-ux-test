@@ -37,6 +37,7 @@
 
             <ng-template pTemplate="header" let-columns>
               <tr>
+                <th *ngIf="jiraCredentials">Jira</th>
                 <th>Name</th>
                 <th>Repository</th>
                 <th>Percent match <i class="badge-light-primary fas fa-question-circle"></i></th>
@@ -48,6 +49,14 @@
             </ng-template>
             <ng-template pTemplate="body" let-embeddedAsset>
               <tr>
+                <td *ngIf="jiraCredentials && !embeddedAsset?.node?.scanAssetMatchJiraTicket">
+                  <button class="btn btn-outline-primary " data-toggle="modal" type="button"
+                          (click)="createJiraTicket(embeddedAsset?.node?.assetMatchId)">Create Jira Ticket</button>
+                </td>
+                <td *ngIf="embeddedAsset?.node?.scanAssetMatchJiraTicket">
+                  <button class="btn btn-outline-primary " data-toggle="modal" type="button"
+                          (click)="openJiraTicket(embeddedAsset?.node?.scanAssetMatchJiraTicket.key, embeddedAsset?.node?.scanAssetMatchJiraTicket.self)">{{embeddedAsset?.node?.scanAssetMatchJiraTicket.key}}</button>
+                </td>
                 <td class="align-middle" (dblclick)="copyToClipboard(embeddedAsset?.node?.assetMatchId, 'Asset ID copied to clipboard');">{{embeddedAsset.node.name}}</td>
                 <td class="align-middle">
                   <i class="btn-outline-info fab fa-github fa-2x align-middle m-r-5"></i>
