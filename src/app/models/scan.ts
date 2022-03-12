@@ -71,6 +71,7 @@ export class Repository {
     defaultBranch?: Branch;
     branches?: Branch[];
     scanBranch?: string = '';
+    repositoryEndpointType?: string = '';
 }
 
 export class Language {

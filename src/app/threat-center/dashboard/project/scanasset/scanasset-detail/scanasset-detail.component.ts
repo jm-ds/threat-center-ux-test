@@ -93,12 +93,15 @@ export class ScanAssetDetailComponent implements OnInit {
     }
 
     fetchRepositoryAsset(embeddedAsset: ScanAsset) {
-        let repositoryOwner = embeddedAsset.matchRepository.repositoryOwner;
-        let repositoryName = embeddedAsset.matchRepository.repositoryName;
-        let assetId = embeddedAsset.originAssetId;
-        this.repositoryService.fetchAsset(repositoryOwner, repositoryName, assetId)
-            .subscribe(result => {
-                embeddedAsset.content = atob(result.content);
+        this.repositoryService.fetchAsset(embeddedAsset.assetRepositoryUrl.data)
+            .subscribe(response => {
+                if (response.content) {
+                    embeddedAsset.content = atob(response.content);
+                }
+                else {
+                    //bitbucket return raw file only, it response hasn't node 'content'
+                    embeddedAsset.content = atob(response);
+                }
                 this.matchAsset = embeddedAsset;
             });
     }
@@ -268,8 +271,6 @@ export class ScanAssetDetailComponent implements OnInit {
 
                 // if we have a repo, pre-load the source asset
                 if (scanRepository) {
-                    const repositoryOwner = scanRepository.repositoryOwner;
-                    const repositoryName = scanRepository.repositoryName;
                     obsScanAsset.subscribe(obsScanResult => {
                         this.attributionStatus = obsScanResult['attributionStatus'];
                         if (isUpdate) {
@@ -279,22 +280,38 @@ export class ScanAssetDetailComponent implements OnInit {
                             this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
                         }
                         this.sourceAsset = obsScanResult;
-                        let assetId = this.sourceAsset.originAssetId;
+                        if (!!this.user.repositoryAccounts) {
+                            //the token is used to access the user(client) repository, which is possibly private
+                            let accessToken;
+                            if (result.scanRepository.repositoryEndpointType === 'GITHUB' && this.user.repositoryAccounts.githubAccount) {
+                                accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
+                            }
+                            if (result.scanRepository.repositoryEndpointType === 'GITLAB' && this.user.repositoryAccounts.gitlabAccount) {
+                                accessToken = this.user.repositoryAccounts.gitlabAccount.accessToken;
+                            }
+                            if (result.scanRepository.repositoryEndpointType === 'BITBUCKET' && this.user.repositoryAccounts.bitbucketAccount) {
+                                accessToken = this.user.repositoryAccounts.bitbucketAccount.accessToken;
+                            }
 
-                        // let user = this.authService.getFromStorageBasedEnv("currentUser");
-                        if (!!this.user.repositoryAccounts && !!this.user.repositoryAccounts.githubAccount) {
-                            const accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
                             console.log("ACCESS TOKEN:", accessToken);
-
                             if (accessToken) {
                                 console.log("Getting file");
-                                this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
-                                    .subscribe(r => {
-                                        this.sourceAsset.content = atob(r.content);
+                                this.repositoryService.fetchAuthenticatedAsset(this.sourceAsset.assetRepositoryUrl.data, accessToken)
+                                    .subscribe(response => {
+                                        if (response.content) {
+                                            this.sourceAsset.content = atob(response.content);
+                                        }
+                                        else {
+                                            //bitbucket return raw file only, it response hasn't node 'content'
+                                            this.sourceAsset.content = atob(response);
+                                        }
                                     });
                             }
+                            else {
+                                console.error("Current user hasn't registered in any source repositories system");
+                            }
                         } else {
-                            console.error("Current user hasn't registered Github account");
+                            console.error("Current user hasn't registered in any source repositories system");
                         }
                     });
                 }
