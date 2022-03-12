@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { Scan } from '@app/models';
+import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Messages } from "@app/messages/messages";
+
+import { Scan } from '@app/models';
+
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { SaveFilterStateService } from '@app/services/core/save-filter-state.service';
 import { ProjectService } from '@app/services/project.service';
@@ -42,7 +43,6 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   timeOutDuration = 1000;
   parentScanAssetId = '';
   story = [];
-  messages = Messages;
   isDisablePaggination: boolean = false;
   constructor(
     private projectService: ProjectService,

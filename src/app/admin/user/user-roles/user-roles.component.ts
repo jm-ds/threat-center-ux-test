@@ -1,18 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserUtils } from "@app/admin/user/user-utils";
-import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
-import { Role, User, Message } from "@app/models";
-import { DualListComponent } from "angular-dual-listbox";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+
+import { Role, User, Message } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { UserUtils } from '@app/admin/user/user-utils';
+
 import { UserService } from '@app/services/user.service';
 import { RoleService } from '@app/services/role.service';
+
+import { DualListComponent } from 'angular-dual-listbox';
 
 @Component({
     selector: 'app-user-roles',
     templateUrl: './user-roles.component.html',
     styleUrls: ['./user-roles.component.scss']
 })
-export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
-
+export class UserRolesComponent extends UserUtils implements OnInit {
     keepSorted = true;
     source: Array<any>;
     confirmed: Array<any> = [];
@@ -67,29 +72,35 @@ export class UserRolesComponent extends UserUtils implements OnInit, OnDestroy {
         return item.roleId + ' - ' + item.description;
     }
 
-    private saveRoles() {
-        this.userService.saveRoles(this.user.username, this.confirmed)
-            .subscribe(({ data }) => {
-                const navigationExtras: NavigationExtras = {
-                    state: { messages: [Message.success("Roles added successfully.")] },
-                    queryParams: {
-                        "userName": this.user.username
-                    }
-                }
-                this.router.navigate(['/admin/user/show'], navigationExtras);
-            }, (error) => {
-                console.error('User Roles Saving', error);
-                const navigationExtras: NavigationExtras = {
-                    state: { messages: [Message.error("Unexpected error occurred while trying to add roles.")] },
-                    queryParams: {
-                        "userName": this.user.username
-                    }
-                }
-            });
-    }
+  private saveRoles() {
+    this.userService
+      .saveRoles(this.user.username, this.confirmed)
+      .subscribe(
+        () => {
+          const navigationExtras: NavigationExtras = {
+            state: {
+              messages: [Message.success(MESSAGES.ROLES_SAVE_SUCCESS)]
+            },
+            queryParams: {
+              userName: this.user.username
+            }
+          };
 
-    ngOnDestroy(): void {
-    }
+          this.router.navigate(['/admin/user/show'], navigationExtras);
+        },
+        error => {
+          console.error('User roles saving', error);
+
+          const navigationExtras: NavigationExtras = {
+            state: {
+              messages: [Message.error(MESSAGES.ROLES_SAVE_ERROR)]
+            },
+            queryParams: {
+              userName: this.user.username
+            }
+          };
+        });
+  }
 
     gotoUser(userName) {
         const navigationExtras: NavigationExtras = {

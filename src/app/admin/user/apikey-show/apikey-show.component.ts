@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+
+import { FetchResult } from 'apollo-link';
+import { ApiKey, Message, Messages, User } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { UserUtils } from '../user-utils';
+
 import { AlertService } from '@app/services/core/alert.service';
-import { ApiKey, Message, Messages, User } from "@app/models";
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';
-import { UserUtils } from '../user-utils';
 
 @Component({
     selector: 'app-api-key',
@@ -66,37 +74,48 @@ export class ApiKeyShowComponent extends UserUtils implements OnInit {
     }
 
 
-    // remove API key
-    removeApiKey() {
-        if (confirm("Are you sure you want to delete API key?")) {
-            let removeApiKeyObservable = undefined;
-            let successLink = undefined;
-            if (this.isUserKey) { // user key
-                removeApiKeyObservable = this.userService.removeApiKey(this.apiKey);
-            } else { // org key
-                removeApiKeyObservable = this.orgService.removeOrgApiKey(this.apiKey);
-                successLink = '/dashboard/org-setting/integration/org-apikeys'
-            }
-            removeApiKeyObservable
-                .subscribe(() => {
-                    if (this.isUserKey) {
-                        const navigationExtras: NavigationExtras = {
-                            state: { messages: [Message.success("API key removed successfully.")] },
-                            queryParams: {
-                                "userName": this.username
-                            }
-                        };
-                        this.router.navigate(['/admin/user/show'], navigationExtras);
-                    } else {
-                        this.router.navigate([successLink],
-                            { state: { messages: [Message.success("API key removed successfully.")] } });
-                    }
-                }, (error) => {
-                    console.error('API key Removing', error);
-                    this.messages = [Message.error("Unexpected error occurred while trying to remove API key.")];
-                });
+  /** Remove API key */
+  removeApiKey() {
+    if (confirm(MESSAGES.API_KEY_REMOVE_CONFIRM)) {
+      let removeApiKeyObservable: Observable<FetchResult>;
+      let successLink: string;
+
+      if (this.isUserKey) { // user key
+        removeApiKeyObservable = this.userService.removeApiKey(this.apiKey);
+      } else { // org key
+        removeApiKeyObservable = this.orgService.removeOrgApiKey(this.apiKey);
+        successLink = '/dashboard/org-setting/integration/org-apikeys';
+      }
+
+      removeApiKeyObservable.subscribe(
+        () => {
+          if (this.isUserKey) {
+            const navigationExtras: NavigationExtras = {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_REMOVE_SUCCESS)]
+              },
+              queryParams: {
+                userName: this.username
+              }
+            };
+
+            this.router.navigate(['/admin/user/show'], navigationExtras);
+          } else {
+            this.router.navigate([successLink], {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_REMOVE_SUCCESS)]
+              }
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('API key Removing', error);
+
+          this.messages = [Message.error(MESSAGES.API_KEY_REMOVE_ERROR)];
         }
+      );
     }
+  }
 
 
     // Copy API key to clipboard

@@ -1,11 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup} from "@app/models";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
+import { Message, Messages, Policy, PolicyAction, PolicyCondition, PolicyConditionGroup } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
 import { EntityService } from '@app/services/entity.service';
 import { ProjectService } from '@app/services/project.service';
 import { PolicyService } from '@app/services/policy.service';
+
+import { ConditionBuilderComponent } from '../condition-builder/condition-builder.component';
 
 @Component({
   selector: 'app-policy-edit',
@@ -105,7 +110,7 @@ export class PolicyEditComponent implements OnInit {
         }
         this.fillActionMaps();
     }
-    
+
     fillActionMaps() {
         this.actionTypes.forEach(obj => {
             this.actionTypeMap[obj.value] = obj.label;
@@ -115,7 +120,7 @@ export class PolicyEditComponent implements OnInit {
             this.actionNames[tp].forEach(obj => {
                 this.actionNameMap[tp][obj.value] = obj.label;
             });
-    
+
         }
     }
 
@@ -128,105 +133,156 @@ export class PolicyEditComponent implements OnInit {
         subordinateGroup.groupOperator = "OR";
         this.policy.conditions.groups.push(mainGroup);
         this.policy.conditions.groups.push(subordinateGroup);
-    }    
-
-    savePolicy() {
-        this.saveDisabled = true;
-
-        this.prepareConditionsBeforeSave(this.policy.conditions);
-        let messages: Message[] = this.validatePolicy();
-        if (messages.length>0) {
-            this.messages = messages;
-            this.saveDisabled = false;
-            return;
-        }
-        this.policyService.savePolicy(this.policy)
-            .subscribe(data => {
-                const link = '/dashboard/policy/show/'+ data.data.createPolicy.policyId+
-                    ((!!this.entityId)? ('/'+this.entityId):'')+
-                    ((!!this.projectId)? ('/'+this.projectId):'');
-                this.saveDisabled = false;
-                this.router.navigate([link],
-                    {state: {messages: [Message.success("Policy saved successfully.")]}});
-            }, (error) => {
-                let msg = '';
-                this.saveDisabled = false;
-                if (error.message) {
-                    const msgs = error.message.split(":");
-                    if (msgs.length>0) {
-                        msg = msgs[msgs.length-1];
-                    }
-                }
-                this.messages = 
-                    [Message.error("Unexpected error occurred while trying to save policy. "+msg)];
-            });
     }
 
+  savePolicy() {
+    this.saveDisabled = true;
 
-    // validation policy
-    validatePolicy(): Message[] {
-        let resMessages: Message[] = [];
-        if (!this.policy.name) {
-            resMessages.push(Message.error("Policy name field is required."));
-        }
-        /*if (!this.policy.title) {
-            resMessages.push(Message.error("Policy title field is required."));
-        }*/
-        resMessages = resMessages.concat(this.validateConditionsExists());
-        if (!this.policy.actions || this.policy.actions.length === 0) {
-            resMessages.push(Message.error("Policy actions must be filled."));
-        }
-        return resMessages;
+    this.prepareConditionsBeforeSave(this.policy.conditions);
+
+    let messages: Message[] = this.validatePolicy();
+
+    if (messages.length > 0) {
+      this.messages = messages;
+      this.saveDisabled = false;
+
+      return;
     }
 
-    // validate conditions
-    validateConditionsExists(): Message[] {
-        if (this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length === 0) {
-            return [Message.error("Main condition group must contain conditions.")];
-        }
-        let typeNotExists = false;
-        let operatorNotExists = false;
-        let valueNotExists = false;
-        let conditions: PolicyCondition[] = [];
-        conditions = this.policy.conditions.groups[0].conditions;
-        if (!!this.policy.conditions.groups[1] && !!this.policy.conditions.groups[1].conditions && this.policy.conditions.groups[1].conditions.length>0) {
-            conditions = conditions.concat(this.policy.conditions.groups[1].conditions);
-        }
-        for (const cond of conditions) {
-            if (!cond.conditionType) {
-                typeNotExists = true;
+    this.policyService
+      .savePolicy(this.policy)
+      .subscribe(
+        (data: any) => {
+          let link = ['/dashboard/policy/show', data.data.createPolicy.policyId];
+
+          if (this.entityId) {
+            link.push(this.entityId);
+          }
+
+          if (this.projectId) {
+            link.push(this.projectId);
+          }
+
+          this.saveDisabled = false;
+
+          this.router.navigate(link, {
+            state: {
+              messages: [Message.success(MESSAGES.POLICY_SAVE_SUCCESS)]
             }
-            if (!cond.operator) {
-                operatorNotExists = true;
+          });
+        },
+        (error: HttpErrorResponse) => {
+          let message = '';
+
+          this.saveDisabled = false;
+
+          if (error.message) {
+            const errorMessages = error.message.split(':');
+
+            if (errorMessages.length > 0) {
+              message = errorMessages[errorMessages.length - 1];
             }
-            let value= undefined;
-            if (cond.conditionDataType === "DCM") {
-                value = cond.decimalValue;
-            } else if (cond.conditionDataType === "DBL") {
-                value = cond.doubleValue;
-            } else if (cond.conditionDataType === "INT") {
-                value = cond.intValue;
-            } else if (cond.conditionDataType === "SVR") {
-                value = cond.severityValue;
-            } else  {
-                value = cond.strValue;
-            }    
-            if (!value) {
-                valueNotExists = true;
-            }
-        }
-        let result: Message[] = [];
-        if (typeNotExists) {
-            result.push(Message.error("Condition type must be filled."))
-        }
-        if (operatorNotExists) {
-            result.push(Message.error("Condition operator must be filled."))
-        }
-        if (valueNotExists) {
-            result.push(Message.error("Condition value must be filled."))
-        }
-        return result;
+          }
+
+          this.messages = [Message.error(`${MESSAGES.POLICY_SAVE_ERROR} ${message}`)];
+        });
+  }
+
+
+  /** Policy validation */
+  validatePolicy(): Message[] {
+    let resMessages: Message[] = [];
+
+    if (!this.policy.name) {
+      resMessages.push(Message.error(MESSAGES.POLICY_NAME_ERROR));
     }
+
+    // if (!this.policy.title) {
+    //     resMessages.push(Message.error("Policy title field is required."));
+    // }
+
+    resMessages = resMessages.concat(this.validateConditionsExists());
+
+    if (!this.policy.actions || this.policy.actions.length === 0) {
+      resMessages.push(Message.error(MESSAGES.POLICY_ACTIONS_ERROR));
+    }
+    return resMessages;
+  }
+
+  // validate conditions
+  validateConditionsExists(): Message[] {
+    if (this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length === 0) {
+      return [Message.error(MESSAGES.CONDITION_GROUP_ERROR)];
+    }
+
+    let typeNotExists = false;
+    let operatorNotExists = false;
+    let valueNotExists = false;
+    let conditions: PolicyCondition[] = [];
+
+    conditions = this.policy.conditions.groups[0].conditions;
+
+    if (!!this.policy.conditions.groups[1] && !!this.policy.conditions.groups[1].conditions
+      && this.policy.conditions.groups[1].conditions.length > 0) {
+      conditions = conditions.concat(this.policy.conditions.groups[1].conditions);
+    }
+    for (const cond of conditions) {
+      if (!cond.conditionType) {
+        typeNotExists = true;
+      }
+
+      if (!cond.operator) {
+        operatorNotExists = true;
+      }
+
+      let value: string | number;
+
+      switch (cond.conditionDataType) {
+        case 'DCM':
+          value = cond.decimalValue;
+
+          break;
+
+        case 'DBL':
+          value = cond.doubleValue;
+
+          break;
+
+        case 'INT':
+          value = cond.intValue;
+
+          break;
+
+        case 'SVR':
+          value = cond.severityValue;
+
+          break;
+
+        default:
+          value = cond.strValue;
+      }
+
+      if (!value) {
+        valueNotExists = true;
+      }
+    }
+
+    let result: Message[] = [];
+
+    if (typeNotExists) {
+      result.push(Message.error(MESSAGES.CONDITION_TYPE_ERROR));
+    }
+
+    if (operatorNotExists) {
+      result.push(Message.error(MESSAGES.CONDITION_OPERATOR_ERROR));
+    }
+
+    if (valueNotExists) {
+      result.push(Message.error(MESSAGES.CONDITION_VALUE_ERROR));
+    }
+
+    return result;
+  }
 
     prepareConditionsBeforeSave(group: PolicyConditionGroup) {
         if (!group) {
@@ -295,7 +351,7 @@ export class PolicyEditComponent implements OnInit {
 
     onActionTypeChange(action: PolicyAction, event: any,index) {
         if (!action.actionType) {
-            // action.actionName=undefined;    
+            // action.actionName=undefined;
             this.policy.actions[index].actionName = undefined;
         } else {
             // action.actionName=this.actionNames[action.actionType][0].value;
@@ -345,12 +401,9 @@ export class PolicyEditComponent implements OnInit {
     gotoTab(tabId: string) {
         this.activeTabIdString = tabId;
     }
-    
-
 }
 
 class CodeNamePair {
     code: string;
     name: string;
   }
-  

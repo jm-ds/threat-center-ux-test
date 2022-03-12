@@ -1,9 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
-import {ApiKey, Message, Messages, User} from "@app/models";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { FetchResult } from 'apollo-link';
+import { ApiKey, Message, Messages, User } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { UserUtils } from '../user-utils';
+
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';
-import { UserUtils } from '../user-utils';
+
 
 @Component({
     selector: 'app-api-key-edit',
@@ -67,72 +76,91 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
                 }
             );
         }
-    }   
-
-    saveApiKey() {
-        let messages: Message[] = this.validateApiKey();
-        if (messages.length>0) {
-            this.messages = messages;
-            return;
-        }
-        if (this.keyId === 'new') {
-            let generateApiKeyObservable=undefined;
-            let successLink = undefined;
-            if (this.isUserKey) {  // user key
-                generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);    
-                successLink = '/admin/show/'+this.username+'/show/apikey/'
-            } else { // org key
-                generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);    
-                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/'
-            }
-            generateApiKeyObservable.subscribe((data:any) => {
-                if (!!data && !!data.data) {
-                    const link = successLink+data.data.generateApiKey.keyId;
-                    this.router.navigate([link],
-                        {state: {messages: [Message.success("API key generated successfully.")]}});
-                }
-            }, (error) => {
-                console.error('API key generating', error);
-                this.messages = [Message.error("Unexpected error occurred while trying to generate API key.")];
-            });
-        } else {
-            let updateApiKeyObservable=undefined;
-            let successLink = undefined;
-            if (this.isUserKey) {  // user key
-                updateApiKeyObservable = this.userService.updateApiKey(this.apiKey);
-                successLink = '/admin/show/'+this.username+'/show/apikey/';
-            } else { // org key
-                updateApiKeyObservable = this.orgService.updateOrgApiKey(this.apiKey);
-                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/'
-            }
-            updateApiKeyObservable.subscribe((data:any) => {
-                if (!!data && !!data.data) {
-                    const link = successLink+data.data.updateApiKey.keyId;
-                    this.router.navigate([link],
-                        {state: {messages: [Message.success("API key saved successfully.")]}});
-                }
-            }, (error) => {
-                console.error('API key saving', error);
-                this.messages = 
-                    [Message.error("Unexpected error occurred while trying to save API key.")];
-            });
-
-        }    
     }
+
+  saveApiKey() {
+    let messages: Message[] = this.validateApiKey();
+
+    if (messages.length > 0) {
+      this.messages = messages;
+
+      return;
+    }
+
+    if (this.keyId === 'new') {
+      let generateApiKeyObservable: Observable<FetchResult>;
+      let successLink: string;
+
+      if (this.isUserKey) { // user key
+        generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
+        successLink = `/admin/show/${this.username}/show/apikey/`;
+      } else { // org key
+        generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
+        successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
+      }
+
+      generateApiKeyObservable.subscribe(
+        (data: any) => {
+          if (!!data && !!data.data) {
+            const link = [successLink, data.data.generateApiKey.keyId];
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_GENERATE_SUCCESS)]
+              }
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('API key generating', error);
+
+          this.messages = [Message.error(MESSAGES.API_KEY_GENERATE_ERROR)];
+        });
+    } else {
+      let updateApiKeyObservable: Observable<FetchResult>;
+      let successLink: string;
+
+      if (this.isUserKey) {  // user key
+        updateApiKeyObservable = this.userService.updateApiKey(this.apiKey);
+        successLink = `/admin/show/${this.username}/show/apikey/`;
+      } else { // org key
+        updateApiKeyObservable = this.orgService.updateOrgApiKey(this.apiKey);
+        successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
+      }
+
+      updateApiKeyObservable.subscribe(
+        (data: any) => {
+          if (!!data && !!data.data) {
+            const link = [successLink, data.data.updateApiKey.keyId];
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_SAVE_SUCCESS)]
+              }
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('API key saving', error);
+
+          this.messages = [Message.error(MESSAGES.API_KEY_SAVE_ERROR)];
+        });
+    }
+  }
 
     // validate API key
     validateApiKey(): Message[] {
         let resMessages: Message[] = [];
         if (!this.apiKey.title) {
-            resMessages.push(Message.error("API key title field is required."));
+            resMessages.push(Message.error(MESSAGES.API_KEY_ERROR));
         }
         return resMessages;
     }
 
-    // navigate to organization settings
-    goToOrgSettings() {
-        this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');        
-    }
+  /** Navigate to organization settings */
+  goToOrgSettings() {
+    this.router.navigateByUrl('dashboard/org-setting/integration/org-apikeys');
+  }
 
     gotoUser() {
         const navigationExtras: NavigationExtras = {

@@ -1,16 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Messages } from "@app/messages/messages";
-import { Scan } from "@app/models";
-import { CoreHelperService } from "@app/services/core/core-helper.service";
-import { UserPreferenceService } from "@app/services/core/user-preference.service";
-import { ProjectService } from "@app/services/project.service";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatPaginator } from '@angular/material';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import * as _ from 'lodash';
-import { NextConfig } from "@app/app-config";
-import { AuthenticationService } from "@app/security/services";
+
+import { Scan } from '@app/models';
+
+import { NextConfig } from '@app/app-config';
+
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { ProjectService } from '@app/services/project.service';
+import { AuthenticationService } from '@app/security/services';
 
 @Component({
     selector: 'app-license-new-card',
@@ -33,7 +36,6 @@ export class NewLicenseCardComponent implements OnInit {
     timeOutDuration = 1000;
     isDisablePaggination: boolean = false;
 
-    messages = Messages;
     totalLicenses: number = 0;
     pageInfo: any;
     constructor(private projectService: ProjectService,
