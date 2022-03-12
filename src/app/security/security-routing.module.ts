@@ -4,6 +4,7 @@ import {LoginComponent} from './login/login.component';
 import {CreateAccountComponent} from '@app/security/create-account/create-account.component';
 import {AwaitingApprovalComponent} from "@app/security/awaiting-approval/awaiting-approval.component";
 import {FinishSignupComponent} from "@app/security/finish-signup/finish-signup.component";
+import { GithubErrorComponent } from './github-error-page/github-error-page.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
             {
                 path: 'awaiting-approval',
                 component: AwaitingApprovalComponent
+            },
+            {
+                path: 'github_login_auth',
+                component: GithubErrorComponent
             }
         ]
     }

@@ -9,6 +9,7 @@ import {AwaitingApprovalComponent} from './awaiting-approval/awaiting-approval.c
 import {AlertModule} from "@app/theme/shared/components";
 import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
 import {FinishSignupComponent} from './finish-signup/finish-signup.component';
+import { GithubErrorComponent } from './github-error-page/github-error-page.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {FinishSignupComponent} from './finish-signup/finish-signup.component';
         LoginComponent,
         CreateAccountComponent,
         AwaitingApprovalComponent,
-        FinishSignupComponent
+        FinishSignupComponent,
+        GithubErrorComponent
     ]
 })
 export class SecurityModule {
