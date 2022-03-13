@@ -499,37 +499,41 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildProjectTree(entity: Entity) {
-    let edges = entity.projects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
+    entity.projects.edges.sort((a, b) => Number(new Date(b.node.created)) - Number(new Date(a.node.created)));
 
-    let nodes: TreeNode[] = edges.map(projectEdge => {
-      let node: TreeNode = {
-        label: projectEdge.node.name,
-        data: projectEdge.node,
-        expandedIcon: "fa fa-folder-open",
-        collapsedIcon: "fa fa-folder",
+    const nodes = entity.projects.edges.map(edge => {
+      const node: TreeNode = {
+        label: edge.node.name,
+        data: edge.node,
         children: []
       };
-      this.buildProjectTreeHier(projectEdge, node);
+
+      if (edge.node.childProjects) {
+        this.buildChildProjectTree(edge, node);
+      }
+
       return node;
     });
+
     this.projects = nodes;
   }
 
-  buildProjectTreeHier(projectEdge: ProjectEdge, treeNode: TreeNode) {
-    projectEdge.node.childProjects.edges = projectEdge.node.childProjects.edges.sort((a, b) => { return Number(new Date(b.node.created)) - Number(new Date(a.node.created)) });
-    if (projectEdge.node.childProjects) {
-      projectEdge.node.childProjects.edges.forEach(edge => {
-        let childNode: TreeNode = {
-          label: edge.node.name,
-          data: edge.node,
-          expandedIcon: "fa fa-folder-open",
-          collapsedIcon: "fa fa-folder",
-          children: []
-        };
-        treeNode.children.push(childNode);
-        this.buildProjectTreeHier(edge, childNode);
-      });
-    }
+  buildChildProjectTree(projectEdge: ProjectEdge, node: TreeNode) {
+    projectEdge.node.childProjects.edges.sort((a, b) => Number(new Date(b.node.created)) - Number(new Date(a.node.created)));
+
+    projectEdge.node.childProjects.edges.forEach(edge => {
+      const childNode: TreeNode = {
+        label: edge.node.name,
+        data: edge.node,
+        children: []
+      };
+
+      node.children.push(childNode);
+
+      if (projectEdge.node.childProjects) {
+        this.buildChildProjectTree(edge, childNode);
+      }
+    });
   }
 
   changeEntity(entityId: string, name: string, isPush: boolean) {
