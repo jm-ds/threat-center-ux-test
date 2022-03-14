@@ -134,7 +134,7 @@
                 <div class="card-body">
                   <div class="container">
                     <div class="row">
-        
+
                       <!-- LEFT COLUMN -->
                       <div class="col-xl-4" style="padding-right:30px">
                         <div class="col-xl-12">
@@ -207,20 +207,20 @@
                             </div>
                           </div>
                         </div>
-        
+
                       </div>
-        
+
                       <!-- RIGHT COLUMN -->
                       <div class="col-xl-8">
-        
+
                         <!-- DESCRIPTION -->
-        
+
                         <div class="col-xl-12">
                           <div class="f-18" style="margin-bottom:20px;text-align:center;width:100%;">{{scanLicense.license?.name}}</div>
                           <div>{{scanLicense.license?.description}}</div>
                         </div>
-        
-        
+
+
                         <!-- ATTRIBUTES
                               <div class="row" style="padding-left:15px;margin-top:40px">
                                 <div class="col-xl-4">
@@ -242,7 +242,7 @@
                                   </div>
                                 </div>
                               </div>-->
-        
+
                         <div style="display: flex;margin-top: 20px;margin-left:15px">
                           <div style="flex-grow: 1">
                             <div class="caption" style="border-bottom: 1px solid gray;margin-right: 40px">Permissions</div>
@@ -266,21 +266,21 @@
                             </div>
                           </div>
                         </div>
-        
+
                         <!-- LICENSE BODY -->
                         <div class="col-xl-12" style="margin-top:40px">
                           <div class="card card-body bg-light" style="padding-left:50px">
                             <pre class="asset-pane">{{scanLicense.license?.body}}</pre>
                           </div>
                         </div>
-        
-        
+
+
                       </div>
-        
+
                     </div>
-        
-        
-        
+
+
+
                   </div>
                 </div>
               </div>
@@ -289,7 +289,7 @@
         </app-card>
       </ng-template>
     </ngb-tab>
-    <!-- Components -->  
+    <!-- Components -->
     <ngb-tab id="tab3" *ngIf="!isFromComponent && scanId">
       <ng-template ngbTabTitle>Components&nbsp;
         <span class="badge badge-light">
@@ -299,7 +299,7 @@
       <ng-template ngbTabContent>
         <app-card [hidHeader]="true" cardClass="mb-0" blockClass="align-items-center justify-content-between">
           <div class="row">
-            <perfect-scrollbar [style.max-height]="'650px'" [style.padding-right]="'10px'" class="col-sm-12" class="overflowshadow" 
+            <perfect-scrollbar [style.max-height]="'650px'" [style.padding-right]="'10px'" class="col-sm-12" class="overflowshadow"
               [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
               <p-table #dt [columns]="componentColumns" [value]="licenseComponents?.edges" [paginator]="false" [rows]="50"
                       tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
@@ -350,7 +350,7 @@
               </mat-paginator>
             </div>
           </div>
-        </app-card>  
+        </app-card>
       </ng-template>
     </ngb-tab>
 
@@ -363,7 +363,7 @@
       </ng-template>
       <ng-template ngbTabContent>
 
-        <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow" 
+        <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow"
         [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
           <p-table *ngIf="scanAssetDetails" #dt [columns]="assetColumns" [value]="sortAssets(scanAssetDetails.edges)" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
@@ -405,7 +405,7 @@
                           [value]="getAssetColumnFilterValue(col)"
                           (change)="filterAssetColumn(col, $event.target.value,'embededSearch')">
                     <option value="ALL" selected>- All -</option>
-                    <option value="over0" [label]="messages.asset.filter.embedded_and_opensource"></option>
+                    <option value="over0" [label]="MESSAGES.ASSET.FILTER.EMBEDDED_AND_OPENSOURCE"></option>
                     <option value="0-10">0-10%</option>
                     <option value="11-30">11-30%</option>
                     <option value="31-50">31-50%</option>

@@ -10,20 +10,19 @@ import { NgbModal, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { JiraCredentials, License, ScanLicense } from '@app/models';
 
 import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
 
 import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { OrgService } from "@app/services/org.service";
-import { JiraService } from "@app/services/jira.service";
+import { OrgService } from '@app/services/org.service';
+import { JiraService } from '@app/services/jira.service';
 
 import { FixComponentDialogComponent } from '@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component';
 import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
 import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
-import {
-  CreateJiraTicketComponent
-} from "@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component";
+import { CreateJiraTicketComponent } from '@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component';
 
 @Component({
   selector: 'license-dimension',
@@ -70,6 +69,7 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   assetTimeOut;
   assetTimeOutDuration = 1000;
   parentScanAssetId = '';
+  MESSAGES = MESSAGES;
 
   permissions: any[];
   limitations: any[];
