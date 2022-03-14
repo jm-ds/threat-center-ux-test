@@ -1,0 +1,61 @@
+<h1>User list</h1>
+
+<div class="mb-3" *ngIf="authorizationService.hasPermissions('USER_CREATE')">
+    <a routerLink="/admin/user/create" class="btn btn-outline-info">Add user</a>
+</div>
+
+
+<app-card [hidHeader]="true" cardClass="user-profile-list">
+    <div class="dt-responsive table-responsive">
+        <table datatable class="table row-border">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Entities</th>
+                    <th>Roles</th>
+                    <th>Date created</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users" (click)="goToUserShow(user.username)">
+                    <td>
+                        <div class="d-inline-block align-middle">
+                            <img src="{{!!user.avatarUrl?user.avatarUrl:'assets/images/user/no-avatar.png'}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                            <div class="d-inline-block">
+                                <h6 class="m-b-0">{{user.fname}} {{user.lname}}</h6>
+                                <p class="m-b-0">{{user.email || 'no email'}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {{renderEntities(user.userEntities)}}
+                    </td>
+                    <td>
+                        {{renderRoles(user.userRoles)}}
+                    </td>
+                    <td>
+                        {{user.created | date :'short'}}
+                    </td>
+                    <td class="skip-row-link">
+                        <span class="badge badge-light-success">Active</span>
+                        <div class="overlay-edit">
+                            <button *ngIf="authorizationService.hasPermissions('USER_EDIT')"
+                             routerLink="/admin/user/edit/{{user.username}}" type="button" class="btn btn-icon btn-success"><i class="feather icon-edit"></i></button>
+                            <button *ngIf="authorizationService.hasPermissions('USER_REMOVE')" type="button" class="btn btn-icon btn-danger disabled"><i class="feather icon-trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Entities</th>
+                    <th>Roles</th>
+                    <th>Date created</th>
+                    <th>Status</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</app-card>
