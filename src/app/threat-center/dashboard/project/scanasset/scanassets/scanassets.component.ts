@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { Scan } from '@app/models';
 
+import { MESSAGES } from '@app/messages/messages';
+
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { SaveFilterStateService } from '@app/services/core/save-filter-state.service';
@@ -43,6 +45,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   timeOutDuration = 1000;
   parentScanAssetId = '';
   story = [];
+  MESSAGES = MESSAGES;
   isDisablePaggination: boolean = false;
   constructor(
     private projectService: ProjectService,
