@@ -211,8 +211,9 @@ export class ApiKeyRequestInput {
     readonly apiKey: string;
     readonly title: string;
     readonly description: string;
+    readonly expiredDate: Date;
 
-    constructor(orgId: string, username: string, keyId: string, apiKey: string, title: string, description: string) {
+    constructor(orgId: string, username: string, keyId: string, apiKey: string, title: string, description: string, expiredDate: Date) {
         this.orgId = orgId;
         this.username = username;
         this.keyId = keyId;
@@ -220,10 +221,11 @@ export class ApiKeyRequestInput {
         this.title = title;
         this.title = title;
         this.description = description;
+        this.expiredDate = expiredDate;
     }
 
     static from(apiKey: ApiKey) {
-        return new ApiKeyRequestInput(apiKey.orgId, apiKey.username, apiKey.keyId, apiKey.apiKey, apiKey.title, apiKey.description);
+        return new ApiKeyRequestInput(apiKey.orgId, apiKey.username, apiKey.keyId, apiKey.apiKey, apiKey.title, apiKey.description, apiKey.expiredDate);
     }
 }
 
