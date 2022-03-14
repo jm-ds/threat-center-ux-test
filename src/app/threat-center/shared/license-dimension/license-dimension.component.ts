@@ -1,21 +1,28 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
-import { NgbModal, NgbTabset } from "@ng-bootstrap/ng-bootstrap";
-import { FixComponentDialogComponent } from "@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component";
-import {License, ScanLicense, ScanOpenSourceProject} from '@app/models';
-import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
-import { Messages } from "@app/messages/messages";
-import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModal, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+
+import { JiraCredentials, License, ScanLicense } from '@app/models';
+
+import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
+
 import { ProjectService } from '@app/services/project.service';
 import { FixService } from '@app/services/fix.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { NextConfig } from '@app/app-config';
-
-
+import { OrgService } from '@app/services/org.service';
+import { JiraService } from '@app/services/jira.service';
+import { ScanOpenSourceProject} from '@app/models';
+import { FixComponentDialogComponent } from '@app/threat-center/dashboard/project/fix-component-dialog/fix-component-dialog.component';
+import { ScanAssetsComponent } from '@app/threat-center/dashboard/project/scanasset/scanassets/scanassets.component';
+import { LicenseDialogComponent } from '@app/threat-center/dashboard/project/licenses-common-dialog/license-dialog.component';
+import { CreateJiraTicketComponent } from '@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component';
 
 @Component({
   selector: 'license-dimension',
@@ -63,23 +70,29 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   assetTimeOut;
   assetTimeOutDuration = 1000;
   parentScanAssetId = '';
-  messages = Messages;
+  MESSAGES = MESSAGES;
 
   permissions: any[];
   limitations: any[];
   conditions: any[];
 
-  constructor(
-    private projectService: ProjectService,
-    private router: Router,
-    private fixService: FixService,
-    private modalService: NgbModal,
-    private coreHelperService: CoreHelperService,
-    private userPreferenceService: UserPreferenceService,
-    private route: ActivatedRoute
-  ) {
+  // For Jira integration
+  jiraCredentials: JiraCredentials;
+  orgId;
+  jiraTicket;
 
+  constructor(
+      private jiraService: JiraService,
+      private orgService: OrgService,
+      private projectService: ProjectService,
+      private router: Router,
+      private fixService: FixService,
+      private modalService: NgbModal,
+      private coreHelperService: CoreHelperService,
+      private userPreferenceService: UserPreferenceService
+  ) {
   }
+
   ngAfterViewInit(): void {
     console.log(this.ctdTabset);
   }
@@ -94,6 +107,18 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
         this.reloadAssets();
       }
     }
+
+    // Get the entity settings and check if there are any Jira settings
+    this.orgService.getOrgSettings().subscribe(
+        data => {
+          if (data.data.orgSettings.jiraCredentials) {
+            this.jiraCredentials = data.data.orgSettings.jiraCredentials;
+          }
+        },
+        error => {
+          console.error("orgService.getOrgSettings().subscribe", error);
+        }
+    );
   }
 
   setLicense(event) {
@@ -110,6 +135,13 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     this.obsScanLicense = this.projectService.getLicenseAndLicenseComponent(this.licenseId, this.licenseDiscovery, this.licenseOrigin, this.scanId, first, last, endCursor, startCursor)
       .pipe(map(result => result.data.scanLicense));
     this.obsScanLicense.subscribe(scanLicense => {
+
+      // Getting jira ticket for license if exists
+      this.orgId = scanLicense.orgId;
+      this.jiraService.getLicenseJiraTicket(this.licenseId, this.scanId, this.orgId).subscribe(jt => {
+        this.jiraTicket = jt.data.licenseJiraTicket;
+      });
+
       if (!!scanLicense.license) {
         this.getLicenseName.emit(scanLicense.license.name);
         this.permissions = this.licenseAttributeFilter(scanLicense.license, 'PERMISSION');
@@ -169,6 +201,29 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     modalRef.componentInstance.newVersion = this.newVersion;
     modalRef.componentInstance.oldVersion = oldVersion;
     modalRef.componentInstance.componentId = componentId;
+  }
+
+  createJiraTicket() {
+    const  modalRef = this.modalService.open(CreateJiraTicketComponent, {
+      keyboard: false,
+    });
+
+    modalRef.componentInstance.projectId = this.projectId;
+    modalRef.componentInstance.scanId = this.scanId;
+    modalRef.componentInstance.orgId = this.orgId;
+    modalRef.componentInstance.licenseId = this.licenseId;
+  }
+
+  // Generating the correct URL for a jira ticket
+  openJiraTicket(key, self: string) {
+    let url: string;
+    if (this.jiraCredentials) {
+      url = this.jiraCredentials.projectUrl + '/browse/' + key;
+    } else {
+      let selfUrl = new URL(self);
+      url = selfUrl.hostname + '/browse/' + key;
+    }
+    window.open(url, "_blank");
   }
 
   // While any changes occurred in page

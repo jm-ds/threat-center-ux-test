@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { UserListComponent } from './user-list/user-list.component';
 import {AlertModule, CardModule} from "@app/theme/shared/components";
-import {NgbDropdownModule, NgbTabsetModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDatepickerModule, NgbDropdownModule, NgbTabsetModule} from "@ng-bootstrap/ng-bootstrap";
 import { UserShowComponent } from './user-show/user-show.component';
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import {AngularDualListBoxModule} from "angular-dual-listbox";
@@ -31,7 +31,8 @@ import { ApiKeyEditComponent } from './apikey-edit/apikey-edit.component';
         AlertModule,
         FormsModule,
         SelectModule,
-        SharedModule
+        SharedModule,
+        NgbDatepickerModule
     ],
     exports: [ApiKeyShowComponent, ApiKeyEditComponent]
 })

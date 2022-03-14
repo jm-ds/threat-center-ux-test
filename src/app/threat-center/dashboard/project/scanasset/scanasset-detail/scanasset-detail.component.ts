@@ -5,7 +5,7 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import Swal from "sweetalert2";
-import { ScanAsset, ScanAssetMatch } from '@app/models';
+import {JiraCredentials, ScanAsset} from '@app/models';
 import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { AlertService } from '@app/services/core/alert.service';
 import { User } from '@app/threat-center/shared/models/types';
@@ -13,6 +13,10 @@ import { ClipboardDialogComponent } from '../../clipboard-dialog/clipboard-dialo
 import { ProjectService } from '@app/services/project.service';
 import { RepositoryService } from '@app/services/repository.service';
 import { StateService } from '@app/services/state.service';
+import {OrgService} from "@app/services/org.service";
+import {
+    CreateJiraTicketComponent
+} from "@app/threat-center/dashboard/project/create-jira-ticket/create-jira-ticket.component";
 
 
 @Component({
@@ -42,8 +46,11 @@ export class ScanAssetDetailComponent implements OnInit {
     user: User;
 
     isDisableAttributeLicensebtn = false;
+    jiraCredentials: JiraCredentials;
+    orgId;
 
     constructor(
+        private orgService: OrgService,
         private projectService: ProjectService,
         private stateService: StateService,
         private repositoryService: RepositoryService,
@@ -61,6 +68,18 @@ export class ScanAssetDetailComponent implements OnInit {
         this.loadData();
         // this.attributionStatus = "COMPLETE";
         this.initBreadcum();
+
+        // Get the entity settings and check if there are any Jira settings
+        this.orgService.getOrgSettings().subscribe(
+            data => {
+                if (data.data.orgSettings.jiraCredentials) {
+                    this.jiraCredentials = data.data.orgSettings.jiraCredentials;
+                }
+            },
+            error => {
+                console.error("orgService.getOrgSettings().subscribe", error);
+            }
+        );
     }
 
     getTextForButton() {
@@ -93,12 +112,15 @@ export class ScanAssetDetailComponent implements OnInit {
     }
 
     fetchRepositoryAsset(embeddedAsset: ScanAsset) {
-        let repositoryOwner = embeddedAsset.matchRepository.repositoryOwner;
-        let repositoryName = embeddedAsset.matchRepository.repositoryName;
-        let assetId = embeddedAsset.originAssetId;
-        this.repositoryService.fetchAsset(repositoryOwner, repositoryName, assetId)
-            .subscribe(result => {
-                embeddedAsset.content = atob(result.content);
+        this.repositoryService.fetchAsset(embeddedAsset.assetRepositoryUrl.data)
+            .subscribe(response => {
+                if (response.content) {
+                    embeddedAsset.content = atob(response.content);
+                }
+                else {
+                    //bitbucket return raw file only, it response hasn't node 'content'
+                    embeddedAsset.content = atob(response);
+                }
                 this.matchAsset = embeddedAsset;
             });
     }
@@ -268,9 +290,8 @@ export class ScanAssetDetailComponent implements OnInit {
 
                 // if we have a repo, pre-load the source asset
                 if (scanRepository) {
-                    const repositoryOwner = scanRepository.repositoryOwner;
-                    const repositoryName = scanRepository.repositoryName;
                     obsScanAsset.subscribe(obsScanResult => {
+                        this.orgId = obsScanResult.orgId; // It is necessary for jira ticket
                         this.attributionStatus = obsScanResult['attributionStatus'];
                         if (isUpdate) {
                             this.getAndSetScanAssetIdWithStatus();
@@ -279,25 +300,64 @@ export class ScanAssetDetailComponent implements OnInit {
                             this.attributionComment = obsScanResult['sourceAssetAttribution'].attributedComment;
                         }
                         this.sourceAsset = obsScanResult;
-                        let assetId = this.sourceAsset.originAssetId;
+                        if (!!this.user.repositoryAccounts) {
+                            //the token is used to access the user(client) repository, which is possibly private
+                            let accessToken;
+                            if (result.scanRepository.repositoryEndpointType === 'GITHUB' && this.user.repositoryAccounts.githubAccount) {
+                                accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
+                            }
+                            if (result.scanRepository.repositoryEndpointType === 'GITLAB' && this.user.repositoryAccounts.gitlabAccount) {
+                                accessToken = this.user.repositoryAccounts.gitlabAccount.accessToken;
+                            }
+                            if (result.scanRepository.repositoryEndpointType === 'BITBUCKET' && this.user.repositoryAccounts.bitbucketAccount) {
+                                accessToken = this.user.repositoryAccounts.bitbucketAccount.accessToken;
+                            }
 
-                        // let user = this.authService.getFromStorageBasedEnv("currentUser");
-                        if (!!this.user.repositoryAccounts && !!this.user.repositoryAccounts.githubAccount) {
-                            const accessToken = this.user.repositoryAccounts.githubAccount.accessToken;
                             console.log("ACCESS TOKEN:", accessToken);
-
                             if (accessToken) {
                                 console.log("Getting file");
-                                this.repositoryService.fetchAuthenticatedAsset(repositoryOwner, repositoryName, assetId, accessToken)
-                                    .subscribe(r => {
-                                        this.sourceAsset.content = atob(r.content);
+                                this.repositoryService.fetchAuthenticatedAsset(this.sourceAsset.assetRepositoryUrl.data, accessToken)
+                                    .subscribe(response => {
+                                        if (response.content) {
+                                            this.sourceAsset.content = atob(response.content);
+                                        }
+                                        else {
+                                            //bitbucket return raw file only, it response hasn't node 'content'
+                                            this.sourceAsset.content = atob(response);
+                                        }
                                     });
                             }
+                            else {
+                                console.error("Current user hasn't registered in any source repositories system");
+                            }
                         } else {
-                            console.error("Current user hasn't registered Github account");
+                            console.error("Current user hasn't registered in any source repositories system");
                         }
                     });
                 }
             });
+    }
+
+    createJiraTicket(assetMatchId) {
+        const  modalRef = this.modalService.open(CreateJiraTicketComponent, {
+            keyboard: false,
+        });
+
+        modalRef.componentInstance.projectId = this.projectId;
+        modalRef.componentInstance.scanId = this.scanId;
+        modalRef.componentInstance.orgId = this.orgId;
+        modalRef.componentInstance.assetMatchId = assetMatchId;
+    }
+
+    // Generating the correct URL for a jira ticket
+    openJiraTicket(key: string, self: string) {
+        let url: string;
+        if (this.jiraCredentials) {
+            url = this.jiraCredentials.projectUrl + '/browse/' + key;
+        } else {
+            let selfUrl = new URL(self);
+            url = selfUrl.hostname + '/browse/' + key;
+        }
+        window.open(url, "_blank");
     }
 }

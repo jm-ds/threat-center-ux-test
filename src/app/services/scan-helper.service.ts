@@ -1,21 +1,25 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { NextConfig } from "@app/app-config";
-import { AlertService } from "@app/services/core/alert.service";
-import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
-import { CoreHelperService } from "@app/services/core/core-helper.service";
-import { Messages } from "@app/messages/messages";
-import { PreScanLoadingDialogComponent } from "@app/threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component";
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import * as moment from "moment";
-import { BehaviorSubject, Subscription } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import Swal from "sweetalert2";
-import { TaskService } from "@app/services/task.service";
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { catchError, map, pluck } from 'rxjs/operators';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import Swal from 'sweetalert2';
+
+import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
+
+import { AlertService } from '@app/services/core/alert.service';
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { TaskService } from '@app/services/task.service';
+
+import { PreScanLoadingDialogComponent } from '@app/threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class ScanHelperService {
@@ -112,7 +116,7 @@ export class ScanHelperService {
                         this.recentlyScanCompleted.push(obj);
                     }
                     this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== tUpdate.taskToken });
-                    this.alertService.alertBox(tUpdate.statusMessage,Messages.commonErrorHeaderText,'error');
+                    this.alertService.alertBox(tUpdate.statusMessage,MESSAGES.ERROR_TITLE,'error');
 
                     //remove scan from storage
                     this.updateStorage(null);
@@ -175,47 +179,54 @@ export class ScanHelperService {
         return modalRef;
     }
 
+  /** Check if latest commit for a branch was scanned already and run scan. */
+  public submitingCheckAlreadyScanned(preScanProjectData: any, LoadingDialogComponent: any) {
+    this.taskService
+      .checkAlreadyScannedProject(
+        this.checkScannedErrorHandler.bind(this, 'ScanHelperService#submitingCheckAlreadyScanned')
+      )
+      .pipe(
+        pluck('data.checkAlreadyScannedProject'),
+        catchError(
+          this.checkScannedErrorHandler.bind(this, 'ScanHelperService#submitingCheckAlreadyScanned')
+        )
+      )
+      .subscribe(check => {
+        if (check) {
+          Swal.close();
+          const lastCheckDate = moment(check)
+            .format('MM/DD/YYYY h:mm a');
 
-    //Check if lastest commit for branch was scanned already and run scan.
-    public submitingCheckAlreadyScanned(preScanProjectData, LoadingDialogComponent) {
-        this.taskService.checkAlreadyScannedProject(this.checkScannedErrorHandler.bind(this))
-            .pipe(map(check => check.data.checkAlreadyScannedProject),
-            catchError(error=> {
-                console.log(error);
-                return error;}
-            )
-            )
-            .subscribe(check => {
-                if (check) {
-                    Swal.close();
-                    const lastDt = moment(check).format('MM/DD/YYYY h:mm a');
-                    this.alertService.alertConfirm('Project was scanned already at '+lastDt,'Do you want to scan anyway?', 'question', 
-                        true, true, '#4680ff', '#6c757d', 'Yes', 'No')
-                            .then((result) => {
-                                if (result.value) {
-                                    // run scan
-                                    this.runScan(preScanProjectData, LoadingDialogComponent);
-                                } else {
-                                    // cancel scan
-                                    this.updateStorage(null);
-                                    this.updateEnabaleNewScan(false);
-                                }
-                            });
-                } else {
-                    // run scan
-                    this.runScan(preScanProjectData, LoadingDialogComponent);
-                }
+          const alertTitle = `Project was scanned already at ${lastCheckDate}`;
+          const alertText = 'Do you want to scan anyway?';
+
+          this.alertService
+            .alertConfirm(alertTitle, alertText, 'question', true, true, '#4680ff', '#6c757d', 'Yes', 'No')
+            .then(({ value }) => {
+              if (value) {
+                // run scan
+                this.runScan(preScanProjectData, LoadingDialogComponent);
+              } else {
+                // cancel scan
+                this.updateStorage(null);
+                this.updateEnabaleNewScan(false);
+              }
             });
-    }
+        } else {
+          // run scan
+          this.runScan(preScanProjectData, LoadingDialogComponent);
+        }
+      });
+  }
 
+  private checkScannedErrorHandler(errorSource: string, error: HttpErrorResponse | any, source: Observable<any>) {
+    // cancel scan
+    this.updateStorage(null);
+    this.updateEnabaleNewScan(false);
 
-    public checkScannedErrorHandler(error: HttpErrorResponse | any) {
-        // cancel scan
-        this.updateStorage(null);
-        this.updateEnabaleNewScan(false);
-        // default error handler
-        return this.coreGraphQLService.errorHandler(error);
-    }
+    // default error handler
+    return this.coreGraphQLService.errorHandler(errorSource, error, source);
+  }
 
 
     // run scan

@@ -1,8 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Message, Messages, Permission, Role} from "@app/models";
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {DualListComponent} from "angular-dual-listbox";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+
+import { Message, Messages, Role } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
 import { RoleService } from '@app/services/role.service';
+
+import { DualListComponent } from 'angular-dual-listbox';
 
 @Component({
     selector: 'app-role-edit',
@@ -87,14 +92,26 @@ export class RoleEditComponent implements OnInit, OnDestroy {
 
 
     saveRole() {
-        this.roleService.saveRole(this.role, this.confirmed, this.newRole)
-            .subscribe(({data}) => {
-                this.router.navigate(['/admin/role/show/' + this.role.roleId],
-                    {state: {messages: [Message.success("Role saved successfully.")]}});
-            }, (error) => {
-                console.error('Role Saving', error);
-                this.router.navigate([this.newRole ? '/admin/role/list' : '/admin/role/show/' + this.role.roleId],
-                    {state: {messages: [Message.error("Unexpected error occurred while trying to save role.")]}});
+      this.roleService
+        .saveRole(this.role, this.confirmed, this.newRole)
+        .subscribe(
+          () => {
+            this.router.navigate(['/admin/role/show/', this.role.roleId], {
+              state: {
+                messages: [Message.success(MESSAGES.ROLE_SAVE_SUCCESS)]
+              }
             });
+          },
+          error => {
+            console.error('Role Saving', error);
+
+            const path = this.newRole ? '/admin/role/list' : `/admin/role/show/${this.role.roleId}`;
+
+            this.router.navigate([path], {
+              state: {
+                messages: [Message.error(MESSAGES.ROLE_SAVE_ERROR)]
+              }
+            });
+          });
     }
 }

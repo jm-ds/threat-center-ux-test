@@ -1,17 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  AttributeAssetRequestInput,
-  ComponentQuery,
-  LicenseQuery,
-  ProjectQuery,
-  Scan,
-  ScanAssetMatch,
-  ScanAssetMatchRequest,
-  ScanAssetQuery,
-  ScanLicenseQuery,
-  ScanOpenSourceProject, ScanQuery,
-  VulnerabilityQuery
-} from "@app/models";
+import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery, ScanOpenSourceProject } from "@app/models";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { FetchPolicy } from "apollo-client";
@@ -416,6 +404,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanLicenseQuery>(gql`
           query {
              scanLicense(scanId:"${scanId}", licenseId:"${licenseId}", licenseDiscovery:"${licenseDiscovery}", licenseOrigin:"${licenseOrigin}") {
+                 orgId,
                  licenseOrigin,
                  licenseDiscovery
                  license {
@@ -645,6 +634,9 @@ export class ProjectService {
                     group
                   }
                 }
+              },
+              vulnJiraTicket(vulnerabilityId:"${vulnerabilityId}" orgId:"${orgId}" scanId:"${scanId}") {
+                id, key, self
               }
           }
         }
@@ -657,7 +649,8 @@ export class ProjectService {
           scan(scanId:"${scanId}") {
             scanRepository {
               repositoryOwner,
-              repositoryName
+              repositoryName,
+              repositoryEndpointType
             }
           }
         }
@@ -728,6 +721,7 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(gql`
         query {
           scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
+            orgId,
             name,
             size,
             assetSize
@@ -737,6 +731,9 @@ export class ProjectService {
             status,
             percentEmbedded,
             attributionStatus,
+            assetRepositoryUrl {
+              data
+            },
             sourceAssetAttribution {
               orgId,
               attributedBy,
@@ -756,6 +753,12 @@ export class ProjectService {
                   earliestReleaseVersion,
                   latestReleaseDate,
                   latestReleaseVersion,
+                  scanAssetMatchJiraTicket {
+                    id, key, self
+                  },
+                  assetRepositoryUrl {
+                    data
+                  },
                   matchRepository{
                     repositoryOwner,
                     repositoryName,

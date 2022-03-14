@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiffViewComponent } from './diff-view.component';
+import { CreateJiraTicketComponent } from './create-jira-ticket.component';
 
-describe('DiffViewComponent', () => {
-  let component: FileViewComponent;
-  let fixture: ComponentFixture<DiffViewComponent>;
+describe('CreateJiraTicketComponent', () => {
+  let component: CreateJiraTicketComponent;
+  let fixture: ComponentFixture<CreateJiraTicketComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffViewComponent ]
+      declarations: [ CreateJiraTicketComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DiffViewComponent);
+    fixture = TestBed.createComponent(CreateJiraTicketComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

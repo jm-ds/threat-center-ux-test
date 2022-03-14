@@ -1,12 +1,18 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { Entity, EntityEdge, Message, Messages, Role, User } from "@app/models";
-import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
-import { DualListComponent } from "angular-dual-listbox";
-import { IOption } from "ng-select";
-import { AuthenticationService } from "@app/security/services";
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+
+import { IOption } from 'ng-select';
+import { DualListComponent } from 'angular-dual-listbox';
+
+import { Entity, EntityEdge, Message, Messages, User } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { AuthenticationService } from '@app/security/services';
 import { EntityService } from '@app/services/entity.service';
 import { UserService } from '@app/services/user.service';
 import { RoleService } from '@app/services/role.service';
+
 
 @Component({
     selector: 'app-user-edit',
@@ -122,50 +128,73 @@ export class UserEditComponent implements OnInit {
     }
 
 
-    private saveUser() {
-        if (!!this.selectedRoles && this.selectedRoles.length >= 1) {
-            this.user.userRoles = this.selectedRoles;
-            this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1 ? this.getEntitiesFromSelectedValues(this.entitySelectSelectedItems).map(entity => new EntityEdge(entity, "")) : [];
-            this.user.defaultEntityId = this.defaultEntityId;
-            let username = this.newUser ? this.user.email : this.user.username;
-            this.userService.saveUser(this.user, this.newUser)
-                .subscribe(({ data }) => {
-                    if (!this.newUser) {
-                        let currentUser: User = this.authService.currentUser;
-                        if (currentUser && currentUser.username === username) { // change yourself
-                            currentUser.fname = this.user.fname;
-                            currentUser.lname = this.user.lname;
-                            currentUser.userEntities = this.user.userEntities;
-                            currentUser.defaultEntityId = this.user.defaultEntityId;
-                            currentUser.userRoles = this.user.userRoles;
-                            this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
-                            this.authService.currentUserSubject.next(currentUser);
-                        }
-                    }
-                    const navigationExtras: NavigationExtras = {
-                        state: { messages: [Message.success("User saved successfully.")] },
-                        queryParams: {
-                            "userName": username
-                        }
-                    };
-                    this.router.navigate(['/admin/user/show'], navigationExtras);
-                }, (error) => {
-                    console.error('User Saving', error);
-                    if (this.newUser) {
-                        this.router.navigate(['/admin/user/list'],
-                            { state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] } });
-                    } else {
-                        const navigationExtras: NavigationExtras = {
-                            state: { messages: [Message.error("Unexpected error occurred while trying to save user.")] },
-                            queryParams: {
-                                "userName": username
-                            }
-                        };
-                        this.router.navigate(['/admin/user/show'], navigationExtras);
-                    }
-                });
-        }
+  private saveUser() {
+    if (!!this.selectedRoles && this.selectedRoles.length >= 1) {
+      this.user.userRoles = this.selectedRoles;
+
+      this.user.userEntities.edges = !!this.entitySelectSelectedItems && this.entitySelectSelectedItems.length >= 1
+        ? this
+          .getEntitiesFromSelectedValues(this.entitySelectSelectedItems)
+          .map(entity => new EntityEdge(entity, ''))
+        : [];
+
+      this.user.defaultEntityId = this.defaultEntityId;
+
+      let username = this.newUser ? this.user.email : this.user.username;
+
+      this.userService
+        .saveUser(this.user, this.newUser)
+        .subscribe(
+          () => {
+            if (!this.newUser) {
+              let currentUser: User = this.authService.currentUser;
+
+              if (currentUser && currentUser.username === username) { // change yourself
+                currentUser.fname = this.user.fname;
+                currentUser.lname = this.user.lname;
+                currentUser.userEntities = this.user.userEntities;
+                currentUser.defaultEntityId = this.user.defaultEntityId;
+                currentUser.userRoles = this.user.userRoles;
+                this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
+                this.authService.currentUserSubject.next(currentUser);
+              }
+            }
+
+            const navigationExtras: NavigationExtras = {
+              state: {
+                messages: [Message.success(MESSAGES.USER_SAVE_SUCCESS)]
+              },
+              queryParams: {
+                userName: username
+              }
+            };
+
+            this.router.navigate(['/admin/user/show'], navigationExtras);
+          },
+          error => {
+            console.error('User Saving', error);
+
+            if (this.newUser) {
+              this.router.navigate(['/admin/user/list'], {
+                state: {
+                  messages: [Message.error(MESSAGES.USER_SAVE_ERROR)]
+                }
+              });
+            } else {
+              const navigationExtras: NavigationExtras = {
+                state: {
+                  messages: [Message.error(MESSAGES.USER_SAVE_ERROR)]
+                },
+                queryParams: {
+                  userName: username
+                }
+              };
+
+              this.router.navigate(['/admin/user/show'], navigationExtras);
+            }
+          });
     }
+  }
 
     private scrollToFirstInvalidControl() {
         const firstInvalidControl: HTMLElement = this.el.nativeElement.querySelector(

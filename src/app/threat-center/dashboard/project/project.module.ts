@@ -31,6 +31,7 @@ import { PolicyComplianceComponent } from './policyandcompilance/policyandcompil
 import { NewVulnerabilitiesCardComponent } from './vulnerability/new-vulnerability/new-vulnerability-card.component';
 import { NewComponentCardComponent } from './component/new-component-card/new-component-card.component';
 import { NewLicenseCardComponent } from './license/new-license/new-license-card.component';
+import { CreateJiraTicketComponent } from './create-jira-ticket/create-jira-ticket.component';
 
 
 @NgModule({
@@ -79,8 +80,9 @@ import { NewLicenseCardComponent } from './license/new-license/new-license-card.
     PolicyComplianceComponent,
     NewVulnerabilitiesCardComponent,
     NewComponentCardComponent,
-    NewLicenseCardComponent
+    NewLicenseCardComponent,
+    CreateJiraTicketComponent
   ],
-  entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent, ClipboardDialogComponent, LicenseDialogComponent]
+  entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent, CreateJiraTicketComponent, ClipboardDialogComponent, LicenseDialogComponent]
 })
 export class ProjectModule { }

@@ -96,6 +96,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.20",
     "@angular/cli": "~8.1.2",
+    "@angular-builders/custom-webpack": "^8.0.0",
     "@angular/compiler-cli": "~8.1.2",
     "@angular/language-service": "~8.1.2",
     "@types/datatables.net": "^1.10.17",

@@ -70,7 +70,7 @@
                         [value]="getColumnFilterValue(col)"
                         (change)="filterColumn(col, $event.target.value,'embededSearch')">
                   <option value="ALL" selected>- All -</option>
-                  <option value="over0" [label]="messages.asset.filter.embedded_and_opensource"></option>
+                  <option value="over0" [label]="MESSAGES.ASSET.FILTER.EMBEDDED_AND_OPENSOURCE"></option>
                   <option value="0-10">0-10%</option>
                   <option value="11-30">11-30%</option>
                   <option value="31-50">31-50%</option>
@@ -162,11 +162,11 @@
         </p-table>
 
       <div class="col-sm-12">
-          <span *ngIf="!!scanAssetDetails.scanAssetsTree && scanAssetDetails.scanAssetsTree.edges.length == 0 && story.length > 0" 
-             class="cursor-pointer text-primary back-link" (click)="goBack()"> 
+          <span *ngIf="!!scanAssetDetails.scanAssetsTree && scanAssetDetails.scanAssetsTree.edges.length == 0 && story.length > 0"
+             class="cursor-pointer text-primary back-link" (click)="goBack()">
             <i class="fas fa-arrow-left"></i> &nbsp;back
-          </span> 
-      
+          </span>
+
         <mat-paginator [hidePageSize]="false" [disabled]="isDisablePaggination" [length]="scanAssetDetails.scanAssetsTree?.totalCount"
           [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
         </mat-paginator>

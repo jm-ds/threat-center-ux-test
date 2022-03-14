@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree, CanDeactivate } from '@angular/router';
+import {
+  Router,
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  CanActivateChild,
+  UrlTree,
+  CanDeactivate
+} from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
 import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
+
 import { AlertService } from '@app/services/core/alert.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { Messages } from '@app/messages/messages';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs/Observable';
 import { AuthenticationService, AuthorizationService } from '../services';
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -16,77 +28,142 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         private authorizationService: AuthorizationService,
         private cookieService: CookieService,
         private corehelperService: CoreHelperService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private httpClient: HttpClient
     ) {
     }
 
+  checkPermissionsAndRedirect(auth) {
+    const user = this.authenticationService.currentUser;
 
-    checkPermissionsAndRedirect(auth) {
-        const user = this.authenticationService.currentUser;
+    console.log(user);
 
-        console.log(user);
-
-        if (!user.approved) {
-            this.router.navigateByUrl('/awaiting-approval');
-            return false;
+    if (!user.approved) {
+      this.router.navigateByUrl('/awaiting-approval', {
+        state: {
+          data: MESSAGES.ACCOUNT_APPROVAL_AWAIT
         }
+      });
 
-        // if logged in and has access rights to current route then return true
-        if (this.authorizationService.hasPermissions(auth)) {
-            console.log("has permissions...");
-            //If found any redirect return url from session in oauth case the nevigate user to that page
-            if (!!sessionStorage.getItem('ReturnUrl') && sessionStorage.getItem('ReturnUrl') !== '/'
-                && sessionStorage.getItem('ReturnUrl') !== '') {
-                const returnUrl = sessionStorage.getItem('ReturnUrl')
-                sessionStorage.removeItem('ReturnUrl');
-                this.router.navigate([returnUrl]);
-            }
+      return false;
+    }
+
+    // if logged in and has access rights to current route then return true
+    if (this.authorizationService.hasPermissions(auth)) {
+      console.log('has permissions…');
+
+      // If found any redirect return url from session in oauth case the nevigate user to that page
+      if (!!sessionStorage.getItem('ReturnUrl') && sessionStorage.getItem('ReturnUrl') !== '/'
+        && sessionStorage.getItem('ReturnUrl') !== '') {
+        const returnUrl = sessionStorage.getItem('ReturnUrl');
+
+        sessionStorage.removeItem('ReturnUrl');
+
+        this.router.navigate([returnUrl], {
+          state: {
+            data: MESSAGES.RETURNED_TO_PAGE
+          }
+        });
+      }
+
+      return true;
+    }
+    else {
+      // otherwise redirect to 'unauthorized' page
+      console.log('!!! HAS NO PERMISSIONS !!!');
+
+      this.corehelperService.isUnAuthorize(true);
+
+      return false;
+    }
+  }
+
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    let jwt = route.queryParams.jwt;
+    let hashedJwt = route.queryParams.redirect;
+    let username = route.queryParams.username;
+
+    // try to get impersonate jwt token from backend
+    if (hashedJwt && username) {
+        // browser send two http request in case of impersionation: options and get, so, ignore second request
+        if (this.authenticationService.getFromSessionStorageBasedEnv("jwt")) {
             return true;
         }
-        else {
-            // otherwise redirect to "unauthorized" page
-            console.log("!!! HAS NO PERMISSIONS !!!");
-            this.corehelperService.isUnAuthorize(true);
+        const promise = this.httpClient.get<any>(`${environment.apiUrl}/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
+        await promise.then((data) => {
+            jwt = data.jwt;
+        }, (error) => {
+            console.error('canActivate threat center call return error ' + JSON.stringify(error));
             return false;
-        }
+        });
     }
 
-    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        let jwt = route.queryParams['jwt'];
-        if (jwt) {
-            this.authenticationService.setInSessionStorageBasedEnv("jwt", jwt);
-            await this.authenticationService.loadAuthenticatedUser();
-            return this.checkPermissionsAndRedirect(route.data.auth);
-        } else {
-            jwt = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
-            if (jwt) {
-                if (this.authenticationService.isTokenExpired(jwt)) {
-                    this.authenticationService.logout();
-                    this.router.navigate(['/login'], { state: { data: Messages.tokenExpired } });
-                }
-                // if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
-                //     await this.authenticationService.loadAuthenticatedUser();
-                // }
-                if (!this.authenticationService.getFromSessionStorageBasedEnv("currentUser")) {
-                    await this.authenticationService.loadAuthenticatedUser();
-                }
-                return this.checkPermissionsAndRedirect(route.data.auth);
+    if (jwt) {
+      this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
+
+      await this.authenticationService.loadAuthenticatedUser();
+
+      return this.checkPermissionsAndRedirect(route.data.auth);
+    } else {
+      jwt = this.authenticationService.getFromSessionStorageBasedEnv('jwt');
+
+      if (jwt) {
+        if (this.authenticationService.isTokenExpired(jwt)) {
+          this.authenticationService.logout();
+
+          this.router.navigate(['/login'], {
+            state: {
+              data: MESSAGES.TOKEN_EXPIRED
             }
+          });
         }
-        if ('invite' in route.queryParams) {
-            const invite = route.queryParams['invite'];
-            this.setInviteCookie(invite);
-            this.router.navigate(['/create-account'], { queryParams: { returnUrl: state.url } });
-            return false
+
+        // if (!this.authenticationService.getFromStorageBasedEnv("currentUser")) {
+        //     await this.authenticationService.loadAuthenticatedUser();
+        // }
+
+        if (!this.authenticationService.getFromSessionStorageBasedEnv('currentUser')) {
+          await this.authenticationService.loadAuthenticatedUser();
         }
-        let message = "";
-        if(new URL(window.location.href).pathname !== '/'){
-            message = "Please authenticate with the new user session.";
-        }
-        // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }, state: { data: message } });
-        return false;
+
+        return this.checkPermissionsAndRedirect(route.data.auth);
+      }
     }
+    if ('invite' in route.queryParams) {
+      const invite = route.queryParams.invite;
+
+      this.setInviteCookie(invite);
+
+      this.router.navigate(['/create-account'], {
+        queryParams: {
+          returnUrl: state.url
+        },
+        state: {
+          data: MESSAGES.ACCOUNT_CREATE_VIA_INVITE
+        }
+      });
+
+      return false;
+    }
+
+    let message = '';
+
+    if (new URL(window.location.href).pathname !== '/') {
+      message = MESSAGES.AUTHENTICATE_NEW_USER_SESSION;
+    }
+
+    // Not logged in so redirect to login page with the return url
+    this.router.navigate(['/login'], {
+      queryParams: {
+        returnUrl: state.url
+      },
+      state: {
+        data: message
+      }
+    });
+
+    return false;
+  }
 
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         // return this.authorizationService.hasPermissions(childRoute.data.auth);

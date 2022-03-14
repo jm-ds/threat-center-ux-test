@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
-import {Scan, ScanOpenSourceProject} from '@app/models';
+import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Messages } from "@app/messages/messages";
+import { Scan, ScanOpenSourceProject } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { SaveFilterStateService } from '@app/services/core/save-filter-state.service';
 import { ProjectService } from '@app/services/project.service';
@@ -43,7 +45,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   timeOutDuration = 1000;
   parentScanAssetId = '';
   story = [];
-  messages = Messages;
+  MESSAGES = MESSAGES;
   isDisablePaggination: boolean = false;
   constructor(
     private projectService: ProjectService,
@@ -88,6 +90,13 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       this.initData();
 
     }
+  }
+
+  updateDataOnSelectedScan(obsScan, scanId) {
+    this.scanId = scanId;
+    this.obsScan = this.projectService.getScanAssets(this.scanId, this.parentScanAssetId, this.makeFilterMapForService(), Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")))
+      .pipe(map(result => result.data.scan));
+    this.initData();
   }
 
   sort(scanAssets: any) {
@@ -250,7 +259,6 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.obsScan.subscribe(asset => {
       this.isDisablePaggination = false;
       this.scanAssetDetails = asset;
-      this.scanOpenSourceProject = asset.scanOpenSourceProject;
       if (!!sessionStorage.getItem('UPDATED_SCAN_ASSETID')) {
         const scanAssetIdLists = JSON.parse(sessionStorage.getItem('UPDATED_SCAN_ASSETID'));
         this.scanAssetDetails.scanAssetsTree.edges.forEach(element => {

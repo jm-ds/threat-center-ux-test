@@ -1,21 +1,24 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { NextConfig } from "@app/app-config";
-import { AlertService } from "@app/services/core/alert.service";
-import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
-import { CoreHelperService } from "@app/services/core/core-helper.service";
-import { UserPreferenceService } from "@app/services/core/user-preference.service";
-import { Messages } from "@app/messages/messages";
-import { ProjectQuery, Scan, ScanQuery } from "@app/models";
-import gql from "graphql-tag";
-import { EMPTY, forkJoin, Observable } from "rxjs";
-import { mergeMap } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+
+import { EMPTY, forkJoin, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+
+import gql from 'graphql-tag';
+
+import { ProjectQuery, Scan, ScanQuery } from '@app/models';
+
+import { NextConfig } from '@app/app-config';
+import { MESSAGES } from '@app/messages/messages';
+
+import { AlertService } from '@app/services/core/alert.service';
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class ProjectDashboardService {
   constructor(private coreGraphQLService: CoreGraphQLService) {
   }
@@ -120,7 +123,7 @@ export class ProjectDashboardService {
                   }
                 }
             }
-          `,'no-cache');
+          `, 'no-cache');
   }
 
   getAllScanData(scanId: string, defaultPage, scanAssetDetails: any, componentPage, vulPage, licensePage) {
@@ -261,7 +264,7 @@ export class ProjectDashboardService {
                       licenseDiscovery,
                       licenseOrigin,
                       trustLevel,
-                      
+
                     }
                   }
                 }
@@ -473,8 +476,14 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
     return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
       .pipe(
         mergeMap((data: any) => {
+          let scanId = '';
           const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-          let scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
+          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+            scanId = lastScanSelected.lastSelectedScanId;
+          } else {
+            scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
+          }
+
           if (!!data.data.project && !!scanId) {
             const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
             const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
@@ -482,7 +491,7 @@ export class ProjectDashboardResolver implements Resolve<Observable<any>> {
             const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage, vulPage, licensePage);
             return forkJoin([res1]);
           } else {
-            this.alertService.alertBox("Project data not found!", Messages.commonErrorHeaderText, 'error');
+            this.alertService.alertBox(MESSAGES.PROJECT_DATA_NOT_FOUND, MESSAGES.ERROR_TITLE, 'error');
             return EMPTY;
           }
         })

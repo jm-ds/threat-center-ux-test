@@ -1,6 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {Message, Messages, Role} from "@app/models";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Message, Messages, Role } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
 import { RoleService } from '@app/services/role.service';
 
 @Component({
@@ -33,18 +37,27 @@ export class RoleShowComponent implements OnInit {
         );
     }
 
-    removeRole() {
-        if (confirm("Are you sure you want to delete the role " + this.role.roleId + "?")) {
-            this.roleService.removeRole(this.role)
-                .subscribe(({data}) => {
-                    this.router.navigate(['/admin/role/list'],
-                        {state: {messages: [Message.success("Role removed successfully.")]}});
-                }, (error) => {
-                    console.error('Role Removing', error);
-                    this.router.navigate(['/admin/role/show/' + this.role.roleId],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove role.")]}});
-                });
-        }
-    }
+  removeRole() {
+    if (confirm(`${MESSAGES.ROLE_REMOVE_CONFIRM} ${this.role.roleId}?`)) {
+      this.roleService
+        .removeRole(this.role)
+        .subscribe(
+          () => {
+            this.router.navigate(['/admin/role/list'], {
+              state: {
+                messages: [Message.success(MESSAGES.ROLE_REMOVE_SUCCESS)]
+              }
+            });
+          },
+          error => {
+            console.error('Role Removing', error);
 
+            this.router.navigate(['/admin/role/show/', this.role.roleId], {
+              state: {
+                messages: [Message.error(MESSAGES.ROLE_REMOVE_ERROR)]
+              }
+            });
+          });
+    }
+  }
 }

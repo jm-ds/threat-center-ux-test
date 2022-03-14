@@ -1,0 +1,16 @@
+<div class="modal-body">
+    <div class="app-modal-header">
+        <h5 class="modal-title">Create Jira Ticket</h5>
+    </div>
+    <div class="app-modal-body">
+        <div class="form-group">
+            <textarea class="form-control" name="coverLetter" [(ngModel)]="content" rows="4"
+                      placeholder="Content of jira ticket">
+            </textarea>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-secondary m-r-5" data-dismiss="modal" (click)="$event.stopPropagation();closeBtn()">Close</button>
+        <button type="button" class="btn btn-primary  m-r-5" (click)="$event.stopPropagation(); createJiraTicket();">Create</button>
+    </div>
+</div>

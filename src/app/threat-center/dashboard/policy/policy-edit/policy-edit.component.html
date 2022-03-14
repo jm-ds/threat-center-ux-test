@@ -15,7 +15,7 @@
 <ng-template [ngIf]="policy != undefined">
   <form>
     <div style="padding:40px 0px 40px 0px;margin-left:5px;margin-right:5px">
-      <ngb-tabset type="pills" [activeId]="activeTabIdString">    
+      <ngb-tabset type="pills" [activeId]="activeTabIdString">
         <ngb-tab title="Policy" id="policyGeneralInfo">
           <ng-template ngbTabContent>
             <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" cardTitle="General Info">
@@ -23,7 +23,7 @@
                 <ng-template [ngIf]="policy.active">
                   <span title="Info" class=" badge m-r-5 badge-light-success" style="margin-bottom: 16px;">Active</span>
                 </ng-template>
-                
+
                 <div *ngIf="policy.entity" class="form-group " style="padding-left: 0px">
                   <label class="font-weight-bolder">Entity</label>
                   <input disabled class="form-control" style="width: 100%;" value="{{policy.entity?.name}}"/>
@@ -32,28 +32,40 @@
                   <label class="font-weight-bolder">Project</label>
                   <input disabled class="form-control" style="width: 100%;" value="{{policy.project?.name}}"/>
                 </div>
-                  <div class="form-group " style="padding-left: 0px">
-                  <label class="font-weight-bolder">Policy Name</label>
-                  <input name="name" required placeholder="Name..." class="form-control" style="width: 100%;" [(ngModel)]="policy.name"/>
+
+                <div class="form-group " style="padding-left: 0px">
+                  <label for="name" class="font-weight-bolder">Policy Name</label>
+                  <input name="name" required placeholder="Name…" class="form-control" style="width: 100%;" #policyName="ngModel"
+                    [(ngModel)]="policy.name">
+
+                  <ng-container *ngIf="policyName.errors && policyName.errors?.required">
+                    <p class="invalid-form">Policy name field is required.</p>
+                  </ng-container>
                 </div>
+
                 <div class="form-group" style="padding-left: 0px" *ngIf="false">
                   <label class="font-weight-bolder">Policy Title</label>
-                  <input name="title" required placeholder="Title..." class="form-control" [(ngModel)]="policy.title"/>
+                  <input name="title" required placeholder="Title…" class="form-control" #policyTitle="ngModel"
+                    [(ngModel)]="policy.title">
+
+                  <ng-container *ngIf="policyTitle.errors && policyTitle.errors?.required">
+                    <p class="invalid-form">Policy title field is required.</p>
+                  </ng-container>
                 </div>
                 <div class="form-group" style="padding-left: 0px">
                   <label class="font-weight-bolder">Policy Type</label>
                   <select [(ngModel)]="policy.conditionType" name="conditionType" (ngModelChange)="onTypeChange($event)"
                       class="form-control form-control-sm input-sm ng-select custom-select">
-                    <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option> 
+                    <option *ngFor="let item of conditionTypeItems" [ngValue]="item.code">{{ item.name }}</option>
                   </select>
-                </div>  
+                </div>
                 <div class="form-group">
                   <label for= "applyToChilds" class="font-weight-bolder">Apply to child entities</label>
                   <input name="applyToChilds" id="applyToChilds" type="checkbox" class="ml-3" [(ngModel)]="policy.applyToChilds"/>
                 </div>
                 <div class="form-group">
                   <label class="font-weight-bolder">Policy Description</label>
-                  <textarea name="description" placeholder="Description..." class="form-control" [(ngModel)]="policy.description" rows="5"></textarea>
+                  <textarea name="description" placeholder="Description…" class="form-control" [(ngModel)]="policy.description" rows="5"></textarea>
                 </div>
                 <div class="form-group" style="padding-left: 0px" *ngIf="false">
                   <label class="font-weight-bolder">Overrides</label>
@@ -77,11 +89,11 @@
                     Conditions
                     <i class="feather icon-chevrons-right" style="font-size: medium;"></i>
                   </button>
-                </div>  
+                </div>
               </div>
             </app-card>
           </ng-template>
-        </ngb-tab>  
+        </ngb-tab>
         <!-- Conditions -->
         <ngb-tab id="policyConditions">
           <ng-template ngbTabTitle>Conditions&nbsp;
@@ -93,7 +105,7 @@
             <app-card cardClass="mb-0" blockClass="d-flex align-items-center justify-content-between" [cardTitle]="conditionType.name+' Conditions'">
               <div class="pt-4" style="width: 100%;">
                 <condition-builder id="conditions" style="width: 100%" [parentGroup]="policy.conditions" [readonly]="false" [policy]="policy">
-                </condition-builder>  
+                </condition-builder>
                 <div class="actions mt-4">
                   <button  (click)="gotoTab('policyActions')" class="btn btn-outline-secondary float-right">
                     Actions
@@ -103,11 +115,11 @@
                     <i class="feather icon-chevrons-left" style="font-size: medium;"></i>
                     General Info
                   </button>
-                </div>  
-              </div>  
-            </app-card>  
-          </ng-template>  
-        </ngb-tab>   
+                </div>
+              </div>
+            </app-card>
+          </ng-template>
+        </ngb-tab>
         <!-- Actions  -->
         <ngb-tab id="policyActions">
           <ng-template ngbTabTitle>Actions&nbsp;
@@ -117,7 +129,7 @@
           </ng-template>
           <ng-template ngbTabContent>
             <app-card blockClass="align-items-center justify-content-between" cardTitle="Actions">
-              
+
               <div style="padding-bottom: 60px">
                 <table class="table table-bordered">
                   <thead>
@@ -130,7 +142,7 @@
                   <tbody>
                     <tr *ngFor="let action of policy.actions;let index = index;">
                       <td>
-                        <select name="{{index}}actionType" class="form-control custom-select" (change)="onActionTypeChange(action,$event,index)" 
+                        <select name="{{index}}actionType" class="form-control custom-select" (change)="onActionTypeChange(action,$event,index)"
                           [(ngModel)]="policy.actions[index].actionType">
                           <option *ngFor="let type of actionTypes" [ngValue]="type.value">
                             {{type.label}}</option>
@@ -165,14 +177,14 @@
                     <i class="feather icon-chevrons-left" style="font-size: medium;"></i>
                     Conditions
                   </button>
-                </div>  
+                </div>
             </div>
 
             </app-card>
-          </ng-template>  
+          </ng-template>
         </ngb-tab>
-      </ngb-tabset>    
-    </div>   
+      </ngb-tabset>
+    </div>
     <div class="actions mt-4">
       <button type="button" class="btn btn-success" [disabled] = "saveDisabled" (click)="savePolicy()" >
           <i class="feather icon-save"></i>
@@ -191,7 +203,7 @@
       </a>
     </div>
 
-  </form>  
+  </form>
 </ng-template>
 
 

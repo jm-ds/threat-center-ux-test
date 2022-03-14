@@ -168,7 +168,7 @@ export class EntityManagerService {
           }`);
     }
 
-    //get entity settings
+    // get entity settings
     getEntitySettings(entityId: string): Observable<ApolloQueryResult<EntityQuery>> {
         return this.coreGraphQLService.coreGQLReqWithQuery<EntityQuery>(
             gql`
@@ -181,7 +181,8 @@ export class EntityManagerService {
                   alertSlackUrls
                   jiraCredentials {
                     projectUrl
-                    projectKey
+                    projectId
+                    issueTypeId
                     email
                     apiToken
                   }
@@ -215,7 +216,7 @@ export class EntityManagerService {
           }`, { entitySettingsRequest: entitySettingsRequest });
     }
 
-    //set entity jira settings
+    // set entity jira settings
     setEntityJiraCredentials(entityId: string, jiraCredentials: JiraCredentials) {
         const entitySettingsRequest = EntitySettingsRequestInput.forJira(entityId, jiraCredentials);
         delete entitySettingsRequest.jiraCredentials["__typename"];
@@ -225,7 +226,8 @@ export class EntityManagerService {
               entityId
               jiraCredentials {
                 projectUrl
-                projectKey
+                projectId
+                issueTypeId
                 email
                 apiToken
               }

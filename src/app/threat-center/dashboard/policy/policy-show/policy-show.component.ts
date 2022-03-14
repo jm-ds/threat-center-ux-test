@@ -1,8 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {Message, Messages, Policy, PolicyConditionGroup} from "@app/models";
-import {ActivatedRoute, Router} from "@angular/router";
-import { PolicyService } from '@app/services/policy.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { Message, Messages, Policy, PolicyConditionGroup } from '@app/models';
+
+import { MESSAGES } from '@app/messages/messages';
+
+import { PolicyService } from '@app/services/policy.service';
 
 @Component({
     selector: 'app-policy-view',
@@ -22,11 +25,11 @@ export class PolicyShowComponent implements OnInit {
 
 
     public actionCols = ['ActionType','ActionName'];
-    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Gate Release', value: 'RELEASE'},
+    public actionTypes = [{label: 'Alert', value: 'ALERT'},{label: 'Issue', value: 'ISSUE'},{label: 'Gate Release', value: 'RELEASE'},
        {label: 'Attribute Source', value: 'ATTRIBUTION'}, {label: 'Upgrade library version', value: 'UPGRADE_VERSION'}];
     public actionNames = {
         'ALERT': [{label: 'Slack', value: 'SLACK'},{label: 'E-mail', value: 'EMAIL'}],//,{label: 'Dashboard', value:'DASHBOARD'}
-        //'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
+        'ISSUE' : [{label: 'Jira', value: 'JIRA'},{label: 'Github', value:'GITHUB'}],
         'RELEASE': [{label: 'No', value:'NO'},{label: 'Yes', value:'PROD'}],
         'ATTRIBUTION': [{label: 'Attribute Source', value:'ATTRIBUTION'}],
         'UPGRADE_VERSION': [{label: 'Latest Secured Version', value:'LAST_VERSION'},{label: 'Next Secured Version', value:'NEXT_VERSION'}]
@@ -79,7 +82,7 @@ export class PolicyShowComponent implements OnInit {
             this.actionNames[tp].forEach(obj => {
                 this.actionNameMap[tp][obj.value] = obj.label;
             });
-    
+
         }
     }
 
@@ -97,7 +100,7 @@ export class PolicyShowComponent implements OnInit {
                 for (const condition of group.groups[0].conditions) {
                     condition.conditionType = policy.conditionType;
                 }
-    
+
             }
         }
         if (group.groups) {
@@ -107,33 +110,59 @@ export class PolicyShowComponent implements OnInit {
         }
     }
 
+  removePolicy() {
+    if (confirm(MESSAGES.POLICY_REMOVE_CONFIRM)) {
+      this.preparePolicyBeforeSend(this.policy.conditions);
 
-    removePolicy() {
-        if (confirm("Are you sure you want to delete the policy?")) {
-            this.preparePolicyBeforeSend(this.policy.conditions);
-            this.policyService.removePolicy(this.policy)
-                .subscribe(({data}) => {
-                    const link = '/dashboard/policy/list'+
-                        ((!!this.entityId)? ('/'+this.entityId):'')+
-                        ((!!this.projectId)? ('/'+this.projectId):'');
-                    this.router.navigate([link],
-                        {state: {messages: [Message.success("Policy removed successfully.")]}});
-                }, (error) => {
-                    const link = '/dashboard/policy/show/'+ this.policy.policyId+
-                        ((!!this.entityId)? ('/'+this.entityId):'')+
-                        ((!!this.projectId)? ('/'+this.projectId):'');
-                let msg = '';
-                if (error.message) {
-                    const msgs = error.message.split(":");
-                    if (msgs.length>0) {
-                        msg = msgs[msgs.length-1];
-                    }
-                }
-                this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to remove policy. "+msg)]}});
-                });
-        }
+      this.policyService
+        .removePolicy(this.policy)
+        .subscribe(
+          () => {
+            let link = ['/dashboard/policy/list'];
+
+            if (this.entityId) {
+              link.push(this.entityId);
+            }
+
+            if (this.projectId) {
+              link.push(this.projectId);
+            }
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.POLICY_REMOVE_SUCCESS)]
+              }
+            });
+          },
+          error => {
+            let link = ['/dashboard/policy/show', this.policy.policyId];
+
+            if (this.entityId) {
+              link.push(this.entityId);
+            }
+
+            if (this.projectId) {
+              link.push(this.projectId);
+            }
+
+            let message = '';
+
+            if (error.message) {
+              const errorMessages = error.message.split(':');
+
+              if (errorMessages.length > 0) {
+                message = errorMessages[errorMessages.length - 1];
+              }
+            }
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.error(`${MESSAGES.POLICY_REMOVE_ERROR} ${message}`)]
+              }
+            });
+          });
     }
+  }
 
     preparePolicyBeforeSend(group: PolicyConditionGroup) {
         if (!group) {
@@ -152,42 +181,73 @@ export class PolicyShowComponent implements OnInit {
             }
         }
     }
-    
 
-    // enable/disable policy
-    enablePolicy() {
-        let confirmText = "Are you sure you want to disable the policy?";
-        if (!this.policy.active) {
-            confirmText = "Are you sure you want to enable the policy?";
-        }
-        if (confirm(confirmText)) {
-            let policy = Object.assign({}, this.policy);
-            policy.active=!policy.active;
-            this.preparePolicyBeforeSend(this.policy.conditions);
-            this.policyService.enablePolicy(policy)
-                .subscribe(({data}) => {
-                    const link = '/dashboard/policy/list'+
-                        ((!!this.entityId)? ('/'+this.entityId):'')+
-                        ((!!this.projectId)? ('/'+this.projectId):'');
-                    this.router.navigate([link],
-                        {state: {messages: [Message.success("Policy state changed successfully.")]}});
-                }, (error) => {
-                    console.error('Policy state change', error);
-                    const link = '/dashboard/policy/show/'+ this.policy.policyId+
-                        ((!!this.entityId)? ('/'+this.entityId):'')+
-                        ((!!this.projectId)? ('/'+this.projectId):'');
-                    let msg = '';
-                    if (error.message) {
-                        const msgs = error.message.split(":");
-                        if (msgs.length>0) {
-                            msg = msgs[msgs.length-1];
-                        }
-                    }
-                    this.router.navigate([link],
-                        {state: {messages: [Message.error("Unexpected error occurred while trying to change policy state. "+msg)]}});
-                });
-        }
+  /** Enable/disable policy */
+  enablePolicy() {
+    let confirmText = MESSAGES.POLICY_DISABLE_CONFIRM;
+
+    if (!this.policy.active) {
+      confirmText = MESSAGES.POLICY_ENABLE_CONFIRM;
     }
+
+    if (confirm(confirmText)) {
+      let policy = Object.assign({}, this.policy);
+
+      policy.active = !policy.active;
+
+      this.preparePolicyBeforeSend(this.policy.conditions);
+
+      this.policyService
+        .enablePolicy(policy)
+        .subscribe(
+          () => {
+            let link = ['/dashboard/policy/list'];
+
+            if (this.entityId) {
+              link.push(this.entityId);
+            }
+
+            if (this.projectId) {
+              link.push(this.projectId);
+            }
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.POLICY_UPDATE_SUCCESS)]
+              }
+            });
+          },
+          error => {
+            console.error('Policy state change', error);
+
+            let link = ['/dashboard/policy/show', this.policy.policyId];
+
+            if (this.entityId) {
+              link.push(this.entityId);
+            }
+
+            if (this.projectId) {
+              link.push(this.projectId);
+            }
+
+            let message = '';
+
+            if (error.message) {
+              const errorMessages = error.message.split(':');
+
+              if (errorMessages.length > 0) {
+                message = errorMessages[errorMessages.length - 1];
+              }
+            }
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.error(`${MESSAGES.POLICY_UPDATE_ERROR} ${message}`)]
+              }
+            });
+          });
+    }
+  }
 
     gotoTab(tabId: string) {
         this.activeTabIdString = tabId;

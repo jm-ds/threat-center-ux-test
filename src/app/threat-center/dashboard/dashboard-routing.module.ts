@@ -23,11 +23,6 @@ const routes: Routes = [
         loadChildren: () => import('./project/project.module').then(module => module.ProjectModule)
       },
       {
-        path: 'container',
-        canActivate: [AuthGuard],
-        loadChildren: () => import('./container/container.module').then(module => module.ContainerModule)
-      },
-      {
         path: 'scan',
         canActivate: [AuthGuard],
         loadChildren: () => import('./quickstart/quickstart.module').then(module => module.QuickstartModule)
