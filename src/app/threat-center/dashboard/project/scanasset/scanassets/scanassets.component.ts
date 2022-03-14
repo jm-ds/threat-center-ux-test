@@ -3,8 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { Scan } from '@app/models';
+import { Scan, ScanOpenSourceProject } from '@app/models';
 
 import { MESSAGES } from '@app/messages/messages';
 
@@ -40,6 +39,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   defaultPageSize = 25;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   scanAssetDetails: any;
+  scanOpenSourceProject: ScanOpenSourceProject;
   columnsFilter = new Map();
   timeOut;
   timeOutDuration = 1000;

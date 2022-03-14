@@ -94,8 +94,15 @@ export class Scan {
     vulnerabilities: Vulnerability[];
     scanRepository: Repository;
     scanMetrics: any;
-    scanAssets: any;
+    scanAssetsTree: ScanAssetsTreeConnection;
     licenses: ScanLicense[];
+    scanOpenSourceProject: ScanOpenSourceProject;
+}
+
+export class ScanOpenSourceProject {
+    owner: string;
+    name: string;
+    repoWebsite: string;
 }
 
 export class GithubAccount {
@@ -137,6 +144,7 @@ export class ScanLicense {
     scanComponents: ScanComponentConnection;
     scanAssetsTree: ScanAssetsTreeConnection;
     scanLicenseAssets: ScanLicenseAssetConnection;
+    scanOpenSourceProject: ScanOpenSourceProject;
 }
 
 export class JiraTicket {

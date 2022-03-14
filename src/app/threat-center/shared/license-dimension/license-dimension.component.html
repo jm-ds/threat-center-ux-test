@@ -358,14 +358,19 @@
     <ngb-tab *ngIf="!isFromComponent && scanId" id="asset">
       <ng-template ngbTabTitle>Assets&nbsp;
         <span class="badge badge-light">
-          {{scanAssetDetails?.totalCount}}
+          {{scanAssetsTree?.totalCount}}
         </span>
       </ng-template>
       <ng-template ngbTabContent>
-
+        <div *ngIf="scanOpenSourceProject">
+          This is open source project '{{scanOpenSourceProject.owner}}/{{scanOpenSourceProject.name}}' and the assets were not scanned.
+          <br>
+          <a href="{{scanOpenSourceProject.repoWebsite}}">{{scanOpenSourceProject.repoWebsite}}</a>
+        </div>
+        <div *ngIf="!scanOpenSourceProject">
         <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow"
         [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
-          <p-table *ngIf="scanAssetDetails" #dt [columns]="assetColumns" [value]="sortAssets(scanAssetDetails.edges)" [paginator]="false" [rows]="50"
+          <p-table *ngIf="scanAssetsTree" #dt [columns]="assetColumns" [value]="sortAssets(scanAssetsTree.edges)" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" sortField="embedded" [sortOrder]="-1">
 
@@ -474,9 +479,10 @@
           </p-table>
         </perfect-scrollbar>
         <div class="col-sm-12">
-          <mat-paginator [hidePageSize]="false" [length]="scanAssetDetails?.totalCount"
+          <mat-paginator [hidePageSize]="false" [length]="scanAssetsTree?.totalCount"
                          [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changeAssetPage($event)">
           </mat-paginator>
+        </div>
         </div>
       </ng-template>
     </ngb-tab>

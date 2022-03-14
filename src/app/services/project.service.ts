@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery } from "@app/models";
+import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery, ScanOpenSourceProject } from "@app/models";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { FetchPolicy } from "apollo-client";
@@ -460,6 +460,11 @@ export class ProjectService {
                     }
                   }
                 }
+                scanOpenSourceProject {
+                  owner,
+                  name,
+                  repoWebsite
+                },
                 scanAssetsTree(${parentAssetId}${assetFilterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
                   pageInfo {
                     hasNextPage
@@ -662,8 +667,13 @@ export class ProjectService {
     const beforeArg = (before) ? `, before: "${before}"` : '';
     return this.coreGraphQLService.coreGQLReq<ScanQuery>(gql`
         query {
-        	scan(scanId:"${scanId}") {
-            scanId
+          scan(scanId:"${scanId}") {
+            scanId,
+            scanOpenSourceProject {
+              owner,
+              name,
+              repoWebsite
+            },
             scanAssetsTree(${parentId}${filterArg}${firstArg}${lastArg}${afterArg}${beforeArg}) {
               pageInfo {
                 hasNextPage
@@ -704,14 +714,14 @@ export class ProjectService {
             }
           }
         }
-      `,fetchPolicy);//, 'no-cache'
+      `,fetchPolicy); // , 'no-cache'
   }
 
   getScanAsset(scanId: string, scanAssetId: string) {
     return this.coreGraphQLService.coreGQLReq<ScanAssetQuery>(gql`
         query {
-        	scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
-        	orgId,
+          scanAsset(scanId:"${scanId}" scanAssetId:"${scanAssetId}") {
+            orgId,
             name,
             size,
             assetSize
@@ -745,6 +755,7 @@ export class ProjectService {
                   latestReleaseVersion,
                   scanAssetMatchJiraTicket {
                     id, key, self
+                  },
                   assetRepositoryUrl {
                     data
                   },
