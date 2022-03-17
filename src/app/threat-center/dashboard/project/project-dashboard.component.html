@@ -13,20 +13,21 @@
                         <h6>Vulnerabilites</h6>
                         <i class="far fa-chart-bar fa-lg"></i>
                     </div>
+
                     <div class="matrix-chart-btm">
-                        <div class="matrix-chart-blk">
-                            <apx-chart [series]="vulDonutData.series" [fill]="donutChartConfig.fill"
-                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
-                                [labels]="vulDonutData.labels" [legend]="donutChartConfig.legend"
-                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
-                            </apx-chart>
-                        </div>
-                        <div class="matrix-chart-legend">
-                            <p *ngFor="let data of vulDonutChartLabel;let i = index">
-                                <span class="{{data.class}}">{{data.label}}</span>
-                                <small>{{vulDonutData?.series[i]}}</small>
-                            </p>
-                        </div>
+                      <div class="matrix-chart-blk">
+                        <apx-chart [series]="vulnerabilityChartData.series" [colors]="VULNERABILITY_CHART_COLORS"
+                          [fill]="vulnerabilityChartFill" [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions"
+                          [labels]="vulnerabilityChartData.labels" [legend]="chartConfig.legend" [responsive]="chartConfig.responsive"
+                          [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                      </div>
+
+                      <div class="matrix-chart-legend">
+                        <p *ngFor="let data of vulnerabilityChartLabels; let i = index">
+                          <span [ngClass]="data.class">{{ data.label }}</span>
+                          <small>{{ vulnerabilityChartData?.series[i] }}</small>
+                        </p>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -37,23 +38,24 @@
                         <h6>License Risk</h6>
                         <i class="far fa-chart-bar fa-lg"></i>
                     </div>
-                    <div class="matrix-chart-btm">
-                        <div class="matrix-chart-blk">
-                            <apx-chart [series]="licenseDonutData.series" [fill]="donutChartConfig.fill"
-                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
-                                [labels]="licenseDonutData.labels" [legend]="donutChartConfig.legend"
-                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
-                            </apx-chart>
-                        </div>
 
-                        <div class="matrix-chart-legend">
-                            <p *ngFor="let data of licenseDonutChartLabel;let i = index">
-                                <span *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0"
-                                    class="{{data.class}}">{{data.label}}</span>
-                                <small
-                                    *ngIf="!!licenseDonutData?.series[i] && licenseDonutData?.series[i] !== 0">{{licenseDonutData?.series[i]}}</small>
-                            </p>
-                        </div>
+                    <div class="matrix-chart-btm">
+                      <div class="matrix-chart-blk">
+                        <apx-chart [series]="licenseChartData.series" [colors]="LICENSE_CHART_COLORS" [fill]="licenseChartFill"
+                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="licenseChartData.labels"
+                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                      </div>
+
+                      <div class="matrix-chart-legend">
+                        <p *ngFor="let data of licenseChartLabels; let i = index">
+                          <span [ngClass]="data.class" *ngIf="!!licenseChartData?.series[i] && licenseChartData?.series[i] !== 0">
+                            {{ data.label }}
+                          </span>
+                          <small *ngIf="!!licenseChartData?.series[i] && licenseChartData?.series[i] !== 0">
+                            {{ licenseChartData?.series[i] }}
+                          </small>
+                        </p>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -64,20 +66,20 @@
                         <h6>Asset composition</h6>
                         <i class="far fa-chart-bar fa-lg"></i>
                     </div>
+
                     <div class="matrix-chart-btm">
-                        <div class="matrix-chart-blk">
-                            <apx-chart [series]="assetDonutData.series" [fill]="donutChartConfig.fill"
-                                [chart]="donutChartConfig.chart" [plotOptions]="donutChartConfig.plotOptions"
-                                [labels]="assetDonutData.labels" [legend]="donutChartConfig.legend"
-                                [responsive]="donutChartConfig.responsive" [dataLabels]="donutChartConfig.dataLabels">
-                            </apx-chart>
-                        </div>
-                        <div class="matrix-chart-legend">
-                            <p *ngFor="let data of assetDonutChartLabel;let i = index">
-                                <span class="{{data.class}}">{{data.label}}</span>
-                                <small>{{assetDonutData?.series[i]}}</small>
-                            </p>
-                        </div>
+                      <div class="matrix-chart-blk">
+                        <apx-chart [series]="assetChartData.series" [colors]="ASSET_CHART_COLORS" [fill]="assetChartFill"
+                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="assetChartData.labels"
+                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                      </div>
+
+                      <div class="matrix-chart-legend">
+                        <p *ngFor="let data of assetChartLabels; let i = index">
+                          <span [ngClass]="data.class">{{ data.label }}</span>
+                          <small>{{ assetChartData?.series[i] }}</small>
+                        </p>
+                      </div>
                     </div>
                 </div>
             </div>

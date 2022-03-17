@@ -56,68 +56,54 @@
                     }
 
                     span {
-                        color: #fff;
-                        position: relative;
-                        padding-left: 15px;
+                      color: #fff;
+                      position: relative;
+                      padding-left: 15px;
 
-                        &:before {
-                            content: '';
-                            position: absolute;
-                            width: 6px;
-                            height: 6px;
-                            background: #fff;
-                            top: 5px;
-                            left: 0;
-                            border-radius: 50%;
-                        }
+                      &:before {
+                        content: '';
+                        position: absolute;
+                        width: 6px;
+                        height: 6px;
+                        background: #fff;
+                        top: 5px;
+                        left: 0;
+                        border-radius: 50%;
+                      }
 
-                        &.red {
-                            &:before {
-                                background: #FB5B5B;
-                            }
-                        }
+                      &.red:before {
+                        background: #fb5b5b;
+                      }
 
-                        &.orange {
-                            &:before {
-                                background: #EE8144;
-                            }
-                        }
+                      &.orange:before {
+                        background: #ee8144;
+                      }
 
-                        &.yellow {
-                            &:before {
-                                background: #D2E032;
-                            }
-                        }
+                      &.yellow:before {
+                        background: #d2e032;
+                      }
 
-                        &.pink {
-                            &:before {
-                                background: #DE3FD8;
-                            }
-                        }
+                      &.pink:before {
+                        background: #de3fd8;
+                      }
 
-                        &.skyblue {
-                            &:before {
-                                background: #58C7C0;
-                            }
-                        }
+                      &.skyblue:before {
+                        background: #58c7c0;
+                      }
 
-                        &.lgt-yellow {
-                            &:before {
-                                background: #C9E282;
-                            }
-                        }
+                      &.lgt-yellow:before {
+                        background: #c9e282;
+                      }
 
-                        &.lgt-green {
-                            &:before {
-                                background: #26F08F;
-                            }
-                        }
+                      &.lgt-green:before {
+                        background: #26f08f;
+                      }
                     }
 
                     small {
-                        font-size: 16px;
-                        color: #fff;
-                        padding-left: 5px;
+                      font-size: 16px;
+                      color: #fff;
+                      padding-left: 5px;
                     }
                 }
             }
