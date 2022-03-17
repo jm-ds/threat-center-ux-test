@@ -16,9 +16,10 @@
 
                     <div class="matrix-chart-btm">
                       <div class="matrix-chart-blk">
-                        <apx-chart [series]="vulnerabilityChartData.series" [fill]="vulnerabilityChartFill" [chart]="chartConfig.chart"
-                            [plotOptions]="chartConfig.plotOptions" [labels]="vulnerabilityChartData.labels" [legend]="chartConfig.legend"
-                            [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                        <apx-chart [series]="vulnerabilityChartData.series" [colors]="VULNERABILITY_CHART_COLORS"
+                          [fill]="vulnerabilityChartFill" [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions"
+                          [labels]="vulnerabilityChartData.labels" [legend]="chartConfig.legend" [responsive]="chartConfig.responsive"
+                          [dataLabels]="chartConfig.dataLabels"></apx-chart>
                       </div>
 
                       <div class="matrix-chart-legend">
@@ -40,9 +41,9 @@
 
                     <div class="matrix-chart-btm">
                       <div class="matrix-chart-blk">
-                        <apx-chart [series]="licenseChartData.series" [fill]="licenseChartFill" [chart]="chartConfig.chart"
-                            [plotOptions]="chartConfig.plotOptions" [labels]="licenseChartData.labels" [legend]="chartConfig.legend"
-                            [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                        <apx-chart [series]="licenseChartData.series" [colors]="LICENSE_CHART_COLORS" [fill]="licenseChartFill"
+                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="licenseChartData.labels"
+                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
                       </div>
 
                       <div class="matrix-chart-legend">
@@ -68,9 +69,9 @@
 
                     <div class="matrix-chart-btm">
                       <div class="matrix-chart-blk">
-                        <apx-chart [series]="assetChartData.series" [fill]="assetChartFill" [chart]="chartConfig.chart"
-                            [plotOptions]="chartConfig.plotOptions" [labels]="assetChartData.labels" [legend]="chartConfig.legend"
-                            [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                        <apx-chart [series]="assetChartData.series" [colors]="ASSET_CHART_COLORS" [fill]="assetChartFill"
+                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="assetChartData.labels"
+                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
                       </div>
 
                       <div class="matrix-chart-legend">
