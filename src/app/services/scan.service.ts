@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
-import { BitbucketUserQuery, GitHubUserQuery, GitLabUserQuery,SnippetQuery } from "@app/models";
+import { BitbucketUserQuery, GitHubUserQuery, GitLabUserQuery, SnippetQuery } from "@app/models";
 import gql from "graphql-tag";
+import {
+  IgnoredFiles,
+  IgnoredFilesRequestInput,
+  IgnoredFileSettingQuery
+} from "@app/models/ignored-files";
 @Injectable({
   providedIn: 'root'
 })
@@ -216,5 +221,57 @@ export class ScanService {
           }
       }
     `, 'no-cache', { snippetText: snippetText, languageType: languageType });
+  }
+
+  // create ignored files setting
+  saveIgnoredFiles(ignoredFiles: IgnoredFiles) {
+    const ignoredFilesRequest = new IgnoredFilesRequestInput(ignoredFiles.objectId, ignoredFiles.type, ignoredFiles.level, ignoredFiles.pattern);
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($ignoredFilesRequest: IgnoredFilesRequestInput) {
+            saveIgnoredFiles(ignoredFilesRequest: $ignoredFilesRequest) {
+                  objectId,
+                  type,
+                  level,
+                  pattern
+            }
+        }`, {ignoredFilesRequest: ignoredFilesRequest});
+  }
+
+  // get ignore files setting
+  getIgnoredFiles(projectId: string, entityId: string) {
+    return this.coreGraphQLService.coreGQLReq<IgnoredFileSettingQuery>(
+        gql`query {
+                getIgnoredFiles(projectId: "${projectId}", entityId: "${entityId}") {
+                  objectId,
+                  type,
+                  level,
+                  pattern
+                }
+            }`, 'no-cache');
+  }
+
+  // update ignore files setting
+  updateIgnoredFiles(ignoredFiles: IgnoredFiles) {
+    const ignoredFilesRequest = new IgnoredFilesRequestInput(ignoredFiles.objectId, ignoredFiles.type, ignoredFiles.level, ignoredFiles.pattern);
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($ignoredFilesRequest: IgnoredFilesRequestInput) {
+            updateIgnoredFiles(ignoredFilesRequest: $ignoredFilesRequest) {
+                  objectId,
+                  type,
+                  level,
+                  pattern
+            }
+        }`, {ignoredFilesRequest: ignoredFilesRequest});
+  }
+
+  // remove ignore files setting
+  removeIgnoredFiles(ignoredFiles: IgnoredFiles) {
+    const ignoredFilesRequest = new IgnoredFilesRequestInput(ignoredFiles.objectId, ignoredFiles.type, ignoredFiles.level, ignoredFiles.pattern);
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($ignoredFilesRequest: IgnoredFilesRequestInput) {
+            removeIgnoredFiles(ignoredFilesRequest: $ignoredFilesRequest) {
+                  objectId,
+                  type,
+                  level,
+                  pattern
+            }
+        }`, {ignoredFilesRequest: ignoredFilesRequest});
   }
 }
