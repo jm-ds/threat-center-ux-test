@@ -16,7 +16,7 @@ export class ProjectDashboardHeaderComponent implements OnInit, OnDestroy {
 
     @Input() obsProject: Observable<Project>;
     @Output() openProjectTag: EventEmitter<any> = new EventEmitter();
-    constructor(protected authorizationService: AuthorizationService, private modalService: NgbModal, private scanService: ScanService) {
+    constructor(public authorizationService: AuthorizationService, private modalService: NgbModal, private scanService: ScanService) {
     }
     ngOnDestroy(): void {
     }
