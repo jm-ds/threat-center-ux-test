@@ -993,10 +993,17 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
     }
 
-    // open project tags popup
-    openProjectTagDialog(content: any) {
-        this.modalService.open(content, { windowClass: 'md-class', centered: true });
-    }
+  /**
+   * Open Project tags modal
+   *
+   * @param content modal `TemplateRef`
+   */
+  onOpenProjectTagsModal(content: any) {
+    this.modalService.open(content, {
+      windowClass: 'md-class',
+      centered: true
+    });
+  }
 
     // remove project tag handler
     removeProjectTag(project: Project, tag: string) {

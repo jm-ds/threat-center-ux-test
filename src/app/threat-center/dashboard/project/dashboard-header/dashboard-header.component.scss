@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+}
+
+h3 {
+  margin-bottom: unset;
+}
+
+button,
+a {
+  padding: 0.25rem 0.5rem;
+}
+
+a.btn {
+  color: #00acc1;
+}

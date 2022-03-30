@@ -1,6 +1,6 @@
-<div *ngIf='obsProject | async as project; '>
-    <project-dashboard-header [obsProject]="obsProject" (openProjectTag)="openProjectTagDialog(projectTags)">
-    </project-dashboard-header>
+<ng-container *ngIf="obsProject | async as project">
+<project-dashboard-header [project]="project" (openProjectTagsModal)="onOpenProjectTagsModal(projectTags)"></project-dashboard-header>
+
     <project-dashboard-top-bar [obsProject]="obsProject" (openScanTab)="openScanTable($event)">
     </project-dashboard-top-bar>
 
@@ -293,4 +293,4 @@
             <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
         </div>
     </ng-template>
-</div>
+</ng-container>
