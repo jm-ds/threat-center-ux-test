@@ -12,12 +12,15 @@ import { AuthorizationService } from '@app/security/services';
 export class ProjectDashboardHeaderComponent {
   @Input() project: Project;
 
+  @Output() openIgnoreAssetsModal = new EventEmitter();
   @Output() openProjectTagsModal = new EventEmitter();
 
   constructor(public authorizationService: AuthorizationService) { }
 
   /** Ignore assets */
-  onIgnoreAssets() { }
+  onIgnoreAssets() {
+    this.openIgnoreAssetsModal.emit();
+  }
 
   /** Project tags */
   onProjectTags() {

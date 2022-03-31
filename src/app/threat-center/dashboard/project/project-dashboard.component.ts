@@ -994,6 +994,18 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
   /**
+   * Open Ignore assets modal
+   *
+   * @param content modal `TemplateRef`
+   */
+  onOpenIgnoreAssetsModal(content: any) {
+    this.modalService.open(content, {
+      windowClass: 'md-class',
+      centered: true
+    });
+  }
+
+  /**
    * Open Project tags modal
    *
    * @param content modal `TemplateRef`

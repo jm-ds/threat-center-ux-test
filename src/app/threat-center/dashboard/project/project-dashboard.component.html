@@ -1,5 +1,6 @@
 <ng-container *ngIf="obsProject | async as project">
-<project-dashboard-header [project]="project" (openProjectTagsModal)="onOpenProjectTagsModal(projectTags)"></project-dashboard-header>
+  <project-dashboard-header [project]="project" (openIgnoreAssetsModal)="onOpenIgnoreAssetsModal(ignoreAssets)"
+    (openProjectTagsModal)="onOpenProjectTagsModal(projectTags)"></project-dashboard-header>
 
     <project-dashboard-top-bar [obsProject]="obsProject" (openScanTab)="openScanTable($event)">
     </project-dashboard-top-bar>
@@ -142,32 +143,43 @@
             </ngb-tab>
         </ngb-tabset>
     </div>
-    <ng-template #projectTags let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Project Tags</h4>
-        </div>
-        <div class="modal-body">
-            <mat-chip-list #tagList>
-                <mat-chip *ngFor="let tag of project.tags" removable="true">
-                    {{tag}}
-                    <button type="button" class="btn btn-icon float-right" title="Remove Tag"
-                        (click)="removeProjectTag(project, tag)" style="color: #c9d0d5; padding: unset;">
-                        <i class="feather icon-x" style="font-weight: 800;"></i>
-                    </button>
-                </mat-chip>
-                <input placeholder="Project Tags..." class="next-dark form-control place-holder"
-                    [matChipInputFor]="tagList" [(ngModel)]="projectTagInputValue"
-                    (matChipInputTokenEnd)="addProjectTagHandler(project, $event)">
-            </mat-chip-list>
-            <div class="hint-block">hit "enter" to add tag then "Save Project Tags" to save your changes</div>
 
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" (click)="modal.close('click'); setProjectTags(project);">Save
-                Project Tags</button>
-            <button type="button" class="btn btn-outline-light" (click)="modal.close('click')">Close</button>
-        </div>
-    </ng-template>
+<ng-template #ignoreAssets let-modal>
+  <div class="modal-header">
+    <h4 id="modal-basic-title" class="modal-title">Ignore Assets</h4>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-light" (click)="modal.close()">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #projectTags let-modal>
+  <div class="modal-header">
+    <h4 id="modal-basic-title" class="modal-title">Project Tags</h4>
+  </div>
+
+  <div class="modal-body">
+    <mat-chip-list #tagList>
+      <mat-chip *ngFor="let tag of project.tags" removable="true">
+        {{ tag }}
+        <button class="btn btn-icon float-right" style="color: #c9d0d5; padding: unset;" title="Remove Tag" (click)="removeProjectTag(project, tag)">
+          <i class="feather icon-x" style="font-weight: 800"></i>
+        </button>
+      </mat-chip>
+
+      <input class="next-dark form-control place-holder" placeholder="Project Tags…" [matChipInputFor]="tagList" [(ngModel)]="projectTagInputValue" (matChipInputTokenEnd)="addProjectTagHandler(project, $event)">
+    </mat-chip-list>
+
+    <div class="hint-block mb-0">Hit 'Enter' to add tag then 'Save Project Tags' to save your changes</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" (click)="modal.close(); setProjectTags(project);">Save Project Tags</button>
+
+    <button class="btn btn-outline-light" (click)="modal.close()">Close</button>
+  </div>
+</ng-template>
 
     <ng-template #scanTable let-modal>
         <div class="modal-header">
