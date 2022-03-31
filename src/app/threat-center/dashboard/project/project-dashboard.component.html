@@ -149,6 +149,51 @@
     <h4 id="modal-basic-title" class="modal-title">Ignore Assets</h4>
   </div>
 
+  <div class="modal-body">
+    <perfect-scrollbar [style.max-height.px]="250">
+      <form [formGroup]="ignoreAssetsForm">
+        <ng-container formArrayName="settings">
+          <fieldset [formGroupName]="i"
+            *ngFor="let setting of ignoreAssetsForm.get('settings')['controls']; index as i; first as isFirst">
+            <input class="form-control" type="text" placeholder="Pattern" formControlName="pattern">
+
+            <select class="form-control custom-select" formControlName="level">
+              <option [value]="null" selected>- Level- </option>
+              <option [value]="level.value" *ngFor="let level of IgnoredAssetsLevel | keyvalue">{{ level.value }}</option>
+            </select>
+
+            <select class="form-control custom-select" formControlName="type">
+              <option [value]="null" selected>- Type -</option>
+              <option [value]="type.value" *ngFor="let type of IgnoredAssetsType | keyvalue">{{ type.value }}</option>
+            </select>
+
+            <ng-container *ngIf="isFirst; else editSetting">
+              <button type="button" class="btn btn-icon btn-success" [class.disabled]="setting.pristine" [disabled]="setting.pristine"
+                (click)="onAddIgnoreAssetsSetting()">
+                <i class="feather icon-plus-square"></i>
+              </button>
+
+              <button type="button" class="btn btn-icon btn-warning" [class.disabled]="setting.pristine" [disabled]="setting.pristine" (click)="onResetIgnoreAssetsSetting()">
+                <i class="feather icon-x-square"></i>
+              </button>
+            </ng-container>
+
+            <ng-template #editSetting>
+              <button type="button" class="btn btn-icon btn-primary" [class.disabled]="setting.pristine" [disabled]="setting.pristine"
+                (click)="onEditIgnoreAssetsSetting(i)">
+                <i class="feather icon-edit"></i>
+              </button>
+
+            <button type="button" class="btn btn-icon btn-danger" (click)="onRemoveIgnoreAssetsSetting(i)">
+                <i class="feather icon-trash-2"></i>
+              </button>
+            </ng-template>
+          </fieldset>
+        </ng-container>
+      </form>
+    </perfect-scrollbar>
+  </div>
+
   <div class="modal-footer">
     <button class="btn btn-outline-light" (click)="modal.close()">Close</button>
   </div>

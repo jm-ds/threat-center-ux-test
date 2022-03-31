@@ -1,35 +1,42 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Entity, Project } from "@app/models";
-import { AuthorizationService } from "@app/security/services";
-import { ChartHelperService } from "@app/services/core/chart-helper.service";
-import { CoreHelperService } from "@app/services/core/core-helper.service";
-import { ProjectBreadcumsService } from "@app/services/core/project-breadcums.service";
-import { UserPreferenceService } from "@app/services/core/user-preference.service";
-import { ProjectDashboardService } from "@app/services/project-dashboard.service";
-import { ProjectService } from "@app/services/project.service";
-import { ScanHelperService } from "@app/services/scan-helper.service";
-import { StateService } from "@app/services/state.service";
-import { ApexChartService } from "@app/theme/shared/components/chart/apex-chart/apex-chart.service";
-import { NgbActiveModal, NgbModal, NgbTabChangeEvent } from "@ng-bootstrap/ng-bootstrap";
-import { forkJoin, Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { ScanAssetsComponent } from "./scanasset";
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material';
+
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import * as _ from 'lodash';
-import { NextConfig } from "@app/app-config";
-import { ClipboardDialogComponent } from "./clipboard-dialog/clipboard-dialog.component";
-import { ProjectDashboardTopbarComponent } from "./dashboard-top-bar/top-bar.component";
-import { NewVulnerabilitiesCardComponent } from "./vulnerability/new-vulnerability/new-vulnerability-card.component";
-import { NewLicenseCardComponent } from "./license/new-license/new-license-card.component";
-import { NewComponentCardComponent } from "./component/new-component-card/new-component-card.component";
+import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
+
+import { Entity, Project } from '@app/models';
+import { Level, Type } from '@app/models/ignored-files';
+
+import { NextConfig } from '@app/app-config';
+
+import { AuthorizationService } from '@app/security/services';
+import { ChartHelperService } from '@app/services/core/chart-helper.service';
+import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { ProjectDashboardService } from '@app/services/project-dashboard.service';
+import { ProjectService } from '@app/services/project.service';
+import { ScanHelperService } from '@app/services/scan-helper.service';
+import { StateService } from '@app/services/state.service';
+
+import { ScanAssetsComponent } from './scanasset';
+import { ClipboardDialogComponent } from './clipboard-dialog/clipboard-dialog.component';
+import { ProjectDashboardTopbarComponent } from './dashboard-top-bar/top-bar.component';
+import { NewVulnerabilitiesCardComponent } from './vulnerability/new-vulnerability/new-vulnerability-card.component';
+import { NewLicenseCardComponent } from './license/new-license/new-license-card.component';
+import { NewComponentCardComponent } from './component/new-component-card/new-component-card.component';
 
 @Component({
     selector: 'app-project-dashboard',
     templateUrl: './project-dashboard.component.html',
     styleUrls: ['./project-dashboard.component.scss']
 })
-
 export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   VULNERABILITY_CHART_COLORS = ['#fb5b5b', '#ee8144', '#d2e032', '#de3fd8', '#58c7c0'];
 
@@ -164,7 +171,6 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     @ViewChild('componentCard', { static: false }) newComponentCard: NewComponentCardComponent;
     @ViewChild('assetContent', { static: false }) scanAssetComponent: ScanAssetsComponent;
 
-
     mostRecentScan;
     vulDonutChart;
     colorsClass = ['red', 'orange', 'yellow', 'lgt-blue', 'green', 'pink', 'white', 'blue'];
@@ -172,7 +178,12 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     isDisablePaggination: boolean = false;
     panelActiveId: string = 'chart-panel';
 
+  ignoreAssetsForm: FormGroup;
+  IgnoredAssetsLevel = Level;
+  IgnoredAssetsType = Type;
+
     constructor(
+      private fb: FormBuilder,
         // private apiService: ApiService,
         private projectService: ProjectService,
         private stateService: StateService,
@@ -993,12 +1004,85 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.scrollX = window.pageXOffset || document.documentElement.scrollLeft;
     }
 
+
+  /** Initialize Ignore assets form */
+  private initIgnoreAssetsForm() {
+    this.ignoreAssetsForm = this.fb.group({
+      settings: this.fb.array([
+        this.fb.group({
+          pattern: undefined,
+          level: undefined,
+          type: undefined
+        })
+      ])
+    });
+  }
+
+  /** Add a setting to ignore assets */
+  onAddIgnoreAssetsSetting() {
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+    const addSettingGroup = settingGroups.at(0);
+    const settingGroup = this.fb.group({ ...addSettingGroup.value });
+
+    settingGroups.insert(1, settingGroup);
+
+    addSettingGroup.reset();
+  }
+
+  /** Reset a setting to ignore assets */
+  onResetIgnoreAssetsSetting() {
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+    const addSettingGroup = settingGroups.at(0);
+
+    addSettingGroup.reset();
+  }
+
+  /**
+   * Edit an ignore assets setting
+   *
+   * @param index setting group index in the form
+   */
+  onEditIgnoreAssetsSetting(index: number) {
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+    const addSettingGroup = settingGroups.at(index);
+
+    /* Remove other groups duplicating the same level in reverse order
+       (starting from the last group and going to the 2nd group) */
+    for (let i = settingGroups.controls.length - 1; i > 0; i--) {
+      const group = settingGroups.at(i);
+
+      // Skip the editable group
+      if (group === addSettingGroup) {
+        continue;
+      }
+
+      if (group.value.level === addSettingGroup.value.level) {
+        settingGroups.removeAt(i);
+      }
+    }
+
+    addSettingGroup.markAsPristine();
+  }
+
+  /**
+   * Remove an ignore assets setting
+   *
+   * @param index setting index in the form
+   */
+  onRemoveIgnoreAssetsSetting(index: number) {
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+
+    settingGroups.removeAt(index);
+  }
+
   /**
    * Open Ignore assets modal
    *
    * @param content modal `TemplateRef`
    */
   onOpenIgnoreAssetsModal(content: any) {
+    this.initIgnoreAssetsForm();
+
     this.modalService.open(content, {
       windowClass: 'md-class',
       centered: true
