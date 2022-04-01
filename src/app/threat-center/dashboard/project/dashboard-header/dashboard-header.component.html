@@ -6,12 +6,7 @@
             </h3>
         </div>
         <div class="col-6 entity-btns" style="text-align:right">
-            <a>
-                <button type="submit" class="btn btn-outline-info ml-2" (click)="openProjectTagDialog(projectTags)">
-                    <i class="feather icon-filter"></i>Ignore Files
-                </button>
-            </a>
-            <a [routerLink]="['/dashboard/policy/list/', project.entityId, project.projectId]"
+            <a [routerLink]="['/dashboard/policy/list/',project.entityId, project.projectId]"
                 *ngIf="authorizationService.hasPermissions('PROJECT_POLICY_MANAGE')">
                 <button type="submit" class="btn btn-outline-info ml-2">
                     <i class="fas fa-feather-alt mr-1"></i>Policies
