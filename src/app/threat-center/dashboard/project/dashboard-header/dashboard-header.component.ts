@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { AuthorizationService } from "@app/security/services";
-import { Project } from "@app/threat-center/shared/models/types";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Observable } from "rxjs";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import {AuthorizationService} from "@app/security/services";
+import {Project} from "@app/threat-center/shared/models/types";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'project-dashboard-header',
@@ -14,7 +14,7 @@ export class ProjectDashboardHeaderComponent implements OnInit, OnDestroy {
 
     @Input() obsProject: Observable<Project>;
     @Output() openProjectTag: EventEmitter<any> = new EventEmitter();
-    constructor(protected authorizationService: AuthorizationService, private modalService: NgbModal) {
+    constructor(public authorizationService: AuthorizationService, private modalService: NgbModal) {
     }
     ngOnDestroy(): void {
     }
