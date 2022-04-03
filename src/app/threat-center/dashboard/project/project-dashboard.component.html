@@ -47,14 +47,14 @@
                       </div>
 
                       <div class="matrix-chart-legend">
-                        <p *ngFor="let data of licenseChartLabels; let i = index">
-                          <span [ngClass]="data.class" *ngIf="!!licenseChartData?.series[i] && licenseChartData?.series[i] !== 0">
-                            {{ data.label }}
-                          </span>
-                          <small *ngIf="!!licenseChartData?.series[i] && licenseChartData?.series[i] !== 0">
-                            {{ licenseChartData?.series[i] }}
-                          </small>
-                        </p>
+                        <ng-container *ngFor="let data of licenseChartLabels; index as i">
+                          <ng-container *ngIf="!!licenseChartData['series'][i] && licenseChartData['series'][i] !== 0">
+                            <p>
+                              <span [ngClass]="data.class">{{ data.label }}</span>
+                              <small>{{ licenseChartData['series'][i] }}</small>
+                            </p>
+                          </ng-container>
+                        </ng-container>
                       </div>
                     </div>
                 </div>
