@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material';
 
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
@@ -11,7 +11,7 @@ import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 
 import { Entity, Project } from '@app/models';
-import { Level, Type } from '@app/models/ignored-files';
+import { IgnoredFiles, Level, Type } from '@app/models/ignored-files';
 
 import { NextConfig } from '@app/app-config';
 
@@ -24,6 +24,7 @@ import { ProjectDashboardService } from '@app/services/project-dashboard.service
 import { ProjectService } from '@app/services/project.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
 import { StateService } from '@app/services/state.service';
+import { ScanService } from '@app/services/scan.service';
 
 import { ScanAssetsComponent } from './scanasset';
 import { ClipboardDialogComponent } from './clipboard-dialog/clipboard-dialog.component';
@@ -181,41 +182,47 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
   ignoreAssetsForm: FormGroup;
   IgnoredAssetsLevel = Level;
   IgnoredAssetsType = Type;
+  private ignoreAssetsSubscription: Subscription;
 
-    constructor(
-      private fb: FormBuilder,
-        // private apiService: ApiService,
-        private projectService: ProjectService,
-        private stateService: StateService,
-        private route: ActivatedRoute,
-        public apexEvent: ApexChartService,
-        private projectDashboardService: ProjectDashboardService,
-        private coreHelperService: CoreHelperService,
-        private scanHelperService: ScanHelperService,
-        private router: Router,
-        private modalService: NgbModal,
-        private userPreferenceService: UserPreferenceService,
-        private projectBreadcumsService: ProjectBreadcumsService,
-        private chartHelperService: ChartHelperService,
-        protected authorizationService: AuthorizationService) {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        // this.scanHelperService.isHighlightNewScanObservable$
-        //     .subscribe(x => {
-        //         this.isHighlightNewScan = x;
-        //         if (x == true) {
-        //             // get new scan and highlight it.
-        //             this.getProjectScanData();
-        //         }
-        //     });
+  constructor(
+    private fb: FormBuilder,
+    // private apiService: ApiService,
+    private projectService: ProjectService,
+    private stateService: StateService,
+    private route: ActivatedRoute,
+    public apexEvent: ApexChartService,
+    private projectDashboardService: ProjectDashboardService,
+    private coreHelperService: CoreHelperService,
+    private scanHelperService: ScanHelperService,
+    private router: Router,
+    private modalService: NgbModal,
+    private userPreferenceService: UserPreferenceService,
+    private projectBreadcumsService: ProjectBreadcumsService,
+    private chartHelperService: ChartHelperService,
+    protected authorizationService: AuthorizationService,
+    private scanService: ScanService
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-        if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras && !!this.router.getCurrentNavigation().extras.state) {
-            const state = this.router.getCurrentNavigation().extras.state;
+    // this.scanHelperService.isHighlightNewScanObservable$
+    //   .subscribe(x => {
+    //     this.isHighlightNewScan = x;
+    //     if (x === true) {
 
-            if (!!state && !!state["from"] && state["from"] === 'DIALOG') {
-                this.isScrollToTabs = true;
-            }
-        }
+    //       // Get new scan and highlight it.
+    //       this.getProjectScanData();
+    //     }
+    //   });
+
+    if (!!this.router.getCurrentNavigation() && !!this.router.getCurrentNavigation().extras
+      && !!this.router.getCurrentNavigation().extras.state) {
+      const state = this.router.getCurrentNavigation().extras.state;
+
+      if (!!state && !!state.from && state.from === 'DIALOG') {
+        this.isScrollToTabs = true;
+      }
     }
+  }
 
     ngOnDestroy(): void {
         this.scanHelperService.updateIsHighlightNewScan(false);
@@ -1006,15 +1013,35 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
 
   /** Initialize Ignore assets form */
-  private initIgnoreAssetsForm() {
+  private initIgnoreAssetsForm(ignoredAssets: IgnoredFiles[]) {
     this.ignoreAssetsForm = this.fb.group({
       settings: this.fb.array([
         this.fb.group({
+          objectID: undefined,
           pattern: undefined,
           level: undefined,
           type: undefined
         })
       ])
+    });
+
+    // Populate Ignore assets form with ignored assets
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+
+    ignoredAssets.forEach(({ objectId, pattern, level, type }: IgnoredFiles) => {
+      const value = {
+        objectID: objectId,
+        pattern,
+        level,
+        type
+      };
+
+      const settingGroup = this.fb.group({
+        ...value,
+        previousValue: { ...value }
+      });
+
+      settingGroups.insert(1, settingGroup);
     });
   }
 
@@ -1081,12 +1108,24 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
    * @param content modal `TemplateRef`
    */
   onOpenIgnoreAssetsModal(content: any) {
-    this.initIgnoreAssetsForm();
+    if (this.ignoreAssetsSubscription) {
+      this.ignoreAssetsSubscription.unsubscribe();
+    }
 
-    this.modalService.open(content, {
-      windowClass: 'md-class',
-      centered: true
-    });
+    const entityID = this.route.snapshot.paramMap.get('entityId');
+
+    this.ignoreAssetsSubscription = this.scanService
+      .getIgnoredFiles(this.projectId, entityID)
+      .subscribe(({ data }) => {
+        const ignoredAssets = data['getIgnoredFiles'] as IgnoredFiles[];
+
+        this.initIgnoreAssetsForm(ignoredAssets);
+
+        this.modalService.open(content, {
+          windowClass: 'md-class',
+          centered: true
+        });
+      });
   }
 
   /**
