@@ -178,9 +178,17 @@ export class NewLicenseCardComponent implements OnInit {
         return val
     }
 
-    onClickAnnotate() {
-        this.annotateClick.emit();
+  onAnnotate(event: MouseEvent, licenseID: string, ignore: boolean) {
+    event.stopImmediatePropagation();
+
+    console.log('licenseID: ' + licenseID + ', ignore=' + ignore);
+
+    if (ignore) {
+      // ignore
+    } else {
+      // this.annotateClick.emit(licenseID);
     }
+  }
 
     isUserSCMAccountExists() {
         return !!this.authService.currentUser.repositoryAccounts && !!this.authService.currentUser.repositoryAccounts
