@@ -17,6 +17,7 @@ import { ProjectService } from '@app/services/project.service';
 import { ScanComponentService } from '@app/services/scan-component.service';
 import { VulnerableCodeMappingService } from '@app/services/vulncode-mapping.service';
 import { StateService } from '@app/services/state.service';
+import { MESSAGES } from '@app/messages/messages';
 
 import { TxComponent } from '@app/models';
 
@@ -54,6 +55,7 @@ export class ComponentDetailComponent implements OnInit {
   scanId: string = "";
   licenseId: string = "";
 
+  MESSAGES = MESSAGES;
   defaultPageSize = 25;
   pageIndex = 0;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
