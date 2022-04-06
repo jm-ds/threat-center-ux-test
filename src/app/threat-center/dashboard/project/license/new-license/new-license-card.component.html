@@ -173,13 +173,13 @@
         <small>FSF Libre</small> {{license.node?.isFsfLibre ? 'YES' :
         'NO'}}
     </div>
-    <div class="info-cols flex-column align-items-start">
-        <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-            <a class="data-cta ingore-cta">Ignore</a>
-            <a class="data-cta ml-2"
-                (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
-        </div>
+
+  <div class="info-cols flex-column align-items-start">
+    <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+      <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true)">Ignore</button>
+      <button class="btn data-cta ml-2" (click)="onAnnotate($event, license.node?.licenseId)">Annotate</button>
     </div>
+  </div>
 
     <!-- <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
         <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
