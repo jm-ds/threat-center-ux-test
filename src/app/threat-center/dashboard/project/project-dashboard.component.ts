@@ -1047,13 +1047,74 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
   /** Add a setting to ignore assets */
   onAddIgnoreAssetsSetting() {
+    if (this.ignoreAssetsSubscription) {
+      this.ignoreAssetsSubscription.unsubscribe();
+    }
+
     const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
     const addSettingGroup = settingGroups.at(0);
-    const settingGroup = this.fb.group({ ...addSettingGroup.value });
 
-    settingGroups.insert(1, settingGroup);
+    const ignoredAsset = new IgnoredFiles();
 
-    addSettingGroup.reset();
+    const { pattern, level, type } = addSettingGroup.value;
+
+    let objectID: string;
+
+    switch (level) {
+      case (Level.PROJECT):
+        objectID = this.projectId;
+
+        break;
+
+      case (Level.ENTITY):
+        const entityID = this.route.snapshot.paramMap.get('entityId');
+
+        objectID = entityID;
+
+        break;
+
+      case (Level.ORGANIZATION):
+      default:
+        objectID = '';
+    }
+
+    ignoredAsset.objectId = objectID;
+    ignoredAsset.pattern = pattern;
+    ignoredAsset.level = level;
+    ignoredAsset.type = type;
+
+    this.ignoreAssetsSubscription = this.scanService
+      .saveIgnoredFiles(ignoredAsset)
+      .subscribe(() => {
+        const value = { objectID, pattern, level, type };
+
+        const settingGroup = this.fb.group({
+          ...value,
+          previousValue: { ...value }
+        });
+
+        // Remove duplicating group
+        const duplicateGroupIndex = settingGroups.controls.findIndex(group => {
+          // Skip the add group
+          if (group === addSettingGroup) {
+            return false;
+          }
+
+          // Matches all fields
+          if (group.value.objectID === objectID && group.value.pattern === pattern && group.value.level === level
+            && group.value.type === type) {
+            return true;
+          }
+        });
+
+        if (duplicateGroupIndex !== -1) {
+          settingGroups.removeAt(duplicateGroupIndex);
+        }
+
+        settingGroups.insert(1, settingGroup);
+
+        addSettingGroup.reset();
+      });
   }
 
   /** Reset a setting to ignore assets */
