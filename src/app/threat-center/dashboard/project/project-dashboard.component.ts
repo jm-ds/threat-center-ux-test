@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material';
 
 import { forkJoin, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -1045,6 +1045,51 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     });
   }
 
+  /**
+   * Remove ignore asset group duplicate
+   *
+   * @param settingGroup ignore asset group
+   */
+  private surppressIgnoreAssetDuplicate(settingGroup: FormGroup) {
+    const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+
+    // Remove duplicating group
+    const duplicateGroupIndex = settingGroups.controls.findIndex(group => {
+      // Skip the add group
+      if (group === settingGroup) {
+        return false;
+      }
+
+      const { objectID, pattern, level, type } = settingGroup.value;
+
+      // Match all fields
+      if (group.value.objectID === objectID && group.value.pattern === pattern && group.value.level === level
+        && group.value.type === type) {
+        return true;
+      }
+    });
+
+    if (duplicateGroupIndex !== -1) {
+      settingGroups.removeAt(duplicateGroupIndex);
+    }
+  }
+
+  private getIgnoredAssetObjectID(level: Level): string {
+    switch (level) {
+      case (Level.PROJECT):
+        return this.projectId;
+
+      case (Level.ENTITY):
+        const entityID = this.route.snapshot.paramMap.get('entityId');
+
+        return entityID;
+
+      case (Level.ORGANIZATION):
+      default:
+        return '';
+    }
+  }
+
   /** Add a setting to ignore assets */
   onAddIgnoreAssetsSetting() {
     if (this.ignoreAssetsSubscription) {
@@ -1052,31 +1097,13 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
-    const addSettingGroup = settingGroups.at(0);
+    const addSettingGroup = settingGroups.at(0) as FormGroup;
 
     const ignoredAsset = new IgnoredFiles();
 
     const { pattern, level, type } = addSettingGroup.value;
 
-    let objectID: string;
-
-    switch (level) {
-      case (Level.PROJECT):
-        objectID = this.projectId;
-
-        break;
-
-      case (Level.ENTITY):
-        const entityID = this.route.snapshot.paramMap.get('entityId');
-
-        objectID = entityID;
-
-        break;
-
-      case (Level.ORGANIZATION):
-      default:
-        objectID = '';
-    }
+    const objectID = this.getIgnoredAssetObjectID(level);
 
     ignoredAsset.objectId = objectID;
     ignoredAsset.pattern = pattern;
@@ -1093,23 +1120,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
           previousValue: { ...value }
         });
 
-        // Remove duplicating group
-        const duplicateGroupIndex = settingGroups.controls.findIndex(group => {
-          // Skip the add group
-          if (group === addSettingGroup) {
-            return false;
-          }
-
-          // Matches all fields
-          if (group.value.objectID === objectID && group.value.pattern === pattern && group.value.level === level
-            && group.value.type === type) {
-            return true;
-          }
-        });
-
-        if (duplicateGroupIndex !== -1) {
-          settingGroups.removeAt(duplicateGroupIndex);
-        }
+        this.surppressIgnoreAssetDuplicate(settingGroup);
 
         settingGroups.insert(1, settingGroup);
 
@@ -1132,24 +1143,38 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
    */
   onEditIgnoreAssetsSetting(index: number) {
     const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
-    const addSettingGroup = settingGroups.at(index);
+    const editSettingGroup = settingGroups.at(index) as FormGroup;
 
-    /* Remove other groups duplicating the same level in reverse order
-       (starting from the last group and going to the 2nd group) */
-    for (let i = settingGroups.controls.length - 1; i > 0; i--) {
-      const group = settingGroups.at(i);
+    const previousIgnoredAsset = new IgnoredFiles();
 
-      // Skip the editable group
-      if (group === addSettingGroup) {
-        continue;
-      }
+    const { pattern, level, type, previousValue } = editSettingGroup.value;
 
-      if (group.value.level === addSettingGroup.value.level) {
-        settingGroups.removeAt(i);
-      }
-    }
+    previousIgnoredAsset.objectId = previousValue.objectID;
+    previousIgnoredAsset.pattern = previousValue.pattern;
+    previousIgnoredAsset.level = previousValue.level;
+    previousIgnoredAsset.type = previousValue.type;
 
-    addSettingGroup.markAsPristine();
+    const ignoredAsset = new IgnoredFiles();
+
+    const objectID = this.getIgnoredAssetObjectID(level);
+
+    ignoredAsset.objectId = objectID;
+    ignoredAsset.pattern = pattern;
+    ignoredAsset.level = level;
+    ignoredAsset.type = type;
+
+    this.scanService
+      .removeIgnoredFiles(previousIgnoredAsset)
+      .pipe(
+        mergeMap(() => this.scanService.saveIgnoredFiles(ignoredAsset))
+      )
+      .subscribe(() => {
+        editSettingGroup.value.previousValue = { objectID, pattern, level, type };
+
+        this.surppressIgnoreAssetDuplicate(editSettingGroup);
+
+        editSettingGroup.markAsPristine();
+      });
   }
 
   /**
