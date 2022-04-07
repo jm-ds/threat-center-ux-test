@@ -311,16 +311,19 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         this.assetChartData['labels'] = this.assetChartLabels.map(({ label }) => label);
 
         this.obsProject.subscribe(res => {
-            if (res && res.scans.edges.length >= 1) {
-                let mostRecentScan;
-                const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-                if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
-                    mostRecentScan = res.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
-                } else {
-                    mostRecentScan = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
-                }
-                this.assignSericesToDonutChart(mostRecentScan);
+          if (res && res.scans.edges.length >= 1) {
+            const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule('Project');
+
+            if (lastScanSelected && lastScanSelected.lastSelectedScanId) {
+              this.mostRecentScan = res.scans.edges.find(edge => edge.node.scanId === lastScanSelected.lastSelectedScanId);
             }
+
+            if (!this.mostRecentScan) {
+              this.mostRecentScan = res.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
+            }
+
+            this.assignSericesToDonutChart(this.mostRecentScan);
+          }
         });
     }
 
@@ -374,11 +377,17 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
             //Taking sacn list to show in scan tab
             this.scanList = project.scans.edges;
             this.projectDetails = project;
-            const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-            if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
-                this.stateService.selectedScan = project.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
-            } else {
-                this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
+
+            const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule('Project');
+
+            if (lastScanSelected && lastScanSelected.lastSelectedScanId) {
+              this.stateService.selectedScan = project.scans.edges.find(
+                (edge: any) => edge.node.scanId === lastScanSelected.lastSelectedScanId
+              );
+            }
+
+            if (!this.stateService.selectedScan) {
+              this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
             }
 
             if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
