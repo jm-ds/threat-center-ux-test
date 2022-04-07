@@ -30,21 +30,25 @@ export class ProjectDashboardTopbarComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
     }
 
-    initMostRecentScan(val: Observable<Project>) {
-        if (val) {
-            val.subscribe(res => {
-                this.totalScanCount = res.scans.totalCount;
-                if (res && res.scans.edges.length >= 1) {
-                    const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-                    if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
-                        this.mostRecentScan = res.scans.edges.find(d => { return d.node.scanId === lastScanSelected.lastSelectedScanId })
-                    } else {
-                        this.mostRecentScan = res.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b));
-                    }
-                }
-            });
+  initMostRecentScan(val: Observable<Project>) {
+    if (val) {
+      val.subscribe(res => {
+        this.totalScanCount = res.scans.totalCount;
+
+        if (res && res.scans.edges.length >= 1) {
+          const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule('Project');
+
+          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+            this.mostRecentScan = res.scans.edges.find(edge =>  edge.node.scanId === lastScanSelected.lastSelectedScanId);
+          }
+
+          if (!this.mostRecentScan) {
+            this.mostRecentScan = res.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
+          }
         }
+      });
     }
+  }
 
     updateData(scan) {
         this.mostRecentScan = scan;
