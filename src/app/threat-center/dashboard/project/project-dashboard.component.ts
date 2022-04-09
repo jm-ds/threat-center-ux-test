@@ -1184,8 +1184,22 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
    */
   onRemoveIgnoreAssetsSetting(index: number) {
     const settingGroups = this.ignoreAssetsForm.get('settings') as FormArray;
+    const removeSettingGroup = settingGroups.at(index);
 
-    settingGroups.removeAt(index);
+    const previousIgnoredAsset = new IgnoredFiles();
+
+    const { objectID, pattern, level, type } = removeSettingGroup.value.previousValue;
+
+    previousIgnoredAsset.objectId = objectID;
+    previousIgnoredAsset.pattern = pattern;
+    previousIgnoredAsset.level = level;
+    previousIgnoredAsset.type = type;
+
+    this.scanService
+      .removeIgnoredFiles(previousIgnoredAsset)
+      .subscribe(() => {
+        settingGroups.removeAt(index);
+      });
   }
 
   /**
