@@ -15,17 +15,7 @@ import { ProjectService } from '@app/services/project.service';
 @Component({
   selector: 'app-scanassets',
   templateUrl: './scanassets.component.html',
-  styles: [
-    `.text-primary:hover{
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .back-link{
-      position: relative;
-      top: 35px;
-    }
-    `
-  ]
+  styleUrls: ['./scanassets.component.scss']
 })
 
 export class ScanAssetsComponent implements OnInit, OnDestroy {
