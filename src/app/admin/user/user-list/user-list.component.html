@@ -56,7 +56,7 @@
                         <div class="overlay-edit">
                             <button *ngIf="authorizationService.hasPermissions('USER_EDIT')"
                              routerLink="/admin/user/edit/{{user.username}}" type="button" class="btn btn-icon btn-success"><i class="feather icon-edit"></i></button>
-                            <button *ngIf="authorizationService.hasPermissions('USER_REMOVE')" type="button" class="btn btn-icon btn-danger disabled"><i class="feather icon-trash-2"></i></button>
+                            <button *ngIf="(authorizationService.hasPermissions('USER_REMOVE') && authorizationService.user.username !== user.username)"  type="button" class="btn btn-icon btn-danger disabled"><i class="feather icon-trash-2"></i></button>
                         </div>
                     </td>
                 </tr>
