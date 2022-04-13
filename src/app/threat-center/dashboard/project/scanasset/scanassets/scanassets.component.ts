@@ -168,16 +168,17 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Ignore specific asset path
+   * Ignore/unignore specific asset path
    *
    * @param event mouse event
    * @param asset scan asset
+   * @param ignore whether ignore or unignore asset
    */
   onIgnoreAsset(event: MouseEvent, {
     name,
     projectId: objectID,
     workspacePath
-  }: ScanAsset) {
+  }: ScanAsset, ignore: boolean) {
     event.stopPropagation();
 
     const pattern = workspacePath || name;
@@ -189,9 +190,11 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     ignoredAsset.level = Level.PROJECT;
     ignoredAsset.type = Type.PATHS;
 
-    this.scanService
-      .saveIgnoredFiles(ignoredAsset)
-      .subscribe();
+    const ignoredFiles$ = ignore
+      ? this.scanService.saveIgnoredFiles(ignoredAsset)
+      : this.scanService.removeIgnoredFiles(ignoredAsset);
+
+    ignoredFiles$.subscribe();
   }
 
   reload() {

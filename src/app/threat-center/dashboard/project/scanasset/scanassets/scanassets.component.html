@@ -176,8 +176,8 @@
 
                   <div class="action-menu-popup">
                     <div class="action-menu">
-                      <button class="btn btn-outline" (click)="onIgnoreAsset($event, asset.node)">Ignore</button>
-                      <button class="btn btn-outline">Unignore</button>
+                      <button class="btn btn-outline" (click)="onIgnoreAsset($event, asset.node, true)">Ignore</button>
+                      <button class="btn btn-outline" (click)="onIgnoreAsset($event, asset.node, false)">Unignore</button>
                     </div>
                   </div>
                 </div>
