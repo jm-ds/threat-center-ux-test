@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
-import {LicenseAssetAttribution, Scan} from '@app/models';
+import { LicenseAssetAttribution, Scan } from '@app/models';
 
 import { NextConfig } from '@app/app-config';
 
