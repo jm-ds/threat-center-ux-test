@@ -177,7 +177,7 @@ export class NewLicenseCardComponent implements OnInit {
         let val = '';
         switch (level) {
             case 'LEVEL_1':
-                val = 'Repository license';
+              val = 'Repository license';
                 break;
             case 'LEVEL_2':
                 val = 'Context relevant license';
