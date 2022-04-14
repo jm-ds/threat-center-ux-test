@@ -175,19 +175,20 @@
     </div>
 
     <div class="info-cols flex-column align-items-start">
-        <div [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-            <div class="action-btns multiple-btn" *ngIf="license.node?.licenseAssetAttribution">
-                {{license.node?.licenseAssetAttribution.attributionStatus}}
-            </div>
-            <div class="action-btns multiple-btn" *ngIf="!license.node?.licenseAssetAttribution">
-                <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
-                    Ignore
-                </button>
-                <button class="btn data-cta ml-2" (click)="onAnnotate($event, license.node?.licenseId, false, attributeProcessExecuteMessageModel)">
-                    Annotate
-                </button>
-            </div>
+      <div [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+        <div class="action-btns multiple-btn" *ngIf="license.node?.licenseAssetAttribution">
+          {{ license.node?.licenseAssetAttribution.attributionStatus }}
+         </div>
+         
+         <div class="action-btns multiple-btn" *ngIf="!license.node?.licenseAssetAttribution">
+          <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
+            Ignore
+          </button>
+          <button class="btn data-cta ml-2" (click)="onAnnotate($event, license.node?.licenseId, false, attributeProcessExecuteMessageModel)">
+            Annotate
+          </button>
         </div>
+      </div>
     </div>
     <app-ui-modal #attributeProcessExecuteMessageModel>
         <div class="app-modal-header">
