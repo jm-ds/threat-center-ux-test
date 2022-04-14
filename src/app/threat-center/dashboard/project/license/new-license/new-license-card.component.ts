@@ -40,8 +40,8 @@ export class NewLicenseCardComponent implements OnInit {
     totalLicenses: number = 0;
     pageInfo: any;
     constructor(
-        private alertService: AlertService,
-        private projectService: ProjectService,
+      private alertService: AlertService,
+      private projectService: ProjectService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
