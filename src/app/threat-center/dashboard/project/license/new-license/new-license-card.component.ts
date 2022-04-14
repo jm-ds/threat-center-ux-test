@@ -191,15 +191,19 @@ export class NewLicenseCardComponent implements OnInit {
   onAnnotate(event: MouseEvent, licenseID: string, ignore: boolean, attributeProcessExecuteMessageModel) {
     event.stopImmediatePropagation();
     attributeProcessExecuteMessageModel.show();
-    this.projectService.attributeAssetsByLicense(this.scanId, licenseID, ignore).subscribe(result => {
-        attributeProcessExecuteMessageModel.hide();
-        // example: result.data.attributeAssetsByLicense.attributionStatus
-        const attribution: LicenseAssetAttribution = result.data['attributeAssetsByLicense'];
-        this.alertService.alertBox('Attribution is successful: ' + attribution.attributionStatus, 'License attribution', 'success');
-    }, (error) => {
-        attributeProcessExecuteMessageModel.hide();
-        this.alertService.alertBox('Attribution error', 'License attribution', 'error');
-    });
+    this.projectService
+      .attributeAssetsByLicense(this.scanId, licenseID, ignore)
+      .subscribe({
+        next: result => {
+          attributeProcessExecuteMessageModel.hide();
+          // example: result.data.attributeAssetsByLicense.attributionStatus
+          const attribution: LicenseAssetAttribution = result.data['attributeAssetsByLicense'];
+          this.alertService.alertBox('Attribution is successful: ' + attribution.attributionStatus, 'License attribution', 'success');
+        },
+       error: error => {
+         attributeProcessExecuteMessageModel.hide();
+         this.alertService.alertBox('Attribution error', 'License attribution', 'error');
+      });
   }
 
     attributeProcessExecutionModel(modelContent) {
