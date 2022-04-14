@@ -105,8 +105,14 @@ export class NewLicenseCardComponent implements OnInit {
 
     // Loading Licenses data after paggination for scan tab.
     loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
-        const licenses = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(),
-            first, last, endCursor, startCursor)
+      const licenses = this.projectService.getScanLicenses(
+        this.scanId,
+        this.makeFilterMapForService(),
+        first,
+        last,
+        endCursor,
+        startCursor
+      )
             .pipe(map(result => result.data.scan));
 
         licenses.subscribe(license => {
