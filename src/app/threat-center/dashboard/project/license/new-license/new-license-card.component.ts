@@ -14,7 +14,7 @@ import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 import { AuthenticationService } from '@app/security/services';
-import {AlertService} from "@app/services/core/alert.service";
+import { AlertService } from "@app/services/core/alert.service";
 
 @Component({
     selector: 'app-license-new-card',
