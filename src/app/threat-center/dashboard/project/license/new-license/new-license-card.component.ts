@@ -207,22 +207,23 @@ export class NewLicenseCardComponent implements OnInit {
   }
 
     attributeProcessExecutionModel(modelContent) {
-        this.alertService.alertConfirm(
-            'Do you want to close dialog?',
-            'You can close modal, attribution process will complete. But if you leave this page you won’t get ' +
-            'completion notification message.',
-            'question',
-            true,
-            true,
-            '#4680ff',
-            '#6c757d',
-            'Yes',
-            'No')
-            .then((result) => {
-                if (result.value) {
-                    modelContent.hide();
-                }
-            });
+      this.alertService.alertConfirm(
+        'Do you want to close dialog?',
+        'You can close modal, attribution process will complete. But if you leave this page you won’t get ' +
+        'completion notification message.',
+        'question',
+        true,
+        true,
+        '#4680ff',
+        '#6c757d',
+        'Yes',
+        'No'
+       )
+       .then(result => {
+         if (result.value) {
+           modelContent.hide();
+         }
+       });
     }
 
     isUserSCMAccountExists() {
