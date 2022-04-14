@@ -174,29 +174,31 @@
         'NO'}}
     </div>
 
-  <div class="info-cols flex-column align-items-start">
-    <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-      <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true)">Ignore</button>
-      <button class="btn data-cta ml-2" (click)="onAnnotate($event, license.node?.licenseId)">Annotate</button>
-    </div>
-  </div>
-
-    <!-- <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
-        <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
-            <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-                <a class="data-cta ingore-cta">Ignore</a>
-                <a class="data-cta ml-2"
-                    (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
+    <div class="info-cols flex-column align-items-start">
+        <div [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+            <div class="action-btns multiple-btn" *ngIf="license.node?.licenseAssetAttribution">
+                {{license.node?.licenseAssetAttribution.attributionStatus}}
+            </div>
+            <div class="action-btns multiple-btn" *ngIf="!license.node?.licenseAssetAttribution">
+                <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
+                    Ignore
+                </button>
+                <button class="btn data-cta ml-2" (click)="onAnnotate($event, license.node?.licenseId, false, attributeProcessExecuteMessageModel)">
+                    Annotate
+                </button>
             </div>
         </div>
     </div>
-    <ng-template #licnseSignleBtn>
-        <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
-            <div class="action-btns">
-                <a class="data-cta ingore-cta">Ignore</a>
-                <a class="data-cta ml-2"
-                    (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
-            </div>
+    <app-ui-modal #attributeProcessExecuteMessageModel>
+        <div class="app-modal-header">
+            <h5 class="modal-title">Attribution Process Executing</h5>
+            <!-- <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="attributionModal.hide()"><span aria-hidden="true">&times;</span></button> -->
         </div>
-    </ng-template> -->
+        <div class="app-modal-body">
+            <p>Attribution process executing. Please wait few seconds.</p>
+        </div>
+        <div class="app-modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributeProcessExecutionModel(attributeProcessExecuteMessageModel)">Close</button>
+        </div>
+    </app-ui-modal>
 </ng-template>
