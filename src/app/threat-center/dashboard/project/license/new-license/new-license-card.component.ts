@@ -189,7 +189,7 @@ export class NewLicenseCardComponent implements OnInit {
     }
 
   onAnnotate(event: MouseEvent, licenseID: string, ignore: boolean, attributeProcessExecuteMessageModel) {
-    event.stopImmediatePropagation();
+    event.stopPropagation();
     attributeProcessExecuteMessageModel.show();
     this.projectService
       .attributeAssetsByLicense(this.scanId, licenseID, ignore)
