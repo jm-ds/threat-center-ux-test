@@ -180,7 +180,7 @@ export class NewLicenseCardComponent implements OnInit {
               val = 'Repository license';
                 break;
             case 'LEVEL_2':
-                val = 'Context relevant license';
+              val = 'Context relevant license';
                 break;
             default:
                 break;
