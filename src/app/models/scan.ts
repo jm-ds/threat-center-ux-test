@@ -106,10 +106,10 @@ export class ScanOpenSourceProject {
 }
 
 export class LicenseAssetAttribution {
-    attributionStatus: string;
-    attributedDate: Date;
-    attributedBy: string;
-    attributedComment: string;
+  attributionStatus: string;
+  attributedDate: Date;
+  attributedBy: string;
+  attributedComment: string;
 }
 
 export class GithubAccount {
