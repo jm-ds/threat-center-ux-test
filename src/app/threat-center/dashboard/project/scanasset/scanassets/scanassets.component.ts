@@ -3,35 +3,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Scan, ScanOpenSourceProject } from '@app/models';
 
+import { Scan, ScanAsset, ScanOpenSourceProject } from '@app/models';
 import { MESSAGES } from '@app/messages/messages';
+import { IgnoredFiles, Level, Type } from '@app/models/ignored-files';
 
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { SaveFilterStateService } from '@app/services/core/save-filter-state.service';
 import { ProjectService } from '@app/services/project.service';
+import { ScanService } from '@app/services/scan.service';
 
 @Component({
   selector: 'app-scanassets',
   templateUrl: './scanassets.component.html',
-  styles: [
-    `.text-primary:hover{
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .back-link{
-      position: relative;
-      top: 35px;
-    }
-    `
-  ]
+  styleUrls: ['./scanassets.component.scss']
 })
 
 export class ScanAssetsComponent implements OnInit, OnDestroy {
 
   @Input() scanId;
   @Input() obsScan: Observable<Scan>;
+
   @Output() isAssetStory = new EventEmitter<boolean>();
 
   columns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
@@ -47,13 +40,16 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   story = [];
   MESSAGES = MESSAGES;
   isDisablePaggination: boolean = false;
+
   constructor(
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,
     private userPreferenceService: UserPreferenceService,
-    private saveFilterStateService: SaveFilterStateService) { }
+    private saveFilterStateService: SaveFilterStateService,
+    private scanService: ScanService
+  ) { }
 
   ngOnDestroy(): void {
     this.saveFilterStateService.saveFilter(this.columnsFilter);
@@ -169,6 +165,36 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
         this.router.navigate([decodeURIComponent(url)]);
       }
     }
+  }
+
+  /**
+   * Ignore/unignore specific asset path
+   *
+   * @param event mouse event
+   * @param asset scan asset
+   * @param ignore whether ignore or unignore asset
+   */
+  onIgnoreAsset(event: MouseEvent, {
+    name,
+    projectId: objectID,
+    workspacePath
+  }: ScanAsset, ignore: boolean) {
+    event.stopPropagation();
+
+    const pattern = workspacePath || name;
+
+    const ignoredAsset = new IgnoredFiles();
+
+    ignoredAsset.objectId = objectID;
+    ignoredAsset.pattern = pattern;
+    ignoredAsset.level = Level.PROJECT;
+    ignoredAsset.type = Type.PATHS;
+
+    const ignoredFiles$ = ignore
+      ? this.scanService.saveIgnoredFiles(ignoredAsset)
+      : this.scanService.removeIgnoredFiles(ignoredAsset);
+
+    ignoredFiles$.subscribe();
   }
 
   reload() {

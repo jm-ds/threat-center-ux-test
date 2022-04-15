@@ -1,23 +1,21 @@
-<div *ngIf='obsProject | async as project; '>
-    <div class="row">
-        <div class="col-6">
-            <h3 class="entity-ttl"> <a [routerLink]="['/dashboard/entity',project.entityId]">
-                    <i class="fas fa-level-up-alt mr-1"></i> Team Dashboard</a> / {{project.name}}
-            </h3>
-        </div>
-        <div class="col-6 entity-btns" style="text-align:right">
-            <a [routerLink]="['/dashboard/policy/list/',project.entityId, project.projectId]"
-                *ngIf="authorizationService.hasPermissions('PROJECT_POLICY_MANAGE')">
-                <button type="submit" class="btn btn-outline-info ml-2">
-                    <i class="fas fa-feather-alt mr-1"></i>Policies
-                </button>
-            </a>
-            <a>
-                <button type="submit" class="btn btn-outline-info ml-2" (click)="openProjectTagDialog(projectTags)"
-                    *ngIf="authorizationService.hasPermissions('PROJECT_EDIT')">
-                    <i class="fas fa-hashtag mr-1"></i>Project Tags
-                </button>
-            </a>
-        </div>
-    </div>
+<h3>
+  <a [routerLink]="['/dashboard/entity', project.entityId]">
+    <i class="fas fa-level-up-alt mr-1"></i> Team Dashboard
+  </a> / {{ project.name }}
+</h3>
+
+<div class="entity-buttons">
+  <button class="btn btn-outline-info ml-2" (click)="onIgnoreAssets()">
+    <i class="feather icon-filter ml-1"></i> Ignore Assets
+  </button>
+
+  <a class="btn btn-outline-info ml-2" [routerLink]="['/dashboard/policy/list/', project.entityId, project.projectId]"
+    *ngIf="authorizationService.hasPermissions('PROJECT_POLICY_MANAGE')">
+    <i class="fas fa-feather-alt mr-1"></i> Policies
+  </a>
+
+  <button class="btn btn-outline-info ml-2" (click)="onProjectTags()"
+    *ngIf="authorizationService.hasPermissions('PROJECT_EDIT')">
+    <i class="fas fa-hashtag mr-1"></i> Project Tags
+  </button>
 </div>

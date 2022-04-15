@@ -12,10 +12,19 @@
     }
 }
 
-
 .btn-xs {
     padding: 0.2rem 0.5rem 0.1rem 0.5rem;
     font-size: 0.875rem;
     line-height: 1.2;
     border-radius: 1px;
+}
+
+.btn-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 15px;
 }

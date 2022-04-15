@@ -13,6 +13,7 @@ export class ScanAsset {
     status: string;
     scanAssetType: string;
     content: string;
+    projectId: string;
     matchRepository: Repository;
     matches: ScanAssetMatch[];
     embeddedAssets: any;

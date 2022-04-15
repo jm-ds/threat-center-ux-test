@@ -1,30 +1,29 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
-import {AuthorizationService} from "@app/security/services";
-import {Project} from "@app/threat-center/shared/models/types";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Observable} from "rxjs";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { Project } from '@app/threat-center/shared/models/types';
+
+import { AuthorizationService } from '@app/security/services';
 
 @Component({
-    selector: 'project-dashboard-header',
-    templateUrl: './dashboard-header.component.html',
-    styleUrls: ['./dashboard-header.component.scss']
+  selector: 'project-dashboard-header',
+  templateUrl: './dashboard-header.component.html',
+  styleUrls: ['./dashboard-header.component.scss']
 })
+export class ProjectDashboardHeaderComponent {
+  @Input() project: Project;
 
-export class ProjectDashboardHeaderComponent implements OnInit, OnDestroy {
+  @Output() openIgnoreAssetsModal = new EventEmitter();
+  @Output() openProjectTagsModal = new EventEmitter();
 
-    @Input() obsProject: Observable<Project>;
-    @Output() openProjectTag: EventEmitter<any> = new EventEmitter();
-    constructor(public authorizationService: AuthorizationService, private modalService: NgbModal) {
-    }
-    ngOnDestroy(): void {
-    }
-    ngOnInit(): void {
-    }
+  constructor(public authorizationService: AuthorizationService) { }
 
-    // open project tags popup
-    openProjectTagDialog(content: any) {
-        this.openProjectTag.emit();
-    }
+  /** Ignore assets */
+  onIgnoreAssets() {
+    this.openIgnoreAssetsModal.emit();
+  }
 
-
+  /** Project tags */
+  onProjectTags() {
+    this.openProjectTagsModal.emit();
+  }
 }

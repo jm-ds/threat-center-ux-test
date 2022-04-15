@@ -107,16 +107,21 @@
             <tr [ngStyle]="{'cursor': scanAsset.node.scanAssetType == 'DIR' || scanAsset.node.matchCount > 0 ? 'pointer' : 'not-allowed' }"
                 *ngIf="scanAsset.node.status === 'ACCEPTED' || scanAsset.node.scanAssetType === 'DIR'"
             (click)="gotoDetails(scanAsset)">
-              <td>
+              <td class="name">
                 <i *ngIf="scanAsset.node.scanAssetType === 'DIR'" class="fas fa-folder"></i>
                 <i *ngIf="scanAsset.node.scanAssetType != 'DIR'" class="far fa-file"></i>
-                &nbsp;&nbsp;{{getName(scanAsset.node.name)}}
+                <span class="asset-name">{{ getName(scanAsset.node.name) }}</span>
                 <i class="fas fa-cubes" triggers="mouseenter:mouseleave" [ngbPopover]="popContent" style="color:#2DC6DB;margin-left: 3px"
                    *ngIf="scanAsset.node.matchType === 'OPEN_COMPONENT' && scanAsset.node.component">
                 </i>
                 <i *ngIf="scanAsset.node.scanAssetType !== 'DIR' && this.columnsFilter.size >= 1" triggers="mouseenter:mouseleave" [ngbPopover]="popContentWorkspace"
                   style="color:#2DC6DB;margin-left: 5px;cursor: pointer" class="fad fa-folder-tree">
                 </i>
+
+                <ng-container *ngTemplateOutlet="assetPopup; context: {
+                  $implicit: scanAsset
+                }"></ng-container>
+
                 <ng-template #popContent>
                   {{scanAsset.node.component.name+":"+scanAsset.node.component.group+":"+scanAsset.node.component.version}}
                 </ng-template>
@@ -136,13 +141,18 @@
               <td *ngIf="scanAsset.node.scanAssetType === 'DIR'"></td>
             </tr>
             <tr style="cursor: not-allowed;" *ngIf="scanAsset.node.status != 'ACCEPTED' && scanAsset.node.scanAssetType != 'DIR'" >
-              <td>
+              <td class="name">
                 <i *ngIf="scanAsset.node.scanAssetType === 'DIR'" class="fas fa-folder"></i>
                 <i *ngIf="scanAsset.node.scanAssetType != 'DIR'" class="far fa-file"></i>
-                &nbsp;&nbsp;{{scanAsset.node.name}}
+                <span class="asset-name">{{ getName(scanAsset.node.name) }}</span>
                 <i *ngIf="scanAsset.node.scanAssetType !== 'DIR' && this.columnsFilter.size >= 1" triggers="mouseenter:mouseleave" [ngbPopover]="popContentWorkspace"
                   style="color:#2DC6DB;margin-left: 3px;cursor: pointer" class="fad fa-folder-tree">
                 </i>
+
+                <ng-container *ngTemplateOutlet="assetPopup; context: {
+                  $implicit: scanAsset
+                }"></ng-container>
+
                 <ng-template #popContentWorkspace>
                   {{scanAsset?.node?.workspacePath}}
                 </ng-template>
@@ -158,6 +168,21 @@
               <td *ngIf="scanAsset.node.scanAssetType != 'DIR'">{{!!scanAsset.node.matchType?matchTypeVal2Caption(scanAsset.node.matchType):''}}</td>
               <td *ngIf="scanAsset.node.scanAssetType === 'DIR'"></td>
             </tr>
+
+            <ng-template #assetPopup let-asset>
+              <div class="action-menu-icon-wrapper">
+                <div class="action-menu-popup-wrapper">
+                  <i class="feather icon-more-vertical"></i>
+
+                  <div class="action-menu-popup">
+                    <div class="action-menu">
+                      <button class="btn btn-outline" (click)="onIgnoreAsset($event, asset.node, true)">Ignore</button>
+                      <button class="btn btn-outline" (click)="onIgnoreAsset($event, asset.node, false)">Unignore</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
           </ng-template>
         </p-table>
 
@@ -173,5 +198,3 @@
       </div>
       </div>
     </div>
-
-
