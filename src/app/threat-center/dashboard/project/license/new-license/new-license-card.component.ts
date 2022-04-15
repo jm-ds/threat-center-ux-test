@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
-import { Scan } from '@app/models';
+import { LicenseAssetAttribution, Scan } from '@app/models';
 
 import { NextConfig } from '@app/app-config';
 
@@ -14,6 +14,7 @@ import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 import { AuthenticationService } from '@app/security/services';
+import { AlertService } from "@app/services/core/alert.service";
 
 @Component({
     selector: 'app-license-new-card',
@@ -38,7 +39,9 @@ export class NewLicenseCardComponent implements OnInit {
 
     totalLicenses: number = 0;
     pageInfo: any;
-    constructor(private projectService: ProjectService,
+    constructor(
+      private alertService: AlertService,
+      private projectService: ProjectService,
         private router: Router,
         private route: ActivatedRoute,
         private coreHelperService: CoreHelperService,
@@ -102,7 +105,14 @@ export class NewLicenseCardComponent implements OnInit {
 
     // Loading Licenses data after paggination for scan tab.
     loadLicensesData(first, last, endCursor = undefined, startCursor = undefined) {
-        let licenses = this.projectService.getScanLicenses(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
+      const licenses = this.projectService.getScanLicenses(
+        this.scanId,
+        this.makeFilterMapForService(),
+        first,
+        last,
+        endCursor,
+        startCursor
+      )
             .pipe(map(result => result.data.scan));
 
         licenses.subscribe(license => {
@@ -167,28 +177,54 @@ export class NewLicenseCardComponent implements OnInit {
         let val = '';
         switch (level) {
             case 'LEVEL_1':
-                val = 'Repository license'
+              val = 'Repository license';
                 break;
             case 'LEVEL_2':
-                val = 'Context relevant license'
+              val = 'Context relevant license';
                 break;
             default:
                 break;
         }
-        return val
+        return val;
     }
 
-  onAnnotate(event: MouseEvent, licenseID: string, ignore: boolean) {
-    event.stopImmediatePropagation();
-
-    console.log('licenseID: ' + licenseID + ', ignore=' + ignore);
-
-    if (ignore) {
-      // ignore
-    } else {
-      // this.annotateClick.emit(licenseID);
-    }
+  onAnnotate(event: MouseEvent, licenseID: string, ignore: boolean, attributeProcessExecuteMessageModel) {
+    event.stopPropagation();
+    attributeProcessExecuteMessageModel.show();
+    this.projectService
+      .attributeAssetsByLicense(this.scanId, licenseID, ignore)
+      .subscribe({
+        next: result => {
+          attributeProcessExecuteMessageModel.hide();
+          // example: result.data.attributeAssetsByLicense.attributionStatus
+          const attribution: LicenseAssetAttribution = result.data['attributeAssetsByLicense'];
+          this.alertService.alertBox('Attribution is successful: ' + attribution.attributionStatus, 'License attribution', 'success');
+        },
+       error: error => {
+         attributeProcessExecuteMessageModel.hide();
+         this.alertService.alertBox('Attribution error', 'License attribution', 'error');
+      });
   }
+
+    attributeProcessExecutionModel(modelContent) {
+      this.alertService.alertConfirm(
+        'Do you want to close dialog?',
+        'You can close modal, attribution process will complete. But if you leave this page you won’t get ' +
+        'completion notification message.',
+        'question',
+        true,
+        true,
+        '#4680ff',
+        '#6c757d',
+        'Yes',
+        'No'
+       )
+       .then(result => {
+         if (result.value) {
+           modelContent.hide();
+         }
+       });
+    }
 
     isUserSCMAccountExists() {
         return !!this.authService.currentUser.repositoryAccounts && !!this.authService.currentUser.repositoryAccounts

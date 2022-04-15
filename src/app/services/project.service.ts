@@ -1,8 +1,24 @@
 import { Injectable } from "@angular/core";
-import { AttributeAssetRequestInput, ComponentQuery, LicenseQuery, ProjectQuery, Scan, ScanAssetMatch, ScanAssetMatchRequest, ScanAssetQuery, ScanLicenseQuery, ScanQuery, VulnerabilityQuery, ScanOpenSourceProject } from "@app/models";
+import {
+  AttributeAssetRequestInput,
+  ComponentQuery,
+  LicenseQuery,
+  ProjectQuery,
+  Scan,
+  ScanAssetMatch,
+  ScanAssetMatchRequest,
+  ScanAssetQuery,
+  ScanLicenseQuery,
+  ScanQuery,
+  VulnerabilityQuery,
+  ScanOpenSourceProject,
+  LicenseAssetAttribution
+} from "@app/models";
 import gql from "graphql-tag";
 import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
 import { FetchPolicy } from "apollo-client";
+import {Observable} from "rxjs";
+import {FetchResult} from "apollo-link";
 
 @Injectable({
   providedIn: 'root'
@@ -263,7 +279,13 @@ export class ProjectService {
                         isFsfLibre,
                         licenseDiscovery,
                         licenseOrigin,
-                        trustLevel
+                        trustLevel,
+                        licenseAssetAttribution {
+                          attributionStatus,
+                          attributedDate,
+                          attributedBy,
+                          attributedComment
+                        }
                       }
                     }
                   }
@@ -821,6 +843,19 @@ export class ProjectService {
     return this.coreGraphQLService.coreGQLReqForMutation(gql`mutation ($attributeAssetRequest: AttributeAssetRequestInput) {
       attributeAsset(attributeAssetRequest: $attributeAssetRequest)
     }`, { attributeAssetRequest: attributeAssetRequest });
+  }
+
+  attributeAssetsByLicense(scanId: string, licenseId: string, ignore: boolean) {
+    return this.coreGraphQLService.coreGQLReqForMutation(gql`
+      mutation ($scanId: String, $licenseId: String, $ignore: Boolean) {
+        attributeAssetsByLicense(scanId: $scanId, licenseId: $licenseId, ignore: $ignore) {
+          attributionStatus,
+          attributedDate,
+          attributedBy,
+          attributedComment
+        }
+      }
+    `, {"scanId": scanId, "licenseId": licenseId, "ignore": ignore});
   }
 
 }

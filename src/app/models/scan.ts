@@ -105,6 +105,13 @@ export class ScanOpenSourceProject {
     repoWebsite: string;
 }
 
+export class LicenseAssetAttribution {
+  attributionStatus: string;
+  attributedDate: Date;
+  attributedBy: string;
+  attributedComment: string;
+}
+
 export class GithubAccount {
     accessToken: string;
     scopes: string[];
@@ -145,6 +152,7 @@ export class ScanLicense {
     scanAssetsTree: ScanAssetsTreeConnection;
     scanLicenseAssets: ScanLicenseAssetConnection;
     scanOpenSourceProject: ScanOpenSourceProject;
+    licenseAssetAttribution: LicenseAssetAttribution;
 }
 
 export class JiraTicket {
