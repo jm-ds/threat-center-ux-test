@@ -23,7 +23,7 @@
         <i class="scan-icon far fa-thumbs-up status-success" *ngIf="statusMessageFromback == 'COMPLETE'">
         </i>
         <p *ngIf="statusMessageFromback == 'COMPLETE'">
-            <span>Scan of {{projectName}} is completed. Take a look at <a (click)="gotoProjectPage()">results</a></span>
+            <span>Scan of {{projectName}} is completed. Take a look at <a (click)="goToProjectPage()">results</a></span>
         </p>
     </div>
 
@@ -43,12 +43,14 @@
             <div class="scan-modal-blk scan-success-blk">
                 <div class="scan-started-blk">
                     <div class="scan-progress">
-                        <i class="scan-icon far fa-thumbs-up status-success loader-img"></i>
-                        <div class="scan-progress-rt" *ngIf="!!item.projectId">
-                            <p>{{item.projectName}} scan is complete. <a class="cursor-pointer"
-                                    (click)="gotoProject(item)"><u>View
-                                        results</u></a> &nbsp;<i class="fas fa-external-link-alt"></i></p>
-                        </div>
+                      <i class="scan-icon far fa-thumbs-up status-success loader-img"></i>
+
+                      <div class="scan-progress-rt" *ngIf="!!item.projectId">
+                        <p>
+                          {{ item.projectName }} scan is complete. <a class="cursor-pointer" (click)="goToProject(item)"><u>View results</u></a>
+                            &nbsp;<i class="fas fa-external-link-alt"></i>
+                        </p>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -108,13 +110,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h6>Recently Completed Scans</h6>
-                    <ul>
-                        <li *ngFor="let project of filterUniqRecords()">
-                            <a (click)="gotoProject(project)" *ngIf="!!project.projectId"
-                                style="color: #4680ff !important;"><u>{{project.projectName}}</u></a>
-                            project. <i class="fas fa-external-link-alt"></i>
-                        </li>
-                    </ul>
+
+                  <ul>
+                    <li *ngFor="let project of filterUniqRecords()">
+                      <a style="color: #4680FF !important" *ngIf="!!project.projectId" (click)="goToProject(project)">
+                        <u>{{ project.projectName }}</u>
+                      </a> project. <i class="fas fa-external-link-alt"></i>
+                    </li>
+                  </ul>
                 </div>
             </div>
         </div>

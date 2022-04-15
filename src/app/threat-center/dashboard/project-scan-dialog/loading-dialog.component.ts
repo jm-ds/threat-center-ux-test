@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { NgbActiveModal, NgbPanelChangeEvent } from "@ng-bootstrap/ng-bootstrap";
-import * as $ from 'jquery'
-import { interval, Subscription } from "rxjs";
-import { NextConfig } from "@app/app-config";
-import { ScanHelperService } from "@app/services/scan-helper.service";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 
+import { NgbActiveModal, NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import * as $ from 'jquery';
+
+import { NextConfig } from '@app/app-config';
+
+import { ScanHelperService } from '@app/services/scan-helper.service';
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 
 @Component({
     selector: 'app-project-scan-loading',
@@ -30,6 +33,7 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
     constructor(
         private scanHelperService: ScanHelperService,
         public activeModal: NgbActiveModal,
+        private userPreferenceService: UserPreferenceService
     ) {
 
         const source = interval(100);
@@ -88,9 +92,16 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
         $('body').addClass("loading-float");
     }
 
-    gotoProject(project) {
-        this.scanHelperService.gotoProjectAndUpdateRecentScan(project);
-    }
+  /**
+   * Go to the project after scan
+   *
+   * @param project scanned project
+   */
+  goToProject(project: unknown) {
+    // empty string for `lastSelectedScan` implies no selected scan
+    this.userPreferenceService.settingUserPreference('Project', null, null, null, null, null, null, '');
+    this.scanHelperService.gotoProjectAndUpdateRecentScan(project);
+  }
 
     closeModelIfNoScanInProgress() {
         if (this.projectScanResults.length == 0) {
