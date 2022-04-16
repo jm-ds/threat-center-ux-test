@@ -196,13 +196,17 @@ export class NewLicenseCardComponent implements OnInit {
       .subscribe({
         next: result => {
           attributeProcessExecuteMessageModel.hide();
+
           // example: result.data.attributeAssetsByLicense.attributionStatus
-          const attribution: LicenseAssetAttribution = result.data['attributeAssetsByLicense'];
-          this.alertService.alertBox('Attribution is successful: ' + attribution.attributionStatus, 'License attribution', 'success');
+          const attribution = (result.data as any).attributeAssetsByLicense as LicenseAssetAttribution;
+
+          this.alertService.alertBox(`Attribution is successful: ${attribution.attributionStatus}`, 'License attribution', 'success');
         },
        error: error => {
          attributeProcessExecuteMessageModel.hide();
-         this.alertService.alertBox('Attribution error', 'License attribution', 'error');
+
+         this.alertService.alertBox(`Attribution error: ${error}`, 'License attribution', 'error');
+       }
       });
   }
 
