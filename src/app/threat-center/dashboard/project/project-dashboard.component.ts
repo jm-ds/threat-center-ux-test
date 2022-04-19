@@ -15,7 +15,7 @@ import { IgnoredFiles, Level, Type } from '@app/models/ignored-files';
 
 import { NextConfig } from '@app/app-config';
 
-import { AuthorizationService } from '@app/security/services';
+import {AuthenticationService, AuthorizationService} from '@app/security/services';
 import { ChartHelperService } from '@app/services/core/chart-helper.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
@@ -200,6 +200,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     private projectBreadcumsService: ProjectBreadcumsService,
     private chartHelperService: ChartHelperService,
     protected authorizationService: AuthorizationService,
+    private authenticationService: AuthenticationService,
     private scanService: ScanService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -1080,11 +1081,11 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
         return this.projectId;
 
       case (Level.ENTITY):
-        const entityID = this.route.snapshot.paramMap.get('entityId');
-
-        return entityID;
+        return this.route.snapshot.paramMap.get('entityId');
 
       case (Level.ORGANIZATION):
+        return this.authenticationService.currentUser.orgId;
+
       default:
         return '';
     }
