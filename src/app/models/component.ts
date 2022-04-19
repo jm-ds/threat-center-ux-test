@@ -27,3 +27,7 @@ export interface ComponentQuery {
 export interface ScanComponentQuery {
     scanComponent: TxComponent;
 }
+
+export interface FixComponentVersionQuery {
+    fixComponentVersion: FixResult[];
+}

@@ -5,6 +5,10 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from "rxjs";
 import {FixResult, PatchedInfoSimplified} from "@app/threat-center/shared/models/types";
 import { FixService } from '@app/services/fix.service';
+import {map, takeUntil} from "rxjs/operators";
+import {ApolloQueryResult} from "apollo-client";
+import {FixComponentVersionQuery} from "@app/models";
+import {subscribe} from "graphql";
 
 
 @Component({
@@ -42,22 +46,23 @@ export class FixComponentDialogComponent implements OnInit {
       });
   }
 
-    fixVersion() {
-        this.spinner.show();
-        this.fixResultObservable = this.fixService.fixComponentVersion(this.scanId, this.componentId, this.oldVersion, this.newVersion);
-        this.fixResultObservable.subscribe(results => {
-            const modalRef = this.modalService.open(FixComponentResultDialogComponent, {
-                keyboard: false,
-            });
-            modalRef.componentInstance.fixResults = results;
-        }, error => {
-            console.error("error: " + error);
-        }, () => {
-            this.spinner.hide();
+  fixVersion() {
+    this.spinner.show();
+    this.fixService.fixComponentVersion(this.scanId, this.componentId, this.oldVersion, this.newVersion)
+      .subscribe(results => {
+        console.log(results);
+        const modalRef = this.modalService.open(FixComponentResultDialogComponent, {
+          keyboard: false,
         });
-    }
+        modalRef.componentInstance.fixResults = results;
+      }, error => {
+        console.error('error: ' + error);
+      }, () => {
+        this.spinner.hide();
+      });
+  }
 
-    closeBtn() {
-        this.activeModal.close();
-    }
+  closeBtn() {
+    this.activeModal.close();
+  }
 }
