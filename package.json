@@ -30,7 +30,7 @@
     "@fullcalendar/interaction": "^4.2.0",
     "@fullcalendar/timegrid": "^4.2.0",
     "@iplab/ngx-file-upload": "^1.4.0",
-    "@ng-bootstrap/ng-bootstrap": "^4.2.1",
+    "@ng-bootstrap/ng-bootstrap": "^5.3.1",
     "@swimlane/ngx-datatable": "^16.0.3",
     "@types/crypto-js": "^4.0.1",
     "angular-6-datatable": "^0.8.0",
