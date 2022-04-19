@@ -402,9 +402,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
               this.stateService.selectedScan = project.scans.edges.find(
                 (edge: any) => edge.node.scanId === lastScanSelected.lastSelectedScanId
               );
-            }
-
-            if (!this.stateService.selectedScan) {
+            } else {
               this.stateService.selectedScan = project.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
             }
 
