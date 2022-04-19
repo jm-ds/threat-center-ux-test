@@ -5,11 +5,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from "rxjs";
 import {FixResult, PatchedInfoSimplified} from "@app/threat-center/shared/models/types";
 import { FixService } from '@app/services/fix.service';
-import {map, takeUntil} from "rxjs/operators";
-import {ApolloQueryResult} from "apollo-client";
-import {FixComponentVersionQuery} from "@app/models";
-import {subscribe} from "graphql";
-
 
 @Component({
     selector: 'app-fix-component-dialog',
@@ -50,7 +45,6 @@ export class FixComponentDialogComponent implements OnInit {
     this.spinner.show();
     this.fixService.fixComponentVersion(this.scanId, this.componentId, this.oldVersion, this.newVersion)
       .subscribe(results => {
-        console.log(results);
         const modalRef = this.modalService.open(FixComponentResultDialogComponent, {
           keyboard: false,
         });
