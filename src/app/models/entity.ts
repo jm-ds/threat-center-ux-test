@@ -3,6 +3,7 @@ import { License } from "./license";
 import { EntityMetricsGroup, EntityMetricsSummaryGroup } from "./metrics";
 import { ProjectConnection } from "./project";
 import { Vulnerability } from "./vulnerability";
+import { Injectable } from "@angular/core";
 
 export class Entity {
     entityId: string;
@@ -54,6 +55,7 @@ export class JiraCredentials {
     apiToken: string;
 }
 
+@Injectable()
 export class EntitySettings {
     orgId: string;
     entityId: string;
