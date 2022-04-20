@@ -29,7 +29,7 @@ export class NewLicenseCardComponent implements OnInit {
     @Output() annotateClick = new EventEmitter();
 
     defaultPageSize = NextConfig.config.defaultItemPerPage;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     licensesDetails: any;
 
     columnsFilter = new Map();

@@ -29,7 +29,7 @@ export class ComponentsComponent implements OnInit {
     newVersion: string;
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     componentDetails: any;
 
     columns = [

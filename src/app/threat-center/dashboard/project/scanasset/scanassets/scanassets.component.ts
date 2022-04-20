@@ -30,7 +30,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   columns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
 
   defaultPageSize = 25;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   scanAssetDetails: any;
   scanOpenSourceProject: ScanOpenSourceProject;
   columnsFilter = new Map();

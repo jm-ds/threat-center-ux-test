@@ -32,7 +32,7 @@ import { CreateJiraTicketComponent } from '@app/threat-center/dashboard/project/
 export class LicenseDimensionComponent implements OnInit, AfterViewInit {
 
   public licenseCols = ['Name', 'Threat'];
-  @ViewChild('ctdTabset', { static: false }) ctdTabset: NgbTabset;
+  @ViewChild('ctdTabset') ctdTabset: NgbTabset;
 
   @Input() licenseId: string;
   @Input() licenseDiscovery: string;
@@ -48,8 +48,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   licenseComponents: any;
   newVersion: string;
   defaultPageSize = NextConfig.config.defaultItemPerPage;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
 
 
 

@@ -164,13 +164,13 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
   licenseChartData = {};
   assetChartData = {};
 
-    @ViewChild('ctdTabset', { static: false }) ctdTabset;
-    @ViewChild('scanTable', { static: false }) scanTable;
-    @ViewChild(ProjectDashboardTopbarComponent, { static: false }) topBar: ProjectDashboardTopbarComponent;
-    @ViewChild('vulTemplate', { static: false }) newVulnerablityCard: NewVulnerabilitiesCardComponent;
-    @ViewChild('licenseCard', { static: false }) newLicenseCard: NewLicenseCardComponent;
-    @ViewChild('componentCard', { static: false }) newComponentCard: NewComponentCardComponent;
-    @ViewChild('assetContent', { static: false }) scanAssetComponent: ScanAssetsComponent;
+    @ViewChild('ctdTabset') ctdTabset;
+    @ViewChild('scanTable') scanTable;
+    @ViewChild(ProjectDashboardTopbarComponent) topBar: ProjectDashboardTopbarComponent;
+    @ViewChild('vulTemplate') newVulnerablityCard: NewVulnerabilitiesCardComponent;
+    @ViewChild('licenseCard') newLicenseCard: NewLicenseCardComponent;
+    @ViewChild('componentCard') newComponentCard: NewComponentCardComponent;
+    @ViewChild('assetContent') scanAssetComponent: ScanAssetsComponent;
 
     mostRecentScan;
     vulDonutChart;
@@ -258,7 +258,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     assetCountTooltip = '';
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     projectDetails = null;
     scanList = [];
 
@@ -274,7 +274,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     scrollX;
     scrollY;
     isAssetStory: boolean = false;
-    @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+    @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
     projectMetrics = [];
     filterBranchName = '';
     timeOut;

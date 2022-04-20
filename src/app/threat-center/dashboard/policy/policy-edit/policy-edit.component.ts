@@ -30,7 +30,7 @@ export class PolicyEditComponent implements OnInit {
     projectId: string
     conditionTypeItems: any;
     conditionType: CodeNamePair;
-    @ViewChild(ConditionBuilderComponent, {static: false}) conditions: ConditionBuilderComponent;
+    @ViewChild(ConditionBuilderComponent) conditions: ConditionBuilderComponent;
     activeTabIdString: string = "policyGeneralInfo";
 
 

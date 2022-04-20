@@ -103,7 +103,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetCountTooltip = '';
 
   defaultPageSize = 25;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   projectDetails = null;
   scanList = [];
 
@@ -119,7 +119,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   scrollX;
   scrollY;
   isAssetStory: boolean = false;
-  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
   projectMetrics = [];
   filterBranchName = '';
   timeOut;

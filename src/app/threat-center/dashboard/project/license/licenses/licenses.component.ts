@@ -25,7 +25,7 @@ export class LicensesComponent implements OnInit {
     columns = ['Name', /*'ID', */'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     licensesDetails: any;
 
     columnsFilter = new Map();

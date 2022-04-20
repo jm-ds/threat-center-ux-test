@@ -54,11 +54,11 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
-    @ViewChild('orgRepoList', { static: false }) orgRepoList: RepositoryListComponent;
-    @ViewChild('repoList', { static: false }) repoList: RepositoryListComponent;
-    @ViewChild('gitLabRepoList', { static: false }) gitLabRepoList: RepositoryListComponent;
-    @ViewChild('bitbucketRepoList', { static: false }) bitbucketRepoList: RepositoryListComponent;
-    @ViewChild('readyScanRepo', { static: false }) readyScanRepo: ReadyScanRepositorylistComponent;
+    @ViewChild('orgRepoList') orgRepoList: RepositoryListComponent;
+    @ViewChild('repoList') repoList: RepositoryListComponent;
+    @ViewChild('gitLabRepoList') gitLabRepoList: RepositoryListComponent;
+    @ViewChild('bitbucketRepoList') bitbucketRepoList: RepositoryListComponent;
+    @ViewChild('readyScanRepo') readyScanRepo: ReadyScanRepositorylistComponent;
 
 
     constructor(

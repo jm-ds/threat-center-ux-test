@@ -58,9 +58,9 @@ export class ComponentDetailComponent implements OnInit {
   MESSAGES = MESSAGES;
   defaultPageSize = 25;
   pageIndex = 0;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('perfectScrollSourceRelese', { static: false }) perfectScrollSourceRelese: PerfectScrollbarComponent;
-  @ViewChild('perfectScrollBinaryRelese', { static: false }) perfectScrollBinaryRelese: PerfectScrollbarComponent;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('perfectScrollSourceRelese') perfectScrollSourceRelese: PerfectScrollbarComponent;
+  @ViewChild('perfectScrollBinaryRelese') perfectScrollBinaryRelese: PerfectScrollbarComponent;
 
   vulnerabilityDetails: any = {};
 

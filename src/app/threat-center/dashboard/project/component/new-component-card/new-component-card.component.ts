@@ -28,7 +28,7 @@ export class NewComponentCardComponent implements OnInit {
     newVersion: string;
 
     defaultPageSize = NextConfig.config.defaultItemPerPage;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     componentDetails: any;
 
     columnsFilter = new Map();
