@@ -6,9 +6,9 @@ import {
   VulnerableReleaseResponseMap
 } from '@app/threat-center/shared/models/types'
 import { Observable } from "rxjs";
-import {CoreGraphQLService} from "@app/services/core/core-graphql.service";
-import gql from "graphql-tag";
-import {map} from "rxjs/operators";
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service'
+import gql from 'graphql-tag';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
