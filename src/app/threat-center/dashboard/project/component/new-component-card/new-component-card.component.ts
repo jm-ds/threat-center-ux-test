@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Scan } from "@app/models";
 import { CoreHelperService } from "@app/services/core/core-helper.service";

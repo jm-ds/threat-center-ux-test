@@ -13,7 +13,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { TaskComponent } from './task/task.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SimmComponent } from './simm/simm.component';
-import { MatPaginatorModule } from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({

@@ -4,7 +4,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';

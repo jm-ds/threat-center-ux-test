@@ -34,7 +34,7 @@ import {UnauthorizedComponent} from "@app/security/unauthorized/unauthorized.com
 import { CookieService } from 'ngx-cookie-service';
 import { LoadingDialogComponent } from './threat-center/dashboard/project-scan-dialog/loading-dialog.component';
 import { PreScanLoadingDialogComponent } from './threat-center/dashboard/pre-scan-dialog/pre-scan-dialog.component';
-import { MatProgressBarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxScrollTopModule } from 'ngx-scrolltop';
 
