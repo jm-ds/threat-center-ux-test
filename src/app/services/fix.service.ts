@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { FixComponentVersionQuery, FixResult} from "@app/models";
-import { PatchedInfoSimplified, PatchedInfoSimplifiedQuery} from "@app/threat-center/shared/models/types";
+import { FixComponentVersionQuery, FixResult } from '@app/models';
+import { PatchedInfoSimplified, PatchedInfoSimplifiedQuery } from '@app/threat-center/shared/models/types';
 import { Observable } from "rxjs";
 import gql from "graphql-tag";
 import {map} from "rxjs/operators";
