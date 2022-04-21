@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import {
-    NextVulnerabilitiesWithCvssV3Query, StartVulnerabilitiesWithCvssV3Query,
-    VulnerableReleaseResponse,
-    VulnerableReleaseResponseMap
-} from "@app/threat-center/shared/models/types";
+  NextVulnerabilitiesWithCvssV3Query,
+  StartVulnerabilitiesWithCvssV3Query,
+  VulnerableReleaseResponse,
+  VulnerableReleaseResponseMap
+} from '@app/threat-center/shared/models/types'
 import { Observable } from "rxjs";
 import {CoreGraphQLService} from "@app/services/core/core-graphql.service";
 import gql from "graphql-tag";
