@@ -29,5 +29,5 @@ export interface ScanComponentQuery {
 }
 
 export interface FixComponentVersionQuery {
-    fixComponentVersion: FixResult[];
+  fixComponentVersion: FixResult[];
 }
