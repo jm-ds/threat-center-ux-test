@@ -58,7 +58,6 @@ import { NgxScrollTopModule } from 'ngx-scrolltop';
     LoadingDialogComponent, PreScanLoadingDialogComponent,
     UnauthorizedComponent
   ],
-  entryComponents:[LoadingDialogComponent, PreScanLoadingDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

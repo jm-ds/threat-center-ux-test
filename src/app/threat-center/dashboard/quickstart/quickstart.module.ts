@@ -41,7 +41,6 @@ import { ReadyScanRepositorylistComponent } from './wizard/ready-scan-repo/ready
     NgbModule,
     MatProgressBarModule
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: []
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class QuickstartModule { }

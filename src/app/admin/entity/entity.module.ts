@@ -20,8 +20,6 @@ import { ChildEntityManageComponent } from './entity-manage/child-entity/child-m
     TreeModule,
     FormsModule,
     NgbModule
-  ],
-  entryComponents: [ChildEntityManageComponent],
-  providers: []
+  ]
 })
 export class EntityModule { }
