@@ -223,15 +223,31 @@
                    [(ngModel)]="snippetText" name="snippetText"
                       required rows="20" cols="30"></textarea>
           </form>
+
           <div class="text-center m-t-20">
             <select class="form-control form-control-sm custom-select" style="width: 100px;margin-right: 20px" id="languageType"
                     [(ngModel)]="languageType" name="languageType" required>
               <option value="" selected>Select language type</option>
-              <option value="JAVASCRIPT">Javascript</option>
-              <option value="PYTHON">Python</option>
-              <option value="JAVA">Java</option>
               <option value="C">C</option>
               <option value="CPP">C++</option>
+              <option value="CSHARP">C#</option>
+              <option value="GO">Go</option>
+              <option value="GROOVY">Groovy</option>
+              <option value="JAVA">Java</option>
+              <option value="JAVASCRIPT">Javascript</option>
+              <option value="KOTLIN">Kotlin</option>
+              <option value="OBJECTIVE_C">Objective-C</option>
+              <option value="PERL">Perl</option>
+              <option value="PERL6">Perl6</option>
+              <option value="PLPGSQL">PLPGSQL</option>
+              <option value="PHP">PHP</option>
+              <option value="PYTHON">Python</option>
+              <option value="R">R</option>
+              <option value="RUBY">Ruby</option>
+              <option value="RUST">Rust</option>
+              <option value="SCALA">Scala</option>
+              <option value="SHELL">Shell</option>
+              <option value="TYPESCRIPT">Javascript</option>
             </select>
             <button class="btn btn-primary" (click)="submitSnippet()">Find Matches</button>
           </div>
@@ -251,10 +267,10 @@
               </ng-template>
 
               <div *ngIf="results.matchSize > 1024; else showMatchBytes">
-                Snippet size: {{results.matchSize/1024| number: '1.0-2'}} KB
+                Match size: {{results.matchSize/1024| number: '1.0-2'}} KB
               </div>
               <ng-template #showMatchBytes>
-                Snippet size: {{results.matchSize}} Bytes
+                Match size: {{results.matchSize}} Bytes
               </ng-template>
 
             </div>
