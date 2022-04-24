@@ -190,6 +190,7 @@ export class ScanService {
             matchTime,
             scanTime,
             snippetSize,
+            matchSize,
             snippetMatches {
               matchAssetId,
               repositoryName,

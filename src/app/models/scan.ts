@@ -165,6 +165,7 @@ export class SnippetMatchResult {
     matchTime: number;
     scanTime: number;
     snippetSize: number;
+    matchSize: number;
     snippetMatches: SnippetMatch[];
 };
 export class SnippetMatch {
