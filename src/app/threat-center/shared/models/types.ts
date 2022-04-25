@@ -651,3 +651,11 @@ export type RunningTaskCountSubscription = {
 export class StringHolder {
   data: string;
 }
+
+export class StartVulnerabilitiesWithCvssV3Query {
+  startVulnerabilitiesWithCvssV3: VulnerableReleaseResponseMap;
+}
+
+export class NextVulnerabilitiesWithCvssV3Query {
+  nextVulnerabilitiesWithCvssV3: VulnerableReleaseResponse;
+}
