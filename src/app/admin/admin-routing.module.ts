@@ -29,6 +29,12 @@ const routes: Routes = [
         loadChildren: () => import('./entity/entity.module').then(module => module.EntityModule)
       },
       {
+        path: 'deployment',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./deployment/deployment.module')
+          .then(module => module.DeploymentModule)
+      },
+      {
         path: 'integration',
         canActivate: [AuthGuard],
         loadChildren: () => import('./integration/integration.module').then(module => module.IntegrationModule)
