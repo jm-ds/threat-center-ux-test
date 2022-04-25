@@ -42,8 +42,8 @@ export class VulnerableCodeMappingService {
                 nextPagingState: "${nextPagingState}",
                 repositoryType: "${repositoryType}",
                 purlType: "${purlType}",
-                group:" ${group}",
-                name: " ${name}"
+                group: "${group}",
+                name: "${name}"
             ) {
                 nextPagingState
                 repositoryType
