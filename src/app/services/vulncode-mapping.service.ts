@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   NextVulnerabilitiesWithCvssV3Query,
   StartVulnerabilitiesWithCvssV3Query,
   VulnerableReleaseResponse,
   VulnerableReleaseResponseMap
-} from '@app/threat-center/shared/models/types'
-import { Observable } from "rxjs";
-import { CoreGraphQLService } from '@app/services/core/core-graphql.service'
+} from '@app/threat-center/shared/models/types';
+import { Observable } from 'rxjs';
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 
@@ -16,13 +16,16 @@ import { map } from 'rxjs/operators';
 })
 export class VulnerableCodeMappingService {
 
+    static readonly COMPONENT_RELEASES_FETCH_COUNT: number = 30;
+
     constructor(private coreGraphQLService: CoreGraphQLService) {
     }
 
     startVulnerabilitiesWithCvssV3(componentId: string): Observable<VulnerableReleaseResponseMap> {
         return this.coreGraphQLService.coreGQLReq<StartVulnerabilitiesWithCvssV3Query>(gql(`query {
             startVulnerabilitiesWithCvssV3(
-                componentId: "${componentId}"
+                componentId: "${componentId}",
+                componentReleasesFetchCount: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_COUNT}
             )
         }`), 'no-cache').pipe(map(res => res.data.startVulnerabilitiesWithCvssV3));
     }
@@ -43,7 +46,8 @@ export class VulnerableCodeMappingService {
                 repositoryType: "${repositoryType}",
                 purlType: "${purlType}",
                 group: "${group}",
-                name: "${name}"
+                name: "${name}",
+                componentReleasesFetchCount: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_COUNT}
             ) {
                 nextPagingState
                 repositoryType
