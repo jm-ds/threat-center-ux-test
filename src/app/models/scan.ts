@@ -161,6 +161,14 @@ export class JiraTicket {
     self: string;
 }
 
+export class DeploymentData {
+  orgId: string;
+  deploymentMode: string;
+  cloudServerUrl: string;
+  cloudThreatrixSchemeIp: string;
+  cloudApiKey: string;
+}
+
 export class SnippetMatchResult {
     matchTime: number;
     scanTime: number;
@@ -233,5 +241,9 @@ export type ScanLicenseQuery = {
 
 export type JiraTicketQuery = {
     licenseJiraTicket: JiraTicket;
+};
+
+export type DeploymentDataQuery = {
+  deploymentData: DeploymentData;
 };
 
