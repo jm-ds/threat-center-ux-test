@@ -106,7 +106,7 @@ export class UserEditComponent implements OnInit {
         }
     }
 
-    private roleDisplay(item: any) {
+    roleDisplay(item: any) {
         return item.roleId + ' - ' + item.description;
     }
 
@@ -128,7 +128,7 @@ export class UserEditComponent implements OnInit {
     }
 
 
-  private saveUser() {
+  saveUser() {
     if (!!this.selectedRoles && this.selectedRoles.length >= 1) {
       this.user.userRoles = this.selectedRoles;
 

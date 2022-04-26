@@ -37,7 +37,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     // private apiService: ApiService,
     private projectService: ProjectService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
@@ -48,7 +48,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private userPreferenceService: UserPreferenceService,
     private projectBreadcumsService: ProjectBreadcumsService,
     private chartHelperService: ChartHelperService,
-    protected authorizationService: AuthorizationService) {
+    public authorizationService: AuthorizationService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.scanHelperService.isHighlightNewScanObservable$

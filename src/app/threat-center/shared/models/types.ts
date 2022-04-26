@@ -293,8 +293,8 @@ export class PatchedInfoSimplified {
   name: string;
   vulnerableVersion: string;
   cveId: string;
-  nextPatchedVersion: string;
-  latestPatchedVersion: string;
+  latestPatchedVersion: any;
+  nextPatchedVersion: any;
 }
 export interface PatchedInfoSimplifiedQuery {
   autofixVersions: PatchedInfoSimplified;

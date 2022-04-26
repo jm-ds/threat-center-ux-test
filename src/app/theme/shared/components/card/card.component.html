@@ -34,8 +34,9 @@
           <a href="javascript:"><i class="feather" [ngClass]="fullIcon"></i></a>
         </li>
 
-        <li *ngIf="hasManualCardReload" class="reload-card" ngbTooltip="Reload" tooltipClass="card-action-tooltip" (click)="cardRefresh($event)"><a href="javascript:"><i
-              class="feather icon-refresh-cw"></i></a></li>
+        <li class="reload-card" ngbTooltip="Reload" tooltipClass="card-action-tooltip" *ngIf="hasManualCardReload" (click)="cardRefresh()">
+          <a href="javascript:"><i class="feather icon-refresh-cw"></i></a>
+        </li>
         <li *ngIf="hasManualCardRemove" class="close-card" ngbTooltip="Remove" tooltipClass="card-action-tooltip" (click)="cardRemoveAction()"><a href="javascript:"><i
               class="feather icon-trash"></i></a></li>
       </ul>

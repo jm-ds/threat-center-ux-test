@@ -70,7 +70,7 @@ export class ComponentDetailComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private scanComponentService: ScanComponentService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,

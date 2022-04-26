@@ -9,8 +9,17 @@ export class FixResult {
 }
 
 export class TxComponent {
-    componentId;
-    copyrightList: Copyright[];
+  componentId: number;
+  name: string;
+  group: string;
+  version: string;
+  repositoryMeta?: {
+    repositoryType: string;
+    latestVersion: string;
+    published: string;
+    lastCheck: Date;
+  };
+  copyrightList: Copyright[];
 }
 
 export class Copyright {

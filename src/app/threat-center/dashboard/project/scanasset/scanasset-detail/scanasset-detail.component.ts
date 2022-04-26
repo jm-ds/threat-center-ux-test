@@ -60,7 +60,7 @@ export class ScanAssetDetailComponent implements OnInit {
         private coreHelperService: CoreHelperService,
         private projectBreadcumsService: ProjectBreadcumsService,
         private alertService: AlertService,
-        protected authorizationService: AuthorizationService,
+        public authorizationService: AuthorizationService,
         private modalService: NgbModal) {
     }
 

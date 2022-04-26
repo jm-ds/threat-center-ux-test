@@ -9,6 +9,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
+import { ApexNonAxisChartSeries } from 'ng-apexcharts';
 
 import { Entity, Project } from '@app/models';
 import { IgnoredFiles, Level, Type } from '@app/models/ignored-files';
@@ -32,6 +33,11 @@ import { ProjectDashboardTopbarComponent } from './dashboard-top-bar/top-bar.com
 import { NewVulnerabilitiesCardComponent } from './vulnerability/new-vulnerability/new-vulnerability-card.component';
 import { NewLicenseCardComponent } from './license/new-license/new-license-card.component';
 import { NewComponentCardComponent } from './component/new-component-card/new-component-card.component';
+
+interface ChartData {
+  labels: string[];
+  series: ApexNonAxisChartSeries;
+}
 
 @Component({
     selector: 'app-project-dashboard',
@@ -160,9 +166,21 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
   ];
 
   chartConfig;
-  vulnerabilityChartData = {};
-  licenseChartData = {};
-  assetChartData = {};
+
+  vulnerabilityChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
+
+  licenseChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
+
+  assetChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
 
     @ViewChild('ctdTabset') ctdTabset;
     @ViewChild('scanTable') scanTable;
@@ -188,7 +206,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     private fb: FormBuilder,
     // private apiService: ApiService,
     private projectService: ProjectService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
@@ -199,7 +217,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     private userPreferenceService: UserPreferenceService,
     private projectBreadcumsService: ProjectBreadcumsService,
     private chartHelperService: ChartHelperService,
-    protected authorizationService: AuthorizationService,
+    public authorizationService: AuthorizationService,
     private authenticationService: AuthenticationService,
     private scanService: ScanService
   ) {

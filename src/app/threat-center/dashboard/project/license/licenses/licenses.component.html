@@ -7,9 +7,7 @@
           header
         </div>
         <div style="text-align: right;float:right;margin-bottom:10px;clear: both;">
-          <input type="text" pInputText size="50" placeholder="Filter"
-            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:160px;display:inline"
-            class="form-control">
+          <input style="width: 160px; display:inline" class="form-control" type="text" pInputText size="50" placeholder="Filter">
         </div>
       </ng-template>
     </div>
@@ -50,12 +48,16 @@
             <td>{{license.node.name}}</td>
 <!--            <td>{{license.node.licenseId}}</td>-->
             <td>
-              <span *ngIf="license.node.licenseDiscovery === 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
-                    class="badge m-r-5 badge-light-success">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
-              <span *ngIf="license.node.licenseDiscovery !== 'DECLARED'" title="{{messages.license.discovery[license.node.licenseDiscovery]}}"
-                    class="badge m-r-5 badge-light-warning">{{messages.license.discovery[license.node.licenseDiscovery]}}</span>
+              <span class="badge m-r-5 badge-light-success" [title]="MESSAGES.LICENSE.DISCOVERY[license.node.licenseDiscovery]"
+                *ngIf="license.node.licenseDiscovery === 'DECLARED'">
+                {{ MESSAGES.LICENSE.DISCOVERY[license.node.licenseDiscovery] }}
+              </span>
+              <span class="badge m-r-5 badge-light-warning" [title]="MESSAGES.LICENSE.DISCOVERY[license.node.licenseDiscovery]"
+                *ngIf="license.node.licenseDiscovery !== 'DECLARED'">
+                {{ MESSAGES.LICENSE.DISCOVERY[license.node.licenseDiscovery] }}
+              </span>
             </td>
-            <td>{{messages.license.origin[license.node.licenseOrigin]}}</td>
+            <td>{{ MESSAGES.LICENSE.DISCOVERY[license.node.licenseOrigin] }}</td>
             <td>
               <div *ngIf="license.node.licenseOrigin === 'ASSET'">
                 Asset license

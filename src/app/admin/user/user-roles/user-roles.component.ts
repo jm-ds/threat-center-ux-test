@@ -72,7 +72,7 @@ export class UserRolesComponent extends UserUtils implements OnInit {
         return item.roleId + ' - ' + item.description;
     }
 
-  private saveRoles() {
+  public saveRoles() {
     this.userService
       .saveRoles(this.user.username, this.confirmed)
       .subscribe(

@@ -23,7 +23,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-assetData let-columns="assetCols">
-            <tr [pSelectableRow]="licenseData">
+            <tr>
               <!--<--<td>{{assetData['assetId']}}</a></td>-->
               <td><i class="far fa-file-alt m-r-10"></i> <a [routerLink]="['fileview']">{{assetData['name']}}</a></td>
               <td>{{assetData['pct_opensource']}}%</td>

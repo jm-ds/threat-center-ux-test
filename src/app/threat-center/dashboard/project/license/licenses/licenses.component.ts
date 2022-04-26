@@ -12,12 +12,15 @@ import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 
+import { MESSAGES } from '@app/messages/messages';
+
 @Component({
     selector: 'app-licenses',
     templateUrl: './licenses.component.html',
     styles: []
 })
 export class LicensesComponent implements OnInit {
+    MESSAGES = MESSAGES;
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
