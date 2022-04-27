@@ -20,6 +20,7 @@ export class TxComponent {
     lastCheck: Date;
   };
   copyrightList: Copyright[];
+  releaseDate: Date;
 }
 
 export class Copyright {

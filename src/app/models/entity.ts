@@ -15,7 +15,9 @@ export class Entity {
     entityComponents: any;
     vulnerabilities: Vulnerability[];
     licenses: License[];
-    childEntities: Entity[];
+    childEntities: {
+      edges: Entity[]
+    };
     entitySettings: EntitySettings;
 }
 

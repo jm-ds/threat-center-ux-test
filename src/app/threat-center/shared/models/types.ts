@@ -1,3 +1,4 @@
+import { Project } from '@app/models';
 // todo: ref: move this file to /src/app/models
 // todo: ref: consider to split this file into several domain specific
 
@@ -227,21 +228,6 @@ export enum Period {
   MONTH="MONTH",
   QUARTER="QUARTER",
   YEAR="YEAR"
-}
-
-
-
-
-export class Project {
-  projectId:string;
-  entityId:string;
-  name:string;
-  created:any;
-  latestScan: Scan;
-  scans: ScanConnection;
-  childProjects: ProjectConnection;
-  errorMsg: string;
-  log: string;
 }
 
 export class Scan {

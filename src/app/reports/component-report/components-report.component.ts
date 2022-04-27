@@ -12,10 +12,6 @@ import * as _ from 'lodash';
     styleUrls: ['./components-report.component.scss']
 })
 export class ComponentsReportComponent implements OnInit, OnDestroy {
-
-    @Input()
-    displayDataOnly: false;
-
     reportDate = new Date();
 
     nameFilter = '';
@@ -48,6 +44,7 @@ export class ComponentsReportComponent implements OnInit, OnDestroy {
      */
     columns = ['Component', 'Group', 'Version', 'Internal', 'Licenses', 'Vulnerabilities', 'Source'];
 
+  @Input() displayDataOnly: boolean;
 
     constructor(
         private reportService: ReportService,

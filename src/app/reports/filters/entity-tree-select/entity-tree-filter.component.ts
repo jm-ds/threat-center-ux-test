@@ -17,6 +17,9 @@ export class EntityTreeFilterComponent implements OnInit {
     hasAllCheckBox: true,
     hasFilter: true,
     hasCollapseExpand: true,
+    get hasDivider() {
+      return false;
+    },
     decoupleChildFromParent: false,
     maxHeight: 500
   };
