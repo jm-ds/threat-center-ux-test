@@ -652,10 +652,10 @@ export class StringHolder {
   data: string;
 }
 
-export class StartVulnerabilitiesWithCvssV3Query {
-  startVulnerabilitiesWithCvssV3: VulnerableReleaseResponseMap;
+export class GetStartVulnerableReleaseListQuery {
+  getStartVulnerableReleaseList: VulnerableReleaseResponseMap;
 }
 
-export class NextVulnerabilitiesWithCvssV3Query {
-  nextVulnerabilitiesWithCvssV3: VulnerableReleaseResponse;
+export class GetNextVulnerableReleaseListQuery {
+  getNextVulnerableReleaseList: VulnerableReleaseResponse;
 }

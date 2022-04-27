@@ -103,7 +103,7 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerabilityDetails = res["component"]["vulnerabilities"];
     });
 
-    this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
+    this.vulnerableCodeMappingService.getStartVulnerableReleaseList(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
 
       this.binaryLoading = true;
       if (data.binaryVulnerableResponse !== undefined) {
@@ -298,7 +298,7 @@ export class ComponentDetailComponent implements OnInit {
   loadBinaryReleasesLazy(event: LazyLoadEvent) {
     if (this.binaryNextPagingState != null) {
       this.loading = true;
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+      this.vulnerableCodeMappingService.getNextVulnerableReleaseList(
         this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
         .subscribe((data: VulnerableReleaseResponse) => {
           this.binaryReleases.push(...data.vulnerableReleases);
@@ -314,7 +314,7 @@ export class ComponentDetailComponent implements OnInit {
   loadSourceReleasesLazy(event: LazyLoadEvent) {
     if (this.sourceNextPagingState != null) {
       this.loading = true
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+      this.vulnerableCodeMappingService.getNextVulnerableReleaseList(
         this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
         .subscribe((data: VulnerableReleaseResponse) => {
           this.sourceReleases.push(...data.vulnerableReleases);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-  NextVulnerabilitiesWithCvssV3Query,
-  StartVulnerabilitiesWithCvssV3Query,
+  GetNextVulnerableReleaseListQuery,
+  GetStartVulnerableReleaseListQuery,
   VulnerableReleaseResponse,
   VulnerableReleaseResponseMap
 } from '@app/threat-center/shared/models/types';
@@ -16,38 +16,38 @@ import { map } from 'rxjs/operators';
 })
 export class VulnerableCodeMappingService {
 
-    static readonly COMPONENT_RELEASES_FETCH_COUNT: number = 30;
+    static readonly COMPONENT_RELEASES_FETCH_SIZE: number = 30;
 
     constructor(private coreGraphQLService: CoreGraphQLService) {
     }
 
-    startVulnerabilitiesWithCvssV3(componentId: string): Observable<VulnerableReleaseResponseMap> {
-        return this.coreGraphQLService.coreGQLReq<StartVulnerabilitiesWithCvssV3Query>(gql(`query {
-            startVulnerabilitiesWithCvssV3(
+  getStartVulnerableReleaseList(componentId: string): Observable<VulnerableReleaseResponseMap> {
+    return this.coreGraphQLService.coreGQLReq<GetStartVulnerableReleaseListQuery>(gql(`query {
+            getStartVulnerableReleaseList(
                 componentId: "${componentId}",
-                componentReleasesFetchCount: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_COUNT}
+                componentReleasesFetchSize: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_SIZE}
             )
-        }`), 'no-cache').pipe(map(res => res.data.startVulnerabilitiesWithCvssV3));
-    }
+        }`), 'no-cache').pipe(map(res => res.data.getStartVulnerableReleaseList));
+  }
 
 
-    nextVulnerabilitiesWithCvssV3(
-      nextPagingState: string, repositoryType: string, purlType: string, group: string, name: string)
-      : Observable<VulnerableReleaseResponse> {
+  getNextVulnerableReleaseList(
+    nextPagingState: string, repositoryType: string, purlType: string, group: string, name: string)
+    : Observable<VulnerableReleaseResponse> {
 
-        console.log('>>>>> passed repositoryType = ', repositoryType);
-        console.log('>>>>> passed purlType = ', purlType);
-        console.log('>>>>> passed group = ', group);
-        console.log('>>>>> passed name = ', name);
+    console.log('>>>>> passed repositoryType = ', repositoryType);
+    console.log('>>>>> passed purlType = ', purlType);
+    console.log('>>>>> passed group = ', group);
+    console.log('>>>>> passed name = ', name);
 
-        return this.coreGraphQLService.coreGQLReq<NextVulnerabilitiesWithCvssV3Query>(gql(`query {
-            nextVulnerabilitiesWithCvssV3(
+    return this.coreGraphQLService.coreGQLReq<GetNextVulnerableReleaseListQuery>(gql(`query {
+            getNextVulnerableReleaseList(
                 nextPagingState: "${nextPagingState}",
                 repositoryType: "${repositoryType}",
                 purlType: "${purlType}",
                 group: "${group}",
                 name: "${name}",
-                componentReleasesFetchCount: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_COUNT}
+                componentReleasesFetchSize: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_SIZE}
             ) {
                 nextPagingState
                 repositoryType
@@ -70,6 +70,6 @@ export class VulnerableCodeMappingService {
                   }
                 }
             }
-        }`), 'no-cache').pipe(map(res => res.data.nextVulnerabilitiesWithCvssV3));
-    }
+        }`), 'no-cache').pipe(map(res => res.data.getNextVulnerableReleaseList));
+  }
 }
