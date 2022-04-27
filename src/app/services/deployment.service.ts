@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
 import gql from 'graphql-tag';
-import { DeploymentDataQuery } from '@app/models';
+import { DeploymentDataQuery, DeploymentSettings } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -25,18 +25,18 @@ export class DeploymentService {
     );
   }
 
-  saveDeploymentData(orgId: string, deploymentMode: string, cloudServerUrl: string, cloudThreatrixSchemeIp: string, cloudApiKey: string) {
-    const deploymentDataRequest = new DeploymentDataRequestInput(
-      orgId,
-      deploymentMode,
-      cloudServerUrl,
-      cloudThreatrixSchemeIp,
-      cloudApiKey
+  saveDeploymentData(deploymentSettings: DeploymentSettings) {
+    const deploymentSettingsInput = new DeploymentSettingsInput(
+      deploymentSettings.orgId,
+      deploymentSettings.deploymentMode,
+      deploymentSettings.cloudServerUrl,
+      deploymentSettings.cloudThreatrixSchemeIp,
+      deploymentSettings.cloudApiKey
     );
     return this.coreGraphQLService.coreGQLReqForMutation(
       gql`
-        mutation($deploymentDataRequest: DeploymentDataRequestInput) {
-          saveDeploymentSettings(deploymentSettings: $deploymentDataRequest) {
+        mutation saveDeploymentSettings($deploymentSettingsInput: DeploymentSettingsInput) {
+          saveDeploymentSettings(deploymentSettings: $deploymentSettingsInput) {
             orgId,
             deploymentMode,
             cloudServerUrl,
@@ -44,12 +44,12 @@ export class DeploymentService {
             cloudApiKey
           }
         }
-        `, {deploymentDataRequest}
+        `, {deploymentSettingsInput}
     );
   }
 }
 
-export class DeploymentDataRequestInput {
+export class DeploymentSettingsInput {
   readonly orgId: string;
   readonly deploymentMode: string;
   readonly cloudServerUrl: string;

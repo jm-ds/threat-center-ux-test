@@ -161,7 +161,7 @@ export class JiraTicket {
     self: string;
 }
 
-export class DeploymentData {
+export class DeploymentSettings {
   orgId: string;
   deploymentMode: string;
   cloudServerUrl: string;
@@ -244,6 +244,6 @@ export type JiraTicketQuery = {
 };
 
 export type DeploymentDataQuery = {
-  deploymentData: DeploymentData;
+    deploymentSettings: DeploymentSettings;
 };
 
