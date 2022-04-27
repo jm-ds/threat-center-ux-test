@@ -206,6 +206,15 @@ const NavigationItems = [
             url: '/dashboard/org-setting',
             permissions: ["ORG_VIEW"],
             target: false,
+          },
+          {
+            id: 'deployment-mode',
+            title: 'Deployment Mode',
+            icon: 'fas fa-tasks',
+            type: 'item',
+            url: '/admin/deployment',
+            permissions: ['ENTITY_EDIT'],
+            target: false
           }
         ]
       }

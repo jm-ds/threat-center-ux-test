@@ -1,0 +1,34 @@
+<div style="width: 100%; margin-top: 8px;">
+    <div>
+        <p style="margin-top:8px; font-weight: bold;">Deployment Mode Settings</p>
+        <div class="form-group " style="padding-left: 0px">
+            <select class="form-control form-control-sm custom-select" id="entityType" [(ngModel)]="deploymentSettings.deploymentMode"
+                    required>
+                <option value="" selected disabled>Select mode</option>
+                <option value="HYBRID">Hybrid</option>
+                <option value="ON_PREM">On prem</option>
+                <option value="TRX_CLOUD">TRX cloud</option>
+            </select>
+        </div>
+        <div *ngIf="deploymentSettings!.deploymentMode=='HYBRID'">
+            <div class="form-group " style="padding-left: 0px">
+                <label class="font-weight-bolder">Cloud Server URL (example: https://stage.threatrix.io)</label>
+                <input name="projectUrl" required placeholder="Project URL" class="form-control" style="width: 100%;" [(ngModel)]="deploymentSettings!.cloudServerUrl"/>
+            </div>
+            <div class="form-group " style="padding-left: 0px">
+                <label class="font-weight-bolder">Cloud Threatrix Scheme Ip (example: 10.128.0.22)</label>
+                <input name="projectId" required placeholder="Project ID" class="form-control" style="width: 100%;" [(ngModel)]="deploymentSettings!.cloudThreatrixSchemeIp"/>
+            </div>
+            <div class="form-group " style="padding-left: 0px">
+                <label class="font-weight-bolder">Cloud Api Key</label>
+                <input name="issueTypeId" required placeholder="Issue Type ID" class="form-control" style="width: 100%;" [(ngModel)]="deploymentSettings!.cloudApiKey"/>
+            </div>
+        </div>
+    </div>
+    <div class="actions mt-4">
+        <button type="button" class="btn btn-success" [disabled] = "!validateData()" (click)="saveDeploymentData()" >
+            <i class="feather icon-save"></i>
+            Save
+        </button>
+    </div>
+</div>
