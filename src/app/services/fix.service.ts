@@ -1,8 +1,7 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {EntityQuery, FixResult} from "@app/models";
-import {PatchedInfo, PatchedInfoSimplified, PatchedInfoSimplifiedQuery} from "@app/threat-center/shared/models/types";
-import { environment } from "environments/environment";
+import { FixComponentVersionQuery, FixResult } from '@app/models';
+import { PatchedInfoSimplified, PatchedInfoSimplifiedQuery } from '@app/threat-center/shared/models/types';
 import { Observable } from "rxjs";
 import gql from "graphql-tag";
 import {map} from "rxjs/operators";
@@ -18,16 +17,20 @@ export class FixService {
         private coreGraphQLService: CoreGraphQLService
     ) {}
 
-
     fixComponentVersion(scanId: string, componentId: string, oldVersion: string, newVersion: string): Observable<FixResult[]> {
-        const url = environment.apiUrl + '/fixComponentVersion';
-        const body = new FormData();
-
-        body.append('scanId', scanId);
-        body.append('componentId', componentId);
-        body.append('newVersion', newVersion);
-        body.append('oldVersion', oldVersion);
-        return this.http.post<FixResult[]>(url, body).pipe();
+        return this.coreGraphQLService.coreGQLReq<FixComponentVersionQuery>(gql(`query {
+            fixComponentVersion(
+                scanId: "${scanId}", componentId: "${componentId}", newVersion: "${newVersion}", oldVersion:" ${oldVersion}"
+            ) {
+                groupId
+                artifactId
+                oldVersion
+                newVersion
+                buildFile
+                success
+                errorMessage
+            }
+        }`), 'no-cache').pipe(map(res => res.data.fixComponentVersion));
     }
 
     getPatchedVersion(componentId: string): Observable<PatchedInfoSimplified> {
