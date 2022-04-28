@@ -26,7 +26,6 @@
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
-    "strictOutputEventTypes": false,
     "strictDomEventTypes": false,
     "strictInjectionParameters": true
   }

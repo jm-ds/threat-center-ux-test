@@ -28,7 +28,7 @@ export class UserEditComponent implements OnInit {
     display: any;
     format: any = DualListComponent.DEFAULT_FORMAT;
     roles: Array<any>;
-    selectedRoles: Array<any>;
+  selectedRoles: any[];
 
     entities: Entity[];
     entitySelectItems: Array<IOption>;
@@ -98,6 +98,10 @@ export class UserEditComponent implements OnInit {
 
         this.display = this.roleDisplay;
     }
+
+  onDestinationChange(event: object) {
+    this.selectedRoles = event as any[];
+  }
 
     save(form) {
         if (form.form.invalid) {

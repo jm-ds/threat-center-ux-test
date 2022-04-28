@@ -20,8 +20,9 @@
         </div>
         <div class="col-md-8">
             <app-card cardTitle="Manage user roles" [options]="false">
-                <dual-list [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
-                           [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled"></dual-list>
+              <dual-list height="265px" [sort]="keepSorted" [source]="source" [key]="key" [display]="display" [filter]="filter"
+                [destination]="confirmed" [format]="format" [disabled]="disabled" (destinationChange)="onDestinationChange($event)">
+              </dual-list>
 
                 <div class="actions mt-5 text-center">
                     <button (click)="saveRoles()" class="btn btn-success">
