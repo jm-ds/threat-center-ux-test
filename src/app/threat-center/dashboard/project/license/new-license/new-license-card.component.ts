@@ -138,7 +138,16 @@ export class NewLicenseCardComponent implements OnInit {
 
     }
 
-    filterColumn(column, value, idElement: string = '') {
+    /**
+     * Filter by column
+     *
+     * @param column column name
+     * @param event input event
+     * @param idElement element ID
+     */
+    onFilterColumn(column: string, event: Event, idElement: string = '') {
+        const { value } = event.target as HTMLInputElement | HTMLSelectElement;
+
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {

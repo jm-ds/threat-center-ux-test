@@ -837,7 +837,15 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  filterColumn(value: string, idElement: string = '') {
+  /**
+   * Filter by column
+   *
+   * @param event input event
+   * @param idElement element ID
+   */
+  onFilterColumn(event: Event, idElement: string = '') {
+    const { value } = event.target as HTMLInputElement;
+
     if (value.length === 0) {
       this.filterBranchName = '';
     } else {

@@ -55,11 +55,10 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
     @ViewChild('orgRepoList') orgRepoList: RepositoryListComponent;
-    @ViewChild('repoList') repoList: RepositoryListComponent;
+    @ViewChild('repoList') private repoList: RepositoryListComponent;
     @ViewChild('gitLabRepoList') gitLabRepoList: RepositoryListComponent;
     @ViewChild('bitbucketRepoList') bitbucketRepoList: RepositoryListComponent;
     @ViewChild('readyScanRepo') readyScanRepo: ReadyScanRepositorylistComponent;
-
 
     constructor(
         private scanService: ScanService,
@@ -267,6 +266,17 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         };
         this.getLastTabSelected();
     }
+
+   /**
+    * Filter by repository
+    *
+    * @param event input event
+    */
+   onRepositoryFilterInput(event: Event) {
+    const { value } = event.target as HTMLInputElement;
+
+    this.repoList.dataTableRef.filterGlobal(value, 'contains');
+  }
 
     onRowSelect(event) {
         this.selectedRepos[0] = event.data;

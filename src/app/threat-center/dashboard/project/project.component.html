@@ -66,9 +66,8 @@
 
         <div style="float: right; text-align: right" *ngIf="stateService.project_tabs_selectedTab === 'scan'">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" size="45" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
-                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
-                   [value]="getColumnFilterValue()"/>
+          <input style="width: auto; display: inline" id="branchName" class="form-control" name="search-name" size="45"
+            placeholder="Branch name" pInputText [value]="getColumnFilterValue()" (input)="onFilterColumn($event, 'branchName')">
         </div>
 
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">

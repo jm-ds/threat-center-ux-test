@@ -2,56 +2,51 @@
     <div class="row">
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <input id="nameSearch" type="text" placeholder="Name" name="search-name" class="form-control"
-                    (input)="filterColumn('Name', $event.target.value,'nameSearch')"
-                    [value]="getColumnFilterValue('Name')" />
+              <input id="nameSearch" class="form-control" name="search-name" placeholder="Name" [value]="getColumnFilterValue('Name')"
+                (input)="onFilterColumn('Name', $event, 'nameSearch')">
             </div>
         </div>
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <select id="locationSearch" class="form-control custom-select search-dropdown-w"
-                    [value]="getColumnFilterValue('Location')"
-                    (change)="filterColumn('Location', $event.target.value,'locationSearch')">
-                    <option value="ALL" selected>- All -</option>
-                    <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
-                    <option value="DRIVE">DRIVE</option>
-                    <option value="STATIC_REF">STATIC REF</option>
-                </select>
+              <select id="locationSearch" class="form-control custom-select search-dropdown-w"
+                [value]="getColumnFilterValue('Location')" (change)="onFilterColumn('Location', $event, 'locationSearch')">
+                <option value="ALL" selected>- All -</option>
+                <option value="DEPENDENCY_FILE">DEPENDENCY FILE</option>
+                <option value="DRIVE">DRIVE</option>
+                <option value="STATIC_REF">STATIC REF</option>
+              </select>
             </div>
         </div>
 
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <select id="typeSearch" class="form-control custom-select search-dropdown-w"
-                    [value]="getColumnFilterValue('Type')"
-                    (change)="filterColumn('Type', $event.target.value,'typeSearch')">
-                    <option value="ALL" selected>- All -</option>
-                    <option value="LIBRARY">LIBRARY</option>
-                    <option value="ASSET">ASSET</option>
-                </select>
+              <select id="typeSearch" class="form-control custom-select search-dropdown-w" [value]="getColumnFilterValue('Type')"
+                (change)="onFilterColumn('Type', $event, 'typeSearch')">
+                <option value="ALL" selected>- All -</option>
+                <option value="LIBRARY">LIBRARY</option>
+                <option value="ASSET">ASSET</option>
+              </select>
             </div>
         </div>
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <select id="discoverySearch" class="form-control custom-select search-dropdown-w"
-                    [value]="getColumnFilterValue('Discovery')"
-                    (change)="filterColumn('Discovery', $event.target.value,'discoverySearch')">
-                    <option value="ALL" selected>- All -</option>
-                    <option value="DECLARED">DECLARED</option>
-                    <option value="DISCOVERED">DISCOVERED</option>
-                </select>
+              <select id="discoverySearch" class="form-control custom-select search-dropdown-w"
+                [value]="getColumnFilterValue('Discovery')" (change)="onFilterColumn('Discovery', $event, 'discoverySearch')">
+                <option value="ALL" selected>- All -</option>
+                <option value="DECLARED">DECLARED</option>
+                <option value="DISCOVERED">DISCOVERED</option>
+              </select>
             </div>
         </div>
 
         <div class="col-sm-4 col-xs-12 mt-1">
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
-                <input type="checkbox" name="checkbox-01" id="checkbox-01"
-                    (change)="filterColumn('Internal', $event.target.value)" [value]="isInternal">
+                <input id="checkbox-01" name="checkbox-01" [value]="isInternal" (change)="onFilterColumn('Internal', $event)">
                 <label for="checkbox-01" class="cr mb-0">Internal</label>
             </div>
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
-                <input type="checkbox" name="checkbox-02" id="checkbox-02"
-                    (change)="filterColumn('Vulnerabilities', $event.target.value)" [value]="isVul">
+                <input id="checkbox-02" type="checkbox" name="checkbox-02" [value]="isVul"
+                  (change)="onFilterColumn('Vulnerabilities', $event)">
                 <label for="checkbox-02" class="cr mb-0">Vulnerabilities</label>
             </div>
             <div class="checkbox checkbox-info d-inline p-0 mr-3">

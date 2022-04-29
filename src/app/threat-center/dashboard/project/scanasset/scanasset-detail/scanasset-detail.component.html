@@ -163,8 +163,10 @@
             </ng-template>
             <ng-template pTemplate="body" let-matchLicense >
               <tr>
-                <td class="align-middle"><input type="checkbox" [id]="matchLicense.licenseId" name="selectedAssetMatch" [value]="matchLicense"
-                                                (change)="onSelectedChange(matchLicense.licenseId, $event.target.checked)"></td>
+                <td class="align-middle">
+                  <input name="assetMatch" type="checkbox" [id]="matchLicense.licenseId" [value]="matchLicense"
+                    (change)="onCheckedAssetMatchChange(matchLicense.licenseId, $event)">
+                </td>
                 <td>{{matchLicense.licenseId}}</td>
                 <td>{{matchLicense.licenseName}}</td>
                 <td>

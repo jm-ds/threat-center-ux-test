@@ -203,7 +203,23 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.initData();
   }
 
-  filterColumn(column, value, idElement: string = '') {
+  filterOnlyAssetsIfFilterActivated() {
+    if (!!this.scanAssetDetails && this.scanAssetDetails.scanAssetsTree.edges.length >= 1 && this.columnsFilter.size >= 1) {
+      this.scanAssetDetails.scanAssetsTree.edges =
+        this.scanAssetDetails.scanAssetsTree.edges.filter(asset => { return asset.node.scanAssetType !== 'DIR' });
+    }
+  }
+
+  /**
+   * Filter by column
+   *
+   * @param column column name
+   * @param event input event
+   * @param idElement element ID
+   */
+  onFilterColumn(column: string, event: Event, idElement: string = '') {
+    const { value } = event.target as HTMLInputElement | HTMLSelectElement;
+
     if (value.length === 0 || value === 'ALL') {
       this.columnsFilter.delete(column);
     } else {
@@ -220,13 +236,6 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
         this.setUserPreferencesDetailsForAseets();
       });
     }, this.timeOutDuration);
-  }
-
-  filterOnlyAssetsIfFilterActivated() {
-    if (!!this.scanAssetDetails && this.scanAssetDetails.scanAssetsTree.edges.length >= 1 && this.columnsFilter.size >= 1) {
-      this.scanAssetDetails.scanAssetsTree.edges =
-        this.scanAssetDetails.scanAssetsTree.edges.filter(asset => { return asset.node.scanAssetType !== 'DIR' });
-    }
   }
 
   getColumnFilterValue(key) {

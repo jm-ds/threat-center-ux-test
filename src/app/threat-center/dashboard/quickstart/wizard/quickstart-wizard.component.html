@@ -372,7 +372,7 @@
     </div>
   </ng-template>
 
-  <ng-template #repoHeader let-img="img" let-user="user" let-repoRef="repoRef" let-badge="badge">
+  <ng-template #repoHeader let-img="img" let-user="user" let-badge="badge">
     <div class="repository-usr">
       <div class="repo-usr-img">
         <img width="30" src="{{img}}">
@@ -381,8 +381,7 @@
         {{user}}
       </div>
       <div class="repo-filter">
-        <input type="text" pInputText size="50" placeholder="Filter"
-          (input)="repoRef['dataTableRef'].filterGlobal($event.target.value, 'contains')" class="form-control">
+        <input class="form-control" placeholder="Filter" pInputText size="50" (input)="onRepositoryFilterInput($event)">
       </div>
     </div>
   </ng-template>

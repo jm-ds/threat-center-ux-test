@@ -224,12 +224,10 @@
                               </tr>
                               <tr>
                                 <th *ngFor="let col of binaryReleases" [ngSwitch]="col.version">
-                                  <input class="form-control" pInputText type="text"
-                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                  <input class="form-control" pInputText (input)="dtBinary.filterGlobal($event, 'startsWith')">
                                 </th>
                                 <th *ngFor="let col of binaryReleases" [ngSwitch]="col.releaseDate">
-                                  <input class="form-control" pInputText type="text"
-                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                  <input class="form-control" pInputText (input)="dtBinary.filterGlobal($event, 'startsWith')">
                                 </th>
                               </tr>
                             </ng-template>
