@@ -25,8 +25,8 @@ export class NavContentComponent implements OnInit, AfterViewInit {
 
   @Output() onNavMobCollapse = new EventEmitter();
 
-  @ViewChild('navbarContent', {static: false}) navbarContent: ElementRef;
-  @ViewChild('navbarWrapper', {static: false}) navbarWrapper: ElementRef;
+  @ViewChild('navbarContent') navbarContent: ElementRef;
+  @ViewChild('navbarWrapper') navbarWrapper: ElementRef;
 
   constructor(public nav: NavigationItem, private zone: NgZone, private location: Location) {
     this.nextConfig = NextConfig.config;

@@ -26,10 +26,6 @@ export class FileSizeSliderFormatter implements NouiFormatter {
     styleUrls: ['./embedded-assets-report.component.scss']
 })
 export class EmbeddedAssetsReportComponent implements OnInit,OnDestroy {
-
-    @Input()
-    displayDataOnly: false;
-
     reportDate = new Date();
 
     nameFilter = '';
@@ -88,6 +84,7 @@ export class EmbeddedAssetsReportComponent implements OnInit,OnDestroy {
      */
     columns = ['File Name', 'File Size', 'Status',  'Embedded percent', 'Attribution', 'Match type'/*, 'Workspace Path'*/];
 
+  @Input() displayDataOnly: boolean;
 
     constructor(private reportService: ReportService,
                 private scrollDisableService: ScrollStateService

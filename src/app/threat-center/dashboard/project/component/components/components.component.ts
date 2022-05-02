@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -29,7 +29,7 @@ export class ComponentsComponent implements OnInit {
     newVersion: string;
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     componentDetails: any;
 
     columns = [

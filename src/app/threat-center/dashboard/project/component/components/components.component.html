@@ -27,18 +27,11 @@
           </tr>
           <tr>
             <th *ngFor="let col of columns">
-              <input *ngIf="col.header =='Name'" id="nameSearch" type="text" placeholder="{{col.header}}"
-                name="search-name" class="form-control"
-                (input)="filterColumn(col.header, $event.target.value,'nameSearch')"
-                [value]="getColumnFilterValue(col.header)" />
-              <input *ngIf="col.header =='Group'" id="groupSearch" type="text" placeholder="{{col.header}}"
-                name="search-name" class="form-control"
-                (input)="filterColumn(col.header, $event.target.value,'groupSearch')"
-                [value]="getColumnFilterValue(col.header)" />
-              <input *ngIf="col.header =='Version'" type="text" placeholder="{{col.header}}" name="search-name"
-                class="form-control" id="versionSearch"
-                (input)="filterColumn(col.header, $event.target.value,'versionSearch')"
-                [value]="getColumnFilterValue(col.header)" />
+              <input id="nameSearch" class="form-control" name="search-name" [value]="getColumnFilterValue(col.header)" [placeholder]="col.header" *ngIf="col.header === 'Name'" (input)="filterColumn(col.header, $event, 'nameSearch')">
+
+              <input id="groupSearch" class="form-control" name="search-name" [value]="getColumnFilterValue(col.header)" [placeholder]="col.header" *ngIf="col.header =='Group'" (input)="filterColumn(col.header, $event, 'groupSearch')">
+
+              <input id="versionSearch" class="form-control" name="search-name" [value]="getColumnFilterValue(col.header)" [placeholder]="col.header" *ngIf="col.header === 'Version'" (input)="filterColumn(col.header, $event,'versionSearch')">
 
               <div container="body" class="dropdown" *ngIf="col.header == 'Internal'" ngbDropdown>
                 <a class="dropdown-toggle text-c-blue" ngbDropdownToggle href="javascript:" data-toggle="dropdown"
@@ -107,14 +100,12 @@
                 </div>
               </div>
 
-              <select id="vulSearch" *ngIf="col.header == 'Vulnerabilities'"
-                class="form-control custom-select" [value]="getColumnFilterValue(col.header)"
-                (change)="filterColumn(col.header, $event.target.value,'vulSearch')">
+              <select id="vulSearch" class="form-control custom-select" [value]="getColumnFilterValue(col.header)"
+                *ngIf="col.header === 'Vulnerabilities'" (change)="filterColumn(col.header, $event, 'vulSearch')">
                 <option value="ALL" selected>- All -</option>
                 <option value="TRUE">True</option>
                 <option value="FALSE">False</option>
               </select>
-
             </th>
           </tr>
         </ng-template>

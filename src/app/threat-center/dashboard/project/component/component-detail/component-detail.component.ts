@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -58,9 +58,9 @@ export class ComponentDetailComponent implements OnInit {
   MESSAGES = MESSAGES;
   defaultPageSize = 25;
   pageIndex = 0;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('perfectScrollSourceRelese', { static: false }) perfectScrollSourceRelese: PerfectScrollbarComponent;
-  @ViewChild('perfectScrollBinaryRelese', { static: false }) perfectScrollBinaryRelese: PerfectScrollbarComponent;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('perfectScrollSourceRelese') perfectScrollSourceRelese: PerfectScrollbarComponent;
+  @ViewChild('perfectScrollBinaryRelese') perfectScrollBinaryRelese: PerfectScrollbarComponent;
 
   vulnerabilityDetails: any = {};
 
@@ -70,7 +70,7 @@ export class ComponentDetailComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private scanComponentService: ScanComponentService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     private router: Router,
     private coreHelperService: CoreHelperService,

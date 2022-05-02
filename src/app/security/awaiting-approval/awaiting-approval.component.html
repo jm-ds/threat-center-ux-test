@@ -30,8 +30,9 @@
 
 
             <div class="mt-5">
-                <app-alert type="info" dismiss="true" *ngIf="messageInfo">{{messageInfo}}</app-alert>
-                <app-alert type="danger" dismiss="true" *ngIf="messageError">{{messageError}}</app-alert>
+                <app-alert type="info" [dismiss]="true" *ngIf="messageInfo">{{ messageInfo }}</app-alert>
+
+                <app-alert type="danger" [dismiss]="true" *ngIf="messageError">{{ messageError }}</app-alert>
             </div>
 
             <form *ngIf="!user?.invitedByUsername && (user?.email == null || user?.email == '' || user?.organization == null || user?.organization.name == null || user?.coverLetter == null)"

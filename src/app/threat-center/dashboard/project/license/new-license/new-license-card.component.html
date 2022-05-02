@@ -2,49 +2,44 @@
     <div class="row">
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <input id="nameSearch" type="text" placeholder="Name" name="search-name" class="form-control"
-                    (input)="filterColumn('Name', $event.target.value,'nameSearch')"
-                    [value]="getColumnFilterValue('Name')" />
+              <input id="nameSearch" class="form-control" name="search-name" placeholder="Name" [value]="getColumnFilterValue('Name')"
+                (input)="onFilterColumn('Name', $event, 'nameSearch')">
             </div>
         </div>
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <input id="spdxSearch" type="text" placeholder="SPDX" name="search-name" class="form-control"
-                    (input)="filterColumn('SPDX', $event.target.value,'spdxSearch')"
-                    [value]="getColumnFilterValue('SPDX')" />
+              <input id="spdxSearch" name="search-name" placeholder="SPDX" class="form-control" [value]="getColumnFilterValue('SPDX')"
+                (input)="onFilterColumn('SPDX', $event, 'spdxSearch')">
             </div>
         </div>
 
 
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-
-                <select id="threatCategorySearch" class="form-control custom-select"
-                    [value]="getColumnFilterValue('Category')"
-                    (change)="filterColumn('Category', $event.target.value,'threatCategorySearch')">
-                    <option value="ALL" selected>- All -</option>
-                    <option value="UNDEFINED">Undefined</option>
-                    <option value="PROPRIETARY_FREE">Proprietary Free</option>
-                    <option value="PUBLIC_DOMAIN">Public Domain</option>
-                    <option value="PROPRIETARY">Proprietary</option>
-                    <option value="PERMISSIVE">Permissive</option>
-                    <option value="COPYLEFT_WEAK">Copyleft Weak</option>
-                    <option value="COPYLEFT_STRONG">Copyleft Strong</option>
-                    <option value="COPYLEFT_PARTIAL">Copyleft Partial</option>
-                    <option value="COPYLEFT_LIMITED">Copyleft Limited</option>
-                    <option value="COPYLEFT">Copyleft</option>
-                </select>
+              <select id="threatCategorySearch" class="form-control custom-select" [value]="getColumnFilterValue('Category')"
+                (change)="onFilterColumn('Category', $event, 'threatCategorySearch')">
+                <option value="ALL" selected>- All -</option>
+                <option value="UNDEFINED">Undefined</option>
+                <option value="PROPRIETARY_FREE">Proprietary Free</option>
+                <option value="PUBLIC_DOMAIN">Public Domain</option>
+                <option value="PROPRIETARY">Proprietary</option>
+                <option value="PERMISSIVE">Permissive</option>
+                <option value="COPYLEFT_WEAK">Copyleft Weak</option>
+                <option value="COPYLEFT_STRONG">Copyleft Strong</option>
+                <option value="COPYLEFT_PARTIAL">Copyleft Partial</option>
+                <option value="COPYLEFT_LIMITED">Copyleft Limited</option>
+                <option value="COPYLEFT">Copyleft</option>
+              </select>
             </div>
         </div>
         <div class="col-sm-2 col-xs-12">
             <div class="form-group">
-                <select id="discovery" class="form-control custom-select"
-                    [value]="getColumnFilterValue('LicenseDiscovery')"
-                    (change)="filterColumn('LicenseDiscovery', $event.target.value,'discovery')">
-                    <option value="ALL" selected>- All -</option>
-                    <option value="DECLARED">DECLARED</option>
-                    <option value="DISCOVERED">DISCOVERED</option>
-                </select>
+              <select id="discovery" class="form-control custom-select" [value]="getColumnFilterValue('LicenseDiscovery')"
+                (change)="onFilterColumn('LicenseDiscovery', $event, 'discovery')">
+                <option value="ALL" selected>- All -</option>
+                <option value="DECLARED">DECLARED</option>
+                <option value="DISCOVERED">DISCOVERED</option>
+              </select>
             </div>
         </div>
     </div>
@@ -179,7 +174,7 @@
         <div class="action-btns multiple-btn" *ngIf="license.node?.licenseAssetAttribution">
           {{ license.node?.licenseAssetAttribution.attributionStatus }}
          </div>
-         
+
          <div class="action-btns multiple-btn" *ngIf="!license.node?.licenseAssetAttribution">
           <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
             Ignore
@@ -195,11 +190,11 @@
       <h5 class="modal-title">Attribution Process Executing</h5>
       <!-- <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="attributionModal.hide()"><span aria-hidden="true">&times;</span></button> -->
     </div>
-    
+
     <div class="app-modal-body">
       <p>Attribution process executing. Please wait few seconds.</p>
     </div>
-    
+
     <div class="app-modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="attributeProcessExecutionModel(attributeProcessExecuteMessageModel)">Close</button>
         </div>

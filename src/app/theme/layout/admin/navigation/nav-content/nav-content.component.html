@@ -1,6 +1,7 @@
-<perfect-scrollbar *ngIf="this.nextConfig['layout'] === 'vertical'" (clickOutside)="navMob()"
-  [excludeBeforeClick]="true" [exclude]="'#mobile-collapse'" id="nav-ps-next" ngClass="next-scroll"
-  [style.max-width]="'300px'" [style.max-height]="'calc(100vh - 60px)'" [usePSClass]="'next'" [disabled]="null">
+<perfect-scrollbar id="nav-ps-next" class="next next-scroll" [style.max-width.px]="300"
+  [style.max-height]="'calc(100vh - 60px)'" [usePSClass]="true" [excludeBeforeClick]="true"
+  [exclude]="'#mobile-collapse'" [disabled]="null" *ngIf="this.nextConfig['layout'] === 'vertical'"
+  (clickOutside)="navMob()">
   <div class="navbar-content">
     <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()">
       <ng-container *ngFor="let item of navigation">
