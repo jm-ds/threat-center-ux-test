@@ -29,11 +29,10 @@
             <input type="text" name="description" class="form-control" placeholder="Description..." required [(ngModel)]="role.description">
         </div>
 
-
         <label>Permissions</label>
-        <dual-list [source]="source" [sort]="true" [key]="'name'" [display]="display" [filter]="false"
-                   [(destination)]="confirmed" height="265px" [format]="format" [disabled]="false"></dual-list>
-
+        <dual-list key="name" height="265px" [source]="source" [sort]="true" [display]="display" [filter]="false"
+          [destination]="confirmed" [format]="format" [disabled]="false" (destinationChange)="onDestinationChange($event)">
+        </dual-list>
 
         <div class="actions mt-4">
             <button type="button" class="btn btn-success" (click)="saveRole()">

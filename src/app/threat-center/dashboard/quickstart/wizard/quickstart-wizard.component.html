@@ -1,6 +1,6 @@
 <app-card [hidHeader]="true" cardClass="tab-card">
 
-  
+
   <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
     <!-- Github -->
     <ngb-tab id="Github">
@@ -133,7 +133,7 @@
       </ng-template>
     </ngb-tab>
 
-    
+
     <!--Bitbucket-->
     <!-- <ngb-tab class="mb-3" id="Bitbucket">
       <ng-template ngbTabTitle>
@@ -145,7 +145,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-xl-8 col-md-12">
-                  
+
                   <ng-container *ngTemplateOutlet="headertem"></ng-container>
                   <div class="row ">
                     <div class="col-xl-6 col-lg-6 col-md-12">
@@ -294,7 +294,7 @@
                 {{match.repositoryOwner}} / {{match.repositoryName}}<br/>
                 SHA-1: {{match.matchAssetId}}<br/>
                 <!--<i class="btn-outline-info fab fa-github fa-1x align-middle m-r-5"></i>-->
-                <div *ngFor="let assetLicense of match.licenses">
+                <div *ngFor="let assetLicense of match.assetLicenses">
                   {{assetLicense.licenseName}} : {{assetLicense.licenseContext}}
 
                 </div>
@@ -334,7 +334,7 @@
   </ngb-tabset>
   <ng-template #loading>
     <div *ngIf="!loadingScan">
-      <p>You don’t have any repositories available for scanning.</p> 
+      <p>You don’t have any repositories available for scanning.</p>
       <p>You must use Github/Gitlab OAuth login in order for Threatrix to access your repositories to run scans from Threat Center</p>
     </div>
     <span *ngIf="loadingScan">Loading...</span>
@@ -372,7 +372,7 @@
     </div>
   </ng-template>
 
-  <ng-template #repoHeader let-img="img" let-user="user" let-repoRef="repoRef" let-badge="badge">
+  <ng-template #repoHeader let-img="img" let-user="user" let-badge="badge">
     <div class="repository-usr">
       <div class="repo-usr-img">
         <img width="30" src="{{img}}">
@@ -381,8 +381,7 @@
         {{user}}
       </div>
       <div class="repo-filter">
-        <input type="text" pInputText size="50" placeholder="Filter"
-          (input)="repoRef['dataTableRef'].filterGlobal($event.target.value, 'contains')" class="form-control">
+        <input class="form-control" placeholder="Filter" pInputText size="50" (input)="onRepositoryFilterInput($event)">
       </div>
     </div>
   </ng-template>

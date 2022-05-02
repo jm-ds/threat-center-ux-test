@@ -11,7 +11,7 @@ import { TcSharedModule } from '@app/threat-center/shared/tc-shared.module';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { NgxSpinnerModule } from "ngx-spinner";
-import { MatProgressBarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RepositoryListComponent } from './wizard/repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './wizard/ready-scan-repo/ready-scan-repo.component';
 
@@ -41,7 +41,6 @@ import { ReadyScanRepositorylistComponent } from './wizard/ready-scan-repo/ready
     NgbModule,
     MatProgressBarModule
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: []
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class QuickstartModule { }

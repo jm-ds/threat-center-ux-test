@@ -20,7 +20,7 @@ import { DualListComponent } from 'angular-dual-listbox';
 export class UserRolesComponent extends UserUtils implements OnInit {
     keepSorted = true;
     source: Array<any>;
-    confirmed: Array<any> = [];
+  confirmed: any[] = [];
     key: string;
     display: any;
     filter = false;
@@ -72,7 +72,11 @@ export class UserRolesComponent extends UserUtils implements OnInit {
         return item.roleId + ' - ' + item.description;
     }
 
-  private saveRoles() {
+  onDestinationChange(event: object) {
+    this.confirmed = event as any[];
+  }
+
+  public saveRoles() {
     this.userService
       .saveRoles(this.user.username, this.confirmed)
       .subscribe(

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Table } from 'primeng';
 
 import { Message, Messages, Policy, PolicyConditionGroup } from '@app/models';
 
@@ -37,7 +39,7 @@ export class PolicyShowComponent implements OnInit {
     public actionTypeMap={};
     public actionNameMap={};
 
-
+    @ViewChild(Table) private table: Table;
 
     constructor(
         private policyService: PolicyService,
@@ -247,6 +249,17 @@ export class PolicyShowComponent implements OnInit {
             });
           });
     }
+  }
+
+  /**
+   * Filter table
+   *
+   * @param event input event
+   */
+   onFilterInput(event: Event) {
+    const { value } = event.target as HTMLInputElement;
+
+    this.table.filterGlobal(value, 'contains');
   }
 
     gotoTab(tabId: string) {

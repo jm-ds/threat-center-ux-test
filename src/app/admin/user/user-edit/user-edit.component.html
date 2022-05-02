@@ -54,11 +54,11 @@
             <ng-select name="defaultEntityId" id="defaultEntityId" [ngClass]="'ng-select'" [options]="defaultEntitySelectionItems" [(ngModel)]="defaultEntityId" [placeholder]="'Select default entity...'"></ng-select>
         </div>
 
-        <!-- [(destination)]="selectedRoles" -->
         <label>Roles</label>
-        <dual-list [source]="roles" [sort]="true" [key]="'roleId'" [display]="roleDisplay" [filter]="false"
-                   [(destination)]="selectedRoles" height="265px" [format]="format" [disabled]="false"></dual-list>
-                   
+        <dual-list key="roleId" height="265px" [source]="roles" [sort]="true" [display]="roleDisplay" [filter]="false"
+          [destination]="selectedRoles" [format]="format" [disabled]="false" (destinationChange)="onDestinationChange($event)">
+        </dual-list>
+
         <span class="mt-4" *ngIf="userForm.submitted && (!selectedRoles || selectedRoles.length == 0)">
             <app-alert type="danger">Role is required.</app-alert>
         </span>

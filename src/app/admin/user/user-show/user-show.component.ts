@@ -21,7 +21,7 @@ export class UserShowComponent extends UserUtils implements OnInit {
         protected router: Router,
         private route: ActivatedRoute,
         private authService: AuthenticationService,
-        protected authorizationService: AuthorizationService
+        public authorizationService: AuthorizationService
     ) {
         super(router);
         this.messages = Messages.fromRouter(this.router);

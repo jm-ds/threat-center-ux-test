@@ -4,7 +4,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { debounceTime, map, filter, startWith } from 'rxjs/operators';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HostListener } from '@angular/core';
@@ -37,7 +37,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     // private apiService: ApiService,
     private projectService: ProjectService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
@@ -48,7 +48,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     private userPreferenceService: UserPreferenceService,
     private projectBreadcumsService: ProjectBreadcumsService,
     private chartHelperService: ChartHelperService,
-    protected authorizationService: AuthorizationService) {
+    public authorizationService: AuthorizationService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.scanHelperService.isHighlightNewScanObservable$
@@ -103,7 +103,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   assetCountTooltip = '';
 
   defaultPageSize = 25;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   projectDetails = null;
   scanList = [];
 
@@ -119,7 +119,7 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   scrollX;
   scrollY;
   isAssetStory: boolean = false;
-  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
   projectMetrics = [];
   filterBranchName = '';
   timeOut;
@@ -837,7 +837,15 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  filterColumn(value: string, idElement: string = '') {
+  /**
+   * Filter by column
+   *
+   * @param event input event
+   * @param idElement element ID
+   */
+  onFilterColumn(event: Event, idElement: string = '') {
+    const { value } = event.target as HTMLInputElement;
+
     if (value.length === 0) {
       this.filterBranchName = '';
     } else {

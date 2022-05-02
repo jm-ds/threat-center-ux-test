@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
+import { ApexNonAxisChartSeries } from 'ng-apexcharts';
 
 import { Entity, Project } from '@app/models';
 import { IgnoredFiles, Level, Type } from '@app/models/ignored-files';
@@ -32,6 +33,11 @@ import { ProjectDashboardTopbarComponent } from './dashboard-top-bar/top-bar.com
 import { NewVulnerabilitiesCardComponent } from './vulnerability/new-vulnerability/new-vulnerability-card.component';
 import { NewLicenseCardComponent } from './license/new-license/new-license-card.component';
 import { NewComponentCardComponent } from './component/new-component-card/new-component-card.component';
+
+interface ChartData {
+  labels: string[];
+  series: ApexNonAxisChartSeries;
+}
 
 @Component({
     selector: 'app-project-dashboard',
@@ -160,17 +166,29 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
   ];
 
   chartConfig;
-  vulnerabilityChartData = {};
-  licenseChartData = {};
-  assetChartData = {};
 
-    @ViewChild('ctdTabset', { static: false }) ctdTabset;
-    @ViewChild('scanTable', { static: false }) scanTable;
-    @ViewChild(ProjectDashboardTopbarComponent, { static: false }) topBar: ProjectDashboardTopbarComponent;
-    @ViewChild('vulTemplate', { static: false }) newVulnerablityCard: NewVulnerabilitiesCardComponent;
-    @ViewChild('licenseCard', { static: false }) newLicenseCard: NewLicenseCardComponent;
-    @ViewChild('componentCard', { static: false }) newComponentCard: NewComponentCardComponent;
-    @ViewChild('assetContent', { static: false }) scanAssetComponent: ScanAssetsComponent;
+  vulnerabilityChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
+
+  licenseChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
+
+  assetChartData: ChartData = {
+    labels: undefined,
+    series: undefined
+  };
+
+    @ViewChild('ctdTabset') ctdTabset;
+    @ViewChild('scanTable') scanTable;
+    @ViewChild(ProjectDashboardTopbarComponent) topBar: ProjectDashboardTopbarComponent;
+    @ViewChild('vulTemplate') newVulnerablityCard: NewVulnerabilitiesCardComponent;
+    @ViewChild('licenseCard') newLicenseCard: NewLicenseCardComponent;
+    @ViewChild('componentCard') newComponentCard: NewComponentCardComponent;
+    @ViewChild('assetContent') scanAssetComponent: ScanAssetsComponent;
 
     mostRecentScan;
     vulDonutChart;
@@ -188,7 +206,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     private fb: FormBuilder,
     // private apiService: ApiService,
     private projectService: ProjectService,
-    private stateService: StateService,
+    public stateService: StateService,
     private route: ActivatedRoute,
     public apexEvent: ApexChartService,
     private projectDashboardService: ProjectDashboardService,
@@ -199,7 +217,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     private userPreferenceService: UserPreferenceService,
     private projectBreadcumsService: ProjectBreadcumsService,
     private chartHelperService: ChartHelperService,
-    protected authorizationService: AuthorizationService,
+    public authorizationService: AuthorizationService,
     private authenticationService: AuthenticationService,
     private scanService: ScanService
   ) {
@@ -258,7 +276,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     assetCountTooltip = '';
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     projectDetails = null;
     scanList = [];
 
@@ -274,7 +292,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     scrollX;
     scrollY;
     isAssetStory: boolean = false;
-    @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+    @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
     projectMetrics = [];
     filterBranchName = '';
     timeOut;
