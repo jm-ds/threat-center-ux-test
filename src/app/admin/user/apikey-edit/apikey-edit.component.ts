@@ -78,82 +78,80 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
         }
     }
 
-    saveApiKey() {
-        let messages: Message[] = this.validateApiKey();
+  saveApiKey() {
+    let messages: Message[] = this.validateApiKey();
 
-        if (messages.length > 0) {
-            this.messages = messages;
+    if (messages.length > 0) {
+      this.messages = messages;
 
-            return;
-        }
-
-        if (this.keyId === 'new') {
-            let generateApiKeyObservable: Observable<FetchResult>;
-            let successLink: string;
-
-            if (!!this.apiKey.expiredDate) {
-                //workaround to convert date from date picker to right graphql date format
-                const value = this.apiKey.expiredDate;
-                this.apiKey.expiredDate = new Date();
-                this.apiKey.expiredDate.setFullYear(value['year'], value['month'] - 1, value['day']);
-            }
-
-            if (this.isUserKey) { // user key
-                generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
-                successLink = `/admin/show/${this.username}/show/apikey/`;
-            } else { // org key
-                generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
-                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
-            }
-
-            generateApiKeyObservable.subscribe(
-                (data: any) => {
-                    if (!!data && !!data.data) {
-                        const link = [successLink, data.data.generateApiKey.keyId];
-
-                        this.router.navigate(link, {
-                            state: {
-                                messages: [Message.success(MESSAGES.API_KEY_GENERATE_SUCCESS)]
-                            }
-                        });
-                    }
-                },
-                (error: HttpErrorResponse) => {
-                    console.error('API key generating', error);
-
-                    this.messages = [Message.error(MESSAGES.API_KEY_GENERATE_ERROR)];
-                });
-        } else {
-            let updateApiKeyObservable: Observable<FetchResult>;
-            let successLink: string;
-
-            if (this.isUserKey) {  // user key
-                updateApiKeyObservable = this.userService.updateApiKey(this.apiKey);
-                successLink = `/admin/show/${this.username}/show/apikey/`;
-            } else { // org key
-                updateApiKeyObservable = this.orgService.updateOrgApiKey(this.apiKey);
-                successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
-            }
-
-            updateApiKeyObservable.subscribe(
-                (data: any) => {
-                    if (!!data && !!data.data) {
-                        const link = [successLink, data.data.updateApiKey.keyId];
-
-                        this.router.navigate(link, {
-                            state: {
-                                messages: [Message.success(MESSAGES.API_KEY_SAVE_SUCCESS)]
-                            }
-                        });
-                    }
-                },
-                (error: HttpErrorResponse) => {
-                    console.error('API key saving', error);
-
-                    this.messages = [Message.error(MESSAGES.API_KEY_SAVE_ERROR)];
-                });
-        }
+      return;
     }
+
+    if (this.keyId === 'new') {
+      let generateApiKeyObservable: Observable<FetchResult>;
+      let successLink: string;
+      if (!!this.apiKey.expiredDate) {
+          //workaround to convert date from date picker to right graphql date format
+          const value = this.apiKey.expiredDate;
+          this.apiKey.expiredDate = new Date();
+          this.apiKey.expiredDate.setFullYear(value['year'], value['month'] - 1, value['day']);
+      }
+      if (this.isUserKey) { // user key
+        generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
+        successLink = `/admin/show/${this.username}/show/apikey/`;
+      } else { // org key
+        generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
+        successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
+      }
+
+      generateApiKeyObservable.subscribe(
+        (data: any) => {
+          if (!!data && !!data.data) {
+            const link = [successLink, data.data.generateApiKey.keyId];
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_GENERATE_SUCCESS)]
+              }
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('API key generating', error);
+
+          this.messages = [Message.error(MESSAGES.API_KEY_GENERATE_ERROR)];
+        });
+    } else {
+      let updateApiKeyObservable: Observable<FetchResult>;
+      let successLink: string;
+
+      if (this.isUserKey) {  // user key
+        updateApiKeyObservable = this.userService.updateApiKey(this.apiKey);
+        successLink = `/admin/show/${this.username}/show/apikey/`;
+      } else { // org key
+        updateApiKeyObservable = this.orgService.updateOrgApiKey(this.apiKey);
+        successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
+      }
+
+      updateApiKeyObservable.subscribe(
+        (data: any) => {
+          if (!!data && !!data.data) {
+            const link = [successLink, data.data.updateApiKey.keyId];
+
+            this.router.navigate(link, {
+              state: {
+                messages: [Message.success(MESSAGES.API_KEY_SAVE_SUCCESS)]
+              }
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('API key saving', error);
+
+          this.messages = [Message.error(MESSAGES.API_KEY_SAVE_ERROR)];
+        });
+    }
+  }
 
     // validate API key
     validateApiKey(): Message[] {
