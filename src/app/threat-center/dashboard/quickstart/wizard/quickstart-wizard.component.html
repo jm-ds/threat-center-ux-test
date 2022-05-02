@@ -304,7 +304,7 @@
                 <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641">
                   Earliest Release
                 </div>
-                {{match.earliestRelease.releaseName}} / {{match.earliestRelease.releaseDate|date:'MMM d, yy'}} <br/>
+                {{match.earliestRelease.releaseName}} / {{match.earliestRelease.releaseDate|date:'MMM d, yyyy'}} <br/>
                 <div *ngFor="let earliestReleaseLicense of match.earliestReleaseLicenses">
                   {{earliestReleaseLicense.licenseName}}
                 </div>
@@ -314,7 +314,7 @@
                 <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641">
                   Latest Release
                 </div>
-                {{match.latestRelease.releaseName}} / {{match.latestRelease.releaseDate|date:'MMM d, yy'}}<br/>
+                {{match.latestRelease.releaseName}} / {{match.latestRelease.releaseDate|date:'MMM d, yyyy'}}<br/>
                 <div *ngFor="let latestReleaseLicense of match.latestReleaseLicenses">
                   {{latestReleaseLicense.licenseName}}
                 </div>
