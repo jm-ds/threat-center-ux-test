@@ -4,7 +4,7 @@ import { SharedModule } from "@app/shared/shared.module";
 import { EntityRoutingModule } from './entity-routing.module';
 import { EntityManageComponent } from './entity-manage/entity-manage.component';
 import { ThemeSharedModule } from '@app/theme/shared/theme-shared.module';
-import { TreeModule } from 'angular-tree-component';
+import { TreeModule } from '@circlon/angular-tree-component';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChildEntityManageComponent } from './entity-manage/child-entity/child-manage.component';
@@ -17,11 +17,9 @@ import { ChildEntityManageComponent } from './entity-manage/child-entity/child-m
     ThemeSharedModule,
     EntityRoutingModule,
     SharedModule,
-    TreeModule.forRoot(),
+    TreeModule,
     FormsModule,
     NgbModule
-  ],
-  entryComponents: [ChildEntityManageComponent],
-  providers: []
+  ]
 })
 export class EntityModule { }

@@ -3,22 +3,29 @@ import {PageInfo} from "@app/models/common";
 import {StringHolder} from "@app/threat-center/shared/models/types";
 
 export class ScanAsset {
-    orgId: string;
-    name: string;
-    size: number;
-    fileSize: number;
-    scanAssetId: string;
-    originAssetId: string;
-    workspacePath: string;
-    status: string;
-    scanAssetType: string;
-    content: string;
-    projectId: string;
-    matchRepository: Repository;
-    matches: ScanAssetMatch[];
-    embeddedAssets: any;
+  orgId: string;
+  name: string;
+  size: number;
+  fileSize: number;
+  scanAssetId: string;
+  originAssetId: string;
+  workspacePath: string;
+  status: string;
+  scanAssetType: string;
+  content: string;
+  projectId: string;
+  matchRepository: Repository;
+  matches: ScanAssetMatch[];
+  embeddedAssets: any;
+  attributionStatus: string;
+  assetRepositoryUrl: StringHolder;
+  sourceAssetAttribution: {
+    attributedDate: Date;
+    attributedBy: string;
+    attributedComment: string;
     attributionStatus: string;
-    assetRepositoryUrl: StringHolder;
+  };
+  assetSize: number;
 }
 
 export class ScanAssetMatch {

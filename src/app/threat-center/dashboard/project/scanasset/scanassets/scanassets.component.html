@@ -44,12 +44,11 @@
             </tr>
             <tr>
               <th *ngFor="let col of columns">
-                <input *ngIf="col=='Name'" id="nameSearch" type="text" placeholder="{{col}}" name="search-name"
-                       class="form-control" (input)="filterColumn(col, $event.target.value,'nameSearch')"
-                       [value]="getColumnFilterValue(col)"/>
-                <select *ngIf="col == 'Status'" id="statusSearch" class="form-control custom-select"
-                        [value]="getColumnFilterValue(col)"
-                        (change)="filterColumn(col, $event.target.value,'statusSearch')">
+                <input id="nameSearch" class="form-control" name="search-name" [value]="getColumnFilterValue(col)" [placeholder]="col"
+                  *ngIf="col === 'Name'" (input)="onFilterColumn(col, $event, 'nameSearch')">
+
+                <select id="statusSearch" class="form-control custom-select" [value]="getColumnFilterValue(col)"
+                  *ngIf="col === 'Status'" (change)="onFilterColumn(col, $event, 'statusSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="IGNORED_SIZE_SMALL">IGNORED_SIZE_SMALL</option>
                   <option value="IGNORED_SIZE_LARGE">IGNORED_SIZE_LARGE</option>
@@ -57,18 +56,18 @@
                   <option value="IGNORED_TYPE_UNSUPPORTED">IGNORED_TYPE_UNSUPPORTED</option>
                   <option value="ACCEPTED">ACCEPTED</option>
                 </select>
-                <select *ngIf="col == 'File Size'" id="fileSizeSearch" class="form-control custom-select"
-                        [value]="getColumnFilterValue(col)"
-                        (change)="filterColumn(col, $event.target.value,'fileSizeSearch')">
+
+                <select id="fileSizeSearch" class="form-control custom-select" [value]="getColumnFilterValue(col)"
+                  *ngIf="col === 'File Size'" (change)="onFilterColumn(col, $event, 'fileSizeSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="1kb">0-1kb</option>
                   <option value="1kb-1mb">1kb-1mb</option>
                   <option value="1mb-10mb">1mb-10mb</option>
                   <option value="10mb+">10mb+</option>
                 </select>
-                <select *ngIf="col == 'Embedded Assets'" id="embededSearch" class="form-control custom-select"
-                        [value]="getColumnFilterValue(col)"
-                        (change)="filterColumn(col, $event.target.value,'embededSearch')">
+
+                <select id="embededSearch" class="form-control custom-select" [value]="getColumnFilterValue(col)"
+                  *ngIf="col === 'Embedded Assets'" (change)="onFilterColumn(col, $event, 'embededSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="over0" [label]="MESSAGES.ASSET.FILTER.EMBEDDED_AND_OPENSOURCE"></option>
                   <option value="0-10">0-10%</option>
@@ -77,18 +76,18 @@
                   <option value="51-70">51-70%</option>
                   <option value="71-100">71-100%</option>
                 </select>
-                <select *ngIf="col == 'Attribution'" id="attributionSearch" class="form-control custom-select"
-                        [value]="getColumnFilterValue(col)"
-                        (change)="filterColumn(col, $event.target.value,'attributionSearch')">
+
+                <select id="attributionSearch" class="form-control custom-select" [value]="getColumnFilterValue(col)"
+                  *ngIf="col === 'Attribution'" (change)="onFilterColumn(col, $event, 'attributionSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="REQUIRED">REQUIRED</option>
                   <option value="PARTIAL">PARTIAL</option>
                   <option value="COMPLETE">COMPLETE</option>
                   <option value="REVIEWED_IGNORED">REVIEWED_IGNORED</option>
                 </select>
-                <select *ngIf="col == 'Match Type'" class="form-control" id="matchTypeSearch"
-                        [value]="getColumnFilterValue(col)"
-                        (change)="filterColumn(col, $event.target.value,'matchTypeSearch')">
+
+                <select id="matchTypeSearch" class="form-control" [value]="getColumnFilterValue(col)" *ngIf="col === 'Match Type'"
+                  (change)="onFilterColumn(col, $event, 'matchTypeSearch')">
                   <option value="ALL" selected>- All -</option>
                   <option value="UNIQUE_PROPRIETARY">PROPRIETARY</option>
                   <option value="PROPRIETARY">PROPRIETARY/OPEN SOURCE</option>

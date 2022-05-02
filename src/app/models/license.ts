@@ -13,6 +13,9 @@ export class License {
     type: string;
     attributes: LicenseAttribute[];
     components: any;
+    compatible: string;
+    incompatible: string;
+    notes: string;
 }
 
 export class LicenseAttribute {

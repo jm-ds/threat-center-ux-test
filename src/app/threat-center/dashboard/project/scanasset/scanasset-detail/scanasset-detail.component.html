@@ -31,7 +31,7 @@
       </div>
       <div class="col-md-12">
        <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow-dialog-table" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
-          <p-table #dt [columns]="embeddedAssetColumns" [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
+          <p-table #dt [value]="sourceAsset.embeddedAssets.edges" [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered  dataTable no-footer table-width"
                    [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']">
 
@@ -163,8 +163,10 @@
             </ng-template>
             <ng-template pTemplate="body" let-matchLicense >
               <tr>
-                <td class="align-middle"><input type="checkbox" [id]="matchLicense.licenseId" name="selectedAssetMatch" [value]="matchLicense"
-                                                (change)="onSelectedChange(matchLicense.licenseId, $event.target.checked)"></td>
+                <td class="align-middle">
+                  <input name="assetMatch" type="checkbox" [id]="matchLicense.licenseId" [value]="matchLicense"
+                    (change)="onCheckedAssetMatchChange(matchLicense.licenseId, $event)">
+                </td>
                 <td>{{matchLicense.licenseId}}</td>
                 <td>{{matchLicense.licenseName}}</td>
                 <td>
@@ -201,7 +203,7 @@
       </div>
       <div class="app-modal-body">
         <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
-          <p-table #dt [columns]="embeddedAssetColumns" [value]="selectedEmbeddedAsset?.matchGroups.edges"
+          <p-table #dt [value]="selectedEmbeddedAsset?.matchGroups.edges"
                    [paginator]="false" [rows]="50"
                    tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                    [autoLayout]="false" [filterDelay]="0" [globalFilterFields]="['name']">
@@ -266,6 +268,3 @@
       </div>
     </app-ui-modal>
   </div>
-
-
-

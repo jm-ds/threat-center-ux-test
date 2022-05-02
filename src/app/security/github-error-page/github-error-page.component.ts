@@ -8,8 +8,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 
 export class GithubErrorComponent implements OnInit {
+  gitHubErrorMessage: any;
 
-    gitHubErrorMessage = {};
     constructor(private route: ActivatedRoute, private router: Router) {
         this.route.queryParams
             .subscribe(params => {

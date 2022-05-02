@@ -60,7 +60,7 @@ export class ScanAssetDetailComponent implements OnInit {
         private coreHelperService: CoreHelperService,
         private projectBreadcumsService: ProjectBreadcumsService,
         private alertService: AlertService,
-        protected authorizationService: AuthorizationService,
+        public authorizationService: AuthorizationService,
         private modalService: NgbModal) {
     }
 
@@ -211,9 +211,16 @@ export class ScanAssetDetailComponent implements OnInit {
             });
     }
 
-    //  selected matches change handler
-    onSelectedChange(licenseId, isChecked) {
-        if (isChecked) {
+    /**
+     * Checked asset match change handler
+     *
+     * @param licenseId license ID
+     * @param event input event
+     */
+    onCheckedAssetMatchChange(licenseId: string, event: Event) {
+        const { checked } = event.target as HTMLInputElement;
+
+        if (checked) {
             this.selectedLicenses.push(licenseId);
         } else {
             let index = -1;

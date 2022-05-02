@@ -1,18 +1,14 @@
     <div class="inner-card">
       <div class="card-body">
-        <p-table #dt [columns]="assetCols" [value]="assetData"
-                 selectionMode="single" dataKey="name"
-                 tableStyleClass="table table-hover dataTable table-sm table-width">
-
+        <p-table tableStyleClass="table table-hover dataTable table-sm table-width" selectionMode="single" dataKey="name" [columns]="assetCols" [value]="assetData">
           <ng-template pTemplate="caption">
             <div style="text-align: left;float:left">
               License Data
             </div>
             <div style="text-align: right;float:right;margin-bottom:10px">
               <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" pInputText size="50" placeholder="Global Filter"
-                     (input)="dt.filterGlobal($event.target.value, 'contains')"
-                     style="width:200px;display:inline" class="form-control">
+              <input style="width: 200px; display: inline" class="form-control" placeholder="Global Filter" pInputText size="50"
+                (input)="onFilterInput($event)">
             </div>
           </ng-template>
           <ng-template pTemplate="header" let-assetCols>
@@ -23,7 +19,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-assetData let-columns="assetCols">
-            <tr [pSelectableRow]="licenseData">
+            <tr>
               <!--<--<td>{{assetData['assetId']}}</a></td>-->
               <td><i class="far fa-file-alt m-r-10"></i> <a [routerLink]="['fileview']">{{assetData['name']}}</a></td>
               <td>{{assetData['pct_opensource']}}%</td>

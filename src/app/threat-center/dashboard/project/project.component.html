@@ -43,7 +43,7 @@
                 [chartId]="'projectLicenseChart'" [chartconfig]="licenseChart"
                 [iconClass]="'fas fa-balance-scale text-c-red f-15 m-r-5'"></project-chart>
             </div>
-  
+
             <div class="col-lg-3 col-md-3">
               <project-chart [chartLabel]="'Components'" [chartArray]='componentChart.series'
                 [chartId]="'projectComponentChart'" [chartconfig]="componentChart"
@@ -66,11 +66,10 @@
 
         <div style="float: right; text-align: right" *ngIf="stateService.project_tabs_selectedTab === 'scan'">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" size="45" pInputText placeholder="Branch name" id="branchName" name="search-name"class="form-control"
-                   (input)="filterColumn($event.target.value,'branchName')" style="width:auto;display:inline"
-                   [value]="getColumnFilterValue()"/>
+          <input style="width: auto; display: inline" id="branchName" class="form-control" name="search-name" size="45"
+            placeholder="Branch name" pInputText [value]="getColumnFilterValue()" (input)="onFilterColumn($event, 'branchName')">
         </div>
-        
+
         <ngb-tabset type="pills" [activeId]="stateService.project_tabs_selectedTab" (tabChange)="onTabChange($event)">
 
           <!-- SCANS TAB -->
@@ -87,9 +86,7 @@
                     header
                   </div>
                   <div style="text-align: right;float:right;margin-bottom:10px;clear: both;">
-                    <input type="text" pInputText size="50" placeholder="Filter"
-                      (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:160px;display:inline"
-                      class="form-control">
+                    <input style="width: 160px; display: inline" class="form-control" type="text" placeholder="Filter" pInputText size="50">
                   </div>
                 </ng-template>
               </div>
@@ -119,8 +116,10 @@
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-scan let-columns="columns">
-                    <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex"
-                      [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId,'scan-highlight': stateService.selectedScan.node?.scanId === scan.node?.scanId }">
+                    <tr [ngClass]="{
+                      'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId,
+                      'scan-highlight': stateService.selectedScan.node?.scanId === scan.node?.scanId
+                    }" [pSelectableRow]="scan">
                       <td (dblclick)="copyToClipboard(scan.node?.scanId, 'Scan ID copied to clipboard');">{{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
                       <td (dblclick)="copyToClipboard(scan.node?.versionHash,'Commit number copied to clipboard');">{{scan.node?.versionHash}}</td>
                       <td>{{scan.node?.branch}}</td>
@@ -167,7 +166,7 @@
                       </td>
                       <td style="text-align: center">
                         <span *ngIf="scan.node?.status==='FAIL'">
-                          <button class="btn badge-light-danger error-btn" title="Show log and error messages"  
+                          <button class="btn badge-light-danger error-btn" title="Show log and error messages"
                             (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
                             <i class="feather icon-x badge-light-danger" style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                           </button>
@@ -180,7 +179,7 @@
                         </span>
                         <span *ngIf="scan.node?.status==='SUCCESS'">
                             <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
-                              class="btn badge-light-success error-btn" title="Show log" 
+                              class="btn badge-light-success error-btn" title="Show log"
                               (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
                               <i class="feather icon-check badge-light-success"
                                 style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>

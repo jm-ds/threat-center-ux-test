@@ -82,7 +82,6 @@ import { CreateJiraTicketComponent } from './create-jira-ticket/create-jira-tick
     NewComponentCardComponent,
     NewLicenseCardComponent,
     CreateJiraTicketComponent
-  ],
-  entryComponents: [FixComponentResultDialogComponent, FixComponentDialogComponent, CreateJiraTicketComponent, ClipboardDialogComponent, LicenseDialogComponent]
+  ]
 })
 export class ProjectModule { }

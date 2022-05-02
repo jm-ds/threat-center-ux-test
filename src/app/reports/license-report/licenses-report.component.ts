@@ -12,10 +12,6 @@ import { ReportService } from '@app/services/report.service';
     styleUrls: ['./licenses-report.component.scss']
 })
 export class LicensesReportComponent implements OnInit, OnDestroy {
-
-    @Input()
-    displayDataOnly: false;
-
     reportDate = new Date();
 
     nameFilter = '';
@@ -36,6 +32,8 @@ export class LicensesReportComponent implements OnInit, OnDestroy {
     */
     // columns = ['Name', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
     columns = ['Name', 'Type', 'Family', 'Category', 'Style'/*, 'Risk score'*/];
+
+  @Input() displayDataOnly: boolean;
 
     constructor(
         private reportService: ReportService,

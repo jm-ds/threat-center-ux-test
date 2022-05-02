@@ -7,7 +7,6 @@ import {VulnerabilitiesReportComponent} from './vulnerability-report/vulnerabili
 import {LicensesReportComponent} from './license-report/licenses-report.component';
 import {ComponentsReportComponent} from './component-report/components-report.component';
 import {EmbeddedAssetsReportComponent} from './embedded-asset-report/embedded-assets-report.component';
-import {IcDatepickerModule} from "ic-datepicker";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbDatepickerModule, NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
 import {TreeviewI18n, TreeviewModule} from "ngx-treeview";
@@ -29,7 +28,6 @@ import {NouisliderModule} from "ng2-nouislider";
     imports: [
         CommonModule,
         ReportsRoutingModule,
-        IcDatepickerModule,
         FormsModule,
         ReactiveFormsModule,
         NgbDatepickerModule,

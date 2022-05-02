@@ -668,11 +668,11 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     return !!content.offsetHeight && content.offsetHeight > 0 ? (Number(content.offsetHeight) + 20) + 'px' : '38px'
   }
 
-  inviteUser(inviteUrlDialog) {
+  inviteUser() {
     this.inviteService.createInvite().subscribe(
       data => {
         const inviteHash = data.data.createInvite.inviteHash;
-        
+
         this.router.navigate(['/admin/invite', inviteHash]);
       },
       error => {

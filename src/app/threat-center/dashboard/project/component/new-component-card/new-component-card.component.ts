@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Scan } from "@app/models";
 import { CoreHelperService } from "@app/services/core/core-helper.service";
@@ -28,7 +28,7 @@ export class NewComponentCardComponent implements OnInit {
     newVersion: string;
 
     defaultPageSize = NextConfig.config.defaultItemPerPage;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     componentDetails: any;
 
     columnsFilter = new Map();
@@ -55,7 +55,7 @@ export class NewComponentCardComponent implements OnInit {
         this.defaultPageSize = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
     }
 
-    updateDataOnSelectedScan(obsScan,scanId){
+    updateDataOnSelectedScan(obsScan, scanId) {
         this.obsScan = obsScan;
         this.scanId = scanId;
         this.initData();
@@ -141,8 +141,16 @@ export class NewComponentCardComponent implements OnInit {
         console.log("Pattern: " + pattern);
     }
 
+    /**
+     * Filter by columm
+     *
+     * @param column column name
+     * @param event input event
+     * @param idElement element ID
+     */
+    onFilterColumn(column: string, event: Event, idElement: string = '') {
+        let { value } = event.target as HTMLInputElement | HTMLSelectElement;
 
-    filterColumn(column, value, idElement: string = '') {
         if (column === 'Internal') {
             this.isInternal = !this.isInternal;
             value = this.isInternal ? 'TRUE' : '';

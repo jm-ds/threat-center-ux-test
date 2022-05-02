@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+
+import { Table } from 'primeng';
 
 import { JiraCredentials, License, ScanLicense } from '@app/models';
 
@@ -32,7 +34,7 @@ import { CreateJiraTicketComponent } from '@app/threat-center/dashboard/project/
 export class LicenseDimensionComponent implements OnInit, AfterViewInit {
 
   public licenseCols = ['Name', 'Threat'];
-  @ViewChild('ctdTabset', { static: false }) ctdTabset: NgbTabset;
+  @ViewChild('ctdTabset') ctdTabset: NgbTabset;
 
   @Input() licenseId: string;
   @Input() licenseDiscovery: string;
@@ -48,8 +50,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   licenseComponents: any;
   newVersion: string;
   defaultPageSize = NextConfig.config.defaultItemPerPage;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(ScanAssetsComponent, { static: false }) child: ScanAssetsComponent;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(ScanAssetsComponent) child: ScanAssetsComponent;
 
 
 
@@ -80,6 +82,8 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
   jiraCredentials: JiraCredentials;
   orgId;
   jiraTicket;
+
+  @ViewChild(Table) private table: Table;
 
   constructor(
       private jiraService: JiraService,
@@ -289,8 +293,27 @@ export class LicenseDimensionComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // filter asset
-  filterAssetColumn(column, value, idElement: string = '') {
+  /**
+   * Filter by component
+   *
+   * @param event input event
+   */
+  public onComponentFilterInput(event: Event) {
+    const { value } = event.target as HTMLInputElement;
+
+    this.table.filterGlobal(value, 'contains');
+  }
+
+  /**
+   * Filter asset column
+   *
+   * @param column column name
+   * @param event intpu or select event
+   * @param idElement element ID
+   */
+  onFilterAssetColumn(column: string, event: Event, idElement: string = '') {
+    const { value } = event.target as HTMLInputElement | HTMLSelectElement;
+
     if (value.length === 0 || value === 'ALL') {
       this.columnsAssetFilter.delete(column);
     } else {

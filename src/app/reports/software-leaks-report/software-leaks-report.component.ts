@@ -11,10 +11,6 @@ import { ReportService } from '@app/services/report.service';
     styleUrls: ['./software-leaks-report.component.scss']
 })
 export class SoftwareLeaksReportComponent implements OnInit {
-
-    @Input()
-    displayDataOnly: false;
-
     reportDate = new Date();
 
     nameFilter: string;
@@ -57,6 +53,7 @@ export class SoftwareLeaksReportComponent implements OnInit {
         },
     ];
 
+    @Input() displayDataOnly: boolean;
 
     constructor(
         private reportService: ReportService,
