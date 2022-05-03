@@ -90,17 +90,18 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
     if (this.keyId === 'new') {
       let generateApiKeyObservable: Observable<FetchResult>;
       let successLink: string;
-
+      if (this.apiKey.expiredDate) {
+          // workaround to convert date from date picker to right GraphQL date format
+          const { year, month, day } = this.apiKey.expiredDate;
+          
+          this.apiKey.expiredDate = new Date();
+          
+          this.apiKey.expiredDate.setFullYear(year, month - 1, day);
+      }
       if (this.isUserKey) { // user key
         generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
         successLink = `/admin/show/${this.username}/show/apikey/`;
       } else { // org key
-        if (!!this.apiKey.expiredDate) {
-            //workaround to convert date from date picker to right graphql date format
-            const value = this.apiKey.expiredDate;
-            this.apiKey.expiredDate = new Date();
-            this.apiKey.expiredDate.setFullYear(value['year'], value['month'] - 1, value['day']);
-        }
         generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
         successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
       }
