@@ -262,6 +262,11 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
+                        <ng-container *ngIf="loading">
+                          <div class="spinner-wrapper">
+                            <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+                           </div>
+                        </ng-container>
                       </div>
                       <div *ngIf="!binaryReleases || binaryReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
                         Data for this repository is coming soon.
@@ -348,6 +353,11 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
+                        <ng-container *ngIf="loading">
+                          <div class="spinner-wrapper">
+                            <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+                           </div>
+                        </ng-container>
                       </div>
                       <div *ngIf="!sourceReleases || sourceReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
                         Data for this repository is coming soon.
