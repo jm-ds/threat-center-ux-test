@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Scan } from "@app/models";
+import { Scan, ScanComponentEdge } from '@app/models';
 import { CoreHelperService } from "@app/services/core/core-helper.service";
 import { UserPreferenceService } from "@app/services/core/user-preference.service";
 import { FixService } from "@app/services/fix.service";
@@ -114,6 +114,16 @@ export class NewComponentCardComponent implements OnInit {
         }
     }
 
+  /** Sort components */
+  private sortComponents() {
+    this.componentDetails.components.edges.sort((a: ScanComponentEdge, b: ScanComponentEdge) => {
+      const aName = this.getComponentName(a);
+      const bName = this.getComponentName(b);
+
+      return aName.localeCompare(bName);
+    });
+  }
+
     // Loading Component data after paggination for scan tab.
     loadComponentData(first, last, endCursor = undefined, startCursor = undefined) {
         let component = this.projectService.getScanComponents(this.scanId, this.makeFilterMapForService(), first, last, endCursor, startCursor)
@@ -121,6 +131,8 @@ export class NewComponentCardComponent implements OnInit {
         component.subscribe(component => {
             this.componentDetails = component;
             this.isDisablePaggination = false;
+
+            this.sortComponents();
         });
     }
 
@@ -286,11 +298,13 @@ export class NewComponentCardComponent implements OnInit {
         return compString;
     }
 
-    // initializing data
-    private initData() {
-        this.obsScan.subscribe(component => {
-            this.isDisablePaggination = false;
-            this.componentDetails = component;
-        });
-    }
+  /** Initialize components data */
+  private initData() {
+    this.obsScan.subscribe(component => {
+      this.isDisablePaggination = false;
+      this.componentDetails = component;
+
+      this.sortComponents();
+    });
+  }
 }
