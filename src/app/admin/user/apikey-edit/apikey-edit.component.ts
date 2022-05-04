@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { FetchResult } from 'apollo-link';
 import { ApiKey, Message, Messages, User } from '@app/models';
 
@@ -12,7 +13,6 @@ import { UserUtils } from '../user-utils';
 
 import { OrgService } from '@app/services/org.service';
 import { UserService } from '@app/services/user.service';
-
 
 @Component({
     selector: 'app-api-key-edit',
@@ -91,16 +91,19 @@ export class ApiKeyEditComponent extends UserUtils implements OnInit {
       let generateApiKeyObservable: Observable<FetchResult>;
       let successLink: string;
 
+      if (this.apiKey.expiredDate) {
+        // workaround to convert date from date picker to correct GraphQL date format
+        const { year, month, day } = this.apiKey.expiredDate as unknown as NgbDate;
+
+        this.apiKey.expiredDate = new Date();
+
+        this.apiKey.expiredDate.setFullYear(year, month - 1, day);
+      }
+
       if (this.isUserKey) { // user key
         generateApiKeyObservable = this.userService.generateApiKey(this.apiKey);
         successLink = `/admin/show/${this.username}/show/apikey/`;
       } else { // org key
-        if (!!this.apiKey.expiredDate) {
-            //workaround to convert date from date picker to right graphql date format
-            const value = this.apiKey.expiredDate;
-            this.apiKey.expiredDate = new Date();
-            this.apiKey.expiredDate.setFullYear(value['year'], value['month'] - 1, value['day']);
-        }
         generateApiKeyObservable = this.orgService.generateOrgApiKey(this.apiKey);
         successLink = '/dashboard/org-setting/integration/org-apikeys/show/apikey/';
       }
