@@ -24,6 +24,7 @@ import { TxComponent } from '@app/models';
 @Component({
   selector: 'component-detail',
   templateUrl: './component-detail.component.html',
+  styleUrls: ['./component-detail.component.scss'],
   styles: []
 })
 export class ComponentDetailComponent implements OnInit {
@@ -67,6 +68,8 @@ export class ComponentDetailComponent implements OnInit {
   breadcumDetail: any = {};
   licensesList = [];
   columns = ['Name', 'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
+
+  loading = false;
   constructor(
     private projectService: ProjectService,
     private scanComponentService: ScanComponentService,
@@ -100,7 +103,7 @@ export class ComponentDetailComponent implements OnInit {
       this.vulnerabilityDetails = res["component"]["vulnerabilities"];
     });
 
-    this.vulnerableCodeMappingService.startVulnerabilitiesWithCvssV3(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
+    this.vulnerableCodeMappingService.getStartVulnerableReleaseList(componentId).subscribe((data: VulnerableReleaseResponseMap) => {
 
       this.binaryLoading = true;
       if (data.binaryVulnerableResponse !== undefined) {
@@ -294,7 +297,8 @@ export class ComponentDetailComponent implements OnInit {
 
   loadBinaryReleasesLazy(event: LazyLoadEvent) {
     if (this.binaryNextPagingState != null) {
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+      this.loading = true;
+      this.vulnerableCodeMappingService.getNextVulnerableReleaseList(
         this.binaryNextPagingState, this.binaryRepositoryType, this.binaryPurlType, this.binaryGroup, this.binaryName)
         .subscribe((data: VulnerableReleaseResponse) => {
           this.binaryReleases.push(...data.vulnerableReleases);
@@ -302,13 +306,15 @@ export class ComponentDetailComponent implements OnInit {
           this.binaryNextPagingState = data.nextPagingState;
           this.perfectScrollBinaryRelese.directiveRef.update();
           this.changeDetector.detectChanges();
+          this.loading = false;
         });
     }
   }
 
   loadSourceReleasesLazy(event: LazyLoadEvent) {
     if (this.sourceNextPagingState != null) {
-      this.vulnerableCodeMappingService.nextVulnerabilitiesWithCvssV3(
+      this.loading = true
+      this.vulnerableCodeMappingService.getNextVulnerableReleaseList(
         this.sourceNextPagingState, this.sourceRepositoryType, this.sourcePurlType, this.sourceGroup, this.sourceName)
         .subscribe((data: VulnerableReleaseResponse) => {
           this.sourceReleases.push(...data.vulnerableReleases);
@@ -316,6 +322,7 @@ export class ComponentDetailComponent implements OnInit {
           this.sourceNextPagingState = data.nextPagingState;
           this.perfectScrollSourceRelese.directiveRef.update();
           this.changeDetector.detectChanges();
+          this.loading = false;
         });
     }
   }

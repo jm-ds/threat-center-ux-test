@@ -1,0 +1,9 @@
+.spinner-wrapper {
+  display: grid;
+  place-items: center;
+  margin-top: 10px;
+  
+  mat-progress-spinner {
+    stroke: #4680FF;
+  }
+}
