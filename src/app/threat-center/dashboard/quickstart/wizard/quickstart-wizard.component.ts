@@ -92,65 +92,89 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     public ghUserCols = [{ field: 'name', header: 'Name' }];
 
-    submitScan(repoType) {
-        let scanRequest = new ScanRequest();
-        scanRequest.repoType = repoType;
-        // this.spinner.show();
-        if (!this.entityId) {
-            if (this.authService.currentUser) {
-                this.entityId = this.authService.currentUser.defaultEntityId;
-            }
-        }
-        console.log("SUBMITTING SCAN..");
+  onSubmitScan(repoType: string) {
+    const scanRequest = new ScanRequest();
 
-        if (repoType === "github") {
-            console.log("is github");
-            // hack: find better way to handle the resource path.
-            let resourcePath = this.selectedRepos[0].node.resourcePath.split("/", 3);
-            let owner = resourcePath[1];
-            let repo = resourcePath[2];
-            let branch = this.selectedRepos[0].node.scanBranch;
-            if (!branch) {
-                branch = this.selectedRepos[0].node.defaultBranchRef.name;
-            }
-            scanRequest.login = owner;
-            scanRequest.branch = branch;
-            scanRequest.repository = repo;
-        } else if (repoType === "gitlab") {
-            console.log("is gitlab");
-            let resourcePath = this.selectedRepos[0].fullPath.split("/", 3);
-            scanRequest.login = resourcePath[0];
-            scanRequest.repository = resourcePath[1];
-            scanRequest.branch = this.selectedRepos[0].repository.rootRef;
-            scanRequest.projectId = this.selectedRepos[0].id;
-        } else {
-            console.log("is bitbucket");
-            let resourcePath = this.selectedRepos[0].fullName.split("/", 3);
-            scanRequest.login = resourcePath[0];
-            scanRequest.repository = resourcePath[1];
-            let branch = this.selectedRepos[0].scanBranch;
-            if (!branch) {
-                branch = this.selectedRepos[0].mainBranch;
-            }
-            scanRequest.branch = branch;
-        }
-        console.log("BRANCH: ", scanRequest.branch);
-        console.log("RPEO: ", scanRequest.repository);
-        console.log("OWDER: ", scanRequest.login);
-        scanRequest.entityId = this.entityId;
-        scanRequest.status = null;
-        this.taskService.scanRequest = scanRequest;
+    scanRequest.repoType = repoType;
 
-        //storing current scan to storage
-        sessionStorage.setItem("REPO_SCAN", JSON.stringify(this.taskService.scanRequest));
-
-        console.log("SUBMITTING TASK..");
-        // open dialog box with message..
-
-        this.isDisableScanBtn = true;
-        //Starting Scaning process....
-        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
+    if (!this.entityId && this.authService.currentUser) {
+      this.entityId = this.authService.currentUser.defaultEntityId;
     }
+
+    console.log('Submitting scan…');
+
+    console.log(`is ${repoType ?? 'default'}`);
+
+    let resourcePath: string;
+    let branch: string;
+
+    switch (repoType) {
+      case 'file':
+      case 'github':
+        branch = this.selectedRepos[0].node.scanBranch;
+
+        if (!branch) {
+          branch = this.selectedRepos[0].node.defaultBranchRef.name;
+        }
+
+        scanRequest.branch = branch;
+
+        // hack: find better way to handle the resource path.
+        resourcePath = this.selectedRepos[0].node.resourcePath.split('/', 3);
+
+        const [, owner, repo] = resourcePath;
+
+        scanRequest.login = owner;
+        scanRequest.repository = repo;
+
+        break;
+
+      case 'gitlab':
+        resourcePath = this.selectedRepos[0].fullPath.split('/', 3);
+
+        scanRequest.login = resourcePath[0];
+        scanRequest.repository = resourcePath[1];
+        scanRequest.branch = this.selectedRepos[0].repository.rootRef;
+        scanRequest.projectId = this.selectedRepos[0].id;
+
+        break;
+
+      case 'bitbucket':
+      default:
+        resourcePath = this.selectedRepos[0].fullName.split('/', 3);
+
+        scanRequest.login = resourcePath[0];
+        scanRequest.repository = resourcePath[1];
+
+        branch = this.selectedRepos[0].scanBranch;
+
+        if (!branch) {
+          branch = this.selectedRepos[0].mainBranch;
+        }
+
+        scanRequest.branch = branch;
+    }
+
+    console.log(`Branch: ${scanRequest.branch}`);
+    console.log(`Repo: ${scanRequest.repository}`);
+    console.log(`Owner: ${scanRequest.login}`);
+
+    scanRequest.entityId = this.entityId;
+    scanRequest.status = null;
+
+    this.taskService.scanRequest = scanRequest;
+
+    // Storing current scan to storage
+    sessionStorage.setItem('REPO_SCAN', JSON.stringify(this.taskService.scanRequest));
+
+    console.log('Submitting task…');
+
+    // Open dialog box with message…
+    this.isDisableScanBtn = true;
+
+    // Starting Scaning process…
+    this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
+  }
 
   onSubmitFileForm() {
     this.fileSubscription?.unsubscribe();
@@ -177,7 +201,9 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
 
     this.fileSubscription = this.httpClient
       .post(`${environment.apiUrl}/project/upload`, formData, options)
-      .subscribe();
+      .subscribe(() => {
+        this.onSubmitScan('file');
+      });
   }
 
     submitSnippet() {

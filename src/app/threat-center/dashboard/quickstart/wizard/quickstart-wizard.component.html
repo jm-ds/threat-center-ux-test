@@ -78,12 +78,11 @@
                         </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button
-                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
-                          class="btn btn-primary" ngbtooltip="Run Scan"
+                        <button class="btn btn-primary" type="button" ngbtooltip="Run Scan"
+                          [class.disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('github')"><i style="color:greenyellow" class="fas fa-power-off">
-                          </i> Execute Threat Scan
+                          (click)="onSubmitScan('github')">
+                          <i style="color: Greenyellow" class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -136,12 +135,11 @@
                         </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button
-                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
-                          class="btn btn-primary" ngbtooltip="Run Scan"
+                        <button class="btn btn-primary" type="button" ngbtooltip="Run Scan"
+                          [class.disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('gitlab')"><i style="color:greenyellow" class="fas fa-power-off">
-                          </i> Execute Threat Scan
+                          (click)="onSubmitScan('gitlab')">
+                          <i style="color: Greenyellow" class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
