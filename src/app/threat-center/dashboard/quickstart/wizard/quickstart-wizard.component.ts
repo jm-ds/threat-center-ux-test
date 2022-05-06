@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
-import { FormControl, FormGroup } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
-import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { HostListener } from '@angular/core';
 import { ScanService } from '@app/services/scan.service';
@@ -18,8 +17,9 @@ import { ReloadService } from '@app/services/reload.service';
 import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { AuthorizationService } from '@app/security/services';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
+
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-quickstart',
@@ -28,6 +28,14 @@ import { UserPreferenceService } from '@app/services/core/user-preference.servic
     encapsulation: ViewEncapsulation.None
 })
 export class QuickstartWizardComponent implements OnInit, OnDestroy {
+  fileForm = this.fb.group({
+    files: [
+      undefined,
+      [Validators.required, FileUploadValidators.filesLimit(1)]
+    ]
+  });
+
+  private fileSubscription: Subscription;
 
     public license: any;
     obsGithubUser: Observable<GitHubUser>;
@@ -52,7 +60,6 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     isDisableScanBtn: boolean = false;
     selectedItem: string = "";
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
-  private filesControl = new FormControl(null, FileUploadValidators.filesLimit(1));
 
     @ViewChild('orgRepoList') orgRepoList: RepositoryListComponent;
     @ViewChild('repoList') private repoList: RepositoryListComponent;
@@ -60,38 +67,30 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     @ViewChild('bitbucketRepoList') bitbucketRepoList: RepositoryListComponent;
     @ViewChild('readyScanRepo') readyScanRepo: ReadyScanRepositorylistComponent;
 
-    constructor(
-        private scanService: ScanService,
-        private location: Location,
-        private router: Router,
-        private route: ActivatedRoute,
-        private taskService: TaskService,
-        private spinner: NgxSpinnerService,
-        public authService: AuthenticationService,
-        private scanHelperService: ScanHelperService,
-        private modalService: NgbModal,
-        private coreHelperService: CoreHelperService,
-        private reloadService: ReloadService,
-        private userPreferenceService:UserPreferenceService,
-        private authorizationService: AuthorizationService) {
-        this.scanHelperService.isEnabaleNewScanObservable$
-            .subscribe(x => {
-                this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
-            });
-    }
-    ngOnDestroy(): void {
-        this.scanHelperService.isRefreshObjectPage.next(false);
-    }
+  constructor(
+    private httpClient: HttpClient,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private scanService: ScanService,
+    private taskService: TaskService,
+    private scanHelperService: ScanHelperService,
+    private coreHelperService: CoreHelperService,
+    private reloadService: ReloadService,
+    private userPreferenceService: UserPreferenceService,
+    public authService: AuthenticationService
+  ) {
+    this.scanHelperService.isEnabaleNewScanObservable$.subscribe(x => {
+      this.isDisableScanBtn = x === null ? this.isDisableScanBtn : x;
+    });
+  }
+
+  ngOnDestroy() {
+    this.scanHelperService.isRefreshObjectPage.next(false);
+
+    this.fileSubscription?.unsubscribe();
+  }
 
     public ghUserCols = [{ field: 'name', header: 'Name' }];
-
-    public demoForm = new FormGroup({
-        files: this.filesControl
-    });
-
-    public toggleStatus() {
-        this.filesControl.disabled ? this.filesControl.enable() : this.filesControl.disable();
-    }
 
     submitScan(repoType) {
         let scanRequest = new ScanRequest();
@@ -152,6 +151,34 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         //Starting Scaning process....
         this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
     }
+
+  onSubmitFileForm() {
+    this.fileSubscription?.unsubscribe();
+
+    if (this.fileForm.invalid) {
+      return;
+    }
+
+    const { files } = this.fileForm.value as {
+      files: File[]
+    };
+
+    const formData = new FormData();
+
+    files.forEach(file => {
+      formData.append('multipartFile', file, file.name);
+    });
+
+    const headers = new HttpHeaders();
+
+    headers.set('Content-Type', 'multipart/form-data');
+
+    const options = { headers };
+
+    this.fileSubscription = this.httpClient
+      .post(`${environment.apiUrl}/project/upload`, formData, options)
+      .subscribe();
+  }
 
     submitSnippet() {
         console.log("SNIPPET", this.snippetText);

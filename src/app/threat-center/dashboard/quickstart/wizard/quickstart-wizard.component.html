@@ -10,14 +10,14 @@
 
       <ng-template ngbTabContent>
         <app-card cardTitle="File Upload" [options]="false">
-          <form [formGroup]="demoForm">
+          <form id="file-upload-form" [formGroup]="fileForm" (ngSubmit)="onSubmitFileForm()">
             <file-upload formControlName="files"
               accept="application/zip,application/tar,application/x-tar,application/gzip,application/x-gzip" [multiple]="false">
             </file-upload>
           </form>
 
           <div class="text-center m-t-20">
-            <button class="btn btn-primary">Upload Now</button>
+            <button class="btn btn-primary" form="file-upload-form" [disabled]="fileForm.invalid">Upload Now</button>
           </div>
         </app-card>
       </ng-template>
