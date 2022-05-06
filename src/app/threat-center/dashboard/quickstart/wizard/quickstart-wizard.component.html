@@ -2,6 +2,27 @@
 
 
   <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
+    <!-- DRAG & DROP -->
+    <ngb-tab class="mb-3" id="DragDrop">
+      <ng-template ngbTabTitle>
+        <span class="tab-title">Drag And Drop</span>
+      </ng-template>
+
+      <ng-template ngbTabContent>
+        <app-card cardTitle="File Upload" [options]="false">
+          <form [formGroup]="demoForm">
+            <file-upload formControlName="files"
+              accept="application/zip,application/tar,application/x-tar,application/gzip,application/x-gzip" [multiple]="false">
+            </file-upload>
+          </form>
+
+          <div class="text-center m-t-20">
+            <button class="btn btn-primary">Upload Now</button>
+          </div>
+        </app-card>
+      </ng-template>
+    </ngb-tab>
+
     <!-- Github -->
     <ngb-tab id="Github">
       <ng-template ngbTabTitle>
@@ -191,25 +212,6 @@
         </div>
       </ng-template>
     </ngb-tab>
-
-    <!-- DRAG & DROP -->
-    <!--
-    <ngb-tab class="mb-3" id="DragDrop">
-      <ng-template ngbTabTitle>
-        <span class="tab-title">Drag And Drop</span>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <app-card cardTitle="File Upload" [options]="false">
-          <form [formGroup]="demoForm">
-            <file-upload formControlName="files"></file-upload>
-          </form>
-          <div class="text-center m-t-20">
-            <button class="btn btn-primary">Upload Now</button>
-          </div>
-        </app-card>
-      </ng-template>
-    </ngb-tab>
-    -->
 
     <!-- SNIPPET *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))" -->
     <ngb-tab class="mb-3" id="Snippet" >

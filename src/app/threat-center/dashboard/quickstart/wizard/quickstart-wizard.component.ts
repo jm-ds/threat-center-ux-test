@@ -52,7 +52,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     isDisableScanBtn: boolean = false;
     selectedItem: string = "";
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
-    private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
+  private filesControl = new FormControl(null, FileUploadValidators.filesLimit(1));
 
     @ViewChild('orgRepoList') orgRepoList: RepositoryListComponent;
     @ViewChild('repoList') private repoList: RepositoryListComponent;
