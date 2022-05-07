@@ -14,10 +14,12 @@ import { ScanService } from '@app/services/scan.service';
 import { TaskService } from '@app/services/task.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
 import { ReloadService } from '@app/services/reload.service';
-import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
+import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult, Task} from '@app/models';
+
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
 
 import { environment } from 'environments/environment';
 
@@ -109,7 +111,6 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     let branch: string;
 
     switch (repoType) {
-      case 'file':
       case 'github':
         branch = this.selectedRepos[0].node.scanBranch;
 
@@ -200,9 +201,16 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     const options = { headers };
 
     this.fileSubscription = this.httpClient
-      .post(`${environment.apiUrl}/project/upload`, formData, options)
-      .subscribe(() => {
-        this.onSubmitScan('file');
+      .post<Task>(`${environment.apiUrl}/project/upload`, formData, options)
+      .subscribe(task => {
+        this.scanHelperService.openFloatingModal(LoadingDialogComponent);
+        this.scanHelperService.submitingUploadProject({
+            uniqId: this.coreHelperService.uuidv4(),
+            projectName: files[0].name,
+            entityId: this.entityId,
+            taskToken: task.taskToken,
+        });
+        this.scanHelperService.getTaskUpdate(task);
       });
   }
 

@@ -77,6 +77,18 @@ export class ScanHelperService {
             });
     }
 
+    public submitingUploadProject(preScanProjectData) {
+        const object = {
+            projectId: '',
+            uniqId: preScanProjectData.uniqId,
+            projectName: preScanProjectData.projectName,
+            entityId: preScanProjectData.entityId,
+            scanStatus: '',
+            taskToken: preScanProjectData.taskToken
+        };
+        this.projectScanResults.push(object);
+    }
+
     //Scan progress and get stats from server and updating needed thing status wise.
     getTaskUpdate(task) {
         this.taskService.getTaskUpdate(task.taskToken)
@@ -232,14 +244,14 @@ export class ScanHelperService {
     // run scan
     private runScan(preScanProjectData, LoadingDialogComponent) {
         this.openScanModel(preScanProjectData).result.then((result) => {
-            this.openFloatingModel(LoadingDialogComponent);
+          this.openFloatingModal(LoadingDialogComponent);
         }, (reason) => { });
         this.submitingScanForProject(preScanProjectData);
     }
 
     //floating model for scan...
-    private openFloatingModel(LoadingDialogComponent) {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
+    public openFloatingModal(loadingDialogComponent) {
+        const modalRef = this.modalService.open(loadingDialogComponent, {
             backdrop: 'static',
             keyboard: false,
             windowClass: 'loading-dialog',
