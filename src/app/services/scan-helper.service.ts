@@ -77,6 +77,18 @@ export class ScanHelperService {
             });
     }
 
+    public submitingUploadProject(preScanProjectData) {
+        const object = {
+            projectId: '',
+            uniqId: preScanProjectData.uniqId,
+            projectName: preScanProjectData.projectName,
+            entityId: preScanProjectData.entityId,
+            scanStatus: '',
+            taskToken: preScanProjectData.taskToken
+        };
+        this.projectScanResults.push(object);
+    }
+
     //Scan progress and get stats from server and updating needed thing status wise.
     getTaskUpdate(task) {
         this.taskService.getTaskUpdate(task.taskToken)
