@@ -204,6 +204,12 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
       .post<Task>(`${environment.apiUrl}/project/upload`, formData, options)
       .subscribe(task => {
         this.scanHelperService.openFloatingModal(LoadingDialogComponent);
+        this.scanHelperService.submitingUploadProject({
+            uniqId: this.coreHelperService.uuidv4(),
+            projectName: files[0].name,
+            entityId: this.entityId,
+            taskToken: task.taskToken,
+        });
         this.scanHelperService.getTaskUpdate(task);
       });
   }
