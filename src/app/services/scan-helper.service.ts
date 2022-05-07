@@ -232,14 +232,14 @@ export class ScanHelperService {
     // run scan
     private runScan(preScanProjectData, LoadingDialogComponent) {
         this.openScanModel(preScanProjectData).result.then((result) => {
-            this.openFloatingModel(LoadingDialogComponent);
+          this.openFloatingModal(LoadingDialogComponent);
         }, (reason) => { });
         this.submitingScanForProject(preScanProjectData);
     }
 
     //floating model for scan...
-    private openFloatingModel(LoadingDialogComponent) {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
+    public openFloatingModal(loadingDialogComponent) {
+        const modalRef = this.modalService.open(loadingDialogComponent, {
             backdrop: 'static',
             keyboard: false,
             windowClass: 'loading-dialog',
