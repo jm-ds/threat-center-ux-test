@@ -259,7 +259,6 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
     public chartDB: any;
     obsProject: Observable<Project>;
-    //selectedScan:Scan;
     projectId: string;
     errorMsg: string;
     log: string;
@@ -407,33 +406,38 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
     initProjectData() {
         this.stateService.obsProject = this.obsProject;
-        this.obsProject.subscribe((project: any) => {
 
+        this.obsProject.subscribe(project => {
             this.initProjectBradcum(project);
 
-            //Taking sacn list to show in scan tab
+            // Taking scan list to show in scan tab
             this.scanList = project.scans.edges;
             this.projectDetails = project;
 
             const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule('Project');
 
+            let selectedScan: any;
+
             if (lastScanSelected && lastScanSelected.lastSelectedScanId) {
-              this.stateService.selectedScan = project.scans.edges.find(
-                (edge: any) => edge.node.scanId === lastScanSelected.lastSelectedScanId
-              );
-            } else {
-              let selectedScan = project.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
+              selectedScan = project.scans.edges.find(edge => edge.node.scanId === lastScanSelected.lastSelectedScanId);
+            }
+
+            if (!selectedScan) {
+              selectedScan = project.scans.edges.reduce((a: any, b: any) => a.node.created > b.node.created ? a : b);
 
               if (!selectedScan) {
                 selectedScan = this.mostRecentScan;
               }
-
-              this.stateService.selectedScan = selectedScan;
             }
+
+            this.stateService.selectedScan = selectedScan;
 
             if (!!project.projectMetricsGroup.projectMetrics && project.projectMetricsGroup.projectMetrics.length >= 1) {
-                this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(function (a, b) { return Number(new Date(a.measureDate)) - Number(new Date(b.measureDate)) });
+              this.projectMetrics = project.projectMetricsGroup.projectMetrics.sort(
+                (a, b) => Number(new Date(a.measureDate)) - Number(new Date(b.measureDate))
+              );
             }
+
             _.each(this.projectMetrics, data => {
                 this.xaxis.categories.push(this.getFormattedDate(new Date(data.measureDate)));
             });
