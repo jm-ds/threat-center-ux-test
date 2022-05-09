@@ -1,5 +1,5 @@
 <div *ngIf='obsEntity | async as entity;'>
-  <div class="row">
+  <header class="row">
     <!-- <div class="col-6">
       <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Project BU</a> / </span>{{entity.name}}</h3>
     </div> -->
@@ -55,7 +55,7 @@
         </span>
       </div>
     </div>
-  </div>
+  </header>
 
   <ng-container *ngIf="entity.entityMetricsGroup?.projectCount; else introduction">
     <ngb-accordion #acc="ngbAccordion" class="chart-panel mt-10" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)">
