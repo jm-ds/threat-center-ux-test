@@ -102,6 +102,7 @@ export class Scan {
     scanAssetsTree: ScanAssetsTreeConnection;
     licenses: ScanLicense[];
     scanOpenSourceProject: ScanOpenSourceProject;
+    created: Date;
 }
 
 export class ScanOpenSourceProject {
