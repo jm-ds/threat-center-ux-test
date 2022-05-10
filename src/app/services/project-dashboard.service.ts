@@ -6,7 +6,7 @@ import { mergeMap } from 'rxjs/operators';
 
 import gql from 'graphql-tag';
 
-import { ProjectQuery, Scan, ScanQuery } from '@app/models';
+import { ProjectQuery, Scan, ScanEdge, ScanQuery } from '@app/models';
 
 import { NextConfig } from '@app/app-config';
 import { MESSAGES } from '@app/messages/messages';
@@ -461,41 +461,64 @@ export class GetProjectData implements Resolve<Observable<any>> {
 @Injectable({
   providedIn: 'root'
 })
-
 export class ProjectDashboardResolver implements Resolve<Observable<any>> {
   constructor(
     private projectDashboardService: ProjectDashboardService,
-    private coreHelperService: CoreHelperService,
     private userPreferenceService: UserPreferenceService,
-    private alertService: AlertService) { }
+    private alertService: AlertService
+  ) { }
+
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    let projectId = route.paramMap.get('projectId');
-    return this.projectDashboardService.getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Scan")))
+    const projectId = route.paramMap.get('projectId');
+
+    return this.projectDashboardService
+      .getProject(projectId, Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName('Project', 'Scan')))
       .pipe(
-        mergeMap((data: any) => {
-          let scanId = '';
-          const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule("Project");
-          if (!!lastScanSelected && !!lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
-            scanId = lastScanSelected.lastSelectedScanId;
-          } else {
-            scanId = data.data.project.scans.edges.reduce((a: any, b: any) => (a.node.created > b.node.created ? a : b)).node.scanId;
+        mergeMap(data => {
+          let scanEdge: ScanEdge;
+
+          const lastScanSelected = this.userPreferenceService.getLastScanSelectedByModule('Project');
+
+          if (lastScanSelected && lastScanSelected.lastSelectedScanId && lastScanSelected.lastSelectedScanId !== '') {
+            scanEdge = data.data.project.scans.edges.find(edge => edge.node.scanId === lastScanSelected.lastSelectedScanId);
           }
 
-          if (!!data.data.project && !!scanId) {
-            const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Components");
-            const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Vulnerabilities");
-            const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Licenses");
-            const res1 = this.projectDashboardService.getAllScanData(scanId, NextConfig.config.defaultItemPerPage, { parentScanAssetId: '', filter: '', first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName("Project", "Assets")) }, componentPage, vulPage, licensePage);
-            return forkJoin([res1]);
+          if (!scanEdge) {
+            scanEdge = data.data.project.scans.edges.reduce((a, b) => a.node.created > b.node.created ? a : b);
+          }
+
+          const scanID = scanEdge.node.scanId;
+
+          if (data.data.project && scanID) {
+            const componentPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName('Project', 'Components');
+            const vulPage = this.userPreferenceService.getItemPerPageByModuleAndComponentName('Project', 'Vulnerabilities');
+            const licensePage = this.userPreferenceService.getItemPerPageByModuleAndComponentName('Project', 'Licenses');
+
+            const scanAssetDetails = {
+              parentScanAssetId: '',
+              filter: '',
+              first: Number(this.userPreferenceService.getItemPerPageByModuleAndComponentName('Project', 'Assets'))
+            };
+
+            const scan$ = this.projectDashboardService.getAllScanData(
+              scanID,
+              NextConfig.config.defaultItemPerPage,
+              scanAssetDetails,
+              componentPage,
+              vulPage,
+              licensePage
+            );
+
+            return forkJoin([scan$]);
           } else {
             this.alertService.alertBox(MESSAGES.PROJECT_DATA_NOT_FOUND, MESSAGES.ERROR_TITLE, 'error');
+
             return EMPTY;
           }
         })
       );
-
   }
 }
