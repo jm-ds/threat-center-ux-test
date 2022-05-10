@@ -1,17 +1,19 @@
-import { PageInfo } from "./common";
-import { Scan, ScanConnection } from "./scan";
+import { PageInfo } from './common';
+import { ProjectMetricsGroup } from './metrics';
+import { Scan, ScanConnection } from './scan';
 
 export class Project {
-    projectId: string;
-    entityId: string;
-    name: string;
-    created: any;
-    latestScan: Scan;
-    scans: ScanConnection;
-    childProjects: ProjectConnection;
-    errorMsg: string;
-    log: string;
-    tags: string[];
+  projectId: string;
+  entityId: string;
+  name: string;
+  created: any;
+  latestScan: Scan;
+  scans: ScanConnection;
+  childProjects: ProjectConnection;
+  errorMsg: string;
+  log: string;
+  tags: string[];
+  projectMetricsGroup: ProjectMetricsGroup;
 }
 
 export class ProjectConnection {
