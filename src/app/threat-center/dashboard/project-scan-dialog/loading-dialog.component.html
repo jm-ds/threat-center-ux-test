@@ -1,4 +1,4 @@
-<!-- 
+<!--
 <div class="modal-body">
     <button type="button" *ngIf="statusMessageFromback == 'COMPLETE'" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -68,8 +68,7 @@
             </div>
         </div>
 
-
-        <div class="scan-modal-blk">
+        <div class="scan-modal-blk" *ngIf="projectScanResults.length || recentlyScanCompleted.length">
             <div class="scan-started-blk">
                 <div class="scan-main-blk" [ngClass]="{'single-project': projectScanResults.length === 1 }"
                     *ngIf="projectScanResults.length >= 1">
