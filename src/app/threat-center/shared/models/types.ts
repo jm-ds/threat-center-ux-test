@@ -592,9 +592,14 @@ export class VulnerableReleaseResponse {
   vulnerableReleases: VulnerableRelease[];
 }
 
+
+export interface VulnerableReleaseResponseMapWrapper {
+  "map": VulnerableReleaseResponseMap;
+}
+
 export interface VulnerableReleaseResponseMap {
-  "binaryVulnerableResponse": VulnerableReleaseResponse;
-  "sourceVulnerableResponse": VulnerableReleaseResponse;
+    "binaryVulnerableResponse": VulnerableReleaseResponse;
+    "sourceVulnerableResponse": VulnerableReleaseResponse;
 }
 
 // graphql error location
@@ -639,7 +644,7 @@ export class StringHolder {
 }
 
 export class GetStartVulnerableReleaseListQuery {
-  getStartVulnerableReleaseList: VulnerableReleaseResponseMap;
+  getStartVulnerableReleaseList: VulnerableReleaseResponseMapWrapper;
 }
 
 export class GetNextVulnerableReleaseListQuery {
