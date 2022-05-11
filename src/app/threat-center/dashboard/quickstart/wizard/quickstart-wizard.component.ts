@@ -1,35 +1,26 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-import { FilterUtils } from 'primeng/utils';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
-import { AuthenticationService } from '@app/security/services';
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { CoreHelperService } from '@app/services/core/core-helper.service';
-import { HostListener } from '@angular/core';
-import { ScanService } from '@app/services/scan.service';
-import { TaskService } from '@app/services/task.service';
-import { ScanHelperService } from '@app/services/scan-helper.service';
-import { ReloadService } from '@app/services/reload.service';
-import {
-    BitbucketUser,
-    Branch,
-    GitHubUser,
-    GitLabUser,
-    ScanRequest,
-    SnippetMatchResult
-} from '@app/models';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {FormBuilder, Validators} from '@angular/forms';
+import {FilterUtils} from 'primeng/utils';
+import {Observable, Subscription} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+import {FileUploadValidators} from '@iplab/ngx-file-upload';
+import {AuthenticationService} from '@app/security/services';
+import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {CoreHelperService} from '@app/services/core/core-helper.service';
+import {ScanService} from '@app/services/scan.service';
+import {TaskService} from '@app/services/task.service';
+import {ScanHelperService} from '@app/services/scan-helper.service';
+import {ReloadService} from '@app/services/reload.service';
 import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult, Task} from '@app/models';
+import { GithubAccount, RepositoryAccounts } from '@app/threat-center/shared/models/types';
+import {UserPreferenceService} from '@app/services/core/user-preference.service';
+import {RepositoryListComponent} from './repo-list/repo-list.component';
+import {ReadyScanRepositorylistComponent} from './ready-scan-repo/ready-scan-repo.component';
+import {LoadingDialogComponent} from '../../project-scan-dialog/loading-dialog.component';
 
-import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import { RepositoryListComponent } from './repo-list/repo-list.component';
-import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
-
-import { environment } from 'environments/environment';
+import {environment} from 'environments/environment';
 
 @Component({
     selector: 'app-quickstart',
