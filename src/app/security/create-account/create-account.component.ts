@@ -54,6 +54,7 @@ export class CreateAccountComponent implements OnInit {
     }
 
     createAccount() {
+        console.error("create-account.component - external login");
         this.loading = true;
         this.authenticationService.createAccount(
             this.model.email,
@@ -79,6 +80,7 @@ export class CreateAccountComponent implements OnInit {
 
   // login via external oauth
   externalLogin(urlText: string, repoTypeDialog) {
+    console.info("create-account.component - external login");
     let param = undefined;
     if (urlText === 'github_login') {
       let repotype = this.authenticationService.getGitHubRepoType();

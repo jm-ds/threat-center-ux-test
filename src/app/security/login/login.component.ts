@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
-import { AuthenticationService } from '../services';
+import {AuthenticationService, LoginType} from '../services';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit {
   apiUrl: string;
   loginPageError:string = '';
   choosenRepoType: string = 'private';
+  currentLogin: LoginType;
+  previousLogin: LoginType;
+  createNewUser: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,6 +59,7 @@ export class LoginComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   login() {
+    console.info("login.component - login");
     this.loading = true;
     this.authenticationService.login(this.model.username, this.model.password)
       .pipe(first())
@@ -70,14 +74,40 @@ export class LoginComponent implements OnInit {
         });
   }
 
+  checkCreateNewUserAndLogin() {
+    if (!this.createNewUser) {
+      console.info(`going to login with ${this.previousLogin} then join the account with ${this.currentLogin}`);
+      this.authenticationService.setJoinAccount(this.currentLogin);
+      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.previousLogin));
+    } else {
+      console.info(`going to login with ${this.currentLogin}`)
+      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.currentLogin));
+    }
+  }
+
   // login via external oauth
-  externalLogin(urlText: string, repoTypeDialog) {
+  externalLogin(urlText: string, previousLoginDialog, repoTypeDialog) {
+    console.info("login.component - external login");
+    this.setCurrentLogin(urlText);
+
+    let lastSuccessfulLogin = JSON.parse(this.authenticationService.getLastSuccessfulLogin());
+    if (lastSuccessfulLogin) {
+      console.info(`last successful login ${lastSuccessfulLogin}`);
+      this.currentLogin = this.getLoginTypeFromUrl(urlText);
+      this.previousLogin = lastSuccessfulLogin['loginType'];
+      if (this.currentLogin !== this.previousLogin) {
+        // ask user if he wants to join the accounts
+        this.openDialog(previousLoginDialog);
+        return;
+      }
+    }
+
     let param = undefined;
     if (urlText === 'github_login') {
       let repotype = this.authenticationService.getGitHubRepoType();
       if (!repotype) {
         // show repo type dialog
-        this.openRepoTypeDialog(repoTypeDialog);
+        this.openDialog(repoTypeDialog);
         return; 
       } else {
         if (repotype === 'private') {
@@ -98,7 +128,7 @@ export class LoginComponent implements OnInit {
   }
 
   // open repo type dialog
-  openRepoTypeDialog(content) {
+  openDialog(content) {
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 
@@ -110,6 +140,28 @@ export class LoginComponent implements OnInit {
       param = 'needPrivateRepos=true';
     }
     this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
+  }
+  getLoginTypeFromUrl(url:string) {
+    let type: LoginType;
+    if (url.toLowerCase().includes('github')) {
+      return LoginType.GITHUB;
+    }
+    if (url.toLowerCase().includes('gitlab')) {
+      return LoginType.GITLAB;
+    }
+    if (url.toLowerCase().includes('bitbucket')) {
+      return LoginType.BITBUCKET;
+    }
+    if (url.toLowerCase().includes('google')) {
+      return LoginType.GOOGLE;
+    }
+    return undefined
+  }
+
+  setCurrentLogin(url:string) {
+    let type = this.getLoginTypeFromUrl(url);
+    console.log('setting current login to ' + type);
+    this.authenticationService.setCurrentLogin(type);
   }
 
 }

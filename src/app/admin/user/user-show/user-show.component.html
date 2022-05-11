@@ -210,6 +210,44 @@
                         </app-card>
                     </ng-template>
                 </ngb-tab>
+                <!-- Repository accounts -->
+                <ngb-tab *ngIf="authorizationService.hasPermissions('USER_VIEW')"> <!-- TODO change to proper permissions-->
+                    <ng-template ngbTabTitle>Repository accounts&nbsp;&nbsp;
+                        <span class="badge badge-light">
+                          {{repositoryAccountList(authService.currentUserSubject.getValue()).length}}
+                        </span>
+                    </ng-template>
+
+                    <ng-template ngbTabContent>
+                        <app-card [hidHeader]="true" cardClass="user-profile-list">
+                            <div class="mb-2 mt-1 float-right" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
+                                <div class="text-left">
+                                    <a routerLink="/admin/user/addRepositoryAccount" class="btn btn-outline-info">Add repository account</a>
+                                </div>
+                            </div>
+                            <div class="dt-responsive table-responsive">
+                                <table datatable class="table row-border" *ngIf="repositoryAccountList(authService.currentUser).length >= 0">
+                                    <thead>
+                                    <tr>
+                                        <th>Account type</th>
+                                        <th>Account user</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let account of repositoryAccountList(authService.currentUser)">
+                                        <td>
+                                            {{account.type}}
+                                        </td>
+                                        <td>
+                                            {{account.accountName}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </app-card>
+                    </ng-template>
+                </ngb-tab>
 
             </ngb-tabset>
 

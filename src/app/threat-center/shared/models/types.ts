@@ -398,15 +398,32 @@ export class ScanAssetMatch {
   percentMatch:number;
 }
 
-export class GithubAccount {
+export class Account {
+  accountName: string
+  type: string
+}
+
+export class PasswordAccount extends Account {
+}
+export class RepositoryAccount extends Account {
   accessToken: string;
   scopes:string[];
+}
+export class GithubAccount extends RepositoryAccount {
+}
+export class GitlabAccount extends RepositoryAccount {
+}
+export class BitbucketAccount extends RepositoryAccount {
+}
+export class GoogleAccount extends RepositoryAccount {
 }
 
 export class RepositoryAccounts {
   githubAccount:GithubAccount;
-  bitbucketAccount:any;
-  gitlabAccount:any;
+  gitlabAccount:GitlabAccount;
+  bitbucketAccount:BitbucketAccount;
+  passwordAccount:PasswordAccount;
+  googleAccount:GoogleAccount;
 }
 
 export class Role {

@@ -7,6 +7,8 @@ import {UserEditComponent} from "@app/admin/user/user-edit/user-edit.component";
 import {AuthGuard} from "@app/security/helpers";
 import { ApiKeyShowComponent } from './apikey-show/apikey-show.component';
 import { ApiKeyEditComponent } from './apikey-edit/apikey-edit.component';
+import {RepositoryAccount} from "@app/threat-center/shared/models/types";
+import {UserAccountsComponent} from "@app/admin/user/user-accounts/user-accounts.component";
 
 
 const routes: Routes = [
@@ -50,9 +52,14 @@ const routes: Routes = [
                 data: {auth: ["USER_VIEW"]}
             },
             {
-                path: 'show/:username/create/apikey/:keyid',
+                path: 'show/:username/create/apikey/:keyid', // TODO escape characters in username
                 component: ApiKeyEditComponent,
                 data: {auth: ["USER_VIEW", "USER_APITOKEN_CREATE"]}
+            },
+            {
+                path: 'addRepositoryAccount',
+                component: UserAccountsComponent,
+                data: {auth: ["USER_VIEW"]}
             }
         ]
     }

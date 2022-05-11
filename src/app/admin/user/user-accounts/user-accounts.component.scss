@@ -1,0 +1,10 @@
+.disabled {
+  color: #e6e6e6;
+  cursor: not-allowed;
+  text-decoration: underline;
+  pointer-events: none;
+}
+
+.alert-box {
+  margin: 0px -10px 20px;
+}

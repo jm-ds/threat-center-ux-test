@@ -15,11 +15,19 @@ import { ScanService } from '@app/services/scan.service';
 import { TaskService } from '@app/services/task.service';
 import { ScanHelperService } from '@app/services/scan-helper.service';
 import { ReloadService } from '@app/services/reload.service';
-import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult} from '@app/models';
+import {
+    BitbucketUser,
+    Branch,
+    GitHubUser,
+    GitLabUser,
+    ScanRequest,
+    SnippetMatchResult
+} from '@app/models';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
 import { AuthorizationService } from '@app/security/services';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
+import {RepositoryAccounts} from "@app/threat-center/shared/models/types";
 
 @Component({
     selector: 'app-quickstart',
@@ -213,13 +221,13 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     }
 
     refreshData() {
-        if (this.activeTab === "Github" && this.authService.currentUser.accessToken.startsWith("github-")) {
+        if (this.activeTab === "Github" && this.authService.currentUser.repositoryAccounts.githubAccount) {
             this.loadGitHubUser();
         }
-        else if (this.activeTab === "Gitlab" && this.authService.currentUser.accessToken.startsWith("gitlab-")) {
+        else if (this.activeTab === "Gitlab" && this.authService.currentUser.repositoryAccounts.gitlabAccount) {
             this.loadGitLabUser();
         }
-        else if (this.activeTab === "Bitbucket" && this.authService.currentUser.accessToken.startsWith("bitbucket-")) {
+        else if (this.activeTab === "Bitbucket" && this.authService.currentUser.repositoryAccounts.bitbucketAccount) {
             this.loadBitbucketUser();
         } else { }
     }
@@ -239,21 +247,21 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         // but I need to figure out how to pull the relative URL and use
         // it for the replaceState URL, I think.
         console.log("IN QuickstartWizardComponent");
-        let accessToken = this.authService.currentUser.accessToken;
-        console.log("accessToken: " + accessToken);
-        if (this.isEmail(accessToken)) {
-            this.activeTab = "Github";//"DragDrop";
-        } else if (accessToken.startsWith("github-")) {
-            this.loadGitHubUser();
-            this.activeTab = "Github";
-        } else if (accessToken.startsWith("gitlab-")) {
-            this.loadGitLabUser();
-            this.activeTab = "Gitlab";
-        } else if (accessToken.startsWith("bitbucket-")) {
-            this.loadBitbucketUser();
-            this.activeTab = "Bitbucket";
-        } else if (accessToken.startsWith("google-")) {
-            this.activeTab = "DragDrop";
+        if (!!this.authService.currentUser && !!this.authService.currentUser.repositoryAccounts) {
+            let repositoryAccounts = this.authService.currentUser.repositoryAccounts;
+            this.loadRepositoryUsers(repositoryAccounts);
+
+            if (repositoryAccounts.githubAccount) {
+              this.activeTab = 'Github';
+            } else if (repositoryAccounts.gitlabAccount) {
+              this.activeTab = 'Gitlab';
+            } else if (repositoryAccounts.bitbucketAccount) {
+              this.activeTab = "Bitbuclet";
+            } else {
+              this.activeTab = "DragDrop";
+            }
+        } else {
+            console.error("Could not get repository accounts, user is not logged it or broken");
         }
 
         FilterUtils['custom'] = (value, filter): boolean => {
@@ -267,6 +275,19 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         };
         this.getLastTabSelected();
     }
+
+    loadRepositoryUsers(repositoryAccounts: RepositoryAccounts) {
+      if (repositoryAccounts.githubAccount) {
+          this.loadGitHubUser();
+      }
+      if (repositoryAccounts.gitlabAccount) {
+        this.loadGitLabUser();
+      }
+      if (repositoryAccounts.bitbucketAccount) {
+        this.loadBitbucketUser();
+      }
+    }
+
 
     onRowSelect(event) {
         this.selectedRepos[0] = event.data;

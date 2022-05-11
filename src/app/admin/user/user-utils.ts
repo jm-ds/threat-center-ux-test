@@ -1,5 +1,6 @@
-import {EntityConnection, Role} from "@app/models";
+import {EntityConnection, Role, User} from "@app/models";
 import {NavigationExtras, Router} from "@angular/router";
+import {RepositoryAccount} from "@app/threat-center/shared/models/types";
 
 export class UserUtils {
 
@@ -62,5 +63,21 @@ export class UserUtils {
         this.router.navigateByUrl('admin/user/show/' + encodeURIComponent(username)+'/show/apikey/' + apiId);
     }
 
+
+    repositoryAccountList(user : User):RepositoryAccount[] {
+        let accounts = new Array();
+        if (user.repositoryAccounts) {
+            if (user.repositoryAccounts.githubAccount) {
+                accounts.push(user.repositoryAccounts.githubAccount);
+            }
+            if (user.repositoryAccounts.gitlabAccount) {
+                accounts.push(user.repositoryAccounts.gitlabAccount);
+            }
+            if (user.repositoryAccounts.bitbucketAccount) {
+                accounts.push(user.repositoryAccounts.bitbucketAccount);
+            }
+        }
+        return accounts;
+    }
 
 }

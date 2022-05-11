@@ -31,29 +31,30 @@
             </div>
             <div id="auth01" class="row" style="margin-bottom:20px">
                 <div title="Github login" class="col-xl-6">
-                    <a (click)="externalLogin('github_login', repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                    <a (click)="externalLogin('github_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
                     </a>
                 </div>
                 <div title="Gitlab login" class="col-xl-6">
-                    <a  (click)="externalLogin('gitlab_login', repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                    <a  (click)="externalLogin('gitlab_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
             </div>
-            <!--
+
             <div id="auth02" class="row" style="margin-bottom:20px">
                 <div title="Bitbucket login coming soon!" class="col-xl-6">
-                    <a (click)="externalLogin('bitbucket_login', repoTypeDialog)" class="cursor-pointer disabled">
-                        <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
+                    <a (click)="externalLogin('bitbucket_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled" [ngClass]="{'disabled': loading == true}">
+                        <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-bitbucket"></i></div>
                     </a>
                 </div>
                 <div title="Google login coming soon!" class="col-xl-6">
-                    <a (click)="externalLogin('google_login', repoTypeDialog)" class="cursor-pointer disabled">
+                    <a (click)="externalLogin('google_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-google"></i></div>
                     </a>
                 </div>
             </div>
+            <!--
             <div id="auth03" class="row mb-0">
                 <div title="Docker login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('docker_login', repoTypeDialog)" class="cursor-pointer disabled">
@@ -119,6 +120,40 @@
               <button type="button" class="btn btn-secondary" (click)="modal.close('click')">Cancel</button>
             </div>
           </ng-template>
-              
+
+
+        <ng-template #previousLoginDialog let-modal>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-basic-title">Previous login detected </h3>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h5>We detected that you have logged in with another oauth provider before.
+                        Do you want to proceed with creating new user or attach {{currentLogin}} account to the existing user?</h5>
+                    <div class="form-group">
+                        <div class="radio radio-primary d-inline">
+                            <input [(ngModel)]="createNewUser" type="radio" value="" name="attachToExistingUser" id="attachToExistingUser">
+                            <label for="attachToExistingUser" class="cr">Attach to existing user</label>
+                            <p class="m-l-30 m-b-0">Attach {{currentLogin}} account to the existing threatrix user.
+                                It's required to first login via {{previousLogin}}, then you will be redirected to {{currentLogin}} auth service.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="radio radio-primary d-inline">
+                            <input [(ngModel)]="createNewUser" type="radio" value="true" name="createNewUser" id="createNewUser">
+                            <label for="createNewUser" class="cr">New user</label>
+                            <p class="m-l-30 m-b-0">Create new user with {{currentLogin}} account.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modal.close('click'); checkCreateNewUserAndLogin();">OK</button>
+                <button type="button" class="btn btn-secondary" (click)="modal.close('click')">Cancel</button>
+            </div>
+        </ng-template>
+
     </div>
 </div>

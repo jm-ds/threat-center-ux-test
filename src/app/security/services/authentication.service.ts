@@ -62,6 +62,7 @@ export class AuthenticationService {
         
         //storing current user details to session storage.
         this.setInSessionStorageBasedEnv("currentUser",user);
+        this.setCurrentLogin(LoginType.PASSWORD);
 
         this.currentUserSubject.next(user);
         return user;
@@ -99,6 +100,7 @@ export class AuthenticationService {
     sessionStorage.removeItem("UserPreference");
     sessionStorage.removeItem("REPO_SCAN");
     sessionStorage.removeItem("AssetFilter");
+    sessionStorage.removeItem("currentLogin")
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
     this.closeWebSocket();
@@ -190,4 +192,87 @@ export class AuthenticationService {
     this.cookieService.set('gh_rt', value, {path: '/',  expires: expiredDate, sameSite: 'Lax' });
   }
 
+  //todo save
+  setLastSuccessfulLogin(loginType: LoginType, accountName: string) {
+    console.log(`setting last successful login to ${loginType} , ${accountName}` );
+    let expiredDate = new Date();
+    expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
+    let jsonLoginData = {
+      loginType: loginType,
+      accountName: accountName
+    };
+
+    this.cookieService.set('last_login', JSON.stringify(jsonLoginData), {path: '/',  expires: expiredDate, sameSite: 'Lax' });
+  }
+
+  getLastSuccessfulLogin() {
+    if (this.cookieService.check('last_login')) {
+      return this.cookieService.get('last_login');
+    } else {
+      return undefined;
+    }
+  }
+
+  setCurrentLogin(loginType: LoginType) {
+    if (environment.production && !environment.staging) {
+      this.localService.setSessionStorage("currentLogin", loginType);
+    } else {
+      sessionStorage.setItem("currentLogin", loginType);
+    }
  }
+
+  getCurrentLogin() {
+    if (environment.production && !environment.staging) {
+      return this.localService.getSessionStorage("currentLogin");
+    } else {
+      return sessionStorage.getItem("currentLogin")
+    }
+  }
+
+  getJoinAccount() {
+    if (environment.production && !environment.staging) {
+      return this.localService.getSessionStorage("accountToJoin");
+    } else {
+      return sessionStorage.getItem("accountToJoin")
+    }
+  }
+
+  setJoinAccount(loginType: LoginType) {
+    if (environment.production && !environment.staging) {
+      this.localService.setSessionStorage("accountToJoin", loginType);
+    } else {
+      sessionStorage.setItem("accountToJoin", loginType);
+    }
+  }
+
+  removeJoinAccount() {
+    sessionStorage.removeItem("accountToJoin");
+  }
+
+
+  loginTypeToLoginUrl(loginType: LoginType) {
+    switch (loginType) {
+      case LoginType.BITBUCKET:
+        return "bitbucket_login";
+      case LoginType.GITHUB:
+        return "github_login";
+      case LoginType.GITLAB:
+        return "gitlab_login";
+      case LoginType.GOOGLE:
+        return "google_login";
+      case LoginType.PASSWORD:
+        return undefined;
+    }
+  }
+
+ }
+
+ export enum LoginType {
+   GITHUB = 'github',
+   GITLAB = 'gitlab',
+   BITBUCKET = 'bitbucket',
+   GOOGLE = 'google',
+   PASSWORD = 'password'
+
+
+}
