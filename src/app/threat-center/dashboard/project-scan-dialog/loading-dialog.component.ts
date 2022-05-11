@@ -49,10 +49,11 @@ export class LoadingDialogComponent implements OnInit, OnDestroy {
                 }
             }
 
-            if (this.projectScanResults.length == 0 && this.recentlyScanCompleted.length == 0 && this.errorScanProject.length == 0) {
-                this.closeModel();
-            }
+            const filteredErrors = this.filterErrorPro(this.errorScanProject);
 
+            if (this.projectScanResults.length === 0 && this.recentlyScanCompleted.length === 0 && filteredErrors.length === 0) {
+              this.closeModel();
+            }
         });
     }
 
