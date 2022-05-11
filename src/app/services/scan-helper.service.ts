@@ -114,7 +114,7 @@ export class ScanHelperService {
                 return EMPTY;
               })
             )),
-            pluck<ApolloQueryResult<TaskQuery>, Task>('data.task_update')
+            pluck<ApolloQueryResult<TaskQuery>, Task>('data', 'task_update')
           )
           .subscribe(tUpdate => {
                 this.updateProjectArray(tUpdate);
