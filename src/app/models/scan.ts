@@ -22,30 +22,32 @@ export class Task {
     subtasks?: Task[] = [];
 }
 
-
 export class GitHubUser {
-    id?: string = '';
-    avatarUrl?: string = '';
-    email?: string = '';
-    name?: string = '';
-    login?: string = '';
-    token?: string = '';
-    //organizations: Organization[];
-    //repositories: Repository[];
-    //primaryLanguage: Language;
+  id?: string;
+  avatarUrl?: string;
+  email?: string;
+  name?: string;
+  login?: string;
+  token?: string;
+  organizations: {
+    edges: Organization[]
+  };
+  repositories: {
+    edges: Repository[]
+  };
+  // primaryLanguage: Language;
 }
 
-
-// Model for gitlab user
+/** Model for GitLab user */
 export class GitLabUser {
-    id?: string = '';
-    avatarUrl?: string = '';
-    email?: string = '';
-    name?: string = '';
-    username?: string = '';
-    token?: string = '';
+  id?: string;
+  avatarUrl?: string;
+  email?: string;
+  name?: string;
+  username?: string;
+  token?: string;
+  gitLabProjects: Repository[];
 }
-
 
 // Model for bitbucket user
 export class BitbucketUser {
@@ -57,11 +59,14 @@ export class BitbucketUser {
     token?: string = '';
 }
 
-
 export class Organization {
-    avatarUrl?: string = '';
-    name?: string = '';
-    repositories: Repository[];
+  node: {
+    avatarUrl?: string;
+    name?: string;
+    repositories: {
+      edges: Repository[]
+    };
+  };
 }
 
 export class Repository {
@@ -97,6 +102,7 @@ export class Scan {
     scanAssetsTree: ScanAssetsTreeConnection;
     licenses: ScanLicense[];
     scanOpenSourceProject: ScanOpenSourceProject;
+    created: Date;
 }
 
 export class ScanOpenSourceProject {
@@ -183,11 +189,15 @@ export class SnippetMatch {
 export class AssetRelease {
     releaseDate: Date;
     releaseName: string;
-};
+}
+
 export class AssetLicense {
-    licenseId: string;
-    name: string;
-};
+  licenseId: string;
+  licenseName: string;
+  licenseContext: string;
+  name: string;
+}
+
 export class RepositoryReleaseLicense {
     licenseId: string;
     licenseName: string;
@@ -234,7 +244,6 @@ export type JiraTicketQuery = {
     licenseJiraTicket: JiraTicket;
 };
 
-export type DeploymentDataQuery = {
-    deploymentSettings: DeploymentSettings;
-};
-
+export interface DeploymentDataQuery {
+  deploymentSettings: DeploymentSettings;
+}

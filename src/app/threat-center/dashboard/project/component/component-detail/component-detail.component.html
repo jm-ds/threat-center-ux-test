@@ -5,7 +5,7 @@
         <span style="font-size:15px">
             <a class="cursor-pointer" [routerLink]="['/dashboard/entity']"><i class="far fa-building"></i>&nbsp;{{breadcumDetail.SelectedEntity.name}}</a> /
             <a class="cursor-pointer" (click)="gotoProject()">{{breadcumDetail.SelectedProject.name}}</a> /
-            <a  *ngIf="breadcumDetail.SelectedLicense && licenseId" class="cursor-pointer" (click)="gotoLicense()">{{breadcumDetail.SelectedLicense.name}}/</a> 
+            <a  *ngIf="breadcumDetail.SelectedLicense && licenseId" class="cursor-pointer" (click)="gotoLicense()">{{breadcumDetail.SelectedLicense.name}}/</a>
             <span style="color: #ffffff;">{{component.name}}</span>
           </span>
       </div>
@@ -16,7 +16,10 @@
       <div class="col-md-6">
         <h3><span style="font-size:15px">{{component.group}}</span> | {{component.name}}</h3>
         Version: <span title="Info" class="badge m-r-5 badge-light-primary">{{component.version}}</span>
-        Released: <span title="Info" class="badge m-r-5 badge-light-primary">{{scanComponent.releaseDate | date:'MMM dd, yyyy'}}</span>
+        Released:
+        <span class="badge m-r-5 badge-light-primary" title="Info">
+          {{ scanComponent.releaseDate | date: 'MMM dd, yyyy' }}
+        </span>
       </div>
     </div>
     <div class="row">
@@ -32,11 +35,11 @@
                       <p-table #dt [columns]="vulnerabilityColumns" [value]="vulnerabilityDetails.edges" [paginator]="false" [rows]="50"
                         tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
                         [autoLayout]="true" [globalFilterFields]="['vulnId','cwe.name']">
-                  
+
                         <ng-template pTemplate="caption">
                           <!-- <div style="display: flex;text-align: left">
                                             <div style="flex: 50%;font-weight:bold">
-                  
+
                                             </div>
                                             <div style="flex: 50%;text-align: right">
                                               <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -51,7 +54,7 @@
                             </th>
                           </tr>
                         </ng-template>
-                  
+
                         <ng-template pTemplate="body" let-vulnerability>
                           <tr (click)="gotoOtherDetailsPage(vulnerability?.node.vulnerabilityId,'vulnerability')" class="cursor-pointer">
                             <td><span class="badge m-r-5 badge-light-info">{{vulnerability?.node.source}}</span>
@@ -65,8 +68,8 @@
                         </ng-template>
                       </p-table>
                     </perfect-scrollbar>
-                  
-                  
+
+
                     <div class="col-sm-12" *ngIf="vulnerabilityDetails.edges.length >= 1">
                       <mat-paginator [hidePageSize]="false" [disabled]="false" [length]="vulnerabilityDetails?.totalCount"
                         [pageSize]="defaultPageSize" [pageSizeOptions]="[25, 50, 100]" (page)="changePage($event)">
@@ -87,11 +90,15 @@
 
               <div style="display: flex; flex-wrap: wrap;">
 
-                <perfect-scrollbar *ngIf="!isDisablePaggination" [style.max-height]="'auto'" class="overflowshadow" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+                <perfect-scrollbar [style.max-height]="'auto'" class="overflowshadow" [config]="{
+                  useBothWheelAxes: true,
+                  suppressScrollX: false,
+                  suppressScrollY: false
+                }">
                   <p-table #dt [columns]="columns" [value]="licensesList" [paginator]="false" [rows]="50"
                     tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width" [autoLayout]="true"
                     [filterDelay]="0" [globalFilterFields]="['name']">
-            
+
                     <ng-template pTemplate="header" let-columns>
                       <tr>
                         <th *ngFor="let col of columns">
@@ -99,7 +106,7 @@
                         </th>
                       </tr>
                     </ng-template>
-            
+
                     <ng-template pTemplate="body" let-license>
                       <tr *ngIf="license.isColspan" style="background-color: #363e4f;">
                         <td colspan="8"><span style="font-size: 15px;">{{license?.name}}</span><i class="fas fa-layer-group ml-1"></i></td>
@@ -197,7 +204,7 @@
                         </div>
                       </div>
                       <div style="width:60%;float:right;" *ngIf="!!binaryReleases && binaryReleases.length >= 1">
-                        <perfect-scrollbar [style.max-height]="'410px'" #perfectScrollBinaryRelese (psYReachEnd)="loadBinaryReleasesLazy($event)" 
+                        <perfect-scrollbar #perfectScrollBinaryRelese [style.max-height.px]="410" (psYReachEnd)="loadBinaryReleasesLazy($event)"
                               class="overflowshadowTop">
                           <p-table #dtBinary [columns]="releaseCols" [value]="binaryReleases"
                                    [scrollable]="false" [rows]="25" [style]="{width:'100%'}" scrollHeight="373px"
@@ -217,12 +224,10 @@
                               </tr>
                               <tr>
                                 <th *ngFor="let col of binaryReleases" [ngSwitch]="col.version">
-                                  <input class="form-control" pInputText type="text"
-                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                  <input class="form-control" pInputText (input)="dtBinary.filterGlobal($event, 'startsWith')">
                                 </th>
                                 <th *ngFor="let col of binaryReleases" [ngSwitch]="col.releaseDate">
-                                  <input class="form-control" pInputText type="text"
-                                         (input)="dtBinary.filterGlobal($event.target.value, 'startsWith')">
+                                  <input class="form-control" pInputText (input)="dtBinary.filterGlobal($event, 'startsWith')">
                                 </th>
                               </tr>
                             </ng-template>
@@ -257,6 +262,11 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
+                        <ng-container *ngIf="loading">
+                          <div class="spinner-wrapper">
+                            <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+                           </div>
+                        </ng-container>
                       </div>
                       <div *ngIf="!binaryReleases || binaryReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
                         Data for this repository is coming soon.
@@ -343,6 +353,11 @@
                             </ng-template>
                           </p-table>
                         </perfect-scrollbar>
+                        <ng-container *ngIf="loading">
+                          <div class="spinner-wrapper">
+                            <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+                           </div>
+                        </ng-container>
                       </div>
                       <div *ngIf="!sourceReleases || sourceReleases.length == 0" style="width:60%;float:right;text-align: center; margin-top: 20px; font-size: 18px;">
                         Data for this repository is coming soon.

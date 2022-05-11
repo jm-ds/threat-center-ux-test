@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
-import { FormControl, FormGroup } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FilterUtils } from 'primeng/utils';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
-import { NgxSpinnerService } from "ngx-spinner";
 import { AuthenticationService } from '@app/security/services';
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { HostListener } from '@angular/core';
 import { ScanService } from '@app/services/scan.service';
@@ -23,11 +22,14 @@ import {
     ScanRequest,
     SnippetMatchResult
 } from '@app/models';
+import {BitbucketUser, Branch, GitHubUser, GitLabUser, ScanRequest, SnippetMatchResult, Task} from '@app/models';
+
+import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { RepositoryListComponent } from './repo-list/repo-list.component';
 import { ReadyScanRepositorylistComponent } from './ready-scan-repo/ready-scan-repo.component';
-import { AuthorizationService } from '@app/security/services';
-import { UserPreferenceService } from '@app/services/core/user-preference.service';
-import {RepositoryAccounts} from "@app/threat-center/shared/models/types";
+import { LoadingDialogComponent } from '../../project-scan-dialog/loading-dialog.component';
+
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-quickstart',
@@ -36,6 +38,14 @@ import {RepositoryAccounts} from "@app/threat-center/shared/models/types";
     encapsulation: ViewEncapsulation.None
 })
 export class QuickstartWizardComponent implements OnInit, OnDestroy {
+  fileForm = this.fb.group({
+    files: [
+      undefined,
+      [Validators.required, FileUploadValidators.filesLimit(1)]
+    ]
+  });
+
+  private fileSubscription: Subscription;
 
     public license: any;
     obsGithubUser: Observable<GitHubUser>;
@@ -60,107 +70,157 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     isDisableScanBtn: boolean = false;
     selectedItem: string = "";
     lastTabChangesInfo: NgbTabChangeEvent = undefined;
-    private filesControl = new FormControl(null, FileUploadValidators.filesLimit(2));
 
-    @ViewChild('orgRepoList', { static: false }) orgRepoList: RepositoryListComponent;
-    @ViewChild('repoList', { static: false }) repoList: RepositoryListComponent;
-    @ViewChild('gitLabRepoList', { static: false }) gitLabRepoList: RepositoryListComponent;
-    @ViewChild('bitbucketRepoList', { static: false }) bitbucketRepoList: RepositoryListComponent;
-    @ViewChild('readyScanRepo', { static: false }) readyScanRepo: ReadyScanRepositorylistComponent;
+    @ViewChild('orgRepoList') orgRepoList: RepositoryListComponent;
+    @ViewChild('repoList') private repoList: RepositoryListComponent;
+    @ViewChild('gitLabRepoList') gitLabRepoList: RepositoryListComponent;
+    @ViewChild('bitbucketRepoList') bitbucketRepoList: RepositoryListComponent;
+    @ViewChild('readyScanRepo') readyScanRepo: ReadyScanRepositorylistComponent;
 
+  constructor(
+    private httpClient: HttpClient,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private scanService: ScanService,
+    private taskService: TaskService,
+    private scanHelperService: ScanHelperService,
+    private coreHelperService: CoreHelperService,
+    private reloadService: ReloadService,
+    private userPreferenceService: UserPreferenceService,
+    public authService: AuthenticationService
+  ) {
+    this.scanHelperService.isEnabaleNewScanObservable$.subscribe(x => {
+      this.isDisableScanBtn = x === null ? this.isDisableScanBtn : x;
+    });
+  }
 
-    constructor(
-        private scanService: ScanService,
-        private location: Location,
-        private router: Router,
-        private route: ActivatedRoute,
-        private taskService: TaskService,
-        private spinner: NgxSpinnerService,
-        public authService: AuthenticationService,
-        private scanHelperService: ScanHelperService,
-        private modalService: NgbModal,
-        private coreHelperService: CoreHelperService,
-        private reloadService: ReloadService,
-        private userPreferenceService:UserPreferenceService,
-        private authorizationService: AuthorizationService) {
-        this.scanHelperService.isEnabaleNewScanObservable$
-            .subscribe(x => {
-                this.isDisableScanBtn = (x == null) ? this.isDisableScanBtn : x;
-            });
-    }
-    ngOnDestroy(): void {
-        this.scanHelperService.isRefreshObjectPage.next(false);
-    }
+  ngOnDestroy() {
+    this.scanHelperService.isRefreshObjectPage.next(false);
+
+    this.fileSubscription?.unsubscribe();
+  }
 
     public ghUserCols = [{ field: 'name', header: 'Name' }];
 
-    public demoForm = new FormGroup({
-        files: this.filesControl
+  onSubmitScan(repoType: string) {
+    const scanRequest = new ScanRequest();
+
+    scanRequest.repoType = repoType;
+
+    if (!this.entityId && this.authService.currentUser) {
+      this.entityId = this.authService.currentUser.defaultEntityId;
+    }
+
+    console.log('Submitting scan…');
+
+    console.log(`is ${repoType ?? 'default'}`);
+
+    let resourcePath: string;
+    let branch: string;
+
+    switch (repoType) {
+      case 'github':
+        branch = this.selectedRepos[0].node.scanBranch;
+
+        if (!branch) {
+          branch = this.selectedRepos[0].node.defaultBranchRef.name;
+        }
+
+        scanRequest.branch = branch;
+
+        // hack: find better way to handle the resource path.
+        resourcePath = this.selectedRepos[0].node.resourcePath.split('/', 3);
+
+        const [, owner, repo] = resourcePath;
+
+        scanRequest.login = owner;
+        scanRequest.repository = repo;
+
+        break;
+
+      case 'gitlab':
+        resourcePath = this.selectedRepos[0].fullPath.split('/', 3);
+
+        scanRequest.login = resourcePath[0];
+        scanRequest.repository = resourcePath[1];
+        scanRequest.branch = this.selectedRepos[0].repository.rootRef;
+        scanRequest.projectId = this.selectedRepos[0].id;
+
+        break;
+
+      case 'bitbucket':
+      default:
+        resourcePath = this.selectedRepos[0].fullName.split('/', 3);
+
+        scanRequest.login = resourcePath[0];
+        scanRequest.repository = resourcePath[1];
+
+        branch = this.selectedRepos[0].scanBranch;
+
+        if (!branch) {
+          branch = this.selectedRepos[0].mainBranch;
+        }
+
+        scanRequest.branch = branch;
+    }
+
+    console.log(`Branch: ${scanRequest.branch}`);
+    console.log(`Repo: ${scanRequest.repository}`);
+    console.log(`Owner: ${scanRequest.login}`);
+
+    scanRequest.entityId = this.entityId;
+    scanRequest.status = null;
+
+    this.taskService.scanRequest = scanRequest;
+
+    // Storing current scan to storage
+    sessionStorage.setItem('REPO_SCAN', JSON.stringify(this.taskService.scanRequest));
+
+    console.log('Submitting task…');
+
+    // Open dialog box with message…
+    this.isDisableScanBtn = true;
+
+    // Starting Scaning process…
+    this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
+  }
+
+  onSubmitFileForm() {
+    this.fileSubscription?.unsubscribe();
+
+    if (this.fileForm.invalid) {
+      return;
+    }
+
+    const { files } = this.fileForm.value as {
+      files: File[]
+    };
+
+    const formData = new FormData();
+
+    files.forEach(file => {
+      formData.append('multipartFile', file, file.name);
     });
 
-    public toggleStatus() {
-        this.filesControl.disabled ? this.filesControl.enable() : this.filesControl.disable();
-    }
+    const headers = new HttpHeaders();
 
-    submitScan(repoType) {
-        let scanRequest = new ScanRequest();
-        scanRequest.repoType = repoType;
-        // this.spinner.show();
-        if (!this.entityId) {
-            if (this.authService.currentUser) {
-                this.entityId = this.authService.currentUser.defaultEntityId;
-            }
-        }
-        console.log("SUBMITTING SCAN..");
+    headers.set('Content-Type', 'multipart/form-data');
 
-        if (repoType === "github") {
-            console.log("is github");
-            // hack: find better way to handle the resource path.
-            let resourcePath = this.selectedRepos[0].node.resourcePath.split("/", 3);
-            let owner = resourcePath[1];
-            let repo = resourcePath[2];
-            let branch = this.selectedRepos[0].node.scanBranch;
-            if (!branch) {
-                branch = this.selectedRepos[0].node.defaultBranchRef.name;
-            }
-            scanRequest.login = owner;
-            scanRequest.branch = branch;
-            scanRequest.repository = repo;
-        } else if (repoType === "gitlab") {
-            console.log("is gitlab");
-            let resourcePath = this.selectedRepos[0].fullPath.split("/", 3);
-            scanRequest.login = resourcePath[0];
-            scanRequest.repository = resourcePath[1];
-            scanRequest.branch = this.selectedRepos[0].repository.rootRef;
-            scanRequest.projectId = this.selectedRepos[0].id;
-        } else {
-            console.log("is bitbucket");
-            let resourcePath = this.selectedRepos[0].fullName.split("/", 3);
-            scanRequest.login = resourcePath[0];
-            scanRequest.repository = resourcePath[1];
-            let branch = this.selectedRepos[0].scanBranch;
-            if (!branch) {
-                branch = this.selectedRepos[0].mainBranch;
-            }
-            scanRequest.branch = branch;
-        }
-        console.log("BRANCH: ", scanRequest.branch);
-        console.log("RPEO: ", scanRequest.repository);
-        console.log("OWDER: ", scanRequest.login);
-        scanRequest.entityId = this.entityId;
-        scanRequest.status = null;
-        this.taskService.scanRequest = scanRequest;
+    const options = { headers };
 
-        //storing current scan to storage
-        sessionStorage.setItem("REPO_SCAN", JSON.stringify(this.taskService.scanRequest));
-
-        console.log("SUBMITTING TASK..");
-        // open dialog box with message..
-
-        this.isDisableScanBtn = true;
-        //Starting Scaning process....
-        this.reloadService.submitingRepoforScanStart(scanRequest, ' scan started.');
-    }
+    this.fileSubscription = this.httpClient
+      .post<Task>(`${environment.apiUrl}/project/upload`, formData, options)
+      .subscribe(task => {
+        this.scanHelperService.openFloatingModal(LoadingDialogComponent);
+        this.scanHelperService.submitingUploadProject({
+            uniqId: this.coreHelperService.uuidv4(),
+            projectName: files[0].name,
+            entityId: this.entityId,
+            taskToken: task.taskToken,
+        });
+        this.scanHelperService.getTaskUpdate(task);
+      });
+  }
 
     submitSnippet() {
         console.log("SNIPPET", this.snippetText);
@@ -275,6 +335,17 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         };
         this.getLastTabSelected();
     }
+
+   /**
+    * Filter by repository
+    *
+    * @param event input event
+    */
+   onRepositoryFilterInput(event: Event) {
+    const { value } = event.target as HTMLInputElement;
+
+    this.repoList.dataTableRef.filterGlobal(value, 'contains');
+  }
 
     loadRepositoryUsers(repositoryAccounts: RepositoryAccounts) {
       if (repositoryAccounts.githubAccount) {

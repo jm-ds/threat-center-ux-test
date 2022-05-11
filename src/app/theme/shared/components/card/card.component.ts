@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { AnimationBuilder, AnimationService } from 'css-animator';
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -60,8 +59,6 @@ export class CardComponent implements OnInit {
   public animation: string;
   public fullIcon: string;
   public isAnimating: boolean;
-  public animator: AnimationBuilder;
-  public animators: AnimationBuilder;
 
   public collapsedCard: string;
   public collapsedIcon: string;
@@ -70,7 +67,7 @@ export class CardComponent implements OnInit {
 
   public cardRemove: string;
 
-  constructor(animationService: AnimationService, config: NgbDropdownConfig) {
+  constructor(config: NgbDropdownConfig) {
     config.placement = 'bottom-right';
     this.customHeader = false;
     this.options = true;
@@ -78,9 +75,6 @@ export class CardComponent implements OnInit {
     this.isCardFooter = false;
     this.cardTitle = '';
 
-    this.animator = animationService.builder();
-    this.animators = animationService.builder();
-    this.animator.useVisibility = true;
     this.fullIcon = 'icon-maximize';
     this.isAnimating = false;
 
@@ -102,28 +96,14 @@ export class CardComponent implements OnInit {
     }
   }
 
-  public fullCardToggle(element: HTMLElement, animation: string, status: boolean) {
-    animation = this.cardClass === 'full-card' ? 'zoomOut' : 'zoomIn';
+  public fullCardToggle() {
+    const animation = this.cardClass === 'full-card' ? 'zoomOut' : 'zoomIn';
+
     this.fullIcon = this.cardClass === 'full-card' ? 'icon-maximize' : 'icon-minimize';
-    // const duration = this.cardClass === 'full-card' ? 300 : 600;
     this.cardClass = this.cardClass === 'full-card' ? this.cardClass : 'full-card';
-    if (status) {
-      this.animation = animation;
-    }
+    this.animation = animation;
     this.isAnimating = true;
 
-    this.animators
-      .setType(this.animation)
-      .setDuration(500)
-      .setDirection('alternate')
-      .setTimingFunction('cubic-bezier(0.1, -0.6, 0.2, 0)')
-      .animate(element)
-      .then(() => {
-        this.isAnimating = false;
-      })
-      .catch(() => {
-        this.isAnimating = false;
-      });
     setTimeout(() => {
       this.cardClass = animation === 'zoomOut' ? '' : this.cardClass;
       if (this.cardClass === 'full-card') {

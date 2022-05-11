@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -30,7 +30,7 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
   columns = ['Name', 'File Size', 'Status', 'Embedded Assets', 'Attribution', 'Match Type'];
 
   defaultPageSize = 25;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   scanAssetDetails: any;
   scanOpenSourceProject: ScanOpenSourceProject;
   columnsFilter = new Map();
@@ -203,7 +203,23 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     this.initData();
   }
 
-  filterColumn(column, value, idElement: string = '') {
+  filterOnlyAssetsIfFilterActivated() {
+    if (!!this.scanAssetDetails && this.scanAssetDetails.scanAssetsTree.edges.length >= 1 && this.columnsFilter.size >= 1) {
+      this.scanAssetDetails.scanAssetsTree.edges =
+        this.scanAssetDetails.scanAssetsTree.edges.filter(asset => { return asset.node.scanAssetType !== 'DIR' });
+    }
+  }
+
+  /**
+   * Filter by column
+   *
+   * @param column column name
+   * @param event input event
+   * @param idElement element ID
+   */
+  onFilterColumn(column: string, event: Event, idElement: string = '') {
+    const { value } = event.target as HTMLInputElement | HTMLSelectElement;
+
     if (value.length === 0 || value === 'ALL') {
       this.columnsFilter.delete(column);
     } else {
@@ -220,13 +236,6 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
         this.setUserPreferencesDetailsForAseets();
       });
     }, this.timeOutDuration);
-  }
-
-  filterOnlyAssetsIfFilterActivated() {
-    if (!!this.scanAssetDetails && this.scanAssetDetails.scanAssetsTree.edges.length >= 1 && this.columnsFilter.size >= 1) {
-      this.scanAssetDetails.scanAssetsTree.edges =
-        this.scanAssetDetails.scanAssetsTree.edges.filter(asset => { return asset.node.scanAssetType !== 'DIR' });
-    }
   }
 
   getColumnFilterValue(key) {

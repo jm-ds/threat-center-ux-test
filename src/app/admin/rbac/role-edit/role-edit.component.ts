@@ -22,8 +22,7 @@ export class RoleEditComponent implements OnInit, OnDestroy {
     display: any;
     format: any = DualListComponent.DEFAULT_FORMAT;
     source: Array<any>;
-    confirmed: Array<any>;
-
+  confirmed: any[];
     mySubscription: any;
 
     constructor(
@@ -85,11 +84,13 @@ export class RoleEditComponent implements OnInit, OnDestroy {
         this.display = this.permissionDisplay;
     }
 
-
     private permissionDisplay(item: any) {
         return item.title + ' - ' + item.description;
     }
 
+  onDestinationChange(event: object) {
+    this.confirmed = event as any[];
+  }
 
     saveRole() {
       this.roleService

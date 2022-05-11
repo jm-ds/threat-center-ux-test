@@ -1,5 +1,5 @@
 <div *ngIf='obsEntity | async as entity;'>
-  <div class="row">
+  <header class="row">
     <!-- <div class="col-6">
       <h3><span *ngIf="entity.parentEntityId"><a (click)="changeEntity(entity.parentEntityId)" style="font-size:15px;cursor: pointer;"><i class="fas fa-level-up-alt m-r-5"></i>Project BU</a> / </span>{{entity.name}}</h3>
     </div> -->
@@ -55,7 +55,7 @@
         </span>
       </div>
     </div>
-  </div>
+  </header>
 
   <ng-container *ngIf="entity.entityMetricsGroup?.projectCount; else introduction">
     <ngb-accordion #acc="ngbAccordion" class="chart-panel mt-10" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)">
@@ -137,7 +137,7 @@
           <div class="row">
             <div class="col-12 entity-chart-tabbing">
               <div class="card mb-3">
-                <ngb-tabset [activeId]="lineChartActiveTab" [justify]="currentJustify" (tabChange)="onStackedChartTabChange($event)">
+                <ngb-tabset [activeId]="lineChartActiveTab" (tabChange)="onStackedChartTabChange($event)">
                   <ngb-tab id="Week">
                     <ng-template ngbTabTitle>Week</ng-template>
 
@@ -235,7 +235,7 @@
             <p>When members of your team become part of Threatrix, it becomes more valuable. By automating security and compliance
               tasks, you can simplify their work.</p>
 
-            <a href="javascript:" (click)="inviteUser(inviteUrlDialog)">
+            <a href="javascript:" (click)="inviteUser()">
               <button type="submit" class="btn btn-outline-info ml-2" >
                 <i class="fas fa-user-plus" style="margin-right: 5px;"></i>
                 Add team members
@@ -467,8 +467,8 @@
                 <div class="col-sm-12">
                   <app-card [hidHeader]="true" cardClass="org-chart table-card" blockClass="px-0 py-0">
                     <perfect-scrollbar [style.max-height]="'600px'">
-                      <p-organizationChart [value]="organizationTreeModel" selectionMode="single"
-                        [(selection)]="selectedNode" (onNodeSelect)="onNodeSelect($event)" styleClass="luna-blue">
+                      <p-organizationChart selectionMode="single" styleClass="luna-blue" [value]="organizationTreeModel"
+                        (onNodeSelect)="onNodeSelect($event)">
                         <ng-template let-node pTemplate="entity">
                           <div class="node-header node-header-top p-corner-top node-header-lg"
                             [ngStyle]="{'height':getContentHeight(nameContent)}">

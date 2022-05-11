@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,12 +12,15 @@ import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { ProjectService } from '@app/services/project.service';
 
+import { MESSAGES } from '@app/messages/messages';
+
 @Component({
     selector: 'app-licenses',
     templateUrl: './licenses.component.html',
     styles: []
 })
 export class LicensesComponent implements OnInit {
+    MESSAGES = MESSAGES;
 
     @Input() scanId;
     @Input() obsScan: Observable<Scan>;
@@ -25,7 +28,7 @@ export class LicensesComponent implements OnInit {
     columns = ['Name', /*'ID', */'Discovery', 'Origin', 'Trust Level', 'SPDX', 'Threat Category', 'Style', 'OSI Approved', 'FSF Libre'];
 
     defaultPageSize = 25;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     licensesDetails: any;
 
     columnsFilter = new Map();

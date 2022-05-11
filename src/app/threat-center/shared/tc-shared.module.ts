@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ThemeSharedModule } from '../../theme/shared/theme-shared.module';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { NgxTextDiffModule } from 'ngx-text-diff';
 import { NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SourceDimensionComponent } from './source-dimension/source-dimension.component';
@@ -13,7 +12,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { TaskComponent } from './task/task.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SimmComponent } from './simm/simm.component';
-import { MatPaginatorModule } from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -22,7 +21,6 @@ import { MatPaginatorModule } from '@angular/material';
     ThemeSharedModule,
     SharedModule,
     TableModule,
-    NgxTextDiffModule,
     RouterModule,
     NgbTooltipModule,
     NgbPopoverModule,

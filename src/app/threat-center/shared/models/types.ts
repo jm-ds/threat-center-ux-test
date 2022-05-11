@@ -1,3 +1,4 @@
+import { Project } from '@app/models';
 // todo: ref: move this file to /src/app/models
 // todo: ref: consider to split this file into several domain specific
 
@@ -229,21 +230,6 @@ export enum Period {
   YEAR="YEAR"
 }
 
-
-
-
-export class Project {
-  projectId:string;
-  entityId:string;
-  name:string;
-  created:any;
-  latestScan: Scan;
-  scans: ScanConnection;
-  childProjects: ProjectConnection;
-  errorMsg: string;
-  log: string;
-}
-
 export class Scan {
   scanId:string;
   branch:string;
@@ -293,8 +279,8 @@ export class PatchedInfoSimplified {
   name: string;
   vulnerableVersion: string;
   cveId: string;
-  nextPatchedVersion: string;
-  latestPatchedVersion: string;
+  latestPatchedVersion: any;
+  nextPatchedVersion: any;
 }
 export interface PatchedInfoSimplifiedQuery {
   autofixVersions: PatchedInfoSimplified;
@@ -669,10 +655,10 @@ export class StringHolder {
   data: string;
 }
 
-export class StartVulnerabilitiesWithCvssV3Query {
-  startVulnerabilitiesWithCvssV3: VulnerableReleaseResponseMap;
+export class GetStartVulnerableReleaseListQuery {
+  getStartVulnerableReleaseList: VulnerableReleaseResponseMap;
 }
 
-export class NextVulnerabilitiesWithCvssV3Query {
-  nextVulnerabilitiesWithCvssV3: VulnerableReleaseResponse;
+export class GetNextVulnerableReleaseListQuery {
+  getNextVulnerableReleaseList: VulnerableReleaseResponse;
 }

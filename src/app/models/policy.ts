@@ -1,7 +1,7 @@
+import { Project } from '@app/models';
 import { Injectable } from '@angular/core';
 import { PageInfo } from './common';
 import { Entity } from './entity';
-import { Project } from './project';
 
 @Injectable()
 export class Policy {

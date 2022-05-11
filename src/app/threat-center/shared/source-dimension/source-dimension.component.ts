@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { RouterModule, Routes } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { FilterUtils } from 'primeng/utils';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'tc-source-dimension',
@@ -29,9 +30,21 @@ export class SourceDimensionComponent implements OnInit {
     {"assetId": "asdf8668", "name": "tobongo.java", "size": 56787 , "pct_opensource":17.4,"status": "File type not supported","licenses": [{"name":"GPL v3"}]},
   ];
 
+  @ViewChild(Table) private table: Table;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  /**
+   * Filter table
+   *
+   * @param event input event
+   */
+   onFilterInput(event: Event) {
+    const { value } = event.target as HTMLInputElement;
+
+    this.table.filterGlobal(value, 'contains');
+  }
 }

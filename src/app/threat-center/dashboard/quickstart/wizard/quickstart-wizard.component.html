@@ -1,7 +1,28 @@
 <app-card [hidHeader]="true" cardClass="tab-card">
 
-  
+
   <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
+    <!-- DRAG & DROP -->
+    <ngb-tab class="mb-3" id="DragDrop">
+      <ng-template ngbTabTitle>
+        <span class="tab-title">Drag And Drop</span>
+      </ng-template>
+
+      <ng-template ngbTabContent>
+        <app-card cardTitle="File Upload" [options]="false">
+          <form id="file-upload-form" [formGroup]="fileForm" (ngSubmit)="onSubmitFileForm()">
+            <file-upload formControlName="files"
+              accept="application/zip,application/tar,application/x-tar,application/gzip,application/x-gzip" [multiple]="false">
+            </file-upload>
+          </form>
+
+          <div class="text-center m-t-20">
+            <button class="btn btn-primary" form="file-upload-form" [disabled]="fileForm.invalid">Upload Now</button>
+          </div>
+        </app-card>
+      </ng-template>
+    </ngb-tab>
+
     <!-- Github -->
     <ngb-tab id="Github">
       <ng-template ngbTabTitle>
@@ -57,12 +78,11 @@
                         </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button
-                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
-                          class="btn btn-primary" ngbtooltip="Run Scan"
+                        <button class="btn btn-primary" type="button" ngbtooltip="Run Scan"
+                          [class.disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('github')"><i style="color:greenyellow" class="fas fa-power-off">
-                          </i> Execute Threat Scan
+                          (click)="onSubmitScan('github')">
+                          <i style="color: Greenyellow" class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -115,12 +135,11 @@
                         </ready-scan-repo>
                       </perfect-scrollbar>
                       <div style="float:right;margin-top:10px">
-                        <button
-                          [ngClass]="{'disabled' : (!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')}"
-                          class="btn btn-primary" ngbtooltip="Run Scan"
+                        <button class="btn btn-primary" type="button" ngbtooltip="Run Scan"
+                          [class.disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
                           [disabled]="(!selectedRepos || selectedRepos.length === 0) || isDisableScanBtn == true || (!selectedItem || selectedItem == '')"
-                          type="button" (click)="submitScan('gitlab')"><i style="color:greenyellow" class="fas fa-power-off">
-                          </i> Execute Threat Scan
+                          (click)="onSubmitScan('gitlab')">
+                          <i style="color: Greenyellow" class="fas fa-power-off"></i> Execute Threat Scan
                         </button>
                       </div>
                     </div>
@@ -133,7 +152,7 @@
       </ng-template>
     </ngb-tab>
 
-    
+
     <!--Bitbucket-->
     <!-- <ngb-tab class="mb-3" id="Bitbucket">
       <ng-template ngbTabTitle>
@@ -145,7 +164,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-xl-8 col-md-12">
-                  
+
                   <ng-container *ngTemplateOutlet="headertem"></ng-container>
                   <div class="row ">
                     <div class="col-xl-6 col-lg-6 col-md-12">
@@ -191,25 +210,6 @@
         </div>
       </ng-template>
     </ngb-tab>
-
-    <!-- DRAG & DROP -->
-    <!--
-    <ngb-tab class="mb-3" id="DragDrop">
-      <ng-template ngbTabTitle>
-        <span class="tab-title">Drag And Drop</span>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <app-card cardTitle="File Upload" [options]="false">
-          <form [formGroup]="demoForm">
-            <file-upload formControlName="files"></file-upload>
-          </form>
-          <div class="text-center m-t-20">
-            <button class="btn btn-primary">Upload Now</button>
-          </div>
-        </app-card>
-      </ng-template>
-    </ngb-tab>
-    -->
 
     <!-- SNIPPET *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))" -->
     <ngb-tab class="mb-3" id="Snippet" >
@@ -294,7 +294,7 @@
                 {{match.repositoryOwner}} / {{match.repositoryName}}<br/>
                 SHA-1: {{match.matchAssetId}}<br/>
                 <!--<i class="btn-outline-info fab fa-github fa-1x align-middle m-r-5"></i>-->
-                <div *ngFor="let assetLicense of match.licenses">
+                <div *ngFor="let assetLicense of match.assetLicenses">
                   {{assetLicense.licenseName}} : {{assetLicense.licenseContext}}
 
                 </div>
@@ -304,7 +304,7 @@
                 <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641">
                   Earliest Release
                 </div>
-                {{match.earliestRelease.releaseName}} / {{match.earliestRelease.releaseDate|date:'MMM d, yy'}} <br/>
+                {{match.earliestRelease.releaseName}} / {{match.earliestRelease.releaseDate|date:'MMM d, yyyy'}} <br/>
                 <div *ngFor="let earliestReleaseLicense of match.earliestReleaseLicenses">
                   {{earliestReleaseLicense.licenseName}}
                 </div>
@@ -314,7 +314,7 @@
                 <div style="margin-bottom:10px; border: #7a8085 1px solid; background: #2a3641">
                   Latest Release
                 </div>
-                {{match.latestRelease.releaseName}} / {{match.latestRelease.releaseDate|date:'MMM d, yy'}}<br/>
+                {{match.latestRelease.releaseName}} / {{match.latestRelease.releaseDate|date:'MMM d, yyyy'}}<br/>
                 <div *ngFor="let latestReleaseLicense of match.latestReleaseLicenses">
                   {{latestReleaseLicense.licenseName}}
                 </div>
@@ -334,7 +334,7 @@
   </ngb-tabset>
   <ng-template #loading>
     <div *ngIf="!loadingScan">
-      <p>You don’t have any repositories available for scanning.</p> 
+      <p>You don’t have any repositories available for scanning.</p>
       <p>You must use Github/Gitlab OAuth login in order for Threatrix to access your repositories to run scans from Threat Center</p>
     </div>
     <span *ngIf="loadingScan">Loading...</span>
@@ -372,7 +372,7 @@
     </div>
   </ng-template>
 
-  <ng-template #repoHeader let-img="img" let-user="user" let-repoRef="repoRef" let-badge="badge">
+  <ng-template #repoHeader let-img="img" let-user="user" let-badge="badge">
     <div class="repository-usr">
       <div class="repo-usr-img">
         <img width="30" src="{{img}}">
@@ -381,8 +381,7 @@
         {{user}}
       </div>
       <div class="repo-filter">
-        <input type="text" pInputText size="50" placeholder="Filter"
-          (input)="repoRef['dataTableRef'].filterGlobal($event.target.value, 'contains')" class="form-control">
+        <input class="form-control" placeholder="Filter" pInputText size="50" (input)="onRepositoryFilterInput($event)">
       </div>
     </div>
   </ng-template>

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { catchError, map, pluck } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, Subscription } from 'rxjs';
+import { catchError, map, mergeMap, pluck } from 'rxjs/operators';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 
+import { ApolloQueryResult } from 'apollo-client';
 import { NextConfig } from '@app/app-config';
+import { Task, TaskQuery } from '@app/models';
 import { MESSAGES } from '@app/messages/messages';
 
 import { AlertService } from '@app/services/core/alert.service';
@@ -77,11 +79,44 @@ export class ScanHelperService {
             });
     }
 
-    //Scan progress and get stats from server and updating needed thing status wise.
-    getTaskUpdate(task) {
-        this.taskService.getTaskUpdate(task.taskToken)
-            .pipe(map(taskUpdate => taskUpdate.data.task_update))
-            .subscribe(tUpdate => {
+    public submitingUploadProject(preScanProjectData) {
+        const object = {
+            projectId: '',
+            uniqId: preScanProjectData.uniqId,
+            projectName: preScanProjectData.projectName,
+            entityId: preScanProjectData.entityId,
+            scanStatus: '',
+            taskToken: preScanProjectData.taskToken
+        };
+        this.projectScanResults.push(object);
+    }
+
+    /**
+     * Scan progress and get stats from server and updating needed thing status wise.
+     *
+     * @param task scan task
+     */
+    getTaskUpdate(task: Task) {
+        this.taskService
+          .getTaskUpdate(task.taskToken)
+          .pipe(
+            catchError((_, caught$) => caught$.pipe(
+              mergeMap(query => {
+                const errorTask = query.data.task_update;
+
+                this.updatingDataWhileGetError(errorTask);
+
+                this.alertService.alertBox(errorTask.statusMessage, MESSAGES.ERROR_TITLE, 'error');
+
+                this.updateStorage(null);
+                this.updateEnabaleNewScan(false);
+
+                return EMPTY;
+              })
+            )),
+            pluck<ApolloQueryResult<TaskQuery>, Task>('data.task_update')
+          )
+          .subscribe(tUpdate => {
                 this.updateProjectArray(tUpdate);
                 if (tUpdate.status === 'COMPLETE' || tUpdate.status === 'COMPLETE_WITH_ERRORS') {
                     //show toaster and pop one from main list and add into recent scan..
@@ -232,14 +267,14 @@ export class ScanHelperService {
     // run scan
     private runScan(preScanProjectData, LoadingDialogComponent) {
         this.openScanModel(preScanProjectData).result.then((result) => {
-            this.openFloatingModel(LoadingDialogComponent);
+          this.openFloatingModal(LoadingDialogComponent);
         }, (reason) => { });
         this.submitingScanForProject(preScanProjectData);
     }
 
     //floating model for scan...
-    private openFloatingModel(LoadingDialogComponent) {
-        const modalRef = this.modalService.open(LoadingDialogComponent, {
+    public openFloatingModal(loadingDialogComponent) {
+        const modalRef = this.modalService.open(loadingDialogComponent, {
             backdrop: 'static',
             keyboard: false,
             windowClass: 'loading-dialog',

@@ -11,7 +11,7 @@ export class ConditionBuilderComponent implements OnInit {
     @Input() public group: PolicyConditionGroup;
     @Input() public parentGroup: PolicyConditionGroup;
     @Input() public policy: Policy;
-    @Input() public readonly: Boolean;
+    @Input() public readonly: boolean;
 
     securityOperators: CodeNamePair[];
     securitySeverityValues: CodeNamePair[];
@@ -32,7 +32,7 @@ export class ConditionBuilderComponent implements OnInit {
 
     conditionTypes: object;
 
-    
+
 
     constructor(group: PolicyConditionGroup, parentGroup: PolicyConditionGroup, policy: Policy){
         this.group = group;
@@ -72,7 +72,7 @@ export class ConditionBuilderComponent implements OnInit {
 
         this.conditionNames = new  Map<String, Map<String,ConditionMetadata>>();
         let conditions = new Map<string, ConditionMetadata>();
-        conditions.set("SEVERITY", { code: "SEVERITY", title: "Severity", dataType: "SVR", 
+        conditions.set("SEVERITY", { code: "SEVERITY", title: "Severity", dataType: "SVR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
@@ -84,7 +84,7 @@ export class ConditionBuilderComponent implements OnInit {
                 { code: "CRITICAL", name: "Critical" }
             ],
             inputType: "CMB"});
-        conditions.set("CVSS2", { code: "CVSS2", title: "CVSS2 Score", dataType: "DCM", 
+        conditions.set("CVSS2", { code: "CVSS2", title: "CVSS2 Score", dataType: "DCM",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
@@ -101,7 +101,7 @@ export class ConditionBuilderComponent implements OnInit {
                 { code: "10", name: "10" }
             ],
             inputType: "CMB"});
-        conditions.set("CVSS3", { code: "CVSS3", title: "CVSS3 Score", dataType: "DCM", 
+        conditions.set("CVSS3", { code: "CVSS3", title: "CVSS3 Score", dataType: "DCM",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
@@ -123,15 +123,15 @@ export class ConditionBuilderComponent implements OnInit {
         this.categories.mainConditions.set(securityType.code, securityType);
 
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("LICENSE_FAMILY", { code: "LICENSE_FAMILY", title: "License Family", dataType: "STR", 
+        conditions.set("LICENSE_FAMILY", { code: "LICENSE_FAMILY", title: "License Family", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("LICENSE_NAME", { code: "LICENSE_NAME", title: "License Name", dataType: "STR", 
+        conditions.set("LICENSE_NAME", { code: "LICENSE_NAME", title: "License Name", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("LICENSE_CATEGORY", { code: "LICENSE_CATEGORY", title: "License Category", dataType: "STR", 
+        conditions.set("LICENSE_CATEGORY", { code: "LICENSE_CATEGORY", title: "License Category", dataType: "STR",
             operators: [{ code: "EQ", name: "=" }],
             values: [
                 { code: "UNDEFINED", name: "Undefined" },
@@ -143,13 +143,13 @@ export class ConditionBuilderComponent implements OnInit {
                 { code: "COPYLEFT_STRONG", name: "Copyleft Strong" },
                 { code: "COPYLEFT_PARTIAL", name: "Copyleft Partial" },
                 { code: "COPYLEFT_LIMITED", name: "Copyleft Limited" },
-                { code: "COPYLEFT", name: "Copyleft" }                
+                { code: "COPYLEFT", name: "Copyleft" }
             ], inputType: "CMB"});
-        conditions.set("LICENSE_FOUND_IN", { code: "LICENSE_FOUND_IN", title: "Found in", dataType: "STR", 
+        conditions.set("LICENSE_FOUND_IN", { code: "LICENSE_FOUND_IN", title: "Found in", dataType: "STR",
             operators: [{ code: "EQ", name: "=" }],
             values: [{ code: "COMPONENT", name: "Component" },
                     { code: "IP", name: "IP" }], inputType: "CMB"});
-        conditions.set("LICENSE_ATTRIBUTE", { code: "LICENSE_ATTRIBUTE", title: "License Attribute", dataType: "STR", 
+        conditions.set("LICENSE_ATTRIBUTE", { code: "LICENSE_ATTRIBUTE", title: "License Attribute", dataType: "STR",
             operators: [{ code: "EQ", name: "=" }],
             values: [
                 { code: "COMMERCIAL_USE", name: "Commercial Use" },
@@ -194,12 +194,12 @@ export class ConditionBuilderComponent implements OnInit {
         this.categories.mainConditions.set(legalType.code, legalType);
 
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("SUPPLY_RISK", { code: "SUPPLY_RISK", title: "Supply Chain Risk", dataType: "DCM", 
+        conditions.set("SUPPLY_RISK", { code: "SUPPLY_RISK", title: "Supply Chain Risk", dataType: "DCM",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
             values: [], inputType: "NUM"});
-        conditions.set("SUPPLY_QUALITY", { code: "SUPPLY_QUALITY", title: "Supply Chain Quality", dataType: "DCM", 
+        conditions.set("SUPPLY_QUALITY", { code: "SUPPLY_QUALITY", title: "Supply Chain Quality", dataType: "DCM",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
@@ -213,23 +213,23 @@ export class ConditionBuilderComponent implements OnInit {
         //// subordiname types
 
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("COMPONENT_GROUP_ID", { code: "COMPONENT_GROUP_ID", title: "Component group ID", dataType: "STR", 
+        conditions.set("COMPONENT_GROUP_ID", { code: "COMPONENT_GROUP_ID", title: "Component group ID", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("COMPONENT_ARTIFACT_ID", { code: "COMPONENT_ARTIFACT_ID", title: "Component SHA1", dataType: "STR", 
+        conditions.set("COMPONENT_ARTIFACT_ID", { code: "COMPONENT_ARTIFACT_ID", title: "Component SHA1", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("COMPONENT_VERSION", { code: "COMPONENT_VERSION", title: "Component version", dataType: "STR", 
+        conditions.set("COMPONENT_VERSION", { code: "COMPONENT_VERSION", title: "Component version", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("COMPONENT_NAME", { code: "COMPONENT_NAME", title: "Component name", dataType: "STR", 
+        conditions.set("COMPONENT_NAME", { code: "COMPONENT_NAME", title: "Component name", dataType: "STR",
             operators: [{ code: "EQ", name: "=" },
                         { code: "LIKE", name: "LIKE" }],
             values: [], inputType: "STR"});
-        conditions.set("COMPONENT_AGE", { code: "COMPONENT_AGE", title: "Component age in months", dataType: "INT", 
+        conditions.set("COMPONENT_AGE", { code: "COMPONENT_AGE", title: "Component age in months", dataType: "INT",
             operators: [{ code: "EQ", name: "=" },
                         { code: "GE", name: ">=" },
                         { code: "LE", name: "<=" }],
@@ -240,7 +240,7 @@ export class ConditionBuilderComponent implements OnInit {
 
         /*
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("EMBEDDED_ASSET", { code: "EMBEDDED_ASSET", title: "IP w/Embedded Assets", dataType: "DBL", 
+        conditions.set("EMBEDDED_ASSET", { code: "EMBEDDED_ASSET", title: "IP w/Embedded Assets", dataType: "DBL",
             operators: [{ code: "GT", name: ">" },
                         { code: "LT", name: "<" }],
             values: [], inputType: "NUM"});
@@ -250,7 +250,7 @@ export class ConditionBuilderComponent implements OnInit {
         */
 
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("RELEASE_STAGE", { code: "RELEASE_STAGE", title: "Release Stage", dataType: "STR", 
+        conditions.set("RELEASE_STAGE", { code: "RELEASE_STAGE", title: "Release Stage", dataType: "STR",
             operators: [{ code: "IN", name: "IN" }],
             values: [
                 { code: "DEVELOPMENT", name: "Development" },
@@ -261,9 +261,9 @@ export class ConditionBuilderComponent implements OnInit {
         let releaseStageType = new ConditionTypeMetadata("RELEASE_STAGE", "Release Stage");
         releaseStageType.conditionMetadatas = conditions;
         this.categories.subordinateConditions.set(releaseStageType.code, releaseStageType);
-        
+
         conditions = new Map<string, ConditionMetadata>();
-        conditions.set("PROJECT_TAG", { code: "PROJECT_TAG", title: "Project Tags", dataType: "STR", 
+        conditions.set("PROJECT_TAG", { code: "PROJECT_TAG", title: "Project Tags", dataType: "STR",
             operators: [{ code: "IN", name: "IN" }],
             values: [], inputType: "CHP"});
         let projectTagType = new ConditionTypeMetadata("PROJECT_TAG", "Project Tag");
@@ -276,10 +276,10 @@ export class ConditionBuilderComponent implements OnInit {
 
     // meta conditions
     fillQualificatorsData() {
-        let threshold = { code: "THRESHOLD", title: "Threshold", dataType: "INT", 
+        let threshold = { code: "THRESHOLD", title: "Threshold", dataType: "INT",
             operators: [{ code: "GE", name: ">=" }],
             values: [], inputType: "NUM"};
-        let scope = { code: "SCOPE", title: "Scope", dataType: "STR", 
+        let scope = { code: "SCOPE", title: "Scope", dataType: "STR",
             operators: [{ code: "EQ", name: "=" }],
             values: [{ code: "PROJECT", name: "Project" },
                     { code: "COMPONENT", name: "Component" }], inputType: "CMB"};
@@ -288,7 +288,7 @@ export class ConditionBuilderComponent implements OnInit {
         // this.categories.mainConditions.forEach((value: ConditionTypeMetadata, key: string) => {
         //             value.conditionMetadatas.set(threshold.code, threshold);
         //             value.conditionMetadatas.set(scope.code, scope);
-        // });   
+        // });
         let condType = new ConditionTypeMetadata("THRESHOLD", "Threshold");
         condType.conditionMetadatas.set("THRESHOLD", threshold);
         this.categories.subordinateConditions.set(condType.code, condType);
@@ -416,7 +416,7 @@ export class ConditionBuilderComponent implements OnInit {
             condition.strValue = newValue.join(",");
         } else  {
             condition.strValue = newValue;
-        }    
+        }
     }
 
     // return condition metadata for condition
@@ -426,7 +426,7 @@ export class ConditionBuilderComponent implements OnInit {
             return undefined;
         }
         return condType.conditionMetadatas.get(conditionName);
-    } 
+    }
 
     // return condition value
     getConditionValue(condition: PolicyCondition) {
@@ -450,7 +450,7 @@ export class ConditionBuilderComponent implements OnInit {
             return condition.arrayValue;
         } else  {
             return condition.strValue;
-        }    
+        }
     }
 
     // change main condition name handler
@@ -479,7 +479,7 @@ export class ConditionBuilderComponent implements OnInit {
                 if (conditionMetadata.dataType == 'DCM' && conditionMetadata.inputType == 'CMB' && conditionMetadata.values.length > 0) {
                     condition.decimalValue = parseInt(conditionMetadata.values[0].code);
                 }
-    
+
             }
         }
     }
@@ -585,7 +585,7 @@ export class ConditionBuilderComponent implements OnInit {
 
     // if this is a last main condition
     isLastMainCondition(condition: PolicyCondition) {
-        return this.policy.conditions.groups[0] && this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length>0 && 
+        return this.policy.conditions.groups[0] && this.policy.conditions.groups[0].conditions && this.policy.conditions.groups[0].conditions.length>0 &&
             this.policy.conditions.groups[0].conditions[0] === condition;
     }
 
@@ -596,7 +596,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
         const index = group.conditions.indexOf(condition);
         return index === group.conditions.length-1;
-    }    
+    }
 
     // if this is a first condition
     isFirstCondition(group: PolicyConditionGroup, condition: PolicyCondition) {
@@ -605,7 +605,7 @@ export class ConditionBuilderComponent implements OnInit {
         }
         const index = group.conditions.indexOf(condition);
         return index === 0;
-    }    
+    }
 }
 
 class CodeNamePair {
@@ -626,7 +626,7 @@ class ConditionCategories {
         this.subordinateConditions = new Map<string, ConditionTypeMetadata>();
     }
 }
-  
+
 class ConditionTypeMetadata {
     code: string;
     title: string;
@@ -645,7 +645,7 @@ class ConditionMetadata {
     operators: CodeNamePair[];
     values: CodeNamePair[];
     inputType: string;
-} 
+}
 
 class SubordinateConditionListItem {
     code: string;
@@ -653,5 +653,3 @@ class SubordinateConditionListItem {
     isType: boolean;
     conditionType: string;
 }
-  
-  

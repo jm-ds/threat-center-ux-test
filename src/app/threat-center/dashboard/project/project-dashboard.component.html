@@ -49,10 +49,10 @@
 
                       <div class="matrix-chart-legend">
                         <ng-container *ngFor="let data of licenseChartLabels; index as i">
-                          <ng-container *ngIf="!!licenseChartData['series'][i] && licenseChartData['series'][i] !== 0">
+                          <ng-container *ngIf="!!licenseChartData.series[i] && licenseChartData['series'][i] !== 0">
                             <p>
                               <span [ngClass]="data.class">{{ data.label }}</span>
-                              <small>{{ licenseChartData['series'][i] }}</small>
+                              <small>{{ licenseChartData.series[i] }}</small>
                             </p>
                           </ng-container>
                         </ng-container>
@@ -88,7 +88,7 @@
     </div>
 
 
-    <div *ngIf="( authorizationService.hasPermissions('FEATURE_PREVIEW'))">
+    <div *ngIf="authorizationService.hasPermissions('FEATURE_PREVIEW')">
         <app-policy-compliance></app-policy-compliance>
     </div>
 
@@ -257,7 +257,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-scan let-columns="columns">
-                        <tr [pSelectableRow]="scan" [pSelectableRowIndex]="rowIndex" class="cursor-pointer"
+                        <tr [pSelectableRow]="scan" class="cursor-pointer"
                             [ngClass]="{'selected-table-row': isHighlightNewScan == true && highlitedScanId == scan.node?.scanId,'scan-highlight': stateService.selectedScan.node?.scanId === scan.node?.scanId }">
                             <td (dblclick)="copyToClipboard(scan.node?.scanId, 'Scan ID copied to clipboard');">
                                 {{(scan.node?.scanId | slice:0:4) + ".." + (scan.node?.scanId | slice:-4)}}</td>
@@ -309,23 +309,21 @@
                             <td style="text-align: center">
                                 <span *ngIf="scan.node?.status==='FAIL'">
                                     <button class="btn badge-light-danger error-btn" title="Show log and error messages"
-                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                      (click)="openLogs(scan.error, scan.node.errorMsg, scan.node.log)">
                                         <i class="feather icon-x badge-light-danger"
                                             style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                                     </button>
                                 </span>
                                 <span *ngIf="scan.node?.status==='WARNING'">
-                                    <button class="btn badge-light-warning error-btn"
-                                        title="Show log and error messages"
-                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                    <button class="btn badge-light-warning error-btn" title="Show log and error messages"
+                                      (click)="openLogs(scan.error, scan.node.errorMsg, scan.node.log)">
                                         <i class="feather icon-x badge-light-warning"
                                             style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                                     </button>
                                 </span>
                                 <span *ngIf="scan.node?.status==='SUCCESS'">
-                                    <button *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
-                                        class="btn badge-light-success error-btn" title="Show log"
-                                        (click)="openLogs(scanError, scan.node.errorMsg, scan.node.log)">
+                                    <button class="btn badge-light-success error-btn" title="Show log" *ngIf="!!scan.node?.errorMsg||!!scan.node?.log"
+                                      (click)="openLogs(scan.error, scan.node.errorMsg, scan.node.log)">
                                         <i class="feather icon-check badge-light-success"
                                             style="font-size: 14px; font-weight: 800; background: none; display: inline-block; padding-top: 3px;"></i>
                                     </button>

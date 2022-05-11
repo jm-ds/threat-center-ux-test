@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -29,7 +29,7 @@ export class NewLicenseCardComponent implements OnInit {
     @Output() annotateClick = new EventEmitter();
 
     defaultPageSize = NextConfig.config.defaultItemPerPage;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     licensesDetails: any;
 
     columnsFilter = new Map();
@@ -138,7 +138,16 @@ export class NewLicenseCardComponent implements OnInit {
 
     }
 
-    filterColumn(column, value, idElement: string = '') {
+    /**
+     * Filter by column
+     *
+     * @param column column name
+     * @param event input event
+     * @param idElement element ID
+     */
+    onFilterColumn(column: string, event: Event, idElement: string = '') {
+        const { value } = event.target as HTMLInputElement | HTMLSelectElement;
+
         if (value.length === 0) {
             this.columnsFilter.delete(column);
         } else {

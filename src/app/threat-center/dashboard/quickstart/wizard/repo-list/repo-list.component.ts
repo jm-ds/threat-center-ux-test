@@ -21,7 +21,7 @@ export class RepositoryListComponent implements OnInit {
     @Output() rowSelect: EventEmitter<any> = new EventEmitter();
     @Output() rowUnSelect: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('dt', { static: false }) dataTable: any;
+    @ViewChild('dt') dataTable: any;
 
     selectedRepos: any[] = [];
     get dataTableRef() {

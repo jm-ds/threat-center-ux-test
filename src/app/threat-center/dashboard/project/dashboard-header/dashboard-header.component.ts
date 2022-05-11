@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Project } from '@app/threat-center/shared/models/types';
-
 import { AuthorizationService } from '@app/security/services';
+
+import { Project } from '@app/models';
 
 @Component({
   selector: 'project-dashboard-header',
