@@ -213,7 +213,7 @@ export class ScanService {
                 licenseId,
                 licenseName
               },
-              licenses {
+              assetLicenses {
                 licenseId,
                 licenseName,
                 licenseContext
