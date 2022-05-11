@@ -104,19 +104,15 @@ export class ScanHelperService {
               mergeMap(query => {
                 const errorTask = query.data.task_update;
 
-                this.updatingDataWhileGetError(errorTask);
-
-                this.alertService.alertBox(errorTask.statusMessage, MESSAGES.ERROR_TITLE, 'error');
-
-                this.updateStorage(null);
-                this.updateEnabaleNewScan(false);
+                this.scanErrorHandler(errorTask);
 
                 return EMPTY;
               })
             )),
             pluck<ApolloQueryResult<TaskQuery>, Task>('data', 'task_update')
           )
-          .subscribe(tUpdate => {
+          .subscribe({
+            next: tUpdate => {
                 this.updateProjectArray(tUpdate);
                 if (tUpdate.status === 'COMPLETE' || tUpdate.status === 'COMPLETE_WITH_ERRORS') {
                     //show toaster and pop one from main list and add into recent scan..
@@ -165,9 +161,14 @@ export class ScanHelperService {
                     //Update Execute Scan Button
                     this.updateEnabaleNewScan(true);
                 }
-            }, err => {
-                this.updatingDataWhileGetError(task);
-            });
+            },
+            error: () => {
+              this.scanErrorHandler(task);
+            },
+            complete: () => {
+              this.scanErrorHandler(task);
+            }
+          });
     }
 
     //Highlite new scan on project page or not
@@ -185,15 +186,27 @@ export class ScanHelperService {
         });
     }
 
-    //Helper function for scan
-    public updatingDataWhileGetError(task) {
-        const obj = this.projectScanResults.find(pro => { return pro.taskToken === task.taskToken });
-        if (!!obj) {
-            obj['CompletedTime'] = new Date();
-            this.errorScanProject.push(obj);
-        }
-        this.projectScanResults = this.projectScanResults.filter(pro => { return pro.taskToken !== task.taskToken });
+  /**
+   * Scan error handler
+   *
+   * @param task scan task
+   */
+  public scanErrorHandler(task: Task) {
+    const projectScanResult = this.projectScanResults.find(project => project.taskToken === task.taskToken);
+
+    if (projectScanResult) {
+      projectScanResult.CompletedTime = new Date();
+
+      this.errorScanProject.push(projectScanResult);
     }
+
+    this.projectScanResults = this.projectScanResults.filter(project => project.taskToken !== task.taskToken);
+
+    this.alertService.alertBox(task.statusMessage || MESSAGES.ERROR_MESSAGE, MESSAGES.ERROR_TITLE, 'error');
+
+    this.updateStorage(null);
+    this.updateEnabaleNewScan(false);
+  }
 
     //Navigate to project page when click on prject from floating model
     public gotoProjectAndUpdateRecentScan(project) {
