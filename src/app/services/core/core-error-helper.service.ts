@@ -149,12 +149,14 @@ export class CoreErrorHelperService {
 
   /**
    * Core error handler
+   *
    * @param errorSource error source path
    * @param requestPayload optional request payload for interceptor
    * @param consoleError optional custom console error message
    * @param alert optional alert
    * @param error HTTP response error
    * @param source source observable
+   *
    * @returns silent empty observable
    */
   errorHandler(
@@ -167,9 +169,9 @@ export class CoreErrorHelperService {
       hasHTML: boolean
     }>,
     error: HttpErrorResponse | any,
-    source: Observable<any>
+    source$: Observable<any>
   ): Observable<never> {
-    this.spinner.hide();
+    this.spinner?.hide();
 
     if (errorSource) {
       console.log(errorSource);
@@ -182,22 +184,22 @@ export class CoreErrorHelperService {
       this.printErrorMessageToConsole(consoleError);
     }
 
-    if (alert || error.message) {
-      const showAlert = alert.hasHTML ? this.alertService.alertBoxHtml : this.alertService.alertBox;
+    if (alert ?? error.error ?? error.message) {
+      const showAlert = alert?.hasHTML ? this.alertService.alertBoxHtml : this.alertService.alertBox;
 
-      let alertText = alert.text;
+      let alertText = alert?.text;
 
       // Alert with error message from server
-      if (error.message) {
-        alertText = `${alertText} ${error.message})`;
+      if (error.error ?? error.message) {
+        alertText = `${error.error ?? error.message}`;
       }
 
-      showAlert(alertText, alert.title, 'error');
+      showAlert(alertText, alert?.title, 'error');
     }
 
     // GraphQL uses network error
-    if (requestPayload || error && error.networkError) {
-      this.handleNetworkError((error && error.networkError) || error, requestPayload);
+    if (requestPayload || error?.networkError) {
+      this.handleNetworkError(error?.networkError ?? error, requestPayload);
     }
 
     return EMPTY;
