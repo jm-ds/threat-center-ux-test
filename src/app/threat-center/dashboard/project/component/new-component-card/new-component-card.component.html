@@ -40,10 +40,12 @@
         </div>
 
         <div class="col-sm-4 col-xs-12 mt-1">
-            <div class="checkbox checkbox-info d-inline p-0 mr-3">
-                <input id="checkbox-01" name="checkbox-01" [value]="isInternal" (change)="onFilterColumn('Internal', $event)">
-                <label for="checkbox-01" class="cr mb-0">Internal</label>
-            </div>
+          <div class="checkbox checkbox-info d-inline p-0 mr-3">
+            <input id="checkbox-01" type="checkbox" name="checkbox-01" [value]="isInternal"
+              (change)="onFilterColumn('Internal', $event)">
+            <label class="cr mb-0" for="checkbox-01">Internal</label>
+          </div>
+
             <div class="checkbox checkbox-info d-inline p-0 mr-3">
                 <input id="checkbox-02" type="checkbox" name="checkbox-02" [value]="isVul"
                   (change)="onFilterColumn('Vulnerabilities', $event)">
