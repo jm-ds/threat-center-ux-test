@@ -11,7 +11,16 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> { 
     const jwtToken = this.authenticationService.getFromSessionStorageBasedEnv("jwt");
     let existingHeaders = request.headers;
-    if (jwtToken && (request.url.includes('user') || request.url.includes('localhost') || request.url.includes('threatrix.io') || request.url.includes('graphql'))) {
+    if (jwtToken && (request.url.includes('user') ||
+        request.url.includes('localhost') ||
+        request.url.includes('threatrix.io') ||
+        request.url.includes('graphql') ||
+        request.url.includes('project/upload') ||
+        request.url.includes('component-state-report') ||
+        request.url.includes('embedded-asset-state-report') ||
+        request.url.includes('license-state-report') ||
+        request.url.includes('vulnerability-state-report')
+    )) {
       existingHeaders = existingHeaders.set('Authorization', `Bearer ${jwtToken}`);
     } else {
       return next.handle(request.clone());

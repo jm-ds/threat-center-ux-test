@@ -57,7 +57,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     obsSnippetMatch: Observable<SnippetMatchResult>;
 
 
-    activeTab = "1";
+    activeTab = "DragDrop";
 
     isDisableScanBtn: boolean = false;
     selectedItem: string = "";
@@ -302,7 +302,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
         let accessToken = this.authService.currentUser.accessToken;
         console.log("accessToken: " + accessToken);
         if (this.isEmail(accessToken)) {
-            this.activeTab = "Github";//"DragDrop";
+            this.activeTab = "DragDrop";
         } else if (accessToken.startsWith("github-")) {
             this.loadGitHubUser();
             this.activeTab = "Github";

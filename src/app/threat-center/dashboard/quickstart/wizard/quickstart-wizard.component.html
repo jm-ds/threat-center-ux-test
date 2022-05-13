@@ -2,6 +2,7 @@
 
 
   <ngb-tabset [activeId]="activeTab" type="pills" *ngIf="!loadingScan; else loading" (tabChange)="onTabChange($event)">
+
     <!-- DRAG & DROP -->
     <ngb-tab class="mb-3" id="DragDrop">
       <ng-template ngbTabTitle>
@@ -12,7 +13,8 @@
         <app-card cardTitle="File Upload" [options]="false">
           <form id="file-upload-form" [formGroup]="fileForm" (ngSubmit)="onSubmitFileForm()">
             <file-upload formControlName="files"
-              accept="application/zip,application/tar,application/x-tar,application/gzip,application/x-gzip" [multiple]="false">
+                         accept="application/zip,application/octet-stream,application/x-zip-compressed,application/tar,application/x-tar,application/gzip,application/x-gzip"
+               [multiple]="false">
             </file-upload>
           </form>
 
