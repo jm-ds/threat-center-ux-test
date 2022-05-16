@@ -26,8 +26,10 @@ export class VulnerableCodeMappingService {
             getStartVulnerableReleaseList(
                 componentId: "${componentId}",
                 componentReleasesFetchSize: ${VulnerableCodeMappingService.COMPONENT_RELEASES_FETCH_SIZE}
-            )
-        }`), 'no-cache').pipe(map(res => res.data.getStartVulnerableReleaseList));
+            ) {
+                map
+            }
+        }`), 'no-cache').pipe(map(res => res.data.getStartVulnerableReleaseList.map));
   }
 
 
