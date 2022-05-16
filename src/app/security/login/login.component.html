@@ -111,9 +111,7 @@
                             <p class="m-l-30 m-b-0">Only your public repositories will be available for scanning</p>
                         </div>
                     </div>
-       
                 </div>
-            
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" (click)="modal.close('click'); setGithubRepoType();">OK</button>
@@ -121,39 +119,35 @@
             </div>
           </ng-template>
 
-
         <ng-template #previousLoginDialog let-modal>
             <div class="modal-header">
                 <h3 class="modal-title" id="modal-basic-title">Previous login detected </h3>
             </div>
             <div class="modal-body">
                 <div>
-                    <h5>We detected that you have logged in with another oauth provider before.
-                        Do you want to proceed with creating new user or attach {{currentLogin}} account to the existing user?</h5>
+                    <h5>We detected that you have logged in before as {{previousLoginUserName}} using {{previousLoginType}} as oauth provider.
+                        Do you want to attach {{currentLogin}} account to user {{previousLoginUserName}} or perform a regular login using {{currentLogin}} (new user might be created)?</h5>
                     <div class="form-group">
                         <div class="radio radio-primary d-inline">
                             <input [(ngModel)]="createNewUser" type="radio" value="" name="attachToExistingUser" id="attachToExistingUser">
                             <label for="attachToExistingUser" class="cr">Attach to existing user</label>
                             <p class="m-l-30 m-b-0">Attach {{currentLogin}} account to the existing threatrix user.
-                                It's required to first login via {{previousLogin}}, then you will be redirected to {{currentLogin}} auth service.</p>
+                                It's required to first login via {{previousLoginType}}, then you will be redirected to {{currentLogin}} auth service.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="radio radio-primary d-inline">
                             <input [(ngModel)]="createNewUser" type="radio" value="true" name="createNewUser" id="createNewUser">
-                            <label for="createNewUser" class="cr">New user</label>
-                            <p class="m-l-30 m-b-0">Create new user with {{currentLogin}} account.</p>
+                            <label for="createNewUser" class="cr">Regular login</label>
+                            <p class="m-l-30 m-b-0">Just login with {{currentLogin}} account. New user might be created.</p>
                         </div>
                     </div>
-
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="modal.close('click'); checkCreateNewUserAndLogin();">OK</button>
                 <button type="button" class="btn btn-secondary" (click)="modal.close('click')">Cancel</button>
             </div>
         </ng-template>
-
     </div>
 </div>

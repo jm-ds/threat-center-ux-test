@@ -8,7 +8,7 @@ import {
   UrlTree,
   CanDeactivate
 } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { NextConfig } from '@app/app-config';
 import { MESSAGES } from '@app/messages/messages';
@@ -17,7 +17,7 @@ import { AlertService } from '@app/services/core/alert.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService, AuthorizationService } from '../services';
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import { environment } from "../../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
@@ -79,22 +79,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   checkIfJoiningAccounts(jwt: string) {
-    let accountToJoin = this.authenticationService.getJoinAccount();
-    if (accountToJoin != null && accountToJoin != undefined ) {
+    const accountToJoin = this.authenticationService.getJoinAccount();
+    if (accountToJoin != null && accountToJoin !== undefined ) {
       console.log(`about to attach  ${accountToJoin} to current user`);
       console.log(`jwt is ${jwt}`);
       const url = environment.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(accountToJoin) + '?joinUser=true&jwt=' + jwt ;
       this.authenticationService.removeJoinAccount();
-
-
-      // this.httpClient.get<any>(environment.apiUrl + '/' + 'save_token' , {observe: 'response'})
-      //     .subscribe((res) => {
-      //           console.log('set cooie header is  ' + res.headers.get("Set-Cookie"));
-      //       console.log('response headers are   :');
-      //           for(let key of Array.from( res.headers.keys()) ) {
-      //             console.log(key + ' : ' + res.headers.get(key));
-      //           }
-      //         } );
 
       window.location.href = url;
 
@@ -123,18 +113,17 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
     if (jwt) {
+      console.log("jwt");
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
 
       await this.authenticationService.loadAuthenticatedUser();
-
-      this.authenticationService.setLastSuccessfulLogin(this.authenticationService.getCurrentLogin(), '');
 
       // check if we are in the process of joining accounts
       this.checkIfJoiningAccounts(jwt);
 
       return this.checkPermissionsAndRedirect(route.data.auth);
     } else {
-      console.log('CAN ACTIVATE NO JWT');
+      console.log(" no jwt");
       jwt = this.authenticationService.getFromSessionStorageBasedEnv('jwt');
 
       if (jwt) {

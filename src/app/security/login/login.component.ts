@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
-import {AuthenticationService, LoginType} from '../services';
+import { AuthenticationService, LoginData, LoginType } from '../services';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,11 +21,12 @@ export class LoginComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   apiUrl: string;
-  loginPageError:string = '';
-  choosenRepoType: string = 'private';
+  loginPageError = '';
+  choosenRepoType = 'private';
   currentLogin: LoginType;
-  previousLogin: LoginType;
-  createNewUser: boolean = false;
+  previousLoginUserName: string;
+  previousLoginType: LoginType;
+  createNewUser = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,21 +46,21 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    //sessionStorage.setItem('token', '');
+    // sessionStorage.setItem('token', '');
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.errorMessage = this.route.snapshot.queryParams['error'];
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    this.errorMessage = this.route.snapshot.queryParams.error;
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
   login() {
-    console.info("login.component - login");
+    console.info('login.component - login');
     this.loading = true;
     this.authenticationService.login(this.model.username, this.model.password)
       .pipe(first())
@@ -68,7 +69,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          console.error("LOGIN ERROR", error);
+          console.error('LOGIN ERROR', error);
           this.error = error;
           this.loading = false;
         });
@@ -76,39 +77,56 @@ export class LoginComponent implements OnInit {
 
   checkCreateNewUserAndLogin() {
     if (!this.createNewUser) {
-      console.info(`going to login with ${this.previousLogin} then join the account with ${this.currentLogin}`);
+      console.info(`going to login with ${this.previousLoginType} then join the account with ${this.currentLogin}`);
       this.authenticationService.setJoinAccount(this.currentLogin);
-      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.previousLogin));
+      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.previousLoginType));
     } else {
-      console.info(`going to login with ${this.currentLogin}`)
+      console.info(`going to login with ${this.currentLogin}`);
       this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.currentLogin));
     }
   }
 
   // login via external oauth
   externalLogin(urlText: string, previousLoginDialog, repoTypeDialog) {
-    console.info("login.component - external login");
+    console.info('login.component - external login');
     this.setCurrentLogin(urlText);
+    const lastSuccessfulLoginData: LoginData = this.authenticationService.getLastSuccessfulLogin();
+    if (lastSuccessfulLoginData) {
+      console.info(`last successful login ${JSON.stringify(lastSuccessfulLoginData)}`);
 
-    let lastSuccessfulLogin = JSON.parse(this.authenticationService.getLastSuccessfulLogin());
-    if (lastSuccessfulLogin) {
-      console.info(`last successful login ${lastSuccessfulLogin}`);
       this.currentLogin = this.getLoginTypeFromUrl(urlText);
-      this.previousLogin = lastSuccessfulLogin['loginType'];
-      if (this.currentLogin !== this.previousLogin) {
-        // ask user if he wants to join the accounts
-        this.openDialog(previousLoginDialog);
-        return;
+      this.previousLoginUserName = lastSuccessfulLoginData.username;
+      let lastLoginType;
+      // TODO with bitbucket and google auth type that code won't work
+      // TODO redirect to password authentication if last login type was password
+      if (this.currentLogin === LoginType.GITHUB
+        && lastSuccessfulLoginData.gitlab
+        && !lastSuccessfulLoginData.github) {
+        lastLoginType = LoginType.GITLAB;
+      }
+      if (this.currentLogin === LoginType.GITLAB
+        && lastSuccessfulLoginData.github
+        && !lastSuccessfulLoginData.gitlab) {
+        lastLoginType = LoginType.GITHUB;
+      }
+      if (lastLoginType) {
+        console.info(`setting previous login type to ${lastLoginType}`);
+        if (lastLoginType) {
+          this.previousLoginType = lastLoginType;
+          // ask user if he wants to join the accounts
+          this.openDialog(previousLoginDialog);
+          return;
+        }
       }
     }
 
-    let param = undefined;
+    let param;
     if (urlText === 'github_login') {
-      let repotype = this.authenticationService.getGitHubRepoType();
+      const repotype = this.authenticationService.getGitHubRepoType();
       if (!repotype) {
         // show repo type dialog
         this.openDialog(repoTypeDialog);
-        return; 
+        return;
       } else {
         if (repotype === 'private') {
           param = 'needPrivateRepos=true';
@@ -116,7 +134,7 @@ export class LoginComponent implements OnInit {
       }
     }
     this.loading = true;
-    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
+    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param ? '?' + param : ''));
   }
 
   // redirect to authenticate url
@@ -135,14 +153,14 @@ export class LoginComponent implements OnInit {
   // save repo type
   setGithubRepoType() {
    this.authenticationService.setGitHubRepoType(this.choosenRepoType);
-    let param = undefined;
-    if (this.choosenRepoType === 'private') {
+   let param;
+   if (this.choosenRepoType === 'private') {
       param = 'needPrivateRepos=true';
     }
-    this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
+   this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param ? '?' + param : ''));
   }
-  getLoginTypeFromUrl(url:string) {
-    let type: LoginType;
+
+  getLoginTypeFromUrl(url: string) {
     if (url.toLowerCase().includes('github')) {
       return LoginType.GITHUB;
     }
@@ -155,11 +173,11 @@ export class LoginComponent implements OnInit {
     if (url.toLowerCase().includes('google')) {
       return LoginType.GOOGLE;
     }
-    return undefined
+    return undefined;
   }
 
-  setCurrentLogin(url:string) {
-    let type = this.getLoginTypeFromUrl(url);
+  setCurrentLogin(url: string) {
+    const type = this.getLoginTypeFromUrl(url);
     console.log('setting current login to ' + type);
     this.authenticationService.setCurrentLogin(type);
   }

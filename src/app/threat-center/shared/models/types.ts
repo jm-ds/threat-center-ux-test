@@ -3,99 +3,99 @@ import { Project } from '@app/models';
 // todo: ref: consider to split this file into several domain specific
 
 export class ScanRequest {
-  login:string;
-  repository:string;
-  branch:string;
-  entityId:string;
+  login: string;
+  repository: string;
+  branch: string;
+  entityId: string;
   repoType: string;
   projectId: string;
 }
 
 export class Task {
-  taskToken?: string ='';
-  status?: string ='';
-  statusMessage?: string ='';
+  taskToken = '';
+  status = '';
+  statusMessage = '';
   pctComplete?: number;
-  resourceId?: string ='';
-  subtasks?: Task[]=[];
+  resourceId = '';
+  subtasks?: Task[] = [];
 }
 
 
 export class GitHubUser {
-  id?: string ='';
-  avatarUrl?: string ='';
-  email?: string ='';
-  name?: string ='';
-  login?: string ='';
-  token?: string='';
-  //organizations: Organization[];
-  //repositories: Repository[];
-  //primaryLanguage: Language;
+  id = '';
+  avatarUrl = '';
+  email = '';
+  name = '';
+  login = '';
+  token = '';
+  // organizations: Organization[];
+  // repositories: Repository[];
+  // primaryLanguage: Language;
 }
 
 
 // Model for gitlab user
 export class GitLabUser {
-  id?: string = '';
-  avatarUrl?: string = '';
-  email?: string = '';
-  name?: string = '';
-  username?: string = '';
-  token?: string = '';
+  id = '';
+  avatarUrl = '';
+  email = '';
+  name = '';
+  username = '';
+  token = '';
 }
 
 
 // Model for bitbucket user
 export class BitbucketUser {
-  id?: string = '';
-  avatarUrl?: string = '';
-  email?: string = '';
-  name?: string = '';
-  username?: string = '';
-  token?: string = '';
+  id = '';
+  avatarUrl = '';
+  email = '';
+  name = '';
+  username = '';
+  token = '';
 }
 
 
 export class Organization {
-  avatarUrl?: string ='';
-  name?: string ='';
+  avatarUrl = '';
+  name = '';
   repositories: Repository[];
 }
 
 export class Repository {
-  repositoryName?: string ='';
-  repositoryOwner?: string='';
-  private?:boolean;
-  defaultBranch?:Branch;
-  branches?:Branch[];
-  scanBranch?:string='';
+  repositoryName = '';
+  repositoryOwner = '';
+  private?: boolean;
+  defaultBranch?: Branch;
+  branches?: Branch[];
+  scanBranch = '';
 }
 
 export class Language {
-  name?: string ='';
-  color?: string ='';
+  name = '';
+  color = '';
 }
 
 export class Branch {
-  name?: string ='';
+  name = '';
 }
 
 export class UserSelection {
-  repository:string;
-  branch:string;
+  repository: string;
+  branch: string;
 }
 
 export class Entity {
-  entityId:string;
+  entityId: string;
   parentEntityId: string;
-  name:string;
-  projects:ProjectConnection;
-  entityMetricsGroup:EntityMetricsGroup;
-  entityMetricsSummaryGroup:EntityMetricsSummaryGroup;
-  entityComponents:any;
+  name: string;
+  projects: ProjectConnection;
+  entityMetricsGroup: EntityMetricsGroup;
+  entityMetricsSummaryGroup: EntityMetricsSummaryGroup;
+  entityComponents: any;
   vulnerabilities: Vulnerability[];
   licenses: License[];
-  childEntities:Entity[];
+  childEntities: Entity[];
 }
 
 
@@ -166,13 +166,13 @@ export class Metrics {
 
 // ENTITY METRICS
 export class EntityMetrics extends Metrics {
-  projectCount:number;
+  projectCount: number;
   measureDate: any;
 }
 
 export class EntityMetricsGroup {
-  period:any;
-  projectCount:number;
+  period: any;
+  projectCount: number;
   entityMetrics: EntityMetrics[];
 }
 
@@ -184,7 +184,7 @@ export class entityMetricsSummaries {
 }
 
 export class EntityMetricsSummaryGroup {
-  entityMetricsSummaries:EntityMetricsSummary[];
+  entityMetricsSummaries: EntityMetricsSummary[];
 }
 
 export class EntityMetricsSummary {
@@ -201,7 +201,7 @@ export class ProjectMetrics extends Metrics {
 }
 
 export class ProjectMetricsGroup {
-  period:any;
+  period: any;
   projectMetrics: ProjectMetrics[];
 }
 
@@ -223,19 +223,19 @@ export class ScanMetricsSummary {
 
 
 export enum Period {
-  CURRENT="CURRENT",
-  WEEK="WEEK",
-  MONTH="MONTH",
-  QUARTER="QUARTER",
-  YEAR="YEAR"
+  CURRENT= 'CURRENT',
+  WEEK= 'WEEK',
+  MONTH= 'MONTH',
+  QUARTER= 'QUARTER',
+  YEAR= 'YEAR'
 }
 
 export class Scan {
-  scanId:string;
-  branch:string;
-  vulnerabilities:Vulnerability[];
-  scanRepository:Repository;
-  scanMetrics:any;
+  scanId: string;
+  branch: string;
+  vulnerabilities: Vulnerability[];
+  scanRepository: Repository;
+  scanMetrics: any;
   scanAssets: any;
 }
 
@@ -287,67 +287,67 @@ export interface PatchedInfoSimplifiedQuery {
 }
 
 export class Vulnerability {
-  vulnerabilityId:string;
-  description:string;
-  references:string;
-  published:string;
-  updated:string;
-  cwe:Cwe;
-  cvssV2BaseScore:string;
-  cvssV2ImpactSubScore:string;
-  cvssV2ExploitabilitySubScore:string;
-  cvssV2Vector:string;
-  cvssV3BaseScore:string;
-  cvssV3ImpactSubScore:string;
-  cvssV3ExploitabilitySubScore:string;
-  cvssV3Vector:string;
-  severity:string;
-  recommendation:string;
-  credits:string;
-  vulnerableVersions:string;
-  patchedVersions:string;
+  vulnerabilityId: string;
+  description: string;
+  references: string;
+  published: string;
+  updated: string;
+  cwe: Cwe;
+  cvssV2BaseScore: string;
+  cvssV2ImpactSubScore: string;
+  cvssV2ExploitabilitySubScore: string;
+  cvssV2Vector: string;
+  cvssV3BaseScore: string;
+  cvssV3ImpactSubScore: string;
+  cvssV3ExploitabilitySubScore: string;
+  cvssV3Vector: string;
+  severity: string;
+  recommendation: string;
+  credits: string;
+  vulnerableVersions: string;
+  patchedVersions: string;
   components: any;
 }
 
 export class License {
-  licenseId:string;
-  spdxId:string;
-  name:string;
-  body:string;
-  description:string;
-  isOsiApproved:boolean;
-  isFsfLibre:boolean;
-  isDeprecated:boolean;
-  attributes:LicenseAttribute[];
+  licenseId: string;
+  spdxId: string;
+  name: string;
+  body: string;
+  description: string;
+  isOsiApproved: boolean;
+  isFsfLibre: boolean;
+  isDeprecated: boolean;
+  attributes: LicenseAttribute[];
   components: any;
 }
 
 export class LicenseAttribute {
-  attributeType:string;
-  key:string
+  attributeType: string;
+  key: string;
 }
 
 export class Cwe {
-  cweId:string;
-  name:string;
+  cweId: string;
+  name: string;
 }
 
 
 // ScanAsset -------------------------------------------------------------------------------------------------
 export class ScanAsset {
-  name:string;
-  size:number;
-  fileSize:number;
-  scanAssetId:string;
-  originAssetId:string;
-  workspacePath:string;
-  status:string;
-  scanAssetType:string;
-  content:string;
-  matchRepository:Repository;
-  matches:ScanAssetMatch[];
+  name: string;
+  size: number;
+  fileSize: number;
+  scanAssetId: string;
+  originAssetId: string;
+  workspacePath: string;
+  status: string;
+  scanAssetType: string;
+  content: string;
+  matchRepository: Repository;
+  matches: ScanAssetMatch[];
   embeddedAssets: EmbeddedAssetConnection;
-  percentEmbedded:number;
+  percentEmbedded: number;
 }
 
 export class EmbeddedAssetConnection {
@@ -380,20 +380,20 @@ export class ScanAssetMatchLicense {
 }
 
 export class ScanAssetMatch {
-  assetMatchId:string;
-  percentMatch:number;
+  assetMatchId: string;
+  percentMatch: number;
 }
 
 export class Account {
-  accountName: string
-  type: string
+  accountName: string;
+  type: string;
 }
 
 export class PasswordAccount extends Account {
 }
 export class RepositoryAccount extends Account {
   accessToken: string;
-  scopes:string[];
+  scopes: string[];
 }
 export class GithubAccount extends RepositoryAccount {
 }
@@ -405,39 +405,39 @@ export class GoogleAccount extends RepositoryAccount {
 }
 
 export class RepositoryAccounts {
-  githubAccount:GithubAccount;
-  gitlabAccount:GitlabAccount;
-  bitbucketAccount:BitbucketAccount;
-  passwordAccount:PasswordAccount;
-  googleAccount:GoogleAccount;
+  githubAccount: GithubAccount;
+  gitlabAccount: GitlabAccount;
+  bitbucketAccount: BitbucketAccount;
+  passwordAccount: PasswordAccount;
+  googleAccount: GoogleAccount;
 }
 
 export class Role {
-   roleId:string;
-   description:string;
-   permissions:string[];
+   roleId: string;
+   description: string;
+   permissions: string[];
 }
 
 export class Authority {
-  authority:string;
+  authority: string;
 }
 
 export class User {
-  accessToken:string;
-  accountNonExpired:boolean;
-  accountNonLocked:boolean;
+  accessToken: string;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
   authorities: Authority[];
   created: string;
   credentialsNonExpired: boolean;
-  email:string;
+  email: string;
   enabled: boolean;
   fname: string;
   lname: string;
   orgId: string;
   defaultEntityId: string;
-  permissions:string[];
+  permissions: string[];
   repositoryAccounts: RepositoryAccounts;
-  roles:Role[];
+  roles: Role[];
   avatarUrl: string;
 }
 
@@ -476,13 +476,13 @@ export class EntityConnection {
   pageInfo: PageInfo;
   totalCount: number;
 
-  constructor(){}
+  constructor() {}
 }
 
 export class EntityEdge {
   node: Entity;
   cursor: string;
-  constructor (node: Entity, cursor: string) {
+  constructor(node: Entity, cursor: string) {
     this.node = node;
     this.cursor = cursor;
   }
@@ -490,62 +490,62 @@ export class EntityEdge {
 
 
 // GRAPHQL QUERIES
-export type TaskQuery = {
-  task_submitScanRequest:Task;
-  task_update:Task;
+export interface TaskQuery {
+  task_submitScanRequest: Task;
+  task_update: Task;
 }
 
-export type RunningTaskCountQuery = {
-  running_scan_tasks_count:number;
+export interface RunningTaskCountQuery {
+  running_scan_tasks_count: number;
 }
 
 
-export type GitHubUserQuery = {
+export interface GitHubUserQuery {
   gitHubUser: GitHubUser;
 }
 
 
 // GitLabUserQuery
-export type GitLabUserQuery = {
+export interface GitLabUserQuery {
   gitLabUser: GitLabUser;
 }
 
 
 // BitbucketUserQuery
-export type BitbucketUserQuery = {
+export interface BitbucketUserQuery {
   bitbucketUser: BitbucketUser;
 }
 
-export type ProjectQuery = {
+export interface ProjectQuery {
   project: Project;
 }
 
-export type EntityQuery = {
+export interface EntityQuery {
   entity: Entity;
 }
 
-export type EntityListQuery = {
+export interface EntityListQuery {
   entities: EntityConnection;
 }
 
-export type VulnerabilityQuery = {
-  vulnerability:Vulnerability;
+export interface VulnerabilityQuery {
+  vulnerability: Vulnerability;
 }
 
-export type ScanQuery = {
-  scan:Scan;
+export interface ScanQuery {
+  scan: Scan;
 }
 
-export type ComponentQuery = {
-  component:TxComponent;
+export interface ComponentQuery {
+  component: TxComponent;
 }
 
-export type LicenseQuery = {
-  license:License;
+export interface LicenseQuery {
+  license: License;
 }
 
-export type ScanAssetQuery = {
-  scanAsset:ScanAsset;
+export interface ScanAssetQuery {
+  scanAsset: ScanAsset;
 }
 
 export class SimmQuery {
@@ -610,12 +610,12 @@ export class VulnerableReleaseResponse {
 }
 
 export interface VulnerableReleaseResponseMap {
-  "binaryVulnerableResponse": VulnerableReleaseResponse;
-  "sourceVulnerableResponse": VulnerableReleaseResponse;
+  'binaryVulnerableResponse': VulnerableReleaseResponse;
+  'sourceVulnerableResponse': VulnerableReleaseResponse;
 }
 
 // graphql error location
-export type SourceLocation = {
+export interface SourceLocation {
   line: number;
   column: number;
   sourceName: string;
@@ -623,15 +623,15 @@ export type SourceLocation = {
 
 // graphql error type
 export enum ErrorType {
-  InvalidSyntax = "InvalidSyntax",
-  ValidationError = "ValidationError",
-  DataFetchingException = "DataFetchingException",
-  OperationNotSupported = "OperationNotSupported",
-  ExecutionAborted = "ExecutionAborted"
+  InvalidSyntax = 'InvalidSyntax',
+  ValidationError = 'ValidationError',
+  DataFetchingException = 'DataFetchingException',
+  OperationNotSupported = 'OperationNotSupported',
+  ExecutionAborted = 'ExecutionAborted'
 }
 
 // graphql error
-export type GraphQLError = {
+export interface GraphQLError {
   message: string;
   locations: SourceLocation[];
   errorType: ErrorType[];
@@ -641,14 +641,14 @@ export type GraphQLError = {
 
 
 // generic subscription result
-export type SubscriptionResult<T> = {
-  value : T;
+export interface SubscriptionResult<T> {
+  value: T;
   errors: GraphQLError[];
 }
 
 // running task count result
-export type RunningTaskCountSubscription = {
-  subscribeRunningScanTaskCount:SubscriptionResult<number>;
+export interface RunningTaskCountSubscription {
+  subscribeRunningScanTaskCount: SubscriptionResult<number>;
 }
 
 export class StringHolder {

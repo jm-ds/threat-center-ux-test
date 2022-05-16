@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 import { LocalService } from '@app/services/core/local.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
+import { Account, RepositoryAccounts } from '@app/threat-center/shared/models/types';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -17,17 +18,17 @@ export class AuthenticationService {
   private websocketClient = null;
 
   constructor(private http: HttpClient, private localService: LocalService,
-    private modalService: NgbModal,
-    private cookieService: CookieService) {
+              private modalService: NgbModal,
+              private cookieService: CookieService) {
     // let user = this.getFromStorageBasedEnv('currentUser');
-    let user = this.getFromSessionStorageBasedEnv('currentUser');
+    const user = this.getFromSessionStorageBasedEnv('currentUser');
     this.currentUserSubject = new BehaviorSubject<User>(user);
   }
 
   public get currentUser(): User {
     // note: I don't think the loading is working in constructor
     if ((!this.currentUserSubject || !this.currentUserSubject.value) && this.getFromSessionStorageBasedEnv('currentUser')) {
-      console.log("Current user subject is null. Loading from localStorage")
+      console.log('Current user subject is null. Loading from localStorage');
       this.currentUserSubject = new BehaviorSubject<User>(this.getFromSessionStorageBasedEnv('currentUser'));
     }
     return this.currentUserSubject.value;
@@ -35,40 +36,45 @@ export class AuthenticationService {
 
   async loadAuthenticatedUser() {
     const url = environment.apiUrl + '/user';
-    let user = await this.http.get<any>(url).toPromise();
+    const user = await this.http.get<any>(url).toPromise();
 
     // this.setInStorageBasedEnv('currentUser', user);
 
-    //storing user data to session storage.
-    this.setInSessionStorageBasedEnv('currentUser',user);
+    // storing user data to session storage.
+    this.setInSessionStorageBasedEnv('currentUser', user);
+    if (this.currentUserSubject && this.currentUserSubject.value) {
+      this.currentUserSubject.next(user);
+    }
+    this.setLastSuccessfulLogin(user);
+
     return user;
   }
 
   login(username: string, password: string) {
     const url = environment.apiUrl + '/authenticate';
     const body = {
-      username: username,
-      password: password
+      username,
+      password
     };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-        console.log("JWT", response.jwt);
+        console.log('JWT', response.jwt);
         this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
 
-        //now we do not need to store data to local storage
+        // now we do not need to store data to local storage
         // this.setInStorageBasedEnv('currentUser', user);
-        
-        //storing current user details to session storage.
-        this.setInSessionStorageBasedEnv("currentUser",user);
+
+        // storing current user details to session storage.
+        this.setInSessionStorageBasedEnv('currentUser', user);
         this.setCurrentLogin(LoginType.PASSWORD);
 
         this.currentUserSubject.next(user);
         return user;
       },
         (err) => {
-          console.error("AUTH SERVICE ERROR:", err);
+          console.error('AUTH SERVICE ERROR:', err);
         }));
   }
 
@@ -80,8 +86,8 @@ export class AuthenticationService {
       .pipe(map(response => {
         this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
-        this.setInSessionStorageBasedEnv("currentUser",user);
-        this.cookieService.delete('invite')
+        this.setInSessionStorageBasedEnv('currentUser', user);
+        this.cookieService.delete('invite');
         return user;
       },
         (err) => {
@@ -92,30 +98,30 @@ export class AuthenticationService {
   logout() {
     // remove user from local storage to log user out
     // localStorage.removeItem('currentUser');
-    console.log("Logout called");
+    console.log('Logout called');
     this.localService.clearToken();
-    sessionStorage.removeItem("jwt");
-    sessionStorage.removeItem("currentUser");
-    sessionStorage.removeItem("ProjectBreadcum");
-    sessionStorage.removeItem("UserPreference");
-    sessionStorage.removeItem("REPO_SCAN");
-    sessionStorage.removeItem("AssetFilter");
-    sessionStorage.removeItem("currentLogin")
+    sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('ProjectBreadcum');
+    sessionStorage.removeItem('UserPreference');
+    sessionStorage.removeItem('REPO_SCAN');
+    sessionStorage.removeItem('AssetFilter');
+    sessionStorage.removeItem('currentLogin');
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
     this.closeWebSocket();
   }
 
   public isTokenExpired(token?: string): boolean {
-    if (!token) return true;
+    if (!token) { return true; }
     const date = this.getTokenExpirationDate(token);
-    if (date === undefined) return false;
+    if (date === undefined) { return false; }
     return !(date.valueOf() > new Date().valueOf());
   }
 
   getTokenExpirationDate(token: string): Date {
     const decoded = jwt_decode(token);
-    if (decoded.exp === undefined) return null;
+    if (decoded.exp === undefined) { return null; }
     const date = new Date(0);
     date.setUTCSeconds(decoded.exp);
     return date;
@@ -155,7 +161,7 @@ export class AuthenticationService {
     if (environment.production && !environment.staging) {
       user = this.localService.getSessionStorage(key);
     } else {
-      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) != "undefined") {
+      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) !== 'undefined') {
         user = JSON.parse(sessionStorage.getItem(key));
       }
     }
@@ -187,27 +193,48 @@ export class AuthenticationService {
 
   // save github repository type in cookie
   setGitHubRepoType(value: string) {
-    let expiredDate = new Date();
+    const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
     this.cookieService.set('gh_rt', value, {path: '/',  expires: expiredDate, sameSite: 'Lax' });
   }
 
-  //todo save
-  setLastSuccessfulLogin(loginType: LoginType, accountName: string) {
-    console.log(`setting last successful login to ${loginType} , ${accountName}` );
-    let expiredDate = new Date();
+  setLastSuccessfulLogin(user: User) {
+    const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
-    let jsonLoginData = {
-      loginType: loginType,
-      accountName: accountName
-    };
-
-    this.cookieService.set('last_login', JSON.stringify(jsonLoginData), {path: '/',  expires: expiredDate, sameSite: 'Lax' });
+    if (user.repositoryAccounts) {
+      const userLoginInfo = {
+        username: user.username,
+        github: user.repositoryAccounts.githubAccount,
+        gitlab: user.repositoryAccounts.gitlabAccount,
+        bitbucket: user.repositoryAccounts.bitbucketAccount,
+        google: user.repositoryAccounts.googleAccount
+      } as LoginData;
+      console.log(`setting last successful login info for user ${user.username} to ${JSON.stringify(userLoginInfo)}`);
+      this.cookieService.set('last_login_data', JSON.stringify(userLoginInfo), {path: '/',  expires: expiredDate, sameSite: 'Lax' });
+    }
   }
 
-  getLastSuccessfulLogin() {
-    if (this.cookieService.check('last_login')) {
-      return this.cookieService.get('last_login');
+  toLoginData(repositoryAccounts: RepositoryAccounts): Map<string, Account> {
+    const accounts = new Map<string, Account>();
+    if (repositoryAccounts.githubAccount) {
+      accounts.set('github', repositoryAccounts.githubAccount);
+    }
+    if (repositoryAccounts.gitlabAccount) {
+      accounts.set('gitlab', repositoryAccounts.gitlabAccount);
+    }
+    if (repositoryAccounts.bitbucketAccount) {
+      accounts.set('bitbucket', repositoryAccounts.bitbucketAccount);
+    }
+    if (repositoryAccounts.googleAccount) {
+      accounts.set('google', repositoryAccounts.googleAccount);
+    }
+    return accounts;
+  }
+
+
+  getLastSuccessfulLogin(): LoginData {
+    if (this.cookieService.check('last_login_data')) {
+      return JSON.parse(this.cookieService.get('last_login_data'));
     } else {
       return undefined;
     }
@@ -215,51 +242,51 @@ export class AuthenticationService {
 
   setCurrentLogin(loginType: LoginType) {
     if (environment.production && !environment.staging) {
-      this.localService.setSessionStorage("currentLogin", loginType);
+      this.localService.setSessionStorage('currentLogin', loginType);
     } else {
-      sessionStorage.setItem("currentLogin", loginType);
+      sessionStorage.setItem('currentLogin', loginType);
     }
  }
 
   getCurrentLogin() {
     if (environment.production && !environment.staging) {
-      return this.localService.getSessionStorage("currentLogin");
+      return this.localService.getSessionStorage('currentLogin');
     } else {
-      return sessionStorage.getItem("currentLogin")
+      return sessionStorage.getItem('currentLogin');
     }
   }
 
   getJoinAccount() {
     if (environment.production && !environment.staging) {
-      return this.localService.getSessionStorage("accountToJoin");
+      return this.localService.getSessionStorage('accountToJoin');
     } else {
-      return sessionStorage.getItem("accountToJoin")
+      return sessionStorage.getItem('accountToJoin');
     }
   }
 
   setJoinAccount(loginType: LoginType) {
     if (environment.production && !environment.staging) {
-      this.localService.setSessionStorage("accountToJoin", loginType);
+      this.localService.setSessionStorage('accountToJoin', loginType);
     } else {
-      sessionStorage.setItem("accountToJoin", loginType);
+      sessionStorage.setItem('accountToJoin', loginType);
     }
   }
 
   removeJoinAccount() {
-    sessionStorage.removeItem("accountToJoin");
+    sessionStorage.removeItem('accountToJoin');
   }
 
 
   loginTypeToLoginUrl(loginType: LoginType) {
     switch (loginType) {
       case LoginType.BITBUCKET:
-        return "bitbucket_login";
+        return 'bitbucket_login';
       case LoginType.GITHUB:
-        return "github_login";
+        return 'github_login';
       case LoginType.GITLAB:
-        return "gitlab_login";
+        return 'gitlab_login';
       case LoginType.GOOGLE:
-        return "google_login";
+        return 'google_login';
       case LoginType.PASSWORD:
         return undefined;
     }
@@ -267,12 +294,19 @@ export class AuthenticationService {
 
  }
 
- export enum LoginType {
+export enum LoginType {
    GITHUB = 'github',
    GITLAB = 'gitlab',
    BITBUCKET = 'bitbucket',
    GOOGLE = 'google',
    PASSWORD = 'password'
-
-
 }
+
+export interface LoginData {
+  username: string;
+  github: Account;
+  gitlab: Account;
+  bitbucket: Account;
+  google: Account;
+}
+

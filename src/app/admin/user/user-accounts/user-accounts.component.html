@@ -1,56 +1,50 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
-    <ol class="breadcrumb" *ngIf="!!currentUser">
+    <ol class="breadcrumb" *ngIf="authenticationService.currentUser">
       <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
-      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(currentUser?.username)">User</a></li>
+      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(authenticationService.currentUser?.username)">User</a></li>
     </ol>
   </nav>
   <h1>Add repository account</h1>
 </div>
 
-
 <app-messages [messages]="messages"></app-messages>
 
-
-<ng-template [ngIf]="currentUser !== undefined">
+<ng-template [ngIf]="authenticationService.currentUser !== undefined">
   <div class="row">
-    <div class="col-md-4" *ngIf="!!currentUser.repositoryAccounts">
-
+    <div class="col-md-4" *ngIf="authenticationService.currentUser.repositoryAccounts">
       <!-- User card -->
-      <app-user-card [user]="currentUser" [showMenu]="true"></app-user-card>
-
+      <app-user-card [user]="authenticationService.currentUser" [showMenu]="true"></app-user-card>
     </div>
     <div class="col-md-6">
       <app-card cardTitle="Add repository account">
-        <div id="auth01" class="row" style="margin-bottom:20px" *ngIf="!hasGithub()">
-          <div title="Github login" class="col-xl-6">
-            <a (click)="addAccount('github')" class="cursor-pointer" [ngClass]="{'disabled': currentUser == false}">
+        <div id="auth01" class="row" style="margin-bottom:20px">
+          <div title="Github login" class="col-xl-6" *ngIf="!hasGithub()">
+            <a (click)="addAccount('github')" class="cursor-pointer">
               <div class="auth-button"><i class="fab fa-github"></i></div>
             </a>
           </div>
-          <div title="Gitlab login" class="col-xl-6"  *ngIf="!hasGitlab()">
+          <div title="Gitlab login" class="col-xl-6" *ngIf="!hasGitlab()">
             <a  (click)="addAccount('gitlab')" class="cursor-pointer" >
               <div class="auth-button"><i class="fab fa-gitlab"></i></div>
             </a>
           </div>
         </div>
-
-<!--        <div id="auth02" class="row" style="margin-bottom:20px">-->
-<!--          <div title="Bitbucket login coming soon!" class="col-xl-6">-->
-<!--            <a (click)="externalLogin('bitbucket_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled" [ngClass]="{'disabled': loading == true}">-->
-<!--              <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-bitbucket"></i></div>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--          <div title="Google login coming soon!" class="col-xl-6">-->
-<!--            <a (click)="externalLogin('google_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled">-->
-<!--              <div class="auth-button disabled"><i class="fab fa-google"></i></div>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        </div>-->
+       <!-- <div id="auth02" class="row" style="margin-bottom:20px">
+          <div title="Bitbucket login coming soon!" class="col-xl-6">
+            <a (click)="externalLogin('bitbucket_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled" [ngClass]="{'disabled': loading == true}">
+              <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-bitbucket"></i></div>
+            </a>
+          </div>
+          <div title="Google login coming soon!" class="col-xl-6">
+            <a (click)="externalLogin('google_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled">
+              <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+            </a>
+          </div>
+        </div>
+        </div>-->
         <div class="actions mt-5">
-
-          <a *ngIf="!!currentUser" (click)="backToUser()" class="btn btn-outline-secondary">
+          <a *ngIf="authenticationService.currentUser" (click)="backToUser()" class="btn btn-outline-secondary">
             <i class="feather  icon-user"></i>
             Back to user
           </a>

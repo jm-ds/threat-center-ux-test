@@ -132,8 +132,6 @@
                             <app-alert type="danger">The user has no roles assigned.</app-alert>
                         </ng-template>
 
-
-
                         <!-- PERMISSIONS -->
                         <ng-template [ngIf]="user.userPermissions">
                             <app-card [hidHeader]="true" cardClass="mb-0 mt-5" blockClass="d-flex align-items-center justify-content-between">
@@ -168,6 +166,7 @@
                         </ng-template>
                     </ng-template>
                 </ngb-tab>
+
                 <!-- API keys -->
                 <ngb-tab *ngIf="authorizationService.hasPermissions('USER_APITOKEN_CREATE')">
                     <ng-template ngbTabTitle>API keys&nbsp;&nbsp;
@@ -210,19 +209,20 @@
                         </app-card>
                     </ng-template>
                 </ngb-tab>
+
                 <!-- Repository accounts -->
-                <ngb-tab *ngIf="authorizationService.hasPermissions('USER_VIEW')"> <!-- TODO change to proper permissions-->
-                    <ng-template ngbTabTitle>Repository accounts&nbsp;&nbsp;
+                <ngb-tab *ngIf="authorizationService.hasPermissions('ROLE_USER')"> <!-- TODO change to proper permissions-->
+                    <ng-template ngbTabTitle>SCM Accounts&nbsp;&nbsp;
                         <span class="badge badge-light">
-                          {{repositoryAccountList(authService.currentUserSubject.getValue()).length}}
+                          {{repositoryAccountList(authService.currentUser).length}}
                         </span>
                     </ng-template>
 
                     <ng-template ngbTabContent>
                         <app-card [hidHeader]="true" cardClass="user-profile-list">
-                            <div class="mb-2 mt-1 float-right" *ngIf="authorizationService.hasPermissions('USER_VIEW')">
+                            <div class="mb-2 mt-1 float-right" *ngIf="authorizationService.hasPermissions('ROLE_USER')">
                                 <div class="text-left">
-                                    <a routerLink="/admin/user/addRepositoryAccount" class="btn btn-outline-info">Add repository account</a>
+                                    <a routerLink="/admin/user/addRepositoryAccount" class="btn btn-outline-info">Add SCM Account</a>
                                 </div>
                             </div>
                             <div class="dt-responsive table-responsive">
@@ -248,9 +248,7 @@
                         </app-card>
                     </ng-template>
                 </ngb-tab>
-
             </ngb-tabset>
-
         </div>
     </div>
 </ng-template>

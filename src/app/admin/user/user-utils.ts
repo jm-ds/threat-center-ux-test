@@ -64,8 +64,8 @@ export class UserUtils {
     }
 
 
-    repositoryAccountList(user : User):RepositoryAccount[] {
-        let accounts = new Array();
+    repositoryAccountList(user : User): RepositoryAccount[] {
+        const accounts = new Array();
         if (user.repositoryAccounts) {
             if (user.repositoryAccounts.githubAccount) {
                 accounts.push(user.repositoryAccounts.githubAccount);
