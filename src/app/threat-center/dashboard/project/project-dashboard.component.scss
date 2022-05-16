@@ -310,15 +310,23 @@
     }
 }
 
-form fieldset {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+form {
 
-  &:not(:last-child) {
-    margin-bottom: 16px;
+  p,
+  fieldset {
+    padding-left: 8px;
+    padding-right: 8px;
+
+  }
+
+  fieldset {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
   }
 }
 
