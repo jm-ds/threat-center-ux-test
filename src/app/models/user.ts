@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EntityModel } from '@app/admin/entity/entity.class';
-import { Permission, Role } from "@app/models/role";
-import { GithubAccount, RepositoryAccounts } from '@app/threat-center/shared/models/types';
+import { Permission, Role } from '@app/models/role';
+import { RepositoryAccounts } from '@app/threat-center/shared/models/types';
 import { PageInfo } from './common';
 import { EntityConnection } from './entity';
 
@@ -11,15 +10,12 @@ export class User {
     id: number;
     username: string;
     password: string;
-    firstName: string;
-    lastName: string;
     fname: string;
     lname: string;
     created: Date;
     email: string;
     orgId: string;
     defaultEntityId: string;
-    authdata?: string;
 
     // lists returned by gql inner queries
     userRoles: Role[];
@@ -45,7 +41,7 @@ export class User {
     apiKeys: ApiKeyConnection;
 
     invitedByUsername: string;
-    
+
     repositoryAccounts: RepositoryAccounts;
 }
 
@@ -225,8 +221,67 @@ export class ApiKeyRequestInput {
     }
 
     static from(apiKey: ApiKey) {
-        return new ApiKeyRequestInput(apiKey.orgId, apiKey.username, apiKey.keyId, apiKey.apiKey, apiKey.title, apiKey.description, apiKey.expiredDate);
+        return new ApiKeyRequestInput(apiKey.orgId, apiKey.username, apiKey.keyId, apiKey.apiKey,
+          apiKey.title, apiKey.description, apiKey.expiredDate);
     }
+}
+
+export class GetUserQuery {
+    getUser: User;
+}
+
+export class AccountCreateMutation {
+    createAccount: AuthenticationResponse;
+}
+
+export class AuthenticationResponse {
+    jwt: string;
+    user: User;
+}
+
+export class FormAccountRequest {
+    email: string;
+    fullName: string;
+    phone: string;
+    password: string;
+    companyName: string;
+    position: string;
+    coverLetter: string;
+    inviteHash: string;
+
+
+    constructor(email: string, fullName: string, phone: string, password: string, companyName: string,
+                position: string, coverLetter: string, inviteHash: string) {
+        this.email = email;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.password = password;
+        this.companyName = companyName;
+        this.position = position;
+        this.coverLetter = coverLetter;
+        this.inviteHash = inviteHash;
+    }
+}
+
+export class AccountUpdateRequest {
+    email: string;
+    orgName: string;
+    coverLetter: string;
+    phone: string;
+    position: string;
+
+
+    constructor(email: string, orgName: string, coverLetter: string, phone: string, position: string) {
+        this.email = email;
+        this.orgName = orgName;
+        this.coverLetter = coverLetter;
+        this.phone = phone;
+        this.position = position;
+    }
+}
+
+export class AccountUpdateMutation {
+    updateAccount: User;
 }
 
 

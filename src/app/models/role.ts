@@ -1,5 +1,3 @@
-import {User} from "@app/models/user";
-
 export class Role {
     roleId: string;
     description: string;

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
 import * as jwt_decode from 'jwt-decode';
-import { OrganizationData, User } from '../../models';
+import { User } from '../../models';
 import { environment } from '../../../environments/environment';
 import { LocalService } from '@app/services/core/local.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,31 +17,20 @@ export class AuthenticationService {
   private websocketClient = null;
 
   constructor(private http: HttpClient, private localService: LocalService,
-    private modalService: NgbModal,
-    private cookieService: CookieService) {
+              private modalService: NgbModal,
+              private cookieService: CookieService) {
     // let user = this.getFromStorageBasedEnv('currentUser');
-    let user = this.getFromSessionStorageBasedEnv('currentUser');
+    const user = this.getFromSessionStorageBasedEnv('currentUser');
     this.currentUserSubject = new BehaviorSubject<User>(user);
   }
 
   public get currentUser(): User {
     // note: I don't think the loading is working in constructor
     if ((!this.currentUserSubject || !this.currentUserSubject.value) && this.getFromSessionStorageBasedEnv('currentUser')) {
-      console.log("Current user subject is null. Loading from localStorage")
+      console.log('Current user subject is null. Loading from localStorage');
       this.currentUserSubject = new BehaviorSubject<User>(this.getFromSessionStorageBasedEnv('currentUser'));
     }
     return this.currentUserSubject.value;
-  }
-
-  async loadAuthenticatedUser() {
-    const url = environment.apiUrl + '/user';
-    let user = await this.http.get<any>(url).toPromise();
-
-    // this.setInStorageBasedEnv('currentUser', user);
-
-    //storing user data to session storage.
-    this.setInSessionStorageBasedEnv('currentUser',user);
-    return user;
   }
 
   login(username: string, password: string) {
@@ -68,23 +57,6 @@ export class AuthenticationService {
       },
         (err) => {
           console.error("AUTH SERVICE ERROR:", err);
-        }));
-  }
-
-  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string, position: string, coverLetter: string, inviteHash: string) {
-    // todo[5]: don't forget to that "this.host_url" to "environment.apiUrl" on merge
-    const url = environment.apiUrl + '/account/create';
-    const body = { email, fullName, phone, password, companyName, position, coverLetter, inviteHash };
-    return this.http.post<any>(url, body)
-      .pipe(map(response => {
-        this.setInSessionStorageBasedEnv('jwt', response.jwt);
-        const user = response.user;
-        this.setInSessionStorageBasedEnv("currentUser",user);
-        this.cookieService.delete('invite')
-        return user;
-      },
-        (err) => {
-          console.error('AUTH SERVICE ERROR:', err);
         }));
   }
 
@@ -140,7 +112,7 @@ export class AuthenticationService {
     return user;
   }
 
-  setInSessionStorageBasedEnv(key: string, data: User) {
+  setInSessionStorageBasedEnv(key: string, data: any) {
     if (environment.production && !environment.staging) {
       this.localService.setSessionStorage(key, data);
     } else {

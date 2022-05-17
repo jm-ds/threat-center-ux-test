@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InviteService } from '@app/services/invite.service';
+import { AccountService } from '@app/security/services/account.service';
 
 @Component({
   selector: 'app-create-account',
@@ -28,6 +29,7 @@ export class CreateAccountComponent implements OnInit {
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private cookieService: CookieService,
         private inviteService: InviteService,
         private modalService: NgbModal
@@ -54,27 +56,17 @@ export class CreateAccountComponent implements OnInit {
     }
 
     createAccount() {
-        this.loading = true;
-        this.authenticationService.createAccount(
-            this.model.email,
-            this.model.fullName,
-            this.model.phone,
-            this.model.password,
-            this.model.companyName,
-            this.model.position,
-            this.model.coverLetter,
-            this.inviteHash
-        )
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigateByUrl('/awaiting-approval');
-                },
-                error => {
-                    console.error('CREATE ACCOUNT ERROR', error);
-                    this.error = error;
-                    this.loading = false;
-                });
+      this.loading = true;
+      this.accountService.createAccount(this.model.email, this.model.fullName, this.model.phone, this.model.password,
+        this.model.companyName, this.model.position, this.model.coverLetter, this.inviteHash)
+        .pipe(first())
+        .subscribe(() => {
+          this.router.navigateByUrl('/awaiting-approval');
+        }, error => {
+          console.error('CREATE ACCOUNT ERROR', error);
+          this.error = error;
+          this.loading = false;
+        });
     }
 
   // login via external oauth
