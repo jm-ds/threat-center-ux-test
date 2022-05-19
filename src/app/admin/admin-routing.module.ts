@@ -35,6 +35,11 @@ const routes: Routes = [
           .then(module => module.DeploymentModule)
       },
       {
+        path: 'api-explorer',
+        loadChildren: () => import('./api-explorer/api-explorer.module')
+          .then(m => m.ApiExplorerModule)
+      },
+      {
         path: 'integration',
         canActivate: [AuthGuard],
         loadChildren: () => import('./integration/integration.module').then(module => module.IntegrationModule)
