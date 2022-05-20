@@ -799,6 +799,13 @@ export class ProjectService {
                         }
                     }
                   },
+                  matchCopyrights {
+                    text
+                    startYear
+                    endYear
+                    toPresent
+                    owners
+                  },
                   matchLicenses {
                     licenseId,
                     licenseName,
