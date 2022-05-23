@@ -152,6 +152,8 @@
   <div class="modal-body">
     <perfect-scrollbar [style.max-height.px]="250">
       <form [formGroup]="ignoreAssetsForm">
+        <p class="text-muted">Use asset name or RegExp to filter files, folders and paths.</p>
+
         <ng-container formArrayName="settings">
           <fieldset [formGroupName]="i"
             *ngFor="let setting of ignoreAssetsForm.get('settings')['controls']; index as i; first as isFirst">
