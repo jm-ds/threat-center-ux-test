@@ -84,9 +84,14 @@ export class AwaitingApprovalComponent implements OnInit {
           this.loading = false;
           this.messageInfo = MESSAGES.ACCOUNT_UPDATE_SUCCESS;
 
-          this.accountService.loadAuthenticatedUser().pipe(first()).subscribe(
-            user => this.user = user
-          );
+          this.accountService
+            .loadAuthenticatedUser()
+            .pipe(
+              first()
+            )
+            .subscribe(user => {
+              this.user = user
+            });
         },
         error => {
           console.error('CREATE ACCOUNT ERROR', error);
