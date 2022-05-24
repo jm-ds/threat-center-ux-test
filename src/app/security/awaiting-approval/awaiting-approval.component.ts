@@ -29,10 +29,7 @@ export class AwaitingApprovalComponent implements OnInit {
     messageInfo: string;
     messageError: string;
 
-  constructor(private authenticationService: AuthenticationService,
-              private accountService: AccountService,
-              public coreHelperService: CoreHelperService) {
-  }
+  constructor(private authenticationService: AuthenticationService, private accountService: AccountService, public coreHelperService: CoreHelperService) { }
 
 
 
