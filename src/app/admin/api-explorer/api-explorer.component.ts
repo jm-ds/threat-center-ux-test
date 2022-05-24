@@ -77,7 +77,14 @@ export class ApiExplorerComponent implements OnDestroy {
               docsPanelState: 'open',
               theme: 'dark'
             }
-          }
+          },
+          handleRequest: (endpointURL: string, requestOptions: any) => fetch(endpointURL, {
+            ...requestOptions,
+            headers: {
+              ...requestOptions.headers,
+              Authorization: `Bearer ${token}`
+            }
+          })
         };
 
         // tslint:disable-next-line: no-unused-expression
