@@ -57,9 +57,9 @@ export class CreateAccountComponent implements OnInit {
 
     createAccount() {
       this.loading = true;
-      
+
       const { email, fullName, phone, password, companyName,  position, coverLetter } = this.model;
-      
+
       this.accountService.createAccount(email, fullName, phone, password, companyName,  position, coverLetter, this.inviteHash)
         .pipe(
           first()
@@ -70,7 +70,7 @@ export class CreateAccountComponent implements OnInit {
           },
           error: error => {
             console.error('CREATE ACCOUNT ERROR', error);
-          
+
             this.error = error;
             this.loading = false;
           }

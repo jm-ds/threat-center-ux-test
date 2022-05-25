@@ -88,16 +88,17 @@ export class AwaitingApprovalComponent implements OnInit {
             .pipe(
               first()
             )
-            .subscribe(user => {
-              this.user = user
+            .subscribe({
+              next: (user) => {
+                this.user = user;
+              },
+              error: error => {
+                console.error('CREATE ACCOUNT ERROR', error);
+                // this.error = error;
+                this.loading = false;
+                this.messageInfo = MESSAGES.ACCOUNT_UPDATE_ERROR;
+              }
             });
-        },
-        error => {
-          console.error('CREATE ACCOUNT ERROR', error);
-
-          // this.error = error;
-          this.loading = false;
-          this.messageInfo = MESSAGES.ACCOUNT_UPDATE_ERROR;
         });
   }
 
