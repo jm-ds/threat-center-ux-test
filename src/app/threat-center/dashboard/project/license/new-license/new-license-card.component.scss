@@ -156,45 +156,13 @@
     }
 }
 
-.multiple-btn{
-    display: flex;
-    align-items: center;
-    @media only screen and (min-width: 1599px) {
-            margin-top: 2px !important;
-            position: relative;
-            left: 370px;
-      }
-}
+.multiple-btn {
 
-
-
-.action-btns {
-    display: flex;
-    align-items: center;
-    // margin-top: 44px;
-
-    .data-cta {
-        min-width: 70px;
-        line-height: 36px;
-        text-align: center;
-        padding: 0 10px;
-        color: #fff;
-        background: #2EA54F;
-        font-size: 15px;
-        text-align: center;
-
-        &:hover {
-            background: #128532;
-        }
-
-        &.ingore-cta {
-            background: #818181;
-
-            &:hover {
-                background: #242E38;
-            }
-        }
-    }
+  @media only screen and (min-width: 1599px) {
+    position: relative;
+    left: 370px;
+    margin-top: 2px !important;
+  }
 }
 
 .data-tag {

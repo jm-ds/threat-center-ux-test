@@ -147,34 +147,6 @@
     }
 }
 
-.action-btns {
-    display: flex;
-    align-items: center;
-
-    .data-cta {
-        min-width: 70px;
-        line-height: 36px;
-        text-align: center;
-        padding: 0 10px;
-        color: #fff;
-        background: #2EA54F;
-        font-size: 15px;
-        text-align: center;
-
-        &:hover {
-            background: #128532;
-        }
-
-        &.ingore-cta {
-            background: #818181;
-
-            &:hover {
-                background: #242E38;
-            }
-        }
-    }
-}
-
 .data-tag {
     display: inline-block;
     min-width: 60px;
