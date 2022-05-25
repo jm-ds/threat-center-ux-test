@@ -59,8 +59,7 @@ export class AwaitingApprovalComponent implements OnInit {
     this.accountService.updateAccount(this.model)
       .pipe(
         map(
-          response => {
-            const user = response;
+          user => {
 
             console.log('response:');
             console.log(user);
