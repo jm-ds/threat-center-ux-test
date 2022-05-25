@@ -57,15 +57,23 @@ export class CreateAccountComponent implements OnInit {
 
     createAccount() {
       this.loading = true;
-      this.accountService.createAccount(this.model.email, this.model.fullName, this.model.phone, this.model.password,
-        this.model.companyName, this.model.position, this.model.coverLetter, this.inviteHash)
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigateByUrl('/awaiting-approval');
-        }, error => {
-          console.error('CREATE ACCOUNT ERROR', error);
-          this.error = error;
-          this.loading = false;
+      
+      const { email, fullName, phone, password, companyName,  position, coverLetter } = this.model;
+      
+      this.accountService.createAccount(email, fullName, phone, password, companyName,  position, coverLetter, this.inviteHash)
+        .pipe(
+          first()
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigateByUrl('/awaiting-approval');
+          },
+          error: error => {
+            console.error('CREATE ACCOUNT ERROR', error);
+          
+            this.error = error;
+            this.loading = false;
+          }
         });
     }
 
