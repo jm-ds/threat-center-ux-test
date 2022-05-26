@@ -20,11 +20,12 @@ import { CookieService } from 'ngx-cookie-service';
 @Injectable({providedIn: 'root'})
 export class AccountService {
 
-  constructor(private coreGraphQLService: CoreGraphQLService,
-              private localService: LocalService,
-              private authService: AuthenticationService,
-              private cookieService: CookieService) {
-  }
+  constructor(
+    private coreGraphQLService: CoreGraphQLService,
+    private localService: LocalService,
+    private authService: AuthenticationService,
+    private cookieService: CookieService
+  ) { }
 
   loadAuthenticatedUser(): Observable<User> {
     return this.coreGraphQLService.coreGQLReq<GetUserQuery>(gql(`query {
