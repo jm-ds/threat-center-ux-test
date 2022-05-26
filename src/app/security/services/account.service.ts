@@ -79,10 +79,13 @@ export class AccountService {
             }
           }
       }`
-    ), 'no-cache').pipe(map((res: ApolloQueryResult<GetUserQuery>) => {
-      this.authService.setInSessionStorageBasedEnv('currentUser', res.data.getUser);
-      return res.data.getUser;
-    }));
+    ), 'no-cache')
+      .pipe(
+        map((res: ApolloQueryResult<GetUserQuery>) => {
+          this.authService.setInSessionStorageBasedEnv('currentUser', res.data.getUser);
+
+          return res.data.getUser;
+        }));
   }
 
   createAccount(email: string, fullName: string, phone: string, password: string,
