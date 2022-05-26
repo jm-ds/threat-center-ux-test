@@ -25,7 +25,8 @@ export class AccountService {
     private localService: LocalService,
     private authService: AuthenticationService,
     private cookieService: CookieService
-  ) { }
+  ) {
+  }
 
   loadAuthenticatedUser(): Observable<User> {
     return this.coreGraphQLService.coreGQLReq<GetUserQuery>(gql(`query {
@@ -104,14 +105,16 @@ export class AccountService {
                   }
                 }
     }`), {formAccountRequest})
-      .pipe(map(res => {
-        this.authService.setInSessionStorageBasedEnv('jwt', res.data.createAccount.jwt);
-        this.authService.setInSessionStorageBasedEnv('currentUser', res.data.createAccount.user);
-        this.cookieService.delete('invite');
-        return res.data.createAccount;
-      }, (err) => {
-        console.error('AUTH SERVICE ERROR:', err);
-      }));
+      .pipe(
+        map(res => {
+          this.authService.setInSessionStorageBasedEnv('jwt', res.data.createAccount.jwt);
+          this.authService.setInSessionStorageBasedEnv('currentUser', res.data.createAccount.user);
+          this.cookieService.delete('invite');
+
+          return res.data.createAccount;
+        }, (err) => {
+          console.error('AUTH SERVICE ERROR:', err);
+        }));
   }
 
   updateAccount(accountUpdateRequest: AccountUpdateRequest) {
@@ -168,9 +171,11 @@ export class AccountService {
                 }
       }`
     ), {accountUpdateRequest})
-      .pipe(map(res => {
-        console.log(res);
-        return res.data.updateAccount;
-      }));
+      .pipe(
+        map(res => {
+          console.log(res);
+
+          return res.data.updateAccount;
+        }));
   }
 }

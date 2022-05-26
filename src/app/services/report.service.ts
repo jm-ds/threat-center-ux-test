@@ -106,7 +106,7 @@ export class ReportService {
 
     // return entity list with license
   findEmbeddedAssets(name, size, embeddedPercent, matchType) {
-      return this.coreGraphQLService.coreGQLReq<FindEmbeddedAssetsQuery>(gql(`query {
+    return this.coreGraphQLService.coreGQLReq<FindEmbeddedAssetsQuery>(gql(`query {
         getEmbeddedAssetStateReport(
           name: "${name}",
           size: "${size}",
@@ -147,8 +147,10 @@ export class ReportService {
             }
         }
       }
-      `), 'no-cache').pipe(map(res => res.data.getEmbeddedAssetStateReport));
-    }
+      `), 'no-cache')
+      .pipe(
+        map(res => res.data.getEmbeddedAssetStateReport));
+  }
 
   getVulnerabilities() {
         return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {
