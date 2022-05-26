@@ -81,7 +81,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let jwt = route.queryParams.jwt;
     const hashedJwt = route.queryParams.redirect;
     const username = route.queryParams.username;
@@ -90,22 +90,26 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (hashedJwt && username) {
         // browser send two http request in case of impersionation: options and get, so, ignore second request
         if (this.authenticationService.getFromSessionStorageBasedEnv('jwt')) {
-            return Observable.of(true);
+            return true;
         }
-        const promise = this.httpClient.get<any>(`${environment.apiUrl}/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
-        from(promise).subscribe((data) => {
+        const promise = this.httpClient.get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
+        await promise.then((data) => {
           jwt = data.jwt;
-        }, catchError(err => {
-          console.error('canActivate threat center call return error ' + JSON.stringify(err));
-          return Observable.of(false);
-        }));
+        }, (error) => {
+          console.error('canActivate threat center call return error ' + JSON.stringify(error));
+          return false;
+        });
     }
 
     if (jwt) {
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
 
-      return this.accountService.loadAuthenticatedUser().pipe(
-        map(() => this.checkPermissionsAndRedirect(route.data.auth)));
+      return this.accountService
+        .loadAuthenticatedUser()
+        .pipe(
+          map(() => this.checkPermissionsAndRedirect(route.data.auth))
+        )
+        .toPromise();
     } else {
       jwt = this.authenticationService.getFromSessionStorageBasedEnv('jwt');
 
@@ -125,10 +129,15 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         // }
 
         if (!this.authenticationService.getFromSessionStorageBasedEnv('currentUser')) {
-          return this.accountService.loadAuthenticatedUser().pipe(map(() => this.checkPermissionsAndRedirect(route.data.auth)));
+          return this.accountService
+            .loadAuthenticatedUser()
+            .pipe(
+              map(() => this.checkPermissionsAndRedirect(route.data.auth))
+            )
+            .toPromise();
         }
 
-        return Observable.of(this.checkPermissionsAndRedirect(route.data.auth));
+        return  this.checkPermissionsAndRedirect(route.data.auth);
       }
     }
     if ('invite' in route.queryParams) {
@@ -145,7 +154,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         }
       });
 
-      return Observable.of(false);
+      return false;
     }
 
     let message = '';
@@ -164,7 +173,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       }
     });
 
-    return Observable.of(false);
+    return false;
   }
 
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

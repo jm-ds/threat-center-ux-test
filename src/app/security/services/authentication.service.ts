@@ -34,7 +34,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string) {
-    const url = environment.apiUrl + '/authenticate';
+    const url = environment.apiUrl + '/rest/auth/authenticate';
     const body = {
       username: username,
       password: password

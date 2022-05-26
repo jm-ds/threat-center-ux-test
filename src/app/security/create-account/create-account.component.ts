@@ -79,20 +79,20 @@ export class CreateAccountComponent implements OnInit {
 
   // login via external oauth
   externalLogin(urlText: string, repoTypeDialog) {
-    let param = undefined;
+    let param;
     if (urlText === 'github_login') {
-      let repotype = this.authenticationService.getGitHubRepoType();
+      const repotype = this.authenticationService.getGitHubRepoType();
       if (!repotype) {
         // show repo type dialog
         this.openRepoTypeDialog(repoTypeDialog);
-        return; 
+        return;
       } else {
         if (repotype === 'private') {
           param = 'needPrivateRepos=true';
         }
       }
-    } 
-    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
+    }
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth' + '/' + urlText + (!!param ? '?' + param : ''));
   }
 
   // redirect to authenticate url
@@ -111,11 +111,11 @@ export class CreateAccountComponent implements OnInit {
   // save repo type
   setGithubRepoType() {
     this.authenticationService.setGitHubRepoType(this.choosenRepoType);
-    let param = undefined;
+    let param;
     if (this.choosenRepoType === 'private') {
       param = 'needPrivateRepos=true';
     }
-    this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth/github_login' + (!!param ? '?' + param : ''));
   }
 
 }

@@ -50,7 +50,7 @@ export class FinishSignupComponent implements OnInit {
         if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
             sessionStorage.setItem('ReturnUrl', this.returnUrl);
         }
-        window.location.href = this.apiUrl + '/' + urlText + '?inviteHash=' + this.inviteHash;
+        window.location.href = this.apiUrl + 'rest/auth/' + urlText + '?inviteHash=' + this.inviteHash;
     }
 
     finishCreateAccount() {
