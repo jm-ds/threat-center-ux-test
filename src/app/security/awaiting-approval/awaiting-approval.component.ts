@@ -11,6 +11,7 @@ import { CommonUIMethodsDecorator } from '@app/core/decorators/common.decorator'
 
 import { AuthenticationService } from '@app/security/services';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
+import { AccountService } from '@app/security/services/account.service';
 
 @Component({
   selector: 'app-awaiting-approval',
@@ -28,10 +29,7 @@ export class AwaitingApprovalComponent implements OnInit {
     messageInfo: string;
     messageError: string;
 
-    constructor(private authenticationService: AuthenticationService,
-        private http: HttpClient,
-        public coreHelperService: CoreHelperService) {
-    }
+  constructor(private authenticationService: AuthenticationService, private accountService: AccountService, public coreHelperService: CoreHelperService) { }
 
 
 
@@ -58,12 +56,10 @@ export class AwaitingApprovalComponent implements OnInit {
     const url = environment.apiUrl + '/account/update';
     // const body = { email, fullName, phone, password, companyName };
 
-    this.http
-      .post<any>(url, /*body*/ this.model)
+    this.accountService.updateAccount(this.model)
       .pipe(
         map(
-          response => {
-            const user = response.user;
+          user => {
 
             console.log('response:');
             console.log(user);
@@ -87,18 +83,22 @@ export class AwaitingApprovalComponent implements OnInit {
           this.loading = false;
           this.messageInfo = MESSAGES.ACCOUNT_UPDATE_SUCCESS;
 
-          this.authenticationService
+          this.accountService
             .loadAuthenticatedUser()
-            .then(user => {
-              this.user = user;
+            .pipe(
+              first()
+            )
+            .subscribe({
+              next: (user) => {
+                this.user = user;
+              },
+              error: error => {
+                console.error('CREATE ACCOUNT ERROR', error);
+                // this.error = error;
+                this.loading = false;
+                this.messageInfo = MESSAGES.ACCOUNT_UPDATE_ERROR;
+              }
             });
-        },
-        error => {
-          console.error('CREATE ACCOUNT ERROR', error);
-
-          // this.error = error;
-          this.loading = false;
-          this.messageInfo = MESSAGES.ACCOUNT_UPDATE_ERROR;
         });
   }
 

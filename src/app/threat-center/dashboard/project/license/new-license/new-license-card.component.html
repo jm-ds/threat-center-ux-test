@@ -113,26 +113,27 @@
                     </div>
                 </div>
 
-                <!-- <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
-                    <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
-                        <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
-                            <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-                                <a class="data-cta ingore-cta">Ignore</a>
-                                <a class="data-cta ml-2"
-                                    (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</a>
-                            </div>
-                        </div>
+              <!-- <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
+                <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
+                  <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
+                    <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+                      <button class="btn data-cta ingore-cta">Ignore</button>
+                      <button class="btn data-cta"
+                        (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</button>
                     </div>
-                    <ng-template #licnseSignleBtn>
-                        <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
-                            <div class="action-btns">
-                                <a class="data-cta ingore-cta">Ignore</a>
-                                <a class="data-cta ml-2"
-                                    (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</a>
-                            </div>
-                        </div>
-                    </ng-template>
-                </div> -->
+                  </div>
+                </div>
+
+                <ng-template #licnseSignleBtn>
+                  <div class="vulner-data-rt" *ngIf="licenseData.value[0].node?.licenseOrigin === 'ASSET'">
+                    <div class="action-btns">
+                      <button class="btn data-cta ingore-cta">Ignore</button>
+                      <button class="btn data-cta"
+                        (click)="gotoDetails(licenseData.value[0].node?.licenseId, licenseData.value[0].node?.licenseDiscovery, licenseData.value[0].node?.licenseOrigin,true)">Annotate</button>
+                    </div>
+                  </div>
+                </ng-template>
+              </div> -->
             </div>
 
         </li>

@@ -1,27 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import 'rxjs/add/observable/of';
-import * as jwt_decode from 'jwt-decode';
-import { OrganizationData, User } from '../../models';
-import { environment } from '../../../environments/environment';
-import { LocalService } from '@app/services/core/local.service';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
+import * as jwt_decode from 'jwt-decode';
+
+import { LocalService } from '@app/services/core/local.service';
+
+import { User } from '../../models';
+
 import { Account, RepositoryAccounts } from '@app/threat-center/shared/models/types';
 
-@Injectable({ providedIn: 'root' })
-export class AuthenticationService {
+import { environment } from '../../../environments/environment';
 
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthenticationService {
   public currentUserSubject: BehaviorSubject<User>;
   private websocketClient = null;
 
-  constructor(private http: HttpClient, private localService: LocalService,
-              private modalService: NgbModal,
-              private cookieService: CookieService) {
+  constructor(
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private localService: LocalService,
+    private cookieService: CookieService
+  ) {
     // let user = this.getFromStorageBasedEnv('currentUser');
     const user = this.getFromSessionStorageBasedEnv('currentUser');
+
     this.currentUserSubject = new BehaviorSubject<User>(user);
   }
 
@@ -34,27 +44,11 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  async loadAuthenticatedUser() {
-    const url = environment.apiUrl + '/user';
-    const user = await this.http.get<any>(url).toPromise();
-
-    // this.setInStorageBasedEnv('currentUser', user);
-
-    // storing user data to session storage.
-    this.setInSessionStorageBasedEnv('currentUser', user);
-    if (this.currentUserSubject && this.currentUserSubject.value) {
-      this.currentUserSubject.next(user);
-    }
-    this.setLastSuccessfulLogin(user);
-
-    return user;
-  }
-
   login(username: string, password: string) {
-    const url = environment.apiUrl + '/authenticate';
+    const url = environment.apiUrl + '/rest/auth/authenticate';
     const body = {
-      username,
-      password
+      username: username,
+      password: password
     };
     return this.http.post<any>(url, body)
       .pipe(map(response => {
@@ -71,23 +65,6 @@ export class AuthenticationService {
         this.setCurrentLogin(LoginType.PASSWORD);
 
         this.currentUserSubject.next(user);
-        return user;
-      },
-        (err) => {
-          console.error('AUTH SERVICE ERROR:', err);
-        }));
-  }
-
-  createAccount(email: string, fullName: string, phone: string, password: string, companyName: string, position: string, coverLetter: string, inviteHash: string) {
-    // todo[5]: don't forget to that "this.host_url" to "environment.apiUrl" on merge
-    const url = environment.apiUrl + '/account/create';
-    const body = { email, fullName, phone, password, companyName, position, coverLetter, inviteHash };
-    return this.http.post<any>(url, body)
-      .pipe(map(response => {
-        this.setInSessionStorageBasedEnv('jwt', response.jwt);
-        const user = response.user;
-        this.setInSessionStorageBasedEnv('currentUser', user);
-        this.cookieService.delete('invite');
         return user;
       },
         (err) => {
@@ -148,7 +125,7 @@ export class AuthenticationService {
     return user;
   }
 
-  setInSessionStorageBasedEnv(key: string, data: User) {
+  setInSessionStorageBasedEnv(key: string, data: any) {
     if (environment.production && !environment.staging) {
       this.localService.setSessionStorage(key, data);
     } else {

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../services';
-import { map, catchError } from 'rxjs/operators'
+import { map, catchError } from 'rxjs/operators';
+
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) { }
@@ -16,7 +17,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         request.url.includes('threatrix.io') ||
         request.url.includes('graphql') ||
         request.url.includes('project/upload') ||
-        request.url.includes('component-state-report') ||
         request.url.includes('embedded-asset-state-report') ||
         request.url.includes('license-state-report') ||
         request.url.includes('vulnerability-state-report')

@@ -17,14 +17,18 @@ import { AlertService } from '@app/services/core/alert.service';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService, AuthorizationService } from '../services';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import { environment } from "../../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { AccountService } from '@app/security/services/account.service';
+import { catchError, map } from 'rxjs/operators';
+import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild {
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private authorizationService: AuthorizationService,
         private cookieService: CookieService,
         private corehelperService: CoreHelperService,
@@ -67,8 +71,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       }
 
       return true;
-    }
-    else {
+    } else {
       // otherwise redirect to 'unauthorized' page
       console.log('!!! HAS NO PERMISSIONS !!!');
 
@@ -92,38 +95,38 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
     let jwt = route.queryParams.jwt;
-    let hashedJwt = route.queryParams.redirect;
-    let username = route.queryParams.username;
+    const hashedJwt = route.queryParams.redirect;
+    const username = route.queryParams.username;
 
     // try to get impersonate jwt token from backend
     if (hashedJwt && username) {
         // browser send two http request in case of impersionation: options and get, so, ignore second request
-        if (this.authenticationService.getFromSessionStorageBasedEnv("jwt")) {
+        if (this.authenticationService.getFromSessionStorageBasedEnv('jwt')) {
             return true;
         }
-        const promise = this.httpClient.get<any>(`${environment.apiUrl}/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
+        const promise = this.httpClient.get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
         await promise.then((data) => {
-            jwt = data.jwt;
+          jwt = data.jwt;
         }, (error) => {
-            console.error('canActivate threat center call return error ' + JSON.stringify(error));
-            return false;
+          console.error('canActivate threat center call return error ' + JSON.stringify(error));
+          return false;
         });
     }
 
     if (jwt) {
-      console.log("jwt");
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
 
-      await this.authenticationService.loadAuthenticatedUser();
-
-      // check if we are in the process of joining accounts
-      this.checkIfJoiningAccounts(jwt);
-
-      return this.checkPermissionsAndRedirect(route.data.auth);
+      return await this.accountService
+        .loadAuthenticatedUser()
+        .pipe(
+          map(() => this.checkIfJoiningAccounts(jwt))
+        )
+        .pipe(
+          map(() => this.checkPermissionsAndRedirect(route.data.auth))
+        )
+        .toPromise();
     } else {
-      console.log(" no jwt");
       jwt = this.authenticationService.getFromSessionStorageBasedEnv('jwt');
 
       if (jwt) {
@@ -142,10 +145,15 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         // }
 
         if (!this.authenticationService.getFromSessionStorageBasedEnv('currentUser')) {
-          await this.authenticationService.loadAuthenticatedUser();
+          return await this.accountService
+            .loadAuthenticatedUser()
+            .pipe(
+              map(() => this.checkPermissionsAndRedirect(route.data.auth))
+            )
+            .toPromise();
         }
 
-        return this.checkPermissionsAndRedirect(route.data.auth);
+        return  this.checkPermissionsAndRedirect(route.data.auth);
       }
     }
     if ('invite' in route.queryParams) {
@@ -191,7 +199,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     // sets invite cookie
     setInviteCookie(inviteValue: string) {
         if (!this.cookieService.check('invite')) {
-            let expiredDate = new Date();
+            const expiredDate = new Date();
             expiredDate.setDate(expiredDate.getDate() + NextConfig.config.inviteCookieExpirePeriodDays);
             this.cookieService.set('invite', inviteValue, { expires: expiredDate, sameSite: 'Lax' });
         }
@@ -209,9 +217,7 @@ export interface CanComponentDeactivate {
 @Injectable({ providedIn: 'root' })
 export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
 
-    canDeactivate(component: CanComponentDeactivate,
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot) {
+    canDeactivate(component: CanComponentDeactivate, route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return component.canDeactivate ? component.canDeactivate() : true;
     }
 

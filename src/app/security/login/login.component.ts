@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
@@ -46,21 +46,20 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    // sessionStorage.setItem('token', '');
+    //sessionStorage.setItem('token', '');
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
-    this.errorMessage = this.route.snapshot.queryParams.error;
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.errorMessage = this.route.snapshot.queryParams['error'];
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
   login() {
-    console.info('login.component - login');
     this.loading = true;
     this.authenticationService.login(this.model.username, this.model.password)
       .pipe(first())
@@ -134,7 +133,7 @@ export class LoginComponent implements OnInit {
       }
     }
     this.loading = true;
-    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param ? '?' + param : ''));
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + urlText + (!!param ? '?' + param : ''));
   }
 
   // redirect to authenticate url
@@ -152,12 +151,12 @@ export class LoginComponent implements OnInit {
 
   // save repo type
   setGithubRepoType() {
-   this.authenticationService.setGitHubRepoType(this.choosenRepoType);
-   let param;
-   if (this.choosenRepoType === 'private') {
+    this.authenticationService.setGitHubRepoType(this.choosenRepoType);
+    let param;
+    if (this.choosenRepoType === 'private') {
       param = 'needPrivateRepos=true';
     }
-   this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param ? '?' + param : ''));
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth/github_login' + (!!param ? '?' + param : ''));
   }
 
   getLoginTypeFromUrl(url: string) {

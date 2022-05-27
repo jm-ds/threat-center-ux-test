@@ -234,7 +234,7 @@ export class ScanHelperService {
         this.checkScannedErrorHandler.bind(this, 'ScanHelperService#submitingCheckAlreadyScanned')
       )
       .pipe(
-        pluck('data.checkAlreadyScannedProject'),
+        pluck('data', 'checkAlreadyScannedProject'),
         catchError(
           this.checkScannedErrorHandler.bind(this, 'ScanHelperService#submitingCheckAlreadyScanned')
         )

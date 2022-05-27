@@ -13,6 +13,7 @@ import { UserPreferenceService } from '@app/services/core/user-preference.servic
 import { SaveFilterStateService } from '@app/services/core/save-filter-state.service';
 import { ProjectService } from '@app/services/project.service';
 import { ScanService } from '@app/services/scan.service';
+import { AlertService } from '@app/services/core/alert.service';
 
 @Component({
   selector: 'app-scanassets',
@@ -48,7 +49,8 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
     private coreHelperService: CoreHelperService,
     private userPreferenceService: UserPreferenceService,
     private saveFilterStateService: SaveFilterStateService,
-    private scanService: ScanService
+    private scanService: ScanService,
+    private alertService: AlertService
   ) { }
 
   ngOnDestroy(): void {
@@ -194,7 +196,22 @@ export class ScanAssetsComponent implements OnInit, OnDestroy {
       ? this.scanService.saveIgnoredFiles(ignoredAsset)
       : this.scanService.removeIgnoredFiles(ignoredAsset);
 
-    ignoredFiles$.subscribe();
+    ignoredFiles$.subscribe({
+      next: () => {
+        this.alertService.alertBox(
+          `${pattern} asset successfully ${ignore ? 'ignored' : 'unignored'}`,
+          `${ignore ? 'Ignore' : 'Unignore'} Asset`,
+          'success'
+        );
+      },
+      error: () => {
+        this.alertService.alertBox(
+          `Error while ${ignore ? 'ignoring' : 'unignoring'} ${pattern} asset`,
+          `${ignore ? 'Ignore' : 'Unignore'} Asset`,
+          'error'
+        );
+      }
+    });
   }
 
   reload() {

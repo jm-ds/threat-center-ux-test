@@ -1,65 +1,42 @@
-import { Injectable } from "@angular/core";
-import {EntityListQuery, ScanLicenseQuery} from "@app/models";
-import { Apollo } from "apollo-angular";
-import gql from "graphql-tag";
-import { CoreGraphQLService } from "@app/services/core/core-graphql.service";
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {PatchedInfo} from "@app/threat-center/shared/models/types";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { map, pluck } from 'rxjs/operators';
+
+import gql from 'graphql-tag';
+
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
+
+import { EntityListQuery } from '@app/models';
+import { FindEmbeddedAssetsQuery } from '@app/threat-center/shared/models/types';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class ReportService {
 
-    constructor(
-        private apollo: Apollo,
-        private coreGraphQLService: CoreGraphQLService,
-        private http: HttpClient
-    ) {
-    }
-
+    constructor(private http: HttpClient, private coreGraphQLService: CoreGraphQLService) { }
 
     // return entity list with vulnerabilities
     getVulnerabilities2(severity, vulns) {
-      const url = environment.apiUrl + '/vulnerability-state-report';
+      const url = environment.apiUrl + '/rest/report/vulnerability-state-report';
       const opts = { params: new HttpParams().set('severity', severity).set('vulns', vulns)};
       return this.http.get<any>(url, opts).pipe();
     }
 
     // return entity list with license
   findLicenses(name, type, category) {
-      const url = environment.apiUrl + '/license-state-report';
+      const url = environment.apiUrl + '/rest/report/license-state-report';
       const opts = { params: new HttpParams().set('name', name).set('type', type).set("category", category)};
-      return this.http.get<any>(url, opts).pipe();
-    }
-
-    // return entity list with license
-  findComponents(nameFilter, versionFilter, typeFilter, locationFilter, discoveryFilter, isInternalFilter, hasVulnerabilitiesFilter) {
-      const url = environment.apiUrl + '/component-state-report';
-
-      let paramsVar = new HttpParams()
-          .set('name', nameFilter)
-          .set('version', versionFilter)
-          .set("type", typeFilter)
-          .set("discoveredIn", locationFilter)
-          .set("discoveryType", discoveryFilter);
-
-      if (isInternalFilter === true) {
-          paramsVar = paramsVar.set("isInternal", isInternalFilter);
-      }
-      if (hasVulnerabilitiesFilter === true) {
-          paramsVar = paramsVar.set("hasVulnerabilities", hasVulnerabilitiesFilter);
-      }
-
-      const opts = { params: paramsVar};
       return this.http.get<any>(url, opts).pipe();
     }
 
   findComponentsGQL(nameFilter, versionFilter, typeFilter, locationFilter, discoveryFilter, isInternalFilter, hasVulnerabilitiesFilter) {
       return this.coreGraphQLService.coreGQLReq<any>(gql`
           query {
-              componentsReport(name:"${nameFilter}", version:"${versionFilter}", type:"${typeFilter}", discoveredIn:"${locationFilter}", 
+              componentsReport(name:"${nameFilter}", version:"${versionFilter}", type:"${typeFilter}", discoveredIn:"${locationFilter}",
                                discoveryType:"${discoveryFilter}", isInternal: ${isInternalFilter}, hasVulnerabilities: ${hasVulnerabilitiesFilter}) {
                   entityId,
                   entityName,
@@ -125,17 +102,54 @@ export class ReportService {
       `);
   }
 
-    // return entity list with license
+  // return entity list with license
   findEmbeddedAssets(name, size, embeddedPercent, matchType) {
-      const url = environment.apiUrl + '/embedded-asset-state-report';
-      const opts = { params: new HttpParams()
-              .set('name', name)
-              .set('size', size)
-              .set("embeddedPercent", embeddedPercent)
-              .set("matchType", matchType)
-      };
-      return this.http.get<any>(url, opts).pipe();
-    }
+    return this.coreGraphQLService
+      .coreGQLReq<FindEmbeddedAssetsQuery>(gql(`query {
+  getEmbeddedAssetStateReport(
+    name: "${name}",
+    size: "${size}",
+    embeddedPercent: "${embeddedPercent}",
+    matchType: "${matchType}"
+  ) {
+      entityId
+      entityName
+      projectName
+      embeddedAssets {
+        id
+        orgId
+        orgName
+        entityId
+        entityName
+        projectId
+        projectName
+        subProjectId
+        subProjectName
+        scanId
+        scanRepoId
+        scanDate
+        dateCreated
+        parentScanAssetId
+        scanAssetId
+        embeddedAssetPercent
+        name
+        localPath
+        workspacePath
+        created
+        status
+        assetSize
+        matchType
+        attributionStatus
+        percentEmbedded
+        componentId
+        matchCount
+      }
+  }
+      }`), 'no-cache')
+      .pipe(
+        pluck('data', 'getEmbeddedAssetStateReport')
+      );
+  }
 
   getVulnerabilities() {
         return this.coreGraphQLService.coreGQLReq<EntityListQuery>(gql`query {

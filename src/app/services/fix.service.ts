@@ -20,7 +20,7 @@ export class FixService {
     fixComponentVersion(scanId: string, componentId: string, oldVersion: string, newVersion: string): Observable<FixResult[]> {
         return this.coreGraphQLService.coreGQLReq<FixComponentVersionQuery>(gql(`query {
             fixComponentVersion(
-                scanId: "${scanId}", componentId: "${componentId}", newVersion: "${newVersion}", oldVersion:" ${oldVersion}"
+                scanId: "${scanId}", componentId: "${componentId}", newVersion: "${newVersion}", oldVersion:"${oldVersion}"
             ) {
                 groupId
                 artifactId

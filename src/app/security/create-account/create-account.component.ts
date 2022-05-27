@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InviteService } from '@app/services/invite.service';
+import { AccountService } from '@app/security/services/account.service';
 
 @Component({
   selector: 'app-create-account',
@@ -28,6 +29,7 @@ export class CreateAccountComponent implements OnInit {
         private route: ActivatedRoute,
         public router: Router,
         private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private cookieService: CookieService,
         private inviteService: InviteService,
         private modalService: NgbModal
@@ -54,47 +56,43 @@ export class CreateAccountComponent implements OnInit {
     }
 
     createAccount() {
-        console.error("create-account.component - external login");
-        this.loading = true;
-        this.authenticationService.createAccount(
-            this.model.email,
-            this.model.fullName,
-            this.model.phone,
-            this.model.password,
-            this.model.companyName,
-            this.model.position,
-            this.model.coverLetter,
-            this.inviteHash
+      this.loading = true;
+
+      const { email, fullName, phone, password, companyName,  position, coverLetter } = this.model;
+
+      this.accountService.createAccount(email, fullName, phone, password, companyName,  position, coverLetter, this.inviteHash)
+        .pipe(
+          first()
         )
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigateByUrl('/awaiting-approval');
-                },
-                error => {
-                    console.error('CREATE ACCOUNT ERROR', error);
-                    this.error = error;
-                    this.loading = false;
-                });
+        .subscribe({
+          next: () => {
+            this.router.navigateByUrl('/awaiting-approval');
+          },
+          error: error => {
+            console.error('CREATE ACCOUNT ERROR', error);
+
+            this.error = error;
+            this.loading = false;
+          }
+        });
     }
 
   // login via external oauth
   externalLogin(urlText: string, repoTypeDialog) {
-    console.info("create-account.component - external login");
-    let param = undefined;
+    let param;
     if (urlText === 'github_login') {
-      let repotype = this.authenticationService.getGitHubRepoType();
+      const repotype = this.authenticationService.getGitHubRepoType();
       if (!repotype) {
         // show repo type dialog
         this.openRepoTypeDialog(repoTypeDialog);
-        return; 
+        return;
       } else {
         if (repotype === 'private') {
           param = 'needPrivateRepos=true';
         }
       }
-    } 
-    this.redirectToExternalLogin(this.apiUrl + '/' + urlText + (!!param? '?'+param: ''))
+    }
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth' + '/' + urlText + (!!param ? '?' + param : ''));
   }
 
   // redirect to authenticate url
@@ -113,11 +111,11 @@ export class CreateAccountComponent implements OnInit {
   // save repo type
   setGithubRepoType() {
     this.authenticationService.setGitHubRepoType(this.choosenRepoType);
-    let param = undefined;
+    let param;
     if (this.choosenRepoType === 'private') {
       param = 'needPrivateRepos=true';
     }
-    this.redirectToExternalLogin(this.apiUrl + '/github_login' + (!!param? '?'+param: ''))
+    this.redirectToExternalLogin(this.apiUrl + '/rest/auth/github_login' + (!!param ? '?' + param : ''));
   }
 
 }

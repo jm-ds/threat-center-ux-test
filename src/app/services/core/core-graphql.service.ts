@@ -11,14 +11,12 @@ import { DocumentNode } from 'graphql';
 import { MESSAGES } from '@app/messages/messages';
 
 import { CoreErrorHelperService } from '@app/services/core/core-error-helper.service';
-import { AlertService } from '@app/services/core/alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class CoreGraphQLService {
-  constructor(private apollo: Apollo, private coreErrorHelperService: CoreErrorHelperService, private alertService: AlertService) { }
+  constructor(private apollo: Apollo, private coreErrorHelperService: CoreErrorHelperService) { }
 
   /** Core GraphQL service */
   coreGQLReq<T>(
@@ -69,7 +67,7 @@ export class CoreGraphQLService {
   errorHandler = (errorSource: string, error: HttpErrorResponse | any, source?: Observable<any>) => {
     let consoleError: string;
 
-    let alert: Partial<{
+    const alert: Partial<{
       title: string,
       text: string,
       hasHTML: boolean;

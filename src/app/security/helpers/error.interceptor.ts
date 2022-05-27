@@ -9,16 +9,28 @@ import { CoreErrorHelperService } from '@app/services/core/core-error-helper.ser
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private coreErrorHelperService: CoreErrorHelperService) { }
 
-  /** Error interceptor */
+  /**
+   * Error interceptor
+   *
+   * @param request HTTP request
+   * @param next HTTP request handler
+   *
+   * @returns HTTP event
+   */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const requestPayload = request.body;
 
     return next
       .handle(request)
       .pipe(
-        catchError(
-          this.coreErrorHelperService.errorHandler.bind(this, 'ErrorInterceptor#intercept', requestPayload)
-        )
+        catchError((error, caught$) => this.coreErrorHelperService.errorHandler(
+          'ErrorInterceptor#intercept',
+          requestPayload,
+          undefined,
+          undefined,
+          error,
+          caught$
+        ))
       );
   }
 }

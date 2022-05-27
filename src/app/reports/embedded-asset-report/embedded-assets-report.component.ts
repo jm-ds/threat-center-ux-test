@@ -103,14 +103,14 @@ export class EmbeddedAssetsReportComponent implements OnInit,OnDestroy {
     findAssets(nameFilter, sizeFilter, embeddedPercentFilter, matchTypeFilter) {
         this.reportService.findEmbeddedAssets(nameFilter, sizeFilter, embeddedPercentFilter, matchTypeFilter).subscribe(data => {
 
-            console.log("=================================================");
+            console.log('=================================================');
             console.log(data);
 
             this.entities = data;
 
             this.totals = {entities: 0, embedded: 0, projects: 0};
 
-            let entities = [];
+            const entities = [];
 
             for (const entity of this.entities) {
                 // this.totals.entities += 1;
