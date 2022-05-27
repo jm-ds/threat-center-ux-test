@@ -1,26 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import 'rxjs/add/observable/of';
-import * as jwt_decode from 'jwt-decode';
-import { User } from '../../models';
-import { environment } from '../../../environments/environment';
-import { LocalService } from '@app/services/core/local.service';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
+import * as jwt_decode from 'jwt-decode';
 
-@Injectable({ providedIn: 'root' })
+import { LocalService } from '@app/services/core/local.service';
+
+import { User } from '../../models';
+
+import { environment } from '../../../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthenticationService {
-
   public currentUserSubject: BehaviorSubject<User>;
   private websocketClient = null;
 
-  constructor(private http: HttpClient, private localService: LocalService,
-              private modalService: NgbModal,
-              private cookieService: CookieService) {
+  constructor(
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private localService: LocalService,
+    private cookieService: CookieService
+  ) {
     // let user = this.getFromStorageBasedEnv('currentUser');
     const user = this.getFromSessionStorageBasedEnv('currentUser');
+
     this.currentUserSubject = new BehaviorSubject<User>(user);
   }
 
@@ -48,7 +57,7 @@ export class AuthenticationService {
 
         //now we do not need to store data to local storage
         // this.setInStorageBasedEnv('currentUser', user);
-        
+
         //storing current user details to session storage.
         this.setInSessionStorageBasedEnv("currentUser",user);
 

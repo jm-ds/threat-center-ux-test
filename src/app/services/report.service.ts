@@ -1,25 +1,23 @@
 import { Injectable } from '@angular/core';
-import {EntityListQuery} from '@app/models';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
-import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { map, pluck } from 'rxjs/operators';
+
+import gql from 'graphql-tag';
+
+import { CoreGraphQLService } from '@app/services/core/core-graphql.service';
+
+import { EntityListQuery } from '@app/models';
 import { FindEmbeddedAssetsQuery } from '@app/threat-center/shared/models/types';
-import { map } from 'rxjs/operators';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class ReportService {
 
-    constructor(
-        private apollo: Apollo,
-        private coreGraphQLService: CoreGraphQLService,
-        private http: HttpClient
-    ) {
-    }
-
+    constructor(private http: HttpClient, private coreGraphQLService: CoreGraphQLService) { }
 
     // return entity list with vulnerabilities
     getVulnerabilities2(severity, vulns) {
@@ -38,7 +36,7 @@ export class ReportService {
   findComponentsGQL(nameFilter, versionFilter, typeFilter, locationFilter, discoveryFilter, isInternalFilter, hasVulnerabilitiesFilter) {
       return this.coreGraphQLService.coreGQLReq<any>(gql`
           query {
-              componentsReport(name:"${nameFilter}", version:"${versionFilter}", type:"${typeFilter}", discoveredIn:"${locationFilter}", 
+              componentsReport(name:"${nameFilter}", version:"${versionFilter}", type:"${typeFilter}", discoveredIn:"${locationFilter}",
                                discoveryType:"${discoveryFilter}", isInternal: ${isInternalFilter}, hasVulnerabilities: ${hasVulnerabilitiesFilter}) {
                   entityId,
                   entityName,
@@ -104,52 +102,53 @@ export class ReportService {
       `);
   }
 
-    // return entity list with license
+  // return entity list with license
   findEmbeddedAssets(name, size, embeddedPercent, matchType) {
-    return this.coreGraphQLService.coreGQLReq<FindEmbeddedAssetsQuery>(gql(`query {
-        getEmbeddedAssetStateReport(
-          name: "${name}",
-          size: "${size}",
-          embeddedPercent: "${embeddedPercent}",
-          matchType: "${matchType}"
-        ) {
-            entityId
-            entityName
-            projectName
-            embeddedAssets {
-              id
-              orgId
-              orgName
-              entityId
-              entityName
-              projectId
-              projectName
-              subProjectId
-              subProjectName
-              scanId
-              scanRepoId
-              scanDate
-              dateCreated
-              parentScanAssetId
-              scanAssetId
-              embeddedAssetPercent
-              name
-              localPath
-              workspacePath
-              created
-              status
-              assetSize
-              matchType
-              attributionStatus
-              percentEmbedded
-              componentId
-              matchCount
-            }
-        }
+    return this.coreGraphQLService
+      .coreGQLReq<FindEmbeddedAssetsQuery>(gql(`query {
+  getEmbeddedAssetStateReport(
+    name: "${name}",
+    size: "${size}",
+    embeddedPercent: "${embeddedPercent}",
+    matchType: "${matchType}"
+  ) {
+      entityId
+      entityName
+      projectName
+      embeddedAssets {
+        id
+        orgId
+        orgName
+        entityId
+        entityName
+        projectId
+        projectName
+        subProjectId
+        subProjectName
+        scanId
+        scanRepoId
+        scanDate
+        dateCreated
+        parentScanAssetId
+        scanAssetId
+        embeddedAssetPercent
+        name
+        localPath
+        workspacePath
+        created
+        status
+        assetSize
+        matchType
+        attributionStatus
+        percentEmbedded
+        componentId
+        matchCount
       }
-      `), 'no-cache')
+  }
+      }`), 'no-cache')
       .pipe(
-        map(res => res.data.getEmbeddedAssetStateReport));
+        pluck('data', 'getEmbeddedAssetStateReport')
+      );
   }
 
   getVulnerabilities() {
