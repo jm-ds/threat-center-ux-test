@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { forkJoin, Observable, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 import * as _ from 'lodash';
@@ -872,10 +872,10 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     private populateScanComponents(data, isUpdate = false) {
-        this.vulScanData = Observable.of(data[0].data);
-        this.componentScanData = Observable.of(data[0].data.scan);
-        this.licensesScanData = Observable.of(data[0].data.scan);
-        this.assetScanData = Observable.of(data[0].data.scan);
+        this.vulScanData = of(data[0].data);
+        this.componentScanData = of(data[0].data.scan);
+        this.licensesScanData = of(data[0].data.scan);
+        this.assetScanData = of(data[0].data.scan);
         if (isUpdate) {
             if (!!this.newVulnerablityCard) {
                 this.newVulnerablityCard.updateDataOnSelectedScan(this.vulScanData, this.stateService.selectedScan.node["scanId"]);

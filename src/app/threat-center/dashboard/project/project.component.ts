@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Observable } from 'rxjs';
-import { debounceTime, map, filter, startWith } from 'rxjs/operators';
+
+import { forkJoin, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { ApexChartService } from '@app/theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator } from '@angular/material/paginator';
@@ -636,10 +638,10 @@ export class ProjectComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private populateScanComponents(data) {
-    this.vulScanData = Observable.of(data[0].data);
-    this.componentScanData = Observable.of(data[0].data.scan);
-    this.licensesScanData = Observable.of(data[0].data.scan);
-    this.assetScanData = Observable.of(data[0].data.scan);
+    this.vulScanData = of(data[0].data);
+    this.componentScanData = of(data[0].data.scan);
+    this.licensesScanData = of(data[0].data.scan);
+    this.assetScanData = of(data[0].data.scan);
   }
 
   private getLastTabSelected() {

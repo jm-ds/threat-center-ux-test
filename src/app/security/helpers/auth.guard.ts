@@ -8,7 +8,8 @@ import {
   UrlTree,
   CanDeactivate
 } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
 
 import { NextConfig } from '@app/app-config';
 import { MESSAGES } from '@app/messages/messages';

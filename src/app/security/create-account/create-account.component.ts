@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
 import { first } from 'rxjs/operators';
-import 'rxjs/add/operator/do';
+
 import { AuthenticationService } from '../services';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
