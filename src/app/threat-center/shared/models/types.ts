@@ -650,3 +650,7 @@ export class GetStartVulnerableReleaseListQuery {
 export class GetNextVulnerableReleaseListQuery {
   getNextVulnerableReleaseList: VulnerableReleaseResponse;
 }
+
+export class FindEmbeddedAssetsQuery {
+  getEmbeddedAssetStateReport: any;
+}
