@@ -92,13 +92,23 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if (this.authenticationService.getFromSessionStorageBasedEnv('jwt')) {
             return true;
         }
-        const promise = this.httpClient.get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
-        await promise.then((data) => {
-          jwt = data.jwt;
-        }, (error) => {
-          console.error('canActivate threat center call return error ' + JSON.stringify(error));
-          return false;
-        });
+
+        this.httpClient
+          .get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=${hashedJwt}&username=${username}`)
+          .pipe(
+            first()
+          )
+          .toPromise()
+          .then(
+            data => {
+              jwt = data.jwt;
+            },
+            error => {
+              console.error(`#canActivate threat center call return error ${JSON.stringify(error)}`);
+
+              return false;
+            }
+          );
     }
 
     if (jwt) {
