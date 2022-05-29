@@ -184,17 +184,10 @@ export class CoreErrorHelperService {
       this.printErrorMessageToConsole(consoleError);
     }
 
-    if (alert ?? error.error ?? error.message) {
-      const showAlert = alert?.hasHTML ? this.alertService.alertBoxHtml : this.alertService.alertBox;
+    if (alert) {
+      const showAlert = alert.hasHTML ? this.alertService.alertBoxHtml : this.alertService.alertBox;
 
-      let alertText = alert?.text;
-
-      // Alert with error message from server
-      if (error.error ?? error.message) {
-        alertText = `${error.error ?? error.message}`;
-      }
-
-      showAlert(alertText, alert?.title, 'error');
+      showAlert(alert.text, alert.title, 'error');
     }
 
     // GraphQL uses network error
