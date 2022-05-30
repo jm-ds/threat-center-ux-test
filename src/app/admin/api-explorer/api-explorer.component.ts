@@ -53,7 +53,7 @@ export class ApiExplorerComponent implements OnDestroy {
     /* uncomment `of(MOCK_SCHEMA)` and its imports in development mode */
     // of(MOCK_SCHEMA)
     this.httpClient
-      .get<string>(`${environment.apiUrl}/graphql_schema`, options)
+      .get<string>(`${environment.apiUrl}/rest/graphql/graphql_schema`, options)
       .subscribe(schema => {
         console.warn(`ApiExplorerComponent#initGraphQLExplorer schema: ${schema}`);
 
