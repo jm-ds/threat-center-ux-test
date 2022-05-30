@@ -219,7 +219,7 @@ const NavigationItems = [
           {
             id: 'api-explorer',
             title: 'API Explorer',
-            icon: 'fas fa-exchange',
+            icon: 'fa fa-exchange-alt',
             type: 'item',
             url: '/admin/api-explorer',
             permissions: ['ENTITY_EDIT'],
