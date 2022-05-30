@@ -40,6 +40,13 @@
                         <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-gitlab"></i></div>
                     </a>
                 </div>
+                <div title="Okta login" class="col-xl-6">
+                    <a  (click)="oktaSamlLogin()" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                        <div class="auth-button">
+                            okta<i [ngClass]="{'disabled': loading == true}"></i>
+                        </div>
+                    </a>
+                </div>
             </div>
             <!--
             <div id="auth02" class="row" style="margin-bottom:20px">
