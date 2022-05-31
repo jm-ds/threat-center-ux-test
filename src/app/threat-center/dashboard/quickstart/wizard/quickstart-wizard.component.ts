@@ -201,7 +201,7 @@ export class QuickstartWizardComponent implements OnInit, OnDestroy {
     const options = { headers };
 
     this.fileSubscription = this.httpClient
-      .post<Task>(`${environment.apiUrl}/project/upload`, formData, options)
+      .post<Task>(`${environment.apiUrl}/rest/quickstart/project/upload`, formData, options)
       .subscribe(task => {
         this.scanHelperService.openFloatingModal(LoadingDialogComponent);
         this.scanHelperService.submitingUploadProject({
