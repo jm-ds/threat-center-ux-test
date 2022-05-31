@@ -51,7 +51,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     '#fb5b5b',
     '#fb5b5b',
     '#fb5b5b',
-    '#ffa21d',
+    '#fb5b5b',
     '#c9e282',
     '#c71585',
     '#00e396',
@@ -115,7 +115,7 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     },
     {
       label: 'Copyleft Partial',
-      class: 'copyleftPartial',
+      class: 'red',
       prop: 'copyleftPartial'
     },
     {
