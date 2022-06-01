@@ -29,7 +29,7 @@
             <div>
                 <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
             </div>
-            <div id="auth01" class="row" style="margin-bottom:20px">
+            <div id="auth01" class="row" style="margin-bottom:10px">
                 <div title="Github login" class="col-xl-6">
                     <a (click)="externalLogin('github_login', repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
@@ -41,7 +41,7 @@
                     </a>
                 </div>
             </div>
-            <div id="auth02" class="row" style="margin-bottom:20px">
+            <div id="auth02" class="row" style="margin-bottom:10px">
                 <div title="Okta login" class="col-xl-6">
                     <a  (click)="oktaSamlLogin()" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <!--
-            <div id="auth03" class="row" style="margin-bottom:20px">
+            <div id="auth03" class="row" style="margin-bottom:10">
                 <div title="Bitbucket login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('bitbucket_login', repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
