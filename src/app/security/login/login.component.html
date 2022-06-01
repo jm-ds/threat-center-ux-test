@@ -45,7 +45,7 @@
                 <div title="Okta login" class="col-xl-6">
                     <a  (click)="oktaSamlLogin()" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button">
-                            okta<i [ngClass]="{'disabled': loading == true}"></i>
+                            <span [ngClass]="{'disabled': loading == true}">okta</span>
                         </div>
                     </a>
                 </div>
