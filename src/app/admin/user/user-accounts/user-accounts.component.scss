@@ -1,0 +1,13 @@
+.disabled {
+  color: #E6E6E6;
+  cursor: not-allowed;
+  text-decoration: underline;
+  pointer-events: none;
+}
+
+.alert-box {
+  margin-top: unset;
+  margin-bottom: 20px;
+  margin-left: -10px;
+  margin-right: -10px;
+}

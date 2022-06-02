@@ -342,7 +342,7 @@
   </ng-template>
 
   <ng-template ngbTabContent #getGithub>
-    <button *ngIf="!!authService.currentUser && !!authService.currentUser.repositoryAccounts && authService.currentUser.repositoryAccounts.githubAccount" class="btn btn-outline-primary" type="button">Get Github Repositories</button>
+    <button *ngIf="!!authService.currentUser && !!authService.currentUser.repositoryAccounts && !!authService.currentUser.repositoryAccounts.githubAccount" class="btn btn-outline-primary" type="button">Get Github Repositories</button>
   </ng-template>
 
   <ng-template ngbTabContent #getGitlab>

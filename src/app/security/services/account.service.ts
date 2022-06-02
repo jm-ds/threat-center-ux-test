@@ -52,15 +52,18 @@ export class AccountService {
     repositoryAccounts {
       githubAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
       gitlabAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
       bitbucketAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
     }
     organization {
@@ -86,7 +89,7 @@ export class AccountService {
       }`), 'no-cache')
       .pipe(
         map((response: ApolloQueryResult<GetUserQuery>) => {
-          this.authService.setInSessionStorageBasedEnv('currentUser', response.data.getUser);
+          this.authService.setCurrentUser(response.data.getUser);
 
           return response.data.getUser;
         })
@@ -113,7 +116,7 @@ export class AccountService {
         map(
           response => {
             this.authService.setInSessionStorageBasedEnv('jwt', response.data.createAccount.jwt);
-            this.authService.setInSessionStorageBasedEnv('currentUser', response.data.createAccount.user);
+            this.authService.setCurrentUser(response.data.createAccount.user);
             this.cookieService.delete('invite');
 
             return response.data.createAccount;

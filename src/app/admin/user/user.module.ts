@@ -16,10 +16,11 @@ import {SelectModule} from "ng-select";
 import {SharedModule} from "@app/shared/shared.module";
 import { ApiKeyShowComponent } from './apikey-show/apikey-show.component';
 import { ApiKeyEditComponent } from './apikey-edit/apikey-edit.component';
+import {UserAccountsComponent} from "@app/admin/user/user-accounts/user-accounts.component";
 
 
 @NgModule({
-  declarations: [UserListComponent, UserShowComponent, UserRolesComponent, UserCardComponent, UserEditComponent, ApiKeyShowComponent, ApiKeyEditComponent],
+  declarations: [UserListComponent, UserShowComponent, UserRolesComponent, UserCardComponent, UserEditComponent, ApiKeyShowComponent, ApiKeyEditComponent, UserAccountsComponent],
     imports: [
         CommonModule,
         UserRoutingModule,

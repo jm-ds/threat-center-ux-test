@@ -159,8 +159,7 @@ export class UserEditComponent implements OnInit {
                 currentUser.userEntities = this.user.userEntities;
                 currentUser.defaultEntityId = this.user.defaultEntityId;
                 currentUser.userRoles = this.user.userRoles;
-                this.authService.setInSessionStorageBasedEnv('currentUser', currentUser);
-                this.authService.currentUserSubject.next(currentUser);
+                this.authService.setCurrentUser(currentUser);
               }
             }
 

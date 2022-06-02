@@ -118,15 +118,6 @@ export class LicenseAssetAttribution {
   attributedComment: string;
 }
 
-export class GithubAccount {
-    accessToken: string;
-    scopes: string[];
-}
-
-export class RepositoryAccounts {
-    githubAccount: GithubAccount;
-}
-
 export class ScanConnection {
     edges: ScanEdge[];
     pageInfo: PageInfo;

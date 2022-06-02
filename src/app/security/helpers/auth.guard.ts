@@ -38,6 +38,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
   checkPermissionsAndRedirect(auth) {
+    console.log(`checkPermissionsAndRedirect`);
     const user = this.authenticationService.currentUser;
 
     console.log(user);
@@ -48,7 +49,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           data: MESSAGES.ACCOUNT_APPROVAL_AWAIT
         }
       });
-
+      console.log(`checkPermissionsAndRedirect return false`);
       return false;
     }
 
@@ -62,14 +63,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const returnUrl = sessionStorage.getItem('ReturnUrl');
 
         sessionStorage.removeItem('ReturnUrl');
-
+        console.log(`checkPermissionsAndRedirect redirecting`);
         this.router.navigate([returnUrl], {
           state: {
             data: MESSAGES.RETURNED_TO_PAGE
           }
         });
       }
-
+      console.log(`checkPermissionsAndRedirect return true`);
       return true;
     } else {
       // otherwise redirect to 'unauthorized' page
@@ -78,6 +79,20 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       this.corehelperService.isUnAuthorize(true);
 
       return false;
+    }
+  }
+
+  checkIfJoiningAccounts(jwt: string) {
+    console.log(`checkIfJoiningAccounts`);
+    const accountToJoin = this.authenticationService.getJoinAccount();
+    if (accountToJoin != null && accountToJoin !== undefined ) {
+      console.log(`about to attach  ${accountToJoin} to current user`);
+      console.log(`jwt is ${jwt}`);
+      const url = environment.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(accountToJoin) + '?joinUser=true&jwt=' + jwt ;
+      this.authenticationService.removeJoinAccount();
+
+      window.location.href = url;
+
     }
   }
 
@@ -113,10 +128,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     if (jwt) {
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
-
       return await this.accountService
         .loadAuthenticatedUser()
         .pipe(
+          map(() => this.checkIfJoiningAccounts(jwt)),
+          map(() => this.authenticationService.setLastSuccessfulLogin()),
           map(() => this.checkPermissionsAndRedirect(route.data.auth)),
           first()
         )

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { first } from 'rxjs/operators';
 
-import { AuthenticationService } from '../services';
+import { AuthenticationService, LoginData, LoginType } from '../services';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -22,8 +22,12 @@ export class LoginComponent implements OnInit {
   model: any = {};
   errorMessage: string;
   apiUrl: string;
-  loginPageError:string = '';
-  choosenRepoType: string = 'private';
+  loginPageError = '';
+  choosenRepoType = 'private';
+  currentLogin: LoginType;
+  previousLoginUserName: string;
+  previousLoginType: LoginType;
+  createNewUser = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,20 +69,62 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          console.error("LOGIN ERROR", error);
+          console.error('LOGIN ERROR', error);
           this.error = error;
           this.loading = false;
         });
   }
 
+  checkCreateNewUserAndLogin() {
+    if (!this.createNewUser) {
+      console.info(`going to login with ${this.previousLoginType} then join the account with ${this.currentLogin}`);
+      this.authenticationService.setJoinAccount(this.currentLogin);
+      this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + this.authenticationService.loginTypeToLoginUrl(this.previousLoginType));
+    } else {
+      console.info(`going to login with ${this.currentLogin}`);
+      this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + this.authenticationService.loginTypeToLoginUrl(this.currentLogin));
+    }
+  }
+
   // login via external oauth
-  externalLogin(urlText: string, repoTypeDialog) {
+  externalLogin(urlText: string, previousLoginDialog, repoTypeDialog) {
+    console.info('login.component - external login');
+    const lastSuccessfulLoginData: LoginData = this.authenticationService.getLastSuccessfulLogin();
+    if (lastSuccessfulLoginData) {
+      console.info(`last successful login ${JSON.stringify(lastSuccessfulLoginData)}`);
+
+      this.currentLogin = this.getLoginTypeFromUrl(urlText);
+      this.previousLoginUserName = lastSuccessfulLoginData.username;
+      let lastLoginType;
+      // TODO with bitbucket and google auth type that code won't work
+      // TODO redirect to password authentication if last login type was password
+      if (this.currentLogin === LoginType.GITHUB
+        && lastSuccessfulLoginData.gitlab
+        && !lastSuccessfulLoginData.github) {
+        lastLoginType = LoginType.GITLAB;
+      }
+      if (this.currentLogin === LoginType.GITLAB
+        && lastSuccessfulLoginData.github
+        && !lastSuccessfulLoginData.gitlab) {
+        lastLoginType = LoginType.GITHUB;
+      }
+      if (lastLoginType) {
+        console.info(`setting previous login type to ${lastLoginType}`);
+        if (lastLoginType) {
+          this.previousLoginType = lastLoginType;
+          // ask user if he wants to join the accounts
+          this.openDialog(previousLoginDialog);
+          return;
+        }
+      }
+    }
+
     let param;
     if (urlText === 'github_login') {
       const repotype = this.authenticationService.getGitHubRepoType();
       if (!repotype) {
         // show repo type dialog
-        this.openRepoTypeDialog(repoTypeDialog);
+        this.openDialog(repoTypeDialog);
         return;
       } else {
         if (repotype === 'private') {
@@ -105,7 +151,7 @@ export class LoginComponent implements OnInit {
   }
 
   // open repo type dialog
-  openRepoTypeDialog(content) {
+  openDialog(content) {
     this.modalService.open(content, { windowClass: 'md-class', centered: true });
   }
 
@@ -117,6 +163,22 @@ export class LoginComponent implements OnInit {
       param = 'needPrivateRepos=true';
     }
     this.redirectToExternalLogin(this.apiUrl + '/rest/auth/github_login' + (!!param ? '?' + param : ''));
+  }
+
+  getLoginTypeFromUrl(url: string) {
+    if (url.toLowerCase().includes('github')) {
+      return LoginType.GITHUB;
+    }
+    if (url.toLowerCase().includes('gitlab')) {
+      return LoginType.GITLAB;
+    }
+    if (url.toLowerCase().includes('bitbucket')) {
+      return LoginType.BITBUCKET;
+    }
+    if (url.toLowerCase().includes('google')) {
+      return LoginType.GOOGLE;
+    }
+    return undefined;
   }
 
 }

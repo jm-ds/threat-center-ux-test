@@ -12,6 +12,8 @@ import { LocalService } from '@app/services/core/local.service';
 
 import { User } from '../../models';
 
+import { Account, RepositoryAccounts } from '@app/threat-center/shared/models/types';
+
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -51,61 +53,57 @@ export class AuthenticationService {
     return this.http.post<any>(url, body)
       .pipe(map(response => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-        console.log("JWT", response.jwt);
+        console.log('JWT', response.jwt);
         this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
 
-        //now we do not need to store data to local storage
-        // this.setInStorageBasedEnv('currentUser', user);
-
-        //storing current user details to session storage.
-        this.setInSessionStorageBasedEnv("currentUser",user);
-
-        this.currentUserSubject.next(user);
+        this.setCurrentUser(user);
         return user;
       },
         (err) => {
-          console.error("AUTH SERVICE ERROR:", err);
+          console.error('AUTH SERVICE ERROR:', err);
         }));
   }
 
   logout() {
     // remove user from local storage to log user out
     // localStorage.removeItem('currentUser');
-    console.log("Logout called");
+    console.log('Logout called');
     this.localService.clearToken();
-    sessionStorage.removeItem("jwt");
-    sessionStorage.removeItem("currentUser");
-    sessionStorage.removeItem("ProjectBreadcum");
-    sessionStorage.removeItem("UserPreference");
-    sessionStorage.removeItem("REPO_SCAN");
-    sessionStorage.removeItem("AssetFilter");
+    sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('ProjectBreadcum');
+    sessionStorage.removeItem('UserPreference');
+    sessionStorage.removeItem('REPO_SCAN');
+    sessionStorage.removeItem('AssetFilter');
+    sessionStorage.removeItem('currentLogin');
     this.modalService.dismissAll();
     this.currentUserSubject.next(null);
     this.closeWebSocket();
   }
 
   public isTokenExpired(token?: string): boolean {
-    if (!token) return true;
+    if (!token) { return true; }
     const date = this.getTokenExpirationDate(token);
-    if (date === undefined) return false;
+    if (date === undefined) { return false; }
     return !(date.valueOf() > new Date().valueOf());
   }
 
   getTokenExpirationDate(token: string): Date {
     const decoded = jwt_decode(token);
-    if (decoded.exp === undefined) return null;
+    if (decoded.exp === undefined) { return null; }
     const date = new Date(0);
     date.setUTCSeconds(decoded.exp);
     return date;
   }
 
-  setInStorageBasedEnv(key: string, data: User) {
+  setCurrentUser(user: User) {
     if (environment.production && !environment.staging) {
-      this.localService.setLocalStorage(key, data);
+      this.localService.setLocalStorage('currentUser', user);
     } else {
-      localStorage.setItem(key, JSON.stringify(data));
+      localStorage.setItem('currentUser', JSON.stringify(user));
     }
+    this.currentUserSubject.next(user);
   }
 
 
@@ -134,7 +132,7 @@ export class AuthenticationService {
     if (environment.production && !environment.staging) {
       user = this.localService.getSessionStorage(key);
     } else {
-      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) != "undefined") {
+      if (sessionStorage.getItem(key) && sessionStorage.getItem(key) !== 'undefined') {
         user = JSON.parse(sessionStorage.getItem(key));
       }
     }
@@ -166,9 +164,87 @@ export class AuthenticationService {
 
   // save github repository type in cookie
   setGitHubRepoType(value: string) {
-    let expiredDate = new Date();
+    const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
     this.cookieService.set('gh_rt', value, {path: '/',  expires: expiredDate, sameSite: 'Lax' });
   }
 
+  setLastSuccessfulLogin() {
+    const expiredDate = new Date();
+    expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
+    const user: User = this.currentUser;
+    if (user.repositoryAccounts) {
+      const userLoginInfo = {
+        username: user.username,
+        github: user.repositoryAccounts.githubAccount,
+        gitlab: user.repositoryAccounts.gitlabAccount,
+        bitbucket: user.repositoryAccounts.bitbucketAccount,
+        google: user.repositoryAccounts.googleAccount
+      } as LoginData;
+      console.log(`setting last successful login info for user ${user.username} to ${JSON.stringify(userLoginInfo)}`);
+      this.cookieService.set('last_login_data', JSON.stringify(userLoginInfo), {path: '/',  expires: expiredDate, sameSite: 'Lax' });
+    }
+  }
+
+  getLastSuccessfulLogin(): LoginData {
+    if (this.cookieService.check('last_login_data')) {
+      return JSON.parse(this.cookieService.get('last_login_data'));
+    } else {
+      return undefined;
+    }
+  }
+
+  getJoinAccount() {
+    if (environment.production && !environment.staging) {
+      return this.localService.getSessionStorage('accountToJoin');
+    } else {
+      return sessionStorage.getItem('accountToJoin');
+    }
+  }
+
+  setJoinAccount(loginType: LoginType) {
+    if (environment.production && !environment.staging) {
+      this.localService.setSessionStorage('accountToJoin', loginType);
+    } else {
+      sessionStorage.setItem('accountToJoin', loginType);
+    }
+  }
+
+  removeJoinAccount() {
+    sessionStorage.removeItem('accountToJoin');
+  }
+
+
+  loginTypeToLoginUrl(loginType: LoginType) {
+    switch (loginType) {
+      case LoginType.BITBUCKET:
+        return 'bitbucket_login';
+      case LoginType.GITHUB:
+        return 'github_login';
+      case LoginType.GITLAB:
+        return 'gitlab_login';
+      case LoginType.GOOGLE:
+        return 'google_login';
+      case LoginType.PASSWORD:
+        return undefined;
+    }
+  }
+
  }
+
+export enum LoginType {
+   GITHUB = 'github',
+   GITLAB = 'gitlab',
+   BITBUCKET = 'bitbucket',
+   GOOGLE = 'google',
+   PASSWORD = 'password'
+}
+
+export interface LoginData {
+  username: string;
+  github: Account;
+  gitlab: Account;
+  bitbucket: Account;
+  google: Account;
+}
+

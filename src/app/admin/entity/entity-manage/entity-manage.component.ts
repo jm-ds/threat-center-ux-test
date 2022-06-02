@@ -106,12 +106,11 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe((data: any) => {
                 if (!!data && !!data.data && !!data.data.updateOrgName) {
                     this.toastr.success("Organization updated successfully.");
-                    let user: User = this.authService.getFromSessionStorageBasedEnv('currentUser');
+                    let user: User = this.authService.currentUser;
                     if (!!user) {
                         if (!!user.organization) {
                             user.organization.name = this.organizationInfo.name;
-                            this.authService.setInSessionStorageBasedEnv('currentUser', user);
-                            this.authService.currentUserSubject.next(user);
+                            this.authService.setCurrentUser(user);
                         }
                     }
                 }
