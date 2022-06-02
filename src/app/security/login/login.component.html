@@ -29,7 +29,7 @@
             <div>
                 <app-alert type="warning" *ngIf="errorMessage">{{errorMessage}}</app-alert>
             </div>
-            <div id="auth01" class="row" style="margin-bottom:20px">
+            <div id="auth01" class="row" style="margin-bottom:10px">
                 <div title="Github login" class="col-xl-6">
                     <a (click)="externalLogin('github_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
                         <div class="auth-button" [ngClass]="{'disabled': loading == true}"><i class="fab fa-github"></i></div>
@@ -41,21 +41,29 @@
                     </a>
                 </div>
             </div>
-
-            <div id="auth02" class="row" style="margin-bottom:20px">
-                <div title="Bitbucket login coming soon!" class="col-xl-6">
-                    <a (click)="externalLogin('bitbucket_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled" [ngClass]="{'disabled': loading == true}">
-                        <div class="auth-button"><i [ngClass]="{'disabled': loading == true}" class="fab fa-bitbucket"></i></div>
-                    </a>
-                </div>
-                <div title="Google login coming soon!" class="col-xl-6">
-                    <a (click)="externalLogin('google_login', previousLoginDialog, repoTypeDialog)" class="cursor-pointer disabled">
-                        <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+            <div id="auth02" class="row" style="margin-bottom:10px">
+                <div title="Okta login" class="col-xl-6">
+                    <a  (click)="oktaSamlLogin()" class="cursor-pointer" [ngClass]="{'disabled': loading == true}">
+                        <div class="auth-button">
+                            <span [ngClass]="{'disabled': loading == true}">okta</span>
+                        </div>
                     </a>
                 </div>
             </div>
             <!--
-            <div id="auth03" class="row mb-0">
+            <div id="auth03" class="row" style="margin-bottom:10">
+                <div title="Bitbucket login coming soon!" class="col-xl-6">
+                    <a (click)="externalLogin('bitbucket_login', repoTypeDialog)" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-bitbucket"></i></div>
+                    </a>
+                </div>
+                <div title="Google login coming soon!" class="col-xl-6">
+                    <a (click)="externalLogin('google_login', repoTypeDialog)" class="cursor-pointer disabled">
+                        <div class="auth-button disabled"><i class="fab fa-google"></i></div>
+                    </a>
+                </div>
+            </div>
+            <div id="auth04" class="row mb-0">
                 <div title="Docker login coming soon!" class="col-xl-6">
                     <a (click)="externalLogin('docker_login', repoTypeDialog)" class="cursor-pointer disabled">
                         <div class="auth-button disabled"><i class="fab fa-docker"></i></div>
@@ -111,7 +119,9 @@
                             <p class="m-l-30 m-b-0">Only your public repositories will be available for scanning</p>
                         </div>
                     </div>
+       
                 </div>
+            
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" (click)="modal.close('click'); setGithubRepoType();">OK</button>

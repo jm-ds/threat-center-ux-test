@@ -10,6 +10,7 @@ import {
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
 import { NextConfig } from '@app/app-config';
 import { MESSAGES } from '@app/messages/messages';
@@ -21,8 +22,6 @@ import { AuthenticationService, AuthorizationService } from '../services';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AccountService } from '@app/security/services/account.service';
-import { catchError, map } from 'rxjs/operators';
-import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -108,13 +107,23 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if (this.authenticationService.getFromSessionStorageBasedEnv('jwt')) {
             return true;
         }
-        const promise = this.httpClient.get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=` + hashedJwt + `&username=` + username).toPromise();
-        await promise.then((data) => {
-          jwt = data.jwt;
-        }, (error) => {
-          console.error('canActivate threat center call return error ' + JSON.stringify(error));
-          return false;
-        });
+
+        this.httpClient
+          .get<any>(`${environment.apiUrl}/rest/auth/impersonate?hashedJwt=${hashedJwt}&username=${username}`)
+          .pipe(
+            first()
+          )
+          .toPromise()
+          .then(
+            data => {
+              jwt = data.jwt;
+            },
+            error => {
+              console.error(`#canActivate threat center call return error ${JSON.stringify(error)}`);
+
+              return false;
+            }
+          );
     }
 
     if (jwt) {
@@ -126,7 +135,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           map(() => this.checkIfJoiningAccounts(jwt))
         )
         .pipe(
-          map(() => this.checkPermissionsAndRedirect(route.data.auth))
+          map(() => this.checkPermissionsAndRedirect(route.data.auth)),
+          first()
         )
         .toPromise();
     } else {
@@ -151,7 +161,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           return await this.accountService
             .loadAuthenticatedUser()
             .pipe(
-              map(() => this.checkPermissionsAndRedirect(route.data.auth))
+              map(() => this.checkPermissionsAndRedirect(route.data.auth)),
+              first()
             )
             .toPromise();
         }

@@ -137,6 +137,12 @@ export class LoginComponent implements OnInit {
     this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + urlText + (!!param ? '?' + param : ''));
   }
 
+  oktaSamlLogin() {
+    console.warn('okta saml login auth');
+    window.location.href = environment.apiUrl + '/rest/auth/okta_saml_login';
+    this.loading = true;
+  }
+
   // redirect to authenticate url
   redirectToExternalLogin(url: string)   {
     // TODO logs

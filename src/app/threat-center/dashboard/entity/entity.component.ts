@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, OnDestroy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { AuthenticationService, AuthorizationService } from '@app/security/services';
 import { ApexChartService } from '../../../theme/shared/components/chart/apex-chart/apex-chart.service';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -884,7 +884,13 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (childData.length >= 1) {
       for (let i = 0; i < childData.length; i++) {
         if (!!childData[i].node) {
-          // let cData: any = await this.entService.getTreeEntity(childData[i].node.entityId).toPromise();
+          // const cData = await this.entService
+          //   .getTreeEntity(childData[i].node.entityId)
+          //   .pipe(
+          //     first()
+          //   )
+          //   .toPromise();
+
           let cData: any = {
             data: {
               entity: childData[i].node

@@ -215,6 +215,15 @@ const NavigationItems = [
             url: '/admin/deployment',
             permissions: ['ENTITY_EDIT'],
             target: false
+          },
+          {
+            id: 'api-explorer',
+            title: 'API Explorer',
+            icon: 'fa fa-exchange-alt',
+            type: 'item',
+            url: '/admin/api-explorer',
+            permissions: ['ENTITY_EDIT'],
+            target: false
           }
         ]
       }

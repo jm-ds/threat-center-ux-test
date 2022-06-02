@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { first } from 'rxjs/operators';
+
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import { AuthenticationService } from '@app/security/services';
 import { ITreeOptions, TreeComponent, TreeNode } from '@circlon/angular-tree-component';
@@ -241,7 +244,13 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (childData.length >= 1) {
             for (let i = 0; i < childData.length; i++) {
                 if (!!childData[i].node) {
-                    let cData: any = await this.entityService.getTreeEntity(childData[i].node.entityId).toPromise();
+                    const cData = await this.entityService
+                      .getTreeEntity(childData[i].node.entityId)
+                      .pipe(
+                        first()
+                      )
+                      .toPromise();
+
                     let d = {};
                     d['id'] = childData[i].node.entityId;
                     d['tagData'] = cData.data.entity;
@@ -383,7 +392,12 @@ export class EntityManageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    private async getTopLevelEntities(orgId: string) {
-        return await this.entityService.getTopLevelEntitiesByOrg(orgId).toPromise();
-    }
+  private async getTopLevelEntities(orgId: string) {
+    return await this.entityService
+      .getTopLevelEntitiesByOrg(orgId)
+      .pipe(
+        first()
+      )
+      .toPromise();
+  }
 }

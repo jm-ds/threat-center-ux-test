@@ -44,6 +44,7 @@
                 <th>Size</th>
                 <th>Versions</th>
                 <th>License(s)</th>
+                <th>Copyright(s)</th>
                 <th *ngIf="!!user.repositoryAccounts">SIMM</th>
               </tr>
             </ng-template>
@@ -82,6 +83,20 @@
                     <span class="text-primary" *ngIf="embeddedAsset?.node?.matchLicenses?.length >= 2">
                       Multiple Licenses ({{embeddedAsset?.node?.matchLicenses?.length}})
                     </span>
+                  </a>
+                </td>
+                <td class="align-middle">
+                  <a (click)="setSelectedEmbeddedAsset(embeddedAsset.node); copyrightsModal.show()">View
+                    <!--
+                    <span style="word-spacing: 6px;" *ngIf="embeddedAsset?.node?.matchCopyrights.length === 1">
+                      {{embeddedAsset?.node?.matchCopyrights[0].licenseName}}
+                      <span class="p-l-5 badge m-r-5 badge-light-warning badge-light-{{embeddedAsset?.node?.matchCopyrights[0].text}}">
+                        {{embeddedAsset?.node?.matchCopyrights[0].text}}</span>
+                    </span>
+                    <span class="text-primary" *ngIf="embeddedAsset?.node?.matchCopyrights?.length >= 2">
+                      Multiple Copyrights ({{embeddedAsset?.node?.matchCopyrights?.length}})
+                    </span>
+                    -->
                   </a>
                 </td>
                 <td class="align-middle" *ngIf="!!user.repositoryAccounts">
@@ -136,6 +151,44 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="licensesModal.hide()">Close</button>
       </div>
     </app-ui-modal><!-- licensesModal -->
+
+
+    <!-- Copyrights Dialog -->
+    <app-ui-modal #copyrightsModal dialogClass="license-model-dialog modal-dialog-centered popup-Width-fix">
+      <div class="app-modal-header">
+        <h5 class="modal-title">{{selectedEmbeddedAsset?.name}}</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="copyrightsModal.hide()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="app-modal-body">
+        <perfect-scrollbar [style.max-height]="'550px'" class="overflowshadowTop">
+          <p-table #dt [value]="selectedEmbeddedAsset?.matchCopyrights" [paginator]="false" [rows]="50"
+                   tableStyleClass="table table-striped table-bordered table-hover dataTable no-footer table-width"
+                   [autoLayout]="true" [filterDelay]="0" [globalFilterFields]="['name']" [scrollable]="false">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>Copyright Text</th>
+                <!--<th>Start Year</th>
+                <th>End Year</th>
+                <th>Valid to present</th>
+                <th>Owners</th>-->
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-matchCopyright >
+              <tr>
+                <td>{{matchCopyright.text}}</td>
+                <!--<td>{{matchCopyright.startYear}}</td>
+                <td>{{matchCopyright.endYear}}</td>
+                <td>{{matchCopyright.toPresent}}</td>
+                <td>{{matchCopyright.owners}}</td>-->
+              </tr>
+            </ng-template>
+          </p-table>
+        </perfect-scrollbar>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="copyrightsModal.hide()">Close</button>
+      </div>
+    </app-ui-modal><!-- Copyrights Modal -->
 
     <!-- Attribution Licenses Dialog -->
     <app-ui-modal #attributionLicensesModal dialogClass="license-model-dialog modal-dialog-centered popup-Width-fix">
