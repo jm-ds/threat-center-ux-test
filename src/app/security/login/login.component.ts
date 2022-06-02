@@ -89,7 +89,6 @@ export class LoginComponent implements OnInit {
   // login via external oauth
   externalLogin(urlText: string, previousLoginDialog, repoTypeDialog) {
     console.info('login.component - external login');
-    this.setCurrentLogin(urlText);
     const lastSuccessfulLoginData: LoginData = this.authenticationService.getLastSuccessfulLogin();
     if (lastSuccessfulLoginData) {
       console.info(`last successful login ${JSON.stringify(lastSuccessfulLoginData)}`);
@@ -145,10 +144,6 @@ export class LoginComponent implements OnInit {
 
   // redirect to authenticate url
   redirectToExternalLogin(url: string)   {
-    // TODO logs
-    console.log(`redirectToExternalLogin`);
-    console.log(`this.returnUrl is ${this.returnUrl}`);
-
     if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
       sessionStorage.setItem('ReturnUrl', this.returnUrl);
     }
@@ -184,12 +179,6 @@ export class LoginComponent implements OnInit {
       return LoginType.GOOGLE;
     }
     return undefined;
-  }
-
-  setCurrentLogin(url: string) {
-    const type = this.getLoginTypeFromUrl(url);
-    console.log('setting current login to ' + type);
-    this.authenticationService.setCurrentLogin(type);
   }
 
 }

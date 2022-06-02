@@ -57,14 +57,7 @@ export class AuthenticationService {
         this.setInSessionStorageBasedEnv('jwt', response.jwt);
         const user = response.user;
 
-        // now we do not need to store data to local storage
-        // this.setInStorageBasedEnv('currentUser', user);
-
-        // storing current user details to session storage.
-        this.setInSessionStorageBasedEnv('currentUser', user);
-        this.setCurrentLogin(LoginType.PASSWORD);
-
-        this.currentUserSubject.next(user);
+        this.setCurrentUser(user);
         return user;
       },
         (err) => {
@@ -104,12 +97,13 @@ export class AuthenticationService {
     return date;
   }
 
-  setInStorageBasedEnv(key: string, data: User) {
+  setCurrentUser(user: User) {
     if (environment.production && !environment.staging) {
-      this.localService.setLocalStorage(key, data);
+      this.localService.setLocalStorage('currentUser', user);
     } else {
-      localStorage.setItem(key, JSON.stringify(data));
+      localStorage.setItem('currentUser', JSON.stringify(user));
     }
+    this.currentUserSubject.next(user);
   }
 
 
@@ -175,9 +169,10 @@ export class AuthenticationService {
     this.cookieService.set('gh_rt', value, {path: '/',  expires: expiredDate, sameSite: 'Lax' });
   }
 
-  setLastSuccessfulLogin(user: User) {
+  setLastSuccessfulLogin() {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() + 181); // valid 181 days
+    const user: User = this.currentUser;
     if (user.repositoryAccounts) {
       const userLoginInfo = {
         username: user.username,
@@ -191,45 +186,11 @@ export class AuthenticationService {
     }
   }
 
-  toLoginData(repositoryAccounts: RepositoryAccounts): Map<string, Account> {
-    const accounts = new Map<string, Account>();
-    if (repositoryAccounts.githubAccount) {
-      accounts.set('github', repositoryAccounts.githubAccount);
-    }
-    if (repositoryAccounts.gitlabAccount) {
-      accounts.set('gitlab', repositoryAccounts.gitlabAccount);
-    }
-    if (repositoryAccounts.bitbucketAccount) {
-      accounts.set('bitbucket', repositoryAccounts.bitbucketAccount);
-    }
-    if (repositoryAccounts.googleAccount) {
-      accounts.set('google', repositoryAccounts.googleAccount);
-    }
-    return accounts;
-  }
-
-
   getLastSuccessfulLogin(): LoginData {
     if (this.cookieService.check('last_login_data')) {
       return JSON.parse(this.cookieService.get('last_login_data'));
     } else {
       return undefined;
-    }
-  }
-
-  setCurrentLogin(loginType: LoginType) {
-    if (environment.production && !environment.staging) {
-      this.localService.setSessionStorage('currentLogin', loginType);
-    } else {
-      sessionStorage.setItem('currentLogin', loginType);
-    }
- }
-
-  getCurrentLogin() {
-    if (environment.production && !environment.staging) {
-      return this.localService.getSessionStorage('currentLogin');
-    } else {
-      return sessionStorage.getItem('currentLogin');
     }
   }
 

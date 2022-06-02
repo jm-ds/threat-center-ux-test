@@ -128,13 +128,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     if (jwt) {
       this.authenticationService.setInSessionStorageBasedEnv('jwt', jwt);
-
       return await this.accountService
         .loadAuthenticatedUser()
         .pipe(
-          map(() => this.checkIfJoiningAccounts(jwt))
-        )
-        .pipe(
+          map(() => this.checkIfJoiningAccounts(jwt)),
+          map(() => this.authenticationService.setLastSuccessfulLogin()),
           map(() => this.checkPermissionsAndRedirect(route.data.auth)),
           first()
         )

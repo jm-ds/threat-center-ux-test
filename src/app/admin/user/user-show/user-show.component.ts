@@ -40,7 +40,7 @@ export class UserShowComponent extends UserUtils implements OnInit {
 
     // initialize user data
     init(username) {
-        const user = this.authService.getFromSessionStorageBasedEnv("currentUser");
+        const user = this.authService.currentUser;
         if (!!user) {
             this.organizationDetails = user['organization'];
         }
