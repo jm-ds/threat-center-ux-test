@@ -26,9 +26,9 @@ export class UserAccountsComponent extends UserUtils implements OnInit {
 
     if (jwt) {
       console.log(`about to attach  ${accountType} to current user`);
-      console.log(`jwt is ${jwt}`);
+      console.log(`jwt is ${jwt} `);
       const loginType = accountType.toLowerCase() as LoginType;
-      let url = environment.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(loginType) + '?joinUser=true&jwt=' + jwt;
+      let url = environment.apiUrl + '/rest/auth/' + this.authenticationService.loginTypeToLoginUrl(loginType) + '?joinUser=true&jwt=' + jwt;
       if (loginType === LoginType.GITHUB) {
         url = url + '&needPrivateRepos=true';
       }

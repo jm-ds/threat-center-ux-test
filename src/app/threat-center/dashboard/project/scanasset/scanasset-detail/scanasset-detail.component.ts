@@ -295,6 +295,7 @@ export class ScanAssetDetailComponent implements OnInit {
             .subscribe(result => {
                 let scanRepository = result.scanRepository;
 
+
                 // if we have a repo, pre-load the source asset
                 if (scanRepository) {
                     obsScanAsset.subscribe(obsScanResult => {

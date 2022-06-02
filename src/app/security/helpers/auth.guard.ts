@@ -39,6 +39,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
   checkPermissionsAndRedirect(auth) {
+    console.log(`checkPermissionsAndRedirect`);
     const user = this.authenticationService.currentUser;
 
     console.log(user);
@@ -49,7 +50,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           data: MESSAGES.ACCOUNT_APPROVAL_AWAIT
         }
       });
-
+      console.log(`checkPermissionsAndRedirect return false`);
       return false;
     }
 
@@ -63,14 +64,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const returnUrl = sessionStorage.getItem('ReturnUrl');
 
         sessionStorage.removeItem('ReturnUrl');
-
+        console.log(`checkPermissionsAndRedirect redirecting`);
         this.router.navigate([returnUrl], {
           state: {
             data: MESSAGES.RETURNED_TO_PAGE
           }
         });
       }
-
+      console.log(`checkPermissionsAndRedirect return true`);
       return true;
     } else {
       // otherwise redirect to 'unauthorized' page
@@ -83,6 +84,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   checkIfJoiningAccounts(jwt: string) {
+    console.log(`checkIfJoiningAccounts`);
     const accountToJoin = this.authenticationService.getJoinAccount();
     if (accountToJoin != null && accountToJoin !== undefined ) {
       console.log(`about to attach  ${accountToJoin} to current user`);

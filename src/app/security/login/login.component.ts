@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { first } from 'rxjs/operators';
 
-import { AuthenticationService } from '../services';
+import { AuthenticationService, LoginData, LoginType } from '../services';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -79,10 +79,10 @@ export class LoginComponent implements OnInit {
     if (!this.createNewUser) {
       console.info(`going to login with ${this.previousLoginType} then join the account with ${this.currentLogin}`);
       this.authenticationService.setJoinAccount(this.currentLogin);
-      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.previousLoginType));
+      this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + this.authenticationService.loginTypeToLoginUrl(this.previousLoginType));
     } else {
       console.info(`going to login with ${this.currentLogin}`);
-      this.redirectToExternalLogin(this.apiUrl + '/' + this.authenticationService.loginTypeToLoginUrl(this.currentLogin));
+      this.redirectToExternalLogin(this.apiUrl + '/rest/auth/' + this.authenticationService.loginTypeToLoginUrl(this.currentLogin));
     }
   }
 
@@ -139,6 +139,10 @@ export class LoginComponent implements OnInit {
 
   // redirect to authenticate url
   redirectToExternalLogin(url: string)   {
+    // TODO logs
+    console.log(`redirectToExternalLogin`);
+    console.log(`this.returnUrl is ${this.returnUrl}`);
+
     if (!!this.returnUrl && this.returnUrl !== '' && this.returnUrl !== '/') {
       sessionStorage.setItem('ReturnUrl', this.returnUrl);
     }

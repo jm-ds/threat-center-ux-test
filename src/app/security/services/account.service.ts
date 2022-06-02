@@ -52,15 +52,18 @@ export class AccountService {
     repositoryAccounts {
       githubAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
       gitlabAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
       bitbucketAccount {
         accessToken,
-        scopes
+        scopes,
+        accountName
       }
     }
     organization {

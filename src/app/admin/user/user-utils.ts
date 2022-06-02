@@ -64,20 +64,25 @@ export class UserUtils {
     }
 
 
-    repositoryAccountList(user : User): RepositoryAccount[] {
-        const accounts = new Array();
-        if (user.repositoryAccounts) {
-            if (user.repositoryAccounts.githubAccount) {
-                accounts.push(user.repositoryAccounts.githubAccount);
-            }
-            if (user.repositoryAccounts.gitlabAccount) {
-                accounts.push(user.repositoryAccounts.gitlabAccount);
-            }
-            if (user.repositoryAccounts.bitbucketAccount) {
-                accounts.push(user.repositoryAccounts.bitbucketAccount);
-            }
-        }
-        return accounts;
+  repositoryAccountList(user: User): RepositoryAccount[] {
+    const accounts = new Array();
+    if (user.repositoryAccounts) {
+      if (user.repositoryAccounts.githubAccount) {
+        user.repositoryAccounts.githubAccount.type = 'github';
+        accounts.push(user.repositoryAccounts.githubAccount);
+      }
+      if (user.repositoryAccounts.gitlabAccount) {
+        user.repositoryAccounts.gitlabAccount.type = 'gitlab';
+        accounts.push(user.repositoryAccounts.gitlabAccount);
+      }
+      if (user.repositoryAccounts.bitbucketAccount) {
+        user.repositoryAccounts.bitbucketAccount.type = 'bitbucket';
+        accounts.push(user.repositoryAccounts.bitbucketAccount);
+      }
     }
+    console.log(`returning for ${JSON.stringify(accounts)}`);
+
+    return accounts;
+  }
 
 }
