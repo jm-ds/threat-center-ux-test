@@ -51,11 +51,11 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
     '#fb5b5b',
     '#fb5b5b',
     '#fb5b5b',
+    '#fb5b5b',
     '#c9e282',
-    '#26f08f',
     '#c71585',
     '#00e396',
-    '#ffa21d',
+    '#26f08f',
     '#f8f8ff',
     '#4680ff'
   ];
@@ -99,11 +99,6 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
 
   licenseChartLabels = [
     {
-      label: 'Copyleft Limited',
-      class: 'red',
-      prop: 'copyleftLimited'
-    },
-    {
       label: 'Copyleft',
       class: 'red',
       prop: 'copyleft'
@@ -114,14 +109,19 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
       prop: 'copyleftStrong'
     },
     {
+      label: 'Copyleft Limited',
+      class: 'red',
+      prop: 'copyleftLimited'
+    },
+    {
+      label: 'Copyleft Partial',
+      class: 'red',
+      prop: 'copyleftPartial'
+    },
+    {
       label: 'Copyleft Weak',
       class: 'lgt-yellow',
       prop: 'copyleftWeak'
-    },
-    {
-      label: 'Permissive',
-      class: 'lgt-green',
-      prop: 'permissive'
     },
     {
       label: 'Proprietary',
@@ -134,9 +134,9 @@ export class ProjectDashboardComponent implements OnInit, AfterViewInit, OnDestr
       prop: 'proprietaryFree'
     },
     {
-      label: 'Copyleft Partial',
-      class: 'copyleftPartial',
-      prop: 'copyleftPartial'
+      label: 'Permissive',
+      class: 'lgt-green',
+      prop: 'permissive'
     },
     {
       label: 'Custom',
