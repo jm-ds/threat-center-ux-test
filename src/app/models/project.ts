@@ -1,5 +1,5 @@
 import { PageInfo } from './common';
-import { ProjectMetricsGroup } from './metrics';
+import { ProjectMetricsGroup, ProjectMetricsSummary } from './metrics';
 import { Scan, ScanConnection } from './scan';
 
 export class Project {
@@ -14,6 +14,7 @@ export class Project {
   log: string;
   tags: string[];
   projectMetricsGroup: ProjectMetricsGroup;
+  projectMetricsSummary: ProjectMetricsSummary;
 }
 
 export class ProjectConnection {

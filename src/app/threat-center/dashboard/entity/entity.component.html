@@ -287,78 +287,96 @@
                               <div>
                                 <span>Vulnerability Risk</span>
 
-                                <div>
-                                  <span class="badge m-r-5 badge-red" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.critical">
-                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.critical }} Critical
-                                  </span>
-                                  <span class="badge m-r-5 badge-pink" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.high">
-                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.high }} High
-                                  </span>
-                                  <span class="badge m-r-5 badge-orange" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.medium">
-                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.medium }} Medium
-                                  </span>
-                                  <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.low">
-                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.low }} Low
-                                  </span>
-                                  <span class="badge m-r-5 badge-light-primary" *ngIf="project.projectMetricsSummary?.vulnerabilityMetrics.info">
-                                    {{ project.projectMetricsSummary?.vulnerabilityMetrics.info }} Info
-                                  </span>
-                                </div>
+                                <ng-container *ngIf="project.projectMetricsSummary.vulnerabilityMetrics.length; else noVulnerabilities">
+                                  <div>
+                                    <span class="badge m-r-5 badge-red" *ngIf="project.projectMetricsSummary.vulnerabilityMetrics?.critical">
+                                      {{ project.projectMetricsSummary.vulnerabilityMetrics.critical }} Critical
+                                    </span>
+                                    <span class="badge m-r-5 badge-pink" *ngIf="project.projectMetricsSummary.vulnerabilityMetrics?.high">
+                                      {{ project.projectMetricsSummary.vulnerabilityMetrics.high }} High
+                                    </span>
+                                    <span class="badge m-r-5 badge-orange" *ngIf="project.projectMetricsSummary.vulnerabilityMetrics?.medium">
+                                      {{ project.projectMetricsSummary.vulnerabilityMetrics.medium }} Medium
+                                    </span>
+                                    <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary.vulnerabilityMetrics?.low">
+                                      {{ project.projectMetricsSummary.vulnerabilityMetrics.low }} Low
+                                    </span>
+                                    <span class="badge m-r-5 badge-light-primary" *ngIf="project.projectMetricsSummary.vulnerabilityMetrics?.info">
+                                      {{ project.projectMetricsSummary.vulnerabilityMetrics.info }} Info
+                                    </span>
+                                  </div>
+                                </ng-container>
+
+                                <ng-template #noVulnerabilities>
+                                  <span class="badge badge-green">No vulnerabilities found</span>
+                                </ng-template>
                               </div>
 
                               <div>
                                 <span>License Risk</span>
 
-                                <div>
-                                  <span class="badge m-r-5 badge-copyleftstrong" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftStrong">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftStrong }} Copyleft Strong
-                                  </span>
-                                  <span class="badge m-r-5 badge-copyLeft" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleft">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleft }} Copyleft
-                                  </span>
-                                  <span class="badge m-r-5 badge-copyleftWeak" *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftWeak">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftWeak }} Copyleft Weak
-                                  </span>
-                                  <span class="badge m-r-5 badge-copyleftPartial"
-                                    *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftPartial">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftPartial }} Copyleft Partial
-                                  </span>
-                                  <span class="badge m-r-5 badge-copyleftLimited"
-                                    *ngIf="project.projectMetricsSummary?.licenseMetrics?.copyleftLimited">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.copyleftLimited }} Copyleft Limited
-                                  </span>
-                                  <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary?.licenseMetrics?.dual">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.dual }} Dual
-                                  </span>
-                                  <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary?.licenseMetrics?.custom">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.custom }} Custom
-                                  </span>
-                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.permissive">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.permissive }} Permissive
-                                  </span>
-                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.proprietary">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.proprietary }} Proprietary
-                                  </span>
-                                  <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary?.licenseMetrics?.proprietaryFree">
-                                    {{ project.projectMetricsSummary?.licenseMetrics?.proprietaryFree }} Proprietary Free
-                                  </span>
-                                </div>
+                                <ng-container *ngIf="project.projectMetricsSummary.licenseMetrics.length; else noLicenses">
+                                  <div>
+                                    <span class="badge m-r-5 badge-copyleftstrong" *ngIf="project.projectMetricsSummary.licenseMetrics?.copyleftStrong">
+                                      {{ project.projectMetricsSummary.licenseMetrics.copyleftStrong }} Copyleft Strong
+                                    </span>
+                                    <span class="badge m-r-5 badge-copyLeft" *ngIf="project.projectMetricsSummary.licenseMetrics?.copyleft">
+                                      {{ project.projectMetricsSummary.licenseMetrics.copyleft }} Copyleft
+                                    </span>
+                                    <span class="badge m-r-5 badge-copyleftWeak" *ngIf="project.projectMetricsSummary.licenseMetrics?.copyleftWeak">
+                                      {{ project.projectMetricsSummary.licenseMetrics.copyleftWeak }} Copyleft Weak
+                                    </span>
+                                    <span class="badge m-r-5 badge-copyleftPartial"
+                                      *ngIf="project.projectMetricsSummary.licenseMetrics?.copyleftPartial">
+                                      {{ project.projectMetricsSummary.licenseMetrics.copyleftPartial }} Copyleft Partial
+                                    </span>
+                                    <span class="badge m-r-5 badge-copyleftLimited"
+                                      *ngIf="project.projectMetricsSummary.licenseMetrics?.copyleftLimited">
+                                      {{ project.projectMetricsSummary.licenseMetrics.copyleftLimited }} Copyleft Limited
+                                    </span>
+                                    <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary.licenseMetrics?.dual">
+                                      {{ project.projectMetricsSummary.licenseMetrics.dual }} Dual
+                                    </span>
+                                    <span class="badge m-r-5 badge-light-warning" *ngIf="project.projectMetricsSummary.licenseMetrics?.custom">
+                                      {{ project.projectMetricsSummary.licenseMetrics.custom }} Custom
+                                    </span>
+                                    <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary.licenseMetrics?.permissive">
+                                      {{ project.projectMetricsSummary.licenseMetrics.permissive }} Permissive
+                                    </span>
+                                    <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary.licenseMetrics?.proprietary">
+                                      {{ project.projectMetricsSummary.licenseMetrics.proprietary }} Proprietary
+                                    </span>
+                                    <span class="badge m-r-5 badge-permissive" *ngIf="project.projectMetricsSummary.licenseMetrics?.proprietaryFree">
+                                      {{ project.projectMetricsSummary.licenseMetrics.proprietaryFree }} Proprietary Free
+                                    </span>
+                                  </div>
+                                </ng-container>
+
+                                <ng-template #noLicenses>
+                                  <span class="badge badge-green">No licenses detected</span>
+                                </ng-template>
                               </div>
 
                               <div>
                                 <span>Asset Composition</span>
 
-                                <div>
-                                  <span class="badge m-r-5 badge-blue" *ngIf="project.projectMetricsSummary?.assetMetrics?.embedded">
-                                    {{ project.projectMetricsSummary?.assetMetrics?.embedded }} Embedded
-                                  </span>
-                                  <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary?.assetMetrics?.openSource">
-                                    {{ project.projectMetricsSummary?.assetMetrics?.openSource }} Open Source
-                                  </span>
-                                  <span class="badge m-r-5 badge-green" *ngIf="project.projectMetricsSummary?.assetMetrics?.unique">
-                                    {{ project.projectMetricsSummary?.assetMetrics?.unique }} Unique
-                                  </span>
-                                </div>
+                                <ng-container *ngIf="project.projectMetricsSummary.assetMetrics.length; else noAssets">
+                                  <div>
+                                    <span class="badge m-r-5 badge-blue" *ngIf="project.projectMetricsSummary.assetMetrics?.embedded">
+                                      {{ project.projectMetricsSummary.assetMetrics.embedded }} Embedded
+                                    </span>
+                                    <span class="badge m-r-5 badge-yellow" *ngIf="project.projectMetricsSummary.assetMetrics?.openSource">
+                                      {{ project.projectMetricsSummary.assetMetrics.openSource }} Open Source
+                                    </span>
+                                    <span class="badge m-r-5 badge-green" *ngIf="project.projectMetricsSummary.assetMetrics?.unique">
+                                      {{ project.projectMetricsSummary.assetMetrics.unique }} Unique
+                                    </span>
+                                  </div>
+                                </ng-container>
+
+                                <ng-template #noAssets>
+                                  <span class="badge badge-green">No assets detected</span>
+                                </ng-template>
                               </div>
 
                               <div>

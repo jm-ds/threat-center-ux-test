@@ -9,7 +9,7 @@ import { TreeNode } from 'primeng/api';
 import { CoreHelperService } from '@app/services/core/core-helper.service';
 import * as _ from 'lodash';
 import { ChartHelperService } from '@app/services/core/chart-helper.service';
-import { Entity, EntityMetrics, Period, ProjectEdge } from '@app/models';
+import { AssetMetrics, Entity, EntityMetrics, LicenseMetrics, Period, Project, ProjectEdge, VulnerabilityMetrics } from '@app/models';
 import { ProjectBreadcumsService } from '@app/services/core/project-breadcums.service';
 import { UserPreferenceService } from '@app/services/core/user-preference.service';
 import { IOption } from "ng-select";
@@ -498,10 +498,31 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
+  private cleanProjectMetrics({ projectMetricsSummary }: Project) {
+    const removeEmptyMetricsAndMetadata = (metrics: VulnerabilityMetrics | LicenseMetrics | AssetMetrics) => Object
+      .keys(metrics)
+      .forEach(key => {
+        if (key === '__typename' || metrics[key] === null || metrics[key] === 0) {
+          delete metrics[key];
+        }
+      });
+
+    const summaryMetrics = ['vulnerabilityMetrics', 'licenseMetrics', 'assetMetrics'];
+
+    summaryMetrics.forEach(metrics => {
+      removeEmptyMetricsAndMetadata(projectMetricsSummary[metrics]);
+
+      // template complains for `length` on `keyvalue` pipe so set here object `length` explicitly instead
+      projectMetricsSummary[metrics].length = Object.keys(projectMetricsSummary[metrics]).length;
+    });
+  }
+
   buildProjectTree(entity: Entity) {
     entity.projects.edges.sort((a, b) => Number(new Date(b.node.created)) - Number(new Date(a.node.created)));
 
     const nodes = entity.projects.edges.map(edge => {
+      this.cleanProjectMetrics(edge.node);
+
       const node: TreeNode = {
         label: edge.node.name,
         data: edge.node,
@@ -522,6 +543,8 @@ export class EntityComponent implements OnInit, OnDestroy, AfterViewChecked {
     projectEdge.node.childProjects.edges.sort((a, b) => Number(new Date(b.node.created)) - Number(new Date(a.node.created)));
 
     projectEdge.node.childProjects.edges.forEach(edge => {
+      this.cleanProjectMetrics(edge.node);
+
       const childNode: TreeNode = {
         label: edge.node.name,
         data: edge.node,
