@@ -55,4 +55,7 @@ export class UserShowComponent extends UserUtils implements OnInit {
         );
     }
 
+  get currentUser() {
+    return this.authService.currentUser;
+  }
 }
