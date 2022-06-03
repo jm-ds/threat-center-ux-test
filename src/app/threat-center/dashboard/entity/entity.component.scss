@@ -389,7 +389,7 @@ header {
   display: flex;
   align-items: flex-start;
   padding: 10px;
-  border: 1px solid #4a4c4f;
+  border: 1px solid #4A4C4F;
 
   &:not(:last-child) {
     margin-bottom: 10px;
@@ -407,25 +407,25 @@ header {
       display: flex;
 
       > div {
-        flex: 1;
-        color: #ffffff;
+        $badge-gap: 5px;
 
-        > span {
+        flex: 1;
+        color: #FFFFFF;
+
+        > span:first-child {
           display: block;
           margin-bottom: 10px;
-          color: #2dc6db;
+          color: #2DC6DB;
           font-weight: 300;
         }
 
+        .badge {
+          margin-bottom: $badge-gap;
+          text-transform: uppercase;
+        }
+
         div {
-          $badge-gap: 5px;
-
           margin-bottom: 5px - $badge-gap;
-
-          .badge {
-            margin-bottom: $badge-gap;
-            text-transform: uppercase;
-          }
         }
       }
     }
