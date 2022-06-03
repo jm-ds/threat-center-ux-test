@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { UserUtils } from '@app/admin/user/user-utils';
-import { Messages, User } from '@app/models';
+import { Component } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+
 import { AuthenticationService, LoginType } from '@app/security/services';
+
+import { Messages } from '@app/models';
+
+import { UserUtils } from '@app/admin/user/user-utils';
+
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -10,14 +14,12 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './user-accounts.component.html',
   styleUrls: ['./user-accounts.component.scss']
 })
-export class UserAccountsComponent extends UserUtils implements OnInit {
-
+export class UserAccountsComponent extends UserUtils {
   messages: Messages;
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    protected router: Router) {
+  constructor(protected router: Router, private authenticationService: AuthenticationService) {
     super(router);
+
     this.messages = Messages.fromRouter(this.router);
   }
 
@@ -55,6 +57,7 @@ export class UserAccountsComponent extends UserUtils implements OnInit {
     return !!this.authenticationService.currentUser.repositoryAccounts.githubAccount;
   }
 
-  ngOnInit(): void {
+  get currentUser() {
+    return this.authenticationService.currentUser;
   }
 }

@@ -214,7 +214,7 @@
                 <ngb-tab *ngIf="authorizationService.hasPermissions('ROLE_USER')"> <!-- TODO change to proper permissions-->
                     <ng-template ngbTabTitle>SCM Accounts&nbsp;&nbsp;
                         <span class="badge badge-light">
-                          {{repositoryAccountList(authService.currentUser).length}}
+                          {{ repositoryAccountList(currentUser).length }}
                         </span>
                     </ng-template>
 
@@ -226,7 +226,7 @@
                                 </div>
                             </div>
                             <div class="dt-responsive table-responsive">
-                                <table datatable class="table row-border" *ngIf="repositoryAccountList(authService.currentUser).length >= 0">
+                                <table datatable class="table row-border">
                                     <thead>
                                     <tr>
                                         <th>Account type</th>
@@ -234,7 +234,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let account of repositoryAccountList(authService.currentUser)">
+                                    <tr *ngFor="let account of repositoryAccountList(currentUser)">
                                         <td>
                                             {{account.type}}
                                         </td>

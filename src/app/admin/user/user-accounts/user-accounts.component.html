@@ -1,8 +1,8 @@
 <div>
   <nav aria-label="breadcrumb" class="float-right">
-    <ol class="breadcrumb" *ngIf="authenticationService.currentUser">
+    <ol class="breadcrumb" *ngIf="currentUser">
       <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserList()">Users</a></li>
-      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(authenticationService.currentUser?.username)">User</a></li>
+      <li class="breadcrumb-item"><a href="javascript:" (click)="goToUserShow(currentUser.username)">User</a></li>
     </ol>
   </nav>
   <h1>Add repository account</h1>
@@ -10,11 +10,11 @@
 
 <app-messages [messages]="messages"></app-messages>
 
-<ng-template [ngIf]="authenticationService.currentUser !== undefined">
+<ng-template [ngIf]="currentUser">
   <div class="row">
-    <div class="col-md-4" *ngIf="authenticationService.currentUser.repositoryAccounts">
+    <div class="col-md-4" *ngIf="currentUser.repositoryAccounts">
       <!-- User card -->
-      <app-user-card [user]="authenticationService.currentUser" [showMenu]="true"></app-user-card>
+      <app-user-card [user]="currentUser" [showMenu]="true"></app-user-card>
     </div>
     <div class="col-md-6">
       <app-card cardTitle="Add repository account">
@@ -44,7 +44,7 @@
         </div>
         </div>-->
         <div class="actions mt-5">
-          <a class="btn btn-outline-secondary" (click)="backToUser()" *ngIf="authenticationService.currentUser">
+          <a class="btn btn-outline-secondary" (click)="backToUser()" *ngIf="currentUser">
             <i class="feather  icon-user"></i>
             Back to user
           </a>
@@ -52,4 +52,4 @@
       </app-card>
     </div>
   </div>
-</ng-template>  
+</ng-template>
