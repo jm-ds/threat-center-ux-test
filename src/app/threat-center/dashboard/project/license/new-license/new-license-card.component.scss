@@ -240,16 +240,15 @@
 }
 
 .info-cols {
-    display: flex;
-    width: 145px;
-    font-size: 15px;
-    color: #fff;
-    align-items: center;
-    font-weight: 300;
+  display: flex;
+  flex: 1 145px;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 300;
 
-    small {
-        color: #2DC6DB;
-        margin-right: 5px;
-        font-size: 15px;
-    }
+  small {
+    margin-right: 5px;
+    color: #2DC6DB;
+    font-size: 15px;
+  }
 }
