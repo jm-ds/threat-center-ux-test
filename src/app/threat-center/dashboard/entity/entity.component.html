@@ -58,9 +58,9 @@
   </header>
 
   <ng-container *ngIf="entity.entityMetricsGroup?.projectCount; else introduction">
-    <ngb-accordion #acc="ngbAccordion" class="chart-panel mt-10" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)">
+    <ngb-accordion #acc="ngbAccordion" [activeIds]="panelActiveId" (panelChange)="toggleAccordian($event)">
       <ngb-panel id="chart-panel">
-        <ng-template ngbPanelHeader let-opened="opened">
+        <ng-template ngbPanelHeader>
           <div class="d-flex align-items-center justify-content-between">
             <button ngbPanelToggle class="btn btn-link p-0">&nbsp;<i class="fas fa-chart-bar"></i>&nbsp; View Charts</button>
           </div>
@@ -136,7 +136,7 @@
 
           <div class="row">
             <div class="col-12 entity-chart-tabbing">
-              <div class="card mb-3">
+              <div class="card">
                 <ngb-tabset [activeId]="lineChartActiveTab" (tabChange)="onStackedChartTabChange($event)">
                   <ngb-tab id="Week">
                     <ng-template ngbTabTitle>Week</ng-template>
