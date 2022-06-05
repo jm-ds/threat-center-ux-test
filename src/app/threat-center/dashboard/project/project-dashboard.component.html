@@ -2,91 +2,105 @@
   <project-dashboard-header [project]="project" (openIgnoreAssetsModal)="onOpenIgnoreAssetsModal(ignoreAssets)"
     (openProjectTagsModal)="onOpenProjectTagsModal(projectTags)"></project-dashboard-header>
 
-    <project-dashboard-top-bar [obsProject]="obsProject" (openScanTab)="openScanTable($event)">
-    </project-dashboard-top-bar>
-
-    <!-- donut chart for scan data -->
-    <div class="matrix-chart">
-        <div class="row">
-            <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="matrix-chart-card">
-                    <div class="matrix-chart-top">
-                        <h6>Vulnerabilites</h6>
-                        <i class="far fa-chart-bar fa-lg"></i>
-                    </div>
-
-                    <div class="matrix-chart-btm">
-                      <div class="matrix-chart-blk">
-                        <apx-chart [series]="vulnerabilityChartData.series" [colors]="VULNERABILITY_CHART_COLORS"
-                          [fill]="vulnerabilityChartFill" [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions"
-                          [labels]="vulnerabilityChartData.labels" [legend]="chartConfig.legend" [responsive]="chartConfig.responsive"
-                          [dataLabels]="chartConfig.dataLabels"></apx-chart>
-                      </div>
-
-                      <div class="matrix-chart-legend">
-                        <p *ngFor="let data of vulnerabilityChartLabels; let i = index">
-                          <span [ngClass]="data.class">{{ data.label }}</span>
-                          <small>{{ vulnerabilityChartData?.series[i] }}</small>
-                        </p>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="matrix-chart-card">
-                    <div class="matrix-chart-top">
-                        <h6>License Risk</h6>
-                        <i class="far fa-chart-bar fa-lg"></i>
-                    </div>
-
-                    <div class="matrix-chart-btm">
-                      <div class="matrix-chart-blk">
-                        <apx-chart [series]="licenseChartData.series" [colors]="LICENSE_CHART_COLORS" [fill]="licenseChartFill"
-                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="licenseChartData.labels"
-                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
-                      </div>
-
-                      <div class="matrix-chart-legend">
-                        <ng-container *ngFor="let data of licenseChartLabels; index as i">
-                          <ng-container *ngIf="!!licenseChartData.series[i] && licenseChartData['series'][i] !== 0">
-                            <p>
-                              <span [ngClass]="data.class">{{ data.label }}</span>
-                              <small>{{ licenseChartData.series[i] }}</small>
-                            </p>
-                          </ng-container>
-                        </ng-container>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-sm-4 col-xs-12">
-                <div class="matrix-chart-card">
-                    <div class="matrix-chart-top">
-                        <h6>Asset composition</h6>
-                        <i class="far fa-chart-bar fa-lg"></i>
-                    </div>
-
-                    <div class="matrix-chart-btm">
-                      <div class="matrix-chart-blk">
-                        <apx-chart [series]="assetChartData.series" [colors]="ASSET_CHART_COLORS" [fill]="assetChartFill"
-                          [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="assetChartData.labels"
-                          [legend]="chartConfig.legend" [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
-                      </div>
-
-                      <div class="matrix-chart-legend">
-                        <p *ngFor="let data of assetChartLabels; let i = index">
-                          <span [ngClass]="data.class">{{ data.label }}</span>
-                          <small>{{ assetChartData?.series[i] }}</small>
-                        </p>
-                      </div>
-                    </div>
-                </div>
-            </div>
+  <ngb-accordion #acc="ngbAccordion" activeIds="header-panel">
+    <ngb-panel id="header-panel">
+      <ng-template ngbPanelHeader>
+        <div class="d-flex align-items-center justify-content-between">
+          <button class="btn p-0" ngbPanelToggle> <i class="fas fa-chart-bar mr-1"></i> View Header</button>
         </div>
-    </div>
+      </ng-template>
 
+      <ng-template ngbPanelContent>
+        <project-dashboard-top-bar [obsProject]="obsProject" (openScanTab)="openScanTable($event)"></project-dashboard-top-bar>
+
+        <!-- Donut chart for scan data -->
+        <div class="matrix-chart">
+          <div class="row">
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+              <div class="matrix-chart-card">
+                <div class="matrix-chart-top">
+                  <h6>Vulnerabilites</h6>
+                  <i class="far fa-chart-bar fa-lg"></i>
+                </div>
+
+                <div class="matrix-chart-btm">
+                  <div class="matrix-chart-blk">
+                    <apx-chart [series]="vulnerabilityChartData.series" [colors]="VULNERABILITY_CHART_COLORS"
+                      [fill]="vulnerabilityChartFill" [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions"
+                      [labels]="vulnerabilityChartData.labels" [legend]="chartConfig.legend"
+                      [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels"></apx-chart>
+                  </div>
+
+                  <div class="matrix-chart-legend">
+                    <p *ngFor="let data of vulnerabilityChartLabels; let i = index">
+                      <span [ngClass]="data.class">{{ data.label }}</span>
+                      <small>{{ vulnerabilityChartData?.series[i] }}</small>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+              <div class="matrix-chart-card">
+                <div class="matrix-chart-top">
+                  <h6>License Risk</h6>
+                  <i class="far fa-chart-bar fa-lg"></i>
+                </div>
+
+                <div class="matrix-chart-btm">
+                  <div class="matrix-chart-blk">
+                    <apx-chart [series]="licenseChartData.series" [colors]="LICENSE_CHART_COLORS"
+                      [fill]="licenseChartFill" [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions"
+                      [labels]="licenseChartData.labels" [legend]="chartConfig.legend"
+                      [responsive]="chartConfig.responsive" [dataLabels]="chartConfig.dataLabels">
+                    </apx-chart>
+                  </div>
+
+                  <div class="matrix-chart-legend">
+                    <ng-container *ngFor="let data of licenseChartLabels; index as i">
+                      <ng-container *ngIf="!!licenseChartData.series[i] && licenseChartData['series'][i] !== 0">
+                        <p>
+                          <span [ngClass]="data.class">{{ data.label }}</span>
+                          <small>{{ licenseChartData.series[i] }}</small>
+                        </p>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+              <div class="matrix-chart-card">
+                <div class="matrix-chart-top">
+                  <h6>Asset composition</h6>
+                  <i class="far fa-chart-bar fa-lg"></i>
+                </div>
+
+                <div class="matrix-chart-btm">
+                  <div class="matrix-chart-blk">
+                    <apx-chart [series]="assetChartData.series" [colors]="ASSET_CHART_COLORS" [fill]="assetChartFill"
+                      [chart]="chartConfig.chart" [plotOptions]="chartConfig.plotOptions" [labels]="assetChartData.labels"
+                      [legend]="chartConfig.legend" [responsive]="chartConfig.responsive"
+                      [dataLabels]="chartConfig.dataLabels">
+                    </apx-chart>
+                  </div>
+
+                  <div class="matrix-chart-legend">
+                    <p *ngFor="let data of assetChartLabels; let i = index">
+                      <span [ngClass]="data.class">{{ data.label }}</span>
+                      <small>{{ assetChartData?.series[i] }}</small>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
 
     <div *ngIf="authorizationService.hasPermissions('FEATURE_PREVIEW')">
         <app-policy-compliance></app-policy-compliance>

@@ -789,57 +789,61 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     margin-top: 10px;
 }
 
-app-entity .accordion {
-  display: block;
+app-entity,
+app-project-dashboard {
 
-  & > .card:not([class*="bg-"]) {
-    margin-bottom: 25px;
-    background: unset;
-    border: unset;
-    box-shadow: unset;
+  .accordion {
+    display: block;
 
-    .card-header {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: unset;
-      padding-right: unset;
-      margin-bottom: 15px;
+    & > .card:not([class*="bg-"]) {
+      margin-bottom: unset;
+      background: unset;
+      border: unset;
+      box-shadow: unset;
 
-      .btn {
+      .card-header {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: unset;
+        padding-right: unset;
+        margin-bottom: 15px;
+
+        .btn {
+          width: 100%;
+          font-size: 16px;
+          color: #ADB7BE;
+          box-shadow: none;
+          text-align: left;
+          text-decoration: none;
+
+          &:after {
+            content: "\f054";
+            position: absolute;
+            top: 12px;
+            margin-left: 8px;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+          }
+
+          &[aria-expanded="true"]:after {
+            content: "\f078";
+          }
+        }
+
+        .no-collapse:after {
+          display: none;
+        }
+      }
+
+      .collapse {
         width: 100%;
-        font-size: 16px;
-        color: #ADB7BE;
-        box-shadow: none;
-        text-align: left;
-        text-decoration: none;
+        display: block;
+        margin-bottom: 10px + 15px; // `.card-header` `padding-bottom` and `margin-bottom` values
 
-        &:after {
-          content: "\f054";
-          position: absolute;
-          top: 12px;
-          margin-left: 8px;
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
+        > .card-body {
+          padding: unset;
+          margin-bottom: unset;
         }
-
-        &[aria-expanded="true"]:after {
-          content: "\f078";
-        }
-      }
-
-      .no-collapse:after {
-        display: none;
-      }
-    }
-
-    .collapse {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px + 15px; // `.card-header` `padding-bottom` and `margin-bottom` values
-
-      > .card-body {
-        padding: unset;
-        margin-bottom: unset;
       }
     }
   }
