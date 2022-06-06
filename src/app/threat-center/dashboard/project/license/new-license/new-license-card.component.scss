@@ -146,23 +146,13 @@
                 }
             }
 
-            .data-row {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                margin-top: 10px;
-            }
+          .data-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+          }
         }
     }
-}
-
-.multiple-btn {
-
-  @media only screen and (min-width: 1599px) {
-    position: relative;
-    left: 370px;
-    margin-top: 2px !important;
-  }
 }
 
 .data-tag {
@@ -241,10 +231,16 @@
 
 .info-cols {
   display: flex;
-  flex: 1 145px;
+  flex-direction: column;
+  flex-basis: 145px;
   color: #FFFFFF;
   font-size: 15px;
   font-weight: 300;
+
+  &:last-of-type {
+    flex: 1;
+    align-items: flex-end;
+  }
 
   small {
     margin-right: 5px;

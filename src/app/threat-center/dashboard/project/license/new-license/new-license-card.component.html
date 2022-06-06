@@ -94,7 +94,7 @@
                             <div *ngIf="licenseData.value.length >= 2;else licenseRowSingle">
                                 <div class="data-row" *ngFor="let license of licenseData?.value">
                                     <ng-container
-                                        *ngTemplateOutlet="licenseRowTem;context:{license: license,licenseData:licenseData}">
+                                        *ngTemplateOutlet="licenseRowItem;context:{license: license,licenseData:licenseData}">
                                     </ng-container>
 
                                 </div>
@@ -105,7 +105,7 @@
                             <ng-template #licenseRowSingle>
                                 <div class="data-row">
                                     <ng-container
-                                        *ngTemplateOutlet="licenseRowTem;context:{license: licenseData.value[0],licenseData:licenseData}">
+                                        *ngTemplateOutlet="licenseRowItem;context:{license: licenseData.value[0],licenseData:licenseData}">
                                     </ng-container>
                                 </div>
                             </ng-template>
@@ -116,7 +116,7 @@
               <!-- <div class="col-sm-2 col-xs-12" *ngIf="isUserSCMAccountExists()">
                 <div *ngIf="licenseData.value.length >= 2;else licnseSignleBtn">
                   <div class="vulner-data-rt" *ngFor="let license of licenseData.value">
-                    <div class="action-btns multiple-btn" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
+                    <div class="action-btns" [hidden]="license.node?.licenseOrigin !== 'ASSET'">
                       <button class="btn data-cta ingore-cta">Ignore</button>
                       <button class="btn data-cta"
                         (click)="gotoDetails(license.node?.licenseId, license.node?.licenseDiscovery, license.node?.licenseOrigin,true)">Annotate</button>
@@ -146,46 +146,53 @@
     </mat-paginator>
 </div>
 
-<ng-template #licenseRowTem let-license="license" let-licenseData="licenseData">
-    <div class="info-cols flex-column align-items-start">
-        <small>Discovery</small> {{license.node?.licenseDiscovery}}
-    </div>
-    <div class="info-cols flex-column align-items-start">
-        <small>Origin</small> {{license.node?.licenseOrigin}}
-    </div>
-    <div class="info-cols flex-column align-items-start">
-        <small>Style</small> {{license.node?.style}}
-    </div>
+<ng-template #licenseRowItem let-license="license" let-licenseData="licenseData">
+  <div class="info-cols">
+    <small>Discovery</small> {{license.node?.licenseDiscovery}}
+  </div>
 
-    <div class="info-cols flex-column align-items-start">
-        <small>Trust Level</small>
-        {{getTrustLevelValue(license.node?.trustLevel)}}
-    </div>
-    <div class="info-cols flex-column align-items-start">
-        <small>OSI Approved</small> {{license.node?.isOsiApproved ? 'YES' :
-        'NO'}}
-    </div>
-    <div class="info-cols flex-column align-items-start">
-        <small>FSF Libre</small> {{license.node?.isFsfLibre ? 'YES' :
-        'NO'}}
-    </div>
+  <div class="info-cols">
+    <small>Origin</small> {{license.node?.licenseOrigin}}
+  </div>
 
-    <div class="info-cols flex-column align-items-start">
-      <div [hidden]="license.node?.licenseOrigin !== 'ASSET'">
-        <div class="action-btns multiple-btn" *ngIf="license.node?.licenseAssetAttribution">
-          {{ license.node?.licenseAssetAttribution.attributionStatus }}
-         </div>
+  <div class="info-cols">
+    <small>Style</small> {{license.node?.style}}
+  </div>
 
-         <div class="action-btns multiple-btn" *ngIf="!license.node?.licenseAssetAttribution">
-          <button class="btn data-cta ingore-cta" (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
-            Ignore
-          </button>
-          <button class="btn data-cta" (click)="onAnnotate($event, license.node?.licenseId, false, attributeProcessExecuteMessageModel)">
-            Annotate
-          </button>
-        </div>
-      </div>
+  <div class="info-cols">
+    <small>Trust Level</small>
+    {{getTrustLevelValue(license.node?.trustLevel)}}
+  </div>
+
+  <div class="info-cols">
+    <small>OSI Approved</small> {{license.node?.isOsiApproved ? 'YES' :
+    'NO'}}
+  </div>
+
+  <div class="info-cols">
+    <small>FSF Libre</small> {{license.node?.isFsfLibre ? 'YES' :
+    'NO'}}
+  </div>
+
+  <div class="info-cols" *ngIf="license.node?.licenseOrigin === 'ASSET'">
+    <div class="action-btns">
+      <ng-container *ngIf="license.node?.licenseAssetAttribution; else attributionStatus">
+        <button class="btn data-cta ingore-cta"
+          (click)="onAnnotate($event, license.node?.licenseId, true, attributeProcessExecuteMessageModel)">
+          Ignore
+        </button>
+        <button class="btn data-cta"
+          (click)="onAnnotate($event, license.node?.licenseId, false, attributeProcessExecuteMessageModel)">
+          Annotate
+        </button>
+      </ng-container>
+
+      <ng-template #attributionStatus>
+        {{ license.node?.licenseAssetAttribution.attributionStatus }}
+      </ng-template>
     </div>
+  </div>
+
   <app-ui-modal #attributeProcessExecuteMessageModel>
     <div class="app-modal-header">
       <h5 class="modal-title">Attribution Process Executing</h5>
