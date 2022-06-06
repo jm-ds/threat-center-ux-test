@@ -174,7 +174,7 @@
     'NO'}}
   </div>
 
-  <div class="info-cols" *ngIf="license.node?.licenseOrigin === 'ASSET'">
+  <div class="info-cols asset" *ngIf="license.node?.licenseOrigin === 'ASSET'">
     <div class="action-btns">
       <ng-container *ngIf="license.node?.licenseAssetAttribution; else attributionStatus">
         <button class="btn data-cta ingore-cta"
