@@ -161,7 +161,7 @@
             &.permissive::after{
                 background: rgb(17, 193, 91);
             }
-            
+
             &.copyleftWeak::after{
                 background: rgb(235, 227, 5);
             }
@@ -235,43 +235,34 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
 }
 
 .entity-chart-row {
-    margin-top: 10px;
-    padding: 10px 0 0;
 
-    .entity-chart-blk {
-        flex: 0 1 20%;
-        max-width: 20%;
-        padding: 0 5px;
+  .entity-chart-blk {
+    flex: 0 1 20%;
+    max-width: 20%;
+    padding: 0 5px;
+  }
+
+  .proj-t-card {
+    .card-body {
+      padding: 10px;
+      min-height: 200px;
+      height: 200px;
     }
+  }
 
-    .proj-t-card {
-        .card-body {
-            padding: 10px;
-            min-height: 200px;
-            height: 200px;
+  .apexcharts-canvas {
+    transform: scale(0.6);
+    -webkit-transform-origin: top center;
+    transform-origin: top center;
 
-            // app-apex-chart {
-            //     div:first-of-type {
-            //         // height: 125px !important;
-            //         // min-height: inherit !important;
-            //     }
-            // }
-        }
+    svg {
+      overflow: inherit;
     }
+  }
 
-    .apexcharts-canvas {
-        transform: scale(0.6);
-        -webkit-transform-origin: top center;
-        transform-origin: top center;
-
-        svg {
-            overflow: inherit;
-        }
-    }
-
-    .card {
-        margin-bottom: 15px;
-    }
+  .card {
+    margin-bottom: 25px;
+  }
 }
 
 .entity-ttl {
@@ -283,7 +274,6 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
         padding: 0.25rem 0.5rem;
     }
 }
-
 
 .ui-treetable .ui-treetable-thead>tr>th,
 .ui-treetable .ui-treetable-tbody>tr>td,
@@ -799,47 +789,62 @@ body.next-dark .entity-chart-tabbing .nav-tabs .nav-item .nav-link:hover {
     margin-top: 10px;
 }
 
-.chart-panel {
-    &.accordion {
-        .card-header {
-            padding: 12px;
+app-entity,
+app-project-dashboard {
 
-            .btn {
-                padding: 10px 40px 10px 15px;
-                color: #fff;
-                border-radius: 4px 4px 0 0;
-                text-decoration: none;
-                width: 100%;
-                font-size: 16px;
-                color: #adb7be;
-                text-align: left;
-                box-shadow: none !important;
+  .accordion {
+    display: block;
 
-                &:after {
-                    content: "\f054";
-                    position: absolute;
-                    top: 12px;
-                    margin-left: 8px;
-                    font-family: "Font Awesome 5 Free";
-                    font-weight: 900;
-                }
+    & > .card:not([class*="bg-"]) {
+      margin-bottom: unset;
+      background: unset;
+      border: unset;
+      box-shadow: unset;
 
-                &[aria-expanded="true"]:after {
-                    content: "\f078";
-                }
+      .card-header {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: unset;
+        padding-right: unset;
+        margin-bottom: 15px;
 
-            }
+        .btn {
+          width: 100%;
+          font-size: 16px;
+          color: #ADB7BE;
+          box-shadow: none;
+          text-align: left;
+          text-decoration: none;
 
-            .no-collapse {
-                &:after {
-                    display: none;
-                }
-            }
+          &:after {
+            content: "\f054";
+            position: absolute;
+            top: 12px;
+            margin-left: 8px;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+          }
+
+          &[aria-expanded="true"]:after {
+            content: "\f078";
+          }
         }
 
-        .collapse {
-            width: 100%;
-            display: block;
+        .no-collapse:after {
+          display: none;
         }
+      }
+
+      .collapse {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px + 15px; // `.card-header` `padding-bottom` and `margin-bottom` values
+
+        > .card-body {
+          padding: unset;
+          margin-bottom: unset;
+        }
+      }
     }
+  }
 }

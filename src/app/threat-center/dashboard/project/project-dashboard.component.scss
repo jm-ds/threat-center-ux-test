@@ -1,6 +1,17 @@
+project-dashboard-header {
+  margin-bottom: 20px;
+}
+
+ngb-accordion {
+  margin-bottom: 15px;
+
+  project-dashboard-top-bar {
+    margin-bottom: 20px;
+  }
+}
+
 .matrix-chart {
     display: block;
-    margin: 20px 0 0;
 
     .matrix-chart-card {
         width: 100%;
@@ -129,32 +140,24 @@
     }
 }
 
-.matrix-dash-tab {
-    margin: 40px 0 0;
+.matrix-dash-tab .dash-tab-form {
+  padding: 15px;
+  background: #29333e;
+  border: 1px solid #888888;
 
-    .dash-tab-form {
-        padding: 15px;
-        background: #29333e;
-        border: 1px solid #888888;
+  .form-group {
+    margin-bottom: unset;
+  }
 
-        .form-group {
-            margin-bottom: 0;
-        }
-
-        .checkbox {
-            &.checkbox-info {
-                input[type=checkbox]+.cr:before {
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 5px;
-                    font-size: 13px;
-                    line-height: 12px;
-                    position: relative;
-                    top: -1px;
-                }
-            }
-        }
-    }
+  .checkbox .checkbox-info input[type=checkbox] + .cr:before {
+    position: relative;
+    top: -1px;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    font-size: 13px;
+    line-height: 12px;
+  }
 }
 
 .vulnerabilites-data {
