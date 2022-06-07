@@ -10,7 +10,7 @@ import { AuthenticationService } from './security/services';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const uri = environment.apiUrl+'/graphql'; // <-- add the URL of the GraphQL server here
-const subscriptionUri = environment.wsUrl+'/subscriptions'; // graphql subscription endpoint
+const subscriptionUri = environment.wsUrl+'/rest/subscriptions'; // graphql subscription endpoint
 
 
 export function createApollo(httpLink: HttpLink, authenticationService: AuthenticationService) {
